@@ -2,6 +2,7 @@
 #include <SDL_image.h>
 #include <cstdio>
 #include <string>
+#include <PhysicsManager.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -55,6 +56,10 @@ static void close() {
 }
 
 int main(int argc, char* args[]) {
+
+    PhysicsManager pm;
+    pm.testBox2d();
+
     if (!init()) return 1;
     SDL_Surface* img = loadImage("dados.png");
     if (img == NULL) return 1;

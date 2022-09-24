@@ -13,6 +13,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\physics\Physics.vcxproj">
+      <Project>{ee72aafb-b4aa-4f0c-8e86-3802b8051aa9}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -63,7 +68,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)src\physics;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -81,7 +86,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)src\physics;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
