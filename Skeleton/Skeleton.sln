@@ -7,20 +7,40 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "projects\main\Main.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physics", "projects\physics\Physics.vcxproj", "{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sound", "projects\sound\sound.vcxproj", "{53446C51-C540-4001-AC09-BBD92CC74904}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Debug|x64.ActiveCfg = Debug|x64
 		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Debug|x64.Build.0 = Debug|x64
+		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Debug|x86.ActiveCfg = Debug|x64
+		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Debug|x86.Build.0 = Debug|x64
 		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Release|x64.ActiveCfg = Release|x64
 		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Release|x64.Build.0 = Release|x64
+		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Release|x86.ActiveCfg = Release|x64
+		{1F5DD364-62F0-42B1-890F-EA1A18663C3E}.Release|x86.Build.0 = Release|x64
 		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Debug|x64.ActiveCfg = Debug|x64
 		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Debug|x64.Build.0 = Debug|x64
+		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Debug|x86.ActiveCfg = Debug|x64
+		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Debug|x86.Build.0 = Debug|x64
 		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Release|x64.ActiveCfg = Release|x64
 		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Release|x64.Build.0 = Release|x64
+		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Release|x86.ActiveCfg = Release|x64
+		{EE72AAFB-B4AA-4F0C-8E86-3802B8051AA9}.Release|x86.Build.0 = Release|x64
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Debug|x64.ActiveCfg = Debug|x64
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Debug|x64.Build.0 = Debug|x64
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Debug|x86.ActiveCfg = Debug|Win32
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Debug|x86.Build.0 = Debug|Win32
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Release|x64.ActiveCfg = Release|x64
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Release|x64.Build.0 = Release|x64
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Release|x86.ActiveCfg = Release|Win32
+		{53446C51-C540-4001-AC09-BBD92CC74904}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
