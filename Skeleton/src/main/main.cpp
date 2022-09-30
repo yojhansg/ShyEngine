@@ -1,72 +1,47 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <cstdio>
-#include <string>
 #include <PhysicsManager.h>
+#include <RendererManager.h>
+#include <InputManager.h>
+#include <SoundManager.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
-SDL_Window* window = NULL;
-SDL_Surface* screenSurface = NULL;
-
-static bool init() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-        return false;
-    }
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        fprintf(stderr, "could not initialize sdl2_image: %s\n", IMG_GetError());
-        return false;
-    }
-    window = SDL_CreateWindow(
-        "hello_sdl2",
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        SDL_WINDOW_SHOWN
-    );
-    if (window == NULL) {
-        fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-        return false;
-    }
-    screenSurface = SDL_GetWindowSurface(window);
-    if (screenSurface == NULL) {
-        fprintf(stderr, "could not get window: %s\n", SDL_GetError());
-        return false;
-    }
-    return true;
-}
-
-static SDL_Surface* loadImage(std::string path) {
-    SDL_Surface* img = IMG_Load(path.c_str());
-    if (img == NULL) {
-        fprintf(stderr, "could not load image: %s\n", IMG_GetError());
-        return NULL;
-    }
-    SDL_Surface* optimizedImg = SDL_ConvertSurface(img, screenSurface->format, 0);
-    if (optimizedImg == NULL) fprintf(stderr, "could not optimize image: %s\n", SDL_GetError());
-    SDL_FreeSurface(img);
-    return optimizedImg;
-}
-
-static void close() {
-    SDL_FreeSurface(screenSurface); screenSurface = NULL;
-    SDL_DestroyWindow(window); window = NULL;
-    SDL_Quit();
-}
+#include <iostream>
 
 int main(int argc, char* args[]) {
 
-    PhysicsManager pm;
-    pm.testBox2d();
+    RendererManager rm;
+    InputManager im;
 
-    if (!init()) return 1;
-    SDL_Surface* img = loadImage("dados.png");
-    if (img == NULL) return 1;
-    SDL_BlitSurface(img, NULL, screenSurface, NULL);
-    SDL_UpdateWindowSurface(window);
-    SDL_Delay(2000);
-    SDL_FreeSurface(img); img = NULL;
-    close();
-    return 0;
+	// a boolean to exit the loop
+	bool exit = false;
+	SDL_Event event;
+
+	while (!exit) {
+
+		Uint32 startTime = SDL_GetTicks();
+
+		im.clearState();
+		while (SDL_PollEvent(&event))
+			im.update(event);
+
+		if (im.isKeyDown(SDL_SCANCODE_ESCAPE) || event.type == SDL_QUIT) {
+			exit = true;
+			continue;
+		}
+
+		if (im.mouseMotionEvent()) {
+			std::cout << im.getMousePos().first << " " << im.getMousePos().second << "\n";
+		}
+
+		//rm.clearRenderer();
+
+		//rm.presentRenderer();
+
+		Uint32 frameTime = SDL_GetTicks() - startTime;
+
+		if (frameTime < 20)
+			SDL_Delay(20 - frameTime);
+	}
+
+	rm.closeSDL();
+
+	return 0;
 }
