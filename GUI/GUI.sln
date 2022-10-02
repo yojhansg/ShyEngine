@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "projects\Main\Main.vcxproj", "{12B89F8D-5B0C-4DC2-8233-BBBA599F60AB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGUI", "projects\ImGUI\ImGUI.vcxproj", "{6F198E1D-A62A-425F-A068-0B496291419F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12B89F8D-5B0C-4DC2-8233-BBBA599F60AB}.Debug|x64.ActiveCfg = Debug|x64
+		{12B89F8D-5B0C-4DC2-8233-BBBA599F60AB}.Debug|x64.Build.0 = Debug|x64
+		{12B89F8D-5B0C-4DC2-8233-BBBA599F60AB}.Release|x64.ActiveCfg = Release|x64
+		{12B89F8D-5B0C-4DC2-8233-BBBA599F60AB}.Release|x64.Build.0 = Release|x64
+		{6F198E1D-A62A-425F-A068-0B496291419F}.Debug|x64.ActiveCfg = Debug|x64
+		{6F198E1D-A62A-425F-A068-0B496291419F}.Debug|x64.Build.0 = Debug|x64
+		{6F198E1D-A62A-425F-A068-0B496291419F}.Release|x64.ActiveCfg = Release|x64
+		{6F198E1D-A62A-425F-A068-0B496291419F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C95FD925-8663-485F-AC2B-5D7BEC48A710}
+	EndGlobalSection
+EndGlobal
