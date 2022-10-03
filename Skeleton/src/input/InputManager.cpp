@@ -22,7 +22,6 @@ namespace InputManager {
 		isKeyUpEvent_ = false;
 		isMouseButtonEvent_ = false;
 		isMouseMotionEvent_ = false;
-		isAxisMotionEvent_ = false;
 
 		for (auto i = 0u; i < 3; i++) {
 			mbState_[i] = false;
@@ -166,56 +165,65 @@ namespace InputManager {
 
 	void InputManager::onJoystickAxisMotion(const SDL_Event& event) {
 
-		if ((event.jaxis.value < -3200) || (event.jaxis.value > 3200)) // Threshold
-		{
-			isAxisMotionEvent_ = true;
-			joystickId = event.jaxis.which;
-		}
-	}
+		if (joysticks.size() > 0) {
 
-	int InputManager::stickAxisXValue(int joy, int stick)
-	{
-		if (joystickValues.size() > 0)
-		{
-			if (stick == 1)
+			if ((event.jaxis.value < -STICK_DEADZONE) || (event.jaxis.value > STICK_DEADZONE)) // Deadzone
 			{
-				return joystickValues[joy].first->getX();
-			}
-			else if (stick == 2)
-			{
-				return joystickValues[joy].second->getX();
-			}
-		}
+				isAxisMotionEvent_ = true;
+				joystickId = event.jaxis.which;
 
-		return 0;
-	}
-
-	int InputManager::stickAxisYValue(int joy, int stick)
-	{
-		if (joystickValues.size() > 0)
-		{
-			if (stick == 1)
-			{
-				return joystickValues[joy].first->getY();
+				switch (event.jaxis.axis)
+				{
+				case 0:
+					joystickValues[joystickId].first->setX(event.jaxis.value);
+					break;
+				case 1:
+					joystickValues[joystickId].first->setY(-event.jaxis.value);
+					break;
+				case 2:
+					joystickValues[joystickId].second->setX(event.jaxis.value);
+					break;
+				case 3:
+					joystickValues[joystickId].second->setY(-event.jaxis.value);
+					break;
+				default:
+					break;
+				}
 			}
-			else if (stick == 2)
-			{
-				return joystickValues[joy].second->getY();
+			else {
+				/*isAxisMotionEvent_ = false;
+
+				for (auto i = 0u; i < joysticks.size(); i++) {
+					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
+					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
+				}*/
 			}
 		}
-
-		return 0;
 	}
 
 	bool InputManager::isJoystickAxisMotion() {
 		return isAxisMotionEvent_;
 	}
-	bool InputManager::getJoystickId()
-	{
+
+	bool InputManager::getJoystickId() {
 		return joystickId;
 	}
-	const std::vector<std::pair<Vector2D*, Vector2D*>>& InputManager::getJoysticksValues()
+
+	Vector2D InputManager::getJoystickValue(int joy, CONTROLLERSTICK ct)
 	{
-		return joystickValues;
+		Vector2D v = Vector2D();
+
+		switch (ct) {
+		case LEFTSTICK:
+			v = joystickValues[joy].first;
+			break;
+		case RIGHTSTICK:
+			v = joystickValues[joy].second;
+			break;
+		default:
+			break;
+		}
+
+		return v / (MAX_STICK_VALUE);
 	}
 }

@@ -6,6 +6,9 @@
 #include <array>
 #include <vector>
 
+#define MAX_STICK_VALUE 32767
+#define STICK_DEADZONE 3276
+
 namespace InputManager {
 
 	class InputManager : public Singleton<InputManager> { 
@@ -16,6 +19,10 @@ namespace InputManager {
 
 		enum MOUSEBUTTON : uint8_t {
 			LEFT = 0, MIDDLE = 1, RIGHT = 2
+		};
+
+		enum CONTROLLERSTICK : uint8_t {
+			LEFTSTICK = 0, RIGHTSTICK = 1,
 		};
 
 		~InputManager();
@@ -53,8 +60,7 @@ namespace InputManager {
 
 		bool getJoystickId();
 
-		const std::vector<std::pair<Vector2D*, Vector2D*>>& getJoysticksValues();
-
+		Vector2D getJoystickValue(int joy, CONTROLLERSTICK ct);
 
 	private:
 
@@ -86,11 +92,6 @@ namespace InputManager {
 		void cleanJoysticks();
 
 		void onJoystickAxisMotion(const SDL_Event& event);
-
-		int stickAxisXValue(int joy, int stick);
-
-		int stickAxisYValue(int joy, int stick);
-
 
 		std::vector<SDL_Joystick*> joysticks;
 		std::vector<std::pair<Vector2D*, Vector2D*>> joystickValues;
