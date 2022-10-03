@@ -26,6 +26,9 @@
     <ProjectReference Include="..\sound\sound.vcxproj">
       <Project>{53446c51-c540-4001-ac09-bbd92cc74904}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -77,7 +80,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src;$(SolutionDir)dependencies\SDL2_mixer\include;$(SolutionDir)src\sound;$(SolutionDir)src\physics;$(SolutionDir)src\renderer;$(SolutionDir)src\input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src;$(SolutionDir)dependencies\SDL2_mixer\include;$(SolutionDir)src\sound;$(SolutionDir)src\physics;$(SolutionDir)src\renderer;$(SolutionDir)src\input;$(SolutionDir)src\utilities</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,7 +100,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src;$(SolutionDir)dependencies\SDL2_mixer\include;$(SolutionDir)src\sound;$(SolutionDir)src\physics;$(SolutionDir)src\renderer;$(SolutionDir)src\input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)dependencies\Box2D\src;$(SolutionDir)dependencies\SDL2_mixer\include;$(SolutionDir)src\sound;$(SolutionDir)src\physics;$(SolutionDir)src\renderer;$(SolutionDir)src\input;$(SolutionDir)src\utilities</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

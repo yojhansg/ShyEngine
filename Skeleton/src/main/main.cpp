@@ -1,14 +1,16 @@
 #include <PhysicsManager.h>
+#include <SoundManager.h>
 #include <RendererManager.h>
 #include <InputManager.h>
-#include <SoundManager.h>
 
 #include <iostream>
+#include <memory>
 
 int main(int argc, char* args[]) {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    RendererManager rm;
-    InputManager im;
+	auto rm = RendererManager::RendererManager::init("PhosphorusEngine Window", 1280, 720);
+	auto im = InputManager::InputManager::init();
 
 	// a boolean to exit the loop
 	bool exit = false;
@@ -18,30 +20,35 @@ int main(int argc, char* args[]) {
 
 		Uint32 startTime = SDL_GetTicks();
 
-		im.clearState();
-		while (SDL_PollEvent(&event))
-			im.update(event);
+		im->clearState();
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {
+				exit = true;
+				continue;
+			}
+			im->update(event);
+		}
 
-		if (im.isKeyDown(SDL_SCANCODE_ESCAPE) || event.type == SDL_QUIT) {
-			exit = true;
+		if (im->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+			exit =  true;
 			continue;
 		}
 
-		if (im.mouseMotionEvent()) {
-			std::cout << im.getMousePos().first << " " << im.getMousePos().second << "\n";
+		if (im->isJoystickAxisMotion()) {
+			std::cout << im->getJoystickId() << std::endl;
 		}
 
-		//rm.clearRenderer();
+		rm->clearRenderer();
 
-		//rm.presentRenderer();
+
+
+		rm->presentRenderer();
 
 		Uint32 frameTime = SDL_GetTicks() - startTime;
 
-		if (frameTime < 20)
-			SDL_Delay(20 - frameTime);
+		if (frameTime < 60)
+			SDL_Delay(60 - frameTime);
 	}
-
-	rm.closeSDL();
 
 	return 0;
 }
