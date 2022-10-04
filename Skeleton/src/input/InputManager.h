@@ -8,6 +8,7 @@
 
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
+#define TRIGGER_DEADZONE 1000
 
 namespace InputManager {
 
@@ -25,9 +26,13 @@ namespace InputManager {
 			LEFTSTICK = 0, RIGHTSTICK = 1,
 		};
 
+		enum CONTROLLERTRIGGER : uint8_t {
+			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1,
+		};
+
 		enum PS4CONTROLLER_BUTTONS : uint8_t {
-			SQUARE = 0, X = 1, CIRCLE = 2, TRIANGLE = 3, L1 = 4, R1 = 5,  L2 = 6, R2 = 7, 
-			SHARE = 8, OPTIONS = 9, L3 = 10, R3 = 11, HOME = 12, TACTIL_PANEL = 13
+			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, 
+			R3 = 8, L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13
 		};
 
 		~InputManager();
@@ -71,7 +76,9 @@ namespace InputManager {
 
 		Vector2D getJoystickValue(int joy, CONTROLLERSTICK ct);
 
-		bool getJoystickButtonState(int joy, PS4CONTROLLER_BUTTONS button);
+		float getJoystickTriggerValue(int joy, CONTROLLERTRIGGER ct);
+		
+		bool getJoystickButtonState(int joy, int button);
 
 	private:
 
@@ -112,6 +119,7 @@ namespace InputManager {
 
 		std::vector<SDL_Joystick*> joysticks;
 		std::vector<std::pair<Vector2D*, Vector2D*>> joystickValues;
+		std::vector<std::pair<int, int>> joystickTriggerValues;
 		std::vector<std::vector<bool>> joystickButtonStates;
 
 		bool isAxisMotionEvent_;

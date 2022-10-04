@@ -149,6 +149,8 @@ namespace InputManager {
 				joysticks.push_back(joy);
 
 				joystickValues.push_back(std::make_pair(new Vector2D(0, 0), new Vector2D(0, 0)));
+
+				joystickTriggerValues.push_back(std::make_pair(0, 0));
 			}
 
 			clearJoysticksButtons();
@@ -177,35 +179,47 @@ namespace InputManager {
 
 		if (joysticks.size() > 0) {
 
-			if ((event.jaxis.value < -STICK_DEADZONE) || (event.jaxis.value > STICK_DEADZONE)) // Deadzone
-			{
-				isAxisMotionEvent_ = true;
-				joystickId = event.jaxis.which;
+			isAxisMotionEvent_ = true;
+			joystickId = event.jaxis.which;
 
-				switch (event.jaxis.axis)
+
+			// Left & right joysticks
+			if (event.jaxis.value < 4) {
+				if ((event.jaxis.value < -STICK_DEADZONE) || (event.jaxis.value > STICK_DEADZONE)) // Deadzone
 				{
-				case 0:
-					joystickValues[joystickId].first->setX(event.jaxis.value);
-					break;
-				case 1:
-					joystickValues[joystickId].first->setY(-event.jaxis.value);
-					break;
-				case 2:
-					joystickValues[joystickId].second->setX(event.jaxis.value);
-					break;
-				case 3:
-					joystickValues[joystickId].second->setY(-event.jaxis.value);
-					break;
-				default:
-					break;
+					switch (event.jaxis.axis) {
+						case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
+						case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
+						case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
+						case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
+						default: break;
+					}
 				}
-			}
-			else {
-				isAxisMotionEvent_ = false;
+				else {
+					isAxisMotionEvent_ = false;
 
-				for (auto i = 0u; i < joysticks.size(); i++) {
-					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
-					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
+					for (auto i = 0u; i < joysticks.size(); i++) {
+						joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
+						joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
+
+						joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
+					}
+				}
+			} // Left & right triggers
+			else {
+
+				if ((event.jaxis.value < -TRIGGER_DEADZONE) || (event.jaxis.value > TRIGGER_DEADZONE)) {
+
+					switch (event.jaxis.axis) {
+					case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+					case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+					default: break;
+					}
+				}
+				else {
+					isAxisMotionEvent_ = false;
+
+					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 				}
 			}
 		}
@@ -259,9 +273,26 @@ namespace InputManager {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	bool InputManager::getJoystickButtonState(int joy, PS4CONTROLLER_BUTTONS button)
+	float InputManager::getJoystickTriggerValue(int joy, CONTROLLERTRIGGER ct)
 	{
-		return joystickButtonStates[joy][(int) button];
+		float v = 0.0f;
+
+		switch (ct) {
+		case LEFT_TRIGGER:
+			v = joystickTriggerValues[joy].first;
+			break;
+		case RIGHT_TRIGGER:
+			v = joystickTriggerValues[joy].second;
+			break;
+		default:
+			break;
+		}
+
+		return v / (float)(MAX_STICK_VALUE);
 	}
 
+	bool InputManager::getJoystickButtonState(int joy, int button)
+	{
+		return joystickButtonStates[joy][button];
+	}
 }
