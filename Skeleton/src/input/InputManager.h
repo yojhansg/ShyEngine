@@ -25,6 +25,11 @@ namespace InputManager {
 			LEFTSTICK = 0, RIGHTSTICK = 1,
 		};
 
+		enum PS4CONTROLLER_BUTTONS : uint8_t {
+			SQUARE = 0, X = 1, CIRCLE = 2, TRIANGLE = 3, L1 = 4, R1 = 5,  L2 = 6, R2 = 7, 
+			SHARE = 8, OPTIONS = 9, L3 = 10, R3 = 11, HOME = 12, TACTIL_PANEL = 13
+		};
+
 		~InputManager();
 
 		// clear the state
@@ -66,7 +71,7 @@ namespace InputManager {
 
 		Vector2D getJoystickValue(int joy, CONTROLLERSTICK ct);
 
-		bool getJoystickButtonState(int joy, int buttonNumber);
+		bool getJoystickButtonState(int joy, PS4CONTROLLER_BUTTONS button);
 
 	private:
 

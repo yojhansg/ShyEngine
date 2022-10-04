@@ -39,7 +39,8 @@ int main(int argc, char* args[]) {
 		}
 		
 		if (im->isJoystickButtonEventDown()) {
-			std::cout << im->getJoystickButtonState(im->getJoystickId(), 0) << std::endl;
+
+			std::cout << im->getJoystickButtonState(im->getJoystickId(), InputManager::InputManager::X) << std::endl;
 		}
 
 		rm->clearRenderer();

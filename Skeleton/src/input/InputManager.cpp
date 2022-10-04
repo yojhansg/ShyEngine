@@ -259,9 +259,9 @@ namespace InputManager {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	bool InputManager::getJoystickButtonState(int joy, int buttonNumber)
+	bool InputManager::getJoystickButtonState(int joy, PS4CONTROLLER_BUTTONS button)
 	{
-		return joystickButtonStates[joy][buttonNumber];
+		return joystickButtonStates[joy][(int) button];
 	}
 
 }
