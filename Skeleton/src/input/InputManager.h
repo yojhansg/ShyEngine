@@ -58,9 +58,15 @@ namespace InputManager {
 		// controller
 		bool isJoystickAxisMotion();
 
+		bool isJoystickButtonEventDown();
+
+		bool isJoystickButtonEventUp();
+
 		bool getJoystickId();
 
 		Vector2D getJoystickValue(int joy, CONTROLLERSTICK ct);
+
+		bool getJoystickButtonState(int joy, int buttonNumber);
 
 	private:
 
@@ -89,14 +95,23 @@ namespace InputManager {
 
 		void initialiseJoysticks();
 
-		void cleanJoysticks();
+		void clearJoysticksButtons();
+
+		void removeJoysticks();
 
 		void onJoystickAxisMotion(const SDL_Event& event);
 
+		void onJoystickButtonDown(const SDL_Event& event);
+
+		void onJoystickButtonUp(const SDL_Event& event);
+
 		std::vector<SDL_Joystick*> joysticks;
 		std::vector<std::pair<Vector2D*, Vector2D*>> joystickValues;
+		std::vector<std::vector<bool>> joystickButtonStates;
 
 		bool isAxisMotionEvent_;
+		bool isJoystickButtonDownEvent_;
+		bool isJoystickButtonUpEvent_;
 		int joystickId;
 
 	};

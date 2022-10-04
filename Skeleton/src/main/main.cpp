@@ -37,6 +37,10 @@ int main(int argc, char* args[]) {
 		if (im->isJoystickAxisMotion()) {
 			std::cout << im->getJoystickValue(im->getJoystickId(), InputManager::InputManager::RIGHTSTICK) << std::endl;
 		}
+		
+		if (im->isJoystickButtonEventDown()) {
+			std::cout << im->getJoystickButtonState(im->getJoystickId(), 0) << std::endl;
+		}
 
 		rm->clearRenderer();
 
