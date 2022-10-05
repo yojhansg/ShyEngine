@@ -31,8 +31,8 @@ namespace InputManager {
 		};
 
 		enum PS4CONTROLLER_BUTTONS : uint8_t {
-			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, 
-			R3 = 8, L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13
+			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
+			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
 
 		~InputManager();
@@ -74,11 +74,21 @@ namespace InputManager {
 
 		bool getJoystickId();
 
-		Vector2D getJoystickValue(int joy, CONTROLLERSTICK ct);
+		Vector2D getJoystickValue(CONTROLLERSTICK ct);
 
-		float getJoystickTriggerValue(int joy, CONTROLLERTRIGGER ct);
+		float getJoystickTriggerValue(CONTROLLERTRIGGER ct);
 		
-		bool getJoystickButtonState(int joy, int button);
+		bool getJoystickButtonState(int button);
+
+		int getJoysticksNumButtons();
+
+		bool isLeftJoystickMotion();
+
+		bool isRightJoystickMotion();
+
+		bool isLeftTriggerMotion();
+
+		bool isRightTriggerMotion();
 
 	private:
 
@@ -121,6 +131,7 @@ namespace InputManager {
 		std::vector<std::pair<Vector2D*, Vector2D*>> joystickValues;
 		std::vector<std::pair<int, int>> joystickTriggerValues;
 		std::vector<std::vector<bool>> joystickButtonStates;
+		std::vector<int> joystickNumButtons;
 
 		bool isAxisMotionEvent_;
 		bool isJoystickButtonDownEvent_;

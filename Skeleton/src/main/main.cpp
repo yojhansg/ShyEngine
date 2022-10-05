@@ -16,6 +16,8 @@ int main(int argc, char* args[]) {
 	bool exit = false;
 	SDL_Event event;
 
+	SDL_Color c = rm->createColor(0x00000000);
+
 	while (!exit) {
 
 		Uint32 startTime = SDL_GetTicks();
@@ -33,13 +35,32 @@ int main(int argc, char* args[]) {
 			exit =  true;
 			continue;
 		}
+		
+		// Test de botones
+		if (im->isJoystickButtonEventDown()) {
+			for (int i = 0; i < im->getJoysticksNumButtons(); i++) {
+				std::cout << im->getJoystickButtonState(i) << "  ";
+			}
+			std::cout << std::endl;
+		}
+
+		// Test de joysticks
 
 		if (im->isJoystickAxisMotion()) {
-			std::cout << "Joystick derecho: " << im->getJoystickTriggerValue(im->getJoystickId(), InputManager::InputManager::LEFT_TRIGGER) << std::endl;
-			std::cout << "Joystick izquierdo: " << im->getJoystickTriggerValue(im->getJoystickId(), InputManager::InputManager::RIGHT_TRIGGER) << std::endl;
+			if (im->isLeftTriggerMotion()) {
+				float a = im->getJoystickTriggerValue(InputManager::InputManager::LEFT_TRIGGER);
+				a *= 255;
+
+				c.r = a; c.g = a; c.b = a;
+			}
+			else {
+				c.r = 0; c.g = 0; c.b = 0;
+			}
 		}
 		
-		rm->clearRenderer();
+
+		
+		rm->clearRenderer(c);
 
 
 

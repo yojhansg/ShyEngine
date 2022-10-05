@@ -4,11 +4,11 @@
 
 namespace InputManager {
 
-	InputManager::InputManager()
-	{
-		initialiseJoysticks();
+	InputManager::InputManager() {
 
 		kbState_ = SDL_GetKeyboardState(0);
+		initialiseJoysticks();
+
 		clearState();
 	}
 
@@ -151,6 +151,8 @@ namespace InputManager {
 				joystickValues.push_back(std::make_pair(new Vector2D(0, 0), new Vector2D(0, 0)));
 
 				joystickTriggerValues.push_back(std::make_pair(0, 0));
+
+				joystickNumButtons.push_back(SDL_JoystickNumButtons(joy));
 			}
 
 			clearJoysticksButtons();
@@ -196,6 +198,7 @@ namespace InputManager {
 					}
 				}
 				else {
+
 					isAxisMotionEvent_ = false;
 
 					for (auto i = 0u; i < joysticks.size(); i++) {
@@ -211,9 +214,9 @@ namespace InputManager {
 				if ((event.jaxis.value < -TRIGGER_DEADZONE) || (event.jaxis.value > TRIGGER_DEADZONE)) {
 
 					switch (event.jaxis.axis) {
-					case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-					case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-					default: break;
+						case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+						case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+						default: break;
 					}
 				}
 				else {
@@ -255,16 +258,16 @@ namespace InputManager {
 		return joystickId;
 	}
 
-	Vector2D InputManager::getJoystickValue(int joy, CONTROLLERSTICK ct)
-	{
+	Vector2D InputManager::getJoystickValue(CONTROLLERSTICK ct) {
+
 		Vector2D v = Vector2D();
 
 		switch (ct) {
 		case LEFTSTICK:
-			v = joystickValues[joy].first;
+			v = joystickValues[joystickId].first;
 			break;
 		case RIGHTSTICK:
-			v = joystickValues[joy].second;
+			v = joystickValues[joystickId].second;
 			break;
 		default:
 			break;
@@ -273,16 +276,16 @@ namespace InputManager {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	float InputManager::getJoystickTriggerValue(int joy, CONTROLLERTRIGGER ct)
-	{
+	float InputManager::getJoystickTriggerValue(CONTROLLERTRIGGER ct) {
+
 		float v = 0.0f;
 
 		switch (ct) {
 		case LEFT_TRIGGER:
-			v = joystickTriggerValues[joy].first;
+			v = joystickTriggerValues[joystickId].first;
 			break;
 		case RIGHT_TRIGGER:
-			v = joystickTriggerValues[joy].second;
+			v = joystickTriggerValues[joystickId].second;
 			break;
 		default:
 			break;
@@ -291,8 +294,28 @@ namespace InputManager {
 		return v / (float)(MAX_STICK_VALUE);
 	}
 
-	bool InputManager::getJoystickButtonState(int joy, int button)
-	{
-		return joystickButtonStates[joy][button];
+	bool InputManager::getJoystickButtonState(int button) {
+
+		return joystickButtonStates[joystickId][button];
+	}
+	int InputManager::getJoysticksNumButtons() {
+
+		return joystickNumButtons[joystickId];
+	}
+	bool InputManager::isLeftJoystickMotion() {
+
+		return std::abs(joystickValues[joystickId].first->getX()) > STICK_DEADZONE || std::abs(joystickValues[joystickId].first->getY()) > STICK_DEADZONE;
+	}
+	bool InputManager::isRightJoystickMotion() {
+
+		return std::abs(joystickValues[joystickId].second->getX()) > STICK_DEADZONE || std::abs(joystickValues[joystickId].second->getY()) > STICK_DEADZONE;
+	}
+	bool InputManager::isLeftTriggerMotion() {
+
+		return std::abs(joystickTriggerValues[joystickId].first) > TRIGGER_DEADZONE;
+	}
+	bool InputManager::isRightTriggerMotion() {
+
+		return std::abs(joystickTriggerValues[joystickId].second) > TRIGGER_DEADZONE;
 	}
 }
