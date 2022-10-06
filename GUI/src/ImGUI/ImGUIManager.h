@@ -1,7 +1,11 @@
 #pragma once
+#include <vector>
+
 struct SDL_Surface;
 struct SDL_Window;
 struct SDL_Renderer;
+
+class ImGUIWindow;
 
 class ImGUIManager
 {
@@ -10,8 +14,8 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
-
-	bool showDemoWindow = false;
+	
+	std::vector<ImGUIWindow*> windows;
 
 	void initImGUI();
 	void initSDL();
@@ -22,8 +26,9 @@ private:
 public:
 	
 	void init();
-	void enableDemoWindow(bool option);
 	void loop();
+
+	void addWindow(ImGUIWindow* window);
 
 	~ImGUIManager();
 };

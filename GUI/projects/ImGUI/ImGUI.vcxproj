@@ -161,6 +161,8 @@
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h" />
+    <ClInclude Include="..\..\src\ImGUI\ImGUIWindow.h" />
+    <ClInclude Include="..\..\src\ImGUI\ImGUIWindowComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.cpp" />
@@ -171,6 +173,8 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\ImGUIWindow.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\ImGUIWindowComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
