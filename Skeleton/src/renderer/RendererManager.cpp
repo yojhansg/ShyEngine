@@ -68,12 +68,9 @@ namespace RendererManager {
 
     void RendererManager::toggleFullScreen() {
         auto flags = SDL_GetWindowFlags(window);
-        if (flags & SDL_WINDOW_FULLSCREEN) {
-            SDL_SetWindowFullscreen(window, 0);
-        }
-        else {
-            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-        }
+
+        if (flags & SDL_WINDOW_FULLSCREEN) SDL_SetWindowFullscreen(window, 0);
+        else SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
 
     void RendererManager::resizeWindow(int w, int h) {
