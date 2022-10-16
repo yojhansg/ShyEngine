@@ -11,10 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\physics\PhysicsManager.h" />
+    <ClCompile Include="..\..\src\physics\PhysicsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\physics\PhysicsManager.cpp" />
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\physics\PhysicsManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -64,7 +69,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)src/utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,7 +89,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)src/utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

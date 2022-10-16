@@ -23,14 +23,14 @@ namespace InputManager {
 		};
 
 		enum CONTROLLERSTICK : uint8_t {
-			LEFTSTICK = 0, RIGHTSTICK = 1,
+			LEFT_STICK = 0, RIGHT_STICK = 1,
 		};
 
 		enum CONTROLLERTRIGGER : uint8_t {
 			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1,
 		};
 
-		enum PS4CONTROLLER_BUTTONS : uint8_t {
+		enum CONTROLLER_BUTTONS : uint8_t {
 			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
@@ -59,11 +59,15 @@ namespace InputManager {
 		// mouse
 		bool mouseMotionEvent();
 
-		bool mouseButtonEvent();
+		bool mouseButtonEventDown();
+
+		bool mouseButtonEventUp();
+
+		bool isMouseButtonDown(MOUSEBUTTON b);
+
+		bool isMouseButtonUp(MOUSEBUTTON b);
 
 		const std::pair<Sint32, Sint32>& getMousePos();
-
-		int getMouseButtonState(MOUSEBUTTON b);
 
 		// controller
 		bool isJoystickAxisMotion();
@@ -107,7 +111,8 @@ namespace InputManager {
 		bool isKeyUpEvent_;
 		bool isKeyDownEvent_;
 		bool isMouseMotionEvent_;
-		bool isMouseButtonEvent_;
+		bool isMouseButtonEventDown_;
+		bool isMouseButtonEventUp_;
 		std::pair<Sint32, Sint32> mousePos_;
 		std::array<bool, 3> mbState_;
 		const Uint8* kbState_;
@@ -137,12 +142,6 @@ namespace InputManager {
 		bool isJoystickButtonDownEvent_;
 		bool isJoystickButtonUpEvent_;
 		int joystickId;
-
+		int numJoysticksConnected;
 	};
-
-	// A macro to simplify the way to access the instance
-
-	inline InputManager& im() {
-		return *InputManager::instance();
-	}
 }

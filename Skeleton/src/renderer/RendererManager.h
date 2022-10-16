@@ -51,13 +51,5 @@ namespace RendererManager {
 
 		SDL_Window* window; // the window
 		SDL_Renderer* renderer; // the renderer
-
 	};
-
-	// A macro to simplify the way to access the instance
-
-	inline RendererManager& rm() {
-		return *RendererManager::instance();
-	}
-
 }

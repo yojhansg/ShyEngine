@@ -15,7 +15,9 @@ int main(int argc, char* args[]) {
 	auto rm = RendererManager::RendererManager::init("PhosphorusEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	auto im = InputManager::InputManager::init();
 	auto sm = SoundManager::SoundManager::init();
+	auto pm = PhysicsManager::PhysicsManager::init();
 
+	pm->testBox2D();
 
 	SDL_Rect* r = new SDL_Rect({ rm->getWidth() / 2 - 25, rm->getHeight() / 2 - 25, 50, 50});
 	SDL_Color c = rm->createColor(0x00000000);
@@ -28,37 +30,22 @@ int main(int argc, char* args[]) {
 
 		Uint32 startTime = SDL_GetTicks();
 
+		// Input
 		im->clearState();
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
+			im->update(event);
+
+			if (im->isKeyDown(SDL_SCANCODE_ESCAPE) || event.type == SDL_QUIT) {
 				exit = true;
 				continue;
 			}
-			im->update(event);
 		}
 
+		// Update
+		pm->update();
 
-		// Test de teclado
-		if (im->isKeyDown(SDL_SCANCODE_ESCAPE)) {
-			exit =  true;
-			continue;
-		}
 
-		// Test de botones
-		if (im->isJoystickButtonEventDown()) {
-			for (int i = 0; i < im->getJoysticksNumButtons(); i++) {
-				std::cout << im->getJoystickButtonState(i) << "  ";
-			}
-			std::cout << std::endl;
-		}
-
-		// Test de triggers
-		if (im->isJoystickAxisMotion()) {
-			if (im->isLeftTriggerMotion()) {
-
-			}
-		}
-
+		// Render
 		rm->clearRenderer(c);
 
 		SDL_SetRenderDrawColor(rm->getRenderer(), 255, 185, 0, 255);

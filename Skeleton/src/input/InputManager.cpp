@@ -20,14 +20,11 @@ namespace InputManager {
 
 		isKeyDownEvent_ = false;
 		isKeyUpEvent_ = false;
-		isMouseButtonEvent_ = false;
+		isMouseButtonEventDown_ = false;
+		isMouseButtonEventUp_ = false;
 		isMouseMotionEvent_ = false;
 		isJoystickButtonDownEvent_ = false;
 		isJoystickButtonUpEvent_ = false;
-
-		for (auto i = 0u; i < 3; i++) {
-			mbState_[i] = false;
-		}
 	}
 
 	void InputManager::update(const SDL_Event& event) {
@@ -92,16 +89,24 @@ namespace InputManager {
 		return isMouseMotionEvent_;
 	}
 
-	bool InputManager::mouseButtonEvent() {
-		return isMouseButtonEvent_;
+	bool InputManager::mouseButtonEventDown() {
+		return isMouseButtonEventDown_;
+	}
+
+	bool InputManager::mouseButtonEventUp() {
+		return isMouseButtonEventUp_;
 	}
 
 	const std::pair<Sint32, Sint32>& InputManager::getMousePos() {
 		return mousePos_;
 	}
 
-	int InputManager::getMouseButtonState(MOUSEBUTTON b) {
+	bool InputManager::isMouseButtonDown(MOUSEBUTTON b) {
 		return mbState_[b];
+	}
+
+	bool InputManager::isMouseButtonUp(MOUSEBUTTON b) {
+		return !mbState_[b];
 	}
 
 	void InputManager::onKeyDown(const SDL_Event& event) {
@@ -119,7 +124,9 @@ namespace InputManager {
 	}
 
 	void InputManager::onMouseButtonChange(const SDL_Event& event, bool isDown) {
-		isMouseButtonEvent_ = true;
+		if (isDown) isMouseButtonEventDown_ = true;
+		else isMouseButtonEventUp_ = true;
+
 		switch (event.button.button) {
 		case SDL_BUTTON_LEFT:
 			mbState_[LEFT] = isDown;
@@ -139,9 +146,11 @@ namespace InputManager {
 
 	void InputManager::initialiseJoysticks() {
 
-		if (SDL_NumJoysticks() > 0) {
+		int nJoysticks = SDL_NumJoysticks();
 
-			for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		if (nJoysticks > 0) {
+
+			for (int i = 0; i < nJoysticks; i++) {
 				SDL_Joystick* joy = SDL_JoystickOpen(i);
 
 				assert(joy != NULL);
@@ -159,6 +168,8 @@ namespace InputManager {
 
 			SDL_JoystickEventState(SDL_ENABLE);
 		}
+
+		numJoysticksConnected = nJoysticks;
 	}
 
 	void InputManager::clearJoysticksButtons() {
@@ -263,10 +274,10 @@ namespace InputManager {
 		Vector2D v = Vector2D();
 
 		switch (ct) {
-		case LEFTSTICK:
+		case LEFT_STICK:
 			v = joystickValues[joystickId].first;
 			break;
-		case RIGHTSTICK:
+		case RIGHT_STICK:
 			v = joystickValues[joystickId].second;
 			break;
 		default:
