@@ -17,7 +17,7 @@ int main(int argc, char* args[]) {
 	auto sm = SoundManager::SoundManager::init();
 	auto pm = PhysicsManager::PhysicsManager::init();
 
-	pm->testBox2D();
+	pm->configureScene();
 
 	SDL_Rect* r = new SDL_Rect({ rm->getWidth() / 2 - 25, rm->getHeight() / 2 - 25, 50, 50});
 	SDL_Color c = rm->createColor(0x00000000);
