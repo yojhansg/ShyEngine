@@ -3,7 +3,6 @@
 #include <Singleton.h>
 #include <Vector2D.h>
 #include <box2d/b2_fixture.h>
-#include "box2d/b2_draw.h"
 
 class b2Vec2;
 class b2World;
@@ -11,26 +10,9 @@ class b2BodyDef;
 class b2Body;
 class b2PolygonShape;
 
-/*
-* Tareas del PhysicsManager:
-* 
-* 1.- Crear el physicsWolrd con gravedad
-* 2.- Implementar la simulación física
-*
-*/
-
 namespace PhysicsManager {
 
-	class DebugDraw : public b2Draw {
-	public:
-		void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-		void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-		void DrawCircle(const b2Vec2& center, float radius, const b2Color& color);
-		void DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color);
-		void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color);
-		void DrawTransform(const b2Transform& xf) {}
-		void DrawPoint(const b2Vec2& p, float size, const b2Color& color) {};
-	};
+	class DebugDraw;
 
 	class PhysicsManager : public Singleton<PhysicsManager> {
 
@@ -45,6 +27,10 @@ namespace PhysicsManager {
 
 		void update();
 
+		void debugDraw(); // Not working
+
+		void enableDebugDraw(bool enable);
+
 		void configureScene();
 
 	private:
@@ -54,6 +40,8 @@ namespace PhysicsManager {
 		float timeStep;
 		int velocityIterations;
 		int positionIterations;
+
+		bool debugDrawEnabled;
 
 		b2Vec2* gravity;
 		b2World* world;
@@ -69,7 +57,7 @@ namespace PhysicsManager {
 		b2PolygonShape* boxShape;
 		b2FixtureDef* boxFixtureDef;
 
-		DebugDraw b2draw;
+		// Debug draw class inherited from b2draw
+		DebugDraw* b2draw;
 	};
-
 }

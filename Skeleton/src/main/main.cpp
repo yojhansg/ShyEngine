@@ -26,9 +26,13 @@ int main(int argc, char* args[]) {
 	bool exit = false;
 	SDL_Event event;
 
+	int frames = 0;
+	Uint32 startTime = SDL_GetTicks();
+	Uint32 timeSinceStart = 0;
+
 	while (!exit) {
 
-		Uint32 startTime = SDL_GetTicks();
+		Uint32 sT = SDL_GetTicks();
 
 		// Input
 		im->clearState();
@@ -44,7 +48,6 @@ int main(int argc, char* args[]) {
 		// Update
 		pm->update();
 
-
 		// Render
 		rm->clearRenderer(c);
 
@@ -53,10 +56,23 @@ int main(int argc, char* args[]) {
 
 		rm->presentRenderer();
 
-		Uint32 frameTime = SDL_GetTicks() - startTime;
 
-		if (frameTime < 60)
-			SDL_Delay(60 - frameTime);
+		// Tiempo
+		timeSinceStart = SDL_GetTicks() - startTime;
+
+		if (timeSinceStart > 1000) {
+			std::cout << "Frames por segundo: " << frames << std::endl;
+
+			timeSinceStart = 0;
+			startTime = SDL_GetTicks();
+			frames = 0;
+		}
+		frames++;
+
+		Uint32 fT = SDL_GetTicks() - sT;
+
+		if (fT < 20)
+			SDL_Delay(20 - fT);
 	}
 
 	delete r; r = NULL;

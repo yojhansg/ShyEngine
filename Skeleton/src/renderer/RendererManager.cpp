@@ -1,5 +1,4 @@
 #include "RendererManager.h"
-
 #include <SDL_image.h>
 
 #define COLOREXP(color) \
@@ -29,7 +28,7 @@ namespace RendererManager {
         // Create window
         window = SDL_CreateWindow(windowTitle.c_str(),
             SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+            SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
         assert(window != nullptr);
 
         // Create the renderer
