@@ -33,6 +33,7 @@ enum WindowFlags_
     NoInputs = NoMouseInputs | NoNavInputs | NoNavFocus,
 };
 
+union SDL_Event;
 class WindowComponent;
 struct ImVec2;
 
@@ -59,6 +60,7 @@ namespace PEditor {
         int getHeight();
 
         void render();
+        void handleInput(SDL_Event* event);
 
         ~Window();
     };

@@ -1,22 +1,26 @@
 #pragma once
-#include "WindowComponent.h"
 #include <vector>
 
+union SDL_Event;
 struct ImVec2;
 class Image;
 
-class Camera: public WindowComponent
+class Camera
 {
 private:
-	int sizeX, sizeY;
-	int posX, posY;
+	float scrollFactor;
+	float posX, posY;
 
-	std::vector<Image*> images;
+	bool leftMouseButtonDown;
+	float mousePosX, mousePosY;
+	float clickOffsetX, clickOffsetY;
 
 public:
+	Camera(ImVec2 position, float scrollFactor);
 
-	Camera(ImVec2 size, ImVec2 position);
+	void handleInput(SDL_Event* event);
 
-	virtual void render();
+	ImVec2 getPosition();
+	float getScrollFactor();
 };
 

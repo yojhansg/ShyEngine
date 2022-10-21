@@ -17,6 +17,8 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
 	
+	bool exit = false;
+
 	std::vector<PEditor::Window*> windows;
 
 	void initImGUI();
@@ -29,6 +31,8 @@ public:
 	
 	void init();
 	void loop();
+
+	void handleInput();
 
 	void addWindow(PEditor::Window* window);
 

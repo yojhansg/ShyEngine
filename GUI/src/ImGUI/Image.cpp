@@ -7,6 +7,9 @@
 
 Image::Image(std::string& path, SDL_Renderer* renderer)
 {
+	posX = 0;
+	posY = 0;
+
 	SDL_Surface* surface = IMG_Load(path.c_str());
 	text = SDL_CreateTextureFromSurface(renderer, surface);
 
@@ -32,6 +35,17 @@ int Image::getWidth()
 int Image::getHeight()
 {
 	return height;
+}
+
+void Image::setPosition(ImVec2 newPos)
+{
+	posX = newPos.x;
+	posY = newPos.y;
+}
+
+ImVec2 Image::getPosition()
+{
+	return ImVec2(posX,posY);
 }
 
 

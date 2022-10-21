@@ -2,6 +2,7 @@
 #include "WindowComponent.h"
 #include <iostream>
 
+struct ImVec2;
 struct SDL_Texture;
 struct SDL_Renderer;
 
@@ -9,7 +10,9 @@ class Image: public WindowComponent
 {
 
 	SDL_Texture* text;
-	int width, height;
+	float width, height;
+
+	float posX, posY;
 
 public:
 
@@ -21,5 +24,8 @@ public:
 
 	int getWidth();
 	int getHeight();
+
+	void setPosition(ImVec2 newPos);
+	ImVec2 getPosition();
 };
 

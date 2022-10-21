@@ -48,6 +48,14 @@ void PEditor::Window::render()
 	ImGui::End();
 }
 
+void PEditor::Window::handleInput(SDL_Event* event)
+{
+	for (auto component : components)
+	{
+		component->handleInput(event);
+	}
+}
+
 PEditor::Window::~Window()
 {
 	for (auto component : components)

@@ -90,10 +90,10 @@ void ImGUIManager::loop()
 {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    Scene* scene = new Scene(windows[1], renderer);
+    Scene* scene = new Scene(windows[0], renderer);
     scene->addImage("test1.jpg");
-    scene->addImage("test2.jpg");
-    scene->addImage("test3.jpg");
+
+    windows[0]->addComponent(scene);
 
  /*   std::string path = "test1.jpg";
     Image* img = new Image(path, renderer);
@@ -102,24 +102,9 @@ void ImGUIManager::loop()
     static float f = 0.0f;
     static int counter = 0;
 
-    bool done = false;
-    while (!done)
+    while (!exit)
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-
-            if (event.type == SDL_QUIT)
-                done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-                done = true;
-        }
+        handleInput();
 
         // Start the Dear ImGui frame
         ImGui_ImplSDLRenderer_NewFrame();
@@ -140,6 +125,30 @@ void ImGUIManager::loop()
         SDL_RenderPresent(renderer);
     }
  
+}
+
+void ImGUIManager::handleInput()
+{
+    // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        ImGui_ImplSDL2_ProcessEvent(&event);
+
+        if (event.type == SDL_QUIT)
+            exit = true;
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+            exit = true;
+
+        for (auto window : windows)
+        {
+            window->handleInput(&event);
+        }
+    }
 }
 
 void ImGUIManager::addWindow(PEditor::Window* window)
