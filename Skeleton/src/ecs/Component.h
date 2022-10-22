@@ -1,29 +1,54 @@
 #pragma once
 
-class Entity;
+namespace ECS {
 
-class Component {
+	class Entity;
+	class Scene;
 
-	friend Entity;
+	class Component {
 
-public:
+		friend Entity;
 
-	Component();
+	public:
 
-	virtual ~Component() {};
+		Component();
 
-private:
+		virtual ~Component() {};
 
-	virtual void init() {};
-	
-	virtual void update() {};
+		Entity* getEntity();
 
-	virtual void fixedUpdate() {};
+		Scene* getScene();
 
+		bool isActive();
 
-	Entity* entity;
+		void setActive(bool ent_active);
 
-	bool enabled;
+		void remove();
 
-};
+		void remove(Component* c);
+
+	private:
+
+		virtual void init() {};
+
+		virtual void update() {};
+
+		virtual void fixedUpdate() {};
+
+		virtual void onActive() {};
+
+		virtual void onDeacitve() {};
+
+		virtual void onSceneUp() {};
+
+		virtual void onSceneDown() {};
+
+		virtual void onDestroy() {};
+
+		Entity* entity;
+
+		bool active;
+	};
+
+}
 

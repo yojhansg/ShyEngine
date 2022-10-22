@@ -1,7 +1,56 @@
 #pragma once
 
-class Scene {
+#include <string>
+#include <list>
 
+namespace ECS {
 
-};
+	class Entity;
+
+	class Scene {
+
+	public:
+
+		Scene(const std::string& sce_name);
+
+		~Scene();
+
+		void init();
+
+		void update();
+
+		void fixedUpdate();
+
+		// Called at the end of the main loop to erase the objects marked as removed
+		void onDestroy();
+
+		// Called when the scene is up
+		void onSceneUp();
+
+		// Called when the scene is changed or destroyed
+		void onSceneDown();
+
+		// Returns the name of the scene
+		std::string getName();
+
+		// Sets the name of the scene
+		void setName(const std::string& sce_name);
+
+		// Creates an entity on the scene and returns the pointer
+		Entity* createEntity(const std::string& name = "New Entity");
+
+		// Destroys an entity with a given pointer
+		void destroyEntity(Entity* ent);
+
+		// Returns the pointer to an entity that matches with the name, nullptr otherwise (Not an efficient way to find an entity)
+		Entity* findEntityByName(const std::string& ent_name);
+
+	private:
+
+		std::string name;
+
+		std::list<std::list<Entity*>::iterator> entitiesRemoved;
+		std::list<Entity*> entities;
+	};
+}
 

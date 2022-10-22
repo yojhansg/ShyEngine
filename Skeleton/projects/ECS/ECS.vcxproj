@@ -140,11 +140,30 @@
     <ClInclude Include="..\..\src\ecs\Component.h" />
     <ClInclude Include="..\..\src\ecs\Entity.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
+    <ClInclude Include="..\..\src\ecs\SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
+    <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\input\Input.vcxproj">
+      <Project>{0025c5f8-2dd5-440e-9127-f230c1c41788}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\physics\Physics.vcxproj">
+      <Project>{ee72aafb-b4aa-4f0c-8e86-3802b8051aa9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\renderer\Renderer.vcxproj">
+      <Project>{dbb8cf48-5ace-435b-85b7-a3606a772488}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sound\sound.vcxproj">
+      <Project>{53446c51-c540-4001-ac09-bbd92cc74904}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

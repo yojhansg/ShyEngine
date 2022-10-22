@@ -11,10 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\main\Engine.cpp" />
     <ClCompile Include="..\..\src\main\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Input\Input.vcxproj">
+    <ClInclude Include="..\..\src\main\Engine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECS\ECS.vcxproj">
+      <Project>{c98d0e6a-a838-4cfd-88aa-cefe6ed55268}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\input\Input.vcxproj">
       <Project>{0025c5f8-2dd5-440e-9127-f230c1c41788}</Project>
     </ProjectReference>
     <ProjectReference Include="..\physics\Physics.vcxproj">
@@ -25,9 +32,6 @@
     </ProjectReference>
     <ProjectReference Include="..\sound\sound.vcxproj">
       <Project>{53446c51-c540-4001-ac09-bbd92cc74904}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
-      <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
