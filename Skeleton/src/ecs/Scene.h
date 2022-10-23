@@ -11,7 +11,7 @@ namespace ECS {
 
 	public:
 
-		Scene(const std::string& sce_name);
+		Scene(const std::string& sce_name = "New Scene");
 
 		~Scene();
 
@@ -19,10 +19,15 @@ namespace ECS {
 
 		void update();
 
+		void lateUpdate();
+
+		void render();
+
+		void handleInput();
+
 		void fixedUpdate();
 
-		// Called at the end of the main loop to erase the objects marked as removed
-		void onDestroy();
+		void removeEntities();
 
 		// Called when the scene is up
 		void onSceneUp();

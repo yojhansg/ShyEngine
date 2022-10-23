@@ -1,8 +1,6 @@
 #include <memory>
+#include <iostream>
 #include "Engine.h"
-
-#define WIN_WIDTH 1280
-#define WIN_HEIGHT 720
 
 int main(int argc, char* args[]) {
 
@@ -15,6 +13,8 @@ int main(int argc, char* args[]) {
 	engine.update();
 
 	engine.close();
+
+	std::cout << "This was Phosphorus Engine!\n";
 	
 	return 0;
 }

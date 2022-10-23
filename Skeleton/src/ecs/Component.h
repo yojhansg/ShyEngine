@@ -33,6 +33,12 @@ namespace ECS {
 
 		virtual void update() {};
 
+		virtual void lateUpdate() {};
+
+		virtual void render() {};
+
+		virtual void handleInput() {};
+
 		virtual void fixedUpdate() {};
 
 		virtual void onActive() {};
@@ -43,7 +49,17 @@ namespace ECS {
 
 		virtual void onSceneDown() {};
 
-		virtual void onDestroy() {};
+		virtual void onCollisionEnter() {};
+
+		virtual void onCollisionStay() {};
+
+		virtual void onCollisionExit() {};
+
+		virtual void onTriggerEnter() {};
+
+		virtual void onTriggerStay() {};
+
+		virtual void onTriggerExit() {};
 
 		Entity* entity;
 

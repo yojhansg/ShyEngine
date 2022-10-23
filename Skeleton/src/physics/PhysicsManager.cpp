@@ -53,7 +53,7 @@ namespace PhysicsManager {
 		delete boxFixtureDef; boxFixtureDef = nullptr;
 	}
 
-	void PhysicsManager::update() {
+	void PhysicsManager::fixedUpdate() {
 		world->Step(timeStep, velocityIterations, positionIterations);
 		// printf("%4.2f %4.2f %4.2f\n", boxBody->GetPosition().x, boxBody->GetPosition().y, boxBody->GetAngle());
 	}

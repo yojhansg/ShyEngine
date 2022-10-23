@@ -113,6 +113,12 @@ namespace ECS {
 
 		void udpate();
 
+		void lateUpdate();
+
+		void render();
+
+		void handleInput();
+
 		// An update executed with the physics step rate
 		void fixedUpdate();
 
@@ -128,8 +134,23 @@ namespace ECS {
 		// Called when the scene is changed or destroyed
 		void onSceneDown();
 
-		// Called at the end of the main loop
-		void onDestroy();
+		// Called when the entity starts colliding with other entity
+		void onCollisionEnter();
+
+		// Called when the entity is colliding with other entity
+		void onCollisionStay();
+
+		// Called when the entity exit the collider of the other entity
+		void onCollisionExit();
+
+		// Called when the entity starts trigging an entity marked as trigger
+		void onTriggerEnter();
+
+		// Called when the entity is trigging and entity marked as trigger
+		void onTriggerStay();
+
+		// Called when the entity exits the trigger of the other entity marked as trigger
+		void onTriggerExit();
 
 		// Name of the entity
 		std::string name;

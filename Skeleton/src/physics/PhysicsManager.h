@@ -25,7 +25,7 @@ namespace PhysicsManager {
 		void setGravity(const Vector2D& gravity);
 		Vector2D getGravity();
 
-		void update();
+		void fixedUpdate();
 
 		void debugDraw(); // Not working
 

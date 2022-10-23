@@ -37,11 +37,8 @@ namespace InputManager {
 
 		~InputManager();
 
-		// clear the state
-		void clearState();
-
-		// update the state with a new event
-		void update(const SDL_Event& event);
+		// Called in the main loop to check is window is closed
+		bool handleInput(SDL_Event& e);
 
 		// keyboard
 		bool keyDownEvent();
@@ -97,6 +94,12 @@ namespace InputManager {
 	private:
 
 		InputManager();
+
+		// clear the state
+		void clearState();
+
+		// update the state with a new event
+		void update(const SDL_Event& event);
 
 		// --------- MOUSE & KB ------------
 

@@ -32,15 +32,36 @@ namespace ECS {
         }
     }
 
-    void Scene::fixedUpdate() {
+    void Scene::lateUpdate() {
         for (auto e : entities) {
-            e->fixedUpdate();
+            if (e->isActive() && !e->isRemoved())
+                e->lateUpdate();
         }
     }
 
-    void Scene::onDestroy() {
+    void Scene::render() {
+        for (auto e : entities) {
+            if (e->isActive() && !e->isRemoved())
+                e->render();
+        }
+    }
+
+    void Scene::handleInput() {
+        for (auto e : entities) {
+            if (e->isActive() && !e->isRemoved())
+                e->handleInput();
+        }
+    }
+
+    void Scene::fixedUpdate() {
+        for (auto e : entities) {
+            if (e->isActive() && !e->isRemoved())
+                e->fixedUpdate();
+        }
+    }
+
+    void Scene::removeEntities() {
         for (auto it : entitiesRemoved) {
-            (*it)->onDestroy();
             delete* it;
             entities.erase(it);
         }
@@ -49,13 +70,15 @@ namespace ECS {
 
     void Scene::onSceneUp() {
         for (auto e : entities) {
-            e->onSceneUp();
+            if (e->isActive() && !e->isRemoved())
+                e->onSceneUp();
         }
     }
 
     void Scene::onSceneDown() {
         for (auto e : entities) {
-            e->onSceneDown();
+            if (e->isActive() && !e->isRemoved())
+                e->onSceneDown();
         }
     }
 

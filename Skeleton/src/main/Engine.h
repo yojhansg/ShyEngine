@@ -19,12 +19,17 @@ namespace SoundManager {
 	class SoundManager;
 }
 
+namespace ECS {
+	class SceneManager;
+}
+
+class SDL_Rect;
+
 class Engine {
 
 public:
 
 	Engine();
-	~Engine();
 
 	void init();
 	void update();
@@ -32,10 +37,10 @@ public:
 
 private:
 
-	PhysicsManager::PhysicsManager* pm;
-	RendererManager::RendererManager* rm;
-	InputManager::InputManager* im;
-	SoundManager::SoundManager* sm;
-
+	ECS::SceneManager* sceneManager;
+	PhysicsManager::PhysicsManager* physicsManager;
+	RendererManager::RendererManager* rendererManager;
+	InputManager::InputManager* inputManager;
+	SoundManager::SoundManager* soundManager;
 };
 

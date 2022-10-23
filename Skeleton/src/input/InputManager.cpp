@@ -16,6 +16,20 @@ namespace InputManager {
 		removeJoysticks();
 	}
 
+	bool InputManager::handleInput(SDL_Event& e) {
+		clearState();
+		while (SDL_PollEvent(&e)) {
+			update(e);
+
+			if (isKeyDown(SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) {
+				return false;
+				continue;
+			}
+		}
+
+		return true;
+	}
+
 	void InputManager::clearState() {
 
 		isKeyDownEvent_ = false;

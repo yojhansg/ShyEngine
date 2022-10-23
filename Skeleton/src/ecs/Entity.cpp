@@ -54,6 +54,24 @@ namespace ECS {
 		componentsRemoved.clear();
 	}
 
+	void Entity::lateUpdate() {
+		for (auto c : components) {
+			if (c->isActive()) c->lateUpdate();
+		}
+	}
+
+	void Entity::render() {
+		for (auto c : components) {
+			if (c->isActive()) c->render();
+		}
+	}
+
+	void Entity::handleInput() {
+		for (auto c : components) {
+			if (c->isActive()) c->handleInput();
+		}
+	}
+
 	void Entity::fixedUpdate() {
 		for (auto c : components) {
 			if (c->isActive()) c->fixedUpdate();
@@ -74,19 +92,49 @@ namespace ECS {
 
 	void Entity::onSceneUp() {
 		for (auto c : components) {
-			c->onSceneUp();
+			if (c->isActive()) c->onSceneUp();
 		}
 	}
 
 	void Entity::onSceneDown() {
 		for (auto c : components) {
-			c->onSceneDown();
+			if (c->isActive()) c->onSceneDown();
 		}
 	}
 
-	void Entity::onDestroy() {
+	void Entity::onCollisionEnter() {
 		for (auto c : components) {
-			c->onDestroy();
+			if (c->isActive()) c->onCollisionEnter();
+		}
+	}
+
+	void Entity::onCollisionStay() {
+		for (auto c : components) {
+			if (c->isActive()) c->onCollisionStay();
+		}
+	}
+
+	void Entity::onCollisionExit() {
+		for (auto c : components) {
+			if (c->isActive()) c->onCollisionExit();
+		}
+	}
+
+	void Entity::onTriggerEnter() {
+		for (auto c : components) {
+			if (c->isActive()) c->onTriggerEnter();
+		}
+	}
+
+	void Entity::onTriggerStay() {
+		for (auto c : components) {
+			if (c->isActive()) c->onTriggerStay();
+		}
+	}
+
+	void Entity::onTriggerExit() {
+		for (auto c : components) {
+			if (c->isActive()) c->onTriggerExit();
 		}
 	}
 
