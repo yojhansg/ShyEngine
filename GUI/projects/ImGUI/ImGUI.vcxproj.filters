@@ -33,13 +33,22 @@
     <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.h">
       <Filter>ImGUI_files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Camera.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Image.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\ImGUIWindow.h">
+    <ClInclude Include="..\..\src\ImGUI\Scene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\ImGUIWindowComponent.h">
+    <ClInclude Include="..\..\src\ImGUI\Window.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\WindowComponent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,13 +74,22 @@
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.cpp">
       <Filter>ImGUI_files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Camera.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Image.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\ImGUIWindow.cpp">
+    <ClCompile Include="..\..\src\ImGUI\Scene.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\ImGUIWindowComponent.cpp">
+    <ClCompile Include="..\..\src\ImGUI\Window.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\WindowComponent.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
