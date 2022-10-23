@@ -5,17 +5,19 @@ struct SDL_Surface;
 struct SDL_Window;
 struct SDL_Renderer;
 
-class ImGUIWindow;
+namespace PEditor {
+	class Window;
+};
 
 class ImGUIManager
 {
 private:
 	// Pointers to our window and surface
+	SDL_Window* window;
 	SDL_Surface* winSurface = nullptr;
-	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
 	
-	std::vector<ImGUIWindow*> windows;
+	std::vector<PEditor::Window*> windows;
 
 	void initImGUI();
 	void initSDL();
@@ -28,7 +30,7 @@ public:
 	void init();
 	void loop();
 
-	void addWindow(ImGUIWindow* window);
+	void addWindow(PEditor::Window* window);
 
 	~ImGUIManager();
 };

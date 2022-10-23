@@ -1,15 +1,29 @@
 #include <ImGUIManager.h>
-#include "ImGUIWindow.h"
+#include "imgui_files/imgui.h"
+#include "Window.h"
 
 int main(int, char**)
 {
-	ImGUIWindow* window = new ImGUIWindow("VENTANA TEST", NoResize | NoMove);
 
 	ImGUIManager* imGUIManager = new ImGUIManager();
 
 	imGUIManager->init();
 
+	PEditor::Window* window = new PEditor::Window("VENTANA TEST1", None);
+	window->setSize(ImVec2(50, 50));
+
 	imGUIManager->addWindow(window);
+
+	window = new PEditor::Window("VENTANA TEST2", None);
+	window->setSize(ImVec2(1080, 720));
+
+	imGUIManager->addWindow(window);
+
+	window = new PEditor::Window("VENTANA TEST3", None);
+	window->setSize(ImVec2(50, 50));
+
+	imGUIManager->addWindow(window);
+
 
 	imGUIManager->loop();
 }

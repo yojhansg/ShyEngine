@@ -2,9 +2,11 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
-#include "ImGUIWindow.h"
+#include "Window.h"
 #include "SDL.h"
 #include <iostream>
+#include "Scene.h"
+#include "Image.h"
 
 void ImGUIManager::initImGUI()
 {
@@ -36,7 +38,7 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    createWindow("", 500, 500, 1080, 720);
+    createWindow("", 0, 0, 1920, 1080);
     createRenderer();
 }
 
@@ -68,7 +70,7 @@ void ImGUIManager::createWindow(const char* name, int posX, int posY, int sizeX,
 
 void ImGUIManager::createRenderer()
 {
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (renderer == NULL)
 	{
 		SDL_Log("Error creating SDL_Renderer!");
@@ -80,11 +82,22 @@ void ImGUIManager::createRenderer()
 void ImGUIManager::init()
 {
     initImGUI();
+
+
 }
 
 void ImGUIManager::loop()
 {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    Scene* scene = new Scene(windows[1], renderer);
+    scene->addImage("test1.jpg");
+    scene->addImage("test2.jpg");
+    scene->addImage("test3.jpg");
+
+ /*   std::string path = "test1.jpg";
+    Image* img = new Image(path, renderer);
+    windows[0]->addComponent(img);*/
 
     static float f = 0.0f;
     static int counter = 0;
@@ -129,10 +142,12 @@ void ImGUIManager::loop()
  
 }
 
-void ImGUIManager::addWindow(ImGUIWindow* window)
+void ImGUIManager::addWindow(PEditor::Window* window)
 {
     windows.push_back(window);
 }
+
+
 
 ImGUIManager::~ImGUIManager()
 {
