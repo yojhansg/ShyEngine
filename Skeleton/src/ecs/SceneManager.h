@@ -4,6 +4,24 @@
 #include <stack>
 #include <string>
 
+/*
+* 
+* This class handles the scenes.
+* User should use this manager to create a new class
+* and call the 'changeScene' method to start rendering 
+* his new class.
+* 
+* There is always an empty scene at the botton of
+* the stack not accesible from the user to avoid
+* problems with an empty stack.
+* 
+* Actually, the 'changeScene' method does not change
+* the scene, it just marks that scene as the new scene to 
+* be rendered and change it at the end of the main loop
+* with the 'manageScenes' method.
+* 
+*/
+
 namespace ECS {
 
 	class Scene;
@@ -48,19 +66,18 @@ namespace ECS {
 		// Remove all the scenes on the stack
 		void removeAllScenes();
 
-		// Destroys the actual scene
-		void removeActualScene();
-
 		/// <summary>
 		/// Manage the scenes.
 		/// If the user changed the scene in the current iteration, this method actually change it
 		/// at the end of the main loop according with the mode.
 		/// </summary>
-		bool manageScenes();
+		void manageScenes();
 
 		void pushScene();
 
 		void popScene();
+
+		void popAndPushScene();
 
 		std::stack<Scene*> scenes;
 
@@ -69,6 +86,8 @@ namespace ECS {
 		Scene* newScene;
 
 		bool change;
+
+		int n_scenes;
 	};
 
 }

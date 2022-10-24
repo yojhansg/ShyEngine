@@ -7,36 +7,30 @@ namespace ECS {
 		newScene = nullptr;
 		mode = PUSH;
 		change = false;
+
+		auto s = new Scene("Bottom Scene");
+		scenes.push(s); 
+
+		n_scenes = 1;
 	}
 
 	SceneManager::~SceneManager() {
 		removeAllScenes();
+
+		delete scenes.top();
+		scenes.pop();
 	}
 
 	Scene* SceneManager::getActualScene() {
-		if (scenes.empty()) return nullptr;
-
 		return scenes.top();
 	}
 
 	int SceneManager::getNumberOfScenes() {
-		return scenes.size();
+		return n_scenes - 1;
 	}
 
 	Scene* SceneManager::createScene(const std::string& sce_name) {
-		Scene* s = new Scene(sce_name);
-
-		scenes.push(s);
-
-		return s;
-	}
-
-	void SceneManager::removeActualScene() {
-		if (!scenes.empty()) {
-			scenes.top()->onSceneDown();
-			delete scenes.top();
-			scenes.pop();
-		}
+		return new Scene(sce_name);
 	}
 
 	void SceneManager::changeScene(Scene* sce, LOAD_MODE m) {
@@ -45,7 +39,7 @@ namespace ECS {
 		change = true;
 	}
 
-	bool SceneManager::manageScenes() {
+	void SceneManager::manageScenes() {
 		if (change) {
 			switch (mode) {
 
@@ -58,9 +52,7 @@ namespace ECS {
 				break;
 
 			case POP_AND_PUSH:
-				popScene();
-				scenes.push(newScene);
-				scenes.top()->onSceneUp();
+				popAndPushScene();
 				break;
 
 			case CLEAR_AND_PUSH:
@@ -78,24 +70,43 @@ namespace ECS {
 		}
 
 		change = false;
-
-		return scenes.empty();
 	}
 
 	void SceneManager::pushScene() {
 
-		if (!scenes.empty()) scenes.top()->onSceneDown();
+		if (n_scenes > 1) scenes.top()->onSceneDown();
 
 		scenes.push(newScene);
-		scenes.top()->onSceneUp();
+		scenes.top()->init();
+
+		n_scenes++;
 	}
 
 	void SceneManager::popScene() {
-		removeActualScene();
+		if (n_scenes > 1) {
+			scenes.top()->onSceneDown();
+			delete scenes.top();
+			scenes.pop();
+
+			n_scenes--;
+
+			if (n_scenes > 1) scenes.top()->onSceneUp();
+		}
+	}
+
+	void SceneManager::popAndPushScene() {
+		if (n_scenes > 1) {
+			scenes.top()->onSceneDown();
+			delete scenes.top();
+			scenes.pop();
+
+			scenes.push(newScene);
+			scenes.top()->init();
+		}
 	}
 
 	void SceneManager::removeAllScenes() {
-		for (int i = 0; i < scenes.size(); i++) popScene();
+		for (int i = 0; i < n_scenes - 1; i++) popScene();
 	}
 
 }

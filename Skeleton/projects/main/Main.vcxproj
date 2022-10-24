@@ -12,10 +12,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main\Engine.cpp" />
+    <ClCompile Include="..\..\src\main\Game.cpp" />
     <ClCompile Include="..\..\src\main\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\main\Engine.h" />
+    <ClInclude Include="..\..\src\main\Game.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ECS\ECS.vcxproj">

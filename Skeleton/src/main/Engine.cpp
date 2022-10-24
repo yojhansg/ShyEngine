@@ -7,14 +7,14 @@
 #include <SceneManager.h>
 #include <Scene.h>
 
-#include <Entity.h>
-#include <Transform.h>
-
 #include <iostream>
 #include <memory>
 
+#include "Game.h"
+
 
 Engine::Engine() {
+
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; soundManager = nullptr; sceneManager = nullptr;
 }
 
@@ -26,14 +26,8 @@ void Engine::init() {
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
 
-	physicsManager->configureScene();
-
-	ECS::Scene* s = sceneManager->createScene();
-
-	ECS::Entity* e = s->createEntity("Jugador");
-	e->addComponent<ECS::Transform>();
-
-	s->init();
+	Game g(sceneManager);
+	g.initScenes();
 }
 
 void Engine::update() {
@@ -49,8 +43,6 @@ void Engine::update() {
 		Uint32 sT = SDL_GetTicks();
 
 		auto scene = sceneManager->getActualScene();
-
-		if (scene == nullptr) break;
 
 		// Input
 		if (!inputManager->handleInput(event)) break;
@@ -71,11 +63,15 @@ void Engine::update() {
 		scene->render();
 		rendererManager->presentRenderer();
 
+		// Remove dead entities
 		scene->removeEntities();
 
+		// Change scene if necessary
 		sceneManager->manageScenes();
 
-		// Tiempo
+
+
+		// Time
 		timeSinceStart = SDL_GetTicks() - startTime;
 
 		if (timeSinceStart > 1000) {
