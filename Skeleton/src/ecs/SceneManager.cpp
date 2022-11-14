@@ -7,18 +7,10 @@ namespace ECS {
 		newScene = nullptr;
 		mode = PUSH;
 		change = false;
-
-		auto s = new Scene("Bottom Scene");
-		scenes.push(s); 
-
-		n_scenes = 1;
 	}
 
 	SceneManager::~SceneManager() {
 		removeAllScenes();
-
-		delete scenes.top();
-		scenes.pop();
 	}
 
 	Scene* SceneManager::getActualScene() {
@@ -26,7 +18,7 @@ namespace ECS {
 	}
 
 	int SceneManager::getNumberOfScenes() {
-		return n_scenes - 1;
+		return scenes.size();
 	}
 
 	Scene* SceneManager::createScene(const std::string& sce_name) {
@@ -74,28 +66,24 @@ namespace ECS {
 
 	void SceneManager::pushScene() {
 
-		if (n_scenes > 1) scenes.top()->onSceneDown();
+		if (scenes.size() > 0) scenes.top()->onSceneDown();
 
 		scenes.push(newScene);
 		scenes.top()->init();
-
-		n_scenes++;
 	}
 
 	void SceneManager::popScene() {
-		if (n_scenes > 1) {
+		if (scenes.size() > 0) {
 			scenes.top()->onSceneDown();
 			delete scenes.top();
 			scenes.pop();
 
-			n_scenes--;
-
-			if (n_scenes > 1) scenes.top()->onSceneUp();
+			if (scenes.size() > 0) scenes.top()->onSceneUp();
 		}
 	}
 
 	void SceneManager::popAndPushScene() {
-		if (n_scenes > 1) {
+		if (scenes.size() > 0) {
 			scenes.top()->onSceneDown();
 			delete scenes.top();
 			scenes.pop();
@@ -106,7 +94,8 @@ namespace ECS {
 	}
 
 	void SceneManager::removeAllScenes() {
-		for (int i = 0; i < n_scenes - 1; i++) popScene();
+		auto size = scenes.size();
+		for (int i = 0; i < size; i++) popScene();
 	}
 
 }

@@ -12,6 +12,8 @@ namespace ECS {
 
 		void lateUpdate() override;
 
+		void handleInput() override;
+
 	private:
 
 

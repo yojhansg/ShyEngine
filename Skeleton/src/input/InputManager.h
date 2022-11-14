@@ -47,24 +47,24 @@ namespace InputManager {
 
 		bool isKeyDown(SDL_Scancode key);
 
-		bool isKeyDown(SDL_Keycode key);
-
 		bool isKeyUp(SDL_Scancode key);
-
-		bool isKeyUp(SDL_Keycode key);
 
 		// mouse
 		bool mouseMotionEvent();
 
-		bool mouseButtonEventDown();
-
-		bool mouseButtonEventUp();
+		bool wheelMotionEvent();
 
 		bool isMouseButtonDown(MOUSEBUTTON b);
 
 		bool isMouseButtonUp(MOUSEBUTTON b);
 
+		bool isMouseButtonDownEvent(MOUSEBUTTON b);
+
+		bool isMouseButtonUpEvent(MOUSEBUTTON b);
+
 		const std::pair<Sint32, Sint32>& getMousePos();
+
+		int getWheelMotionY();
 
 		// controller
 		bool isJoystickAxisMotion();
@@ -111,13 +111,18 @@ namespace InputManager {
 
 		void onMouseButtonChange(const SDL_Event& event, bool isDown);
 
+		void onMouseWheelMotion(const SDL_Event& event);
+
 		bool isKeyUpEvent_;
 		bool isKeyDownEvent_;
+
 		bool isMouseMotionEvent_;
+		bool isMouseWheelEvent_;
 		bool isMouseButtonEventDown_;
 		bool isMouseButtonEventUp_;
 		std::pair<Sint32, Sint32> mousePos_;
 		std::array<bool, 3> mbState_;
+		int wheelMotionY_;
 		const Uint8* kbState_;
 
 

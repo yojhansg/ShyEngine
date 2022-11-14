@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include <InputManager.h>
 #include <iostream>
 
 namespace ECS {
@@ -8,11 +9,15 @@ namespace ECS {
 	}
 
 	void Transform::update() {
-		std::cout << "Componente Transform actualizandose!\n";
+		//std::cout << "Componente Transform actualizandose!\n";
 	}
 
 	void Transform::lateUpdate() {
-		std::cout << "Componente Transform actualizandose mas tarde!\n";
+		//std::cout << "Componente Transform actualizandose mas tarde!\n";
+	}
+
+	void Transform::handleInput() {
+
 	}
 
 }

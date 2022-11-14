@@ -52,7 +52,6 @@ namespace ECS {
 			T* c = new T();
 
 			c->entity = this;
-			c->init();
 			components.push_back(c);
 
 			return c;

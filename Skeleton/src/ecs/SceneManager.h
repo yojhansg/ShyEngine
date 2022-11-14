@@ -11,10 +11,6 @@
 * and call the 'changeScene' method to start rendering 
 * his new class.
 * 
-* There is always an empty scene at the botton of
-* the stack not accesible from the user to avoid
-* problems with an empty stack.
-* 
 * Actually, the 'changeScene' method does not change
 * the scene, it just marks that scene as the new scene to 
 * be rendered and change it at the end of the main loop
@@ -61,17 +57,17 @@ namespace ECS {
 
 		void changeScene(Scene* sce, LOAD_MODE m);
 
-	private:
-
-		// Remove all the scenes on the stack
-		void removeAllScenes();
-
 		/// <summary>
 		/// Manage the scenes.
 		/// If the user changed the scene in the current iteration, this method actually change it
 		/// at the end of the main loop according with the mode.
 		/// </summary>
 		void manageScenes();
+
+	private:
+
+		// Remove all the scenes on the stack
+		void removeAllScenes();
 
 		void pushScene();
 
@@ -86,8 +82,6 @@ namespace ECS {
 		Scene* newScene;
 
 		bool change;
-
-		int n_scenes;
 	};
 
 }

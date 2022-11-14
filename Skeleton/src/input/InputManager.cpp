@@ -7,6 +7,7 @@ namespace InputManager {
 	InputManager::InputManager() {
 
 		kbState_ = SDL_GetKeyboardState(0);
+
 		initialiseJoysticks();
 
 		clearState();
@@ -37,6 +38,7 @@ namespace InputManager {
 		isMouseButtonEventDown_ = false;
 		isMouseButtonEventUp_ = false;
 		isMouseMotionEvent_ = false;
+		isMouseWheelEvent_ = false;
 		isJoystickButtonDownEvent_ = false;
 		isJoystickButtonUpEvent_ = false;
 	}
@@ -49,6 +51,9 @@ namespace InputManager {
 			break;
 		case SDL_KEYUP:
 			onKeyUp(event);
+			break;
+		case SDL_MOUSEWHEEL:
+			onMouseWheelMotion(event);
 			break;
 		case SDL_MOUSEMOTION:
 			onMouseMotion(event);
@@ -73,7 +78,15 @@ namespace InputManager {
 		}
 	}
 
-	// --------- MOUSE & KB ------------
+	// --------- KB ------------
+
+	void InputManager::onKeyDown(const SDL_Event& event) {
+		isKeyDownEvent_ = true;
+	}
+
+	void InputManager::onKeyUp(const SDL_Event& event) {
+		isKeyUpEvent_ = true;
+	}
 
 	bool InputManager::keyDownEvent() {
 		return isKeyDownEvent_;
@@ -91,28 +104,22 @@ namespace InputManager {
 		return keyUpEvent() && kbState_[key] == 0;
 	}
 
-	bool InputManager::isKeyDown(SDL_Keycode key) {
-		return isKeyDown(SDL_GetScancodeFromKey(key));
-	}
-
-	bool InputManager::isKeyUp(SDL_Keycode key) {
-		return isKeyUp(SDL_GetScancodeFromKey(key));
-	}
+	// ----------- MOUSE -----------------
 
 	bool InputManager::mouseMotionEvent() {
 		return isMouseMotionEvent_;
 	}
 
-	bool InputManager::mouseButtonEventDown() {
-		return isMouseButtonEventDown_;
-	}
-
-	bool InputManager::mouseButtonEventUp() {
-		return isMouseButtonEventUp_;
+	bool InputManager::wheelMotionEvent() {
+		return isMouseWheelEvent_;
 	}
 
 	const std::pair<Sint32, Sint32>& InputManager::getMousePos() {
 		return mousePos_;
+	}
+
+	int InputManager::getWheelMotionY() {
+		return wheelMotionY_;
 	}
 
 	bool InputManager::isMouseButtonDown(MOUSEBUTTON b) {
@@ -123,18 +130,23 @@ namespace InputManager {
 		return !mbState_[b];
 	}
 
-	void InputManager::onKeyDown(const SDL_Event& event) {
-		isKeyDownEvent_ = true;
+	bool InputManager::isMouseButtonDownEvent(MOUSEBUTTON b) {
+		return isMouseButtonEventDown_ && mbState_[b];
 	}
 
-	void InputManager::onKeyUp(const SDL_Event& event) {
-		isKeyUpEvent_ = true;
+	bool InputManager::isMouseButtonUpEvent(MOUSEBUTTON b) {
+		return isMouseButtonEventUp_ && !mbState_[b];
 	}
 
 	void InputManager::onMouseMotion(const SDL_Event& event) {
 		isMouseMotionEvent_ = true;
 		mousePos_.first = event.motion.x;
 		mousePos_.second = event.motion.y;
+	}
+
+	void InputManager::onMouseWheelMotion(const SDL_Event& event) {
+		wheelMotionY_ = event.wheel.y;
+		isMouseWheelEvent_ = true;
 	}
 
 	void InputManager::onMouseButtonChange(const SDL_Event& event, bool isDown) {
@@ -209,45 +221,48 @@ namespace InputManager {
 			isAxisMotionEvent_ = true;
 			joystickId = event.jaxis.which;
 
-
 			// Left & right joysticks
-			if (event.jaxis.value < 4) {
-				if ((event.jaxis.value < -STICK_DEADZONE) || (event.jaxis.value > STICK_DEADZONE)) // Deadzone
+			if (event.jaxis.axis < 4) {
+
+				if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
 				{
 					switch (event.jaxis.axis) {
 						case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
 						case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
 						case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
 						case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-						default: break;
+						default: 
+							break;
 					}
 				}
 				else {
 
 					isAxisMotionEvent_ = false;
 
-					for (auto i = 0u; i < joysticks.size(); i++) {
+					/*for (auto i = 0u; i < joysticks.size(); i++) {
 						joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
 						joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
 
 						joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
-					}
+					}*/
 				}
+
 			} // Left & right triggers
 			else {
 
-				if ((event.jaxis.value < -TRIGGER_DEADZONE) || (event.jaxis.value > TRIGGER_DEADZONE)) {
+				if (std::abs(event.jaxis.value) > TRIGGER_DEADZONE) {
 
 					switch (event.jaxis.axis) {
-						case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-						case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-						default: break;
+						case 0: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+						case 1: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+						default: 
+							break;
 					}
 				}
 				else {
 					isAxisMotionEvent_ = false;
 
-					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
+					//joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 				}
 			}
 		}

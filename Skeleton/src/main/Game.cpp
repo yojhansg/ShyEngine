@@ -21,6 +21,7 @@ void Game::initScenes() {
 	player->addComponent<ECS::Transform>();
 
 	sceneManager->changeScene(defaultScene, ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
 	//// First scene
 	//firstScene = sceneManager->createScene("First scene");
