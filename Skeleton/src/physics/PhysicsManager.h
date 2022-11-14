@@ -14,7 +14,7 @@ namespace PhysicsManager {
 
 	class DebugDraw;
 
-	class PhysicsManager : public Singleton<PhysicsManager> {
+	class PhysicsManager : public Utilities::Singleton<PhysicsManager> {
 
 		friend Singleton<PhysicsManager>;
 
@@ -22,8 +22,8 @@ namespace PhysicsManager {
 
 		~PhysicsManager();
 
-		void setGravity(const Vector2D& gravity);
-		Vector2D getGravity();
+		void setGravity(const Utilities::Vector2D& gravity);
+		Utilities::Vector2D getGravity();
 
 		void fixedUpdate();
 

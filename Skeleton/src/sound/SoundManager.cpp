@@ -1,5 +1,4 @@
 #include "SoundManager.h"
-
 #include "SDL.h"
 
 namespace SoundManager {

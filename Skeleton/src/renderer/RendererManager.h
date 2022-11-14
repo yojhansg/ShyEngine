@@ -1,14 +1,15 @@
 #pragma once
 
 #include <Singleton.h>
-#include <Vector2D.h>
-
 #include <string>
 #include <SDL.h>
 
+class SDL_Window;
+class SDL_Renderer;
+
 namespace RendererManager {
 
-	class RendererManager : public Singleton<RendererManager> {
+	class RendererManager : public Utilities::Singleton<RendererManager> {
 
 		friend Singleton<RendererManager>;
 
@@ -30,12 +31,6 @@ namespace RendererManager {
 		void resizeWindow(int w, int h);
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
-
-		SDL_Color createColor(unsigned long num);
-		SDL_Color createColor(std::string strnum);
-
-		SDL_Rect createRect(Vector2D& pos, float w, float h);
-		SDL_Rect createRect(float x, float y, float w, float h);
 
 	private:
 

@@ -2,7 +2,6 @@
 
 #include "Singleton.h"
 #include "SDL_mixer.h"
-
 #include <string>
 #include <map>
 
@@ -10,7 +9,7 @@
 
 namespace SoundManager {
 
-	class SoundManager : public Singleton<SoundManager> {
+	class SoundManager : public Utilities::Singleton<SoundManager> {
 
 		friend Singleton<SoundManager>;
 

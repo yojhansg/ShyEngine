@@ -6,6 +6,7 @@
 #include <InputManager.h>
 #include <SceneManager.h>
 #include <Scene.h>
+#include <SDLUtils.h>
 
 #include <iostream>
 #include <memory>
@@ -16,6 +17,7 @@
 Engine::Engine() {
 
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; soundManager = nullptr; sceneManager = nullptr;
+
 }
 
 void Engine::init() {
@@ -52,14 +54,14 @@ void Engine::update() {
 		scene->update();
 
 		// FixedUpdate
-		physicsManager->fixedUpdate();
 		scene->fixedUpdate();
+		physicsManager->fixedUpdate();
 
 		// LateUpdate
 		scene->lateUpdate();
 
 		// Render
-		rendererManager->clearRenderer();
+		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
 		scene->render();
 		rendererManager->presentRenderer();
 

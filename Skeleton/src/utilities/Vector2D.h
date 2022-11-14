@@ -10,7 +10,10 @@
  * modify the state are the different setters (and operator=).
  *
  */
-class Vector2D {
+
+namespace Utilities {
+
+	class Vector2D {
 
 	public:
 
@@ -128,8 +131,10 @@ class Vector2D {
 	private:
 		float x_;  // first coordinate
 		float y_;  // second coordinate
-};
+	};
 
-// needed for printing a value of tyep Vector2D with std::cout.
-// The definition is in .cpp
-std::ostream& operator<<(std::ostream& os, const Vector2D& v);
+	// needed for printing a value of tyep Vector2D with std::cout.
+	// The definition is in .cpp
+	std::ostream& operator<<(std::ostream& os, const Vector2D& v);
+
+}

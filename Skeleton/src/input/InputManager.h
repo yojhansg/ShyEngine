@@ -2,17 +2,16 @@
 
 #include "SDL.h"
 #include <Singleton.h>
-#include <Vector2D.h>
 #include <array>
 #include <vector>
 
-#define MAX_STICK_VALUE 32767
-#define STICK_DEADZONE 3276
-#define TRIGGER_DEADZONE 1000
+namespace Utilities {
+	class Vector2D;
+}
 
 namespace InputManager {
 
-	class InputManager : public Singleton<InputManager> { 
+	class InputManager : public Utilities::Singleton<InputManager> {
 
 		friend Singleton<InputManager>;
 
@@ -75,7 +74,7 @@ namespace InputManager {
 
 		bool getJoystickId();
 
-		Vector2D getJoystickValue(CONTROLLERSTICK ct);
+		Utilities::Vector2D getJoystickValue(CONTROLLERSTICK ct);
 
 		float getJoystickTriggerValue(CONTROLLERTRIGGER ct);
 		
@@ -141,7 +140,7 @@ namespace InputManager {
 		void onJoystickButtonUp(const SDL_Event& event);
 
 		std::vector<SDL_Joystick*> joysticks;
-		std::vector<std::pair<Vector2D*, Vector2D*>> joystickValues;
+		std::vector<std::pair<Utilities::Vector2D*, Utilities::Vector2D*>> joystickValues;
 		std::vector<std::pair<int, int>> joystickTriggerValues;
 		std::vector<std::vector<bool>> joystickButtonStates;
 		std::vector<int> joystickNumButtons;

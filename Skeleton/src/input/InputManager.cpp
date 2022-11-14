@@ -1,6 +1,9 @@
 #include "InputManager.h"
+#include <Vector2D.h>
 
-#include <iostream>
+#define MAX_STICK_VALUE 32767
+#define STICK_DEADZONE 3276
+#define TRIGGER_DEADZONE 1000
 
 namespace InputManager {
 
@@ -183,7 +186,7 @@ namespace InputManager {
 					
 				joysticks.push_back(joy);
 
-				joystickValues.push_back(std::make_pair(new Vector2D(0, 0), new Vector2D(0, 0)));
+				joystickValues.push_back(std::make_pair(new Utilities::Vector2D(0, 0), new Utilities::Vector2D(0, 0)));
 
 				joystickTriggerValues.push_back(std::make_pair(0, 0));
 
@@ -298,9 +301,9 @@ namespace InputManager {
 		return joystickId;
 	}
 
-	Vector2D InputManager::getJoystickValue(CONTROLLERSTICK ct) {
+	Utilities::Vector2D InputManager::getJoystickValue(CONTROLLERSTICK ct) {
 
-		Vector2D v = Vector2D();
+		Utilities::Vector2D v = Utilities::Vector2D();
 
 		switch (ct) {
 		case LEFT_STICK:

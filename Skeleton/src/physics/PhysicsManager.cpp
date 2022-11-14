@@ -3,8 +3,6 @@
 #include "GLFW/glfw3.h"
 #include "DebugDraw.h"
 
-#include <iostream>
-
 namespace PhysicsManager {
 
 	PhysicsManager::PhysicsManager() {
@@ -98,12 +96,12 @@ namespace PhysicsManager {
 		boxBody->CreateFixture(boxFixtureDef);
 	}
 
-	void PhysicsManager::setGravity(const Vector2D& g) {
+	void PhysicsManager::setGravity(const Utilities::Vector2D& g) {
 		gravity->Set(g.getX(), g.getY());
 		world->SetGravity(*gravity);
 	}
 
-	Vector2D PhysicsManager::getGravity() {
-		return Vector2D(gravity->x, gravity->y);
+	Utilities::Vector2D PhysicsManager::getGravity() {
+		return Utilities::Vector2D(gravity->x, gravity->y);
 	}
 }

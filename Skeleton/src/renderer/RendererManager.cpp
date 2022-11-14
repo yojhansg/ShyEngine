@@ -1,9 +1,6 @@
 #include "RendererManager.h"
 #include <SDL_image.h>
 
-#define COLOREXP(color) \
-	color.r, color.g, color.b, color.a
-
 namespace RendererManager {
 
     RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400) {}
@@ -84,46 +81,12 @@ namespace RendererManager {
         SDL_SetWindowPosition(window, x, y);
     }
 
-    SDL_Color RendererManager::createColor(unsigned long num) {
-        return
-        {
-             static_cast<Uint8>((num >> 24) & 0xff),
-             static_cast<Uint8>((num >> 16) & 0xff),
-             static_cast<Uint8>((num >> 8) & 0xff),
-             static_cast<Uint8>(num & 0xff)
-        };
-    }
-
-    SDL_Color RendererManager::createColor(std::string strnum) {
-        return createColor(std::stoul(strnum.erase(0, 2), nullptr, 16));
-    }
-
-    SDL_Rect RendererManager::createRect(Vector2D& pos, float w, float h) {
-        return
-        {
-            static_cast<int>(pos.getX()),
-            static_cast<int>(pos.getY()),
-            static_cast<int>(w),
-            static_cast<int>(h) 
-        };
-    }
-
-    SDL_Rect RendererManager::createRect(float x, float y, float w, float h) {
-        return
-        {
-            static_cast<int>(x),
-            static_cast<int>(y),
-            static_cast<int>(w),
-            static_cast<int>(h)
-        };
-    }
-
     void RendererManager::showCursor(bool show) {
         SDL_ShowCursor(show);
     }
 
     void RendererManager::clearRenderer(SDL_Color bg) {
-        SDL_SetRenderDrawColor(renderer, COLOREXP(bg));
+        SDL_SetRenderDrawColor(renderer, bg.r, bg.g, bg.b, bg.a);
         SDL_RenderClear(renderer);
     }
 

@@ -22,7 +22,7 @@ namespace ECS {
 
 	class Scene;
 
-	class SceneManager : public Singleton<SceneManager> {
+	class SceneManager : public Utilities::Singleton<SceneManager> {
 
 	public:
 
