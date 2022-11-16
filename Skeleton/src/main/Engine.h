@@ -1,8 +1,5 @@
 #pragma once
 
-#define WIN_WIDTH 1280
-#define WIN_HEIGHT 720
-
 namespace PhysicsManager {
 	class PhysicsManager;
 }
@@ -23,7 +20,9 @@ namespace ECS {
 	class SceneManager;
 }
 
-class SDL_Rect;
+namespace Utilities {
+	class EngineTime;
+}
 
 class Engine {
 
@@ -42,5 +41,7 @@ private:
 	RendererManager::RendererManager* rendererManager;
 	InputManager::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;
+
+	Utilities::EngineTime* engineTime;
 };
 

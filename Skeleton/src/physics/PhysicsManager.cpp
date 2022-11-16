@@ -9,7 +9,10 @@ namespace PhysicsManager {
 		gravity = new b2Vec2(0.0f, -9.8f);
 		world = new b2World(*gravity);
 
-		debugDrawEnabled = false;
+		velocityIterations = 6;
+		positionIterations = 3;
+
+		/*debugDrawEnabled = false;
 
 		b2draw = new DebugDraw();
 
@@ -22,7 +25,7 @@ namespace PhysicsManager {
 		flags += b2Draw::e_pairBit;
 		b2draw->SetFlags(flags);
 
-		timeStep = 1.0f / 60.0f;
+		timeStep = 1.0f / 50.0f;
 		velocityIterations = 6;
 		positionIterations = 3;
 
@@ -33,13 +36,13 @@ namespace PhysicsManager {
 		boxBodyDef = nullptr;
 		boxBody = nullptr;
 		boxShape = nullptr;
-		boxFixtureDef = nullptr;
+		boxFixtureDef = nullptr;*/
 	}
 
 	PhysicsManager::~PhysicsManager() {
 		delete gravity;
 		delete world;
-		delete b2draw;
+		/*delete b2draw;
 
 		delete groundBodydef; groundBodydef = nullptr;
 		groundBody = nullptr;
@@ -48,52 +51,53 @@ namespace PhysicsManager {
 		delete boxBodyDef; boxBodyDef = nullptr;
 		boxBody = nullptr;
 		delete boxShape; boxShape = nullptr;
-		delete boxFixtureDef; boxFixtureDef = nullptr;
+		delete boxFixtureDef; boxFixtureDef = nullptr;*/
 	}
 
-	void PhysicsManager::fixedUpdate() {
-		world->Step(timeStep, velocityIterations, positionIterations);
+	void PhysicsManager::fixedUpdate(float fixedDeltaTime) {
+		world->Step(fixedDeltaTime, velocityIterations, positionIterations);
+
 		// printf("%4.2f %4.2f %4.2f\n", boxBody->GetPosition().x, boxBody->GetPosition().y, boxBody->GetAngle());
 	}
 
 	void PhysicsManager::debugDraw() {
-		if (debugDrawEnabled)
-			 world->DebugDraw();
+		/*if (debugDrawEnabled)
+			 world->DebugDraw();*/
 	}
 
 	void PhysicsManager::enableDebugDraw(bool enable) {
-		debugDrawEnabled = enable;
+		//debugDrawEnabled = enable;
 	}
 
 	void PhysicsManager::configureScene() {
 
-		// Ground (Static)
-		groundBodydef = new b2BodyDef();
-		groundBodydef->position.Set(0.0f, -0.5f);
+		//// Ground (Static)
+		//groundBodydef = new b2BodyDef();
+		//groundBodydef->position.Set(0.0f, -0.5f);
 
-		groundBody = world->CreateBody(groundBodydef);
+		//groundBody = world->CreateBody(groundBodydef);
 
-		groundShape = new b2PolygonShape();
-		groundShape->SetAsBox(0.5f, 0.005f);
+		//groundShape = new b2PolygonShape();
+		//groundShape->SetAsBox(0.5f, 0.005f);
 
-		groundBody->CreateFixture(groundShape, 0.0f);
+		//groundBody->CreateFixture(groundShape, 0.0f);
 
-		// Box (Dynamic)
-		boxBodyDef = new b2BodyDef();
-		boxBodyDef->type = b2_dynamicBody;
-		boxBodyDef->position.Set(0.0f, 1.0f);
+		//// Box (Dynamic)
+		//boxBodyDef = new b2BodyDef();
+		//boxBodyDef->type = b2_dynamicBody;
+		//boxBodyDef->position.Set(0.0f, 1.0f);
 
-		boxBody = world->CreateBody(boxBodyDef);
+		//boxBody = world->CreateBody(boxBodyDef);
 
-		boxShape = new b2PolygonShape();
-		boxShape->SetAsBox(0.01f, 0.01f);
+		//boxShape = new b2PolygonShape();
+		//boxShape->SetAsBox(0.01f, 0.01f);
 
-		boxFixtureDef = new b2FixtureDef();
-		boxFixtureDef->shape = boxShape;
-		boxFixtureDef->density = 1.0f;
-		boxFixtureDef->friction = 0.9f;
+		//boxFixtureDef = new b2FixtureDef();
+		//boxFixtureDef->shape = boxShape;
+		//boxFixtureDef->density = 1.0f;
+		//boxFixtureDef->friction = 0.9f;
 
-		boxBody->CreateFixture(boxFixtureDef);
+		//boxBody->CreateFixture(boxFixtureDef);
 	}
 
 	void PhysicsManager::setGravity(const Utilities::Vector2D& g) {

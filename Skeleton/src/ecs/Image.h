@@ -4,15 +4,15 @@
 
 namespace ECS {
 
-	class InputManager;
-
 	class Image : public Component {
 	public:
 		void init() override;
 
-		void update() override;
+		void update(float deltaTime) override;
 
-		void lateUpdate() override;
+		void lateUpdate(float deltaTime) override;
+
+		void fixedUpdate(float fixedDeltaTime) override;
 
 		void handleInput() override;
 

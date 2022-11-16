@@ -9,7 +9,7 @@
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
 
-	defaultScene = firstScene = secondScene = nullptr;
+	defaultScene = firstScene = nullptr;
 }
 
 void Game::initScenes() {
@@ -23,15 +23,12 @@ void Game::initScenes() {
 	sceneManager->changeScene(defaultScene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 
-	//// First scene
-	//firstScene = sceneManager->createScene("First scene");
+	// First scene
+	firstScene = sceneManager->createScene("First scene");
 
-	//ECS::Entity* rock = firstScene->createEntity("Rock");
-	//rock->addComponent<ECS::Image>();
+	ECS::Entity* rock = firstScene->createEntity("Rock");
+	rock->addComponent<ECS::Image>();
 
-	//// Second scene 
-	//secondScene = sceneManager->createScene("Second scene");
-
-	//ECS::Entity* water = secondScene->createEntity("Water");
-	//water->addComponent<ECS::Image>();
+	sceneManager->changeScene(firstScene, ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 }

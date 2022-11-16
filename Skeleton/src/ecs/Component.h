@@ -31,15 +31,15 @@ namespace ECS {
 
 		virtual void init() {};
 
-		virtual void update() {};
+		virtual void update(float deltaTime) {};
 
-		virtual void lateUpdate() {};
+		virtual void lateUpdate(float deltaTime) {};
 
 		virtual void render() {};
 
 		virtual void handleInput() {};
 
-		virtual void fixedUpdate() {};
+		virtual void fixedUpdate(float fixedDeltaTime) {};
 
 		virtual void onActive() {};
 

@@ -24,9 +24,15 @@
     <ClInclude Include="..\..\src\utilities\SDLUtils.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\utilities\EngineTime.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\utilities\Vector2D.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\utilities\EngineTime.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

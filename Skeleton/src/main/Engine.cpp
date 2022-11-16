@@ -7,17 +7,21 @@
 #include <SceneManager.h>
 #include <Scene.h>
 #include <SDLUtils.h>
-
-#include <iostream>
-#include <memory>
+#include <EngineTime.h>
 
 #include "Game.h"
+#include <iostream>
 
+#include <chrono>
+using namespace std::chrono;
+
+
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
 
 Engine::Engine() {
-
-	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; soundManager = nullptr; sceneManager = nullptr;
-
+	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; 
+	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr;
 }
 
 void Engine::init() {
@@ -27,6 +31,7 @@ void Engine::init() {
 	rendererManager = RendererManager::RendererManager::init("PhosphorusEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
+	engineTime = Utilities::EngineTime::init();
 
 	Game g(sceneManager);
 	g.initScenes();
@@ -36,29 +41,37 @@ void Engine::update() {
 
 	SDL_Event event;
 
-	int frames = 0;
-	Uint32 startTime = SDL_GetTicks();
-	Uint32 timeSinceStart = 0;
+	steady_clock::time_point beginTime = high_resolution_clock::now();
+	steady_clock::time_point physicsFrame = beginTime;
+	steady_clock::time_point startTime = beginTime;
+
+	float fixedDeltaTime = 1.0f / 50.0f;
 
 	while (true) {
 
-		Uint32 sT = SDL_GetTicks();
-
 		auto scene = sceneManager->getActualScene();
+		if (scene == nullptr) break;
 
 		// Input
 		if (!inputManager->handleInput(event)) break;
 		scene->handleInput();
 
 		// Update
-		scene->update();
+		scene->update(engineTime->deltaTime);
 
-		// FixedUpdate
-		scene->fixedUpdate();
-		physicsManager->fixedUpdate();
+
+		duration<double, std::milli> physicsFrameTime = beginTime - physicsFrame;
+		if (physicsFrameTime.count() > fixedDeltaTime * 1000) {
+
+			// FixedUpdate
+			scene->fixedUpdate(fixedDeltaTime);
+			physicsManager->fixedUpdate(fixedDeltaTime);
+
+			physicsFrame = beginTime;
+		}
 
 		// LateUpdate
-		scene->lateUpdate();
+		scene->lateUpdate(engineTime->deltaTime);
 
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
@@ -71,24 +84,16 @@ void Engine::update() {
 		// Change scene if necessary
 		sceneManager->manageScenes();
 
+		steady_clock::time_point endTime = high_resolution_clock::now();
 
+		duration<float, std::milli> timeSinceStart = endTime - startTime;
+		duration<double, std::milli> frameTime = endTime - beginTime;
 
-		// Time
-		timeSinceStart = SDL_GetTicks() - startTime;
+		engineTime->timeSinceStart = timeSinceStart.count();
+		engineTime->deltaTime = frameTime.count() * 0.001f;
+		engineTime->frames++;
 
-		if (timeSinceStart > 1000) {
-			std::cout << "Frames por segundo: " << frames << std::endl;
-
-			timeSinceStart = 0;
-			startTime = SDL_GetTicks();
-			frames = 0;
-		}
-		frames++;
-
-		Uint32 fT = SDL_GetTicks() - sT;
-
-		if (fT < 20)
-			SDL_Delay(20 - fT);
+		beginTime = endTime;
 	}
 }
 

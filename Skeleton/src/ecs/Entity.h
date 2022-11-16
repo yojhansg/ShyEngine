@@ -110,16 +110,16 @@ namespace ECS {
 
 		void init();
 
-		void udpate();
+		void udpate(float deltaTime);
 
-		void lateUpdate();
+		void lateUpdate(float deltaTime);
 
 		void render();
 
 		void handleInput();
 
 		// An update executed with the physics step rate
-		void fixedUpdate();
+		void fixedUpdate(float fixedDeltaTime);
 
 		// Called when the entity is set to active
 		void onActive();

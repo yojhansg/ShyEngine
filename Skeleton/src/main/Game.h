@@ -23,7 +23,5 @@ private:
 
 	ECS::Scene* defaultScene;
 	ECS::Scene* firstScene;
-	ECS::Scene* secondScene;
-
 };
 

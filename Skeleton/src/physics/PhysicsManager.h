@@ -25,7 +25,7 @@ namespace PhysicsManager {
 		void setGravity(const Utilities::Vector2D& gravity);
 		Utilities::Vector2D getGravity();
 
-		void fixedUpdate();
+		void fixedUpdate(float fixedDeltaTime);
 
 		void debugDraw(); // Not working
 
@@ -37,27 +37,26 @@ namespace PhysicsManager {
 
 		PhysicsManager();
 
-		float timeStep;
 		int velocityIterations;
 		int positionIterations;
-
-		bool debugDrawEnabled;
 
 		b2Vec2* gravity;
 		b2World* world;
 
-		// Ground
-		b2BodyDef* groundBodydef; // Body definition, sets the position, type (static, dynamic, kinematic) ...
-		b2Body* groundBody; // The actual body object
-		b2PolygonShape* groundShape; // A shape to attach to the object through a fixture
+		//bool debugDrawEnabled;
 
-		// Box
-		b2BodyDef* boxBodyDef;
-		b2Body* boxBody;
-		b2PolygonShape* boxShape;
-		b2FixtureDef* boxFixtureDef;
+		//// Ground
+		//b2BodyDef* groundBodydef; // Body definition, sets the position, type (static, dynamic, kinematic) ...
+		//b2Body* groundBody; // The actual body object
+		//b2PolygonShape* groundShape; // A shape to attach to the object through a fixture
 
-		// Debug draw class inherited from b2draw
-		DebugDraw* b2draw;
+		//// Box
+		//b2BodyDef* boxBodyDef;
+		//b2Body* boxBody;
+		//b2PolygonShape* boxShape;
+		//b2FixtureDef* boxFixtureDef;
+
+		//// Debug draw class inherited from b2draw
+		//DebugDraw* b2draw;
 	};
 }

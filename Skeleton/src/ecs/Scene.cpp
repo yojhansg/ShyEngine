@@ -20,22 +20,22 @@ namespace ECS {
         }
     }
 
-    void Scene::update() {
+    void Scene::update(float deltaTime) {
 
         for (auto it = entities.begin(); it != entities.end(); it++) {
             Entity* e = *it;
 
             if (e->isActive() && !e->isRemoved())
-                e->udpate();
+                e->udpate(deltaTime);
             else if (e->isRemoved())
                 entitiesRemoved.push_back(it);
         }
     }
 
-    void Scene::lateUpdate() {
+    void Scene::lateUpdate(float deltaTime) {
         for (auto e : entities) {
             if (e->isActive() && !e->isRemoved())
-                e->lateUpdate();
+                e->lateUpdate(deltaTime);
         }
     }
 
@@ -53,10 +53,10 @@ namespace ECS {
         }
     }
 
-    void Scene::fixedUpdate() {
+    void Scene::fixedUpdate(float fixedDeltaTime) {
         for (auto e : entities) {
             if (e->isActive() && !e->isRemoved())
-                e->fixedUpdate();
+                e->fixedUpdate(fixedDeltaTime);
         }
     }
 

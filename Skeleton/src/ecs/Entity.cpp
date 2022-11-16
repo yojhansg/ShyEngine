@@ -42,9 +42,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::udpate() {
+	void Entity::udpate(float deltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->update();
+			if (c->isActive()) c->update(deltaTime);
 		}
 
 		for (auto it : componentsRemoved) {
@@ -54,9 +54,9 @@ namespace ECS {
 		componentsRemoved.clear();
 	}
 
-	void Entity::lateUpdate() {
+	void Entity::lateUpdate(float deltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->lateUpdate();
+			if (c->isActive()) c->lateUpdate(deltaTime);
 		}
 	}
 
@@ -72,9 +72,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::fixedUpdate() {
+	void Entity::fixedUpdate(float fixedDeltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->fixedUpdate();
+			if (c->isActive()) c->fixedUpdate(fixedDeltaTime);
 		}
 	}
 

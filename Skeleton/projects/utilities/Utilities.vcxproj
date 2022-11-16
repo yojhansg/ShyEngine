@@ -139,11 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\utilities\EngineTime.h" />
     <ClInclude Include="..\..\src\utilities\SDLUtils.h" />
     <ClInclude Include="..\..\src\utilities\Singleton.h" />
     <ClInclude Include="..\..\src\utilities\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\utilities\EngineTime.cpp" />
     <ClCompile Include="..\..\src\utilities\Vector2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

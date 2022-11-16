@@ -17,15 +17,15 @@ namespace ECS {
 
 		void init();
 
-		void update();
+		void update(float deltaTime);
 
-		void lateUpdate();
+		void lateUpdate(float deltaTime);
 
 		void render();
 
 		void handleInput();
 
-		void fixedUpdate();
+		void fixedUpdate(float fixedDeltaTime);
 
 		void removeEntities();
 

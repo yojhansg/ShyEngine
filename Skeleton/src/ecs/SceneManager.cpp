@@ -14,6 +14,9 @@ namespace ECS {
 	}
 
 	Scene* SceneManager::getActualScene() {
+
+		if (scenes.empty()) return nullptr;
+
 		return scenes.top();
 	}
 
