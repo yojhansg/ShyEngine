@@ -4,9 +4,6 @@
 #include <string>
 #include <SDL.h>
 
-class SDL_Window;
-class SDL_Renderer;
-
 namespace RendererManager {
 
 	class RendererManager : public Utilities::Singleton<RendererManager> {

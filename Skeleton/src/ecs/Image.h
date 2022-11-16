@@ -1,23 +1,40 @@
 #pragma once
 
 #include "Component.h"
+#include <RendererManager.h>
 
 namespace ECS {
 
+	class Transform;
+
 	class Image : public Component {
+
 	public:
+
+		Image();
+		
+		Image(const std::string& filename);
+
+		~Image();
+
 		void init() override;
 
-		void update(float deltaTime) override;
+		void render() override;
 
-		void lateUpdate(float deltaTime) override;
+		int getWidth();
 
-		void fixedUpdate(float fixedDeltaTime) override;
-
-		void handleInput() override;
+		int getHeight();
 
 	private:
 
+		SDL_Renderer* renderer;
+		SDL_Texture* texture;
+
+		int width, height;
+
+		std::string fileName;
+
+		Transform* transform;
 	};
 
 }

@@ -43,6 +43,10 @@ namespace Utilities {
 			static_cast<int>(h)
 		};
 	}
+
+	SDL_Rect createRect(int x, int y, int w, int h) {
+		return { x, y, w, h };
+	}
 }
 
 

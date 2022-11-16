@@ -77,12 +77,6 @@ namespace Utilities {
 			return *this;
 		}
 
-		inline Vector2D operator+=(const Vector2D& v) {
-			x_ += v.x_;
-			y_ += v.y_;
-			return *this;
-		}
-
 		// ** various operations
 
 		// length of the vector
@@ -114,14 +108,37 @@ namespace Utilities {
 			return Vector2D(x_ - v.x_, y_ - v.y_);
 		}
 
+		inline Vector2D operator-=(const Vector2D& v) {
+			x_ -= v.x_;
+			y_ -= v.y_;
+			return *this;
+		}
+
 		// vector addition
 		inline Vector2D operator+(const Vector2D& v) const {
 			return Vector2D(x_ + v.x_, y_ + v.y_);
 		}
 
+		inline Vector2D operator+=(const Vector2D& v) {
+			x_ += v.x_;
+			y_ += v.y_;
+			return *this;
+		}
+
 		// multiplication by constant (scaling)
 		inline Vector2D operator*(float d) const {
 			return Vector2D(x_ * d, y_ * d);
+		}
+
+		// multiplication by constant (scaling)
+		inline Vector2D operator*=(float d) const {
+			return Vector2D(x_ * d, y_ * d);
+		}
+
+		inline Vector2D operator*=(float d) {
+			x_ *= d;
+			y_ *= d;
+			return *this;
 		}
 
 		// division by constant (scaling)

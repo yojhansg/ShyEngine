@@ -1,38 +1,60 @@
 #include "Transform.h"
 #include "Vector2D.h"
-#include <iostream>
 
 namespace ECS {
 
 	Transform::Transform() {
-
-		position = Utilities::Vector2D(0, 0);
-		scale = Utilities::Vector2D(1, 1);
-		rotation = 0;
+		position_ = Utilities::Vector2D(0, 0);
+		scale_ = Utilities::Vector2D(1, 1);
+		rotation_ = 0;
 	}
 
+	Transform::Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation) {
+		position_ = position; 
+		scale_ = scale;
+		rotation_ = rotation;
+	}
+
+	// ------------- Getters -----------------
+
 	Utilities::Vector2D Transform::getPosition() {
-		return position;
+		return position_;
 	}
 
 	Utilities::Vector2D Transform::getScale() {
-		return scale;
+		return scale_;
 	}
 
 	float Transform::getRotation() {
-		return rotation;
+		return rotation_;
+	}
+
+	// ------------- Setters -----------------
+
+	void Transform::setPosition(const Utilities::Vector2D& position) {
+		this->position_ = position;
 	}
 
 	void Transform::setScale(const Utilities::Vector2D& scale) {
-		this->scale = scale;
+		this->scale_ = scale;
 	}
 
+	void Transform::setRotation(float rotation) {
+		this->rotation_ = rotation;
+	}
+
+	// ------------ Modifiers ------------------
+
 	void Transform::translate(const Utilities::Vector2D& position) {
-		this->position += position;
+		this->position_ += position;
 	}
 
 	void Transform::rotate(float rotation) {
-		this->rotation = rotation;
+		this->rotation_ += rotation;
+	}
+
+	void Transform::scale(float scale) {
+		this->scale_ *= scale;
 	}
 
 }

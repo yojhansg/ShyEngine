@@ -45,11 +45,11 @@ namespace ECS {
 		void removeComponent(Component* c);
 
 		// Adds a T component to the entity
-		template <typename T>
+		template <typename T, typename ...Ts>
 		requires isComponent<T>
-		T* addComponent() {
+		T* addComponent(Ts &&... args) {
 
-			T* c = new T();
+			T* c = new T(std::forward<Ts>(args)...);
 
 			c->entity = this;
 			components.push_back(c);

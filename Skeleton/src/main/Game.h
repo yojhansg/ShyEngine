@@ -21,7 +21,7 @@ private:
 
 	ECS::SceneManager* sceneManager;
 
-	ECS::Scene* defaultScene;
 	ECS::Scene* firstScene;
+	ECS::Scene* secondScene;
 };
 

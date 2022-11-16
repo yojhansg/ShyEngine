@@ -3,7 +3,9 @@
 
 namespace RendererManager {
 
-    RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400) {}
+    RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400) {
+        initSDL();
+    }
 
     RendererManager::RendererManager(const std::string& title, int w, int h) {
         windowTitle = title;
