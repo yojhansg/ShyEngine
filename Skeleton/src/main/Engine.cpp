@@ -26,7 +26,7 @@ Engine::Engine() {
 void Engine::init() {
 
 	sceneManager = ECS::SceneManager::init();
-	physicsManager = PhysicsManager::PhysicsManager::init();
+	physicsManager = PhysicsManager::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
 	rendererManager = RendererManager::RendererManager::init("PhosphorusEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
@@ -57,7 +57,6 @@ void Engine::update() {
 
 		// Update
 		scene->update(engineTime->deltaTime);
-
 
 		duration<double, std::milli> physicsFrameTime = beginTime - physicsFrame;
 		if (physicsFrameTime.count() > fixedDeltaTime * 1000) {

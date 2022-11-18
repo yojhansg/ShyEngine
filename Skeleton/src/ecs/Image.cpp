@@ -1,26 +1,15 @@
 #include "Image.h"
 #include "Entity.h"
-#include "Component.h"
 #include "Transform.h"
 #include <SDL_image.h>
 
 namespace ECS {
 
-	void Image::initImage() {
+	Image::Image(const std::string& fileName) {
 		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
 		width = height = 0;
 
 		flipX = flipY = false;
-
-		fileName = "";
-	}
-
-	Image::Image() {
-		initImage();
-	}
-
-	Image::Image(const std::string& fileName) {
-		initImage();
 
 		this->fileName = fileName;
 	}
@@ -46,14 +35,15 @@ namespace ECS {
 		width = surface->w; height = surface->h;
 		SDL_FreeSurface(surface);
 
-		// Position and scalation of the image
-		transform = getEntity()->getComponent<Transform>();
-
 		// Flip
 		flipMode();
 
 		// Rotation point
 		rotationPoint = new SDL_Point({ width / 2, height / 2 });
+	}
+
+	void Image::start() {
+		transform = getEntity()->getComponent<Transform>();
 	}
 
 	void Image::render() {
@@ -76,6 +66,18 @@ namespace ECS {
 
 	int Image::getHeight() {
 		return height;
+	}
+
+	void Image::setWidth(float width) {
+		this->width = width;
+	}
+
+	void Image::setHeight(float height) {
+		this->height = height;
+	}
+
+	void Image::setSize(float width, float height) {
+		this->width = width; this->height = height;
 	}
 
 	void Image::setFlipX(bool flip) {

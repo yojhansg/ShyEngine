@@ -11,19 +11,25 @@ namespace ECS {
 
 	public:
 
-		Image();
-		
-		Image(const std::string& filename);
+		Image(const std::string& filename = "");
 
 		~Image();
 
 		void init() override;
+
+		void start() override;
 
 		void render() override;
 
 		int getWidth();
 
 		int getHeight();
+
+		void setWidth(float width);
+
+		void setHeight(float height);
+
+		void setSize(float width, float height);
 
 		void setFlipX(bool flip);
 
@@ -32,8 +38,6 @@ namespace ECS {
 		void setRotaionPoint(int x, int y);
 
 	private:
-
-		void initImage();
 
 		void flipMode();
 

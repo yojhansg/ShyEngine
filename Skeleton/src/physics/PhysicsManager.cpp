@@ -5,14 +5,15 @@
 
 namespace PhysicsManager {
 
-	PhysicsManager::PhysicsManager() {
-		gravity = new b2Vec2(0.0f, -9.8f);
-		world = new b2World(*gravity);
+	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
+		this->gravity = new b2Vec2(gravity.getX(), gravity.getY());
+		world = new b2World(*this->gravity);
 
-		velocityIterations = 6;
-		positionIterations = 3;
+		this->velocityIterations = velocityIterations;
+		this->positionIterations = positionIterations;
 
-		/*debugDrawEnabled = false;
+		// Debug Draw
+		debugDrawEnabled = false;
 
 		b2draw = new DebugDraw();
 
@@ -24,80 +25,31 @@ namespace PhysicsManager {
 		flags += b2Draw::e_aabbBit;
 		flags += b2Draw::e_pairBit;
 		b2draw->SetFlags(flags);
-
-		timeStep = 1.0f / 50.0f;
-		velocityIterations = 6;
-		positionIterations = 3;
-
-		groundBodydef = nullptr;
-		groundBody = nullptr;
-		groundShape = nullptr;
-
-		boxBodyDef = nullptr;
-		boxBody = nullptr;
-		boxShape = nullptr;
-		boxFixtureDef = nullptr;*/
 	}
 
-	PhysicsManager::~PhysicsManager() {
-		delete gravity;
-		delete world;
-		/*delete b2draw;
+	PhysicsManager::PhysicsManager() {
+		initPhysicsManager(Utilities::Vector2D(0, 9.8f), 6, 3);
+	}
 
-		delete groundBodydef; groundBodydef = nullptr;
-		groundBody = nullptr;
-		delete groundShape; groundShape = nullptr;
-
-		delete boxBodyDef; boxBodyDef = nullptr;
-		boxBody = nullptr;
-		delete boxShape; boxShape = nullptr;
-		delete boxFixtureDef; boxFixtureDef = nullptr;*/
+	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
+		initPhysicsManager(gravity, velocityIterations, positionIterations);
 	}
 
 	void PhysicsManager::fixedUpdate(float fixedDeltaTime) {
 		world->Step(fixedDeltaTime, velocityIterations, positionIterations);
-
-		// printf("%4.2f %4.2f %4.2f\n", boxBody->GetPosition().x, boxBody->GetPosition().y, boxBody->GetAngle());
 	}
 
 	void PhysicsManager::debugDraw() {
-		/*if (debugDrawEnabled)
-			 world->DebugDraw();*/
+		if (debugDrawEnabled)
+			 world->DebugDraw();
 	}
 
 	void PhysicsManager::enableDebugDraw(bool enable) {
-		//debugDrawEnabled = enable;
+		debugDrawEnabled = enable;
 	}
 
-	void PhysicsManager::configureScene() {
-
-		//// Ground (Static)
-		//groundBodydef = new b2BodyDef();
-		//groundBodydef->position.Set(0.0f, -0.5f);
-
-		//groundBody = world->CreateBody(groundBodydef);
-
-		//groundShape = new b2PolygonShape();
-		//groundShape->SetAsBox(0.5f, 0.005f);
-
-		//groundBody->CreateFixture(groundShape, 0.0f);
-
-		//// Box (Dynamic)
-		//boxBodyDef = new b2BodyDef();
-		//boxBodyDef->type = b2_dynamicBody;
-		//boxBodyDef->position.Set(0.0f, 1.0f);
-
-		//boxBody = world->CreateBody(boxBodyDef);
-
-		//boxShape = new b2PolygonShape();
-		//boxShape->SetAsBox(0.01f, 0.01f);
-
-		//boxFixtureDef = new b2FixtureDef();
-		//boxFixtureDef->shape = boxShape;
-		//boxFixtureDef->density = 1.0f;
-		//boxFixtureDef->friction = 0.9f;
-
-		//boxBody->CreateFixture(boxFixtureDef);
+	b2World* PhysicsManager::getWorld() {
+		return world;
 	}
 
 	void PhysicsManager::setGravity(const Utilities::Vector2D& g) {
@@ -107,5 +59,11 @@ namespace PhysicsManager {
 
 	Utilities::Vector2D PhysicsManager::getGravity() {
 		return Utilities::Vector2D(gravity->x, gravity->y);
+	}
+
+	PhysicsManager::~PhysicsManager() {
+		delete gravity;
+		delete world;
+		delete b2draw;
 	}
 }
