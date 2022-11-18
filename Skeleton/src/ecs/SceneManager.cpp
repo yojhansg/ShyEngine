@@ -72,7 +72,7 @@ namespace ECS {
 		if (scenes.size() > 0) scenes.top()->onSceneDown();
 
 		scenes.push(newScene);
-		scenes.top()->init();
+		scenes.top()->start();
 	}
 
 	void SceneManager::popScene() {
@@ -92,7 +92,7 @@ namespace ECS {
 			scenes.pop();
 
 			scenes.push(newScene);
-			scenes.top()->init();
+			scenes.top()->start();
 		}
 	}
 

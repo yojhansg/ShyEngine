@@ -14,9 +14,9 @@ namespace ECS {
         entities.clear();
     }
 
-    void Scene::init() {
+    void Scene::start() {
         for (auto e : entities) {
-            e->init();
+            e->start();
         }
     }
 

@@ -6,17 +6,21 @@
 
 namespace ECS {
 
-	Image::Image() {
-		renderer = nullptr; texture = nullptr; transform = nullptr;
+	void Image::initImage() {
+		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
 		width = height = 0;
+
+		flipX = flipY = false;
 
 		fileName = "";
 	}
 
+	Image::Image() {
+		initImage();
+	}
+
 	Image::Image(const std::string& fileName) {
-		
-		renderer = nullptr; texture = nullptr; transform = nullptr;
-		width = height = 0;
+		initImage();
 
 		this->fileName = fileName;
 	}
@@ -24,32 +28,46 @@ namespace ECS {
 	Image::~Image() {
 		if (texture != nullptr)
 			SDL_DestroyTexture(texture);
+
+		delete rotationPoint;
 	}
 	
 	void Image::init() {
 
 		renderer = RendererManager::RendererManager::instance()->getRenderer();
 
+		// Surface and texture
 		SDL_Surface* surface = IMG_Load(fileName.c_str());
-		if (surface == nullptr)
-			throw "Couldn't load image: " + fileName;
+		assert(surface != nullptr, "Couldn't load image: " + fileName);
 
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
-		if (texture == nullptr) {
-			SDL_FreeSurface(surface);
-			throw "Couldn't load image: " + fileName;
-		}
+		assert(texture != nullptr, "Couldn't load image: " + fileName);
 
-		width = surface->w;
-		height = surface->h;
+		width = surface->w; height = surface->h;
+		SDL_FreeSurface(surface);
 
+		// Position and scalation of the image
 		transform = getEntity()->getComponent<Transform>();
+
+		// Flip
+		flipMode();
+
+		// Rotation point
+		rotationPoint = new SDL_Point({ width / 2, height / 2 });
 	}
 
 	void Image::render() {
-		SDL_Rect src = { 0, 0, width, height };
-		SDL_Rect dest = { 0, 0, width, height };
-		SDL_RenderCopy(renderer, texture, &src, &dest);
+
+		srcRect = { 0, 0, width, height };
+
+		int x = std::round(transform->getPosition().getX());
+		int y = std::round(transform->getPosition().getY());
+		int w = std::round(transform->getScale().getX() * width);
+		int h = std::round(transform->getScale().getY() * height);
+
+		dstRect = { x, y, w, h };
+
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, transform->getRotation(), rotationPoint, mode);
 	}
 
 	int Image::getWidth() {
@@ -58,6 +76,32 @@ namespace ECS {
 
 	int Image::getHeight() {
 		return height;
+	}
+
+	void Image::setFlipX(bool flip) {
+		flipX = flip;
+		flipMode();
+	}
+
+	void Image::setFlipY(bool flip) {
+		flipY = flip;
+		flipMode();
+	}
+
+	void Image::setRotaionPoint(int x, int y) {
+		rotationPoint->x = x;
+		rotationPoint->y = y;
+	}
+
+	void Image::flipMode() {
+		if (!flipX && !flipY) mode = SDL_FLIP_NONE;
+		else {
+
+			assert(!flipX && flipY || flipX && !flipY, "Image can not be fliped horizontally and vertically.");
+
+			if (flipX) mode = SDL_FLIP_HORIZONTAL;
+			else mode = SDL_FLIP_VERTICAL;
+		}
 	}
 
 }

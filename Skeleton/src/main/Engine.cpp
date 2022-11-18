@@ -15,7 +15,6 @@
 #include <chrono>
 using namespace std::chrono;
 
-
 #define WIN_WIDTH 1920
 #define WIN_HEIGHT 1080
 
@@ -84,6 +83,7 @@ void Engine::update() {
 		// Change scene if necessary
 		sceneManager->manageScenes();
 
+		// Time
 		steady_clock::time_point endTime = high_resolution_clock::now();
 
 		duration<float, std::milli> timeSinceStart = endTime - startTime;

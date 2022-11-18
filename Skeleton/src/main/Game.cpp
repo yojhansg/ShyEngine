@@ -4,6 +4,7 @@
 #include <Scene.h>
 #include <Entity.h>
 #include <Transform.h>
+#include <RendererManager.h>
 #include <Image.h>
 
 Game::Game(ECS::SceneManager* sm) {
@@ -18,8 +19,14 @@ void Game::initScenes() {
 	firstScene = sceneManager->createScene("Default scene");
 
 	ECS::Entity* player = firstScene->createEntity("Player");
-	player->addComponent<ECS::Transform>();
-	player->addComponent<ECS::Image>("link.png");
+	auto tr = player->addComponent<ECS::Transform>();
+	auto im = player->addComponent<ECS::Image>("link.png");
+
+	RendererManager::RendererManager* renderer = RendererManager::RendererManager::instance();
+
+	im->setRotaionPoint(im->getWidth() / 2, im->getHeight() / 2);
+	tr->setPosition(renderer->getWidth() / 2 - im->getWidth() / 2, renderer->getHeight() / 2 - im->getHeight() / 2);
+	tr->scale(0.5f);
 
 	sceneManager->changeScene(firstScene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();

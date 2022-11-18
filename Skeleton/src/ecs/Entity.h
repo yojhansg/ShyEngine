@@ -52,6 +52,7 @@ namespace ECS {
 			T* c = new T(std::forward<Ts>(args)...);
 
 			c->entity = this;
+			c->init();
 			components.push_back(c);
 
 			return c;
@@ -108,7 +109,7 @@ namespace ECS {
 
 	private:
 
-		void init();
+		void start();
 
 		void udpate(float deltaTime);
 

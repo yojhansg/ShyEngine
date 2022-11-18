@@ -36,9 +36,9 @@ namespace ECS {
 		return name;
 	}
 
-	void Entity::init() {
+	void Entity::start() {
 		for (auto c : components) {
-			c->init();
+			c->start();
 		}
 	}
 

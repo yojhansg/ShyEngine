@@ -35,8 +35,16 @@ namespace ECS {
 		this->position_ = position;
 	}
 
+	void Transform::setPosition(float x, float y) {
+		this->position_.set(x, y);
+	}
+
 	void Transform::setScale(const Utilities::Vector2D& scale) {
 		this->scale_ = scale;
+	}
+
+	void Transform::setScale(float x, float y) {
+		this->scale_.set(x, y);
 	}
 
 	void Transform::setRotation(float rotation) {
@@ -47,6 +55,10 @@ namespace ECS {
 
 	void Transform::translate(const Utilities::Vector2D& position) {
 		this->position_ += position;
+	}
+
+	void Transform::translate(float x, float y) {
+		this->position_.set(this->position_.getX() + x, this->position_.getY() + y);
 	}
 
 	void Transform::rotate(float rotation) {

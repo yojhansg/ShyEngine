@@ -19,11 +19,14 @@ namespace ECS {
 
 		// Setters
 		void setPosition(const Utilities::Vector2D& position);
+		void setPosition(float x, float y);
 		void setScale(const Utilities::Vector2D& scale);
+		void setScale(float x, float y);
 		void setRotation(float rotation);
 
 		// Modifiers
 		void translate(const Utilities::Vector2D& position);
+		void translate(float x, float y);
 		void rotate(float rotation);
 		void scale(float scale);
 

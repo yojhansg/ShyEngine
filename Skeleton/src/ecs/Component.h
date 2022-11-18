@@ -31,6 +31,8 @@ namespace ECS {
 
 		virtual void init() {};
 
+		virtual void start() {};
+
 		virtual void update(float deltaTime) {};
 
 		virtual void lateUpdate(float deltaTime) {};
