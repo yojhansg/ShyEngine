@@ -47,19 +47,21 @@ namespace PEditor {
         std::string windowName;
 
         int width, height;
+        int posX, posY;
 
     public:
-
+        
         Window(std::string windowName, WindowFlags flags);
 
         void addComponent(WindowComponent* component);
 
+        void setPosition(ImVec2 position);
         void setSize(ImVec2 size);
 
-        int getWidth();
-        int getHeight();
+        ImVec2 getSize();
+        ImVec2 getPosition();
 
-        void render();
+        virtual void render();
         void handleInput(SDL_Event* event);
 
         ~Window();

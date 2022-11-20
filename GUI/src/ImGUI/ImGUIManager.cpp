@@ -8,6 +8,12 @@
 #include "Scene.h"
 #include "Image.h"
 
+ImGUIManager* ImGUIManager::instance = nullptr;
+
+ImGUIManager::ImGUIManager() {
+    init();
+}
+
 void ImGUIManager::initImGUI()
 {
     // Setup Dear ImGui context
@@ -38,14 +44,14 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    createWindow("", 0, 0, 1920, 1080);
+    createWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080);
     createRenderer();
 }
 
 void ImGUIManager::createWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
 
 	// Create our window
-	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 	window = SDL_CreateWindow(name, posX, posY, sizeX, sizeY, window_flags);
 
 	// Make sure creating the window succeeded
@@ -82,22 +88,22 @@ void ImGUIManager::createRenderer()
 void ImGUIManager::init()
 {
     initImGUI();
+}
 
+ImGUIManager* ImGUIManager::getInstance()
+{
+    if (instance == nullptr) {
+        instance = new ImGUIManager();
+    }
+    
+    return instance;
 
 }
 
 void ImGUIManager::loop()
 {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    Scene* scene = new Scene(windows[0], renderer);
-    scene->addImage("test1.jpg");
-
-    windows[0]->addComponent(scene);
-
- /*   std::string path = "test1.jpg";
-    Image* img = new Image(path, renderer);
-    windows[0]->addComponent(img);*/
+   
 
     static float f = 0.0f;
     static int counter = 0;
@@ -129,11 +135,6 @@ void ImGUIManager::loop()
 
 void ImGUIManager::handleInput()
 {
-    // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -142,6 +143,8 @@ void ImGUIManager::handleInput()
         if (event.type == SDL_QUIT)
             exit = true;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+            exit = true;
+        if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
             exit = true;
 
         for (auto window : windows)
@@ -154,6 +157,11 @@ void ImGUIManager::handleInput()
 void ImGUIManager::addWindow(PEditor::Window* window)
 {
     windows.push_back(window);
+}
+
+SDL_Renderer* ImGUIManager::getRenderer()
+{
+    return renderer;
 }
 
 
@@ -174,4 +182,12 @@ ImGUIManager::~ImGUIManager()
     {
         delete window;
     }
+}
+
+ImVec2 ImGUIManager::getMainWindowSize()
+{
+    int w, h;
+    SDL_GetWindowSize(window, &w, &h);
+
+    return ImVec2(w, h);
 }

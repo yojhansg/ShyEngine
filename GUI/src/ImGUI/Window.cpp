@@ -10,8 +10,13 @@ PEditor::Window::Window(std::string _windowName, WindowFlags f = None)
 {
 	flags = f;
 	windowName = _windowName;
+
+
 	width = 50;
 	height = 50;
+
+	posX = 0;
+	posY = 0;
 }
 
 void PEditor::Window::addComponent(WindowComponent* component)
@@ -24,20 +29,32 @@ void PEditor::Window::setSize(ImVec2 size)
 	width = size.x;
 	height = size.y;
 }
-
-int PEditor::Window::getWidth()
+void PEditor::Window::setPosition(ImVec2 position)
 {
-	return width;
+	posX = position.x;
+	posY = position.y;
 }
 
-int PEditor::Window::getHeight()
+
+ImVec2 PEditor::Window::getSize()
 {
-	return height;
+	return ImVec2(width, height);
 }
+
+ImVec2 PEditor::Window::getPosition()
+{
+	return ImVec2(posX, posY);
+}
+
 
 void PEditor::Window::render()
-{
+{	
 	ImGui::Begin(windowName.c_str(),(bool*)0, (ImGuiWindowFlags_) flags);
+
+
+	ImGui::SetWindowSize(ImVec2(width, height));
+
+	ImGui::SetWindowPos(ImVec2(posX, posY));
 
 	for(auto component : components)
 	{

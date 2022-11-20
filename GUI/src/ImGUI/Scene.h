@@ -11,6 +11,7 @@ struct ImVec2;
 class Camera;
 class Image;
 class string;
+class ImGUIManager;
 
 namespace PEditor {
 	class Window;
@@ -29,10 +30,11 @@ private:
 	std::vector<Image*> images;
 
 	int width, height;
+	int posX, posY;
 
 public:
 
-	Scene(PEditor::Window* window, SDL_Renderer* renderer);
+	Scene(PEditor::Window* window);
 
 	void addImage(std::string path);
 

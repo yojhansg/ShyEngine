@@ -1,29 +1,32 @@
 #include <ImGUIManager.h>
 #include "imgui_files/imgui.h"
 #include "Window.h"
+#include "Scene.h"
+#include "Image.h"
+#include "MenuBar.h"
+
 
 int main(int, char**)
 {
 
-	ImGUIManager* imGUIManager = new ImGUIManager();
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 
-	imGUIManager->init();
+	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	/*PEditor::Window* window = new PEditor::Window("VENTANA TEST1", None);
-	window->setSize(ImVec2(50, 50));
+	PEditor::MenuBar* menuBar = new PEditor::MenuBar();
+	imGUIManager->addWindow(menuBar);
 
-	imGUIManager->addWindow(window);*/
 
-	PEditor::Window* window = new PEditor::Window("VENTANA TEST2", NoMove);
-	window->setSize(ImVec2(1080, 720));
+	PEditor::Window* sceneWindow = new PEditor::Window("Scene", NoMove | NoResize | NoCollapse);
+	//1095 x 750 instead of 1080 x 720 to leave a little offset between the window and the scene image
+	ImVec2 sceneSize = ImVec2(1095, 755);
+	sceneWindow->setSize(sceneSize);
+	sceneWindow->setPosition(ImVec2(mainWindowSize.x / 2 - sceneSize.x / 2, 20));
 
-	imGUIManager->addWindow(window);
+	Scene* scene = new Scene(sceneWindow);
+	scene->addImage("test1.jpg");
 
-	/*window = new PEditor::Window("VENTANA TEST3", None);
-	window->setSize(ImVec2(50, 50));
-
-	imGUIManager->addWindow(window);*/
-
+	imGUIManager->addWindow(sceneWindow);
 
 	imGUIManager->loop();
 }

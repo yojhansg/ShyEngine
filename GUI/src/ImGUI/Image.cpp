@@ -2,16 +2,16 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "imgui.h"
+#include "ImGUIManager.h"
 
 
-
-Image::Image(std::string& path, SDL_Renderer* renderer)
+Image::Image(std::string& path)
 {
 	posX = 0;
 	posY = 0;
 
 	SDL_Surface* surface = IMG_Load(path.c_str());
-	text = SDL_CreateTextureFromSurface(renderer, surface);
+	text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
 	width = surface->w;
 	height = surface->h;

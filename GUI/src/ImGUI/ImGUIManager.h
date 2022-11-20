@@ -4,6 +4,7 @@
 struct SDL_Surface;
 struct SDL_Window;
 struct SDL_Renderer;
+struct ImVec2;
 
 namespace PEditor {
 	class Window;
@@ -12,6 +13,9 @@ namespace PEditor {
 class ImGUIManager
 {
 private:
+
+	static ImGUIManager* instance;
+
 	// Pointers to our window and surface
 	SDL_Window* window;
 	SDL_Surface* winSurface = nullptr;
@@ -28,13 +32,21 @@ private:
 	void createRenderer();
 
 public:
+
+	static ImGUIManager* getInstance();
 	
+	ImGUIManager();
+
 	void init();
 	void loop();
 
 	void handleInput();
 
 	void addWindow(PEditor::Window* window);
+
+	SDL_Renderer* getRenderer();
+
+	ImVec2 getMainWindowSize();
 
 	~ImGUIManager();
 };

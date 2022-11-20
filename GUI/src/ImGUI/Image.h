@@ -5,6 +5,7 @@
 struct ImVec2;
 struct SDL_Texture;
 struct SDL_Renderer;
+class ImGUIManager;
 
 class Image: public WindowComponent
 {
@@ -16,7 +17,7 @@ class Image: public WindowComponent
 
 public:
 
-	Image(std::string& path, SDL_Renderer* renderer);
+	Image(std::string& path);
 
 	virtual void render();
 
