@@ -36,8 +36,7 @@ namespace RendererManager {
         assert(renderer != nullptr);
 
         // initialize SDL_image
-        int imgInit_ret = IMG_Init(
-            IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
+        int imgInit_ret = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
         assert(imgInit_ret != 0);
     }
 

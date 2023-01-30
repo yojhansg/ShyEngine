@@ -3,7 +3,7 @@
 namespace Utilities {
 
 	EngineTime::EngineTime() {
-		deltaTime = 1.0f / 60.0f;
+		deltaTime = 1.0f / 144.0f;
 		timeSinceStart = 0;
 		frames = 0;
 	}

@@ -90,7 +90,7 @@ void ECS::Rigidbody::start() {
 void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
 	transform->setPosition(body->GetPosition().x, body->GetPosition().y);
 
-	std::cout << body->GetPosition().x << " " << body->GetPosition().y << std::endl;
+	// std::cout << body->GetPosition().x << " " << body->GetPosition().y << std::endl;
 }
 
 void ECS::Rigidbody::setBodyType(BODY_TYPE type) {

@@ -53,8 +53,7 @@ namespace ECS {
 
 		Transform* transform;
 
-		bool flipX;
-		bool flipY;
+		bool flipX, flipY;
 
 		SDL_RendererFlip mode;
 

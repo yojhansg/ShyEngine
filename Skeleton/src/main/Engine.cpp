@@ -36,18 +36,21 @@ void Engine::init() {
 	g.initScenes();
 }
 
+void Engine::close() {}
+
 void Engine::update() {
 
 	SDL_Event event;
 
 	steady_clock::time_point beginTime = high_resolution_clock::now();
-	steady_clock::time_point physicsFrame = beginTime;
+	steady_clock::time_point physicsTime = beginTime;
 	steady_clock::time_point startTime = beginTime;
 
 	float fixedDeltaTime = 1.0f / 50.0f;
 
 	while (true) {
 
+		// Scene
 		auto scene = sceneManager->getActualScene();
 		if (scene == nullptr) break;
 
@@ -55,18 +58,17 @@ void Engine::update() {
 		if (!inputManager->handleInput(event)) break;
 		scene->handleInput();
 
-		// Update
-		scene->update(engineTime->deltaTime);
+		// FixedUpdate
+		while (physicsTime < beginTime) {
 
-		duration<double, std::milli> physicsFrameTime = beginTime - physicsFrame;
-		if (physicsFrameTime.count() > fixedDeltaTime * 1000) {
-
-			// FixedUpdate
 			scene->fixedUpdate(fixedDeltaTime);
 			physicsManager->fixedUpdate(fixedDeltaTime);
 
-			physicsFrame = beginTime;
+			physicsTime += std::chrono::milliseconds((int) (fixedDeltaTime * 1000));
 		}
+
+		// Update
+		scene->update(engineTime->deltaTime);
 
 		// LateUpdate
 		scene->lateUpdate(engineTime->deltaTime);
@@ -93,9 +95,6 @@ void Engine::update() {
 		engineTime->frames++;
 
 		beginTime = endTime;
+
 	}
-}
-
-void Engine::close() {
-
 }
