@@ -25,7 +25,7 @@ namespace PhysicsManager {
 
 		void fixedUpdate(float fixedDeltaTime);
 
-		void debugDraw(); // Not working
+		void debugDraw();
 
 		void enableDebugDraw(bool enable);
 

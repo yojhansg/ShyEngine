@@ -69,10 +69,13 @@ namespace ECS {
 		// Remove all the scenes on the stack
 		void removeAllScenes();
 
+		// Push one scene to the top of the stack
 		void pushScene();
 
+		// Pop the scene on top of the stack
 		void popScene();
 
+		// Pop and push
 		void popAndPushScene();
 
 		std::stack<Scene*> scenes;

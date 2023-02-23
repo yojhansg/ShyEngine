@@ -13,6 +13,7 @@ namespace Utilities {
 		float calculateFrameRate();
 
 		float deltaTime;
+		float fixedDeltaTime;
 		float timeSinceStart;
 		unsigned long long frames;
 

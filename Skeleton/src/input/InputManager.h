@@ -4,6 +4,11 @@
 #include <Singleton.h>
 #include <array>
 #include <vector>
+#include <string>
+
+/*
+Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
+*/
 
 namespace Utilities {
 	class Vector2D;
@@ -29,7 +34,8 @@ namespace InputManager {
 			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1,
 		};
 
-		enum CONTROLLER_BUTTONS : uint8_t {
+		// PS4 Mapping
+		enum PS4_CONTROLLER_BUTTONS : uint8_t {
 			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
@@ -39,7 +45,7 @@ namespace InputManager {
 		// Called in the main loop to check is window is closed
 		bool handleInput(SDL_Event& e);
 
-		// keyboard
+		// Keyboard
 		bool keyDownEvent();
 
 		bool keyUpEvent();
@@ -48,7 +54,7 @@ namespace InputManager {
 
 		bool isKeyUp(SDL_Scancode key);
 
-		// mouse
+		// Mouse
 		bool mouseMotionEvent();
 
 		bool wheelMotionEvent();
@@ -65,7 +71,9 @@ namespace InputManager {
 
 		int getWheelMotionY();
 
-		// controller
+		// Controller
+		int getJoysticksConnected();
+
 		bool isJoystickAxisMotion();
 
 		bool isJoystickButtonEventDown();
@@ -90,14 +98,20 @@ namespace InputManager {
 
 		bool isRightTriggerMotion();
 
+		bool joystickConnectedEvent();
+
+		bool joystickDisconnectedEvent();
+
+		std::string getJoystickName();
+
 	private:
 
 		InputManager();
 
-		// clear the state
+		// Clear the state
 		void clearState();
 
-		// update the state with a new event
+		// Update the state with a new event
 		void update(const SDL_Event& event);
 
 		// --------- MOUSE & KB ------------
@@ -129,9 +143,17 @@ namespace InputManager {
 
 		void initialiseJoysticks();
 
+		void addJoystick(int joystick_id);
+
+		void removeJoystick(int joystick_id);
+
 		void clearJoysticksButtons();
 
 		void removeJoysticks();
+
+		void joystickConnected();
+
+		void joystickDisconnected();
 
 		void onJoystickAxisMotion(const SDL_Event& event);
 
@@ -144,10 +166,13 @@ namespace InputManager {
 		std::vector<std::pair<int, int>> joystickTriggerValues;
 		std::vector<std::vector<bool>> joystickButtonStates;
 		std::vector<int> joystickNumButtons;
+		std::vector<std::string> joystickNames;
 
 		bool isAxisMotionEvent_;
 		bool isJoystickButtonDownEvent_;
 		bool isJoystickButtonUpEvent_;
+		bool joystickConnected_;
+		bool joystickDisconnected_;
 		int joystickId;
 		int numJoysticksConnected;
 	};

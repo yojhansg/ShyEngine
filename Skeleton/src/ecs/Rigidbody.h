@@ -69,9 +69,8 @@ namespace ECS {
         // Box 2D
         b2World* world;
         
-        b2BodyDef* bodyDefinition;
         b2Body* body;
-        b2PolygonShape* shape;
+        b2BodyDef* bodyDefinition;
         b2FixtureDef* fixture;
 
         // Entity Components

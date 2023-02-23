@@ -15,6 +15,9 @@
     <ClCompile Include="..\..\src\physics\PhysicsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\renderer\Renderer.vcxproj">
+      <Project>{dbb8cf48-5ace-435b-85b7-a3606a772488}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
     </ProjectReference>
@@ -71,7 +74,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)dependencies\OpenGL\include\;$(SolutionDir)src/utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)dependencies\OpenGL\include\;$(SolutionDir)dependencies\SDL2\include\;$(SolutionDir)src/utilities;$(SolutionDir)src/renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -91,7 +94,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)dependencies\OpenGL\include\;$(SolutionDir)src/utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\Box2D\include\;$(SolutionDir)dependencies\Box2D\src\;$(SolutionDir)dependencies\OpenGL\include\;$(SolutionDir)dependencies\SDL2\include\;$(SolutionDir)src/utilities;$(SolutionDir)src/renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

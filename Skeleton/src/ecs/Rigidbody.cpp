@@ -4,8 +4,7 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "PhysicsManager.h"
-
-#include <iostream>
+#include "Vector2D.h"
 
 ECS::Rigidbody::Rigidbody() {
 
@@ -24,18 +23,14 @@ ECS::Rigidbody::Rigidbody() {
 	// Box 2D
 	world = nullptr;
 
-	bodyDefinition = nullptr;
 	body = nullptr;
-	shape = nullptr;
 	fixture = nullptr;
+	bodyDefinition = nullptr;
 }
 
 ECS::Rigidbody::~Rigidbody() {
 	delete fixture;
-	delete shape;
 	delete bodyDefinition;
-
-	world->DestroyBody(body);
 }
 
 void ECS::Rigidbody::init() {
@@ -43,7 +38,6 @@ void ECS::Rigidbody::init() {
 	world = PhysicsManager::PhysicsManager::instance()->getWorld();
 
 	bodyDefinition = new b2BodyDef();
-	shape = new b2PolygonShape();
 	fixture = new b2FixtureDef();
 }
 
@@ -52,48 +46,54 @@ void ECS::Rigidbody::start() {
 	transform = this->getEntity()->getComponent<Transform>();
 	collider = this->getEntity()->getComponent<Collider>();
 
-	bodyDefinition->type = assingBodyType(bodyType);
-	bodyDefinition->position.Set(transform->getPosition().getX(), transform->getPosition().getY());
-	bodyDefinition->linearDamping = linearDrag;
-	bodyDefinition->angularDamping = angularDrag;
+	if (collider != nullptr) {
+		body = collider->getBody();
+		body->SetType(assingBodyType(bodyType));
+		body->SetLinearDamping(linearDrag);
+		body->SetAngularDamping(angularDrag);
 
-	body = world->CreateBody(bodyDefinition);
+		switch (body->GetType()) {
+			case b2_staticBody:
+				body->CreateFixture(collider->getShape(), 0.0f);
+				break;
+			case b2_kinematicBody:
+				fixture->shape = collider->getShape();
 
-	shape->SetAsBox(transform->getScale().getX() / 2, transform->getScale().getY() / 2);
+				body->CreateFixture(fixture);
+				break;
+			case b2_dynamicBody:
+				fixture->shape = collider->getShape();
+				fixture->friction = collider->getFriction();
+				fixture->restitution = collider->getBounciness();
+				fixture->isSensor = collider->isTrigger();
+				fixture->density = mass / (collider->getSize().getX() * collider->getSize().getY());
 
-	// Rigidbody size = Collider size if Collider Component exists in the entity
-	if (collider != nullptr)
-		shape->SetAsBox(collider->getSize().getX() / 2, collider->getSize().getY() / 2);
-
-
-	switch (bodyDefinition->type) {
-	case b2_staticBody:
-		body->CreateFixture(shape, 0.0f);
-		break;
-	case b2_kinematicBody:
-		// TODO
-		break;
-	case b2_dynamicBody:
-		fixture->shape = shape;
-		fixture->friction = collider != nullptr ? collider->getFriction() : 0;
-		fixture->restitution = collider != nullptr ? collider->getBounciness() : 0;
-		fixture->isSensor = collider != nullptr ? collider->isTrigger() : false;
-		fixture->density = collider != nullptr ? mass / collider->getSize().magnitude() : mass;
-
-		body->CreateFixture(fixture);
-		break;
-	default:
-		break;
+				body->CreateFixture(fixture);
+				break;
+			default:
+				break;
+		}
 	}
+	else {
+		Utilities::Vector2D size = transform->getScale();
+
+
+	}
+
 }
 
 void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
-	transform->setPosition(body->GetPosition().x, body->GetPosition().y);
 
-	// std::cout << body->GetPosition().x << " " << body->GetPosition().y << std::endl;
+	Utilities::Vector2D size = Utilities::Vector2D();
+
+	if (collider != nullptr)
+		size = collider->getSize();
+
+	transform->setPosition(body->GetPosition().x - size.getX() / 2, body->GetPosition().y - size.getY() / 2);
+
 }
 
-void ECS::Rigidbody::setBodyType(BODY_TYPE type) {
+void ECS::Rigidbody::setBodyType(BODY_TYPE type) { 
 	bodyType = type;
 }
 

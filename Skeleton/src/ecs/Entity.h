@@ -117,8 +117,6 @@ namespace ECS {
 
 		void render();
 
-		void handleInput();
-
 		// An update executed with the physics step rate
 		void fixedUpdate(float fixedDeltaTime);
 

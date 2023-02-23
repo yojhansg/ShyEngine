@@ -23,8 +23,6 @@ namespace ECS {
 
 		void render();
 
-		void handleInput();
-
 		void fixedUpdate(float fixedDeltaTime);
 
 		void removeEntities();

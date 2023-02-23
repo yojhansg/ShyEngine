@@ -66,12 +66,6 @@ namespace ECS {
 		}
 	}
 
-	void Entity::handleInput() {
-		for (auto c : components) {
-			if (c->isActive()) c->handleInput();
-		}
-	}
-
 	void Entity::fixedUpdate(float fixedDeltaTime) {
 		for (auto c : components) {
 			if (c->isActive()) c->fixedUpdate(fixedDeltaTime);

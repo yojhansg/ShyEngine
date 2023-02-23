@@ -46,13 +46,6 @@ namespace ECS {
         }
     }
 
-    void Scene::handleInput() {
-        for (auto e : entities) {
-            if (e->isActive() && !e->isRemoved())
-                e->handleInput();
-        }
-    }
-
     void Scene::fixedUpdate(float fixedDeltaTime) {
         for (auto e : entities) {
             if (e->isActive() && !e->isRemoved())

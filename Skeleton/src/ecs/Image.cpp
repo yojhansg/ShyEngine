@@ -7,7 +7,7 @@ namespace ECS {
 
 	Image::Image(const std::string& fileName) {
 		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
-		width = height = 0;
+		width = height = srcX = srcY = srcWidth = srcHeight = 0;
 
 		flipX = flipY = false;
 
@@ -33,6 +33,7 @@ namespace ECS {
 		assert(texture != nullptr, "Couldn't load image: " + fileName);
 
 		width = surface->w; height = surface->h;
+		srcWidth = width; srcHeight = height;
 		SDL_FreeSurface(surface);
 
 		// Flip
@@ -48,7 +49,7 @@ namespace ECS {
 
 	void Image::render() {
 
-		srcRect = { 0, 0, width, height };
+		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
 		int x = std::round(transform->getPosition().getX());
 		int y = std::round(transform->getPosition().getY());
@@ -68,16 +69,22 @@ namespace ECS {
 		return height;
 	}
 
-	void Image::setWidth(float width) {
-		this->width = width;
+	void Image::setSrcRect(int x, int y, int w, int h) {
+		srcX = x; srcY = y;
+		srcWidth = w; srcHeight = h;
 	}
 
-	void Image::setHeight(float height) {
-		this->height = height;
+	void Image::setWidth(float w) {
+		width = w;
 	}
 
-	void Image::setSize(float width, float height) {
-		this->width = width; this->height = height;
+	void Image::setHeight(float h) {
+		height = h;
+	}
+
+	void Image::setSize(float w, float h) {
+		width = w;
+		height = h;
 	}
 
 	void Image::setFlipX(bool flip) {

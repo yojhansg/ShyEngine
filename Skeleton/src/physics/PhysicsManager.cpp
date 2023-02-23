@@ -16,7 +16,6 @@ namespace PhysicsManager {
 		debugDrawEnabled = false;
 
 		b2draw = new DebugDraw();
-
 		world->SetDebugDraw(b2draw);
 		uint32 flags = 0;
 		flags += b2Draw::e_shapeBit;
@@ -40,8 +39,10 @@ namespace PhysicsManager {
 	}
 
 	void PhysicsManager::debugDraw() {
+	#ifdef _DEBUG
 		if (debugDrawEnabled)
 			 world->DebugDraw();
+	#endif
 	}
 
 	void PhysicsManager::enableDebugDraw(bool enable) {

@@ -18,8 +18,8 @@ namespace RendererManager {
         closeSDL();
     }
 
-    void RendererManager::initSDL()
-    {
+    void RendererManager::initSDL() {
+
         // initialise SDL
         int sdlInit_ret = SDL_Init(SDL_INIT_EVERYTHING);
         assert(sdlInit_ret == 0);

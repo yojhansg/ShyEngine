@@ -25,6 +25,8 @@ namespace ECS {
 
 		int getHeight();
 
+		void setSrcRect(int x, int y, int w, int h);
+
 		void setWidth(float width);
 
 		void setHeight(float height);
@@ -44,14 +46,18 @@ namespace ECS {
 		SDL_Renderer* renderer;
 		SDL_Texture* texture;
 
-		SDL_Rect srcRect;
-		SDL_Rect dstRect;
-
-		int width, height;
+		Transform* transform;
 
 		std::string fileName;
 
-		Transform* transform;
+		SDL_Rect srcRect;
+		SDL_Rect dstRect;
+
+		// Real size of texture
+		int width, height;
+
+		// Source Rect information
+		int srcX, srcY, srcWidth, srcHeight;
 
 		bool flipX, flipY;
 

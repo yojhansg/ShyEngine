@@ -39,8 +39,6 @@ namespace ECS {
 
 		virtual void render() {};
 
-		virtual void handleInput() {};
-
 		virtual void fixedUpdate(float fixedDeltaTime) {};
 
 		virtual void onActive() {};

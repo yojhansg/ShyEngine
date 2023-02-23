@@ -21,7 +21,8 @@ private:
 
 	ECS::SceneManager* sceneManager;
 
-	ECS::Scene* firstScene;
-	ECS::Scene* secondScene;
-};
+	ECS::Scene* scene;
 
+	void firstScene();
+
+};

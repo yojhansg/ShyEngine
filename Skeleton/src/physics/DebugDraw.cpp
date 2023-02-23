@@ -1,86 +1,68 @@
 #include "DebugDraw.h"
 #include "GLFW/glfw3.h"
+#include <RendererManager.h>
 
 namespace PhysicsManager {
 
-	void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
-		glColor4f(color.r, color.g, color.b, 0.5f);
-		glBegin(GL_LINE_LOOP);
-		for (int i = 0; i < vertexCount; i++) {
-			b2Vec2 v = vertices[i];
-			glVertex2f(v.x, v.y);
-		}
-		glEnd();
+	DebugDraw::DebugDraw() {
+		renderer = RendererManager::RendererManager::instance()->getRenderer();
 	}
 
-	void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
-		glColor4f(color.r, color.g, color.b, color.a);
-		glBegin(GL_POLYGON);
-		for (int i = 0; i < vertexCount; i++) {
-			glVertex2f(vertices[i].x, vertices[i].y);
+	void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
+
+		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
+
+		for (int i = 0; i < vertexCount - 1; i++) {
+			b2Vec2 v1 = vertices[i];
+			b2Vec2 v2 = vertices[i + 1];
+			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 		}
-		glEnd();
+
+		b2Vec2 v1 = vertices[vertexCount - 1];
+		b2Vec2 v2 = vertices[0];
+
+		SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 	}
 
 	void DebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Color& color) {
-		const float k_segments = 16.0f;
-		const float k_increment = 2.0f * b2_pi / k_segments;
+		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
+
+		const float k_segments = 90.0f;
+		const float k_increment = 0.1f;
 		float theta = 0.0f;
 
-		glColor4f(color.r, color.g, color.b, 1);
-		glBegin(GL_LINE_LOOP);
-		GLfloat glVertices[32];
 		for (int32 i = 0; i < k_segments; ++i) {
-			b2Vec2 v = center + radius * b2Vec2(cos(theta), sin(theta));
-			glVertex2f(v.x, v.y);
+			b2Vec2 v1 = center + radius * b2Vec2(cos(theta), sin(theta));
 			theta += k_increment;
+			b2Vec2 v2 = center + radius * b2Vec2(cos(theta), sin(theta));
+			theta += k_increment;
+			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 		}
-		glEnd();
 	}
 
 	void DebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color) {
-		const float k_segments = 16.0f;
-		int vertexCount = 16;
-		const float k_increment = 2.0f * b2_pi / k_segments;
+
+		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
+
+		const float k_segments = 90.0f;
+		const float k_increment = 0.1f;
 		float theta = 0.0f;
 
-		glColor4f(color.r, color.g, color.b, 0.5f);
-		glBegin(GL_TRIANGLE_FAN);
-		GLfloat glVertices[32];
 		for (int32 i = 0; i < k_segments; ++i) {
-			b2Vec2 v = center + radius * b2Vec2(cos(theta), sin(theta));
-			glVertex2f(v.x, v.y);
+			b2Vec2 v1 = center + radius * b2Vec2(cos(theta), sin(theta));
 			theta += k_increment;
+			b2Vec2 v2 = center + radius * b2Vec2(cos(theta), sin(theta));
+			theta += k_increment;
+			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 		}
-		glEnd();
-
-		DrawSegment(center, center + radius * axis, color);
 	}
 
-	void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {
-		glColor4f(color.r, color.g, color.b, 1);
-		glBegin(GL_LINES);
-		glVertex2f(p1.x, p1.y);
-		glVertex2f(p2.x, p2.y);
-		glEnd();
-	}
+	void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {}
 
-	void DebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color) {
-		glColor4f(color.r, color.g, color.b, 1);
-		glPointSize(1.0f);
-		glBegin(GL_POINTS);
-		glVertex2f(p.x, p.y);
-		glEnd();
-	}
+	void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {}
 
-	void DebugDraw::DrawTransform(const b2Transform& xf) {
-		b2Vec2 p1 = xf.p, p2;
-		const float k_axisScale = 0.4f;
+	void DebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color) {}
 
-		p2 = p1 + k_axisScale * xf.q.GetXAxis();
-		DrawSegment(p1, p2, b2Color(1, 0, 0));
+	void DebugDraw::DrawTransform(const b2Transform& xf) {}
 
-		p2 = p1 + k_axisScale * xf.q.GetYAxis();
-		DrawSegment(p1, p2, b2Color(0, 1, 0));
-	}
 }

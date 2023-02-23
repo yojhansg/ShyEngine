@@ -26,11 +26,13 @@ Engine::Engine() {
 void Engine::init() {
 
 	sceneManager = ECS::SceneManager::init();
+	rendererManager = RendererManager::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	physicsManager = PhysicsManager::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
-	rendererManager = RendererManager::RendererManager::init("PhosphorusEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
 	engineTime = Utilities::EngineTime::init();
+
+	physicsManager->enableDebugDraw(true);
 
 	Game g(sceneManager);
 	g.initScenes();
@@ -46,8 +48,6 @@ void Engine::update() {
 	steady_clock::time_point physicsTime = beginTime;
 	steady_clock::time_point startTime = beginTime;
 
-	float fixedDeltaTime = 1.0f / 50.0f;
-
 	while (true) {
 
 		// Scene
@@ -56,15 +56,14 @@ void Engine::update() {
 
 		// Input
 		if (!inputManager->handleInput(event)) break;
-		scene->handleInput();
 
 		// FixedUpdate
 		while (physicsTime < beginTime) {
 
-			scene->fixedUpdate(fixedDeltaTime);
-			physicsManager->fixedUpdate(fixedDeltaTime);
+			scene->fixedUpdate(engineTime->fixedDeltaTime);
+			physicsManager->fixedUpdate(engineTime->fixedDeltaTime);
 
-			physicsTime += std::chrono::milliseconds((int) (fixedDeltaTime * 1000));
+			physicsTime += std::chrono::milliseconds((int) (engineTime->fixedDeltaTime * 1000));
 		}
 
 		// Update
@@ -76,6 +75,7 @@ void Engine::update() {
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
 		scene->render();
+		physicsManager->debugDraw();
 		rendererManager->presentRenderer();
 
 		// Remove dead entities
