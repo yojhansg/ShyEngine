@@ -20,6 +20,10 @@ namespace ECS {
 	class SceneManager;
 }
 
+namespace ResourcesManager {
+	class ResourcesManager;
+}
+
 namespace Utilities {
 	class EngineTime;
 }
@@ -41,6 +45,7 @@ private:
 	RendererManager::RendererManager* rendererManager;
 	InputManager::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;
+	ResourcesManager::ResourcesManager* resourcesManager;
 
 	Utilities::EngineTime* engineTime;
 };

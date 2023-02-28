@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "Transform.h"
 #include <SDL_image.h>
+#include <Texture.h>
+#include <ResourcesManager.h>
 
 namespace ECS {
 
@@ -15,9 +17,6 @@ namespace ECS {
 	}
 
 	Image::~Image() {
-		if (texture != nullptr)
-			SDL_DestroyTexture(texture);
-
 		delete rotationPoint;
 	}
 	
@@ -25,16 +24,11 @@ namespace ECS {
 
 		renderer = RendererManager::RendererManager::instance()->getRenderer();
 
-		// Surface and texture
-		SDL_Surface* surface = IMG_Load(fileName.c_str());
-		assert(surface != nullptr, "Couldn't load image: " + fileName);
+		auto t = ResourcesManager::ResourcesManager::instance()->addTexture(fileName);
 
-		texture = SDL_CreateTextureFromSurface(renderer, surface);
-		assert(texture != nullptr, "Couldn't load image: " + fileName);
+		texture = t->getSDLTexture(); width = t->getWidth(); height = t->getHeight();
 
-		width = surface->w; height = surface->h;
 		srcWidth = width; srcHeight = height;
-		SDL_FreeSurface(surface);
 
 		// Flip
 		flipMode();

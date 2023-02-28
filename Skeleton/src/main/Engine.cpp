@@ -5,6 +5,7 @@
 #include <SoundManager.h>
 #include <InputManager.h>
 #include <SceneManager.h>
+#include <ResourcesManager.h>
 #include <Scene.h>
 #include <SDLUtils.h>
 #include <EngineTime.h>
@@ -15,12 +16,12 @@
 #include <chrono>
 using namespace std::chrono;
 
-#define WIN_WIDTH 1920
-#define WIN_HEIGHT 1080
+#define WIN_WIDTH 1080
+#define WIN_HEIGHT 720
 
 Engine::Engine() {
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; 
-	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr;
+	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr;
 }
 
 void Engine::init() {
@@ -30,6 +31,7 @@ void Engine::init() {
 	physicsManager = PhysicsManager::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
+	resourcesManager = ResourcesManager::ResourcesManager::init();
 	engineTime = Utilities::EngineTime::init();
 
 	physicsManager->enableDebugDraw(true);

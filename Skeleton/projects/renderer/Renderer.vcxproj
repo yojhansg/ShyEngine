@@ -148,9 +148,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\renderer\RendererManager.h" />
+    <ClInclude Include="..\..\src\renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\renderer\RendererManager.cpp" />
+    <ClCompile Include="..\..\src\renderer\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">

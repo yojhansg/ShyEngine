@@ -15,18 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\renderer\RendererManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\renderer\Texture.h">
+    <ClInclude Include="..\..\src\resourcesManager\ResourcesManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\renderer\RendererManager.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\renderer\Texture.cpp">
+    <ClCompile Include="..\..\src\resourcesManager\ResourcesManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
