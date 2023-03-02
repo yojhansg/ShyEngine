@@ -6,11 +6,26 @@
 #include "Camera.h"
 #include "ImGUIManager.h"
 
-Scene::Scene(PEditor::Window* w)
+Scene::Scene()
 {
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
+
+	//SCENE WINDOW
+	PEditor::Window* sceneWindow = new PEditor::Window("Scene", NoMove | NoResize | NoCollapse);
+	//1095 x 750 instead of 1080 x 720 to leave a little offset between the window and the scene image
+	ImVec2 sceneSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
+	sceneWindow->setSize(sceneSize);
+	sceneWindow->setPosition(ImVec2(mainWindowSize.x / 2 - sceneSize.x / 2, 20));
+
+	addImage("test1.jpg");
+
+	imGUIManager->addWindow(sceneWindow);
+
+
 	camera = new Camera(ImVec2(50, 50), 1);
 
-	window = w;
+	window = sceneWindow;
 	window->addComponent(this);
 
 	renderer = ImGUIManager::getInstance()->getRenderer();

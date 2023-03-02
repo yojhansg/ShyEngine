@@ -44,11 +44,11 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    createWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080);
-    createRenderer();
+    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1080, 720);
+    createSDLRenderer();
 }
 
-void ImGUIManager::createWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
+void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
 
 	// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
@@ -74,7 +74,7 @@ void ImGUIManager::createWindow(const char* name, int posX, int posY, int sizeX,
 	}
 }
 
-void ImGUIManager::createRenderer()
+void ImGUIManager::createSDLRenderer()
 {
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (renderer == NULL)
@@ -159,6 +159,11 @@ void ImGUIManager::addWindow(PEditor::Window* window)
     windows.push_back(window);
 }
 
+void ImGUIManager::setScene(PEditor::Scene* scene)
+{
+    this->scene = scene;
+}
+
 SDL_Renderer* ImGUIManager::getRenderer()
 {
     return renderer;
@@ -190,4 +195,9 @@ ImVec2 ImGUIManager::getMainWindowSize()
     SDL_GetWindowSize(window, &w, &h);
 
     return ImVec2(w, h);
+}
+
+Scene* ImGUIManager::getScene()
+{
+    return scene;
 }

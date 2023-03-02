@@ -8,9 +8,7 @@ namespace PEditor{
 
 
      public:
-
         MenuBar();
-
 
         virtual void render();
     };

@@ -8,6 +8,7 @@ struct ImVec2;
 
 namespace PEditor {
 	class Window;
+	class Scene;
 };
 
 class ImGUIManager
@@ -20,6 +21,8 @@ private:
 	SDL_Window* window;
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
+
+	Scene* scene;
 	
 	bool exit = false;
 
@@ -27,9 +30,8 @@ private:
 
 	void initImGUI();
 	void initSDL();
-
-	void createWindow(const char* name, int posX, int posY, int sizeX, int sizeY);
-	void createRenderer();
+	void createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY);
+	void createSDLRenderer();
 
 public:
 
@@ -40,13 +42,16 @@ public:
 	void init();
 	void loop();
 
+
 	void handleInput();
 
 	void addWindow(PEditor::Window* window);
+	void setScene(PEditor::Scene* scene);
+		
 
 	SDL_Renderer* getRenderer();
-
 	ImVec2 getMainWindowSize();
+	Scene* getScene();
 
 	~ImGUIManager();
 };

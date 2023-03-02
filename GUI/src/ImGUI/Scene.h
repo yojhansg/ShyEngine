@@ -17,30 +17,32 @@ namespace PEditor {
 	class Window;
 };
 
-class Scene : public WindowComponent
-{
-private:
+namespace PEditor {
+	class Scene : public WindowComponent
+	{
+	private:
 
-	PEditor::Window* window = nullptr;
-	SDL_Renderer* renderer = nullptr;
-	SDL_Texture* targetTexture = nullptr;
+		PEditor::Window* window = nullptr;
+		SDL_Renderer* renderer = nullptr;
+		SDL_Texture* targetTexture = nullptr;
 
-	Camera* camera;
+		Camera* camera;
 
-	std::vector<Image*> images;
+		std::vector<Image*> images;
 
-	int width, height;
-	int posX, posY;
+		int width, height;
+		int posX, posY;
 
-public:
+	public:
 
-	Scene(PEditor::Window* window);
+		Scene();
 
-	void addImage(std::string path);
+		void addImage(std::string path);
 
-	bool entityOutsideCamera(ImVec2 pos, float width, float height);
-	
-	virtual void handleInput(SDL_Event* event);
-	virtual void render();
-};
+		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 
+		virtual void handleInput(SDL_Event* event);
+		virtual void render();
+	};
+
+}
