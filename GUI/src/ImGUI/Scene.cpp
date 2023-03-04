@@ -6,14 +6,13 @@
 #include "Camera.h"
 #include "ImGUIManager.h"
 
-Scene::Scene()
+PEditor::Scene::Scene()
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
 	//SCENE WINDOW
 	PEditor::Window* sceneWindow = new PEditor::Window("Scene", NoMove | NoResize | NoCollapse);
-	//1095 x 750 instead of 1080 x 720 to leave a little offset between the window and the scene image
 	ImVec2 sceneSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
 	sceneWindow->setSize(sceneSize);
 	sceneWindow->setPosition(ImVec2(mainWindowSize.x / 2 - sceneSize.x / 2, 20));
@@ -21,7 +20,7 @@ Scene::Scene()
 	addImage("test1.jpg");
 
 	imGUIManager->addWindow(sceneWindow);
-
+	imGUIManager->setScene(this);
 
 	camera = new Camera(ImVec2(50, 50), 1);
 
@@ -43,13 +42,19 @@ Scene::Scene()
 
 }
 
-void Scene::addImage(std::string path)
+void PEditor::Scene::addImage(std::string path)
 {
 	images.push_back(new Image(path));
 }
 
-bool Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
+std::vector<Image*> PEditor::Scene::getGameObjects()
 {
+	return images;
+}
+
+bool PEditor::Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
+{
+	//TODO
 	/*if (pos.x > width || pos.y > height || pos.x + width <= 0 || pos.y + height <= 0) {
 		return true;
 	}
@@ -58,7 +63,7 @@ bool Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
 	return true;
 }
 
-void Scene::handleInput(SDL_Event* event)
+void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	int mouseX, mouseY;
 
@@ -68,7 +73,7 @@ void Scene::handleInput(SDL_Event* event)
 		camera->handleInput(event);
 }
 
-void Scene::render()
+void PEditor::Scene::render()
 {
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_RenderClear(renderer);

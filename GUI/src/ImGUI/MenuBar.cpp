@@ -40,6 +40,7 @@ void PEditor::MenuBar::render()
 
         if (ImGui::BeginMenu("Help"))
         {
+            ImGui::MenuItem("About us", NULL, false);
             ImGui::EndMenu();
         }
 

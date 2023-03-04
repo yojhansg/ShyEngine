@@ -36,22 +36,28 @@
     <ClInclude Include="..\..\src\ImGUI\Camera.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\Image.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\Scene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\Window.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\MenuBar.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Hierarchy.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\WindowComponent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\MenuBar.h">
+    <ClInclude Include="..\..\src\ImGUI\Image.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Scene.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\FileExplorer.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -96,6 +102,12 @@
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

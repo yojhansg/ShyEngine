@@ -47,6 +47,10 @@ ImVec2 PEditor::Window::getPosition()
 }
 
 
+void PEditor::Window::update()
+{
+}
+
 void PEditor::Window::render()
 {	
 	ImGui::Begin(windowName.c_str(),(bool*)0, (ImGuiWindowFlags_) flags);

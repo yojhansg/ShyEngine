@@ -32,6 +32,7 @@ void ImGUIManager::initImGUI()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer_Init(renderer);
+
 }
 
 void ImGUIManager::initSDL()
@@ -44,7 +45,8 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1080, 720);
+    ImVec2 windowSize = ImVec2(1920, 1080);
+    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowSize.x, windowSize.y);
     createSDLRenderer();
 }
 
@@ -102,35 +104,45 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-   
-
-    static float f = 0.0f;
-    static int counter = 0;
 
     while (!exit)
     {
+        update();
         handleInput();
-
-        // Start the Dear ImGui frame
-        ImGui_ImplSDLRenderer_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
-
-        for (auto window : windows)
-        {
-            window->render();
-        }
-      
-
-        // Rendering
-        ImGui::Render();
-        SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-        SDL_RenderClear(renderer);
-        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
-        SDL_RenderPresent(renderer);
+        render();
     }
  
+}
+
+void ImGUIManager::update()
+{
+    for (auto window : windows)
+    {
+        window->update();
+    }
+}
+
+void ImGUIManager::render()
+{
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    // Start the Dear ImGui frame
+    ImGui_ImplSDLRenderer_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+
+    for (auto window : windows)
+    {
+        window->render();
+    }
+
+
+    // Rendering
+    ImGui::Render();
+    SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
+    SDL_RenderClear(renderer);
+    ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+    SDL_RenderPresent(renderer);
 }
 
 void ImGUIManager::handleInput()
@@ -197,7 +209,7 @@ ImVec2 ImGUIManager::getMainWindowSize()
     return ImVec2(w, h);
 }
 
-Scene* ImGUIManager::getScene()
+PEditor::Scene* ImGUIManager::getScene()
 {
     return scene;
 }

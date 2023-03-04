@@ -38,6 +38,7 @@ namespace PEditor {
 		Scene();
 
 		void addImage(std::string path);
+		std::vector<Image*> getGameObjects();
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 

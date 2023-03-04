@@ -22,7 +22,7 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
 
-	Scene* scene;
+	PEditor::Scene* scene;
 	
 	bool exit = false;
 
@@ -42,7 +42,8 @@ public:
 	void init();
 	void loop();
 
-
+	void update();
+	void render();
 	void handleInput();
 
 	void addWindow(PEditor::Window* window);
@@ -51,7 +52,8 @@ public:
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getMainWindowSize();
-	Scene* getScene();
+
+	PEditor::Scene* getScene();
 
 	~ImGUIManager();
 };

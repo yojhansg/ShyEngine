@@ -4,7 +4,8 @@
 #include "Scene.h"
 #include "Image.h"
 #include "MenuBar.h"
-
+#include "Hierarchy.h"
+#include "FileExplorer.h"
 
 int main(int, char**)
 {
@@ -15,11 +16,16 @@ int main(int, char**)
 	PEditor::MenuBar* menuBar = new PEditor::MenuBar();
 	imGUIManager->addWindow(menuBar);
 
-
-
 	//SCENE
-	Scene* scene = new Scene();
+	PEditor::Scene* scene = new PEditor::Scene();
 
+	//HIERARCHY
+	PEditor::Hierarchy* hierarchy = new PEditor::Hierarchy();
+	imGUIManager->addWindow(hierarchy);
+
+	//FILE EXPLORER
+	PEditor::FileExplorer* fileExplorer = new PEditor::FileExplorer();
+	imGUIManager->addWindow(fileExplorer);
 
 	imGUIManager->loop();
 }

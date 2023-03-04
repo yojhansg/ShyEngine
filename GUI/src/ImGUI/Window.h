@@ -40,7 +40,7 @@ struct ImVec2;
 namespace PEditor {
     class Window
     {
-    private:
+    protected:
 
         WindowFlags flags;
         std::vector<WindowComponent*> components;
@@ -60,9 +60,10 @@ namespace PEditor {
 
         ImVec2 getSize();
         ImVec2 getPosition();
-
+        
+        virtual void update();
         virtual void render();
-        void handleInput(SDL_Event* event);
+        virtual void handleInput(SDL_Event* event);
 
         ~Window();
     };
