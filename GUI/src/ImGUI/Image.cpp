@@ -5,7 +5,7 @@
 #include "ImGUIManager.h"
 
 
-Image::Image(std::string& path)
+PEditor::Image::Image(std::string& path)
 {
 	posX = 0;
 	posY = 0;
@@ -17,33 +17,33 @@ Image::Image(std::string& path)
 	height = surface->h;
 }
 
-void Image::render()
+void PEditor::Image::render()
 {
 	ImGui::Image(text, ImVec2(width, height));
 }
 
-SDL_Texture* Image::getTexture()
+SDL_Texture* PEditor::Image::getTexture()
 {
 	return text;
 }
 
-int Image::getWidth()
+int PEditor::Image::getWidth()
 {
 	return width;
 }
 
-int Image::getHeight()
+int PEditor::Image::getHeight()
 {
 	return height;
 }
 
-void Image::setPosition(ImVec2 newPos)
+void PEditor::Image::setPosition(ImVec2 newPos)
 {
 	posX = newPos.x;
 	posY = newPos.y;
 }
 
-ImVec2 Image::getPosition()
+ImVec2 PEditor::Image::getPosition()
 {
 	return ImVec2(posX,posY);
 }

@@ -61,7 +61,18 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
         if (file.is_directory())
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.25f, 0.25f, 1.0f, 1.0f)); 
+            std::string path = "test1.jpg";
+            PEditor::Image* folderImage = new  PEditor::Image(path);
+
+            static ImTextureID folder_icon_texture_id = (ImTextureID) folderImage->getTexture();
+            const float icon_size = ImGui::GetTextLineHeight();
+            const ImVec2 icon_position = ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + (ImGui::GetItemRectSize().y - icon_size) * 0.5f);
+
+            ImGui::Image(folder_icon_texture_id, ImVec2(icon_size, icon_size), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
+
+            ImGui::SameLine();
+
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f)); 
 
             // Display directories in blue color
             if (ImGui::Selectable(filename.c_str(), false))

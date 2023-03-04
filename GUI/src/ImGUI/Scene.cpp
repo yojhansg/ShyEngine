@@ -44,10 +44,10 @@ PEditor::Scene::Scene()
 
 void PEditor::Scene::addImage(std::string path)
 {
-	images.push_back(new Image(path));
+	images.push_back(new PEditor::Image(path));
 }
 
-std::vector<Image*> PEditor::Scene::getGameObjects()
+std::vector<PEditor::Image*> PEditor::Scene::getGameObjects()
 {
 	return images;
 }

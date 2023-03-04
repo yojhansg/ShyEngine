@@ -9,12 +9,12 @@ struct SDL_Renderer;
 struct SDL_Texture;
 struct ImVec2;
 class Camera;
-class Image;
 class string;
 class ImGUIManager;
 
 namespace PEditor {
 	class Window;
+	class Image;
 };
 
 namespace PEditor {
@@ -28,7 +28,7 @@ namespace PEditor {
 
 		Camera* camera;
 
-		std::vector<Image*> images;
+		std::vector<PEditor::Image*> images;
 
 		int width, height;
 		int posX, posY;
@@ -38,7 +38,7 @@ namespace PEditor {
 		Scene();
 
 		void addImage(std::string path);
-		std::vector<Image*> getGameObjects();
+		std::vector<PEditor::Image*> getGameObjects();
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 

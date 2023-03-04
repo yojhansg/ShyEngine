@@ -7,26 +7,27 @@ struct SDL_Texture;
 struct SDL_Renderer;
 class ImGUIManager;
 
-class Image: public WindowComponent
-{
+namespace PEditor {
+	class Image : public WindowComponent
+	{
 
-	SDL_Texture* text;
-	float width, height;
+		SDL_Texture* text;
+		float width, height;
 
-	float posX, posY;
+		float posX, posY;
 
-public:
+	public:
 
-	Image(std::string& path);
+		Image(std::string& path);
 
-	virtual void render();
+		virtual void render();
 
-	SDL_Texture* getTexture();
+		SDL_Texture* getTexture();
 
-	int getWidth();
-	int getHeight();
+		int getWidth();
+		int getHeight();
 
-	void setPosition(ImVec2 newPos);
-	ImVec2 getPosition();
-};
-
+		void setPosition(ImVec2 newPos);
+		ImVec2 getPosition();
+	};
+}
