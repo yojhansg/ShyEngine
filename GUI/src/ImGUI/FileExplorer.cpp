@@ -63,7 +63,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
         std::string path = file.is_directory() ? "folder.png" : "file.png";
         PEditor::GameObject* gameObject = new  PEditor::GameObject(path);
         ImTextureID imageTextId = (ImTextureID)gameObject->getTexture();
-        const float iconSize = ImGui::GetTextLineHeight();
+        const float iconSize = ImGui::GetTextLineHeight() + 8;
         ImGui::Image(imageTextId, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
 
         ImGui::SameLine();
