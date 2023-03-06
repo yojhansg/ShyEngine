@@ -24,6 +24,9 @@ namespace ECS {
 
 		renderer = RendererManager::RendererManager::instance()->getRenderer();
 
+		transform = getEntity()->getComponent<Transform>();
+		assert(transform != nullptr, "La entidad debe contener un componente Transform");
+
 		auto t = ResourcesManager::ResourcesManager::instance()->addTexture(fileName);
 
 		texture = t->getSDLTexture(); width = t->getWidth(); height = t->getHeight();
@@ -37,22 +40,18 @@ namespace ECS {
 		rotationPoint = new SDL_Point({ width / 2, height / 2 });
 	}
 
-	void Image::start() {
-		transform = getEntity()->getComponent<Transform>();
-	}
-
 	void Image::render() {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
-		int x = std::round(transform->getPosition().getX());
-		int y = std::round(transform->getPosition().getY());
-		int w = std::round(transform->getScale().getX() * width);
-		int h = std::round(transform->getScale().getY() * height);
+		int x = std::round(transform->getPosition()->getX());
+		int y = std::round(transform->getPosition()->getY());
+		int w = std::round(transform->getScale()->getX() * width);
+		int h = std::round(transform->getScale()->getY() * height);
 
 		dstRect = { x, y, w, h };
 
-		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, transform->getRotation(), rotationPoint, mode);
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotation(), rotationPoint, mode);
 	}
 
 	int Image::getWidth() {

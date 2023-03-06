@@ -8,6 +8,7 @@ class b2BodyDef;
 class b2Body;
 class b2PolygonShape;
 class b2FixtureDef;
+class b2Fixture;
 class b2World;
 enum b2BodyType;
 
@@ -25,7 +26,9 @@ namespace ECS {
 
         void init() override;
 
-        void start() override;
+        void update(float deltaTime) override;
+
+        void fixedUpdate(float fixedDeltaTime) override;
 
         // Setters & getters
         void setTrigger(bool trigger);
@@ -38,19 +41,26 @@ namespace ECS {
         float getBounciness();
 
         Utilities::Vector2D getSize();
-        void setSize(Utilities::Vector2D size);
+        void setSize(float x, float y);
+
+        Utilities::Vector2D getOffSet();
+        void setOffSet(float x, float y);
 
         b2Body* getBody();
         b2PolygonShape* getShape();
 
     private:
 
-        // Collider properties
-        float friction, bounciness;
-
-        bool isTrigger_;
-
         Utilities::Vector2D size;
+        Utilities::Vector2D offSet;
+
+        // Just for comfort
+        b2Vec2* temporalPosition;
+
+        // Position, Rotation & Scale
+        Utilities::Vector2D* position;
+        const double* rotation;
+        Utilities::Vector2D* scale;
 
         // Box2d
         b2World* world;
@@ -58,6 +68,7 @@ namespace ECS {
         b2BodyDef* bodyDefinition;
         b2Body* body;
         b2PolygonShape* shape;
+        b2Fixture* fixture;
 
         // Entity Components
         Transform* transform;

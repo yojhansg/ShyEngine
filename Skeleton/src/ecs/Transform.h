@@ -13,9 +13,9 @@ namespace ECS {
 		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
 
 		// Getters
-		Utilities::Vector2D getPosition();
-		Utilities::Vector2D getScale();
-		float getRotation();
+		Utilities::Vector2D* getPosition();
+		Utilities::Vector2D* getScale();
+		const double* getRotation();
 
 		// Setters
 		void setPosition(const Utilities::Vector2D& position);
@@ -34,7 +34,7 @@ namespace ECS {
 
 		Utilities::Vector2D position_;
 		Utilities::Vector2D scale_;
-		float rotation_;
+		double rotation_;
 	};
 
 }

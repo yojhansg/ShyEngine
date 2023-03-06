@@ -30,30 +30,37 @@ void Game::firstScene() {
 	// Player
 	ECS::Entity* player = scene->createEntity("Player");
 
-	auto tr = player->addComponent<ECS::Transform>();
 	auto im = player->addComponent<ECS::Image>("link.png");
-
+	auto tr = player->addComponent<ECS::Transform>();
 	auto collider = player->addComponent<ECS::Collider>();
-	collider->setBounciness(0.5f);
-	auto rb = player->addComponent<ECS::Rigidbody>();
-	rb->setBodyType(ECS::Rigidbody::DINAMIC);
-	rb->setGravityScale(2.0f);
+	auto tComp = player->addComponent<ECS::TestComponent>();
 
-	im->setSize(im->getWidth() / 2, im->getHeight() / 2);
 
-	tr->setPosition(renderer->getWidth() / 2 - im->getWidth() / 2, renderer->getHeight() / 2 - im->getHeight() / 2);
-
+	/*auto rb = player->addComponent<ECS::Rigidbody>();
+	rb->setBodyType(ECS::Rigidbody::DINAMIC);*/
 
 	// Ground
-	ECS::Entity* ground = scene->createEntity("Ground");
+	/*ECS::Entity* ground = scene->createEntity("Ground");
 
 	auto grTr = ground->addComponent<ECS::Transform>();
 	auto grIm = ground->addComponent<ECS::Image>("ground.png");
-	auto grCol = ground->addComponent<ECS::Collider>();
+	auto grCol = ground->addComponent<ECS::Collider>();*/
 
-	grIm->setSize(1000, 100);
-	grTr->setPosition(renderer->getWidth() / 2 - grIm->getWidth() / 2, renderer->getHeight() - grIm->getHeight());
+	// Init
+	scene->init();
 
+	// Player settings
+	tr->setPosition(renderer->getWidth() / 2 - im->getWidth() / 2, renderer->getHeight() / 2 - im->getHeight() / 2);
+	collider->setSize(200, 200);
+	//tr->setRotation(45.0f);
+
+	//// Ground settings
+	/*grCol->setTrigger(true);
+	grIm->setSize(50, 50);
+	grTr->setPosition(renderer->getWidth() / 2 - grIm->getWidth() / 2, renderer->getHeight() - grIm->getHeight());*/
+
+	// START
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
+
 }

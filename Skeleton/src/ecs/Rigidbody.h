@@ -29,8 +29,6 @@ namespace ECS {
 
         void init() override;
 
-        void start() override;
-
         void fixedUpdate(float fixedDeltaTime) override;
 
         void setBodyType(BODY_TYPE type);

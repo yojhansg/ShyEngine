@@ -15,6 +15,8 @@ namespace ECS {
 
 		~Scene();
 
+		void init();
+
 		void start();
 
 		void update(float deltaTime);

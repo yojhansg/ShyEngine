@@ -39,11 +39,10 @@ void ECS::Rigidbody::init() {
 
 	bodyDefinition = new b2BodyDef();
 	fixture = new b2FixtureDef();
-}
-
-void ECS::Rigidbody::start() {
 
 	transform = this->getEntity()->getComponent<Transform>();
+	assert(transform != nullptr, "La entidad debe contener un componente Transform");
+
 	collider = this->getEntity()->getComponent<Collider>();
 
 	if (collider != nullptr) {
@@ -53,25 +52,25 @@ void ECS::Rigidbody::start() {
 		body->SetAngularDamping(angularDrag);
 
 		switch (body->GetType()) {
-			case b2_staticBody:
-				body->CreateFixture(collider->getShape(), 0.0f);
-				break;
-			case b2_kinematicBody:
-				fixture->shape = collider->getShape();
+		case b2_staticBody:
+			body->CreateFixture(collider->getShape(), 0.0f);
+			break;
+		case b2_kinematicBody:
+			fixture->shape = collider->getShape();
 
-				body->CreateFixture(fixture);
-				break;
-			case b2_dynamicBody:
-				fixture->shape = collider->getShape();
-				fixture->friction = collider->getFriction();
-				fixture->restitution = collider->getBounciness();
-				fixture->isSensor = collider->isTrigger();
-				fixture->density = mass / (collider->getSize().getX() * collider->getSize().getY());
+			body->CreateFixture(fixture);
+			break;
+		case b2_dynamicBody:
+			fixture->shape = collider->getShape();
+			fixture->friction = collider->getFriction();
+			fixture->restitution = collider->getBounciness();
+			fixture->isSensor = collider->isTrigger();
+			fixture->density = mass / (collider->getSize().getX() * collider->getSize().getY());
 
-				body->CreateFixture(fixture);
-				break;
-			default:
-				break;
+			body->CreateFixture(fixture);
+			break;
+		default:
+			break;
 		}
 	}
 	else {
@@ -79,7 +78,6 @@ void ECS::Rigidbody::start() {
 
 
 	}
-
 }
 
 void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
@@ -90,7 +88,6 @@ void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
 		size = collider->getSize();
 
 	transform->setPosition(body->GetPosition().x - size.getX() / 2, body->GetPosition().y - size.getY() / 2);
-
 }
 
 void ECS::Rigidbody::setBodyType(BODY_TYPE type) { 

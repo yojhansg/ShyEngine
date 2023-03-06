@@ -1,20 +1,21 @@
 #include "DebugDraw.h"
-#include "GLFW/glfw3.h"
 #include <RendererManager.h>
+#include <SDL.h>
 
 namespace PhysicsManager {
 
 	DebugDraw::DebugDraw() {
 		renderer = RendererManager::RendererManager::instance()->getRenderer();
+		
 	}
 
 	void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
-
+		
 		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
 
-		for (int i = 0; i < vertexCount - 1; i++) {
-			b2Vec2 v1 = vertices[i];
-			b2Vec2 v2 = vertices[i + 1];
+		for (int i = 1; i < vertexCount; i++) {
+			b2Vec2 v1 = vertices[i - 1];
+			b2Vec2 v2 = vertices[i];
 			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 		}
 
@@ -22,6 +23,7 @@ namespace PhysicsManager {
 		b2Vec2 v2 = vertices[0];
 
 		SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
+
 	}
 
 	void DebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Color& color) {

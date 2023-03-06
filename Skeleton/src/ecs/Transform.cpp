@@ -17,16 +17,16 @@ namespace ECS {
 
 	// ------------- Getters -----------------
 
-	Utilities::Vector2D Transform::getPosition() {
-		return position_;
+	Utilities::Vector2D* Transform::getPosition() {
+		return &position_;
 	}
 
-	Utilities::Vector2D Transform::getScale() {
-		return scale_;
+	Utilities::Vector2D* Transform::getScale() {
+		return &scale_;
 	}
 
-	float Transform::getRotation() {
-		return rotation_;
+	const double* Transform::getRotation() {
+		return &rotation_;
 	}
 
 	// ------------- Setters -----------------

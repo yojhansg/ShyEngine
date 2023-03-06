@@ -1,6 +1,5 @@
 #include "PhysicsManager.h"
 #include "box2d/box2d.h"
-#include "GLFW/glfw3.h"
 #include "DebugDraw.h"
 
 namespace PhysicsManager {

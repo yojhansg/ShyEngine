@@ -2,9 +2,7 @@
 #include <RendererManager.h>
 #include <Texture.h>
 
-ResourcesManager::ResourcesManager::ResourcesManager() {
-
-}
+ResourcesManager::ResourcesManager::ResourcesManager() {}
 
 ResourcesManager::ResourcesManager::~ResourcesManager() {
 
