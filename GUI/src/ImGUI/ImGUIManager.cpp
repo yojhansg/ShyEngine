@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include <iostream>
 #include "Scene.h"
-#include "Image.h"
+#include "GameObject.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -45,7 +45,7 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    ImVec2 windowSize = ImVec2(1920, 1080);
+    ImVec2 windowSize = ImVec2(1080, 720);
     createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowSize.x, windowSize.y);
     createSDLRenderer();
 }

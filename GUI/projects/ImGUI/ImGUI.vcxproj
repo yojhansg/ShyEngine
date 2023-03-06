@@ -103,7 +103,7 @@
     <ClInclude Include="..\..\src\ImGUI\Camera.h" />
     <ClInclude Include="..\..\src\ImGUI\FileExplorer.h" />
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
-    <ClInclude Include="..\..\src\ImGUI\Image.h" />
+    <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
     <ClInclude Include="..\..\src\ImGUI\Scene.h" />

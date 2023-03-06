@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include "imgui.h"
-#include "Image.h"
+#include "GameObject.h"
 #include "SDL.h"
 
 Camera::Camera(ImVec2 position, float sf)

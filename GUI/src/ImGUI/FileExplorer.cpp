@@ -1,7 +1,7 @@
 #include "FileExplorer.h"
 #include <imgui.h>
 #include "ImGUIManager.h"
-#include "Image.h"
+#include "GameObject.h"
 #include "Scene.h"
 #include <filesystem>
 #include "imgui.h"
@@ -24,6 +24,7 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoColl
     _getcwd(buffer, FILENAME_MAX);
     std::string project_path(buffer);
     current_path = project_path;
+
 }
 
 void PEditor::FileExplorer::drawFileExplorerWindow()
@@ -59,19 +60,18 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
     {
         std::string filename = file.path().filename().string();
 
+        std::string path = file.is_directory() ? "folder.png" : "file.png";
+        PEditor::GameObject* gameObject = new  PEditor::GameObject(path);
+        ImTextureID imageTextId = (ImTextureID)gameObject->getTexture();
+        const float iconSize = ImGui::GetTextLineHeight();
+        ImGui::Image(imageTextId, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
+
+        ImGui::SameLine();
+
+        ImGui::SetWindowFontScale(1.5);
+
         if (file.is_directory())
         {
-            std::string path = "test1.jpg";
-            PEditor::Image* folderImage = new  PEditor::Image(path);
-
-            static ImTextureID folder_icon_texture_id = (ImTextureID) folderImage->getTexture();
-            const float icon_size = ImGui::GetTextLineHeight();
-            const ImVec2 icon_position = ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y + (ImGui::GetItemRectSize().y - icon_size) * 0.5f);
-
-            ImGui::Image(folder_icon_texture_id, ImVec2(icon_size, icon_size), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
-
-            ImGui::SameLine();
-
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f)); 
 
             // Display directories in blue color
@@ -90,6 +90,8 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                 // TODO: Handle file selection
             }
         }
+
+        ImGui::SetWindowFontScale(1);
     }
 
 }
@@ -103,6 +105,7 @@ void PEditor::FileExplorer::render()
     ImGui::SetWindowSize(ImVec2(width, height));
 
     ImGui::SetWindowPos(ImVec2(posX, posY));
+
 
     //for (auto component : components)
     //{

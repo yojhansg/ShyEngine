@@ -8,7 +8,7 @@ struct SDL_Renderer;
 class ImGUIManager;
 
 namespace PEditor {
-	class Image : public WindowComponent
+	class GameObject : public WindowComponent
 	{
 
 		SDL_Texture* text;
@@ -18,7 +18,7 @@ namespace PEditor {
 
 	public:
 
-		Image(std::string& path);
+		GameObject(std::string& path);
 
 		virtual void render();
 

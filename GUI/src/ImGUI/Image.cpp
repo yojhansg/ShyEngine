@@ -1,11 +1,11 @@
-#include "Image.h"
+#include "GameObject.h"
 #include "SDL.h"
 #include "SDL_image.h"
 #include "imgui.h"
 #include "ImGUIManager.h"
 
 
-PEditor::Image::Image(std::string& path)
+PEditor::GameObject::GameObject(std::string& path)
 {
 	posX = 0;
 	posY = 0;
@@ -17,33 +17,33 @@ PEditor::Image::Image(std::string& path)
 	height = surface->h;
 }
 
-void PEditor::Image::render()
+void PEditor::GameObject::render()
 {
 	ImGui::Image(text, ImVec2(width, height));
 }
 
-SDL_Texture* PEditor::Image::getTexture()
+SDL_Texture* PEditor::GameObject::getTexture()
 {
 	return text;
 }
 
-int PEditor::Image::getWidth()
+int PEditor::GameObject::getWidth()
 {
 	return width;
 }
 
-int PEditor::Image::getHeight()
+int PEditor::GameObject::getHeight()
 {
 	return height;
 }
 
-void PEditor::Image::setPosition(ImVec2 newPos)
+void PEditor::GameObject::setPosition(ImVec2 newPos)
 {
 	posX = newPos.x;
 	posY = newPos.y;
 }
 
-ImVec2 PEditor::Image::getPosition()
+ImVec2 PEditor::GameObject::getPosition()
 {
 	return ImVec2(posX,posY);
 }

@@ -2,7 +2,7 @@
 #include "imgui_files/imgui.h"
 #include "Window.h"
 #include "Scene.h"
-#include "Image.h"
+#include "GameObject.h"
 #include "MenuBar.h"
 #include "Hierarchy.h"
 #include "FileExplorer.h"

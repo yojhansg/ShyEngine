@@ -14,7 +14,7 @@ class ImGUIManager;
 
 namespace PEditor {
 	class Window;
-	class Image;
+	class GameObject;
 };
 
 namespace PEditor {
@@ -28,7 +28,7 @@ namespace PEditor {
 
 		Camera* camera;
 
-		std::vector<PEditor::Image*> images;
+		std::vector<PEditor::GameObject*> gameObjects;
 
 		int width, height;
 		int posX, posY;
@@ -38,7 +38,7 @@ namespace PEditor {
 		Scene();
 
 		void addImage(std::string path);
-		std::vector<PEditor::Image*> getGameObjects();
+		std::vector<PEditor::GameObject*> getGameObjects();
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 

@@ -51,7 +51,7 @@
     <ClInclude Include="..\..\src\ImGUI\WindowComponent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\Image.h">
+    <ClInclude Include="..\..\src\ImGUI\GameObject.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\Scene.h">

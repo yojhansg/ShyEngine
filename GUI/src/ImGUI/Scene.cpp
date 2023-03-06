@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "SDL.h"
-#include "Image.h"
+#include "GameObject.h"
 #include "Window.h"
 #include "imgui.h"
 #include "Camera.h"
@@ -44,12 +44,12 @@ PEditor::Scene::Scene()
 
 void PEditor::Scene::addImage(std::string path)
 {
-	images.push_back(new PEditor::Image(path));
+	gameObjects.push_back(new PEditor::GameObject(path));
 }
 
-std::vector<PEditor::Image*> PEditor::Scene::getGameObjects()
+std::vector<PEditor::GameObject*> PEditor::Scene::getGameObjects()
 {
-	return images;
+	return gameObjects;
 }
 
 bool PEditor::Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
@@ -77,16 +77,16 @@ void PEditor::Scene::render()
 {
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_RenderClear(renderer);
-	for (auto image : images) {
+	for (auto gameObject : gameObjects) {
 
-		ImVec2 position = ImVec2(image->getPosition().x + camera->getPosition().x , image->getPosition().y + camera->getPosition().y);
-		float width = image->getWidth() * camera->getScrollFactor();
-		float height = image->getHeight() * camera->getScrollFactor();
+		ImVec2 position = ImVec2(gameObject->getPosition().x + camera->getPosition().x , gameObject->getPosition().y + camera->getPosition().y);
+		float width = gameObject->getWidth() * camera->getScrollFactor();
+		float height = gameObject->getHeight() * camera->getScrollFactor();
 
 		//if (entityOutsideCamera(position, width, height)) continue;
 
 		SDL_Rect dst = { position.x, position.y, width, height };
-		SDL_RenderCopy(renderer, image->getTexture(), NULL, &dst);
+		SDL_RenderCopy(renderer, gameObject->getTexture(), NULL, &dst);
 	}
 
 	SDL_SetRenderTarget(renderer, NULL);

@@ -1,7 +1,7 @@
 #include "Hierarchy.h"
 #include <imgui.h>
 #include "ImGUIManager.h"
-#include "Image.h"
+#include "GameObject.h"
 #include "Scene.h"
 
 PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoResize | NoCollapse | NoMove)
@@ -23,7 +23,7 @@ void PEditor::Hierarchy::render()
 
 	PEditor::Scene* scene = imGUIManager->getScene();
 	
-	std::vector<Image*> gameObjects = scene->getGameObjects();
+	std::vector<GameObject*> gameObjects = scene->getGameObjects();
 
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
