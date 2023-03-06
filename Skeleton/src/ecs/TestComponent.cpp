@@ -11,6 +11,6 @@ void ECS::TestComponent::start() {
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	//transform->rotate(0.1f);
+	//transform->scale(0.999f);
 
 }

@@ -44,7 +44,7 @@ namespace ECS {
         void setSize(float x, float y);
 
         Utilities::Vector2D getOffSet();
-        void setOffSet(float x, float y);
+        void addOffSet(float x, float y);
 
         b2Body* getBody();
         b2PolygonShape* getShape();

@@ -50,8 +50,9 @@ void Game::firstScene() {
 	scene->init();
 
 	// Player settings
-	tr->setPosition(renderer->getWidth() / 2 - im->getWidth() / 2, renderer->getHeight() / 2 - im->getHeight() / 2);
-	collider->setSize(200, 200);
+	tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
+	tr->setScale(1.0f, 0.5f);
+	//collider->setSize(200, 200);
 	//tr->setRotation(45.0f);
 
 	//// Ground settings

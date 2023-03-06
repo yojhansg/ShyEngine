@@ -44,8 +44,12 @@ namespace ECS {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
-		int x = std::round(transform->getPosition()->getX());
-		int y = std::round(transform->getPosition()->getY());
+		float distanceX = (width * transform->getScale()->getX()) / 2;
+
+		distanceX = (transform->getScale()->getX() >= 1) ? distanceX : -distanceX;
+
+		int x = std::round(transform->getPosition()->getX() - width / 2 + distanceX);
+		int y = std::round(transform->getPosition()->getY() - height / 2);
 		int w = std::round(transform->getScale()->getX() * width);
 		int h = std::round(transform->getScale()->getY() * height);
 

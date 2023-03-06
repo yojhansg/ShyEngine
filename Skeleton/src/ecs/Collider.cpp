@@ -49,20 +49,22 @@ void ECS::Collider::init() {
 	shape->SetAsBox(size.getX() / 2, size.getY() / 2);
 
 	bodyDefinition->type = b2_staticBody;
-	bodyDefinition->position.Set(position->getX() + size.getX() / 2 + offSet.getX(), position->getY() + size.getY() / 2 + offSet.getY());
+	bodyDefinition->position.Set(position->getX() + offSet.getX(), position->getY()+ offSet.getY());
 	bodyDefinition->angle = (M_PI / 180) * (*rotation);
 
 	body = world->CreateBody(bodyDefinition);
 
 	fixture = body->CreateFixture(shape, 0.0f);
+
 }
 
 void ECS::Collider::update(float deltaTime) {
 
 	// Position + half size to center the collider + collider offsets
-	temporalPosition->Set(position->getX() + size.getX() / 2 + offSet.getX(), position->getY() + size.getY() / 2 + offSet.getY());
+	temporalPosition->Set(position->getX() + offSet.getX(), position->getY() + offSet.getY());
 
 	body->SetTransform(*temporalPosition, (b2_pi / 180) * (*rotation));
+
 }
 
 void ECS::Collider::fixedUpdate(float fixedDeltaTime) {
@@ -98,6 +100,9 @@ Utilities::Vector2D ECS::Collider::getSize() {
 }
 
 void ECS::Collider::setSize(float x, float y) {
+
+	std::cout << body->GetTransform().p.x << " " << body->GetTransform().p.y << std::endl;
+
 	this->size.set(x, y);
 
 	body->DestroyFixture(fixture);
@@ -109,15 +114,20 @@ void ECS::Collider::setSize(float x, float y) {
 	fixtureDef.shape = &boxShape;
 	fixtureDef.density = 1;
 
-	fixture = body->CreateFixture(&fixtureDef); //AJUSTAR POSICION DEL NUEVO COLLIDER DESPUES DE CAMBIARLE EL TAMAÑO
+	fixture = body->CreateFixture(&fixtureDef);
+
+	//offSet.set(offSet.getX() + , offSet.getY() + );
+
+
+	std::cout << body->GetTransform().p.x << " " << body->GetTransform().p.y << std::endl;
 }
 
 Utilities::Vector2D ECS::Collider::getOffSet() {
 	return offSet;
 }
 
-void ECS::Collider::setOffSet(float x, float y) {
-	offSet.set(x, y);
+void ECS::Collider::addOffSet(float x, float y) {
+	offSet.set(offSet.getX() + x, offSet.getY() + y);
 }
 
 b2Body* ECS::Collider::getBody() {
