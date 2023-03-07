@@ -11,6 +11,10 @@ void ECS::TestComponent::start() {
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	//transform->scale(0.999f);
+	Utilities::Vector2D a = Utilities::Vector2D();
+	a.setX(transform->getScale()->getX() - transform->getScale()->getX() * deltaTime / 10);
+	a.setY(transform->getScale()->getY() - transform->getScale()->getY() * deltaTime / 10);
+
+	transform->setScale(a);
 
 }

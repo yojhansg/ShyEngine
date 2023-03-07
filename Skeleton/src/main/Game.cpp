@@ -30,8 +30,8 @@ void Game::firstScene() {
 	// Player
 	ECS::Entity* player = scene->createEntity("Player");
 
-	auto im = player->addComponent<ECS::Image>("link.png");
 	auto tr = player->addComponent<ECS::Transform>();
+	auto im = player->addComponent<ECS::Image>("link.png");
 	auto collider = player->addComponent<ECS::Collider>();
 	auto tComp = player->addComponent<ECS::TestComponent>();
 
@@ -51,7 +51,8 @@ void Game::firstScene() {
 
 	// Player settings
 	tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
-	tr->setScale(1.0f, 0.5f);
+	tr->setScale(0.5f, 0.5f);
+	collider->addOffSet(50, 50);
 	//collider->setSize(200, 200);
 	//tr->setRotation(45.0f);
 

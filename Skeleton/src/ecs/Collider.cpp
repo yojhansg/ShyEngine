@@ -44,7 +44,7 @@ void ECS::Collider::init() {
 
 	// Collider size = Image size if Image component exists in the entity
 	if (image != nullptr)
-		size.set(image->getWidth(), image->getHeight());
+		size.set(image->getTextureWidth(), image->getTextureHeight());
 
 	shape->SetAsBox(size.getX() / 2, size.getY() / 2);
 
@@ -63,8 +63,23 @@ void ECS::Collider::update(float deltaTime) {
 	// Position + half size to center the collider + collider offsets
 	temporalPosition->Set(position->getX() + offSet.getX(), position->getY() + offSet.getY());
 
+	// Position + rotation
 	body->SetTransform(*temporalPosition, (b2_pi / 180) * (*rotation));
 
+	// Scale
+	float scaledX = (size.getX() * transform->getScale()->getX());
+	float scaledY = (size.getY() * transform->getScale()->getY());
+
+	body->DestroyFixture(fixture);
+
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(scaledX / 2, scaledY / 2);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &boxShape;
+	fixtureDef.density = 1;
+
+	fixture = body->CreateFixture(&fixtureDef);
 }
 
 void ECS::Collider::fixedUpdate(float fixedDeltaTime) {
@@ -100,26 +115,7 @@ Utilities::Vector2D ECS::Collider::getSize() {
 }
 
 void ECS::Collider::setSize(float x, float y) {
-
-	std::cout << body->GetTransform().p.x << " " << body->GetTransform().p.y << std::endl;
-
 	this->size.set(x, y);
-
-	body->DestroyFixture(fixture);
-
-	b2PolygonShape boxShape;
-	boxShape.SetAsBox(x / 2, y / 2);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &boxShape;
-	fixtureDef.density = 1;
-
-	fixture = body->CreateFixture(&fixtureDef);
-
-	//offSet.set(offSet.getX() + , offSet.getY() + );
-
-
-	std::cout << body->GetTransform().p.x << " " << body->GetTransform().p.y << std::endl;
 }
 
 Utilities::Vector2D ECS::Collider::getOffSet() {

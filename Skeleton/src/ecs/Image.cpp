@@ -44,12 +44,17 @@ namespace ECS {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
-		float distanceX = (width * transform->getScale()->getX()) / 2;
+		float scaledX = (width * transform->getScale()->getX());
+		float scaledY = (height * transform->getScale()->getY());
 
-		distanceX = (transform->getScale()->getX() >= 1) ? distanceX : -distanceX;
+		float distanceX = (abs(width - scaledX)) / 2;
+		float distanceY = (abs(height - scaledY)) / 2;
+
+		distanceX = (transform->getScale()->getX() > 1) ? -distanceX : distanceX;
+		distanceY = (transform->getScale()->getY() > 1) ? -distanceY : distanceY;
 
 		int x = std::round(transform->getPosition()->getX() - width / 2 + distanceX);
-		int y = std::round(transform->getPosition()->getY() - height / 2);
+		int y = std::round(transform->getPosition()->getY() - height / 2 + distanceY);
 		int w = std::round(transform->getScale()->getX() * width);
 		int h = std::round(transform->getScale()->getY() * height);
 
@@ -58,30 +63,17 @@ namespace ECS {
 		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotation(), rotationPoint, mode);
 	}
 
-	int Image::getWidth() {
+	int Image::getTextureWidth() {
 		return width;
 	}
 
-	int Image::getHeight() {
+	int Image::getTextureHeight() {
 		return height;
 	}
 
 	void Image::setSrcRect(int x, int y, int w, int h) {
 		srcX = x; srcY = y;
 		srcWidth = w; srcHeight = h;
-	}
-
-	void Image::setWidth(float w) {
-		width = w;
-	}
-
-	void Image::setHeight(float h) {
-		height = h;
-	}
-
-	void Image::setSize(float w, float h) {
-		width = w;
-		height = h;
 	}
 
 	void Image::setFlipX(bool flip) {

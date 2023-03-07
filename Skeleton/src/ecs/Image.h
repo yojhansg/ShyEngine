@@ -19,17 +19,11 @@ namespace ECS {
 
 		void render() override;
 
-		int getWidth();
+		int getTextureWidth();
 
-		int getHeight();
+		int getTextureHeight();
 
 		void setSrcRect(int x, int y, int w, int h);
-
-		void setWidth(float width);
-
-		void setHeight(float height);
-
-		void setSize(float width, float height);
 
 		void setFlipX(bool flip);
 
