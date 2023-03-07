@@ -2,6 +2,7 @@
 
 #include <Singleton.h>
 #include <unordered_map>
+#include <string>
 
 namespace RendererManager {
 	class Texture;
