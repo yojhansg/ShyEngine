@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,30 +153,30 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\ecs\Camera.h" />
-    <ClInclude Include="..\..\src\ecs\Collider.h" />
     <ClInclude Include="..\..\src\ecs\Component.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Collider.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Image.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Rigidbody.h" />
+    <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
     <ClInclude Include="..\..\src\ecs\Entity.h" />
-    <ClInclude Include="..\..\src\ecs\Image.h" />
-    <ClInclude Include="..\..\src\ecs\Rigidbody.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
     <ClInclude Include="..\..\src\ecs\SceneManager.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\Variable.h" />
-    <ClInclude Include="..\..\src\ecs\TestComponent.h" />
-    <ClInclude Include="..\..\src\ecs\Transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ecs\Camera.cpp" />
-    <ClCompile Include="..\..\src\ecs\Collider.cpp" />
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Collider.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Rigidbody.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
-    <ClCompile Include="..\..\src\ecs\Image.cpp" />
-    <ClCompile Include="..\..\src\ecs\Rigidbody.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp" />
-    <ClCompile Include="..\..\src\ecs\TestComponent.cpp" />
-    <ClCompile Include="..\..\src\ecs\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\input\Input.vcxproj">

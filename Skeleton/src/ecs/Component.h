@@ -79,9 +79,6 @@ namespace ECS {
 		
 		typedef Scripting::Variable (*CallableMethod)(std::vector<Scripting::Variable> const&);
 		std::map <std::string, CallableMethod> registeredMethods;
-
 	};
-
-
 }
 

@@ -4,11 +4,11 @@
 #include <RendererManager.h>
 #include <Scene.h>
 #include <Entity.h>
-#include <Transform.h>
-#include <Image.h>
-#include <Collider.h>
-#include <Rigidbody.h>
-#include <TestComponent.h>
+#include <Components/Transform.h>
+#include <Components/Image.h>
+#include <Components/Collider.h>
+#include <Components/Rigidbody.h>
+#include <Components/TestComponent.h>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
