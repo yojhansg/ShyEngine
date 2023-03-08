@@ -36,6 +36,8 @@ void Game::firstScene() {
 	auto tComp = player->addComponent<ECS::TestComponent>();
 
 
+	tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});
+
 	/*auto rb = player->addComponent<ECS::Rigidbody>();
 	rb->setBodyType(ECS::Rigidbody::DINAMIC);*/
 

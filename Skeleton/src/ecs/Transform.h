@@ -3,6 +3,8 @@
 #include "Component.h"
 #include "Vector2D.h"
 
+#include "Scripting/Variable.h"
+
 namespace ECS {
 
 	class Transform : public Component {
@@ -37,4 +39,8 @@ namespace ECS {
 		double rotation_;
 	};
 
+
+
+	/*Metodos scripting*/
+	Scripting::Variable MiMetodo(std::vector<Scripting::Variable>const&);
 }

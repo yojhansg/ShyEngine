@@ -19,6 +19,12 @@
     <Filter Include="Archivos de encabezado\Components">
       <UniqueIdentifier>{992a41d1-7c91-4e83-ac9c-0b5c825fe9d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Scripting">
+      <UniqueIdentifier>{ed79e30d-508f-4c53-a2bb-712c34dd6362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Scripting">
+      <UniqueIdentifier>{c02ceda0-fd69-479f-853d-10a49f6e93ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ecs\Entity.h">
@@ -51,6 +57,9 @@
     <ClInclude Include="..\..\src\ecs\TestComponent.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\Variable.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -82,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\TestComponent.cpp">
       <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
