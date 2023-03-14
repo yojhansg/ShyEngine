@@ -17,6 +17,7 @@ namespace SoundManager {
 }
 
 namespace ECS {
+	class ECS;
 	class SceneManager;
 }
 
@@ -40,6 +41,7 @@ public:
 
 private:
 
+	ECS::ECS* ecs;
 	ECS::SceneManager* sceneManager;
 	PhysicsManager::PhysicsManager* physicsManager;
 	RendererManager::RendererManager* rendererManager;

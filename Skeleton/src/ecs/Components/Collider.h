@@ -26,9 +26,11 @@ namespace ECS {
 
         void init() override;
 
+        void start() override;
+
         void update(float deltaTime) override;
 
-        void fixedUpdate(float fixedDeltaTime) override;
+        //void fixedUpdate(float fixedDeltaTime) override;
 
         // Setters & getters
         void setTrigger(bool trigger);
@@ -48,14 +50,17 @@ namespace ECS {
 
         b2Body* getBody();
         b2PolygonShape* getShape();
+        b2Fixture* getFixture();
 
     private:
+
+        float screenToWorldFactor;
 
         Utilities::Vector2D size;
         Utilities::Vector2D offSet;
 
         // Just for comfort
-        b2Vec2* temporalPosition;
+        b2Vec2* framePosition;
 
         // Position, Rotation & Scale
         Utilities::Vector2D* position;

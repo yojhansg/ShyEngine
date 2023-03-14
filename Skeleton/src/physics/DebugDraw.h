@@ -20,6 +20,7 @@ namespace PhysicsManager {
 
 	private:
 		SDL_Renderer* renderer;
+
 	};
 
 }

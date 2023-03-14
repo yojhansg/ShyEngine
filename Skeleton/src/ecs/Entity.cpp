@@ -102,9 +102,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onCollisionEnter() {
+	void Entity::onCollisionEnter(Entity* a, Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onCollisionEnter();
+			if (c->isActive()) c->onCollisionEnter(a, b);
 		}
 	}
 
@@ -114,9 +114,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onCollisionExit() {
+	void Entity::onCollisionExit(Entity* a, Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onCollisionExit();
+			if (c->isActive()) c->onCollisionExit(a, b);
 		}
 	}
 

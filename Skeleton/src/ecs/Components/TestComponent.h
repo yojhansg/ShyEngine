@@ -13,6 +13,10 @@ namespace ECS {
 
 		void update(float deltaTime) override;
 
+		void onCollisionEnter(Entity* a, Entity* b) override;
+
+		void onCollisionExit(Entity* a, Entity* b) override;
+
 	private:
 
 		Transform* transform;

@@ -1,12 +1,15 @@
 #include "PhysicsManager.h"
 #include "box2d/box2d.h"
 #include "DebugDraw.h"
+#include "box2d/b2_contact.h"
 
 namespace PhysicsManager {
 
 	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
 		this->gravity = new b2Vec2(gravity.getX(), gravity.getY());
 		world = new b2World(*this->gravity);
+
+		this->screenToWorldFactor = 100.0f;
 
 		this->velocityIterations = velocityIterations;
 		this->positionIterations = positionIterations;
@@ -33,6 +36,10 @@ namespace PhysicsManager {
 		initPhysicsManager(gravity, velocityIterations, positionIterations);
 	}
 
+	void PhysicsManager::setContactListener(b2ContactListener* contactListener) {
+		world->SetContactListener(contactListener);
+	}
+
 	void PhysicsManager::fixedUpdate(float fixedDeltaTime) {
 		world->Step(fixedDeltaTime, velocityIterations, positionIterations);
 	}
@@ -46,6 +53,10 @@ namespace PhysicsManager {
 
 	void PhysicsManager::enableDebugDraw(bool enable) {
 		debugDrawEnabled = enable;
+	}
+
+	float PhysicsManager::getScreenToWorldFactor() {
+		return screenToWorldFactor;
 	}
 
 	b2World* PhysicsManager::getWorld() {

@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Component.h"
+#include "Vector2D.h"
 #include <box2d/b2_fixture.h>
 
-class b2BodyDef;
 class b2Body;
-class b2PolygonShape;
-class b2FixtureDef;
+class b2Fixture;
 class b2World;
 enum b2BodyType;
 
@@ -41,35 +40,22 @@ namespace ECS {
 
         void setGravityScale(float scale);
 
-        void freezeXPosition(bool value);
-
-        void freezeYPosition(bool value);
-
-        void freezeZRotation(bool value);
-
     private:
 
-        b2BodyType assingBodyType(BODY_TYPE type);
-
-        BODY_TYPE bodyType;
+        float screenToWorldFactor;
 
         float mass;
         float linearDrag;
         float angularDrag;
-
         float gravityScale;
 
-        // Constraints
-        bool xMovementLocked;
-        bool yMovementLocked;
-        bool rotationLocked;
+        BODY_TYPE bodyType;
 
         // Box 2D
         b2World* world;
         
         b2Body* body;
-        b2BodyDef* bodyDefinition;
-        b2FixtureDef* fixture;
+        b2Fixture* fixture;
 
         // Entity Components
         Transform* transform;

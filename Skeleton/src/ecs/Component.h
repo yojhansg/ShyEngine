@@ -59,11 +59,11 @@ namespace ECS {
 
 		virtual void onSceneDown() {};
 
-		virtual void onCollisionEnter() {};
+		virtual void onCollisionEnter(Entity* a, Entity* b) {};
 
 		virtual void onCollisionStay() {};
 
-		virtual void onCollisionExit() {};
+		virtual void onCollisionExit(Entity* a, Entity* b) {};
 
 		virtual void onTriggerEnter() {};
 

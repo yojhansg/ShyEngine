@@ -1,5 +1,6 @@
 #include "DebugDraw.h"
 #include <RendererManager.h>
+#include "PhysicsManager.h"
 #include <SDL.h>
 
 namespace PhysicsManager {
@@ -10,17 +11,26 @@ namespace PhysicsManager {
 	}
 
 	void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
+
+		float screenToWorldFactor = PhysicsManager::instance()->getScreenToWorldFactor();
 		
 		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
 
 		for (int i = 1; i < vertexCount; i++) {
 			b2Vec2 v1 = vertices[i - 1];
-			b2Vec2 v2 = vertices[i];
+			b2Vec2 v2 = vertices[i]; 
+			
+			v1 *= screenToWorldFactor;
+			v2 *= screenToWorldFactor;
+
 			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 		}
 
 		b2Vec2 v1 = vertices[vertexCount - 1];
 		b2Vec2 v2 = vertices[0];
+
+		v1 *= screenToWorldFactor;
+		v2 *= screenToWorldFactor;
 
 		SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
 

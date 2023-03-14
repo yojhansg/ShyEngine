@@ -8,6 +8,7 @@ namespace ECS {
 
 	class Component;
 	class Scene;
+	class ContactListener;
 
 	// This is a way to ensure that T is a Component
 	template <typename T>
@@ -16,6 +17,7 @@ namespace ECS {
 	class Entity final {
 
 		friend Scene;
+		friend ContactListener;
 
 	public:
 
@@ -134,13 +136,13 @@ namespace ECS {
 		void onSceneDown();
 
 		// Called when the entity starts colliding with other entity
-		void onCollisionEnter();
+		void onCollisionEnter(Entity* a, Entity* b);
 
 		// Called when the entity is colliding with other entity
 		void onCollisionStay();
 
 		// Called when the entity exit the collider of the other entity
-		void onCollisionExit();
+		void onCollisionExit(Entity* a, Entity* b);
 
 		// Called when the entity starts trigging an entity marked as trigger
 		void onTriggerEnter();

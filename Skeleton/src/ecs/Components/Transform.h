@@ -27,7 +27,7 @@ namespace ECS {
 		void setRotation(float rotation);
 
 		// Modifiers
-		void translate(const Utilities::Vector2D& position);
+		void translate(const Utilities::Vector2D& direction);
 		void translate(float x, float y);
 		void rotate(float rotation);
 		void scale(float scale);

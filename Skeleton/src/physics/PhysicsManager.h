@@ -5,6 +5,8 @@
 
 class b2Vec2;
 class b2World;
+class b2Body;
+class b2ContactListener;
 
 namespace PhysicsManager {
 
@@ -29,6 +31,10 @@ namespace PhysicsManager {
 
 		void enableDebugDraw(bool enable);
 
+		void setContactListener(b2ContactListener* contactListener);
+
+		float getScreenToWorldFactor();
+
 	private:
 
 		void initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations);
@@ -47,5 +53,7 @@ namespace PhysicsManager {
 
 		// Debug draw class inherited from b2draw
 		DebugDraw* b2draw;
+
+		float screenToWorldFactor;
 	};
 }

@@ -9,13 +9,15 @@
 
 ECS::Collider::Collider() {
 
+	screenToWorldFactor = PhysicsManager::PhysicsManager::instance()->getScreenToWorldFactor();
+
 	size = Utilities::Vector2D(1, 1);
 	offSet = Utilities::Vector2D(0, 0);
 
 	transform = nullptr; world = nullptr;
 	body = nullptr; shape = nullptr;
 	bodyDefinition = nullptr; 
-	temporalPosition = nullptr;
+	framePosition = nullptr;
 	fixture = nullptr; scale = nullptr;
 }
 
@@ -23,7 +25,7 @@ ECS::Collider::~Collider() {
 	delete shape;
 	delete bodyDefinition;
 
-	delete temporalPosition;
+	delete framePosition;
 
 	world->DestroyBody(body);
 }
@@ -31,7 +33,7 @@ ECS::Collider::~Collider() {
 void ECS::Collider::init() {
 	world = PhysicsManager::PhysicsManager::instance()->getWorld();
 
-	bodyDefinition = new b2BodyDef(); shape = new b2PolygonShape(); temporalPosition = new b2Vec2;
+	bodyDefinition = new b2BodyDef(); shape = new b2PolygonShape(); framePosition = new b2Vec2();
 
 	transform = this->getEntity()->getComponent<Transform>();
 	assert(transform != nullptr, "La entidad debe contener un componente Transform");
@@ -44,46 +46,51 @@ void ECS::Collider::init() {
 
 	// Collider size = Image size if Image component exists in the entity
 	if (image != nullptr)
-		size.set(image->getTextureWidth(), image->getTextureHeight());
+		size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
 
-	shape->SetAsBox(size.getX() / 2, size.getY() / 2);
+	shape->SetAsBox(size.getX() / 2.0f, size.getY() / 2.0f);
 
 	bodyDefinition->type = b2_staticBody;
-	bodyDefinition->position.Set(position->getX() + offSet.getX(), position->getY()+ offSet.getY());
-	bodyDefinition->angle = (M_PI / 180) * (*rotation);
+	bodyDefinition->position.Set(0, 0);
+	bodyDefinition->userData.pointer = uintptr_t(static_cast<void*>(this->getEntity()));
 
 	body = world->CreateBody(bodyDefinition);
 
 	fixture = body->CreateFixture(shape, 0.0f);
+	fixture->SetRestitution(0.5f);
 
+}
+
+void ECS::Collider::start() {
+
+	framePosition->Set(position->getX() / screenToWorldFactor + offSet.getX(), position->getY() / screenToWorldFactor + offSet.getY());
+
+	body->SetTransform(*framePosition, (b2_pi / 180) * (*rotation));
 }
 
 void ECS::Collider::update(float deltaTime) {
 
-	// Position + half size to center the collider + collider offsets
-	temporalPosition->Set(position->getX() + offSet.getX(), position->getY() + offSet.getY());
+	//// Position + collider offsets
+	//framePosition->Set(position->getX() / screenToWorldFactor + offSet.getX(), position->getY() / screenToWorldFactor + offSet.getY());
 
-	// Position + rotation
-	body->SetTransform(*temporalPosition, (b2_pi / 180) * (*rotation));
+	//// Position + rotation
+	//body->SetTransform(*framePosition, (b2_pi / 180) * (*rotation));
 
 	// Scale
-	float scaledX = (size.getX() * transform->getScale()->getX());
-	float scaledY = (size.getY() * transform->getScale()->getY());
+	float scaledX = (size.getX() * scale->getX());
+	float scaledY = (size.getY() * scale->getY());
 
 	body->DestroyFixture(fixture);
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(scaledX / 2, scaledY / 2);
+	boxShape.SetAsBox(scaledX / 2.0f, scaledY / 2.0f);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &boxShape;
 	fixtureDef.density = 1;
 
 	fixture = body->CreateFixture(&fixtureDef);
-}
-
-void ECS::Collider::fixedUpdate(float fixedDeltaTime) {
-
+	fixture->SetRestitution(0.8f);
 }
 
 void ECS::Collider::setTrigger(bool trigger) {
@@ -132,4 +139,8 @@ b2Body* ECS::Collider::getBody() {
 
 b2PolygonShape* ECS::Collider::getShape() {
 	return shape;
+}
+
+b2Fixture* ECS::Collider::getFixture() {
+	return fixture;
 }

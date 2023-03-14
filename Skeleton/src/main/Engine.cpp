@@ -6,6 +6,7 @@
 #include <InputManager.h>
 #include <SceneManager.h>
 #include <ResourcesManager.h>
+#include <ECS.h>
 #include <Scene.h>
 #include <SDLUtils.h>
 #include <EngineTime.h>
@@ -20,7 +21,7 @@ using namespace std::chrono;
 #define WIN_HEIGHT 1080
 
 Engine::Engine() {
-	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; 
+	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; ecs = nullptr;
 	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr;
 }
 
@@ -29,6 +30,7 @@ void Engine::init() {
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = RendererManager::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	physicsManager = PhysicsManager::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
+	ecs = ECS::ECS::init();
 	inputManager = InputManager::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
 	resourcesManager = ResourcesManager::ResourcesManager::init();
@@ -39,8 +41,6 @@ void Engine::init() {
 	Game g(sceneManager);
 	g.initScenes();
 }
-
-void Engine::close() {}
 
 void Engine::update() {
 
@@ -100,3 +100,5 @@ void Engine::update() {
 
 	}
 }
+
+void Engine::close() {}

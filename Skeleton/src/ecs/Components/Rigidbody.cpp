@@ -4,9 +4,11 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "PhysicsManager.h"
-#include "Vector2D.h"
+#include <iostream>
 
 ECS::Rigidbody::Rigidbody() {
+
+	screenToWorldFactor = PhysicsManager::PhysicsManager::instance()->getScreenToWorldFactor();
 
 	this->bodyType = STATIC;
 	this->mass = 1;
@@ -16,125 +18,73 @@ ECS::Rigidbody::Rigidbody() {
 
 	this->gravityScale = 1;
 
-	xMovementLocked = yMovementLocked = rotationLocked = false;
-
 	transform = nullptr; collider = nullptr;
 
 	// Box 2D
 	world = nullptr;
 
-	body = nullptr;
-	fixture = nullptr;
-	bodyDefinition = nullptr;
+	body = nullptr; fixture = nullptr;
 }
 
 ECS::Rigidbody::~Rigidbody() {
-	delete fixture;
-	delete bodyDefinition;
 }
-
 void ECS::Rigidbody::init() {
 
 	world = PhysicsManager::PhysicsManager::instance()->getWorld();
-
-	bodyDefinition = new b2BodyDef();
-	fixture = new b2FixtureDef();
 
 	transform = this->getEntity()->getComponent<Transform>();
 	assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
 	collider = this->getEntity()->getComponent<Collider>();
+	assert(collider != nullptr, "La entidad debe contener un componente Collider para poder añadir componente Rigidbody");
 
-	if (collider != nullptr) {
-		body = collider->getBody();
-		body->SetType(assingBodyType(bodyType));
-		body->SetLinearDamping(linearDrag);
-		body->SetAngularDamping(angularDrag);
-
-		switch (body->GetType()) {
-		case b2_staticBody:
-			body->CreateFixture(collider->getShape(), 0.0f);
-			break;
-		case b2_kinematicBody:
-			fixture->shape = collider->getShape();
-
-			body->CreateFixture(fixture);
-			break;
-		case b2_dynamicBody:
-			fixture->shape = collider->getShape();
-			fixture->friction = collider->getFriction();
-			fixture->restitution = collider->getBounciness();
-			fixture->isSensor = collider->isTrigger();
-			fixture->density = mass / (collider->getSize().getX() * collider->getSize().getY());
-
-			body->CreateFixture(fixture);
-			break;
-		default:
-			break;
-		}
-	}
-	else {
-		Utilities::Vector2D size = transform->getScale();
-
-
-	}
+	body = collider->getBody();
+	fixture = collider->getFixture();
 }
 
 void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
 
-	Utilities::Vector2D size = Utilities::Vector2D();
-
-	if (collider != nullptr)
-		size = collider->getSize();
-
-	transform->setPosition(body->GetPosition().x - size.getX() / 2, body->GetPosition().y - size.getY() / 2);
+	transform->setPosition(body->GetPosition().x * screenToWorldFactor, body->GetPosition().y * screenToWorldFactor);
 }
 
 void ECS::Rigidbody::setBodyType(BODY_TYPE type) { 
-	bodyType = type;
-}
-
-void ECS::Rigidbody::setLinearDrag(float drag) {
-	linearDrag = drag;
-}
-
-void ECS::Rigidbody::setAngularDrag(float drag) {
-	angularDrag = drag;
-}
-
-void ECS::Rigidbody::setMass(float mass) {
-	this->mass = mass;
-}
-
-void ECS::Rigidbody::setGravityScale(float scale) {
-	gravityScale = scale;
-}
-
-void ECS::Rigidbody::freezeXPosition(bool value) {
-	xMovementLocked = value;
-}
-
-void ECS::Rigidbody::freezeYPosition(bool value) {
-	yMovementLocked = value;
-}
-
-void ECS::Rigidbody::freezeZRotation(bool value) {
-	rotationLocked = value;
-}
-
-b2BodyType ECS::Rigidbody::assingBodyType(BODY_TYPE type) {
 
 	b2BodyType bodyType = b2_staticBody;
 
-	if (type == ECS::Rigidbody::STATIC) {
+	switch (type)
+	{
+	case ECS::Rigidbody::STATIC:
 		bodyType = b2_staticBody;
-	}
-	else if (type == ECS::Rigidbody::KINEMATIC) {
+		break;
+	case ECS::Rigidbody::KINEMATIC:
 		bodyType = b2_kinematicBody;
-	}
-	else if (type == ECS::Rigidbody::DINAMIC) {
+		break;
+	case ECS::Rigidbody::DINAMIC:
 		bodyType = b2_dynamicBody;
+		break;
+	default:
+		break;
 	}
 
-	return bodyType;
+	body->SetType(bodyType);
+}
+
+void ECS::Rigidbody::setLinearDrag(float drag) {
+	body->SetLinearDamping(drag);
+}
+
+void ECS::Rigidbody::setAngularDrag(float drag) {
+	body->SetAngularDamping(drag);
+}
+
+void ECS::Rigidbody::setMass(float mass) {
+
+	if (collider != nullptr)
+		fixture->SetDensity(mass / collider->getSize().volume());
+	else
+		fixture->SetDensity(mass);
+}
+
+void ECS::Rigidbody::setGravityScale(float scale) {
+	body->SetGravityScale(scale);
 }

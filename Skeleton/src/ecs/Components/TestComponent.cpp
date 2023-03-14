@@ -5,16 +5,27 @@
 #include "Entity.h"
 #include "Transform.h"
 
+
 void ECS::TestComponent::start() {
 	transform = this->getEntity()->getComponent<Transform>();
 }
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	Utilities::Vector2D a = Utilities::Vector2D();
-	a.setX(transform->getScale()->getX() - transform->getScale()->getX() * deltaTime / 10);
-	a.setY(transform->getScale()->getY() - transform->getScale()->getY() * deltaTime / 10);
+	transform->translate(1, 0);
 
-	transform->setScale(a);
+}
 
+void ECS::TestComponent::onCollisionEnter(Entity* a, Entity* b) {
+
+	std::cout << "Comenzo el choque!" << std::endl;
+	std::cout << a->getEntityName() << std::endl;
+	std::cout << b->getEntityName() << std::endl;
+}
+
+void ECS::TestComponent::onCollisionExit(Entity* a, Entity* b) {
+
+	std::cout << "Termino el choque!" << std::endl;
+	std::cout << a->getEntityName() << std::endl;
+	std::cout << b->getEntityName() << std::endl;
 }

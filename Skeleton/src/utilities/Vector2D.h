@@ -89,6 +89,10 @@ namespace Utilities {
 			return *this / magnitude();
 		}
 
+		inline float volume() const {
+			return x_ * y_;
+		}
+
 		// counter clockwise rotation in a normal coordinate system, and
 		// it is clockwise rotation if we work with a coordinate system
 		// in which the vertical axe is flipped (it is like a mirror over

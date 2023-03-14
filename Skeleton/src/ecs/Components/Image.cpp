@@ -37,7 +37,7 @@ namespace ECS {
 		flipMode();
 
 		// Rotation point
-		rotationPoint = new SDL_Point({ width / 2, height / 2 });
+		rotationPoint = new SDL_Point({ width / 4, height / 4 });
 	}
 
 	void Image::render() {

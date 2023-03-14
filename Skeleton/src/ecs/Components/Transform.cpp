@@ -58,8 +58,8 @@ namespace ECS {
 
 	// ------------ Modifiers ------------------
 
-	void Transform::translate(const Utilities::Vector2D& position) {
-		this->position_ += position;
+	void Transform::translate(const Utilities::Vector2D& direction) {
+		this->position_ += direction;
 	}
 
 	void Transform::translate(float x, float y) {
