@@ -26,8 +26,8 @@ ECS::Rigidbody::Rigidbody() {
 	body = nullptr; fixture = nullptr;
 }
 
-ECS::Rigidbody::~Rigidbody() {
-}
+ECS::Rigidbody::~Rigidbody() {}
+
 void ECS::Rigidbody::init() {
 
 	world = PhysicsManager::PhysicsManager::instance()->getWorld();
@@ -45,6 +45,7 @@ void ECS::Rigidbody::init() {
 void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
 
 	transform->setPosition(body->GetPosition().x * screenToWorldFactor, body->GetPosition().y * screenToWorldFactor);
+	transform->setRotation(body->GetAngle() * (180 / b2_pi));
 }
 
 void ECS::Rigidbody::setBodyType(BODY_TYPE type) { 

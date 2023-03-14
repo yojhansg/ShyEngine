@@ -50,8 +50,9 @@ void Game::firstScene() {
 	// Player settings
 	tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 	tr->setScale(0.5f, 0.5f);
+	tr->rotate(45.0f);
 
-	collider->setBounciness(0.2f);
+	collider->setBounciness(0.5f);
 	rb->setBodyType(ECS::Rigidbody::DINAMIC);
 
 	// Ground settings

@@ -14,6 +14,10 @@ ECS::Collider::Collider() {
 	size = Utilities::Vector2D(1, 1);
 	offSet = Utilities::Vector2D(0, 0);
 
+	trigger = false;
+	friction = 0;
+	bounciness = 0;
+
 	transform = nullptr; world = nullptr;
 	body = nullptr; shape = nullptr;
 	bodyDefinition = nullptr; 
@@ -26,6 +30,7 @@ ECS::Collider::~Collider() {
 	delete bodyDefinition;
 
 	delete framePosition;
+	delete frameFixtureDef;
 
 	world->DestroyBody(body);
 }
@@ -34,6 +39,7 @@ void ECS::Collider::init() {
 	world = PhysicsManager::PhysicsManager::instance()->getWorld();
 
 	bodyDefinition = new b2BodyDef(); shape = new b2PolygonShape(); framePosition = new b2Vec2();
+	frameFixtureDef = new b2FixtureDef();
 
 	transform = this->getEntity()->getComponent<Transform>();
 	assert(transform != nullptr, "La entidad debe contener un componente Transform");
@@ -57,7 +63,6 @@ void ECS::Collider::init() {
 	body = world->CreateBody(bodyDefinition);
 
 	fixture = body->CreateFixture(shape, 0.0f);
-	fixture->SetRestitution(0.5f);
 
 }
 
@@ -77,44 +82,45 @@ void ECS::Collider::update(float deltaTime) {
 	//body->SetTransform(*framePosition, (b2_pi / 180) * (*rotation));
 
 	// Scale
-	float scaledX = (size.getX() * scale->getX());
-	float scaledY = (size.getY() * scale->getY());
+	float scaledX = size.getX() * scale->getX();
+	float scaledY = size.getY() * scale->getY();
 
 	body->DestroyFixture(fixture);
 
-	b2PolygonShape boxShape;
-	boxShape.SetAsBox(scaledX / 2.0f, scaledY / 2.0f);
+	shape->SetAsBox(scaledX / 2.0f, scaledY / 2.0f);
 
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &boxShape;
-	fixtureDef.density = 1;
+	frameFixtureDef->shape = shape;
+	frameFixtureDef->density = 1;
 
-	fixture = body->CreateFixture(&fixtureDef);
-	fixture->SetRestitution(0.8f);
-}
+	fixture = body->CreateFixture(frameFixtureDef);
 
-void ECS::Collider::setTrigger(bool trigger) {
 	fixture->SetSensor(trigger);
-}
-
-bool ECS::Collider::isTrigger() {
-	return fixture->IsSensor();
-}
-
-void ECS::Collider::setFriction(float friction) {
+	fixture->SetRestitution(bounciness);
 	fixture->SetFriction(friction);
 }
 
+void ECS::Collider::setTrigger(bool trigger) {
+	this->trigger = trigger;
+}
+
+bool ECS::Collider::isTrigger() {
+	return trigger;
+}
+
+void ECS::Collider::setFriction(float friction) {
+	this->friction = friction;
+}
+
 float ECS::Collider::getFriction() {
-	return fixture->GetFriction();
+	return friction;
 }
 
 void ECS::Collider::setBounciness(float bounciness) {
-	fixture->SetRestitution(bounciness);
+	this->bounciness = bounciness;
 }
 
 float ECS::Collider::getBounciness() {
-	return fixture->GetRestitution();
+	return bounciness;
 }
 
 Utilities::Vector2D ECS::Collider::getSize() {

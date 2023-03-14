@@ -59,6 +59,11 @@ namespace ECS {
         Utilities::Vector2D size;
         Utilities::Vector2D offSet;
 
+        // Fixture properties
+        bool trigger;
+        float friction;
+        float bounciness;
+
         // Just for comfort
         b2Vec2* framePosition;
 
@@ -74,6 +79,9 @@ namespace ECS {
         b2Body* body;
         b2PolygonShape* shape;
         b2Fixture* fixture;
+
+        // Frame fixture settings
+        b2FixtureDef* frameFixtureDef;
 
         // Entity Components
         Transform* transform;
