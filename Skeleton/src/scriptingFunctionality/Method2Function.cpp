@@ -94,6 +94,8 @@ void Method2Function::ProcessFile(std::string const& path)
 
 	bool containsPublish = false;
 
+	std::string currentClassName = "";
+
 	std::vector<std::string> methodsFound;
 
 	while (stream) {
@@ -162,18 +164,6 @@ Example:
 
 */
 
-/*
-
-	struct Variable {
-				std::string name;
-				std::string type;
-			};
-
-	std::string className;
-	std::string returnType;
-	std::string methodName;
-	std::vector<Variable> input;
-*/
 
 
 #define BLANK " "
@@ -227,14 +217,15 @@ std::string Method2Function::Method::FunctionDefinition()
 		i++;
 	}
 
-	declaration.seekp(-2, declaration.cur);
+	if (input.size() > 0)
+		declaration.seekp(-2, declaration.cur);
 	declaration << ");" NEWLINE;
 
 
 	if (returnType != "void")
 		declaration << TAB "return ret;" NEWLINE;
 	else
-		declaration << TAB "return" VARIABLE "::Null();" NEWLINE;
+		declaration << TAB "return " VARIABLE "::Null();" NEWLINE;
 
 	declaration << "}" NEWLINE;
 
@@ -249,7 +240,7 @@ std::string Method2Function::Method::String2ScriptingVariable(std::string& in)
 		return "value.Int";
 	if (in == "float")
 		return "value.Float";
-	if (in == "bool") 
+	if (in == "bool")
 		return "value.Bool";
 	if (in == "char")
 		return "value.Char";

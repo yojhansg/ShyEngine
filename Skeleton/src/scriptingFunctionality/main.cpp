@@ -17,7 +17,15 @@ int main() {
 	method.methodName = "Move";
 	method.input = { {"newPosition", "Vector3"}};
 
-	std::cout << method.FunctionDeclaration() << std::endl;
+	std::cout << method.FunctionDeclaration() << std::endl << std::endl;
+	std::cout << method.FunctionDefinition() << std::endl;
+
+	method.returnType = "Vector3";
+	method.className = "Transform";
+	method.methodName = "GetPosition";
+	method.input = { };
+
+	std::cout << method.FunctionDeclaration() << std::endl << std::endl;
 	std::cout << method.FunctionDefinition() << std::endl;
 
 
