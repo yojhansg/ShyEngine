@@ -19,6 +19,7 @@ namespace ECS {
 
 		void render() override;
 
+	publish:
 		int getTextureWidth();
 
 		int getTextureHeight();

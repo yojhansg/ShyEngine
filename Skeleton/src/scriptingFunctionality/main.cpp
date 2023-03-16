@@ -10,7 +10,7 @@ int main() {
 //	void Move(Vector3 newPosition);
 //	Vector3 GetPosition();
 //}
-	auto method = Method2Function::Method();
+	/*auto method = Method2Function::Method();
 
 	method.returnType = "void";
 	method.className = "Transform";
@@ -29,7 +29,7 @@ int main() {
 	std::cout << method.FunctionDefinition() << std::endl;
 
 
-	return 0;
+	return 0;*/
 
 	Method2Function script(Method2Function::GetDefaultRoot(), Method2Function::GetDefaultOutput());
 

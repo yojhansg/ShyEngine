@@ -47,17 +47,6 @@ Method2Function& Method2Function::Begin()
 	return *this;
 }
 
-void Method2Function::CreateOutputFile(std::string const& fileName, std::vector<std::string>& methods)
-{
-	std::ofstream stream(output + "\\" + fileName + ".txt");
-
-	for (std::string& m : methods) {
-
-		//WriteMethod(stream, m);
-	}
-
-	stream.close();
-}
 
 void Method2Function::CreateOutputFolder()
 {
@@ -68,7 +57,7 @@ void Method2Function::CreateOutputFolder()
 
 std::string Method2Function::GetDefaultRoot()
 {
-	return std::filesystem::current_path().string();
+	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs)";
 }
 
 std::string Method2Function::GetDefaultOutput()
@@ -96,7 +85,6 @@ void Method2Function::ProcessFile(std::string const& path)
 
 	std::string currentClassName = "";
 
-	std::vector<std::string> methodsFound;
 
 	while (stream) {
 		std::string line;
@@ -107,24 +95,107 @@ void Method2Function::ProcessFile(std::string const& path)
 		if (line == "")
 			continue;
 
-		if (line == "publish") {
+		if (line.contains("//"))
+			continue;
+
+		if (line == "publish:") {
 			containsPublish = true;
 			continue;
-			//std::cout << "encontrado en " << path << std::endl;
 		}
 
-		if (containsPublish) {
-			methodsFound.push_back(line);
+		if (line == "public:" || line == "private:" || line == "protected:" || line == "}" || line == "};") {
+			containsPublish = false;
+			continue;
+		}
+
+		if (line.contains("class")) {
+			
+			if (line.contains(";"))
+				continue;
+
+			std::string className = line.erase(0, line.find("class") + 5);
+
+			if (className.contains("{")) {
+				className = className.substr(0, className.find("{"));
+			}
+			
+			size_t space = className.find(":");
+			if (space != std::string::npos)
+				className = className.substr(0, space);
+
+
+			currentClassName = Method2Function::trim(className);
+
+			continue;
+		}
+
+		if (currentClassName.size() > 0 && containsPublish) {
+			
+			methods.push_back(CreateMethod(line, currentClassName));
 		}
 	}
-
-	if (containsPublish) {
-		CreateOutputFile(std::filesystem::path(path).filename().replace_extension().string(), methodsFound);
-	}
-
 
 	stream.close();
 }
+
+
+
+Method2Function::Method Method2Function::CreateMethod(std::string const& line, std::string const& className)
+{
+	Method method;
+
+	method.className = className;
+
+	std::string l = trim(line);
+
+	int nextWord = l.find(" ");
+	int idx = nextWord + 1;
+	method.returnType = l.substr(0, nextWord);
+
+	l = l.substr(idx);
+	nextWord = l.find("(");
+	idx = nextWord + 1;
+	method.methodName = trim(l.substr(0, nextWord));
+
+	l = l.substr(idx);
+
+	bool isType = true;
+	std::string returnType;
+	std::string paramName;
+	for (char c : l) {
+		if (c == ' ') {
+
+			if (returnType.size() > 0)
+				isType = false;
+			
+			continue;
+		}
+
+
+		if (c == ',') {
+			method.input.push_back({ paramName, returnType });
+			returnType = "";
+			paramName = "";
+
+			isType = true;
+			continue;
+		}
+
+		if (c == ')') {
+			if (returnType.size() > 0)
+				method.input.push_back({ paramName, returnType });
+			break;
+		}
+
+		if (isType)
+			returnType += c;
+		else paramName += c;
+	}
+
+	return method;
+}
+
+
 
 
 /*
@@ -183,7 +254,7 @@ std::string Method2Function::Method::FunctionDeclaration()
 
 	definition << className << UNDERSCORE << methodName;
 
-	definition << "(" VECTOR ");";
+	definition << "(" VECTOR ");" NEWLINE;
 
 	return definition.str();
 }

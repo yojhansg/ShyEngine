@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
-#define WHITESPACE "\n\r\t\f\v"
+#define WHITESPACE "\n\r\t\f\v "
 
 /*
 	Method2Function
@@ -19,8 +20,15 @@
 
 	La finalidad es poder llamar a un metodo de una clase teniendo un puntero a la instancia y conociendo el nombre
 	del metodo
-*/
 
+
+	Orden de ejecucion:
+
+		1: Leer todos los ficheros
+		2: Generar fichero.h
+		3: Generar fichero.cpp
+
+*/
 
 class Method2Function {
 
@@ -101,10 +109,10 @@ public:
 
 	Method2Function& Begin();
 
-	/*
+	/* TODO
 		Crea los ficheros de salida del programa.
 	*/
-	void CreateOutputFile(std::string const& fileName, std::vector<std::string>& methods);
+	void CreateFileStream(std::ofstream& stream, std::string const& path);
 
 	/*
 		Crea la carpeta de salida en caso de que no exista
@@ -140,12 +148,16 @@ public:
 	};
 
 
+	/*
+		Crea una instancia de <Method> dado un string 
+	*/
+	static Method CreateMethod(std::string const& line, std::string const& className);
+
 private:
 
 	/*
 		Directorios del programa
 	*/
-
 	std::string root;
 	std::string output;
 	
@@ -161,10 +173,12 @@ private:
 	std::ofstream cpp;
 
 
+
 	/*
 		Metodos de eliminar espacios de cadenas de texto 
 	*/
 
+	public:
 	inline std::string static ltrim(const std::string& s)
 	{
 		size_t start = s.find_first_not_of(WHITESPACE);

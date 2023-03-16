@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#define publish public
+
 namespace ECS {
 
 	class Entity;
