@@ -65,6 +65,10 @@ void Game::firstScene() {
 	// Ground settings
 	grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
+	
+	std::map<std::string, CallableFunction> map;
+	FunctionManager::CreateFunctionMap(map);
+	std::cout << "Funcion:" << map["getTextureWidth"]({im}) << std::endl;
 
 	std::map<std::string, CallableFunction> map;
 	FunctionManager::CreateFunctionMap(map);

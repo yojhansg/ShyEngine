@@ -72,6 +72,9 @@
     <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
       <Filter>Archivos de encabezado\FunctionManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
+      <Filter>Archivos de encabezado\FunctionManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
