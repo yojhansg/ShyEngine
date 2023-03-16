@@ -36,7 +36,21 @@ namespace Scripting {
 		static Variable Bool(bool value);
 		static Variable Char(char value);
 		static Variable Component(ECS::Component* comp);
+
+
+		operator int(){
+			return 3;
+		}
+
+		Variable(int value);
+		Variable(float value);
+		Variable(bool value);
+		Variable(char value);
+		Variable(ECS::Component* comp);
+
 	};
+
+
 
 
 	using Input = Variable;

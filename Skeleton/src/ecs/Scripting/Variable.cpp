@@ -22,42 +22,59 @@ namespace Scripting {
 
 	Variable Scripting::Variable::Int(int value)
 	{
-		Variable val;
-		val.type = Type::Int;
-		val.value.Int = value;
-		return val;
+		return value;
 	}
 
 	Variable Scripting::Variable::Float(float value)
 	{
-		Variable val;
-		val.type = Type::Float;
-		val.value.Float = value;
-		return val;
+		return value;
 	}
 
 	Variable Scripting::Variable::Bool(bool value)
 	{
-		Variable val;
-		val.type = Type::Bool;
-		val.value.Bool = value;
-		return val;
+		return value;
 	}
 
 	Variable Scripting::Variable::Char(char value)
 	{
-		Variable val;
-		val.type = Type::Char;
-		val.value.Char = value;
-		return val;
+		return value;
 	}
 
 	Variable Variable::Component(ECS::Component* comp)
 	{
-		Variable val;
-		val.type = Type::Component;
-		val.value.pointer = comp;
-		return val;
+		return comp;
+	}
+
+	Variable::Variable(int val)
+	{
+		type = Type::Int;
+		value.Int = val;
+	}
+
+	Variable::Variable(float val)
+	{
+		type = Type::Float;
+		value.Float = val;
+	}
+
+	
+	Variable::Variable(bool val)
+	{
+		type = Type::Bool;
+		value.Bool = val;
+	}
+
+	
+	Variable::Variable(char val)
+	{
+		type = Type::Char;
+		value.Char = val;
+	}
+
+	Variable::Variable(ECS::Component* comp)
+	{
+		type = Type::Component;
+		value.pointer = comp;
 	}
 
 }

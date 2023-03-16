@@ -37,6 +37,8 @@ int main() {
 	script.AskForOutput();
 	script.CreateOutputFolder();
 	script.Begin();
+	script.CreateFunctionManagerHeader();
+	script.CreateFunctionManagerContent();
 
 	return 0;
 }

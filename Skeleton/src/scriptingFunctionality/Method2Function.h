@@ -9,6 +9,18 @@
 #define WHITESPACE "\n\r\t\f\v "
 
 /*
+
+TODO: 
+	generar otro fichero txt para usar por el editor
+	Que ese fichero sirva para facilitar la lectura de los distintos metodos creados
+
+	Hacer que la ruta de functionManager sea relativa y no absoluta
+
+	El nombre del metodo en el mapa no incluye el nombre de la clase
+*/
+
+
+/*
 	Method2Function
 		
 	Clase auxiliar del motor. Se encarga de generar los ficheros "FunctionManager.h" y "FuncionManager.cpp".
@@ -112,7 +124,8 @@ public:
 	/* TODO
 		Crea los ficheros de salida del programa.
 	*/
-	void CreateFileStream(std::ofstream& stream, std::string const& path);
+	Method2Function& CreateFunctionManagerHeader();
+	Method2Function& CreateFunctionManagerContent();
 
 	/*
 		Crea la carpeta de salida en caso de que no exista
@@ -165,14 +178,7 @@ private:
 		Vector con la informacion de los metodos encontrados
 	*/
 	std::vector<Method> methods;
-	
-	/*
-		Flujo de salida 
-	*/
-	std::ofstream h;
-	std::ofstream cpp;
-
-
+	std::vector<std::string> filesToInclude;
 
 	/*
 		Metodos de eliminar espacios de cadenas de texto 

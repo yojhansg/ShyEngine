@@ -9,6 +9,9 @@
 #include <Components/Collider.h>
 #include <Components/Rigidbody.h>
 #include <Components/TestComponent.h>
+#include <FunctionManager/FunctionManager.h>
+#include <map>
+#include <iostream>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -58,6 +61,10 @@ void Game::firstScene() {
 	// Ground settings
 	grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
+	
+	std::map<std::string, CallableFunction> map;
+	FunctionManager::CreateFunctionMap(map);
+	std::cout << "Funcion:" << map["getTextureWidth"]({im}) << std::endl;
 
 	// Scripting
 	//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});

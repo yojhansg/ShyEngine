@@ -48,6 +48,7 @@ Method2Function& Method2Function::Begin()
 }
 
 
+
 void Method2Function::CreateOutputFolder()
 {
 	std::filesystem::path path(output);
@@ -62,7 +63,7 @@ std::string Method2Function::GetDefaultRoot()
 
 std::string Method2Function::GetDefaultOutput()
 {
-	return (std::filesystem::current_path() /= "ScriptMethods").string();
+	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs\FunctionManager)";
 }
 
 
@@ -82,7 +83,7 @@ void Method2Function::ProcessFile(std::string const& path)
 	std::ifstream stream(path);
 
 	bool containsPublish = false;
-
+	bool fileIncluded = false;
 	std::string currentClassName = "";
 
 
@@ -109,7 +110,7 @@ void Method2Function::ProcessFile(std::string const& path)
 		}
 
 		if (line.contains("class")) {
-			
+
 			if (line.contains(";"))
 				continue;
 
@@ -118,7 +119,7 @@ void Method2Function::ProcessFile(std::string const& path)
 			if (className.contains("{")) {
 				className = className.substr(0, className.find("{"));
 			}
-			
+
 			size_t space = className.find(":");
 			if (space != std::string::npos)
 				className = className.substr(0, space);
@@ -130,8 +131,14 @@ void Method2Function::ProcessFile(std::string const& path)
 		}
 
 		if (currentClassName.size() > 0 && containsPublish) {
-			
+
 			methods.push_back(CreateMethod(line, currentClassName));
+
+			if (!fileIncluded) {
+
+				filesToInclude.push_back(path);
+				fileIncluded = true;
+			}
 		}
 	}
 
@@ -148,16 +155,14 @@ Method2Function::Method Method2Function::CreateMethod(std::string const& line, s
 
 	std::string l = trim(line);
 
-	int nextWord = l.find(" ");
-	int idx = nextWord + 1;
+	size_t nextWord = l.find(" ");
 	method.returnType = l.substr(0, nextWord);
 
-	l = l.substr(idx);
+	l = l.substr(nextWord + 1);
 	nextWord = l.find("(");
-	idx = nextWord + 1;
 	method.methodName = trim(l.substr(0, nextWord));
 
-	l = l.substr(idx);
+	l = l.substr(nextWord + 1);
 
 	bool isType = true;
 	std::string returnType;
@@ -167,7 +172,7 @@ Method2Function::Method Method2Function::CreateMethod(std::string const& line, s
 
 			if (returnType.size() > 0)
 				isType = false;
-			
+
 			continue;
 		}
 
@@ -242,8 +247,8 @@ Example:
 #define NEWLINE "\n"
 #define UNDERSCORE "_"
 #define VARIABLE "Scripting::Variable"
-#define VECTOR "std::vector<" VARIABLE ">& vec"
-#define CAST(className) "static_cast<" + className + "*>(self)"
+#define VECTOR "std::vector<" VARIABLE ">const& vec"
+#define CAST(className, cast) "static_cast<" + className + "*>(" + cast + ")"
 
 
 std::string Method2Function::Method::FunctionDeclaration()
@@ -264,23 +269,23 @@ std::string Method2Function::Method::FunctionDefinition()
 {
 	std::stringstream declaration;
 
-	declaration << FunctionDeclaration();
+	declaration << VARIABLE BLANK;
 
-	declaration.seekp(-1, declaration.cur);
+	declaration << className << UNDERSCORE << methodName;
 
-	declaration << "{" NEWLINE;
+	declaration << "(" VECTOR "){" NEWLINE;
 
-	declaration << TAB << className << "* self = " CAST(className) ";" NEWLINE;
+	declaration << TAB << className << "* self = " CAST(className, "vec[0].value.pointer") ";" NEWLINE;
 
 	declaration << TAB;
 	if (returnType != "void") {
 
-		declaration << returnType << "* ret = ";
+		declaration << returnType << " ret = ";
 	}
 
 	declaration << "self->" << methodName << "(";
 
-	int i = 0;
+	int i = 1;
 	for (auto& in : input) {
 
 		declaration << "vec[" << i << "]." << String2ScriptingVariable(in.type) << ", ";
@@ -317,4 +322,82 @@ std::string Method2Function::Method::String2ScriptingVariable(std::string& in)
 		return "value.Char";
 
 	return "value." + in;
+}
+
+
+
+Method2Function& Method2Function::CreateFunctionManagerHeader()
+{
+	std::ofstream h(output + "/FunctionManager.h");
+
+	h << R"(#pragma once
+
+#include <map>
+#include <string>
+#include <vector>
+#include "Scripting/Variable.h"
+
+)";
+
+	h << "//Creation time: " << __TIMESTAMP__ << "\n";
+
+	h << R"(
+typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
+
+class FunctionManager {
+
+public:
+
+	static void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
+};
+
+)";
+
+	for (auto& method : methods) {
+
+		h << method.FunctionDeclaration();
+	}
+
+
+	h.close();
+	return *this;
+}
+
+Method2Function& Method2Function::CreateFunctionManagerContent()
+{
+	std::ofstream cpp(output + "/FunctionManager.cpp");
+
+	cpp << R"(#include "FunctionManager.h"
+
+)";
+
+	cpp << "//Creation time: " << __TIMESTAMP__ << "\n";
+
+	for (auto& file : filesToInclude) {
+
+		cpp << "#include <" << file <<">\n";
+	}
+
+	cpp << R"(
+
+using namespace ECS;
+
+void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>& map){
+
+)";
+
+	for (auto& method : methods) {
+
+		cpp << "\tmap.emplace(\"" << method.methodName << "\"," << method.className << "_" << method.methodName << ");\n";
+	}
+
+	cpp << "\n};\n";
+
+	for (auto& method : methods) {
+
+		cpp << method.FunctionDefinition();
+	}
+
+	cpp.close();
+	return *this;
 }
