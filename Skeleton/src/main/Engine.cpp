@@ -11,6 +11,9 @@
 #include <SDLUtils.h>
 #include <EngineTime.h>
 
+#include <Component.h>
+#include <FunctionManager/FunctionManager.h>
+
 #include "Game.h"
 #include <iostream>
 
@@ -27,6 +30,9 @@ Engine::Engine() {
 
 void Engine::init() {
 
+	if (ECS_Version != ECSfunc_Version) {
+		std::cout << "Warning: La version del ECS con coincide con la version de las funciones" << std::endl;
+	}
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = RendererManager::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	physicsManager = PhysicsManager::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));

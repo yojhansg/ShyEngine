@@ -5,6 +5,19 @@
 #include <vector>
 #include <string>
 
+
+#define ECS_Version 1.0
+/*
+	Para poder publicar un metodo basta con poner el modificador de
+	acceso <publish> encima de los metodos que se quieran publicar.
+
+	Condiciones para poder publicar un metodo:
+
+		-No puede devolver un valor <const> o por referencia
+		-No puede recibir un parametro <const> o por referencia
+		-El nombre del metodo no puede contener una barra baja
+
+*/
 #define publish public
 
 namespace ECS {

@@ -63,7 +63,7 @@ void Game::firstScene() {
 	rb->setGravityScale(0);*/
 
 	// Ground settings
-	grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
+	//grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
 	
 	std::map<std::string, CallableFunction> map;
