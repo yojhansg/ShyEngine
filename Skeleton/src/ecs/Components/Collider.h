@@ -30,8 +30,6 @@ namespace ECS {
 
         void update(float deltaTime) override;
 
-        //void fixedUpdate(float fixedDeltaTime) override;
-
         // Setters & getters
         void setTrigger(bool trigger);
         bool isTrigger();
@@ -41,6 +39,9 @@ namespace ECS {
 
         void setBounciness(float bounciness);
         float getBounciness();
+
+        void setRotationFreezed(bool freezed);
+        bool getRotationFreezed();
 
         Utilities::Vector2D getSize();
         void setSize(float x, float y);
@@ -63,6 +64,7 @@ namespace ECS {
         bool trigger;
         float friction;
         float bounciness;
+        bool rotationFreezed;
 
         // Just for comfort
         b2Vec2* framePosition;

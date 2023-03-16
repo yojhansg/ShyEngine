@@ -37,7 +37,7 @@ namespace ECS {
 		flipMode();
 
 		// Rotation point
-		rotationPoint = new SDL_Point({ width / 4, height / 4 });
+		rotationPoint = new SDL_Point({ width / 2, height / 2 });
 	}
 
 	void Image::render() {
@@ -59,6 +59,9 @@ namespace ECS {
 		int h = std::round(transform->getScale()->getY() * height);
 
 		dstRect = { x, y, w, h };
+
+		rotationPoint->x = w / 2;
+		rotationPoint->y = h / 2;
 
 		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotation(), rotationPoint, mode);
 	}

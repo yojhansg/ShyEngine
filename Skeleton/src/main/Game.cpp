@@ -9,6 +9,9 @@
 #include <Components/Collider.h>
 #include <Components/Rigidbody.h>
 #include <Components/TestComponent.h>
+#include <FunctionManager/FunctionManager.h>
+#include <map>
+#include <iostream>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -33,16 +36,15 @@ void Game::firstScene() {
 	auto tr = player->addComponent<ECS::Transform>();
 	auto im = player->addComponent<ECS::Image>("link.png");
 	auto collider = player->addComponent<ECS::Collider>();
-	auto rb = player->addComponent<ECS::Rigidbody>();
-
-	auto tComp = player->addComponent<ECS::TestComponent>();
+	//auto rb = player->addComponent<ECS::Rigidbody>();
+	//auto tComp = player->addComponent<ECS::TestComponent>();
 
 	// Ground
-	ECS::Entity* ground = scene->createEntity("Ground");
+	/*ECS::Entity* ground = scene->createEntity("Ground");
 
 	auto grTr = ground->addComponent<ECS::Transform>();
 	auto grIm = ground->addComponent<ECS::Image>("ground.png");
-	auto grCol = ground->addComponent<ECS::Collider>();
+	auto grCol = ground->addComponent<ECS::Collider>();*/
 
 	// Init
 	scene->init();
@@ -52,12 +54,21 @@ void Game::firstScene() {
 	tr->setScale(0.5f, 0.5f);
 	tr->rotate(45.0f);
 
-	collider->setBounciness(0.5f);
-	rb->setBodyType(ECS::Rigidbody::DINAMIC);
+	collider->setRotationFreezed(true);
+	collider->addOffSet(collider->getSize().getX() * 0.25f, collider->getSize().getY() * 0.25f);
+	//collider->setSize(collider->getSize().getX() / 2, collider->getSize().getY() / 2);
+
+
+	/*rb->setBodyType(ECS::Rigidbody::DINAMIC);
+	rb->setGravityScale(0);*/
 
 	// Ground settings
 	grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
+
+	std::map<std::string, CallableFunction> map;
+	FunctionManager::CreateFunctionMap(map);
+	std::cout << "Funcion:" << map["getTextureWidth"]({im}) << std::endl;
 
 	// Scripting
 	//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});

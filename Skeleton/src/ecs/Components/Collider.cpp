@@ -17,6 +17,7 @@ ECS::Collider::Collider() {
 	trigger = false;
 	friction = 0;
 	bounciness = 0;
+	rotationFreezed = false;
 
 	transform = nullptr; world = nullptr;
 	body = nullptr; shape = nullptr;
@@ -75,19 +76,19 @@ void ECS::Collider::start() {
 
 void ECS::Collider::update(float deltaTime) {
 
-	//// Position + collider offsets
-	//framePosition->Set(position->getX() / screenToWorldFactor + offSet.getX(), position->getY() / screenToWorldFactor + offSet.getY());
+	// Position + collider offsets
+	framePosition->Set(position->getX() / screenToWorldFactor + (offSet.getX() * scale->getX()), position->getY() / screenToWorldFactor + (offSet.getY() * scale->getY()));
 
-	//// Position + rotation
-	//body->SetTransform(*framePosition, (b2_pi / 180) * (*rotation));
+	// Position + rotation
+	body->SetTransform(*framePosition, (b2_pi / 180) * (*rotation));
 
 	// Scale
-	float scaledX = size.getX() * scale->getX();
-	float scaledY = size.getY() * scale->getY();
+	float scaledX = (size.getX() / 2.0f) * scale->getX();
+	float scaledY = (size.getY() / 2.0f) * scale->getY();
 
 	body->DestroyFixture(fixture);
 
-	shape->SetAsBox(scaledX / 2.0f, scaledY / 2.0f);
+	shape->SetAsBox(scaledX, scaledY);
 
 	frameFixtureDef->shape = shape;
 	frameFixtureDef->density = 1;
@@ -97,6 +98,7 @@ void ECS::Collider::update(float deltaTime) {
 	fixture->SetSensor(trigger);
 	fixture->SetRestitution(bounciness);
 	fixture->SetFriction(friction);
+
 }
 
 void ECS::Collider::setTrigger(bool trigger) {
@@ -121,6 +123,14 @@ void ECS::Collider::setBounciness(float bounciness) {
 
 float ECS::Collider::getBounciness() {
 	return bounciness;
+}
+
+void ECS::Collider::setRotationFreezed(bool freezed) {
+	body->SetFixedRotation(freezed);
+}
+
+bool ECS::Collider::getRotationFreezed() {
+	return body->IsFixedRotation();
 }
 
 Utilities::Vector2D ECS::Collider::getSize() {

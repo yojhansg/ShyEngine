@@ -40,6 +40,12 @@ namespace ECS {
 
         void setGravityScale(float scale);
 
+        void setLinearVelocity(const Utilities::Vector2D& vel);
+
+        Utilities::Vector2D getLinearVelocity();
+
+        void applyForce(const Utilities::Vector2D& force);
+
     private:
 
         float screenToWorldFactor;

@@ -130,10 +130,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\scriptingFunctionality\main.cpp" />
-    <ClCompile Include="..\..\src\scriptingFunctionality\GenerateScriptMethod.cpp" />
+    <ClCompile Include="..\..\src\scriptingFunctionality\Method2Function.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\scriptingFunctionality\GenerateScriptMethod.h" />
+    <ClInclude Include="..\..\src\scriptingFunctionality\Method2Function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

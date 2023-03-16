@@ -1,10 +1,15 @@
 #include "ContactListener.h"
-
+#include <PhysicsManager.h>
 #include <box2d/b2_contact.h>
 #include <Entity.h>
 #include <iostream>
 
 namespace ECS {
+
+	ContactListener::ContactListener() {
+
+		PhysicsManager::PhysicsManager::instance()->setContactListener(this);
+	}
 
 	void ContactListener::BeginContact(b2Contact* contact) {
 

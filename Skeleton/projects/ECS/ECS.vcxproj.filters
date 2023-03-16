@@ -25,6 +25,12 @@
     <Filter Include="Archivos de origen\Scripting">
       <UniqueIdentifier>{c02ceda0-fd69-479f-853d-10a49f6e93ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\FunctionManager">
+      <UniqueIdentifier>{2ab92bd7-ca8e-4a0b-abf0-97a9b8b6a5f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\FunctionManager">
+      <UniqueIdentifier>{8aa5e7cd-8589-4def-a47a-38c654612cd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ecs\Entity.h">
@@ -63,8 +69,8 @@
     <ClInclude Include="..\..\src\ecs\ContactListener.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\ECS.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
+      <Filter>Archivos de encabezado\FunctionManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,11 +107,11 @@
     <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\ECS.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\FunctionManager\FunctionManager.cpp">
+      <Filter>Archivos de origen\FunctionManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

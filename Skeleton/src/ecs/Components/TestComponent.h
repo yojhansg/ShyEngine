@@ -4,6 +4,7 @@
 namespace ECS {
 
 	class Transform;
+	class Rigidbody;
 
 	class TestComponent : public Component {
 
@@ -13,6 +14,8 @@ namespace ECS {
 
 		void update(float deltaTime) override;
 
+		void fixedUpdate(float fixedDeltaTime) override;
+
 		void onCollisionEnter(Entity* a, Entity* b) override;
 
 		void onCollisionExit(Entity* a, Entity* b) override;
@@ -20,6 +23,10 @@ namespace ECS {
 	private:
 
 		Transform* transform;
+
+		Rigidbody* rb;
+
+		bool onGround;
 
 	};
 }

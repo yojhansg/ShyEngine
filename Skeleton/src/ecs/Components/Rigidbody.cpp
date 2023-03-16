@@ -24,6 +24,7 @@ ECS::Rigidbody::Rigidbody() {
 	world = nullptr;
 
 	body = nullptr; fixture = nullptr;
+
 }
 
 ECS::Rigidbody::~Rigidbody() {}
@@ -39,6 +40,7 @@ void ECS::Rigidbody::init() {
 	assert(collider != nullptr, "La entidad debe contener un componente Collider para poder añadir componente Rigidbody");
 
 	body = collider->getBody();
+
 	fixture = collider->getFixture();
 }
 
@@ -88,4 +90,23 @@ void ECS::Rigidbody::setMass(float mass) {
 
 void ECS::Rigidbody::setGravityScale(float scale) {
 	body->SetGravityScale(scale);
+}
+
+void ECS::Rigidbody::applyForce(const Utilities::Vector2D& force) {
+
+	b2Vec2 p = body->GetWorldCenter();
+
+	body->ApplyForce(b2Vec2(force.getX(), force.getY()), p, true);
+}
+
+void ECS::Rigidbody::setLinearVelocity(const Utilities::Vector2D& vel) {
+
+	body->SetLinearVelocity(b2Vec2(vel.getX(), vel.getY()));
+}
+
+Utilities::Vector2D ECS::Rigidbody::getLinearVelocity() {
+
+	b2Vec2 v = body->GetLinearVelocity();
+
+	return Utilities::Vector2D(v.x, v.y);
 }
