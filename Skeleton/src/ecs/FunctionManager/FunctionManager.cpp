@@ -1,7 +1,7 @@
 #include "FunctionManager.h"
 
 //Creation time: Thu Mar 16 13:13:08 2023
-#include <C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs\Components\Image.h>
+#include <Components/Image.h>
 
 
 using namespace ECS;

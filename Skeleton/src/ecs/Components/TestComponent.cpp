@@ -18,8 +18,8 @@ void ECS::TestComponent::start() {
 void ECS::TestComponent::update(float deltaTime) {
 
 	//transform->translate(1, 0);
-	//transform->scale(1 - 0.0005f);
-	transform->rotate(deltaTime * 100);
+	transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 1.001f, transform->getScale()->getY()));
+	//transform->rotate(deltaTime * 10);
 
 	/*auto im = InputManager::InputManager::instance();
 

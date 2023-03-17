@@ -145,6 +145,12 @@ namespace Utilities {
 			return *this;
 		}
 
+		inline Vector2D operator*=(const Vector2D& v) {
+			x_ *= v.x_;
+			y_ *= v.y_;
+			return *this;
+		}
+
 		// division by constant (scaling)
 		inline Vector2D operator/(float d) const {
 			return Vector2D(x_ / d, y_ / d);

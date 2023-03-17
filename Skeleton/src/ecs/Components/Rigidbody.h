@@ -16,55 +16,55 @@ namespace ECS {
 
     class Rigidbody : public Component {
 
-    public:
+    //public:
 
-        enum BODY_TYPE {
-            STATIC = 0, KINEMATIC = 1, DINAMIC = 2
-        };
+    //    enum BODY_TYPE {
+    //        STATIC = 0, KINEMATIC = 1, DINAMIC = 2
+    //    };
 
-        Rigidbody();
+    //    Rigidbody();
 
-        ~Rigidbody();
+    //    ~Rigidbody();
 
-        void init() override;
+    //    void init() override;
 
-        void fixedUpdate(float fixedDeltaTime) override;
+    //    void fixedUpdate(float fixedDeltaTime) override;
 
-        void setBodyType(BODY_TYPE type);
+    //    void setBodyType(BODY_TYPE type);
 
-        void setLinearDrag(float drag);
+    //    void setLinearDrag(float drag);
 
-        void setAngularDrag(float drag);
+    //    void setAngularDrag(float drag);
 
-        void setMass(float mass);
+    //    void setMass(float mass);
 
-        void setGravityScale(float scale);
+    //    void setGravityScale(float scale);
 
-        void setLinearVelocity(const Utilities::Vector2D& vel);
+    //    void setLinearVelocity(const Utilities::Vector2D& vel);
 
-        Utilities::Vector2D getLinearVelocity();
+    //    Utilities::Vector2D getLinearVelocity();
 
-        void applyForce(const Utilities::Vector2D& force);
+    //    void applyForce(const Utilities::Vector2D& force);
 
-    private:
+    //private:
 
-        float screenToWorldFactor;
+    //    float screenToWorldFactor;
 
-        float mass;
-        float linearDrag;
-        float angularDrag;
-        float gravityScale;
+    //    float mass;
+    //    float linearDrag;
+    //    float angularDrag;
+    //    float gravityScale;
 
-        BODY_TYPE bodyType;
+    //    BODY_TYPE bodyType;
 
-        // Box 2D
-        b2World* world;
-        
-        b2Body* body;
-        b2Fixture* fixture;
+    //    // Box 2D
+    //    b2World* world;
+    //    
+    //    b2Body* body;
+    //    b2Fixture* fixture;
 
-        // Entity Components
-        Transform* transform;
-        Collider* collider;
+    //    // Entity Components
+    //    Transform* transform;
+    //    Collider* collider;
     };
 }

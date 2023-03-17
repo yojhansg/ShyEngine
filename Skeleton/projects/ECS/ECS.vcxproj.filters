@@ -75,6 +75,18 @@
     <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
       <Filter>Archivos de encabezado\FunctionManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\BoxCollider.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\ChainCollider.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\CircleCollilder.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\EdgeCollider.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -115,6 +127,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\FunctionManager\FunctionManager.cpp">
       <Filter>Archivos de origen\FunctionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\BoxCollider.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\EdgeCollider.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\CircleCollilder.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\ChainCollider.cpp">
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

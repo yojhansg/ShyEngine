@@ -154,8 +154,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ecs\Component.h" />
+    <ClInclude Include="..\..\src\ecs\Components\BoxCollider.h" />
     <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
+    <ClInclude Include="..\..\src\ecs\Components\ChainCollider.h" />
+    <ClInclude Include="..\..\src\ecs\Components\CircleCollilder.h" />
     <ClInclude Include="..\..\src\ecs\Components\Collider.h" />
+    <ClInclude Include="..\..\src\ecs\Components\EdgeCollider.h" />
     <ClInclude Include="..\..\src\ecs\Components\Image.h" />
     <ClInclude Include="..\..\src\ecs\Components\Rigidbody.h" />
     <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
@@ -169,8 +173,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\BoxCollider.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\ChainCollider.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\CircleCollilder.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Collider.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\EdgeCollider.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Rigidbody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
