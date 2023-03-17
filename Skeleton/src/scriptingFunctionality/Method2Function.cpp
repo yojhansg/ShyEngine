@@ -3,14 +3,19 @@
 #include <filesystem>
 
 
-Method2Function::Method2Function(std::string const& root, std::string const& output) : root(root), output(output)
+Method2Function::Method2Function(std::string const& root) : root(root)
 {
+	output = root + "\\FunctionManager";
+
+
+
 }
 
 
 void Method2Function::AskForRoot()
 {
 	AskForPath("root", root);
+	output = root + "\\FunctionManager";
 }
 
 void Method2Function::AskForOutput()
@@ -61,12 +66,6 @@ std::string Method2Function::GetDefaultRoot()
 	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs)";
 }
 
-std::string Method2Function::GetDefaultOutput()
-{
-	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs\FunctionManager)";
-}
-
-
 
 void Method2Function::ProcessFolder(std::string const& path)
 {
@@ -95,6 +94,12 @@ void Method2Function::ProcessFile(std::string const& path)
 
 		if (line == "")
 			continue;
+
+		if (line.contains("ECS_Version")) {
+
+			ECS_Version = trim(line.substr(line.find("ECS_Version") + 12));
+			continue;
+		}
 
 		if (line.contains("//"))
 			continue;
@@ -132,7 +137,7 @@ void Method2Function::ProcessFile(std::string const& path)
 
 		if (currentClassName.size() > 0 && containsPublish) {
 
-			methods.push_back(CreateMethod(line, currentClassName));
+			methods[currentClassName].push_back(CreateMethod(line, currentClassName));
 
 			if (!fileIncluded) {
 
@@ -245,11 +250,15 @@ Example:
 #define BLANK " "
 #define TAB "\t"
 #define NEWLINE "\n"
-#define UNDERSCORE "_"
 #define VARIABLE "Scripting::Variable"
 #define VECTOR "std::vector<" VARIABLE ">const& vec"
 #define CAST(className, cast) "static_cast<" + className + "*>(" + cast + ")"
 
+
+std::string Method2Function::Method::FunctionName()
+{
+	return className + "_" + methodName;
+}
 
 std::string Method2Function::Method::FunctionDeclaration()
 {
@@ -257,13 +266,12 @@ std::string Method2Function::Method::FunctionDeclaration()
 
 	definition << VARIABLE BLANK;
 
-	definition << className << UNDERSCORE << methodName;
+	definition << FunctionName();
 
 	definition << "(" VECTOR ");" NEWLINE;
 
 	return definition.str();
 }
-
 
 std::string Method2Function::Method::FunctionDefinition()
 {
@@ -271,7 +279,7 @@ std::string Method2Function::Method::FunctionDefinition()
 
 	declaration << VARIABLE BLANK;
 
-	declaration << className << UNDERSCORE << methodName;
+	declaration << FunctionName();
 
 	declaration << "(" VECTOR "){" NEWLINE;
 
@@ -339,6 +347,7 @@ Method2Function& Method2Function::CreateFunctionManagerHeader()
 
 )";
 
+	h << "#define ECSfunc_Version " << ECS_Version << "\n";
 	h << "//Creation time: " << __TIMESTAMP__ << "\n";
 
 	h << R"(
@@ -353,9 +362,12 @@ public:
 
 )";
 
-	for (auto& method : methods) {
+	for (auto& currentClass : methods) {
 
-		h << method.FunctionDeclaration();
+		for (auto& method : currentClass.second) {
+
+			h << method.FunctionDeclaration();
+		}
 	}
 
 
@@ -375,7 +387,8 @@ Method2Function& Method2Function::CreateFunctionManagerContent()
 
 	for (auto& file : filesToInclude) {
 
-		cpp << "#include <" << file <<">\n";
+		auto filename = std::filesystem::path(file);
+		cpp << "#include <Components/" << filename.filename().string() << ">\n";
 	}
 
 	cpp << R"(
@@ -386,18 +399,98 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 
 )";
 
-	for (auto& method : methods) {
+	for (auto& currentClass : methods) {
 
-		cpp << "\tmap.emplace(\"" << method.methodName << "\"," << method.className << "_" << method.methodName << ");\n";
+		for (auto& method : currentClass.second) {
+
+			std::string functionName = method.FunctionName();
+			cpp << "\tmap.emplace(\"" << functionName << "\"," << functionName << ");\n";
+		}
 	}
 
 	cpp << "\n};\n";
 
-	for (auto& method : methods) {
+	for (auto& currentClass : methods) {
 
-		cpp << method.FunctionDefinition();
+		for (auto& method : currentClass.second) {
+
+			cpp << method.FunctionDefinition();
+		}
 	}
 
 	cpp.close();
 	return *this;
 }
+
+
+#include "json.hpp"
+using namespace nlohmann;
+
+Method2Function& Method2Function::CreateFunctionManagerJSON()
+{
+
+	/*
+		Ejemplo del JSON
+
+
+			{
+			"Transform" = {
+				"Move" = {
+					"input" = {
+
+					},
+					"return" = "int"
+				}
+			},
+
+
+		}
+
+	*/
+
+
+	json root;
+
+	for (auto& currentClass : methods) {
+
+		int idx = 0;
+		for (auto& method : currentClass.second) {
+
+			root[currentClass.first][method.methodName] =
+			{ 
+				{"return", method.returnType}
+			};
+				
+
+			json inputJson;
+
+			for (auto& input : method.input) {
+				inputJson +=
+				{
+					{"type", input.type},
+					{ "name", input.name }
+				};
+			}
+
+			if (!inputJson.is_null())
+				root[currentClass.first][method.methodName]["input"] = inputJson;
+
+			idx++;
+		}
+	}
+
+
+	std::cout << root.dump(4) << std::endl;
+
+	std::ofstream fmJSON(output + "/FunctionManager.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+
+

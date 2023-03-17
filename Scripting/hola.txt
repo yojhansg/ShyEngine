@@ -1,0 +1,19 @@
+#pragma once
+#include<iostream>
+#include<string>
+
+int main(){
+
+float IBox_0 = -45.000000;
+float IBox_1 = 24.000000;
+float IBox_3 = IBox_0 - IBox_1;
+float IBox_2 = 26.000000;
+float IBox_5 = IBox_3 + IBox_2;
+std::cout << IBox_5 << std::endl;
+if(IBox_0){
+ }std::cout << IBox_0 << std::endl;
+int IBox_11 = 2;
+std::string IBox_7 = "hola nene como estas";
+std::cout << IBox_7 << std::endl;
+std::cout << IBox_7 << std::endl;
+}

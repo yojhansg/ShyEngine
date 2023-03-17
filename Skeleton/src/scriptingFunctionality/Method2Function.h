@@ -1,13 +1,5 @@
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <iostream>
-
-#define WHITESPACE "\n\r\t\f\v "
-
 /*
 
 TODO: 
@@ -17,6 +9,8 @@ TODO:
 	Hacer que la ruta de functionManager sea relativa y no absoluta
 
 	El nombre del metodo en el mapa no incluye el nombre de la clase
+
+	Control de versiones
 */
 
 
@@ -41,6 +35,15 @@ TODO:
 		3: Generar fichero.cpp
 
 */
+
+#include <map>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+
+#define WHITESPACE "\n\r\t\f\v "
+
 
 class Method2Function {
 
@@ -82,7 +85,7 @@ public:
 			}
 	*/
 
-	Method2Function(std::string const& root, std::string const& output);
+	Method2Function(std::string const& root);
 
 	/*
 		Abre la carpeta dada por la ruta. 
@@ -126,6 +129,7 @@ public:
 	*/
 	Method2Function& CreateFunctionManagerHeader();
 	Method2Function& CreateFunctionManagerContent();
+	Method2Function& CreateFunctionManagerJSON();
 
 	/*
 		Crea la carpeta de salida en caso de que no exista
@@ -136,7 +140,6 @@ public:
 		Genera las rutas por defecto
 	*/
 	static std::string GetDefaultRoot();
-	static std::string GetDefaultOutput();
 
 
 	struct Method {
@@ -154,6 +157,7 @@ public:
 		std::string FunctionDefinition();
 		std::string FunctionDeclaration();
 
+		std::string FunctionName();
 		/*
 			Dado un string conteniendo un tipo devuelve su representacion en una variable de scripting
 		*/
@@ -173,18 +177,17 @@ private:
 	*/
 	std::string root;
 	std::string output;
-	
+	std::string ECS_Version;
 	/*
 		Vector con la informacion de los metodos encontrados
 	*/
-	std::vector<Method> methods;
+	std::map<std::string, std::vector<Method>> methods;
 	std::vector<std::string> filesToInclude;
 
 	/*
 		Metodos de eliminar espacios de cadenas de texto 
 	*/
 
-	public:
 	inline std::string static ltrim(const std::string& s)
 	{
 		size_t start = s.find_first_not_of(WHITESPACE);

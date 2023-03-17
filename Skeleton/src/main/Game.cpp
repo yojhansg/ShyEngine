@@ -32,7 +32,7 @@ void Game::firstScene() {
 	scene = sceneManager->createScene("Default scene");
 
 	// 2.- Entities
-	
+
 		// Player
 		ECS::Entity* player = scene->createEntity("Player");
 
@@ -55,7 +55,7 @@ void Game::firstScene() {
 
 
 	// 4.- Components settings
-	
+
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.5f, 0.5f);
@@ -70,7 +70,7 @@ void Game::firstScene() {
 		// Ground
 		//grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
-	
+
 	// Scripting
 	//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});
 

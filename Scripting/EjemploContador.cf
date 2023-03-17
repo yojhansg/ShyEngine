@@ -1,0 +1,87 @@
+{
+  "nodeCount": 8,
+  "init": 0,
+  "update": 0,
+  "logic": [],
+  "attributes":{
+    "decimal": [
+      {
+        "name": "num",
+        "value": 1
+      }
+    ]
+  },
+  "input": [
+    {
+      "id": 5,
+      "type": "s",
+      "next": -1,
+      "alter": 0,
+      "input": [],
+      "value": "el numero es: "
+    },
+    {
+      "id": 6,
+      "type": "s",
+      "next": -1,
+      "alter": 0,
+      "input": [],
+      "value": "num"
+    },
+    {
+      "id": 7,
+      "type": "f",
+      "next": -1,
+      "alter": 0,
+      "input": [],
+      "value": 2
+    }
+  ],
+  "operator": [
+    {
+      "id": 0,
+      "type": 0,
+      "next": 1,
+      "alter": 0,
+      "input": [
+        5
+      ]
+    },
+    {
+      "id": 1,
+      "type": 0,
+      "next": 4,
+      "alter": 0,
+      "input": [
+        3
+      ]
+    },
+    {
+      "id": 2,
+      "type": 22,
+      "next": -1,
+      "alter": 0,
+      "input": [
+        6
+      ]
+    },
+    {
+      "id": 3,
+      "type": 5,
+      "next": -1,
+      "alter": 0,
+      "input": [
+        2, 7
+      ]
+    },
+    {
+      "id": 4,
+      "type": 23,
+      "next": -1,
+      "alter": 0,
+      "input": [
+        6, 3
+      ]
+    }
+  ]
+}
