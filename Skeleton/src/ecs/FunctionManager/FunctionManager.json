@@ -1,0 +1,136 @@
+{
+    "Image": {
+        "getTextureHeight": {
+            "return": "int"
+        },
+        "getTextureWidth": {
+            "return": "int"
+        },
+        "setFlipX": {
+            "input": [
+                {
+                    "name": "flip",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "setFlipY": {
+            "input": [
+                {
+                    "name": "flip",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "setRotaionPoint": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "int"
+                },
+                {
+                    "name": "y",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "setSrcRect": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "int"
+                },
+                {
+                    "name": "y",
+                    "type": "int"
+                },
+                {
+                    "name": "w",
+                    "type": "int"
+                },
+                {
+                    "name": "h",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        }
+    },
+    "Transform": {
+        "getPosition": {
+            "return": "Utilities::Vector2D*"
+        },
+        "getScale": {
+            "return": "Utilities::Vector2D*"
+        },
+        "rotate": {
+            "input": [
+                {
+                    "name": "rotation",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "scale": {
+            "input": [
+                {
+                    "name": "scale",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setPosition": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setRotation": {
+            "input": [
+                {
+                    "name": "rotation",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setScale": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "translate": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        }
+    }
+}

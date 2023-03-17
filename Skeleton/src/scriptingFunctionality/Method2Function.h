@@ -129,6 +129,7 @@ public:
 	*/
 	Method2Function& CreateFunctionManagerHeader();
 	Method2Function& CreateFunctionManagerContent();
+	Method2Function& CreateFunctionManagerJSON();
 
 	/*
 		Crea la carpeta de salida en caso de que no exista
@@ -180,7 +181,7 @@ private:
 	/*
 		Vector con la informacion de los metodos encontrados
 	*/
-	std::vector<Method> methods;
+	std::map<std::string, std::vector<Method>> methods;
 	std::vector<std::string> filesToInclude;
 
 	/*

@@ -13,8 +13,9 @@ int main() {
 	script.AskForOutput();
 	script.CreateOutputFolder();
 	script.Begin();
-	script.CreateFunctionManagerHeader();
-	script.CreateFunctionManagerContent();
+	//script.CreateFunctionManagerHeader();
+	//script.CreateFunctionManagerContent();
+	script.CreateFunctionManagerJSON();
 
 	return 0;
 }
