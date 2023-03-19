@@ -1,7 +1,10 @@
 #include "Vector2D.h"
 #include <cassert>
+#include <string>
+#include "StringTrim.h"
 
 #define PI 3.14159265358979323846264338327950288f
+#include <iostream>
 
 namespace Utilities {
 
@@ -48,5 +51,21 @@ namespace Utilities {
 		angle = (abs(K + angle) < abs(angle)) ? K + angle : angle;
 		return angle * 180.0f / PI;
 	}
+	Vector2D::Vector2D(const char* str): Vector2D(std::string(str)) {
+	}
 
+	Vector2D::Vector2D(std::string const& str) {
+
+		std::string trimed = Utilities::trim(str, "([ )]");
+
+		size_t coma = trimed.find(",");
+
+		assert(coma != std::string::npos);
+
+		std::string x = trimed.substr(0, coma);
+		std::string y = trimed.substr(coma + 1);
+
+		x_ = std::stof(x);
+		y_ = std::stof(y);
+	}
 }

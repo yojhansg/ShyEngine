@@ -32,7 +32,8 @@
 		-
 		-No puede recibir un parametro <const> o por referencia
 		-El nombre del metodo no puede contener una barra baja
-		-El tipo de retorno o de los parametros no puede tener un nombre compuesto por un espacio de nombres o una clase (pe. usar Vector2D en vez Utilities::Vector2d)
+		-No se puede usar <reflect> en varios atributos simultaneamente (pe. No se puede usar en 'reflect int x, y;'.)
+		-No pueden haber <reflect> en la misma linea (pe. No se podria usar 'reflect x; reflect y;'. Tendrian que estar en lineas separadas) 
 
 */
 #define reflect friend class ClassReflection;

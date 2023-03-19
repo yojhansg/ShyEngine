@@ -16,8 +16,13 @@ namespace ECS {
 		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
 
 	private:
-		friend Game;
 		reflect int x;
+
+		reflect bool tonto;
+		reflect float hmmmm;
+	public:
+
+		reflect Utilities::Vector2D miVector2d;
 
 	publish:
 		// Getters

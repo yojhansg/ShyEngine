@@ -47,7 +47,8 @@ namespace ECS {
 		SDL_Rect dstRect;
 
 		// Real size of texture
-		int width, height;
+		reflect int width;
+		reflect int height;
 
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;

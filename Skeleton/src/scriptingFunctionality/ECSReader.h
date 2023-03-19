@@ -39,7 +39,6 @@
 #include <fstream>
 #include <iostream>
 
-#define WHITESPACE "\n\r\t\f\v "
 
 
 class ECSReader {
@@ -175,6 +174,8 @@ public:
 
 		std::string type;
 		std::string name;
+
+		std::string TypeConversion(std::string const& convertName);
 	};
 
 private:
@@ -207,23 +208,4 @@ private:
 	*/
 	ECSReader& CreateFunctionManagerSource();
 	
-	/*
-		Metodos de eliminar espacios de cadenas de texto
-	*/
-
-	inline std::string static ltrim(const std::string& s)
-	{
-		size_t start = s.find_first_not_of(WHITESPACE);
-		return (start == std::string::npos) ? "" : s.substr(start);
-	}
-
-	inline std::string static rtrim(const std::string& s)
-	{
-		size_t end = s.find_last_not_of(WHITESPACE);
-		return (end == std::string::npos) ? "" : s.substr(0, end + 1);
-	}
-
-	inline std::string static trim(const std::string& s) {
-		return rtrim(ltrim(s));
-	}
 };

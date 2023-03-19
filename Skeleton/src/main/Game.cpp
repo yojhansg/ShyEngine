@@ -58,14 +58,13 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 
-	std::cout << tr->x << std::endl;
 
 	std::map<std::string, std::string> map;
 	map["x"] = "3";
-
+	map["miVector2d"] = "1, 89";
 	ClassReflection::ReflectTransform(tr, map);
 
-	std::cout << tr->x << std::endl;
+	std::cout << tr->miVector2d << std::endl;
 
 
 		// Player

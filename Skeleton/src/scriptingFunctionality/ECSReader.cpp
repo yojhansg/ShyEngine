@@ -1,6 +1,7 @@
 #include "ECSReader.h"
 #include "ClassCreator.h"
 #include <filesystem>
+#include <StringTrim.h>
 
 ECSReader::ECSReader(std::string const& root) : root(root)
 {
@@ -90,7 +91,7 @@ void ECSReader::ProcessFile(std::string const& path)
 		std::string line;
 
 		std::getline(stream, line);
-		line = ECSReader::trim(line);
+		line = Utilities::trim(line);
 
 		if (line == "")
 			continue;
@@ -98,7 +99,7 @@ void ECSReader::ProcessFile(std::string const& path)
 		//TODO: esto no hacerlo asi, mejor hacer que importe el fichero .h y ya
 		if (line.contains("ECS_Version")) {
 
-			ECS_Version = trim(line.substr(line.find("ECS_Version") + 12));
+			ECS_Version = Utilities::trim(line.substr(line.find("ECS_Version") + 12));
 			continue;
 		}
 
@@ -131,7 +132,7 @@ void ECSReader::ProcessFile(std::string const& path)
 				className = className.substr(0, space);
 
 
-			currentClassName = ECSReader::trim(className);
+			currentClassName = Utilities::trim(className);
 
 			continue;
 		}
@@ -181,14 +182,14 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 
 	method.className = className;
 
-	std::string l = trim(line);
+	std::string l = Utilities::trim(line);
 
 	size_t nextWord = l.find(" ");
 	method.returnType = l.substr(0, nextWord);
 
 	l = l.substr(nextWord + 1);
 	nextWord = l.find("(");
-	method.methodName = trim(l.substr(0, nextWord));
+	method.methodName = Utilities::trim(l.substr(0, nextWord));
 
 	l = l.substr(nextWord + 1);
 
@@ -269,8 +270,6 @@ Example:
 */
 
 
-
-#define BLANK " "
 #define TAB "\t"
 #define NEWLINE "\n"
 #define VARIABLE "Scripting::Variable"
@@ -287,7 +286,7 @@ std::string ECSReader::Method::FunctionDeclaration()
 {
 	std::stringstream definition;
 
-	definition << VARIABLE BLANK;
+	definition << VARIABLE << " ";
 
 	definition << FunctionName();
 
@@ -300,7 +299,7 @@ std::string ECSReader::Method::FunctionDefinition()
 {
 	std::stringstream declaration;
 
-	declaration << VARIABLE BLANK;
+	declaration << VARIABLE << " ";
 
 	declaration << FunctionName();
 
@@ -339,7 +338,7 @@ std::string ECSReader::Method::FunctionDefinition()
 	return declaration.str();
 }
 
-
+//TODO: rellenar con el resto de valores
 std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 {
 	if (in == "int")
@@ -352,6 +351,34 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 		return "value.Char";
 
 	return "value." + in;
+}
+
+
+std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
+{
+	if (type == "int") {
+		return "std::stoi(" + convertName + ")";
+	}
+
+	if (type == "float") {
+		return "std::stof(" + convertName + ")";
+	}
+
+	if (type == "bool") {
+
+		return convertName + " == \"true\" ? true : false";
+	}
+
+	if (type == "string") {
+		return convertName;
+	}
+
+	if (type == "Utilities::Vector2D" || type == "Vector2D") {
+
+		return convertName;
+	}
+
+	return convertName;
 }
 
 
@@ -454,11 +481,14 @@ ECSReader& ECSReader::ClassReflection()
 
 	creator.Empty()
 		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddDefine("ECSreflection_Version", ECS_Version)
 		.Empty()
 		.AddLine("using namespace ECS;")
 		.BeginClass()
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
-		.AddMethod("void", "hola", { {} }, "");
+		.AddMethod("void", "hola", { {} }, "")
+		.Public();
+	
 
 	for (auto& className : attributes) {
 
@@ -467,7 +497,8 @@ ECSReader& ECSReader::ClassReflection()
 
 			//TODO hacer un metodo que convierta de string a un valor
 			method << "\tif(map.contains(\"" << attribute.name << "\"))\n";
-			method << "\t\tself->" << attribute.name << "= 10" << ";\n";
+
+			method << "\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
 		}
 
 
@@ -546,7 +577,3 @@ ECSReader& ECSReader::Convert2JSON()
 
 	return *this;
 }
-
-
-
-
