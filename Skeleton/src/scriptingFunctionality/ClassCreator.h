@@ -46,7 +46,7 @@ public:
 	ClassCreator& AddDefine(cstring name, cstring value = "");
 	ClassCreator& AddComment(cstring comment);
 
-	ClassCreator& AddLine(cstring line);
+	ClassCreator& AddLine(cstring line = "");
 	ClassCreator& Empty(int lineCount = 1);
 
 	std::string Header();

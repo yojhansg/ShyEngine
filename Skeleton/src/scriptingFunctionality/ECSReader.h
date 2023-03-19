@@ -31,6 +31,8 @@
 
 	Este metodo modifica el valor de la variable si la encuentra en el mapa
 
+	Añadir los valores que permiten reflexion al json con informacion
+
 */
 
 #include <map>

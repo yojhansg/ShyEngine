@@ -482,28 +482,37 @@ ECSReader& ECSReader::ClassReflection()
 	creator.Empty()
 		.AddComment("Creation time : " __TIMESTAMP__)
 		.AddDefine("ECSreflection_Version", ECS_Version)
-		.Empty()
+		.AddLine()
 		.AddLine("using namespace ECS;")
+		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
+		.AddLine()
 		.BeginClass()
+		.Empty(1)
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
-		.AddMethod("void", "hola", { {} }, "")
+		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
+		.Empty(1)
 		.Public();
-	
+
 
 	for (auto& className : attributes) {
 
 		std::stringstream method;
+		method << "\t\t" << className.first << "* self = static_cast<" << className.first << "*>(selfComp);\n";
+
 		for (auto& attribute : className.second) {
-
 			//TODO hacer un metodo que convierta de string a un valor
-			method << "\tif(map.contains(\"" << attribute.name << "\"))\n";
 
-			method << "\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
+
+			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
+
+			method << "\t\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
 		}
 
 
-		creator.AddMethod("void", "Reflect" + className.first, { {className.first + "*", "self"},
+		creator.AddMethod("void", "Reflect" + className.first, { {"Component*", "selfComp"},
 			{"std::map<std::string, std::string> const&", "map"} }, method.str(), true);
+
+		creator.AddLine();
 	}
 
 

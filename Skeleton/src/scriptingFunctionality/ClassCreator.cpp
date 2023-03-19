@@ -139,6 +139,7 @@ std::string ClassCreator::Source()
 {
 	ClassCreator source(className, false);
 
+	source.Empty(3);
 	source.IncludeRelative(className + ".h");
 
 	for (auto& m : methods) {

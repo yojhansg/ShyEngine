@@ -5,13 +5,19 @@
 #include <Components/Image.h>
 #include <Components/Transform.h>
 
-//Creation time : Sun Mar 19 13:59:41 2023
+//Creation time : Sun Mar 19 15:46:28 2023
 #define ECSreflection_Version 1.0
 
 using namespace ECS;
+typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);
+
 class ClassReflection{
-	void hola( );
+
+	std::map<std::string, ReflectionMethod> reflectionMethods;
+
 public: 
-	static void ReflectImage(Image* self, std::map<std::string, std::string> const& map);
-	static void ReflectTransform(Transform* self, std::map<std::string, std::string> const& map);
+	static void ReflectImage(Component* selfComp, std::map<std::string, std::string> const& map);
+
+	static void ReflectTransform(Component* selfComp, std::map<std::string, std::string> const& map);
+
 };
