@@ -1,21 +1,20 @@
-
 #include <iostream>
 #include <string>
-#include "Method2Function.h"
+#include "ECSReader.h"
+#include "ClassCreator.h"
 
 int main() {
-
-	Method2Function script(
-		Method2Function::GetDefaultRoot()
+	ECSReader reader(
+		ECSReader::GetDefaultRoot()
 	);
 
-	script.AskForRoot();
-	script.AskForOutput();
-	script.CreateOutputFolder();
-	script.Begin();
-	//script.CreateFunctionManagerHeader();
-	//script.CreateFunctionManagerContent();
-	script.CreateFunctionManagerJSON();
+	//reader.AskForRoot();
+	//reader.AskForOutput();
+	reader.Read();
+
+	reader.Method2Function();
+	reader.ClassReflection();
+	reader.Convert2JSON();
 
 	return 0;
 }

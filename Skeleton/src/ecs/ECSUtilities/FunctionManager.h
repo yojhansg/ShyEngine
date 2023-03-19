@@ -5,20 +5,22 @@
 #include <vector>
 #include "Scripting/Variable.h"
 
+
+
 #define ECSfunc_Version 1.0
-//Creation time: Fri Mar 17 01:46:49 2023
+//Creation time : Sun Mar 19 04:38:37 2023
 
-	typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
+typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
-	class FunctionManager {
+class FunctionManager{
+public: 
+	void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
+};
 
-	public:
 
-		static void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
-	};
 
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable> const &vec);
+Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec);

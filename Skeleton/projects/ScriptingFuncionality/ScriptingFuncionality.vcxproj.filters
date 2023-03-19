@@ -18,12 +18,18 @@
     <ClCompile Include="..\..\src\scriptingFunctionality\main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\scriptingFunctionality\Method2Function.cpp">
+    <ClCompile Include="..\..\src\scriptingFunctionality\ECSReader.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\scriptingFunctionality\ClassCreator.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\scriptingFunctionality\Method2Function.h">
+    <ClInclude Include="..\..\src\scriptingFunctionality\ECSReader.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\scriptingFunctionality\ClassCreator.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

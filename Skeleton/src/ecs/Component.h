@@ -16,9 +16,27 @@
 		-No puede devolver un valor <const> o por referencia
 		-No puede recibir un parametro <const> o por referencia
 		-El nombre del metodo no puede contener una barra baja
+		-El tipo de retorno o de los parametros no puede tener un nombre 
+		compuesto por un espacio de nombres o una clase (pe. usar Vector2D en vez Utilities::Vector2d)
+		-En caso de ser un puntero, el asterisco no puede estar separado del nombre mediante un espacio
 
 */
 #define publish public
+
+/*
+	Para poder tener reflexion sobre un atributo basta con poner la marca <reflect>
+	delante del atributo en cuestion
+
+	Condiciones para poder publicar un metodo:
+
+		-
+		-No puede recibir un parametro <const> o por referencia
+		-El nombre del metodo no puede contener una barra baja
+		-El tipo de retorno o de los parametros no puede tener un nombre compuesto por un espacio de nombres o una clase (pe. usar Vector2D en vez Utilities::Vector2d)
+
+*/
+#define reflect friend class ClassReflection;
+class ClassReflection;
 
 namespace ECS {
 
@@ -26,7 +44,6 @@ namespace ECS {
 	class Scene;
 
 	class Component {
-
 		friend Entity;
 
 	public:

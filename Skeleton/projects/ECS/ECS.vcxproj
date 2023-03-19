@@ -165,8 +165,9 @@
     <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
     <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
     <ClInclude Include="..\..\src\ecs\ContactListener.h" />
+    <ClInclude Include="..\..\src\ecs\ECSUtilities\ClassReflection.h" />
+    <ClInclude Include="..\..\src\ecs\ECSUtilities\FunctionManager.h" />
     <ClInclude Include="..\..\src\ecs\Entity.h" />
-    <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
     <ClInclude Include="..\..\src\ecs\SceneManager.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\Variable.h" />
@@ -184,8 +185,9 @@
     <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp" />
+    <ClCompile Include="..\..\src\ecs\ECSUtilities\ClassReflection.cpp" />
+    <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
-    <ClCompile Include="..\..\src\ecs\FunctionManager\FunctionManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp" />

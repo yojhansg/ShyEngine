@@ -131,11 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\scriptingFunctionality\ClassCreator.cpp" />
     <ClCompile Include="..\..\src\scriptingFunctionality\main.cpp" />
-    <ClCompile Include="..\..\src\scriptingFunctionality\Method2Function.cpp" />
+    <ClCompile Include="..\..\src\scriptingFunctionality\ECSReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\scriptingFunctionality\Method2Function.h" />
+    <ClInclude Include="..\..\src\scriptingFunctionality\ClassCreator.h" />
+    <ClInclude Include="..\..\src\scriptingFunctionality\ECSReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

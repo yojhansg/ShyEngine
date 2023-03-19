@@ -10,7 +10,8 @@
 #include <Components/CircleCollilder.h>
 #include <Components/Rigidbody.h>
 #include <Components/TestComponent.h>
-#include <FunctionManager/FunctionManager.h>
+#include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ClassReflection.h>
 #include <map>
 #include <iostream>
 
@@ -55,6 +56,17 @@ void Game::firstScene() {
 
 
 	// 4.- Components settings
+
+
+	std::cout << tr->x << std::endl;
+
+	std::map<std::string, std::string> map;
+	map["x"] = "3";
+
+	ClassReflection::ReflectTransform(tr, map);
+
+	std::cout << tr->x << std::endl;
+
 
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);

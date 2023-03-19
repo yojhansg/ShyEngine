@@ -5,6 +5,7 @@
 
 #include "Scripting/Variable.h"
 
+class Game;
 namespace ECS {
 
 	class Transform : public Component {
@@ -13,6 +14,10 @@ namespace ECS {
 		Transform();
 
 		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
+
+	private:
+		friend Game;
+		reflect int x;
 
 	publish:
 		// Getters

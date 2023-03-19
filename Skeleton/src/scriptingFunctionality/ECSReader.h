@@ -1,21 +1,7 @@
 #pragma once
 
 /*
-
-TODO: 
-	generar otro fichero txt para usar por el editor
-	Que ese fichero sirva para facilitar la lectura de los distintos metodos creados
-
-	Hacer que la ruta de functionManager sea relativa y no absoluta
-
-	El nombre del metodo en el mapa no incluye el nombre de la clase
-
-	Control de versiones
-*/
-
-
-/*
-	Method2Function
+	ECSReader
 		
 	Clase auxiliar del motor. Se encarga de generar los ficheros "FunctionManager.h" y "FuncionManager.cpp".
 	Estos ficheros luego se usan el motor para hacer las llamadas a los distintos metodos de los componentes.
@@ -26,13 +12,24 @@ TODO:
 
 	La finalidad es poder llamar a un metodo de una clase teniendo un puntero a la instancia y conociendo el nombre
 	del metodo
+*/
 
 
-	Orden de ejecucion:
 
-		1: Leer todos los ficheros
-		2: Generar fichero.h
-		3: Generar fichero.cpp
+/*
+	TODO:
+
+	Mirar si las clases tiene mas sentido que sean estaticas
+
+	Cambiar la forma de leer la version
+
+	Generar clase ComponentReflection
+
+	esta clase
+
+	Crea un metodo para cada clase del motor que tenga el atributo reflect
+
+	Este metodo modifica el valor de la variable si la encuentra en el mapa
 
 */
 
@@ -45,7 +42,7 @@ TODO:
 #define WHITESPACE "\n\r\t\f\v "
 
 
-class Method2Function {
+class ECSReader {
 
 public:
 	/*
@@ -85,7 +82,28 @@ public:
 			}
 	*/
 
-	Method2Function(std::string const& root);
+	ECSReader(std::string const& root);
+
+	/*
+		Comienza a procesar carpetas a partir de la carpeta <output>
+	*/
+
+	ECSReader& Read();
+
+	/*
+		Genera la clase <FunctionManager> con las distintas funciones marcadas como <publish> del ECS
+	*/
+	ECSReader& Method2Function();
+	
+	/*
+		Genera la clase <FunctionManager> con los atributos marcados como <reflect> del ECS
+	*/
+	ECSReader& ClassReflection();
+
+	/*
+		Genera un fichero JSON con la informacion relevante del ECS
+	*/
+	ECSReader& Convert2JSON();
 
 	/*
 		Abre la carpeta dada por la ruta. 
@@ -118,23 +136,6 @@ public:
 	*/
 	void AskForPath(std::string const& name, std::string& path);
 
-	/*
-		Comienza a procesar carpetas a partir de la carpeta <output> 
-	*/
-
-	Method2Function& Begin();
-
-	/* TODO
-		Crea los ficheros de salida del programa.
-	*/
-	Method2Function& CreateFunctionManagerHeader();
-	Method2Function& CreateFunctionManagerContent();
-	Method2Function& CreateFunctionManagerJSON();
-
-	/*
-		Crea la carpeta de salida en caso de que no exista
-	*/
-	void CreateOutputFolder();
 
 	/*
 		Genera las rutas por defecto
@@ -164,11 +165,17 @@ public:
 		std::string String2ScriptingVariable(std::string& in);
 	};
 
-
 	/*
 		Crea una instancia de <Method> dado un string 
 	*/
 	static Method CreateMethod(std::string const& line, std::string const& className);
+
+
+	struct Attribute {
+
+		std::string type;
+		std::string name;
+	};
 
 private:
 
@@ -181,11 +188,27 @@ private:
 	/*
 		Vector con la informacion de los metodos encontrados
 	*/
-	std::map<std::string, std::vector<Method>> methods;
 	std::vector<std::string> filesToInclude;
+	std::map<std::string, std::vector<Method>> methods;
+	std::map<std::string, std::vector<Attribute>> attributes;
 
 	/*
-		Metodos de eliminar espacios de cadenas de texto 
+		Crea la carpeta de salida en caso de que no exista
+	*/
+	void CreateOutputFolder();
+
+	/*
+		Genera el fichero .h de la clase <FunctionManager>
+	*/
+	ECSReader& CreateFunctionManagerHeader();
+	
+	/*
+		Genera el fichero .cpp de la clase <FunctionManager>
+	*/
+	ECSReader& CreateFunctionManagerSource();
+	
+	/*
+		Metodos de eliminar espacios de cadenas de texto
 	*/
 
 	inline std::string static ltrim(const std::string& s)
