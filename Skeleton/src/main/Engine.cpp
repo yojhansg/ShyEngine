@@ -22,10 +22,11 @@
 #include <chrono>
 using namespace std::chrono;
 
-#define WIN_WIDTH 1920
-#define WIN_HEIGHT 1080
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
 
 Engine::Engine() {
+
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; contactListener = nullptr;
 	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr; scriptManager = nullptr;
 }
@@ -35,8 +36,6 @@ void Engine::init() {
 	if (ECS_Version != ECSfunc_Version) {
 		std::cout << "Warning: La version del motor no coincide con la version de las funciones de los scripts" << std::endl;
 	}
-
-
 
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = RendererManager::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);

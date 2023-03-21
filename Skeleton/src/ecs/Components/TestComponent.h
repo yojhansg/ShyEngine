@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Component.h"
 
 namespace ECS {
@@ -16,9 +17,9 @@ namespace ECS {
 
 		void fixedUpdate(float fixedDeltaTime) override;
 
-		void onCollisionEnter(Entity* a, Entity* b) override;
+		void onCollisionEnter(Entity* b) override;
 
-		void onCollisionExit(Entity* a, Entity* b) override;
+		void onCollisionExit(Entity* b) override;
 
 	private:
 

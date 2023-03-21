@@ -10,15 +10,15 @@
 void ECS::TestComponent::start() {
 	transform = this->getEntity()->getComponent<Transform>();
 
-	rb = this->getEntity()->getComponent<Rigidbody>();
+	//rb = this->getEntity()->getComponent<Rigidbody>();
 
 	onGround = false;
 }
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	//transform->translate(1, 0);
-	transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 1.001f, transform->getScale()->getY()));
+	transform->translate(1, 0);
+	//transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 1.001f, transform->getScale()->getY() * 1.001f));
 	//transform->rotate(deltaTime * 10);
 
 	/*auto im = InputManager::InputManager::instance();
@@ -33,15 +33,15 @@ void ECS::TestComponent::fixedUpdate(float fixedDeltaTime) {
 	
 }
 
-void ECS::TestComponent::onCollisionEnter(Entity* a, Entity* b) {
+void ECS::TestComponent::onCollisionEnter(Entity* b) {
 
 	std::cout << "Comenzo el choque!" << std::endl;
-	std::cout << a->getEntityName() << std::endl;
+	std::cout << b->getEntityName() << std::endl;
 
 	onGround = true;
 }
 
-void ECS::TestComponent::onCollisionExit(Entity* a, Entity* b) {
+void ECS::TestComponent::onCollisionExit(Entity* b) {
 
 	/*std::cout << "Termino el choque!" << std::endl;
 	std::cout << a->getEntityName() << std::endl;*/

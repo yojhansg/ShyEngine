@@ -137,13 +137,13 @@ namespace ECS {
 		void onSceneDown();
 
 		// Called when the entity starts colliding with other entity
-		void onCollisionEnter(Entity* a, Entity* b);
+		void onCollisionEnter(Entity* b);
 
 		// Called when the entity is colliding with other entity
 		void onCollisionStay();
 
 		// Called when the entity exit the collider of the other entity
-		void onCollisionExit(Entity* a, Entity* b);
+		void onCollisionExit(Entity* b);
 
 		// Called when the entity starts trigging an entity marked as trigger
 		void onTriggerEnter();
