@@ -22,6 +22,10 @@ namespace Utilities {
 			x_(), y_() {
 		}
 
+		//Construct a Vector2D given a string representing its value ("(2, 1)", "3, 1")
+		Vector2D(std::string const& str);
+		Vector2D(const char* charArray);
+
 		Vector2D(const Vector2D& v) :
 			x_(v.getX()), y_(v.getY()) {
 		}
@@ -82,6 +86,11 @@ namespace Utilities {
 		// length of the vector
 		inline float magnitude() const {
 			return sqrtf(powf(x_, 2) + powf(y_, 2));
+		}
+
+		// square length of the vector
+		inline float sqrMagnitude() const {
+			return x_ * x_ + y_ * y_;
 		}
 
 		// vector in the same direction of length 1

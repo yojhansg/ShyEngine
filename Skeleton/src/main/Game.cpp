@@ -11,7 +11,8 @@
 #include <Components/CircleCollilder.h>
 #include <Components/Rigidbody.h>
 #include <Components/TestComponent.h>
-#include <FunctionManager/FunctionManager.h>
+#include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ClassReflection.h>
 #include <map>
 
 Game::Game(ECS::SceneManager* sm) {
@@ -34,7 +35,7 @@ void Game::firstScene() {
 	// 2.- Entities
 
 		// Player
-		ECS::Entity* player = scene->createEntity("Player");
+	ECS::Entity* player = scene->createEntity("Player");
 
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("link.png");
@@ -55,6 +56,16 @@ void Game::firstScene() {
 
 	// 4.- Components settings
 
+
+
+	std::map<std::string, std::string> map;
+	map["x"] = "3";
+	map["miVector2d"] = "1, 89";
+	ClassReflection::ReflectTransform(tr, map);
+
+	//std::cout << tr->miVector2d << std::endl;
+
+
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 3);
 		tr->setScale(0.35f, 0.35f);
@@ -66,11 +77,11 @@ void Game::firstScene() {
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
 
-	// Scripting
-	//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});
+// Scripting
+//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});
 
 
-	// 5.- Start
+// 5.- Start
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 

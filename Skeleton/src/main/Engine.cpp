@@ -12,7 +12,7 @@
 #include <EngineTime.h>
 
 #include <Component.h>
-#include <FunctionManager/FunctionManager.h>
+#include <ECSUtilities/FunctionManager.h>
 
 #include "Game.h"
 #include <iostream>
@@ -33,7 +33,7 @@ Engine::Engine() {
 void Engine::init() {
 
 	if (ECS_Version != ECSfunc_Version) {
-		std::cout << "Warning: La version del ECS con coincide con la version de las funciones" << std::endl;
+		std::cout << "Warning: La version del motor no coincide con la version de las funciones de los scripts" << std::endl;
 	}
 
 	sceneManager = ECS::SceneManager::init();

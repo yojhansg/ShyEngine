@@ -1,29 +1,25 @@
-#include "Method2Function.h"
-#include <iostream>
+#include "ECSReader.h"
+#include "ClassCreator.h"
 #include <filesystem>
+#include <StringTrim.h>
 
-
-Method2Function::Method2Function(std::string const& root) : root(root)
+ECSReader::ECSReader(std::string const& root) : root(root)
 {
-	output = root + "\\FunctionManager";
-
-
-
+	output = root + "\\ECSUtilities";
 }
 
-
-void Method2Function::AskForRoot()
+void ECSReader::AskForRoot()
 {
 	AskForPath("root", root);
-	output = root + "\\FunctionManager";
+	output = root + "\\ECSUtilities";
 }
 
-void Method2Function::AskForOutput()
+void ECSReader::AskForOutput()
 {
 	AskForPath("output directory", output);
 }
 
-void Method2Function::AskForPath(std::string const& name, std::string& path)
+void ECSReader::AskForPath(std::string const& name, std::string& path)
 {
 	bool pathAccepted = false;
 	while (!pathAccepted)
@@ -46,38 +42,43 @@ void Method2Function::AskForPath(std::string const& name, std::string& path)
 	}
 }
 
-Method2Function& Method2Function::Begin()
+ECSReader& ECSReader::Read()
 {
 	ProcessFolder(root);
 	return *this;
 }
 
 
+ECSReader& ECSReader::Method2Function() {
 
-void Method2Function::CreateOutputFolder()
+	return CreateFunctionManagerHeader().CreateFunctionManagerSource();
+}
+
+
+void ECSReader::CreateOutputFolder()
 {
 	std::filesystem::path path(output);
 	std::filesystem::create_directories(output);
 }
 
 
-std::string Method2Function::GetDefaultRoot()
+std::string ECSReader::GetDefaultRoot()
 {
 	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs)";
 }
 
 
-void Method2Function::ProcessFolder(std::string const& path)
+void ECSReader::ProcessFolder(std::string const& path)
 {
 	std::filesystem::path currentPath = std::filesystem::path(path);
 
 	for (auto const& it : std::filesystem::directory_iterator(currentPath)) {
 
-		(this->*(it.is_directory() ? &Method2Function::ProcessFolder : &Method2Function::ProcessFile))(it.path().string());
+		(this->*(it.is_directory() ? &ECSReader::ProcessFolder : &ECSReader::ProcessFile))(it.path().string());
 	}
 }
 
-void Method2Function::ProcessFile(std::string const& path)
+void ECSReader::ProcessFile(std::string const& path)
 {
 	std::ifstream stream(path);
 
@@ -90,18 +91,19 @@ void Method2Function::ProcessFile(std::string const& path)
 		std::string line;
 
 		std::getline(stream, line);
-		line = Method2Function::trim(line);
+		line = Utilities::trim(line);
 
 		if (line == "")
 			continue;
 
+		//TODO: esto no hacerlo asi, mejor hacer que importe el fichero .h y ya
 		if (line.contains("ECS_Version")) {
 
-			ECS_Version = trim(line.substr(line.find("ECS_Version") + 12));
+			ECS_Version = Utilities::trim(line.substr(line.find("ECS_Version") + 12));
 			continue;
 		}
 
-		if (line.contains("//"))
+		if (line.rfind("//", 0) == 0) //Ignora comentarios
 			continue;
 
 		if (line == "publish:") {
@@ -130,7 +132,29 @@ void Method2Function::ProcessFile(std::string const& path)
 				className = className.substr(0, space);
 
 
-			currentClassName = Method2Function::trim(className);
+			currentClassName = Utilities::trim(className);
+
+			continue;
+		}
+
+		if (line.rfind("reflect", 0) == 0) {
+
+			std::string removeReflect = line.substr(8);
+
+			int blankSpace = removeReflect.find(" ");
+
+			std::string attReturnType = removeReflect.substr(0, blankSpace);
+			std::string attNameWithComa = removeReflect.substr(blankSpace + 1);
+			std::string attName = attNameWithComa.substr(0, attNameWithComa.find(";"));
+
+			attributes[currentClassName].push_back({ attReturnType, attName });
+
+			//TODO: ver si deberia separar la reflexion de la funcionalizacion a la hora de incluir ficheros
+			if (!fileIncluded) {
+
+				filesToInclude.push_back(path);
+				fileIncluded = true;
+			}
 
 			continue;
 		}
@@ -152,20 +176,20 @@ void Method2Function::ProcessFile(std::string const& path)
 
 
 
-Method2Function::Method Method2Function::CreateMethod(std::string const& line, std::string const& className)
+ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string const& className)
 {
 	Method method;
 
 	method.className = className;
 
-	std::string l = trim(line);
+	std::string l = Utilities::trim(line);
 
 	size_t nextWord = l.find(" ");
 	method.returnType = l.substr(0, nextWord);
 
 	l = l.substr(nextWord + 1);
 	nextWord = l.find("(");
-	method.methodName = trim(l.substr(0, nextWord));
+	method.methodName = Utilities::trim(l.substr(0, nextWord));
 
 	l = l.substr(nextWord + 1);
 
@@ -246,8 +270,6 @@ Example:
 */
 
 
-
-#define BLANK " "
 #define TAB "\t"
 #define NEWLINE "\n"
 #define VARIABLE "Scripting::Variable"
@@ -255,16 +277,16 @@ Example:
 #define CAST(className, cast) "static_cast<" + className + "*>(" + cast + ")"
 
 
-std::string Method2Function::Method::FunctionName()
+std::string ECSReader::Method::FunctionName()
 {
 	return className + "_" + methodName;
 }
 
-std::string Method2Function::Method::FunctionDeclaration()
+std::string ECSReader::Method::FunctionDeclaration()
 {
 	std::stringstream definition;
 
-	definition << VARIABLE BLANK;
+	definition << VARIABLE << " ";
 
 	definition << FunctionName();
 
@@ -273,11 +295,11 @@ std::string Method2Function::Method::FunctionDeclaration()
 	return definition.str();
 }
 
-std::string Method2Function::Method::FunctionDefinition()
+std::string ECSReader::Method::FunctionDefinition()
 {
 	std::stringstream declaration;
 
-	declaration << VARIABLE BLANK;
+	declaration << VARIABLE << " ";
 
 	declaration << FunctionName();
 
@@ -316,9 +338,8 @@ std::string Method2Function::Method::FunctionDefinition()
 	return declaration.str();
 }
 
-
-
-std::string Method2Function::Method::String2ScriptingVariable(std::string& in)
+//TODO: rellenar con el resto de valores
+std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 {
 	if (in == "int")
 		return "value.Int";
@@ -333,34 +354,53 @@ std::string Method2Function::Method::String2ScriptingVariable(std::string& in)
 }
 
 
+std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
+{
+	if (type == "int") {
+		return "std::stoi(" + convertName + ")";
+	}
 
-Method2Function& Method2Function::CreateFunctionManagerHeader()
+	if (type == "float") {
+		return "std::stof(" + convertName + ")";
+	}
+
+	if (type == "bool") {
+
+		return convertName + " == \"true\" ? true : false";
+	}
+
+	if (type == "string") {
+		return convertName;
+	}
+
+	if (type == "Utilities::Vector2D" || type == "Vector2D") {
+
+		return convertName;
+	}
+
+	return convertName;
+}
+
+
+ECSReader& ECSReader::CreateFunctionManagerHeader()
 {
 	std::ofstream h(output + "/FunctionManager.h");
 
-	h << R"(#pragma once
-
-#include <map>
-#include <string>
-#include <vector>
-#include "Scripting/Variable.h"
-
-)";
-
-	h << "#define ECSfunc_Version " << ECS_Version << "\n";
-	h << "//Creation time: " << __TIMESTAMP__ << "\n";
-
-	h << R"(
-typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
-
-class FunctionManager {
-
-public:
-
-	static void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
-};
-
-)";
+	h << ClassCreator("FunctionManager")
+		.IncludeAbsolutes({ "map", "string", "vector" })
+		.IncludeRelative("Scripting/Variable.h")
+		.Empty(3)
+		.AddDefine("ECSfunc_Version", ECS_Version)
+		.AddComment("Creation time : " __TIMESTAMP__)
+		.Empty()
+		.AddLine("typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);")
+		.Empty()
+		.BeginClass()
+		.Public()
+		.AddMethod("void", "CreateFunctionMap", { {"std::map<std::string, CallableFunction>&", "map"} })
+		.EndClass()
+		.Empty(3)
+		.Header();
 
 	for (auto& currentClass : methods) {
 
@@ -370,12 +410,11 @@ public:
 		}
 	}
 
-
 	h.close();
 	return *this;
 }
 
-Method2Function& Method2Function::CreateFunctionManagerContent()
+ECSReader& ECSReader::CreateFunctionManagerSource()
 {
 	std::ofstream cpp(output + "/FunctionManager.cpp");
 
@@ -423,29 +462,92 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 }
 
 
+ECSReader& ECSReader::ClassReflection()
+{
+	std::ofstream h(output + "/ClassReflection.h  ");
+	std::ofstream cpp(output + "/ClassReflection.cpp");
+
+	ClassCreator creator = ClassCreator("ClassReflection");
+
+	creator.IncludeAbsolutes({ "string" , "map" });
+
+
+
+	for (auto& file : filesToInclude) {
+
+		auto filename = std::filesystem::path(file);
+		creator.IncludeAbsolute("Components/" + filename.filename().string());
+	}
+
+	creator.Empty()
+		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddDefine("ECSreflection_Version", ECS_Version)
+		.AddLine()
+		.AddLine("using namespace ECS;")
+		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
+		.AddLine()
+		.BeginClass()
+		.Empty(1)
+		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
+		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
+		.Empty(1)
+		.Public();
+
+
+	for (auto& className : attributes) {
+
+		std::stringstream method;
+		method << "\t\t" << className.first << "* self = static_cast<" << className.first << "*>(selfComp);\n";
+
+		for (auto& attribute : className.second) {
+			//TODO hacer un metodo que convierta de string a un valor
+
+
+			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
+
+			method << "\t\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
+		}
+
+
+		creator.AddMethod("void", "Reflect" + className.first, { {"Component*", "selfComp"},
+			{"std::map<std::string, std::string> const&", "map"} }, method.str(), true);
+
+		creator.AddLine();
+	}
+
+
+	//TODO: Buscar las clases que tengo que añadir para reflexionar
+
+	creator.EndClass();
+
+	h << creator.Header();
+	cpp << creator.Source();
+
+	h.close();
+	cpp.close();
+	return *this;
+}
+
+
+
 #include "json.hpp"
 using namespace nlohmann;
 
-Method2Function& Method2Function::CreateFunctionManagerJSON()
+ECSReader& ECSReader::Convert2JSON()
 {
-
 	/*
 		Ejemplo del JSON
 
-
 			{
-			"Transform" = {
-				"Move" = {
+			"Transform" : {
+				"Move" : {
 					"input" = {
-
+						Vector3 Move;
 					},
-					"return" = "int"
+					"return" : "int"
 				}
 			},
-
-
 		}
-
 	*/
 
 
@@ -453,14 +555,13 @@ Method2Function& Method2Function::CreateFunctionManagerJSON()
 
 	for (auto& currentClass : methods) {
 
-		int idx = 0;
 		for (auto& method : currentClass.second) {
 
 			root[currentClass.first][method.methodName] =
-			{ 
+			{
 				{"return", method.returnType}
 			};
-				
+
 
 			json inputJson;
 
@@ -474,13 +575,8 @@ Method2Function& Method2Function::CreateFunctionManagerJSON()
 
 			if (!inputJson.is_null())
 				root[currentClass.first][method.methodName]["input"] = inputJson;
-
-			idx++;
 		}
 	}
-
-
-	std::cout << root.dump(4) << std::endl;
 
 	std::ofstream fmJSON(output + "/FunctionManager.json");
 
@@ -490,7 +586,3 @@ Method2Function& Method2Function::CreateFunctionManagerJSON()
 
 	return *this;
 }
-
-
-
-

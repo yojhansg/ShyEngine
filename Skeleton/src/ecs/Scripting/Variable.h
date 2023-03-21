@@ -5,6 +5,7 @@ namespace ECS {
 	class Component;
 }
 
+//TODO: meter el tipo vector2d
 namespace Scripting {
 
 
