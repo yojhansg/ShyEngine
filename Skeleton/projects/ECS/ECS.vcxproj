@@ -170,7 +170,14 @@
     <ClInclude Include="..\..\src\ecs\Entity.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
     <ClInclude Include="..\..\src\ecs\SceneManager.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\Fork.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\Function.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\Node.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\OutputNode.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\Script.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\ScriptManager.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\Variable.h" />
+    <ClInclude Include="..\..\src\ecs\Scripting\ConstNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
@@ -190,7 +197,14 @@
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\Fork.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\Function.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\Node.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\OutputNode.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\Script.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\ScriptManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp" />
+    <ClCompile Include="..\..\src\ecs\Scripting\ConstNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\input\Input.vcxproj">

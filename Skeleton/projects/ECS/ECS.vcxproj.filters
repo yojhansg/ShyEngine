@@ -69,9 +69,6 @@
     <ClInclude Include="..\..\src\ecs\ContactListener.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
-      <Filter>Archivos de encabezado\FunctionManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\BoxCollider.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -89,6 +86,27 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\ECSUtilities\ClassReflection.h">
       <Filter>Archivos de encabezado\ECSUtilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\Script.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\Node.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\Fork.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\Function.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\ConstNode.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\ScriptManager.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Scripting\OutputNode.h">
+      <Filter>Archivos de encabezado\Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +163,27 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\ECSUtilities\ClassReflection.cpp">
       <Filter>Archivos de origen\ECSUtilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\Script.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\Node.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\Function.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\Fork.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\ConstNode.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\ScriptManager.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Scripting\OutputNode.cpp">
+      <Filter>Archivos de origen\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

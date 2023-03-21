@@ -14,7 +14,6 @@ namespace Scripting {
 		enum class Type {
 			Null, Int, Float, Bool, Char, Component
 		};
-		Type type;
 
 		union Value {
 			int Int;
@@ -24,8 +23,10 @@ namespace Scripting {
 
 			ECS::Component* pointer;
 		};
-		Value value;
 
+
+		Type type;
+		Value value;
 
 		Variable();
 		Variable(Type type);
@@ -38,17 +39,34 @@ namespace Scripting {
 		static Variable Char(char value);
 		static Variable Component(ECS::Component* comp);
 
-
-		operator int(){
-			return 3;
-		}
-
 		Variable(int value);
 		Variable(float value);
 		Variable(bool value);
 		Variable(char value);
 		Variable(ECS::Component* comp);
 
+
+		Variable operator +(Variable const& other) const;
+		Variable operator -(Variable const& other) const;
+		Variable operator *(Variable const& other) const;
+		Variable operator /(Variable const& other) const;
+		Variable operator %(Variable const& other) const;
+
+		Variable Pow(Variable const& other) const;
+
+
+		/*
+			Arithmetic grid
+
+			-------   Null Int Float   Char Component
+
+			Int        x    o    o      o       x  
+			Float      x    o    o      x       x
+			Char       x    o    x      o       x
+		
+		*/
+
+		static bool ArithmeticCheck(Variable const& a, Variable const& b);
 	};
 
 
