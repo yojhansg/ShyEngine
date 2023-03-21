@@ -2,111 +2,178 @@
 //#include "box2d/box2d.h"
 //#include "Entity.h"
 //#include "Transform.h"
-//#include "Collider.h"
+//#include "BoxCollider.h"
+//#include "CircleCollilder.h"
 //#include "PhysicsManager.h"
 //#include <iostream>
 //
-//ECS::Rigidbody::Rigidbody() {
+//namespace ECS {
 //
-//	screenToWorldFactor = PhysicsManager::PhysicsManager::instance()->getScreenToWorldFactor();
+//	Rigidbody::Rigidbody() {
 //
-//	this->bodyType = STATIC;
-//	this->mass = 1;
+//		screenToWorldFactor = PhysicsManager::PhysicsManager::instance()->getScreenToWorldFactor();
 //
-//	this->linearDrag = 0;
-//	this->angularDrag = 0;
+//		world = nullptr;
 //
-//	this->gravityScale = 1;
+//		this->bodyType = STATIC;
 //
-//	transform = nullptr; collider = nullptr;
+//		transform = nullptr;
 //
-//	// Box 2D
-//	world = nullptr;
+//		bodyDef = nullptr;
+//		fixtureDef = nullptr;
+//		body = nullptr; 
+//		shape = nullptr;
+//		fixture = nullptr;
 //
-//	body = nullptr; fixture = nullptr;
-//
-//}
-//
-//ECS::Rigidbody::~Rigidbody() {}
-//
-//void ECS::Rigidbody::init() {
-//
-//	world = PhysicsManager::PhysicsManager::instance()->getWorld();
-//
-//	transform = this->getEntity()->getComponent<Transform>();
-//	assert(transform != nullptr, "La entidad debe contener un componente Transform");
-//
-//	collider = this->getEntity()->getComponent<Collider>();
-//	assert(collider != nullptr, "La entidad debe contener un componente Collider para poder añadir componente Rigidbody");
-//
-//	body = collider->getBody();
-//
-//	fixture = collider->getFixture();
-//}
-//
-//void ECS::Rigidbody::fixedUpdate(float fixedDeltaTime) {
-//
-//	transform->setPosition(body->GetPosition().x * screenToWorldFactor, body->GetPosition().y * screenToWorldFactor);
-//	transform->setRotation(body->GetAngle() * (180 / b2_pi));
-//}
-//
-//void ECS::Rigidbody::setBodyType(BODY_TYPE type) { 
-//
-//	b2BodyType bodyType = b2_staticBody;
-//
-//	switch (type)
-//	{
-//	case ECS::Rigidbody::STATIC:
-//		bodyType = b2_staticBody;
-//		break;
-//	case ECS::Rigidbody::KINEMATIC:
-//		bodyType = b2_kinematicBody;
-//		break;
-//	case ECS::Rigidbody::DINAMIC:
-//		bodyType = b2_dynamicBody;
-//		break;
-//	default:
-//		break;
 //	}
 //
-//	body->SetType(bodyType);
-//}
+//	Rigidbody::~Rigidbody() {
+//		delete bodyDef;
+//		delete fixtureDef;
+//		delete shape;
 //
-//void ECS::Rigidbody::setLinearDrag(float drag) {
-//	body->SetLinearDamping(drag);
-//}
+//		body->DestroyFixture(fixture);
+//		world->DestroyBody(body);
+//	}
 //
-//void ECS::Rigidbody::setAngularDrag(float drag) {
-//	body->SetAngularDamping(drag);
-//}
+//	void Rigidbody::init() {
 //
-//void ECS::Rigidbody::setMass(float mass) {
+//		world = PhysicsManager::PhysicsManager::instance()->getWorld();
 //
-//	if (collider != nullptr)
-//		fixture->SetDensity(mass / collider->getSize().volume());
-//	else
-//		fixture->SetDensity(mass);
-//}
+//		transform = this->getEntity()->getComponent<Transform>();
+//		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 //
-//void ECS::Rigidbody::setGravityScale(float scale) {
-//	body->SetGravityScale(scale);
-//}
+//		bodyDef = new b2BodyDef();
+//		shape = new b2PolygonShape();
+//		fixtureDef = new b2FixtureDef();
 //
-//void ECS::Rigidbody::applyForce(const Utilities::Vector2D& force) {
+//		shape->SetAsBox(1.0f, 1.0f);
 //
-//	b2Vec2 p = body->GetWorldCenter();
+//		bodyDef->type = b2_staticBody;
+//		bodyDef->position.Set(0, 0);
 //
-//	body->ApplyForce(b2Vec2(force.getX(), force.getY()), p, true);
-//}
+//		fixtureDef->shape = shape;
+//		fixtureDef->density = 1.0f;
+//		fixtureDef->isSensor = true;
 //
-//void ECS::Rigidbody::setLinearVelocity(const Utilities::Vector2D& vel) {
+//		body = world->CreateBody(bodyDef);
 //
-//	body->SetLinearVelocity(b2Vec2(vel.getX(), vel.getY()));
-//}
+//		fixture = body->CreateFixture(fixtureDef);
 //
-//Utilities::Vector2D ECS::Rigidbody::getLinearVelocity() {
+//		// Collision filtering
+//		b2Filter f = fixture->GetFilterData();
 //
-//	b2Vec2 v = body->GetLinearVelocity();
+//		f.categoryBits = 0x0002;
+//		f.maskBits = 0x0000;
 //
-//	return Utilities::Vector2D(v.x, v.y);
+//		fixture->SetFilterData(f);
+//
+//	}
+//
+//	void Rigidbody::start() {
+//
+//		b2Vec2 v = b2Vec2(transform->getPosition()->getX() / screenToWorldFactor, transform->getPosition()->getY() / screenToWorldFactor);
+//
+//		body->SetTransform(v, (b2_pi / 180) * (*transform->getRotation()));
+//	}
+//
+//	void Rigidbody::fixedUpdate(float fixedDeltaTime) {
+//
+//		transform->setPosition(body->GetPosition().x * screenToWorldFactor, body->GetPosition().y * screenToWorldFactor);
+//		transform->setRotation(body->GetAngle() * (180 / b2_pi));
+//	}
+//
+//	void Rigidbody::setRotationFreezed(bool freezed) {
+//		body->SetFixedRotation(freezed);
+//	}
+//
+//	bool Rigidbody::isRotationFreezed() {
+//		return body->IsFixedRotation();
+//	}
+//
+//	void Rigidbody::setBodyType(BODY_TYPE type) {
+//
+//		bodyType = type;
+//
+//		b2BodyType t = b2_staticBody;
+//
+//		switch (type) {
+//			case ECS::Rigidbody::STATIC:
+//				t = b2_staticBody;
+//				break;
+//			case ECS::Rigidbody::KINEMATIC:
+//				t = b2_kinematicBody;
+//				break;
+//			case ECS::Rigidbody::DYNAMIC:
+//				t = b2_dynamicBody;
+//				break;
+//			default:
+//				break;
+//		}
+//
+//		body->SetType(t);
+//	}
+//
+//	Rigidbody::BODY_TYPE Rigidbody::getBodyType() {
+//		return bodyType;
+//	}
+//
+//	void Rigidbody::setLinearDrag(float drag) {
+//		body->SetLinearDamping(drag);
+//	}
+//
+//	float Rigidbody::getLinearDrag() {
+//		return body->GetLinearDamping();
+//	}
+//
+//	void Rigidbody::setAngularDrag(float drag) {
+//		body->SetAngularDamping(drag);
+//	}
+//
+//	float Rigidbody::getAngularDrag() {
+//		return body->GetAngularDamping();
+//	}
+//
+//	void Rigidbody::setMass(float mass) {
+//
+//		auto b = this->entity->getComponent<BoxCollider>();
+//		auto c = this->entity->getComponent<CircleCollilder>();
+//
+//		if (b != nullptr)
+//			fixture->SetDensity(body->GetMass() / b->getVolume());
+//		
+//		if (c != nullptr)
+//			fixture->SetDensity(body->GetMass() / c->getVolume());
+//	}
+//
+//	void Rigidbody::setGravityScale(float scale) {
+//		body->SetGravityScale(scale);
+//	}
+//
+//	float Rigidbody::getGravityScale() {
+//		return body->GetGravityScale();
+//	}
+//
+//
+//
+//
+//	void Rigidbody::applyForce(const Utilities::Vector2D& force) {
+//
+//		b2Vec2 p = body->GetWorldCenter();
+//
+//		body->ApplyForce(b2Vec2(force.getX(), force.getY()), p, true);
+//	}
+//
+//	void Rigidbody::setLinearVelocity(const Utilities::Vector2D& vel) {
+//
+//		body->SetLinearVelocity(b2Vec2(vel.getX(), vel.getY()));
+//	}
+//
+//	Utilities::Vector2D Rigidbody::getLinearVelocity() {
+//
+//		b2Vec2 v = body->GetLinearVelocity();
+//
+//		return Utilities::Vector2D(v.x, v.y);
+//	}
+//
 //}

@@ -6,13 +6,13 @@
 #include <Entity.h>
 #include <Components/Transform.h>
 #include <Components/Image.h>
+#include <Components/Collider.h>
 #include <Components/BoxCollider.h>
 #include <Components/CircleCollilder.h>
 #include <Components/Rigidbody.h>
 #include <Components/TestComponent.h>
 #include <FunctionManager/FunctionManager.h>
 #include <map>
-#include <iostream>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -37,18 +37,17 @@ void Game::firstScene() {
 		ECS::Entity* player = scene->createEntity("Player");
 
 		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("kj.png");
-		auto collider = player->addComponent<ECS::CircleCollilder>();
-
+		auto im = player->addComponent<ECS::Image>("link.png");
+		auto collider = player->addComponent<ECS::Collider>();
 		//auto rb = player->addComponent<ECS::Rigidbody>();
 		auto tComp = player->addComponent<ECS::TestComponent>();
 
 		// Ground
-		/*ECS::Entity* ground = scene->createEntity("Ground");
+		ECS::Entity* ground = scene->createEntity("Ground");
 
 		auto grTr = ground->addComponent<ECS::Transform>();
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
-		auto grCol = ground->addComponent<ECS::Collider>();*/
+		auto grCol = ground->addComponent<ECS::Collider>();
 
 	// 3.- Init
 	scene->init();
@@ -57,18 +56,14 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
-		tr->setScale(0.5f, 0.5f);
-
-		collider->setRotationFreezed(true);
-		//collider->setRadius(2);
-		//collider->addOffSet(collider->getSize().getX() / 2, collider->getSize().getY() / 2);
-
-		/*rb->setBodyType(ECS::Rigidbody::DINAMIC);
-		rb->setGravityScale(0);*/
-
+		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 3);
+		tr->setScale(0.35f, 0.35f);
+		
+		collider->setBodyType(ECS::Collider::DYNAMIC);
+		
 		// Ground
-		//grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
+		grTr->setScale(0.75f, 0.75f);
+		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight());
 
 
 	// Scripting
