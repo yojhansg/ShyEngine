@@ -154,14 +154,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ecs\Component.h" />
-    <ClInclude Include="..\..\src\ecs\Components\BoxCollider.h" />
+    <ClInclude Include="..\..\src\ecs\Components\BoxBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
-    <ClInclude Include="..\..\src\ecs\Components\ChainCollider.h" />
-    <ClInclude Include="..\..\src\ecs\Components\CircleCollilder.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Collider.h" />
-    <ClInclude Include="..\..\src\ecs\Components\EdgeCollider.h" />
+    <ClInclude Include="..\..\src\ecs\Components\ChainBody.h" />
+    <ClInclude Include="..\..\src\ecs\Components\CircleBody.h" />
+    <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
+    <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Image.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Rigidbody.h" />
     <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
     <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
     <ClInclude Include="..\..\src\ecs\ContactListener.h" />
@@ -174,14 +173,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\BoxCollider.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\ChainCollider.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\CircleCollilder.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Collider.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\EdgeCollider.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Rigidbody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp" />

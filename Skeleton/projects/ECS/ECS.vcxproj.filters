@@ -51,13 +51,10 @@
     <ClInclude Include="..\..\src\ecs\Components\Camera.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\Collider.h">
+    <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\Image.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\Rigidbody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\Transform.h">
@@ -69,19 +66,16 @@
     <ClInclude Include="..\..\src\ecs\ContactListener.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\FunctionManager\FunctionManager.h">
-      <Filter>Archivos de encabezado\FunctionManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\BoxCollider.h">
+    <ClInclude Include="..\..\src\ecs\Components\BoxBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\ChainCollider.h">
+    <ClInclude Include="..\..\src\ecs\Components\ChainBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\CircleCollilder.h">
+    <ClInclude Include="..\..\src\ecs\Components\CircleBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\EdgeCollider.h">
+    <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\ECSUtilities\FunctionManager.h">
@@ -110,13 +104,10 @@
     <ClCompile Include="..\..\src\ecs\Components\Camera.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\Collider.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\Rigidbody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp">
@@ -128,16 +119,16 @@
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\BoxCollider.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\EdgeCollider.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\CircleCollilder.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\ChainCollider.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp">

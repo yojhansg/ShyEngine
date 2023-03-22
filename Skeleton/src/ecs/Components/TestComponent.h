@@ -5,7 +5,6 @@
 namespace ECS {
 
 	class Transform;
-	class Rigidbody;
 
 	class TestComponent : public Component {
 
@@ -24,8 +23,6 @@ namespace ECS {
 	private:
 
 		Transform* transform;
-
-		Rigidbody* rb;
 
 		bool onGround;
 

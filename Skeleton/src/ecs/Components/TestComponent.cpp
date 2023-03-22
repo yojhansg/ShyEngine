@@ -4,7 +4,6 @@
 #include <Vector2D.h>
 #include "Entity.h"
 #include "Transform.h"
-#include "Rigidbody.h"
 
 
 void ECS::TestComponent::start() {
@@ -17,9 +16,9 @@ void ECS::TestComponent::start() {
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	transform->translate(1, 0);
-	//transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 1.001f, transform->getScale()->getY() * 1.001f));
-	//transform->rotate(deltaTime * 10);
+	//transform->translate(1, 0);
+	//transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 0.9995f, transform->getScale()->getY() * 0.9995f));
+	//transform->rotate(deltaTime * 20);
 
 	/*auto im = InputManager::InputManager::instance();
 
