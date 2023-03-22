@@ -100,7 +100,10 @@ namespace PhysicsManager {
 	
 		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
 
-		SDL_RenderDrawLine(renderer, p1.x * screenToWorldFactor, (p1.y * screenToWorldFactor), p2.x * screenToWorldFactor, p2.y * screenToWorldFactor);
+		b2Vec2 a = { p1.x * screenToWorldFactor, p1.y * screenToWorldFactor };
+		b2Vec2 b = { p2.x * screenToWorldFactor, p2.y * screenToWorldFactor };
+
+		SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
 
 	}
 
@@ -111,10 +114,10 @@ namespace PhysicsManager {
 		SDL_SetRenderDrawColor(renderer, color.r * 255, color.g * 255, color.b * 255, 255);
 
 		SDL_Rect rect;
-		rect.x = (p.x - size / 2.0f) * screenToWorldFactor;
-		rect.y = (p.y - size / 2.0f) * screenToWorldFactor;
-		rect.w = size * screenToWorldFactor;
-		rect.h = size * screenToWorldFactor;
+		rect.x = p.x * screenToWorldFactor;
+		rect.y = p.y * screenToWorldFactor;
+		rect.w = size;
+		rect.h = size;
 
 		SDL_RenderFillRect(renderer, &rect);
 

@@ -98,7 +98,7 @@ namespace Utilities {
 			return *this / magnitude();
 		}
 
-		inline float volume() const {
+		inline float area() const {
 			return x_ * y_;
 		}
 
@@ -136,6 +136,14 @@ namespace Utilities {
 			x_ += v.x_;
 			y_ += v.y_;
 			return *this;
+		}
+
+		inline bool operator!=(const Vector2D& v) {
+			return x_ != v.x_ || y_ != v.y_;
+		}
+
+		inline bool operator==(const Vector2D& v) {
+			return x_ == v.x_ && y_ == v.y_;
 		}
 
 		// multiplication by constant (scaling)
