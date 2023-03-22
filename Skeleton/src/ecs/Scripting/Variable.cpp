@@ -1,5 +1,7 @@
 #include "Variable.h"
 
+#include <iostream>
+
 namespace Scripting {
 
 	Variable::Variable()
@@ -76,5 +78,176 @@ namespace Scripting {
 		type = Type::Component;
 		value.pointer = comp;
 	}
+
+	//Todo esto se puede mejorar probablemente con preprocesadores
+	bool Variable::ArithmeticCheck(Variable const& a, Variable const& b)
+	{
+		if (a.type == Type::Null || b.type == Type::Null) {
+
+			return false;
+		}
+		if (a.type == Type::Bool || b.type == Type::Bool) {
+
+			return false;
+		}
+		if (a.type == Type::Component || b.type == Type::Component) {
+
+			return false;
+		}
+
+
+
+		if (a.type == Type::Char && b.type == Type::Float) {
+
+			return false;
+		}
+		if (a.type == Type::Float && b.type == Type::Char) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	Variable Variable::operator+(Variable const& other) const
+	{
+		if (!ArithmeticCheck(*this, other)) {
+
+			std::cout << "Error: No se puede realizar esa operacion" << std::endl;
+			return Null();
+		}
+
+		if (type != other.type) {
+
+			std::cout << "Error: Aun no se han implementado las operaciones entre distintos tipos" << std::endl;
+			return Null();
+		}
+
+		Variable ret(type);
+
+		switch (type)
+		{
+		case Scripting::Variable::Type::Int:
+			ret.value.Int = value.Int + other.value.Int;
+			break;
+		case Scripting::Variable::Type::Float:
+			ret.value.Float = value.Float + other.value.Float;
+			break;
+		case Scripting::Variable::Type::Char:
+			ret.value.Char = value.Char + other.value.Char;
+			break;
+		}
+
+		return ret;
+	}
+
+	Variable Variable::operator-(Variable const& other)const
+	{
+		if (!ArithmeticCheck(this, other)) {
+
+			std::cout << "Error: No se puede realizar esa operacion" << std::endl;
+			return Null();
+		}
+
+		if (type != other.type) {
+
+			std::cout << "Error: Aun no se han implementado las operaciones entre distintos tipos" << std::endl;
+			return Null();
+		}
+
+		Variable ret(type);
+
+		switch (type)
+		{
+		case Scripting::Variable::Type::Int:
+			ret.value.Float = value.Int - other.value.Int;
+			break;
+		case Scripting::Variable::Type::Float:
+			ret.value.Float = value.Float - other.value.Float;
+			break;
+		case Scripting::Variable::Type::Char:
+			ret.value.Char = value.Char - other.value.Char;
+			break;
+		}
+
+		return ret;
+	}
+
+	Variable Variable::operator*(Variable const& other)const
+	{
+		if (!ArithmeticCheck(this, other)) {
+
+			std::cout << "Error: No se puede realizar esa operacion" << std::endl;
+			return Null();
+		}
+
+		if (type != other.type) {
+
+			std::cout << "Error: Aun no se han implementado las operaciones entre distintos tipos" << std::endl;
+			return Null();
+		}
+
+		Variable ret(type);
+
+		switch (type)
+		{
+		case Scripting::Variable::Type::Int:
+			ret.value.Float = value.Int * other.value.Int;
+			break;
+		case Scripting::Variable::Type::Float:
+			ret.value.Float = value.Float * other.value.Float;
+			break;
+		case Scripting::Variable::Type::Char:
+			ret.value.Char = value.Char * other.value.Char;
+			break;
+		}
+
+		return ret;
+	}
+
+	Variable Variable::operator/(Variable const& other)const
+	{
+		if (!ArithmeticCheck(this, other)) {
+
+			std::cout << "Error: No se puede realizar esa operacion" << std::endl;
+			return Null();
+		}
+
+		if (type != other.type) {
+
+			std::cout << "Error: Aun no se han implementado las operaciones entre distintos tipos" << std::endl;
+			return Null();
+		}
+
+		Variable ret(type);
+
+		switch (type)
+		{
+		case Scripting::Variable::Type::Int:
+			ret.value.Float = value.Int / other.value.Int;
+			break;
+		case Scripting::Variable::Type::Float:
+			ret.value.Float = value.Float / other.value.Float;
+			break;
+		case Scripting::Variable::Type::Char:
+			ret.value.Char = value.Char / other.value.Char;
+			break;
+		}
+
+		return ret;
+	}
+
+	Variable Variable::operator%(Variable const& other)const
+	{
+		std::cout << "Error: operacion no implementada" << std::endl;
+		return Null();
+	}
+
+	Variable Variable::Pow(Variable const& other) const
+	{
+		std::cout << "Error: operacion no implementada" << std::endl;
+		return Null();
+	}
+
 
 }

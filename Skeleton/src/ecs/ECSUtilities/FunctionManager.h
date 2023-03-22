@@ -14,7 +14,7 @@ typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> 
 
 class FunctionManager{
 public: 
-	void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
+	static void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
 };
 
 

@@ -29,6 +29,9 @@ namespace Utilities {
 	class EngineTime;
 }
 
+namespace Scripting {
+	class ScriptManager;
+}
 class Engine {
 
 public:
@@ -48,7 +51,7 @@ private:
 	InputManager::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;
 	ResourcesManager::ResourcesManager* resourcesManager;
-
+	Scripting::ScriptManager* scriptManager;
 	Utilities::EngineTime* engineTime;
 };
 
