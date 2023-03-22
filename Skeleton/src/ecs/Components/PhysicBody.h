@@ -36,6 +36,7 @@ namespace ECS {
         void fixedUpdate(float fixedDeltaTime);
 
         // Setters & getters
+    publish:
         void setTrigger(bool trigger);
         bool isTrigger();
 
@@ -44,7 +45,7 @@ namespace ECS {
 
         void setBounciness(float bounciness);
         float getBounciness();
-        
+    public:
         Vector2D getOffSet();
         void addOffSet(float x, float y);
 

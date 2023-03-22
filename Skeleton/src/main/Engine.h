@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PhysicsManager {
+namespace Physics {
 	class PhysicsManager;
 }
 
@@ -46,7 +46,7 @@ private:
 
 	ECS::ContactListener* contactListener;
 	ECS::SceneManager* sceneManager;
-	PhysicsManager::PhysicsManager* physicsManager;
+	Physics::PhysicsManager* physicsManager;
 	RendererManager::RendererManager* rendererManager;
 	InputManager::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;

@@ -3,7 +3,7 @@
 #include "DebugDraw.h"
 #include "box2d/b2_contact.h"
 
-namespace PhysicsManager {
+namespace Physics {
 
 	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
 		this->gravity = new b2Vec2(gravity.getX(), gravity.getY());

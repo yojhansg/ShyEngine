@@ -59,6 +59,44 @@
             "return": "void"
         }
     },
+    "PhysicsBody": {
+        "getBounciness": {
+            "return": "float"
+        },
+        "getFriction": {
+            "return": "float"
+        },
+        "isTrigger": {
+            "return": "bool"
+        },
+        "setBounciness": {
+            "input": [
+                {
+                    "name": "bounciness",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setFriction": {
+            "input": [
+                {
+                    "name": "friction",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setTrigger": {
+            "input": [
+                {
+                    "name": "trigger",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        }
+    },
     "Transform": {
         "getPosition": {
             "return": "Utilities::Vector2D*"

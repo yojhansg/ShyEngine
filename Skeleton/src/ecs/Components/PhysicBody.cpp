@@ -8,7 +8,7 @@ namespace ECS {
 
 	PhysicsBody::PhysicsBody() {
 
-		screenToWorldFactor = PhysicsManager::PhysicsManager::instance()->getScreenToWorldFactor();
+		screenToWorldFactor = Physics::PhysicsManager::instance()->getScreenToWorldFactor();
 
 		world = nullptr;
 
@@ -46,7 +46,7 @@ namespace ECS {
 		transform = this->getEntity()->getComponent<Transform>();
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		world = PhysicsManager::PhysicsManager::instance()->getWorld();
+		world = Physics::PhysicsManager::instance()->getWorld();
 
 		position = transform->getPosition();
 		rotation = transform->getRotation();
@@ -54,7 +54,6 @@ namespace ECS {
 
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
-
 	}
 
 	void PhysicsBody::start() {

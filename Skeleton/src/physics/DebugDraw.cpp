@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <vector>
 
-namespace PhysicsManager {
+namespace Physics {
 
 	DebugDraw::DebugDraw() {
 		renderer = RendererManager::RendererManager::instance()->getRenderer();

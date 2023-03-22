@@ -10,7 +10,7 @@ class b2World;
 class b2Body;
 class b2ContactListener;
 
-namespace PhysicsManager {
+namespace Physics {
 
 	class DebugDraw;
 

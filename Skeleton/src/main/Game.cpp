@@ -14,7 +14,7 @@
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ClassReflection.h>
 #include <map>
-
+#include <iostream>
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
 
@@ -66,11 +66,11 @@ void Game::firstScene() {
 	map["miVector2d"] = "1, 89";
 	ClassReflection::ReflectTransform(tr, map);
 
-	//std::cout << tr->miVector2d << std::endl;
+	std::cout << tr->x << std::endl;
+	std::cout << tr->miVector2d << std::endl;
 
 	// Scripting
-	//tr->CallMethod("HolaMamasita", { Scripting::Variable::Component(tr), Scripting::Variable::Float(2)});
-
+	
 
 	// 4.- Components settings
 
