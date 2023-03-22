@@ -62,10 +62,9 @@ namespace ECS {
         
         void setBodyType(BODY_TYPE type);
         BODY_TYPE getBodyType();
-        
         void setLinearDrag(float drag);
         float getLinearDrag();
-        
+    public:
         void setAngularDrag(float drag);
         float getAngularDrag();
                 

@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sun Mar 19 15:46:28 2023
+//Creation time : Wed Mar 22 23:38:04 2023
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
@@ -33,3 +33,5 @@ Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const&
 Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);

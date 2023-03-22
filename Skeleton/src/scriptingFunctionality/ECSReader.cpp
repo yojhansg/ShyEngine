@@ -2,16 +2,20 @@
 #include "ClassCreator.h"
 #include <filesystem>
 #include <StringTrim.h>
+#include "EditorExport.h"
+#include <Windows.h>
+
+#define _2str(x) #x
 
 ECSReader::ECSReader(std::string const& root) : root(root)
 {
-	output = root + "\\ECSUtilities";
+	output = root + "\\ecs\\ECSUtilities";
 }
 
 void ECSReader::AskForRoot()
 {
 	AskForPath("root", root);
-	output = root + "\\ECSUtilities";
+	output = root + "\\ecs\\ECSUtilities";
 }
 
 void ECSReader::AskForOutput()
@@ -64,7 +68,7 @@ void ECSReader::CreateOutputFolder()
 
 std::string ECSReader::GetDefaultRoot()
 {
-	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src\ecs)";
+	return R"(C:\Users\sryoj\Documents\TFG\Skeleton\src)";
 }
 
 
@@ -74,18 +78,32 @@ void ECSReader::ProcessFolder(std::string const& path)
 
 	for (auto const& it : std::filesystem::directory_iterator(currentPath)) {
 
+		if (it.is_directory() && it.path().filename() == "scriptingFunctionality") {
+			continue;
+		}
+
 		(this->*(it.is_directory() ? &ECSReader::ProcessFolder : &ECSReader::ProcessFile))(it.path().string());
 	}
 }
 
 void ECSReader::ProcessFile(std::string const& path)
 {
+
+	//Just process .h files
+	std::string extension = path.substr(path.find("."));
+
+	if (extension != ".h") {
+		return;
+	}
+
+
 	std::ifstream stream(path);
 
 	bool containsPublish = false;
 	bool fileIncluded = false;
 	std::string currentClassName = "";
 
+	bool currentClassIsManager = false;
 
 	while (stream) {
 		std::string line;
@@ -106,7 +124,7 @@ void ECSReader::ProcessFile(std::string const& path)
 		if (line.rfind("//", 0) == 0) //Ignora comentarios
 			continue;
 
-		if (line == "publish:") {
+		if (line == _2str(publish) ":") {
 			containsPublish = true;
 			continue;
 		}
@@ -116,12 +134,49 @@ void ECSReader::ProcessFile(std::string const& path)
 			continue;
 		}
 
+		//TODO: comprobar si pertecene a una clase exportada o a una clase manager
+
+		bool forceAddClassName = false;
+		std::string textToRemove = "";
+
 		if (line.contains("class")) {
 
-			if (line.contains(";"))
+			if (line.contains(";")) //Forward declaration -> ignore
 				continue;
 
-			std::string className = line.erase(0, line.find("class") + 5);
+			textToRemove = "class";
+			currentClassIsManager = false;
+		}
+		else if (line.contains(_2str(EditorComponent)))
+		{
+			size_t idx = line.find(_2str(EditorComponent));
+			if (idx > 0 && line[idx - 1] == '<')
+			{
+				//Es un comentario
+				continue;
+			}
+
+			textToRemove = _2str(EditorComponent);
+			forceAddClassName = true;
+			currentClassIsManager = false;
+		}
+		else if (line.contains(_2str(EditorManager)))
+		{
+			size_t idx = line.find(_2str(EditorManager));
+			if (idx > 0 && line[idx - 1] == '<')
+			{
+				//Es un comentario
+				continue;
+			}
+
+			textToRemove = _2str(EditorManager);
+			currentClassIsManager = true;
+		}
+		
+
+		if (textToRemove.size() > 0) {
+
+			std::string className = line.erase(0, line.find(textToRemove) + textToRemove.size());
 
 			if (className.contains("{")) {
 				className = className.substr(0, className.find("{"));
@@ -131,13 +186,17 @@ void ECSReader::ProcessFile(std::string const& path)
 			if (space != std::string::npos)
 				className = className.substr(0, space);
 
-
 			currentClassName = Utilities::trim(className);
+
+			if (forceAddClassName) {
+
+				methods[currentClassName];
+			}
 
 			continue;
 		}
 
-		if (line.rfind("reflect", 0) == 0) {
+		if (line.rfind(_2str(reflect), 0) == 0) {
 
 			std::string removeReflect = line.substr(8);
 
@@ -159,9 +218,35 @@ void ECSReader::ProcessFile(std::string const& path)
 			continue;
 		}
 
-		if (currentClassName.size() > 0 && containsPublish) {
+		if (currentClassName.size() > 0 && containsPublish) { //Si 
 
-			methods[currentClassName].push_back(CreateMethod(line, currentClassName));
+			Method method = CreateMethod(line, currentClassName);
+
+			if (!method.valid)
+			{
+
+				//TODO: hacer algo asi para el manejo de errores con colores que puede quedar bastante chulo
+				HANDLE hConsole;
+
+				hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+				SetConsoleTextAttribute(hConsole, 12);
+				std::cout << "Error: ";
+				SetConsoleTextAttribute(hConsole, 15);
+
+				std::cout << "Comportamiento no valido.Hay un atributo dentro de la marca " _2str(publish) << "\n";
+				std::cout << "Linea: " + line << "\nEn la clase " + currentClassName << std::endl;
+				continue;
+			}
+
+			if (!currentClassIsManager)
+				methods[currentClassName].push_back(method);
+
+			else
+				managerMethods[currentClassName].push_back(method);
+
+
+			//TODO: distinguir entre includes de componentes y de managers
 
 			if (!fileIncluded) {
 
@@ -189,6 +274,13 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 
 	l = l.substr(nextWord + 1);
 	nextWord = l.find("(");
+
+	if (nextWord == std::string::npos) {
+
+		method.valid = false;
+		return method;
+	}
+
 	method.methodName = Utilities::trim(l.substr(0, nextWord));
 
 	l = l.substr(nextWord + 1);
@@ -230,46 +322,6 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 }
 
 
-
-
-/*
-Example:
-
-	class Transform {
-
-		publish:
-			void Move(Vector3 newPosition);
-			Vector3 GetPosition();
-		}
-
-		Function declaration :
-
-		Scripting::Variable Transform_Move(std::vector<Scripting::Variable>& vec);
-		Scripting::Variable Transform_GetPosition(std::vector<Scripting::Variable>& vec);
-
-		Function definition :
-
-		Scripting::Variable Transform_Move(std::vector<Scripting::Variable>& vec) {
-
-			Transform* self = static_cast<Transform*>(vec[0]);
-
-			self->Move(vec[1].value.Vector3);
-
-			return Scripting::Variable::Null();
-		}
-
-		Scripting::Variable Transform_GetPosition(std::vector<Scripting::Variable>& vec) {
-
-			Transform* self = static_cast<Transform*>(vec[0]);
-
-			Vector3 ret = self->GetPosition();
-
-			return ret;
-		}
-
-*/
-
-
 #define TAB "\t"
 #define NEWLINE "\n"
 #define VARIABLE "Scripting::Variable"
@@ -284,18 +336,61 @@ std::string ECSReader::Method::FunctionName()
 
 std::string ECSReader::Method::FunctionDeclaration()
 {
+	std::stringstream declaration;
+
+	declaration << VARIABLE << " ";
+
+	declaration << FunctionName();
+
+	declaration << "(" VECTOR ");" NEWLINE;
+
+	return declaration.str();
+}
+
+std::string ECSReader::Method::FunctionDefinition()
+{
 	std::stringstream definition;
 
 	definition << VARIABLE << " ";
 
 	definition << FunctionName();
 
-	definition << "(" VECTOR ");" NEWLINE;
+	definition << "(" VECTOR "){" NEWLINE;
+
+	definition << TAB << className << "* self = " CAST(className, "vec[0].value.pointer") ";" NEWLINE;
+
+	definition << TAB;
+	if (returnType != "void") {
+
+		definition << returnType << " ret = ";
+	}
+
+	definition << "self->" << methodName << "(";
+
+	int i = 1;
+	for (auto& in : input) {
+
+		definition << "vec[" << i << "]." << String2ScriptingVariable(in.type) << ", ";
+
+		i++;
+	}
+
+	if (input.size() > 0)
+		definition.seekp(-2, definition.cur);
+	definition << ");" NEWLINE;
+
+
+	if (returnType != "void")
+		definition << TAB "return ret;" NEWLINE;
+	else
+		definition << TAB "return " VARIABLE "::Null();" NEWLINE;
+
+	definition << "}" NEWLINE;
 
 	return definition.str();
 }
 
-std::string ECSReader::Method::FunctionDefinition()
+std::string ECSReader::Method::ManagerFunctionDeclaration()
 {
 	std::stringstream declaration;
 
@@ -305,7 +400,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	declaration << "(" VECTOR "){" NEWLINE;
 
-	declaration << TAB << className << "* self = " CAST(className, "vec[0].value.pointer") ";" NEWLINE;
+	declaration << TAB << className << "* manager = " + className + "::instance();" NEWLINE;
 
 	declaration << TAB;
 	if (returnType != "void") {
@@ -313,9 +408,9 @@ std::string ECSReader::Method::FunctionDefinition()
 		declaration << returnType << " ret = ";
 	}
 
-	declaration << "self->" << methodName << "(";
+	declaration << "manager->" << methodName << "(";
 
-	int i = 1;
+	int i = 0;
 	for (auto& in : input) {
 
 		declaration << "vec[" << i << "]." << String2ScriptingVariable(in.type) << ", ";
@@ -337,6 +432,9 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	return declaration.str();
 }
+
+
+
 
 //TODO: rellenar con el resto de valores
 std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
@@ -397,7 +495,7 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 		.Empty()
 		.BeginClass()
 		.Public()
-		.AddMethod("void", "CreateFunctionMap", { {"std::map<std::string, CallableFunction>&", "map"} })
+		.AddMethod("void", "CreateFunctionMap", { {"std::map<std::string, CallableFunction>&", "map"} }, "", true)
 		.EndClass()
 		.Empty(3)
 		.Header();
@@ -409,6 +507,16 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 			h << method.FunctionDeclaration();
 		}
 	}
+
+
+	for (auto& currentClass : managerMethods) {
+
+		for (auto& method : currentClass.second) {
+
+			h << method.FunctionDeclaration();
+		}
+	}
+
 
 	h.close();
 	return *this;
@@ -447,6 +555,15 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 		}
 	}
 
+	for (auto& currentClass : managerMethods) {
+
+		for (auto& method : currentClass.second) {
+
+			std::string functionName = method.FunctionName();
+			cpp << "\tmap.emplace(\"" << functionName << "\"," << functionName << ");\n";
+		}
+	}
+
 	cpp << "\n};\n";
 
 	for (auto& currentClass : methods) {
@@ -456,6 +573,15 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 			cpp << method.FunctionDefinition();
 		}
 	}
+
+	for (auto& currentClass : managerMethods) {
+
+		for (auto& method : currentClass.second) {
+
+			cpp << method.ManagerFunctionDeclaration();
+		}
+	}
+
 
 	cpp.close();
 	return *this;
@@ -554,6 +680,8 @@ ECSReader& ECSReader::Convert2JSON()
 	json root;
 
 	for (auto& currentClass : methods) {
+
+		root[currentClass.first] = {};
 
 		for (auto& method : currentClass.second) {
 

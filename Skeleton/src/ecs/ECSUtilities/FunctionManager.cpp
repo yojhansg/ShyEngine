@@ -1,8 +1,9 @@
 #include "FunctionManager.h"
 
-//Creation time: Sun Mar 19 15:46:28 2023
+//Creation time: Wed Mar 22 23:38:04 2023
 #include <Components/Image.h>
 #include <Components/Transform.h>
+#include <PhysicsManager.h>
 
 
 using namespace ECS;
@@ -23,6 +24,8 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Transform_translate",Transform_translate);
 	map.emplace("Transform_rotate",Transform_rotate);
 	map.emplace("Transform_scale",Transform_scale);
+	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
+	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
 
 };
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){
@@ -93,5 +96,18 @@ Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec){
 	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
 	self->scale(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+
+
+Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){
+	//PhysicsManager* manager = PhysicsManager::instance();
+	PhysicsManager::PhysicsManager* manager = PhysicsManager::PhysicsManager::instance();
+	manager->debugDraw();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager::PhysicsManager* manager = PhysicsManager::PhysicsManager::instance();
+	manager->enableDebugDraw(vec[0].value.Bool);
 	return Scripting::Variable::Null();
 }

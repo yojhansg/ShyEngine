@@ -3,6 +3,8 @@
 #include <Singleton.h>
 #include <Vector2D.h>
 
+#include "EditorExport.h"
+
 class b2Vec2;
 class b2World;
 class b2Body;
@@ -12,7 +14,7 @@ namespace PhysicsManager {
 
 	class DebugDraw;
 
-	class PhysicsManager : public Utilities::Singleton<PhysicsManager> {
+	EditorManager PhysicsManager : public Utilities::Singleton<PhysicsManager> {
 
 		friend Singleton<PhysicsManager>;
 
@@ -27,10 +29,12 @@ namespace PhysicsManager {
 
 		void fixedUpdate(float fixedDeltaTime);
 
+	publish:
 		void debugDraw();
 
 		void enableDebugDraw(bool enable);
 
+	public:
 		void setContactListener(b2ContactListener* contactListener);
 
 		float getScreenToWorldFactor();

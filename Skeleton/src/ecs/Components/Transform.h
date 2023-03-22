@@ -29,6 +29,8 @@ namespace ECS {
 		Utilities::Vector2D* getPosition();
 		Utilities::Vector2D* getScale();
 
+		int y;
+
 	public:
 		const double* getRotation();
 
@@ -57,8 +59,4 @@ namespace ECS {
 		double rotation_;
 	};
 
-
-
-	/*Metodos scripting*/
-	Scripting::Variable MiMetodo(std::vector<Scripting::Variable>const&);
 }

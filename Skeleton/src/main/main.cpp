@@ -5,11 +5,25 @@
 #include "Scripting/Node.h"
 #include "Scripting/ConstNode.h"
 #include "Scripting/Function.h"
+#include "EditorExport.h"
 
 using namespace Scripting;
 
+
+/*
+
+	TODO:
+
+	Como vamos a serializar los objetos de la escena
+	y como podemos conseguir las referencias a ellos luego en el codigo
+
+*/
+
+
+
 int main(int argc, char* args[]) {
 
+	//TODO: quitar esto y quitar tambien los includes que he ido dejando por ahi
 
 	Function* suma = new Function(0, 0, "");
 

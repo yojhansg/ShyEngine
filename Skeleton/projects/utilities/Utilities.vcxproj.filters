@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\src\utilities\StringTrim.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\utilities\EditorExport.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\utilities\Vector2D.cpp">
