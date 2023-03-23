@@ -6,12 +6,13 @@
 #include "Camera.h"
 #include "ImGUIManager.h"
 
-PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse)
+PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	imGUIManager->setScene(this);
 
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
+
 
 	ImVec2 windowSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
 
@@ -26,11 +27,11 @@ PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse)
 
 	addGameObject("test1.jpg");
 
-	camera = new Camera(ImVec2(50, 50), 1);
+	camera = new Camera(ImVec2(50, 50), 0.5);
 
 	renderer = imGUIManager->getRenderer();
 
-	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, oriWidth -15 , oriHeight -35);
+	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, oriWidth , oriHeight);
 
 	selectedGameObject = gameObjects[0];
 }
@@ -61,13 +62,48 @@ bool PEditor::Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
 	return true;
 }
 
+void PEditor::Scene::renderGameObjects()
+{
+	for (auto gameObject : gameObjects) {
+
+		ImVec2 position = ImVec2((gameObject->getPosition().x + camera->getPosition().x) * camera->getScrollFactor(),
+								(gameObject->getPosition().y + camera->getPosition().y) * camera->getScrollFactor());
+
+		float width = gameObject->getWidth() * camera->getScrollFactor();
+		float height = gameObject->getHeight() * camera->getScrollFactor();
+
+		//if (entityOutsideCamera(position, width, height)) continue;
+
+		SDL_Rect dst = { position.x, position.y, width, height };
+		SDL_RenderCopy(renderer, gameObject->getTexture(), NULL, &dst);
+	}
+}
+
+void PEditor::Scene::renderFrame()
+{
+	//SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
+	Uint8 r, g, b, a;
+	SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(),camera->getPosition().y * camera->getScrollFactor());
+	float width = 1080 * camera->getScrollFactor();
+	float height = 720 * camera->getScrollFactor();;
+
+	SDL_RenderDrawLine(renderer, position.x, position.y, position.x + width, position.y);
+	SDL_RenderDrawLine(renderer, position.x, position.y + height, position.x + width, position.y + height);
+	SDL_RenderDrawLine(renderer, position.x, position.y, position.x, position.y + height);
+	SDL_RenderDrawLine(renderer, position.x + width, position.y, position.x + width, position.y + height);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+}
+
 void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	int mouseX, mouseY;
 
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	if ((mouseX > posX && mouseX < posX + width + 15 && mouseY > posY && mouseY < posY + height + 35) || event->type == SDL_MOUSEBUTTONUP)
+	if ((mouseX > posX && mouseX < posX + width && mouseY > posY + 15 && mouseY < posY + height) || event->type == SDL_MOUSEBUTTONUP)
 		camera->handleInput(event);
 }
 
@@ -81,21 +117,13 @@ void PEditor::Scene::render()
 
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_RenderClear(renderer);
-	for (auto gameObject : gameObjects) {
 
-		ImVec2 position = ImVec2(gameObject->getPosition().x + camera->getPosition().x, gameObject->getPosition().y + camera->getPosition().y);
-		float width = gameObject->getWidth() * camera->getScrollFactor();
-		float height = gameObject->getHeight() * camera->getScrollFactor();
-
-		//if (entityOutsideCamera(position, width, height)) continue;
-
-		SDL_Rect dst = { position.x, position.y, width, height };
-		SDL_RenderCopy(renderer, gameObject->getTexture(), NULL, &dst);
-	}
+	renderGameObjects();
+	renderFrame();
 
 	SDL_SetRenderTarget(renderer, NULL);
 
-	ImGui::Image(targetTexture, ImVec2(width - 15, height - 35));
+	ImGui::Image(targetTexture, ImVec2(width, oriHeight * width / oriWidth));
 
 	ImGui::End();
 

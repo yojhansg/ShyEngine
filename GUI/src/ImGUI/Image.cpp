@@ -12,7 +12,7 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	tr = new Transform();
 	tr->setPosition(0, 0);
-	tr->setSize(surface->w, surface->h);
+	tr->setSize(100, 100);
 	tr->type = transform;
 
 	components.emplace(transform, tr);

@@ -17,7 +17,7 @@ PEditor::Components::Components() : Window("Components", NoResize | NoCollapse |
 	oriHeight = windowSize.y;
 
 	setSize(ImVec2(windowSize.x, windowSize.y));
-	setPosition(ImVec2(846, 20));
+	setPosition(ImVec2(846 * mainWindowSize.x / 1080, 20));
 
 	oriPosX = posX;
 	oriPosY = posY;

@@ -39,6 +39,9 @@ namespace PEditor {
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 
+		void renderGameObjects();
+		void renderFrame();
+
 		virtual void handleInput(SDL_Event* event);
 		virtual void render();
 	};

@@ -7,7 +7,10 @@ Camera::Camera(ImVec2 position, float sf)
 {
 	scrollFactor = sf;
 
-	leftMouseButtonDown = false;
+	rightMouseButtonDown = false;
+
+	clickOffsetX = clickOffsetY = 0;
+	mousePosX = mousePosY = 0;
 
 	posX = position.x;
 	posY = position.y;
@@ -17,9 +20,9 @@ void Camera::handleInput(SDL_Event* event)
 {
 	if (event->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (!leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+		if (!rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
 		{
-			leftMouseButtonDown = true;
+			rightMouseButtonDown = true;
 		
 			clickOffsetX = mousePosX - posX;
 			clickOffsetY = mousePosY - posY;
@@ -28,9 +31,9 @@ void Camera::handleInput(SDL_Event* event)
 
 	if (event->type == SDL_MOUSEBUTTONUP)
 	{
-		if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+		if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
 		{
-			leftMouseButtonDown = false;
+			rightMouseButtonDown = false;
 		}
 	}
 
@@ -39,7 +42,7 @@ void Camera::handleInput(SDL_Event* event)
 		mousePosX = event->motion.x;
 		mousePosY = event->motion.y;
 
-		if (leftMouseButtonDown)
+		if (rightMouseButtonDown)
 		{
 			posX = mousePosX - clickOffsetX;
 			posY = mousePosY - clickOffsetY;
@@ -49,11 +52,11 @@ void Camera::handleInput(SDL_Event* event)
 	if (event->type == SDL_MOUSEWHEEL) {
 		if (event->wheel.y > 0) // scroll up
 		{
-			scrollFactor += 0.05;
+			scrollFactor += 0.025;
 		}
 		else if (event->wheel.y < 0) // scroll down
 		{
-			scrollFactor -= 0.05;
+			scrollFactor -= 0.025;
 		}
 	}
 }
