@@ -15,6 +15,6 @@ int main(int argc, char* args[]) {
 	engine.close();
 
 	std::cout << "This was My Engine!\n";
-	
+
 	return 0;
 }

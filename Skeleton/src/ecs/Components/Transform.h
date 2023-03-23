@@ -15,6 +15,8 @@ namespace ECS {
 
 		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
 
+		friend Game;
+
 	private:
 		reflect int x;
 
@@ -28,6 +30,8 @@ namespace ECS {
 		// Getters
 		Utilities::Vector2D* getPosition();
 		Utilities::Vector2D* getScale();
+
+		int y;
 
 	public:
 		const double* getRotation();
@@ -57,8 +61,4 @@ namespace ECS {
 		double rotation_;
 	};
 
-
-
-	/*Metodos scripting*/
-	Scripting::Variable MiMetodo(std::vector<Scripting::Variable>const&);
 }

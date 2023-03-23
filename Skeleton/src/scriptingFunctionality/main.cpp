@@ -8,8 +8,8 @@ int main() {
 		ECSReader::GetDefaultRoot()
 	);
 
-	//reader.AskForRoot();
-	//reader.AskForOutput();
+	reader.AskForRoot();
+	reader.AskForOutput();
 	reader.Read();
 
 	reader.Method2Function();

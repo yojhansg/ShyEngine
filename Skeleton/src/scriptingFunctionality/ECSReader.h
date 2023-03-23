@@ -19,19 +19,20 @@
 /*
 	TODO:
 
-	Mirar si las clases tiene mas sentido que sean estaticas
-
 	Cambiar la forma de leer la version
 
-	Generar clase ComponentReflection
-
-	esta clase
-
-	Crea un metodo para cada clase del motor que tenga el atributo reflect
-
-	Este metodo modifica el valor de la variable si la encuentra en el mapa
-
 	Añadir los valores que permiten reflexion al json con informacion
+
+	Cambiar nombre de salida del JSON
+
+
+	Contenido a generar:
+
+		Un json con la informacion del proyecto
+
+			-Componentes:
+				-Atributos publicos de los componentes
+
 
 */
 
@@ -40,7 +41,6 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-
 
 
 class ECSReader {
@@ -159,11 +159,21 @@ public:
 		std::string FunctionDefinition();
 		std::string FunctionDeclaration();
 
+
+		std::string ManagerFunctionDeclaration();
+
+
 		std::string FunctionName();
 		/*
 			Dado un string conteniendo un tipo devuelve su representacion en una variable de scripting
 		*/
 		std::string String2ScriptingVariable(std::string& in);
+
+		/*
+			Variable de comprobacion en caso en caso de que haya habido un error generando el metodo
+		*/
+		bool valid = true;
+
 	};
 
 	/*
@@ -194,6 +204,8 @@ private:
 	std::vector<std::string> filesToInclude;
 	std::map<std::string, std::vector<Method>> methods;
 	std::map<std::string, std::vector<Attribute>> attributes;
+
+	std::map<std::string, std::vector<Method>> managerMethods;
 
 	/*
 		Crea la carpeta de salida en caso de que no exista

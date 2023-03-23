@@ -3,9 +3,11 @@
 #include <string>
 #include <map>
 #include <Components/Image.h>
+#include <Components/PhysicBody.h>
 #include <Components/Transform.h>
+#include <PhysicsManager.h>
 
-//Creation time : Sun Mar 19 15:46:28 2023
+//Creation time : Wed Mar 22 23:46:56 2023
 #define ECSreflection_Version 1.0
 
 using namespace ECS;

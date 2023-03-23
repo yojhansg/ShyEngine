@@ -2,7 +2,7 @@
 #include "box2d/b2_draw.h"
 #include <SDL.h>
 
-namespace PhysicsManager {
+namespace Physics {
 
 	class DebugDraw : public b2Draw {
 

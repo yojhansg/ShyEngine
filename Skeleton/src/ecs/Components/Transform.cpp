@@ -10,8 +10,6 @@ namespace ECS {
 		scale_ = Utilities::Vector2D(1, 1);
 		rotation_ = 0;
 
-		//registeredMethods.insert(std::make_pair("HolaMamasita", &Component::cacadevaca));
-		registeredMethods.emplace("HolaMamasita", MiMetodo);
 	}
 
 	Transform::Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation) {
@@ -74,13 +72,4 @@ namespace ECS {
 		this->scale_ *= scale;
 	}
 
-	Scripting::Variable MiMetodo(std::vector<Scripting::Variable> const& input)
-	{
-		Transform* tr = static_cast<Transform*>(input[0].value.pointer);
-		tr->rotate(input[1].value.Float);
-
-		std::cout << "Hola que tal" << std::endl;
-
-		return Scripting::Variable::Null();
-	}
 }
