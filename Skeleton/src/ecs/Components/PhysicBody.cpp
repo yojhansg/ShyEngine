@@ -209,4 +209,48 @@ namespace ECS {
 		return mass;
 	}
 
+	float PhysicsBody::getAngle() {
+		return body->GetAngle() * (180 / b2_pi);
+	}
+
+	void PhysicsBody::setLinearVelocity(float x, float y) {
+		body->SetLinearVelocity({ x, y });
+	}
+
+	Vector2D PhysicsBody::getLinearVelocity() {
+		return { body->GetLinearVelocity().x, body->GetLinearVelocity().y };
+	}
+
+	void PhysicsBody::setAngularVelocity(float a) {
+		body->SetAngularVelocity(a);
+	}
+
+	float PhysicsBody::getAngularVelocity() {
+		return body->GetAngularVelocity();
+	}
+
+	void PhysicsBody::applyForce(const Vector2D& force, const Vector2D& point) {
+		body->ApplyForce({ force.getX(), force.getY() }, { point.getX(), point.getY() }, true);
+	}
+
+	void PhysicsBody::applyForceToCenter(const Vector2D& force) {
+		body->ApplyForceToCenter({ force.getX(), force.getY() }, true);
+	}
+
+	void PhysicsBody::applyTorque(float torque) {
+		body->ApplyTorque(torque, true);
+	}
+
+	void PhysicsBody::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point) {
+		body->ApplyLinearImpulse({ impulse.getX(), impulse.getY() }, { point.getX(), point.getY() }, true);
+	}
+
+	void PhysicsBody::applyLinearImpulseToCenter(const Vector2D& impulse) {
+		body->ApplyLinearImpulseToCenter({ impulse.getX(), impulse.getY() }, true);
+	}
+
+	void PhysicsBody::applyAngularImpulse(float impulse) {
+		body->ApplyAngularImpulse(impulse, true);
+	}
+
 }

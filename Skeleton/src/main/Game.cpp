@@ -15,6 +15,7 @@
 #include <ECSUtilities/ClassReflection.h>
 #include <map>
 #include <iostream>
+
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
 
@@ -40,14 +41,13 @@ void Game::firstScene() {
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("link.png");
 		auto collider = player->addComponent<ECS::BoxBody>();
-		auto tComp = player->addComponent<ECS::TestComponent>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
 
 		auto grTr = ground->addComponent<ECS::Transform>();
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
-		auto grCol = ground->addComponent<ECS::ChainBody>();
+		auto grCol = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
 		ECS::Entity* ball = scene->createEntity("Ball");
@@ -55,6 +55,7 @@ void Game::firstScene() {
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
 		auto colliderBall = ball->addComponent<ECS::CircleBody>();
+		auto tComp = ball->addComponent<ECS::TestComponent>();
 
 
 
@@ -66,8 +67,8 @@ void Game::firstScene() {
 	map["miVector2d"] = "1, 89";
 	ClassReflection::ReflectTransform(tr, map);
 
-	std::cout << tr->x << std::endl;
-	std::cout << tr->miVector2d << std::endl;
+	/*std::cout << tr->x << std::endl;
+	std::cout << tr->miVector2d << std::endl;*/
 
 	// Scripting
 	
@@ -84,6 +85,7 @@ void Game::firstScene() {
 		// Ground
 		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
+		grCol->addOffSet(0, -1);
 
 		//// Ball
 		trBall->setPosition(renderer->getWidth() / 1.5f, renderer->getHeight() / 4);

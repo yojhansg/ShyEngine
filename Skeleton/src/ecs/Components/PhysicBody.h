@@ -35,8 +35,9 @@ namespace ECS {
 
         void fixedUpdate(float fixedDeltaTime);
 
-        // Setters & getters
     publish:
+
+        // Setters & getters
         void setTrigger(bool trigger);
         bool isTrigger();
 
@@ -45,7 +46,10 @@ namespace ECS {
 
         void setBounciness(float bounciness);
         float getBounciness();
+
     public:
+
+        // Common body methods
         Vector2D getOffSet();
         void addOffSet(float x, float y);
 
@@ -68,6 +72,27 @@ namespace ECS {
         float getMass();
         
         virtual float getArea() = 0;
+        float getAngle();
+
+
+        // Force methods
+        void setLinearVelocity(float x, float y);
+        Vector2D getLinearVelocity();
+
+        void setAngularVelocity(float a);
+        float getAngularVelocity();
+
+        void applyForce(const Vector2D& force, const Vector2D& point);
+        
+        void applyForceToCenter(const Vector2D& force);
+
+        void applyTorque(float torque);
+
+        void applyLinearImpulse(const Vector2D& impulse, const Vector2D& point);
+
+        void applyLinearImpulseToCenter(const Vector2D& impulse);
+
+        void applyAngularImpulse(float impulse);
 
     protected:
 

@@ -5,6 +5,7 @@
 namespace ECS {
 
 	class Transform;
+	class CircleBody;
 
 	class TestComponent : public Component {
 
@@ -23,6 +24,8 @@ namespace ECS {
 	private:
 
 		Transform* transform;
+
+		CircleBody* body;
 
 		bool onGround;
 
