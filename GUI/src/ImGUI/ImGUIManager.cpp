@@ -45,8 +45,8 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    ImVec2 windowSize = ImVec2(1080, 720);
-    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowSize.x, windowSize.y);
+    originalWindowSize = new ImVec2(1080, 720);
+    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, originalWindowSize->x, originalWindowSize->y);
     createSDLRenderer();
 }
 
@@ -181,6 +181,11 @@ SDL_Renderer* ImGUIManager::getRenderer()
     return renderer;
 }
 
+ImVec2 ImGUIManager::getOriginalWindowSize()
+{
+    return *originalWindowSize;
+}
+
 
 
 ImGUIManager::~ImGUIManager()
@@ -199,6 +204,8 @@ ImGUIManager::~ImGUIManager()
     {
         delete window;
     }
+
+    delete originalWindowSize;
 }
 
 ImVec2 ImGUIManager::getMainWindowSize()

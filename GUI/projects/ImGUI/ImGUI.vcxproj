@@ -101,14 +101,16 @@
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\src\ImGUI\Camera.h" />
+    <ClInclude Include="..\..\src\ImGUI\Component.h" />
+    <ClInclude Include="..\..\src\ImGUI\Components.h" />
     <ClInclude Include="..\..\src\ImGUI\FileExplorer.h" />
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
     <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
     <ClInclude Include="..\..\src\ImGUI\Scene.h" />
+    <ClInclude Include="..\..\src\ImGUI\Transform.h" />
     <ClInclude Include="..\..\src\ImGUI\Window.h" />
-    <ClInclude Include="..\..\src\ImGUI\WindowComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.cpp" />
@@ -119,14 +121,15 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
     <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Image.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Scene.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Transform.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Window.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\WindowComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

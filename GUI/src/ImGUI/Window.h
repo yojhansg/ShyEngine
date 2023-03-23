@@ -43,11 +43,14 @@ namespace PEditor {
     protected:
 
         WindowFlags flags;
-        std::vector<WindowComponent*> components;
+        std::vector<WindowComponent*> windowComponents;
         std::string windowName;
 
         int width, height;
         int posX, posY;
+
+        int oriWidth, oriHeight;
+        int oriPosX, oriPosY;
 
     public:
         

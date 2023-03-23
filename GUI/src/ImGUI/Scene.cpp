@@ -6,43 +6,36 @@
 #include "Camera.h"
 #include "ImGUIManager.h"
 
-PEditor::Scene::Scene()
+PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	imGUIManager->setScene(this);
+
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	//SCENE WINDOW
-	PEditor::Window* sceneWindow = new PEditor::Window("Scene", NoMove | NoResize | NoCollapse);
-	ImVec2 sceneSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
-	sceneWindow->setSize(sceneSize);
-	sceneWindow->setPosition(ImVec2(mainWindowSize.x / 2 - sceneSize.x / 2, 20));
+	ImVec2 windowSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
 
-	addImage("test1.jpg");
+	oriWidth = windowSize.x;
+	oriHeight = windowSize.y;
 
-	imGUIManager->addWindow(sceneWindow);
-	imGUIManager->setScene(this);
+	setSize(windowSize);
+	setPosition(ImVec2(mainWindowSize.x / 2 - windowSize.x / 2, 20));
+
+	oriPosX = posX;
+	oriPosY = posY;
+
+	addGameObject("test1.jpg");
 
 	camera = new Camera(ImVec2(50, 50), 1);
 
-	window = sceneWindow;
-	window->addComponent(this);
+	renderer = imGUIManager->getRenderer();
 
-	renderer = ImGUIManager::getInstance()->getRenderer();
+	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, oriWidth -15 , oriHeight -35);
 
-	// -15 and - 35 is to get the resolution without the offset (TODO: create variable so there are no arbitrary numbers)
-	ImVec2 size = window->getSize();
-	width = size.x - 15;
-	height = size.y - 35;
-
-	ImVec2 position = window->getPosition();
-	posX = position.x;
-	posY = position.y;
-
-	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-
+	selectedGameObject = gameObjects[0];
 }
 
-void PEditor::Scene::addImage(std::string path)
+void PEditor::Scene::addGameObject(std::string path)
 {
 	gameObjects.push_back(new PEditor::GameObject(path));
 }
@@ -50,6 +43,11 @@ void PEditor::Scene::addImage(std::string path)
 std::vector<PEditor::GameObject*> PEditor::Scene::getGameObjects()
 {
 	return gameObjects;
+}
+
+PEditor::GameObject* PEditor::Scene::getSelectedGameObject()
+{
+	return selectedGameObject;
 }
 
 bool PEditor::Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
@@ -75,11 +73,17 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 
 void PEditor::Scene::render()
 {
+	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
+
+
+	ImGui::SetWindowSize(ImVec2(width, height));
+	ImGui::SetWindowPos(ImVec2(posX, posY));
+
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_RenderClear(renderer);
 	for (auto gameObject : gameObjects) {
 
-		ImVec2 position = ImVec2(gameObject->getPosition().x + camera->getPosition().x , gameObject->getPosition().y + camera->getPosition().y);
+		ImVec2 position = ImVec2(gameObject->getPosition().x + camera->getPosition().x, gameObject->getPosition().y + camera->getPosition().y);
 		float width = gameObject->getWidth() * camera->getScrollFactor();
 		float height = gameObject->getHeight() * camera->getScrollFactor();
 
@@ -91,6 +95,9 @@ void PEditor::Scene::render()
 
 	SDL_SetRenderTarget(renderer, NULL);
 
-	ImGui::Image(targetTexture, ImVec2(width, height));
+	ImGui::Image(targetTexture, ImVec2(width - 15, height - 35));
+
+	ImGui::End();
+
 }
 

@@ -27,6 +27,8 @@ private:
 	bool exit = false;
 
 	std::vector<PEditor::Window*> windows;
+	
+	ImVec2* originalWindowSize;
 
 	void initImGUI();
 	void initSDL();
@@ -51,6 +53,7 @@ public:
 		
 
 	SDL_Renderer* getRenderer();
+	ImVec2 getOriginalWindowSize();
 	ImVec2 getMainWindowSize();
 
 	PEditor::Scene* getScene();

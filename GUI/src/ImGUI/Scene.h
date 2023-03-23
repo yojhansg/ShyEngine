@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "WindowComponent.h"
 #include <iostream>
+#include "Window.h"
 
 union SDL_Event;
 
@@ -13,32 +13,29 @@ class string;
 class ImGUIManager;
 
 namespace PEditor {
-	class Window;
 	class GameObject;
 };
 
 namespace PEditor {
-	class Scene : public WindowComponent
+	class Scene : public Window
 	{
 	private:
 
-		PEditor::Window* window = nullptr;
 		SDL_Renderer* renderer = nullptr;
 		SDL_Texture* targetTexture = nullptr;
 
 		Camera* camera;
 
 		std::vector<PEditor::GameObject*> gameObjects;
-
-		int width, height;
-		int posX, posY;
+		GameObject* selectedGameObject;
 
 	public:
 
 		Scene();
 
-		void addImage(std::string path);
+		void addGameObject(std::string path);
 		std::vector<PEditor::GameObject*> getGameObjects();
+		GameObject* getSelectedGameObject();
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 

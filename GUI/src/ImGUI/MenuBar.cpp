@@ -1,13 +1,22 @@
 #include "MenuBar.h"
 #include "imgui.h"
+#include "Window.h"
+#include "ImGUIManager.h"
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
-
+    originalFramePadding = ImGui::GetStyle().FramePadding.y;
+    
+    //Width is 0 cause menu bar always take the whole screen width
+    width = oriWidth = 0;
+    height = oriHeight = 4;  
 }
 
 void PEditor::MenuBar::render()
 {
+    // Change the menu bar height temporarily
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, height));  // Change the menu bar height to 10 pixels
+
     if (ImGui::BeginMainMenuBar())
     {
 
@@ -46,4 +55,18 @@ void PEditor::MenuBar::render()
 
         ImGui::EndMainMenuBar();
     }
+
+    // Reset the menu bar height to the default value
+    ImGui::PopStyleVar();  // Restore the default menu bar height
+}
+
+void PEditor::MenuBar::update()
+{
+    ImGUIManager* manager = ImGUIManager::getInstance();
+    ImVec2 originalSize = manager->getOriginalWindowSize();
+    ImVec2 currentSize = manager->getMainWindowSize();
+
+    float scaleFactorY = currentSize.y / originalSize.y;
+
+    height = oriHeight * scaleFactorY * scaleFactorY * 0.88f;
 }

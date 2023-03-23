@@ -15,10 +15,16 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoColl
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	ImVec2 windowSize = ImVec2(mainWindowSize.x, 305 * mainWindowSize.y / 1080);
+	ImVec2 windowSize = ImVec2(mainWindowSize.x, 297 * mainWindowSize.y / 1080);
+
+    oriWidth = windowSize.x;
+    oriHeight = windowSize.y;
 
 	setSize(ImVec2(windowSize.x, windowSize.y));
-	setPosition(ImVec2(0, 776 * mainWindowSize.y / 1080));
+	setPosition(ImVec2(0, 784 * mainWindowSize.y / 1080));
+
+    oriPosX = posX;
+    oriPosY = posY;
 
     char buffer[FILENAME_MAX];
     _getcwd(buffer, FILENAME_MAX);
@@ -105,12 +111,6 @@ void PEditor::FileExplorer::render()
     ImGui::SetWindowSize(ImVec2(width, height));
 
     ImGui::SetWindowPos(ImVec2(posX, posY));
-
-
-    //for (auto component : components)
-    //{
-    //    component->render();
-    //}
 
     drawFileExplorerWindow();
 

@@ -1,20 +1,21 @@
 #pragma once
-#include "WindowComponent.h"
 #include <iostream>
+#include <unordered_map>
 
 struct ImVec2;
 struct SDL_Texture;
 struct SDL_Renderer;
 class ImGUIManager;
+class Transform;
+class Component;
 
 namespace PEditor {
-	class GameObject : public WindowComponent
+	class GameObject
 	{
 
 		SDL_Texture* text;
-		float width, height;
-
-		float posX, posY;
+		Transform* tr;
+		std::unordered_map<int ,Component*> components;
 
 	public:
 
@@ -26,6 +27,8 @@ namespace PEditor {
 
 		int getWidth();
 		int getHeight();
+
+		std::unordered_map<int, Component*>* getComponents();
 
 		void setPosition(ImVec2 newPos);
 		ImVec2 getPosition();
