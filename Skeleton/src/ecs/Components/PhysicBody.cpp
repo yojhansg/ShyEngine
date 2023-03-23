@@ -78,7 +78,7 @@ namespace ECS {
 
 	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
 
-		if (bodyType == DYNAMIC) {
+		if (bodyType != STATIC) {
 
 			// Position
 			Vector2D trPosOffSet = *position - lastPositionSync;

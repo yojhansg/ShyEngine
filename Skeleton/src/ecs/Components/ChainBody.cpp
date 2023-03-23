@@ -10,7 +10,8 @@ namespace ECS {
 
 		shape = nullptr;
 
-		vertices = std::vector<b2Vec2>();
+		m_vertices = std::vector<b2Vec2>();
+
 	}
 
 	ChainBody::~ChainBody() {
@@ -31,17 +32,19 @@ namespace ECS {
 		if (image != nullptr)
 			size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
 
+			// Default chain shape (same as default edge shape)
+			m_vertices.push_back({ -size.getX() / 2, 0 });
+			m_vertices.push_back({ size.getX() / 2, 0 });
 
-		shape->m_vertices = new b2Vec2[3];
+			shape->m_count = 2;
 
-		shape->m_count = 4;
-;
-		shape->m_vertices[0] = { 0, -size.getY() / 2 };
-		shape->m_vertices[1] = { -size.getX() / 2, 0 };
-		shape->m_vertices[2] = { size.getX() / 2, 0 };
+			// Create verts array
+			verts = new b2Vec2[2];
+			verts[0] = m_vertices[0]; verts[1] = m_vertices[1];
 
-		//shape->CreateChain(shape->m_vertices, 1, shape->m_vertices[1], shape->m_vertices[2]);
-
+			// Create shape verts array
+			shape->m_vertices = new b2Vec2[2];
+			shape->m_vertices[0] = m_vertices[0]; shape->m_vertices[1] = m_vertices[1];
 
 		bodyDef->type = b2_staticBody;
 		bodyDef->position.Set(0, 0);
@@ -57,37 +60,46 @@ namespace ECS {
 		delete shape;
 
 		shape = static_cast<b2ChainShape*>(fixture->GetShape());
+
+		// Chain creation
+		shape->Clear();
+
+		shape->CreateChain(verts, m_vertices.size(), {}, {});
+
+		delete verts;
+
 	}
 
+	Vector2D ChainBody::getSize() {
+		return size;
+	}
+
+	// TO DO
 	void ChainBody::setVertices(const std::vector<b2Vec2>& v) {
-		/*vertices = std::vector<b2Vec2>();
 
-		for (int i = 0; i < v.size(); i++) {
-			vertices.push_back(v[i]);
-		}
+		m_vertices = v;
 
-		createVerticesArray();*/
+		shape->Clear();
+
+		verts = new b2Vec2[m_vertices.size()];
+
+		for (int i = 0; i < m_vertices.size(); i++) verts[i] = m_vertices[i];
+
+		shape->CreateChain(verts, m_vertices.size(), {}, {});
+
+		delete verts;
 
 	}
 
-	void ChainBody::createVerticesArray() {
-		
-		/*shape->m_vertices = new b2Vec2[vertices.size()];
-
-		for (int i = 0; i < vertices.size(); i++) {
-			shape->m_vertices[i] = vertices[i];
-		}*/
-	}
-
+	// TO DO
 	void ChainBody::scaleShape() {
 
+		for (int i = 0; i < m_vertices.size(); i++) {
 
+			shape->m_vertices[i].x = m_vertices[i].x * scale->getX();
+			shape->m_vertices[i].y = m_vertices[i].y * scale->getY();
+		}
 
-		/*shape->m_vertex1.x *= scale->getX();
-		shape->m_vertex1.y *= scale->getY();
-
-		shape->m_vertex2.x *= scale->getX();
-		shape->m_vertex2.y *= scale->getY();*/
 	}
 
 }

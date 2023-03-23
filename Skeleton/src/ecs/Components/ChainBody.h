@@ -17,11 +17,11 @@ namespace ECS {
 
         void init() override;
 
+        Vector2D getSize();
+
         void setVertices(const std::vector<b2Vec2>& vertices);
 
     private:
-
-        void createVerticesArray();
 
         void setMass(float mass) override {};
 
@@ -32,7 +32,9 @@ namespace ECS {
         // Box2d chainShape
         b2ChainShape* shape;
 
-        std::vector<b2Vec2> vertices;
+        std::vector<b2Vec2> m_vertices;
+
+        b2Vec2* verts;
 
     };
 

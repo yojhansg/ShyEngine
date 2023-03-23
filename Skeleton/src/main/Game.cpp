@@ -49,7 +49,7 @@ void Game::firstScene() {
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
 		auto grCol = ground->addComponent<ECS::ChainBody>();
 
-		//// Ball
+		// Ball
 		ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
@@ -82,13 +82,11 @@ void Game::firstScene() {
 		collider->setBounciness(0.5f);
 		
 		// Ground
-		grTr->setScale(1, 0.75f);
+		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
-		//grCol->setEdgeVertices({ -grCol->getSize().getX() / 2 ,  -grCol->getSize().getY() / 2 }, { grCol->getSize().getX() / 2 , -grCol->getSize().getY() / 2 });
-		//grCol->addOffSet(0, -grCol->getSize().getY() / 2);
 
 		//// Ball
-		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
+		trBall->setPosition(renderer->getWidth() / 1.5f, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
 
 		colliderBall->setBodyType(ECS::PhysicsBody::DYNAMIC);
