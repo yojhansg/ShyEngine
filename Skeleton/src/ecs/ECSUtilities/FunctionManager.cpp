@@ -1,6 +1,6 @@
 #include "FunctionManager.h"
 
-//Creation time: Wed Mar 22 23:46:56 2023
+//Creation time: Fri Mar 24 02:12:49 2023
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
@@ -8,6 +8,9 @@
 
 
 using namespace ECS;
+using namespace Physics;
+
+
 
 void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>& map){
 
@@ -135,9 +138,6 @@ Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec){
 	self->scale(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-
-using namespace Physics;
-
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->debugDraw();

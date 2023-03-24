@@ -34,11 +34,11 @@ void ECSReader::AskForPath(std::string const& name, std::string& path)
 		std::string line;
 		std::getline(std::cin, line);
 
-		if (line != "y" && line != "n") {
+		if (line != "y" && line != "n" && line != "") {
 			return AskForPath(name, path);
 		}
 
-		if (line == "y")
+		if (line == "y" || line.empty())
 			break;
 
 		std::cout << "Enter new " << name << ": " << std::endl;
@@ -172,7 +172,7 @@ void ECSReader::ProcessFile(std::string const& path)
 			textToRemove = _2str(EditorManager);
 			currentClassIsManager = true;
 		}
-		
+
 
 		if (textToRemove.size() > 0) {
 
@@ -250,7 +250,10 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			if (!fileIncluded) {
 
-				filesToInclude.push_back(path);
+				if (currentClassIsManager)
+					managerFiles.push_back(path);
+
+				else filesToInclude.push_back(path);
 				fileIncluded = true;
 			}
 		}
@@ -538,9 +541,20 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 		cpp << "#include <Components/" << filename.filename().string() << ">\n";
 	}
 
+
+	for (auto& file : managerFiles) {
+
+		auto filename = std::filesystem::path(file);
+		cpp << "#include <" << filename.filename().string() << ">\n";
+	}
+
+
 	cpp << R"(
 
 using namespace ECS;
+using namespace Physics;
+
+
 
 void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>& map){
 
@@ -596,23 +610,15 @@ ECSReader& ECSReader::ClassReflection()
 	ClassCreator creator = ClassCreator("ClassReflection");
 
 	creator.IncludeAbsolutes({ "string" , "map" });
-
-
-
-	for (auto& file : filesToInclude) {
-
-		auto filename = std::filesystem::path(file);
-		creator.IncludeAbsolute("Components/" + filename.filename().string());
-	}
+	creator.AddLine("namespace ECS { class Component; }");
 
 	creator.Empty()
 		.AddComment("Creation time : " __TIMESTAMP__)
 		.AddDefine("ECSreflection_Version", ECS_Version)
 		.AddLine()
 		.AddLine("using namespace ECS;")
-		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
-		.AddLine()
 		.BeginClass()
+		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
 		.Empty(1)
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
 		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
@@ -635,7 +641,7 @@ ECSReader& ECSReader::ClassReflection()
 		}
 
 
-		creator.AddMethod("void", "Reflect" + className.first, { {"Component*", "selfComp"},
+		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
 			{"std::map<std::string, std::string> const&", "map"} }, method.str(), true);
 
 		creator.AddLine();
@@ -645,6 +651,14 @@ ECSReader& ECSReader::ClassReflection()
 	//TODO: Buscar las clases que tengo que añadir para reflexionar
 
 	creator.EndClass();
+
+	for (auto& file : filesToInclude) {
+
+		auto filename = std::filesystem::path(file);
+		creator.AddCppInclude("Components/" + filename.filename().string());
+	}
+
+
 
 	h << creator.Header();
 	cpp << creator.Source();

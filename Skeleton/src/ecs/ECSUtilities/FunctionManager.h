@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Wed Mar 22 23:46:56 2023
+//Creation time : Fri Mar 24 02:12:49 2023
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 

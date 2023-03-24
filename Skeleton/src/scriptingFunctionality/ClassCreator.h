@@ -49,6 +49,8 @@ public:
 	ClassCreator& AddLine(cstring line = "");
 	ClassCreator& Empty(int lineCount = 1);
 
+	ClassCreator& AddCppInclude(std::string const& inc);
+
 	std::string Header();
 	std::string Source();
 
@@ -57,4 +59,5 @@ private:
 	std::string className;
 	std::stringstream classStream;
 	std::vector<Method> methods;
+	std::vector<std::string> includeCpp;
 };

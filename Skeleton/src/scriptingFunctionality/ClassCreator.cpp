@@ -129,6 +129,12 @@ ClassCreator& ClassCreator::Empty(int lineCount)
 	return *this;
 }
 
+ClassCreator& ClassCreator::AddCppInclude(std::string const& inc)
+{
+	includeCpp.push_back(inc);
+	return *this;
+}
+
 std::string ClassCreator::Header()
 {
 	return classStream.str();
@@ -139,8 +145,17 @@ std::string ClassCreator::Source()
 {
 	ClassCreator source(className, false);
 
-	source.Empty(3);
+
+	source.classStream << "\t";
 	source.IncludeRelative(className + ".h");
+	source.Empty();
+
+	for (auto& inc : includeCpp) {
+
+		source.classStream << "\t";
+		source.IncludeRelative(inc);
+	}
+	source.Empty(3);
 
 	for (auto& m : methods) {
 

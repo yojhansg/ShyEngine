@@ -202,6 +202,7 @@ private:
 		Vector con la informacion de los metodos encontrados
 	*/
 	std::vector<std::string> filesToInclude;
+	std::vector<std::string> managerFiles;
 	std::map<std::string, std::vector<Method>> methods;
 	std::map<std::string, std::vector<Attribute>> attributes;
 
