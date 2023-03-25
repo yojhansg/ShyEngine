@@ -2,15 +2,17 @@
 #include "FunctionManager.h"
 #include "Entity.h"
 
-//Creation time: Sat Mar 25 17:27:25 2023
+//Creation time: Sat Mar 25 18:38:01 2023
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
+#include <InputManager.h>
 #include <PhysicsManager.h>
 
 
 using namespace ECS;
 using namespace Physics;
+using namespace Input;
 
 
 
@@ -36,6 +38,9 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Transform_translate",Transform_translate);
 	map.emplace("Transform_rotate",Transform_rotate);
 	map.emplace("Transform_scale",Transform_scale);
+	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
+	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
+	map.emplace("InputManager_print",InputManager_print);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
 
@@ -138,6 +143,21 @@ Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->scale(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->keyDownEvent();
+	return ret;
+}
+Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->keyUpEvent();
+	return ret;
+}
+Scripting::Variable InputManager_print(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	manager->print();
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){

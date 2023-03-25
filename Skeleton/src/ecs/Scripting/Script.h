@@ -20,15 +20,15 @@ namespace ECS {
 
 		void Initialise(std::string path);
 
+
+		void start() override;
+		void update(float dt) override;
 	private:
 
 		Scripting::Node* startNode;
 		Scripting::Node* updateNode;
 
 		std::map<std::string, Scripting::Variable> attributes;
-
-		void start() override;
-		void update(float dt) override;
 
 		void Iteration(Scripting::Node* beginNode);
 	};

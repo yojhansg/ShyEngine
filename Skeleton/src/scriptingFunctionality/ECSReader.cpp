@@ -525,6 +525,8 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 	return *this;
 }
 
+
+//TODO: este metodo es una mierda
 ECSReader& ECSReader::CreateFunctionManagerSource()
 {
 	std::ofstream cpp(output + "/FunctionManager.cpp");
@@ -555,6 +557,7 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 
 using namespace ECS;
 using namespace Physics;
+using namespace Input;
 
 
 

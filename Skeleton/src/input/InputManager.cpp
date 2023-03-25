@@ -5,7 +5,9 @@
 #define STICK_DEADZONE 3276
 #define TRIGGER_DEADZONE 1000
 
-namespace InputManager {
+#include <iostream>
+
+namespace Input {
 
 	InputManager::InputManager() {
 
@@ -419,5 +421,10 @@ namespace InputManager {
 	std::string InputManager::getJoystickName() {
 
 		return joystickNames[joystickId];
+	}
+
+	void InputManager::print()
+	{
+		std::cout << "hola imprimo por consola" << std::endl;
 	}
 }

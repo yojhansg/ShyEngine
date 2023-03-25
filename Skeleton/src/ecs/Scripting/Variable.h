@@ -7,7 +7,7 @@ namespace ECS {
 }
 
 //TODO: hacer que en vez de guardar un componente como variable se guarde directamente el objeto
-//TODO: meter el tipo vector2d
+//TODO: meter el tipo string
 namespace Scripting {
 
 

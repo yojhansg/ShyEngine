@@ -11,6 +11,7 @@ using namespace nlohmann;
 
 using jsonarray = std::vector<json>;
 
+#include <iostream>
 
 Scripting::ScriptManager::ScriptManager()
 {
@@ -34,9 +35,13 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 	}
 
 	std::ifstream fileStream("Scripts/" + path);
-	json file = json::parse(path);
 
-
+	if (!fileStream.good())
+	{
+		std::cout << "Error leyendo el archivo" << std::endl;
+		return ScriptNodes();
+	}
+	json file = json::parse(fileStream);
 
 
 	int nodeCount = file["nodeCount"].get<int>();
@@ -60,11 +65,12 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 			}
 
 			NodeInfo info;
+			int next = -1;
 			if (node.contains("next")) {
 
-				int next = node["next"].get<int>();
-				info.next = next;
+				next = node["next"].get<int>();
 			}
+			info.next = next;
 
 			if (node.contains("input")) {
 
@@ -95,7 +101,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 				float v = constValue["float"].get<float>();
 				value = v;
-			} 
+			}
 			else if (type == "int") {
 
 				int v = constValue["int"].get<int>();
@@ -122,9 +128,9 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 			int condition = forkNode["condition"].get<int>();
 
-			forks.push_back({nodeIdx, A, B});
+			forks.push_back({ nodeIdx, A, B });
 
-			Fork* forkNode = new Fork(nodeIdx, (Fork::ForkType) forkType);
+			Fork* forkNode = new Fork(nodeIdx, (Fork::ForkType)forkType);
 			allScriptNodes[nodeIdx] = forkNode;
 
 			NodeInfo info;
@@ -136,25 +142,10 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		}
 	}
 
-
-	ScriptNodes scriptNodeInfo = { nullptr, nullptr };
-
-	if (file.contains("start")) {
-		int startIdx = file["start"].get<int>();
-		Node* startNode = allScriptNodes[startIdx];
-		scriptNodeInfo.start = startNode;
-	}
-
-	if (file.contains("update")) {
-		int updateIdx = file["update"].get<int>();
-		Node* updateNode = allScriptNodes[updateIdx];
-		scriptNodeInfo.update = updateNode;
-	}
-
-	//TODO: mover esto un poco mas arriba
 	for (auto& info : functionInfo) {
 
-		info.function->SetNextNode(allScriptNodes[info.next]);
+		if (info.next >= 0)
+			info.function->SetNextNode(allScriptNodes[info.next]);
 
 		std::vector<OutputNode*> input;
 
@@ -178,6 +169,23 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 		manager->allNodes.push_back(node);
 	}
+
+
+	ScriptNodes scriptNodeInfo = { nullptr, nullptr };
+
+	if (file.contains("start")) {
+		int startIdx = file["start"].get<int>();
+		Node* startNode = allScriptNodes[startIdx];
+		scriptNodeInfo.start = startNode;
+	}
+
+	if (file.contains("update")) {
+		int updateIdx = file["update"].get<int>();
+		Node* updateNode = allScriptNodes[updateIdx];
+		scriptNodeInfo.update = updateNode;
+	}
+
+
 
 	fileStream.close();
 	manager->scripts[path] = scriptNodeInfo;

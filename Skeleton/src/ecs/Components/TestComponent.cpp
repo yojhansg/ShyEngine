@@ -21,9 +21,9 @@ void ECS::TestComponent::update(float deltaTime) {
 	//transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 0.9995f, transform->getScale()->getY() * 0.9995f));
 	//transform->rotate(deltaTime * 20);
 
-	auto im = InputManager::InputManager::instance();
+	auto im = Input::InputManager::instance();
 
-	if (im->isJoystickButtonEventDown() && im->getJoystickButtonState(InputManager::InputManager::X)) {
+	if (im->isJoystickButtonEventDown() && im->getJoystickButtonState(Input::InputManager::X)) {
 		body->applyLinearImpulseToCenter({ 0, -30 });
 	}
 

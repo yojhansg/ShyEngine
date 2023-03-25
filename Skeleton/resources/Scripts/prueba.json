@@ -1,0 +1,15 @@
+{
+    "nodeCount": 1,
+    "start": 0,
+
+
+    "functions" : [
+
+        {
+            "index" : 0,
+            "operator": 0,
+            "methodCall": "InputManager_print"
+        }
+
+    ]
+ }

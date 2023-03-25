@@ -8,7 +8,7 @@ namespace RendererManager {
 	class RendererManager;
 }
 
-namespace InputManager {
+namespace Input {
 	class InputManager;
 }
 
@@ -48,7 +48,7 @@ private:
 	ECS::SceneManager* sceneManager;
 	Physics::PhysicsManager* physicsManager;
 	RendererManager::RendererManager* rendererManager;
-	InputManager::InputManager* inputManager;
+	Input::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;
 	ResourcesManager::ResourcesManager* resourcesManager;
 	Scripting::ScriptManager* scriptManager;

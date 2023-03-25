@@ -23,6 +23,9 @@ void ECS::Script::Initialise(std::string path)
 
 void ECS::Script::Iteration(Scripting::Node* beginNode)
 {
+	if (beginNode == nullptr)
+		return;
+
 	currentScript = this;
 	beginNode->Cicle();
 	currentScript = nullptr;

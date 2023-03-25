@@ -5,7 +5,7 @@
 #include <array>
 #include <vector>
 #include <string>
-
+#include <EditorExport.h>
 /*
 Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
 */
@@ -14,9 +14,9 @@ namespace Utilities {
 	class Vector2D;
 }
 
-namespace InputManager {
+namespace Input {
 
-	class InputManager : public Utilities::Singleton<InputManager> {
+	EditorManager InputManager : public Utilities::Singleton<InputManager> {
 
 		friend Singleton<InputManager>;
 
@@ -46,10 +46,15 @@ namespace InputManager {
 		bool handleInput(SDL_Event& e);
 
 		// Keyboard
+	publish:
 		bool keyDownEvent();
 
 		bool keyUpEvent();
 
+		void print();
+
+
+	public:
 		bool isKeyDown(SDL_Scancode key);
 
 		bool isKeyUp(SDL_Scancode key);

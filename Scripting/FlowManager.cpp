@@ -39,16 +39,18 @@ namespace CFlat {
 
 		//TODO manejo de error -> fichero script no existe
 		//Si el archivo no existe retornamos y se hace el manejo de errores
-		std::ifstream f(path + file + fileExtension);
+		std::ifstream f("prueba.json");
 		if (!f.good()) {
 
 			std::cout << "El archivo no existe";
 			return nullptr;
 		}
+		json data = json::parse(f);
+
+
 		std::ofstream output("Hola.txt");
 		output << "#pragma once\n#include<iostream>\n#include<string>\n\n";
 
-		json data = json::parse(f);
 
 		int boxCount = data["nodeCount"].get<int>();
 
