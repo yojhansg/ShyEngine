@@ -18,8 +18,7 @@ void Scripting::Function::Operate(Node*& nextNode)
 	//TODO: resto de operaciones
 	//TODO: script manager tiene que tener el mapa generado por function manager
 
-
-
+	//TODO: ser un puto loco, hacer que no haya indice de operacion y que todo vaya por metodos
 
 	output = input[0]->output + input[1]->output;
 

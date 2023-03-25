@@ -13,6 +13,13 @@ namespace ECS {
 	//Los scripts comparten nodos
 	class Script : public Component
 	{
+
+	public:
+
+		static Script* currentScript;
+
+		void Initialise(std::string path);
+
 	private:
 
 		Scripting::Node* startNode;
@@ -23,8 +30,6 @@ namespace ECS {
 		void start() override;
 		void update(float dt) override;
 
-
-		void Initialise(std::string path);
 		void Iteration(Scripting::Node* beginNode);
 	};
 }

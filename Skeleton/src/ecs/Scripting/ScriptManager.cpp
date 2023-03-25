@@ -26,8 +26,18 @@ Scripting::ScriptManager::~ScriptManager()
 
 Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::string const& path)
 {
+	ScriptManager* manager = instance();
+
+	if (manager->scripts.contains(path)) {
+
+		return manager->scripts[path];
+	}
+
 	std::ifstream fileStream("Scripts/" + path);
 	json file = json::parse(path);
+
+
+
 
 	int nodeCount = file["nodeCount"].get<int>();
 	std::vector<Node*> allScriptNodes(nodeCount);
@@ -110,12 +120,18 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 			int A = forkNode["A"].get<int>();
 			int B = forkNode["B"].get<int>();
 
+			int condition = forkNode["condition"].get<int>();
+
 			forks.push_back({nodeIdx, A, B});
 
 			Fork* forkNode = new Fork(nodeIdx, (Fork::ForkType) forkType);
 			allScriptNodes[nodeIdx] = forkNode;
 
-			NodeInfo info = { forkNode, A, B };
+			NodeInfo info;
+			info.fork = forkNode;
+			info.A = A;
+			info.B = B;
+			info.condition = condition;
 			forkConnections.push_back(info);
 		}
 	}
@@ -140,25 +156,37 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 		info.function->SetNextNode(allScriptNodes[info.next]);
 
+		std::vector<OutputNode*> input;
+
+		for (int i : info.input) {
+			OutputNode* out = static_cast<OutputNode*>(allScriptNodes[i]);
+			input.push_back(out);
+		}
+
+		info.function->SetInput(input);
 	}
 
-	//for (auto& next : nextNodes) {
+	for (auto& fork : forkConnections) {
 
-	//	//static_cast<Function*>(allScriptNodes[next[0]])->SetNextNode(allScriptNodes[next[1]]);
-	//}
-
-	//for (auto& fork : forkConnections) {
-
-	//	//static_cast<Fork*>(allScriptNodes[fork[0]])->SetFork(allScriptNodes[fork[1]], allScriptNodes[fork[2]]);
-	//}
+		fork.fork->SetFork(allScriptNodes[fork.A], allScriptNodes[fork.B]);
+		fork.fork->SetCondition(static_cast<OutputNode*>(allScriptNodes[fork.condition]));
+		//static_cast<Fork*>(allScriptNodes[fork[0]])->SetFork(allScriptNodes[fork[1]], allScriptNodes[fork[2]]);
+	}
 
 
 	for (Node* node : allScriptNodes) {
 
-		allNodes.push_back(node);
+		manager->allNodes.push_back(node);
 	}
 
 	fileStream.close();
-	scripts[path] = scriptNodeInfo;
+	manager->scripts[path] = scriptNodeInfo;
 	return scriptNodeInfo;
+}
+
+Scripting::Variable Scripting::ScriptManager::CallFunction(std::string const& func, std::vector<Scripting::Variable> const& vec)
+{
+	ScriptManager* manager = instance();
+
+	return manager->functionMap[func](vec);
 }
