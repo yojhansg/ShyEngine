@@ -53,12 +53,6 @@ void Game::firstScene() {
 		std::map<std::string, CallableFunction> funciones;
 		FunctionManager::CreateFunctionMap(funciones);
 
-		auto ret = funciones["Transform_getPosition"]({
-				grTr->getEntity()
-			});
-
-		funciones["Transform_setPosition"]({ grTr->getEntity(), ret, ret 
-			});
 
 		// Ball
 		ECS::Entity* ball = scene->createEntity("Ball");

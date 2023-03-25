@@ -28,12 +28,17 @@ namespace ECS {
 
 	publish:
 		// Getters
-		Utilities::Vector2D* getPosition();
-		Utilities::Vector2D* getScale();
+		Utilities::Vector2D getPosition();
+		Utilities::Vector2D getScale();
+
+	public:
+		Utilities::Vector2D* getPositionPointer();
+		Utilities::Vector2D* getScalePointer();
 
 		int y;
 
 	public:
+		//TODO: que esto no devuelva un puntero o hacer otro metodo para las fisicas
 		const double* getRotation();
 
 		// Setters

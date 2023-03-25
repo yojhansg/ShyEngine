@@ -44,19 +44,23 @@ namespace ECS {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
-		float scaledX = (width * transform->getScale()->getX());
-		float scaledY = (height * transform->getScale()->getY());
+
+		auto trPos = transform->getPosition();
+		auto trScale = transform->getScale();
+
+		float scaledX = (width * trScale.getX());
+		float scaledY = (height * trScale.getY());
 
 		float distanceX = (abs(width - scaledX)) / 2;
 		float distanceY = (abs(height - scaledY)) / 2;
 
-		distanceX = (transform->getScale()->getX() > 1) ? -distanceX : distanceX;
-		distanceY = (transform->getScale()->getY() > 1) ? -distanceY : distanceY;
+		distanceX = (trScale.getX() > 1) ? -distanceX : distanceX;
+		distanceY = (trScale.getY() > 1) ? -distanceY : distanceY;
 
-		int x = std::round(transform->getPosition()->getX() - width / 2 + distanceX);
-		int y = std::round(transform->getPosition()->getY() - height / 2 + distanceY);
-		int w = std::round(transform->getScale()->getX() * width);
-		int h = std::round(transform->getScale()->getY() * height);
+		int x = std::round(trPos.getX() - width / 2 + distanceX);
+		int y = std::round(trPos.getY() - height / 2 + distanceY);
+		int w = std::round(trScale.getX() * width);
+		int h = std::round(trScale.getY() * height);
 
 		dstRect = { x, y, w, h };
 

@@ -102,12 +102,12 @@ Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>co
 }
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	Utilities::Vector2D* ret = self->getPosition();
+	Utilities::Vector2D ret = self->getPosition();
 	return ret;
 }
 Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	Utilities::Vector2D* ret = self->getScale();
+	Utilities::Vector2D ret = self->getScale();
 	return ret;
 }
 Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec){

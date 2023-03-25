@@ -47,6 +47,11 @@ namespace Scripting {
 		return comp;
 	}
 
+	Variable Variable::Vector2D(Utilities::Vector2D vector)
+	{
+		return vector;
+	}
+
 	Variable::Variable(int val)
 	{
 		type = Type::Int;
@@ -79,11 +84,13 @@ namespace Scripting {
 		value.entity = entity;
 	}
 
-	//Variable::Vector2D(Utilities::Vector2D vec) {
+	Variable::Variable(Utilities::Vector2D vector)
+	{
+		type = Type::Vector2D;
+		this->vector = vector;
+		value.Int = 0;
+	}
 
-	//	type = Type::Vector2D;
-	//	value.vector = vec;
-	//}
 	//Todo esto se puede mejorar probablemente con preprocesadores
 	bool Variable::ArithmeticCheck(Variable const& a, Variable const& b)
 	{
@@ -140,6 +147,9 @@ namespace Scripting {
 			break;
 		case Scripting::Variable::Type::Char:
 			ret.value.Char = value.Char + other.value.Char;
+			break;
+		case Scripting::Variable::Type::Vector2D:
+			ret.vector = vector + other.vector;
 			break;
 		}
 

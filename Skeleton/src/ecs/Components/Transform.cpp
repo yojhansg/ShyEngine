@@ -20,11 +20,21 @@ namespace ECS {
 
 	// ------------- Getters -----------------
 
-	Utilities::Vector2D* Transform::getPosition() {
+	Utilities::Vector2D Transform::getPosition() {
+		return position_;
+	}
+
+	Utilities::Vector2D Transform::getScale() {
+		return scale_;
+	}
+
+	Utilities::Vector2D* Transform::getPositionPointer()
+	{
 		return &position_;
 	}
 
-	Utilities::Vector2D* Transform::getScale() {
+	Utilities::Vector2D* Transform::getScalePointer()
+	{
 		return &scale_;
 	}
 

@@ -99,10 +99,10 @@
     },
     "Transform": {
         "getPosition": {
-            "return": "Utilities::Vector2D*"
+            "return": "Utilities::Vector2D"
         },
         "getScale": {
-            "return": "Utilities::Vector2D*"
+            "return": "Utilities::Vector2D"
         },
         "rotate": {
             "input": [

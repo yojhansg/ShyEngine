@@ -14,7 +14,7 @@ namespace Scripting {
 	struct Variable {
 
 		enum class Type {
-			Null, Int, Float, Bool, Char, Entity
+			Null, Int, Float, Bool, Char, Entity, Vector2D
 		};
 
 		union Value {
@@ -29,6 +29,8 @@ namespace Scripting {
 		Type type;
 		Value value;
 
+		Utilities::Vector2D vector;
+
 		Variable();
 		Variable(Type type);
 
@@ -39,13 +41,14 @@ namespace Scripting {
 		static Variable Bool(bool value);
 		static Variable Char(char value);
 		static Variable Entity(ECS::Entity* entity);
+		static Variable Vector2D(Utilities::Vector2D vector);
 
 		Variable(int value);
 		Variable(float value);
 		Variable(bool value);
 		Variable(char value);
 		Variable(ECS::Entity* entity);
-
+		Variable(Utilities::Vector2D vector);
 
 		Variable operator +(Variable const& other) const;
 		Variable operator -(Variable const& other) const;

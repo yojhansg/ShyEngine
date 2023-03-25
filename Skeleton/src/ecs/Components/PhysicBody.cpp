@@ -48,9 +48,9 @@ namespace ECS {
 
 		world = Physics::PhysicsManager::instance()->getWorld();
 
-		position = transform->getPosition();
+		position = transform->getPositionPointer();
 		rotation = transform->getRotation();
-		scale = transform->getScale();
+		scale = transform->getScalePointer();
 
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
