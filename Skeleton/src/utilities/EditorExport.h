@@ -37,6 +37,8 @@
 
 
 /*
+	Publicar metodos de componentes.
+
 	Para poder publicar un metodo basta con poner el modificador de
 	acceso <publish> encima de los metodos que se quieran publicar.
 

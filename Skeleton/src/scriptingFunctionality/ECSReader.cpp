@@ -360,7 +360,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	definition << "(" VECTOR "){" NEWLINE;
 
-	definition << TAB << className << "* self = " CAST(className, "vec[0].value.pointer") ";" NEWLINE;
+	definition << TAB << className << "* self = vec[0].value.entity->getComponent<" + className + ">();" NEWLINE;
 
 	definition << TAB;
 	if (returnType != "void") {
@@ -529,7 +529,9 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 {
 	std::ofstream cpp(output + "/FunctionManager.cpp");
 
-	cpp << R"(#include "FunctionManager.h"
+	cpp << R"(
+#include "FunctionManager.h"
+#include "Entity.h"
 
 )";
 
@@ -629,7 +631,7 @@ ECSReader& ECSReader::ClassReflection()
 	for (auto& className : attributes) {
 
 		std::stringstream method;
-		method << "\t\t" << className.first << "* self = static_cast<" << className.first << "*>(selfComp);\n";
+		method << "\t\t" << className.first << "* self = static_cast<" + className.first + "*>(selfComp);\n";
 
 		for (auto& attribute : className.second) {
 			//TODO hacer un metodo que convierta de string a un valor
@@ -651,7 +653,6 @@ ECSReader& ECSReader::ClassReflection()
 	//TODO: Buscar las clases que tengo que añadir para reflexionar
 
 	creator.EndClass();
-
 	for (auto& file : filesToInclude) {
 
 		auto filename = std::filesystem::path(file);

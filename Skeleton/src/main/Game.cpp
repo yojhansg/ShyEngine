@@ -16,6 +16,7 @@
 #include <map>
 #include <iostream>
 
+
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
 
@@ -48,6 +49,16 @@ void Game::firstScene() {
 		auto grTr = ground->addComponent<ECS::Transform>();
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
 		auto grCol = ground->addComponent<ECS::EdgeBody>();
+
+		std::map<std::string, CallableFunction> funciones;
+		FunctionManager::CreateFunctionMap(funciones);
+
+		auto ret = funciones["Transform_getPosition"]({
+				grTr->getEntity()
+			});
+
+		funciones["Transform_setPosition"]({ grTr->getEntity(), ret, ret 
+			});
 
 		// Ball
 		ECS::Entity* ball = scene->createEntity("Ball");

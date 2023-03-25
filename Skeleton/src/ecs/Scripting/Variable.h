@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Vector2D.h"
 
 namespace ECS {
-	class Component;
+	class Entity;
 }
 
 //TODO: hacer que en vez de guardar un componente como variable se guarde directamente el objeto
@@ -13,7 +14,7 @@ namespace Scripting {
 	struct Variable {
 
 		enum class Type {
-			Null, Int, Float, Bool, Char, Component
+			Null, Int, Float, Bool, Char, Entity
 		};
 
 		union Value {
@@ -21,8 +22,7 @@ namespace Scripting {
 			float Float;
 			bool Bool;
 			char Char;
-
-			ECS::Component* pointer;
+			ECS::Entity* entity;
 		};
 
 
@@ -38,13 +38,13 @@ namespace Scripting {
 		static Variable Float(float value);
 		static Variable Bool(bool value);
 		static Variable Char(char value);
-		static Variable Component(ECS::Component* comp);
+		static Variable Entity(ECS::Entity* entity);
 
 		Variable(int value);
 		Variable(float value);
 		Variable(bool value);
 		Variable(char value);
-		Variable(ECS::Component* comp);
+		Variable(ECS::Entity* entity);
 
 
 		Variable operator +(Variable const& other) const;

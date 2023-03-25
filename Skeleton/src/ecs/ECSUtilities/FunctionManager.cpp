@@ -1,6 +1,8 @@
-#include "FunctionManager.h"
 
-//Creation time: Fri Mar 24 02:12:49 2023
+#include "FunctionManager.h"
+#include "Entity.h"
+
+//Creation time: Sat Mar 25 17:27:25 2023
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
@@ -39,102 +41,102 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 
 };
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	int ret = self->getTextureWidth();
 	return ret;
 }
 Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	int ret = self->getTextureHeight();
 	return ret;
 }
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	self->setSrcRect(vec[1].value.Int, vec[2].value.Int, vec[3].value.Int, vec[4].value.Int);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	self->setFlipX(vec[1].value.Bool);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	self->setFlipY(vec[1].value.Bool);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec){
-	Image* self = static_cast<Image*>(vec[0].value.pointer);
+	Image* self = vec[0].value.entity->getComponent<Image>();
 	self->setRotaionPoint(vec[1].value.Int, vec[2].value.Int);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	self->setTrigger(vec[1].value.Bool);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_isTrigger(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	bool ret = self->isTrigger();
 	return ret;
 }
 Scripting::Variable PhysicsBody_setFriction(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	self->setFriction(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_getFriction(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	float ret = self->getFriction();
 	return ret;
 }
 Scripting::Variable PhysicsBody_setBounciness(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	self->setBounciness(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = static_cast<PhysicsBody*>(vec[0].value.pointer);
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
 	float ret = self->getBounciness();
 	return ret;
 }
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	Utilities::Vector2D* ret = self->getPosition();
 	return ret;
 }
 Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	Utilities::Vector2D* ret = self->getScale();
 	return ret;
 }
 Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->setPosition(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_setScale(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->setScale(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->setRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->translate(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->rotate(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec){
-	Transform* self = static_cast<Transform*>(vec[0].value.pointer);
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->scale(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }

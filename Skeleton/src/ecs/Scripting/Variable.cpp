@@ -1,5 +1,4 @@
 #include "Variable.h"
-
 #include <iostream>
 
 namespace Scripting {
@@ -15,6 +14,7 @@ namespace Scripting {
 		type = t;
 		value.Int = 0;
 	}
+
 
 
 	Variable Scripting::Variable::Null()
@@ -42,7 +42,7 @@ namespace Scripting {
 		return value;
 	}
 
-	Variable Variable::Component(ECS::Component* comp)
+	Variable Variable::Entity(ECS::Entity* comp)
 	{
 		return comp;
 	}
@@ -73,12 +73,17 @@ namespace Scripting {
 		value.Char = val;
 	}
 
-	Variable::Variable(ECS::Component* comp)
+	Variable::Variable(ECS::Entity* entity)
 	{
-		type = Type::Component;
-		value.pointer = comp;
+		type = Type::Entity;
+		value.entity = entity;
 	}
 
+	//Variable::Vector2D(Utilities::Vector2D vec) {
+
+	//	type = Type::Vector2D;
+	//	value.vector = vec;
+	//}
 	//Todo esto se puede mejorar probablemente con preprocesadores
 	bool Variable::ArithmeticCheck(Variable const& a, Variable const& b)
 	{
@@ -90,7 +95,7 @@ namespace Scripting {
 
 			return false;
 		}
-		if (a.type == Type::Component || b.type == Type::Component) {
+		if (a.type == Type::Entity || b.type == Type::Entity) {
 
 			return false;
 		}
