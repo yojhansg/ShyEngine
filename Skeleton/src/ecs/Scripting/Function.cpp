@@ -2,7 +2,7 @@
 #include "ScriptManager.h"
 #include <iostream>
 
-Scripting::Function::Function(int idx, int operation, std::string const& method): OutputNode(idx), operation(operation), methodName(method), next(nullptr)
+Scripting::Function::Function(int idx, std::string const& method): OutputNode(idx), methodName(method), next(nullptr)
 {
 
 }

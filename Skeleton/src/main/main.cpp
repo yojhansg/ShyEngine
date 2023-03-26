@@ -2,21 +2,21 @@
 #include <iostream>
 #include "Engine.h"
 
-//#include "Scripting/Script.h"
+#include "Scripting/Script.h"
 
 int main(int argc, char* args[]) {
 
 
 
-	//ECS::Script script;
+	ECS::Script script;
 
-	//script.Initialise("prueba.json");
+	script.Initialise("prueba.json");
 
-	//std::cout << "=== Init ===" << std::endl;
-	//script.start();
-	//std::cout << "=== Udate ===" << std::endl;
+	std::cout << "=== Init ===" << std::endl;
+	script.start();
+	std::cout << "=== Udate ===" << std::endl;
 
-	//return 0;
+	return 0;
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 

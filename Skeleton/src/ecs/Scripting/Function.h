@@ -29,7 +29,7 @@ namespace Scripting {
 		};
 
 
-		Function(int idx, int operation, std::string const& method = "");
+		Function(int idx, std::string const& method = "");
 
 		void Operate(Node*& nextNode) override;
 
@@ -39,8 +39,6 @@ namespace Scripting {
 		void SetInput(std::vector<OutputNode*> input);
 
 	private:
-
-		int operation;
 
 
 		Node* next;

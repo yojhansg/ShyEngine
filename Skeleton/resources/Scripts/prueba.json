@@ -1,15 +1,40 @@
 {
-    "nodeCount": 1,
-    "start": 0,
+    "nodeCount": 3,
+    "start": 2,
 
 
     "functions" : [
 
         {
             "index" : 0,
-            "operator": 0,
-            "methodCall": "InputManager_print"
+            "function": "InputManager_print"
+        }
+
+    ],
+
+    
+    "consts" : [
+
+        {
+            "index" : 1,
+            "type": "bool",
+            "value": 1
+        }
+
+    ],
+
+    
+    "forks" : [
+
+        {
+            "index" : 2,
+            "A": 0,
+            "B": -1,
+            "type": 1,
+            "condition": 1
         }
 
     ]
+
+
  }

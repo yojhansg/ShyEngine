@@ -19,11 +19,29 @@ void Scripting::Fork::SetCondition(OutputNode* node)
 
 void Scripting::Fork::Operate(Node*& next)
 {
-	//Default -> if
+	condition->Cicle();
 
-	//TODO: resto de forks
+	switch (type)
+	{
+	case Scripting::Fork::ForkType::While:
 
-	if (condition->output.value.Bool)
-		next = A;
-	else next = B;
+		while (condition->output.value.Bool) {
+
+			A->Cicle();
+			condition->Cicle();
+		}
+		next = B;
+
+		break;
+	case Scripting::Fork::ForkType::For:
+		break;
+	default:
+
+
+		if (condition->output.value.Bool)
+			next = A;
+		else next = B;
+
+		break;
+	}
 }

@@ -57,12 +57,8 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		for (auto& node : functions) {
 
 			int nodeIdx = node["index"].get<int>();
-			int operation = node["operator"].get<int>();
 
-			std::string methodCall = "";
-			if (operation == 0) {
-				methodCall = node["methodCall"].get<std::string>();
-			}
+			std::string methodCall = node["function"].get<std::string>();
 
 			NodeInfo info;
 			int next = -1;
@@ -77,7 +73,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				info.input = node["input"].get<std::vector<int>>();
 			}
 
-			Function* function = new Function(nodeIdx, operation, methodCall);
+			Function* function = new Function(nodeIdx, methodCall);
 			allScriptNodes[nodeIdx] = function;
 
 			info.function = function;
@@ -85,11 +81,11 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		}
 	}
 
-	if (file.contains("constValues")) {
+	if (file.contains("consts")) {
 
-		jsonarray constValues = file["constValues"].get<jsonarray>();
+		jsonarray consts = file["consts"].get<jsonarray>();
 
-		for (auto& constValue : constValues) {
+		for (auto& constValue : consts) {
 
 			int nodeIdx = constValue["index"].get<int>();
 
@@ -99,13 +95,22 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 			if (type == "float") {
 
-				float v = constValue["float"].get<float>();
+				float v = constValue["value"].get<float>();
 				value = v;
 			}
 			else if (type == "int") {
 
-				int v = constValue["int"].get<int>();
+				int v = constValue["value"].get<int>();
 				value = v;
+			}
+			else if (type == "bool") {
+
+				int b = constValue["value"].get<int>();
+				value = (bool)b;
+			}
+			else if (type == "Vector2D") {
+				std::string vec = constValue["value"].get<std::string>();
+				value = (Utilities::Vector2D)vec;
 			}
 
 			ConstNode* constValueNode = new ConstNode(nodeIdx, value);
@@ -159,7 +164,10 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	for (auto& fork : forkConnections) {
 
-		fork.fork->SetFork(allScriptNodes[fork.A], allScriptNodes[fork.B]);
+		Node* A = fork.A >= 0 ? allScriptNodes[fork.A] : nullptr;
+		Node* B = fork.B >= 0 ? allScriptNodes[fork.B] : nullptr;
+
+		fork.fork->SetFork(A, B);
 		fork.fork->SetCondition(static_cast<OutputNode*>(allScriptNodes[fork.condition]));
 		//static_cast<Fork*>(allScriptNodes[fork[0]])->SetFork(allScriptNodes[fork[1]], allScriptNodes[fork[2]]);
 	}
