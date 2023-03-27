@@ -3,6 +3,8 @@
 #include "DebugDraw.h"
 #include "box2d/b2_contact.h"
 
+const int MAX_COLLISION_LAYERS = 16;
+
 namespace Physics {
 
 	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
@@ -23,6 +25,13 @@ namespace Physics {
 		flags += b2Draw::e_shapeBit;
 		flags += b2Draw::e_centerOfMassBit;
 		b2draw->SetFlags(flags);
+
+		// Collision Matrix
+
+		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS));
+
+		addCollisionLayer("Default");
+
 	}
 
 	PhysicsManager::PhysicsManager() {
@@ -31,6 +40,33 @@ namespace Physics {
 
 	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
 		initPhysicsManager(gravity, velocityIterations, positionIterations);
+	}
+
+	void PhysicsManager::addCollisionLayer(const std::string& layerName) {
+
+		assert(layersCount < MAX_COLLISION_LAYERS, "Número máximo de capas de colision alcanzado!");
+
+		layers.insert(std::make_pair(layerName, layersCount));
+
+		layersCount++;
+
+	}
+
+	void PhysicsManager::removeCollisionLayer(const std::string& layerName) {
+
+		assert(layersCount > 0, "No se puede eliminar la capa por defecto!");
+
+		layers.erase(layerName);
+
+		layersCount--;
+	}
+
+	int PhysicsManager::getLayerNumber(const std::string& layerName) {
+		return layers.at(layerName);
+	}
+
+	int PhysicsManager::getMaskBits(const std::string& layerName) {
+
 	}
 
 	void PhysicsManager::setContactListener(b2ContactListener* contactListener) {
@@ -74,4 +110,5 @@ namespace Physics {
 		delete world;
 		delete b2draw;
 	}
+
 }

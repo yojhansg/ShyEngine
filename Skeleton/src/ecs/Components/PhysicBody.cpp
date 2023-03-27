@@ -8,7 +8,9 @@ namespace ECS {
 
 	PhysicsBody::PhysicsBody() {
 
-		screenToWorldFactor = Physics::PhysicsManager::instance()->getScreenToWorldFactor();
+		pm = Physics::PhysicsManager::instance();
+
+		screenToWorldFactor = pm->getScreenToWorldFactor();
 
 		world = nullptr;
 
@@ -33,6 +35,8 @@ namespace ECS {
 		position = nullptr;
 		rotation = nullptr;
 		scale = nullptr;
+
+		layerName = "Default";
 		
 	}
 
@@ -73,6 +77,14 @@ namespace ECS {
 		lastPositionSync = position;
 		lastRotationSync = *rotation;
 		lastScaleInfo = scale;
+
+		// Collision Filtering
+		b2Filter filter = fixture->GetFilterData();
+
+		filter.categoryBits = pm->getLayerNumber(layerName);
+		filter.maskBits = pm->
+
+		fixture->SetFilterData(filter);
 	}
 
 	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
@@ -113,6 +125,23 @@ namespace ECS {
 		}
 
 	}
+
+	void PhysicsBody::onActive() {
+		body->SetAwake(true);
+	}
+
+	void PhysicsBody::onDeacitve() {
+		body->SetAwake(false);
+	}
+
+	void PhysicsBody::onSceneUp() {
+		body->SetAwake(true);
+	}
+
+	void PhysicsBody::onSceneDown() {
+		body->SetAwake(false);
+	}
+
 
 	void PhysicsBody::setTrigger(bool trigger) {
 		fixture->SetSensor(trigger);

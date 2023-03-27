@@ -1,5 +1,6 @@
 #include "TestComponent.h"
 #include "InputManager.h"
+#include "SceneManager.h"
 #include <iostream>
 #include <Vector2D.h>
 #include "CircleBody.h"
@@ -23,8 +24,11 @@ void ECS::TestComponent::update(float deltaTime) {
 
 	auto im = Input::InputManager::instance();
 
-	if (im->isJoystickButtonEventDown() && im->getJoystickButtonState(Input::InputManager::X)) {
-		body->applyLinearImpulseToCenter({ 0, -30 });
+	if (im->isJoystickButtonEventDown()) {
+
+		if (im->getJoystickButtonState(Input::InputManager::X)) {
+			body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
+		}
 	}
 
 }

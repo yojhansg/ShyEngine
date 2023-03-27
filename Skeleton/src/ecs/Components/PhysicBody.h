@@ -13,6 +13,10 @@ enum b2BodyType;
 
 using namespace Utilities;
 
+namespace Physics {
+    class PhysicsManager;
+}
+
 namespace ECS {
 
     class Transform;
@@ -33,7 +37,16 @@ namespace ECS {
 
         void start() override;
 
-        void fixedUpdate(float fixedDeltaTime);
+        void fixedUpdate(float fixedDeltaTime) override;
+
+        void onActive() override;
+
+        void onDeacitve() override;
+
+        void onSceneUp() override;
+
+        void onSceneDown() override;
+
 
     publish:
 
@@ -73,7 +86,6 @@ namespace ECS {
         
         virtual float getArea() = 0;
         float getAngle();
-
 
         // Force methods
         void setLinearVelocity(float x, float y);
@@ -127,8 +139,14 @@ namespace ECS {
 
     private:
 
+        Physics::PhysicsManager* pm;
+
         Vector2D lastPositionSync;
         float lastRotationSync;
         Vector2D lastScaleInfo;
+
+        // Collision Layer
+        std::string layerName;
+
     };
 }
