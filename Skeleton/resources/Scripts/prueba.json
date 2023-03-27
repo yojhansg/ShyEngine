@@ -1,13 +1,30 @@
 {
-    "nodeCount": 3,
-    "start": 2,
+    "nodeCount": 10,
+    "start": 0,
 
 
     "functions" : [
 
         {
             "index" : 0,
-            "function": "InputManager_print"
+            "function": "ScriptFunctionality_Print_Number",
+            "input" : [
+                4
+            ]
+        },
+        {
+            "index" : 1,
+            "function": "ScriptFunctionality_Vector2D_Create",
+            "input" : [
+                2, 3
+            ]
+        },
+        {
+            "index" : 4,
+            "function": "ScriptFunctionality_Vector2D_X",
+            "input" : [
+                1
+            ]
         }
 
     ],
@@ -15,23 +32,16 @@
     
     "consts" : [
 
-        {
-            "index" : 1,
-            "type": "bool",
-            "value": 1
-        }
-
-    ],
-
-    
-    "forks" : [
-
+        
         {
             "index" : 2,
-            "A": 0,
-            "B": -1,
-            "type": 1,
-            "condition": 1
+            "type": "float",
+            "value": 12
+        },
+        {
+            "index" : 3,
+            "type": "float",
+            "value": 15
         }
 
     ]
