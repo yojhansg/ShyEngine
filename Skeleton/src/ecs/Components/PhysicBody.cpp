@@ -81,8 +81,8 @@ namespace ECS {
 		// Collision Filtering
 		b2Filter filter = fixture->GetFilterData();
 
-		filter.categoryBits = pm->getLayerNumber(layerName);
-		filter.maskBits = pm->
+		filter.categoryBits = pm->getLayerBits(layerName);
+		filter.maskBits = pm->getMaskBits(layerName);
 
 		fixture->SetFilterData(filter);
 	}
@@ -141,7 +141,6 @@ namespace ECS {
 	void PhysicsBody::onSceneDown() {
 		body->SetAwake(false);
 	}
-
 
 	void PhysicsBody::setTrigger(bool trigger) {
 		fixture->SetSensor(trigger);
@@ -240,6 +239,10 @@ namespace ECS {
 
 	float PhysicsBody::getAngle() {
 		return body->GetAngle() * (180 / b2_pi);
+	}
+
+	void PhysicsBody::setCollisionLayer(const std::string& layerName) {
+		this->layerName = layerName;
 	}
 
 	void PhysicsBody::setLinearVelocity(float x, float y) {

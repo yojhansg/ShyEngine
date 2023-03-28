@@ -46,6 +46,7 @@ namespace ECS {
 		delete shape;
 		
 		shape = static_cast<b2PolygonShape*>(fixture->GetShape());
+
 	}
 
 	Vector2D BoxBody::getSize() {

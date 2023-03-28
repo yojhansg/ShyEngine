@@ -47,7 +47,11 @@ namespace Physics {
 
 		int getLayerNumber(const std::string& layerName);
 
+		int getLayerBits(const std::string& layerName);
+
 		int getMaskBits(const std::string& layerName);
+
+		void setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide);
 
 	private:
 

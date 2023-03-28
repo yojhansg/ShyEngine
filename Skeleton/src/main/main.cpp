@@ -6,9 +6,7 @@
 
 int main(int argc, char* args[]) {
 
-
-
-	ECS::Script script;
+	/*ECS::Script script;
 
 	script.Initialise("prueba.json");
 
@@ -16,7 +14,7 @@ int main(int argc, char* args[]) {
 	script.start();
 	std::cout << "=== Udate ===" << std::endl;
 
-	return 0;
+	return 0;*/
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 

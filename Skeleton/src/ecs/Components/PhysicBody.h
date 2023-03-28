@@ -87,6 +87,9 @@ namespace ECS {
         virtual float getArea() = 0;
         float getAngle();
 
+        // Collision Filtering
+        void setCollisionLayer(const std::string& layerName);
+
         // Force methods
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();

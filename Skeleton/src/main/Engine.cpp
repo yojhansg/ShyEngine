@@ -48,7 +48,6 @@ void Engine::init() {
 	engineTime = Utilities::EngineTime::init();
 	scriptManager = Scripting::ScriptManager::init();
 
-
 	physicsManager->enableDebugDraw(true);
 
 	Game g(sceneManager);

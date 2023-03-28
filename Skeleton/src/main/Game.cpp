@@ -2,6 +2,7 @@
 
 #include <SceneManager.h>
 #include <RendererManager.h>
+#include <PhysicsManager.h>
 #include <Scene.h>
 #include <Entity.h>
 #include <Components/Transform.h>
@@ -41,14 +42,14 @@ void Game::firstScene() {
 
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("link.png");
-		auto collider = player->addComponent<ECS::BoxBody>();
+		auto body = player->addComponent<ECS::BoxBody>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
 
 		auto grTr = ground->addComponent<ECS::Transform>();
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
-		auto grCol = ground->addComponent<ECS::EdgeBody>();
+		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		std::map<std::string, CallableFunction> funciones;
 		FunctionManager::CreateFunctionMap(funciones);
@@ -59,7 +60,7 @@ void Game::firstScene() {
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto colliderBall = ball->addComponent<ECS::CircleBody>();
+		auto ballBody = ball->addComponent<ECS::CircleBody>();
 		auto tComp = ball->addComponent<ECS::TestComponent>();
 
 
@@ -76,28 +77,34 @@ void Game::firstScene() {
 	std::cout << tr->miVector2d << std::endl;*/
 
 	// Scripting
-	
+
+
+	auto pm = Physics::PhysicsManager::instance();
+
+	pm->addCollisionLayer("Player");
+	pm->setCollisionBetweenLayers("Default", "Player", false);
 
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(renderer->getWidth() / 3, renderer->getHeight() / 3);
+		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
 		
-		collider->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		collider->setBounciness(0.5f);
+		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
+		body->setBounciness(0.5f);
+		body->setCollisionLayer("Player");
 		
 		// Ground
 		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
-		grCol->addOffSet(0, -1);
+		grBody->addOffSet(0, -1);
 
 		//// Ball
-		trBall->setPosition(renderer->getWidth() / 1.5f, renderer->getHeight() / 4);
+		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
 
-		colliderBall->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		colliderBall->setBounciness(0.5f);
+		ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
+		ballBody->setBounciness(0.5f);
 
 	// 5.- Start
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);

@@ -2,12 +2,14 @@
 #include "box2d/box2d.h"
 #include "DebugDraw.h"
 #include "box2d/b2_contact.h"
+#include <iostream>
 
 const int MAX_COLLISION_LAYERS = 16;
 
 namespace Physics {
 
 	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
+
 		this->gravity = new b2Vec2(gravity.getX(), gravity.getY());
 		world = new b2World(*this->gravity);
 
@@ -28,7 +30,9 @@ namespace Physics {
 
 		// Collision Matrix
 
-		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS));
+		layersCount = 0;
+
+		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, true));
 
 		addCollisionLayer("Default");
 
@@ -66,6 +70,32 @@ namespace Physics {
 	}
 
 	int PhysicsManager::getMaskBits(const std::string& layerName) {
+
+		int layerN = getLayerNumber(layerName);
+
+		int flags = 0;
+
+		for (int i = 0; i < layersCount; i++) {
+
+			if (collision_matrix[layerN][i])
+				flags += std::pow(2, i);
+				
+		}
+
+		return flags;
+	}
+
+	int PhysicsManager::getLayerBits(const std::string& layerName) {
+		return std::pow(2, layers.at(layerName));
+	}
+
+	void PhysicsManager::setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide) {
+
+		int layerA = getLayerNumber(layerNameA);
+		int layerB = getLayerNumber(layerNameB);
+
+		collision_matrix[layerA][layerB] = collide;
+		collision_matrix[layerB][layerA] = collide;
 
 	}
 
