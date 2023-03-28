@@ -27,10 +27,8 @@ public:
 publish:
 
 	ECS::Entity* GameObject();
-	//print
+
 	void Print(Scripting::Variable val);
-	void Print_Number(float n);
-	void Print_Vector2D(Vector2D n);
 
 
 	//Math
@@ -61,6 +59,18 @@ publish:
 	Vector2D Vector2D_Normalize(Vector2D vec);
 	float Vector2D_Angle(Vector2D vec);
 	float Vector2D_AngleWithVector(Vector2D vec, Vector2D other);
+
+
+	//String
+	std::string String_Concatenate(std::string a, std::string b);
+	std::string String_Substring(std::string a, int begin, int end);
+	std::string String_Begining(std::string a, int b);
+	std::string String_End(std::string a, int b);
+	std::string String_Trim(std::string a, std::string values);
+	std::string String_TrimBlanks(std::string a);
+	char String_GetLetter(std::string a, int b);
+	int String_Find(std::string a, char c);
+
 private:
 
 	ScriptFunctionality();

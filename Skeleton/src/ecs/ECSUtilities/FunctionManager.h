@@ -47,8 +47,6 @@ Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Print_Vector2D(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Subtract(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Multiply(std::vector<Scripting::Variable>const& vec);
@@ -71,3 +69,11 @@ Scripting::Variable ScriptFunctionality_Vector2D_Y(std::vector<Scripting::Variab
 Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);

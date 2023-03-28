@@ -98,15 +98,15 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				float v = constValue["value"].get<float>();
 				value = v;
 			}
-			else if (type == "int") {
-
-				int v = constValue["value"].get<int>();
-				value = v;
-			}
 			else if (type == "bool") {
 
 				int b = constValue["value"].get<int>();
 				value = (bool)b;
+			}
+			else if (type == "char") {
+
+				char c = constValue["value"].get<char>();
+				value = c;
 			}
 			else if (type == "Vector2D") {
 				std::string vec = constValue["value"].get<std::string>();
