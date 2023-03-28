@@ -66,7 +66,7 @@ namespace Physics {
 	}
 
 	int PhysicsManager::getMaskBits(const std::string& layerName) {
-
+		return 0;
 	}
 
 	void PhysicsManager::setContactListener(b2ContactListener* contactListener) {

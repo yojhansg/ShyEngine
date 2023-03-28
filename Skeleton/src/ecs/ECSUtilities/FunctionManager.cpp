@@ -32,6 +32,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicsBody_getFriction",PhysicsBody_getFriction);
 	map.emplace("PhysicsBody_setBounciness",PhysicsBody_setBounciness);
 	map.emplace("PhysicsBody_getBounciness",PhysicsBody_getBounciness);
+	map.emplace("Transform_Print_GameObject_Name",Transform_Print_GameObject_Name);
 	map.emplace("Transform_getPosition",Transform_getPosition);
 	map.emplace("Transform_getScale",Transform_getScale);
 	map.emplace("Transform_setPosition",Transform_setPosition);
@@ -45,6 +46,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("InputManager_print",InputManager_print);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
+	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
 	map.emplace("ScriptFunctionality_Print_Number",ScriptFunctionality_Print_Number);
 	map.emplace("ScriptFunctionality_Print_Vector2D",ScriptFunctionality_Print_Vector2D);
 	map.emplace("ScriptFunctionality_Math_Add",ScriptFunctionality_Math_Add);
@@ -131,6 +133,11 @@ Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>co
 	float ret = self->getBounciness();
 	return ret;
 }
+Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->Print_GameObject_Name();
+	return Scripting::Variable::Null();
+}
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	Utilities::Vector2D ret = self->getPosition();
@@ -195,6 +202,11 @@ Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variab
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->enableDebugDraw(vec[0].value.Bool);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	ECS::Entity* ret = manager->GameObject();
+	return ret;
 }
 Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();

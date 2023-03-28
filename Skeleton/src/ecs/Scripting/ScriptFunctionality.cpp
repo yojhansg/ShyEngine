@@ -1,6 +1,7 @@
 #include "ScriptFunctionality.h"
 #include <math.h>
 #include <iostream>
+#include <Script.h>
 
 #define DELTA 0.001f
 
@@ -11,6 +12,13 @@ Scripting::ScriptFunctionality::~ScriptFunctionality()
 Scripting::ScriptFunctionality::ScriptFunctionality()
 {
 }
+
+
+ECS::Entity* Scripting::ScriptFunctionality::GameObject()
+{
+	return ECS::Script::currentScript->getEntity();
+}
+
 
 void Scripting::ScriptFunctionality::Print_Number(float n)
 {

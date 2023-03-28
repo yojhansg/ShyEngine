@@ -4,7 +4,14 @@
 #include "EditorExport.h"
 #include "Vector2D.h"
 
+
+namespace ECS {
+
+	class Entity;
+}
+
 using Utilities::Vector2D;
+
 
 namespace Scripting {
 
@@ -19,6 +26,7 @@ public:
 
 publish:
 
+	ECS::Entity* GameObject();
 	//print
 	void Print_Number(float n);
 	void Print_Vector2D(Vector2D n);

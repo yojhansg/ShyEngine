@@ -82,7 +82,7 @@ namespace ECS {
 		b2Filter filter = fixture->GetFilterData();
 
 		filter.categoryBits = pm->getLayerNumber(layerName);
-		filter.maskBits = pm->
+		//filter.maskBits = pm->
 
 		fixture->SetFilterData(filter);
 	}

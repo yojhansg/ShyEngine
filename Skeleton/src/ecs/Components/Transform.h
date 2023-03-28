@@ -28,8 +28,14 @@ namespace ECS {
 
 	publish:
 		// Getters
+
+		//TODO: temporal
+
+		void Print_GameObject_Name();
+
 		Utilities::Vector2D getPosition();
 		Utilities::Vector2D getScale();
+
 
 	public:
 		Utilities::Vector2D* getPositionPointer();

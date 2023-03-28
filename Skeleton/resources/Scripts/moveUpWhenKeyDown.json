@@ -1,0 +1,91 @@
+{
+    "nodeCount": 20,
+    "update": 0,
+
+
+    "functions" : [
+
+        {
+            "index" : 1,
+            "function": "Transform_setPosition",
+            "input" : [
+                10, 7, 8
+            ]
+        },
+        {
+            "index" : 2,
+            "function": "Transform_getPosition",
+            "input": [
+                10
+            ],
+           
+            "comment": "@Vector posicion del transform"
+        },
+        {
+            "index" : 3,
+            "function": "ScriptFunctionality_GameObject"
+        },
+        
+        {
+            "index" : 4,
+            "function": "InputManager_keyDownEvent"
+        },
+        {
+            "index" : 6,
+            "function": "ScriptFunctionality_Vector2D_Y",
+            "input": [
+                2
+            ],
+            "comment": "@posicion y del transform"
+        },
+        {
+            "index" : 7,
+            "function": "ScriptFunctionality_Vector2D_X",
+            "input": [
+                2
+            ],
+            "comment": "@posicion x del transform"
+        }
+        ,
+        {
+            "index" : 8,
+            "function": "ScriptFunctionality_Math_Add",
+            "input": [
+                5, 6
+            ],
+            "comment": "Suma la posicion y del vector"
+        },
+        {
+            "index" : 9,
+            "function": "ScriptFunctionality_Vector2D_Create",
+            "input": [
+                7, 8
+            ],
+            "comment": "Crea el nuevo transform con la posicion cambiada"
+        },
+        {
+            "index" : 10,
+            "function": "ScriptFunctionality_GameObject"
+        }
+    ],
+
+    "forks" : [
+
+        {
+            "index" : 0,
+            "type" : 0,
+            "A": 1,
+            "B": -1,
+            "condition": 4
+        }
+    ],
+    "consts" : [
+
+        {
+            "index": 5,
+            "type": "float",
+            "value": -500
+        }
+
+    ]
+ }

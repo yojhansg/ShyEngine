@@ -9,6 +9,7 @@
 #include <Components/BoxBody.h>
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
+#include <Scripting/Script.h>
 #include <Components/ChainBody.h>
 #include <Components/TestComponent.h>
 #include <ECSUtilities/FunctionManager.h>
@@ -37,30 +38,30 @@ void Game::firstScene() {
 	// 2.- Entities
 
 		// Player
-		ECS::Entity* player = scene->createEntity("Player");
+	ECS::Entity* player = scene->createEntity("Player");
 
-		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("link.png");
-		auto collider = player->addComponent<ECS::BoxBody>();
+	auto tr = player->addComponent<ECS::Transform>();
+	auto im = player->addComponent<ECS::Image>("link.png");
+	auto collider = player->addComponent<ECS::BoxBody>();
 
-		// Ground
-		ECS::Entity* ground = scene->createEntity("Ground");
+	// Ground
+	ECS::Entity* ground = scene->createEntity("Ground");
 
-		auto grTr = ground->addComponent<ECS::Transform>();
-		auto grIm = ground->addComponent<ECS::Image>("ground.png");
-		auto grCol = ground->addComponent<ECS::EdgeBody>();
+	auto grTr = ground->addComponent<ECS::Transform>();
+	auto grIm = ground->addComponent<ECS::Image>("ground.png");
+	auto grCol = ground->addComponent<ECS::EdgeBody>();
 
-		std::map<std::string, CallableFunction> funciones;
-		FunctionManager::CreateFunctionMap(funciones);
+	std::map<std::string, CallableFunction> funciones;
+	FunctionManager::CreateFunctionMap(funciones);
 
 
-		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
+	// Ball
+	ECS::Entity* ball = scene->createEntity("Ball");
 
-		auto trBall = ball->addComponent<ECS::Transform>();
-		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto colliderBall = ball->addComponent<ECS::CircleBody>();
-		auto tComp = ball->addComponent<ECS::TestComponent>();
+	auto trBall = ball->addComponent<ECS::Transform>();
+	auto imBall = ball->addComponent<ECS::Image>("ball.png");
+	auto colliderBall = ball->addComponent<ECS::CircleBody>();
+	auto tComp = ball->addComponent<ECS::TestComponent>();
 
 
 
@@ -76,30 +77,38 @@ void Game::firstScene() {
 	std::cout << tr->miVector2d << std::endl;*/
 
 	// Scripting
-	
+
 
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(renderer->getWidth() / 3, renderer->getHeight() / 3);
-		tr->setScale(0.35f, 0.35f);
-		
-		collider->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		collider->setBounciness(0.5f);
-		
-		// Ground
-		grTr->setScale(1, 1);
-		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
-		grCol->addOffSet(0, -1);
+	tr->setPosition(renderer->getWidth() / 3, renderer->getHeight() / 3);
+	tr->setScale(0.35f, 0.35f);
 
-		//// Ball
-		trBall->setPosition(renderer->getWidth() / 1.5f, renderer->getHeight() / 4);
-		trBall->setScale(0.25f, 0.25f);
+	collider->setBodyType(ECS::PhysicsBody::DYNAMIC);
+	collider->setBounciness(0.5f);
 
-		colliderBall->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		colliderBall->setBounciness(0.5f);
+	// Ground
+	grTr->setScale(1, 1);
+	grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
+	grCol->addOffSet(0, -1);
+
+	//// Ball
+	trBall->setPosition(renderer->getWidth() / 1.5f, renderer->getHeight() / 4);
+	trBall->setScale(0.25f, 0.25f);
+
+	colliderBall->setBodyType(ECS::PhysicsBody::DYNAMIC);
+	colliderBall->setBounciness(0.5f);
 
 	// 5.- Start
+
+
+	//Yojhan - Scripts
+	player->addComponent<ECS::Script>()->Initialise("printGameObjectName.json");
+	player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
+	player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
+
+
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 

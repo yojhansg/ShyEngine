@@ -3,7 +3,7 @@
 #include "Engine.h"
 
 
-#define DEBUG_SCRIPT
+//#define DEBUG_SCRIPT
 
 
 #ifdef DEBUG_SCRIPT
