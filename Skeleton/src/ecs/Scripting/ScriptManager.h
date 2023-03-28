@@ -27,6 +27,7 @@ namespace Scripting {
 
 			Node* start;
 			Node* update;
+			Node* onCollisionEnter;
 		};
 
 

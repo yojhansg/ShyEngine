@@ -36,11 +36,6 @@ namespace ECS {
 
 		void remove(Component* c);
 
-		Scripting::Variable CallMethod(std::string methodName, std::vector<Scripting::Variable> const& input);
-		
-		Scripting::Variable cacadevaca(std::vector<Scripting::Variable> const&);
-
-
 	private:
 
 		virtual void init() {};
@@ -80,9 +75,6 @@ namespace ECS {
 
 		Entity* entity;
 		bool active;
-		
-		typedef Scripting::Variable (*CallableMethod)(std::vector<Scripting::Variable> const&);
-		std::map <std::string, CallableMethod> registeredMethods;
 	};
 }
 

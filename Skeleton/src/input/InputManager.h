@@ -51,7 +51,6 @@ namespace Input {
 
 		bool keyUpEvent();
 
-		void print();
 
 
 	public:

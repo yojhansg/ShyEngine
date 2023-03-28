@@ -3,6 +3,7 @@
 #include "Singleton.h"
 #include <stack>
 #include <string>
+#include "EditorExport.h"
 
 /*
 * 
@@ -18,11 +19,13 @@
 * 
 */
 
+//TODO: en los scripts no se puede tener un puntero a una escena, asi que habria que representar las escenas por un string o por un index
+
 namespace ECS {
 
 	class Scene;
 
-	class SceneManager : public Utilities::Singleton<SceneManager> {
+	EditorManager SceneManager : public Utilities::Singleton<SceneManager> {
 
 	public:
 
@@ -57,6 +60,9 @@ namespace ECS {
 
 		void changeScene(Scene* sce, LOAD_MODE m);
 
+	publish:
+		void resetScene();
+	public:
 		/// <summary>
 		/// Manage the scenes.
 		/// If the user changed the scene in the current iteration, this method actually change it

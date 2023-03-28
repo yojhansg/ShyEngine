@@ -6,6 +6,7 @@
 #include <Component.h>
 #include <Scripting/Variable.h>
 #include <Scripting/Node.h>
+#include "Scripting/ScriptManager.h"
 
 namespace ECS {
 
@@ -23,10 +24,11 @@ namespace ECS {
 
 		void start() override;
 		void update(float dt) override;
+		void onCollisionEnter(Entity* entity) override;
+
 	private:
 
-		Scripting::Node* startNode;
-		Scripting::Node* updateNode;
+		Scripting::ScriptManager::ScriptNodes nodes;
 
 		std::map<std::string, Scripting::Variable> attributes;
 

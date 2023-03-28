@@ -185,6 +185,8 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	ScriptNodes scriptNodeInfo = { nullptr, nullptr };
 
+
+	//Ver una forma de hacer esto en un bucle o algo asi para que sea mas comodo de hacer la verdad
 	if (file.contains("start")) {
 		int startIdx = file["start"].get<int>();
 		Node* startNode = allScriptNodes[startIdx];
@@ -197,6 +199,11 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		scriptNodeInfo.update = updateNode;
 	}
 
+	if (file.contains("onCollisionEnter")) {
+		int collisionIdx = file["onCollisionEnter"].get<int>();
+		Node* collisionNode = allScriptNodes[collisionIdx];
+		scriptNodeInfo.onCollisionEnter = collisionNode;
+	}
 
 
 	fileStream.close();

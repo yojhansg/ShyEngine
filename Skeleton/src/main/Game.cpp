@@ -41,80 +41,97 @@ void Game::firstScene() {
 		// Player
 	ECS::Entity* player = scene->createEntity("Player");
 
-		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("link.png");
-		auto body = player->addComponent<ECS::BoxBody>();
+	auto tr = player->addComponent<ECS::Transform>();
+	auto im = player->addComponent<ECS::Image>("pollo.png");
+	auto body = player->addComponent<ECS::BoxBody>();
 
 	// Ground
-	ECS::Entity* ground = scene->createEntity("Ground");
-
-		auto grTr = ground->addComponent<ECS::Transform>();
-		auto grIm = ground->addComponent<ECS::Image>("ground.png");
-		auto grBody = ground->addComponent<ECS::EdgeBody>();
-
-	std::map<std::string, CallableFunction> funciones;
-	FunctionManager::CreateFunctionMap(funciones);
+	//ECS::Entity* ground = scene->createEntity("Ground");
+	//
+	//auto grTr = ground->addComponent<ECS::Transform>();
+	//auto grIm = ground->addComponent<ECS::Image>("ground.png");
+	//auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 
 	// Ball
 	ECS::Entity* ball = scene->createEntity("Ball");
 
-		auto trBall = ball->addComponent<ECS::Transform>();
-		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto ballBody = ball->addComponent<ECS::CircleBody>();
-		auto tComp = ball->addComponent<ECS::TestComponent>();
+	auto trBall = ball->addComponent<ECS::Transform>();
+	auto imBall = ball->addComponent<ECS::Image>("ball.png");
+	auto ballBody = ball->addComponent<ECS::CircleBody>();
+	auto tComp = ball->addComponent<ECS::TestComponent>();
+
+
+	ECS::Entity* tuberia = scene->createEntity("Tuberia");
+	auto tubTr = tuberia->addComponent<ECS::Transform>();
+	auto tubIm = tuberia->addComponent<ECS::Image>("tuberiaFlappyBird.png");
+	auto tubBody = tuberia->addComponent<ECS::BoxBody>();
+
+
+
+	ECS::Entity* tuberiaInv = scene->createEntity("Tuberia");
+	auto tubTrInv = tuberiaInv->addComponent<ECS::Transform>();
+	auto tubImInv = tuberiaInv->addComponent<ECS::Image>("tuberiaFlappyBird.png");
+	auto tubBodyInv = tuberiaInv->addComponent<ECS::BoxBody>();
+
+	player->addComponent<ECS::Script>()->Initialise("FlappyBirdJump.json");
+	player->addComponent<ECS::Script>()->Initialise("RestartOnCollision.json");
+
+	tuberia->addComponent<ECS::Script>()->Initialise("MovimientoTuberia.json");
+	tuberiaInv->addComponent<ECS::Script>()->Initialise("MovimientoTuberia.json");
 
 
 
 	// 3.- Init
 	scene->init();
 
-	std::map<std::string, std::string> map;
-	map["x"] = "3";
-	map["miVector2d"] = "1, 89";
-	ClassReflection::ReflectTransform(tr, map);
-
-	/*std::cout << tr->x << std::endl;
-	std::cout << tr->miVector2d << std::endl;*/
-
-	// Scripting
-
 
 	auto pm = Physics::PhysicsManager::instance();
 
 	pm->addCollisionLayer("Player");
-	pm->setCollisionBetweenLayers("Default", "Player", false);
+	pm->setCollisionBetweenLayers("Default", "Player", true);
 
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
-		tr->setScale(0.35f, 0.35f);
+	tr->setPosition(200 / 2, renderer->getHeight() / 2);
+	tr->setScale(0.35f, 0.35f);
 
-		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		body->setBounciness(0.5f);
-		body->setCollisionLayer("Player");
+	body->setBodyType(ECS::PhysicsBody::DYNAMIC);
+	body->setBounciness(0.5f);
+	body->setCollisionLayer("Player");
+	body->setRotationFreezed(true);
 
-		// Ground
-		grTr->setScale(1, 1);
-		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
-		grBody->addOffSet(0, -1);
+	tubTrInv->setRotation(180);
+	tubTrInv->setPosition(1400, 150);
+	tubTr->setPosition(1400, renderer->getHeight() - 150);
 
-		//// Ball
-		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
-		trBall->setScale(0.25f, 0.25f);
+	tubBody->setBodyType(ECS::PhysicsBody::KINEMATIC);
+	tubBody->setGravityScale(0);
 
-		ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		ballBody->setBounciness(0.5f);
+	tubBodyInv->setBodyType(ECS::PhysicsBody::KINEMATIC);
+	tubBodyInv->setGravityScale(0);
+
+	// Ground
+	//grTr->setScale(1, 1);
+	//grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
+	//grBody->addOffSet(0, -1);
+
+	//// Ball
+	trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
+	trBall->setScale(0.25f, 0.25f);
+
+	ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
+	ballBody->setBounciness(0.5f);
 
 	// 5.- Start
 
 
 	//Yojhan - Scripts
-	player->addComponent<ECS::Script>()->Initialise("printGameObjectName.json");
-	player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
-	player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
-
+	//player->addComponent<ECS::Script>()->Initialise("printGameObjectName.json");
+	//player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
+	//player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
+	
 
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();

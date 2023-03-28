@@ -6,6 +6,7 @@
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
+#include <SceneManager.h>
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
 #include <PhysicsManager.h>
@@ -32,6 +33,8 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicsBody_getFriction",PhysicsBody_getFriction);
 	map.emplace("PhysicsBody_setBounciness",PhysicsBody_setBounciness);
 	map.emplace("PhysicsBody_getBounciness",PhysicsBody_getBounciness);
+	map.emplace("PhysicsBody_setLinearVelocity",PhysicsBody_setLinearVelocity);
+	map.emplace("PhysicsBody_getLinearVelocity",PhysicsBody_getLinearVelocity);
 	map.emplace("Transform_Print_GameObject_Name",Transform_Print_GameObject_Name);
 	map.emplace("Transform_getPosition",Transform_getPosition);
 	map.emplace("Transform_getScale",Transform_getScale);
@@ -43,9 +46,9 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Transform_scale",Transform_scale);
 	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
 	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
-	map.emplace("InputManager_print",InputManager_print);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
+	map.emplace("SceneManager_resetScene",SceneManager_resetScene);
 	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
 	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
 	map.emplace("ScriptFunctionality_Math_Add",ScriptFunctionality_Math_Add);
@@ -140,6 +143,16 @@ Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>co
 	float ret = self->getBounciness();
 	return ret;
 }
+Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	self->setLinearVelocity(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	Vector2D ret = self->getLinearVelocity();
+	return ret;
+}
 Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->Print_GameObject_Name();
@@ -195,11 +208,6 @@ Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>cons
 	bool ret = manager->keyUpEvent();
 	return ret;
 }
-Scripting::Variable InputManager_print(std::vector<Scripting::Variable>const& vec){
-	InputManager* manager = InputManager::instance();
-	manager->print();
-	return Scripting::Variable::Null();
-}
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->debugDraw();
@@ -208,6 +216,11 @@ Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->enableDebugDraw(vec[0].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	manager->resetScene();
 	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec){

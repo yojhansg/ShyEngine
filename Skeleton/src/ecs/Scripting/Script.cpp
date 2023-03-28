@@ -5,20 +5,23 @@ ECS::Script* ECS::Script::currentScript = nullptr;
 
 void ECS::Script::start()
 {
-	Iteration(startNode);
+	Iteration(nodes.start);
 }
 
 void ECS::Script::update(float dt)
 {
-	Iteration(updateNode);
+	Iteration(nodes.update);
+}
+
+void ECS::Script::onCollisionEnter(Entity* entity)
+{
+	//TODO: ver una forma de saber con que objeto he colisionado
+	Iteration(nodes.onCollisionEnter);
 }
 
 void ECS::Script::Initialise(std::string path)
 {
-	auto scriptInfo = Scripting::ScriptManager::LoadScript(path);
-
-	startNode = scriptInfo.start;
-	updateNode = scriptInfo.update;
+	nodes = Scripting::ScriptManager::LoadScript(path);
 }
 
 void ECS::Script::Iteration(Scripting::Node* beginNode)

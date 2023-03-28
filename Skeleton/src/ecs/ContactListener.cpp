@@ -7,7 +7,7 @@ namespace ECS {
 
 	ContactListener::ContactListener() {
 
-		//PhysicsManager::PhysicsManager::instance()->setContactListener(this);
+		Physics::PhysicsManager::instance()->setContactListener(this);
 	}
 
 	void ContactListener::BeginContact(b2Contact* contact) {

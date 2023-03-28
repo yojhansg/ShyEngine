@@ -34,6 +34,14 @@ namespace ECS {
 		change = true;
 	}
 
+	void SceneManager::resetScene() {
+		
+		//TODO: intentar hacer esto un pelin mejor
+		scenes.top()->onSceneDown();
+		scenes.top()->~Scene();
+		scenes.top()->start();
+	}
+
 	void SceneManager::manageScenes() {
 		if (change) {
 			switch (mode) {
