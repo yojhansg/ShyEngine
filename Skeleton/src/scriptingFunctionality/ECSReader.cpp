@@ -450,6 +450,9 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 		return "value.Bool";
 	if (in == "char")
 		return "value.Char";
+	if (in == "Utilities::Vector2D" || in == "Vector2D") {
+		return "vector";
+	}
 
 	return "value." + in;
 }
@@ -558,6 +561,7 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 using namespace ECS;
 using namespace Physics;
 using namespace Input;
+using namespace Scripting;
 
 
 

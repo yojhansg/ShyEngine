@@ -15,19 +15,6 @@ namespace Scripting {
 
 	public:
 
-		enum class Operation {
-
-			FunctionCall, Print, 
-
-			//Math operations
-			Add, Subtract, Multiply, Division, Power, SquareRoot, Mod, PlusOne,
-
-			//Logic operations
-			Equal, Different, Minor, Greater, MinorEqual, GreaterEqual, And, Or, Not,
-
-			OperationCount
-		};
-
 
 		Function(int idx, std::string const& method = "");
 

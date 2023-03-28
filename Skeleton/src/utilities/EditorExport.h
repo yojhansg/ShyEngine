@@ -53,6 +53,7 @@
 		-No puede haber atributos dentro del modificador publish
 		-No pueden haber comentarios de asterisco. Para comentar usar doble barra (//)
 		-Los tipos de entrada o salida tienen que ser los tipos permitidos. (pe. no se pueden tener enums por ejemplo)
+		-No se puede usar sobre metodos estaticos
 
 */
 #define publish public

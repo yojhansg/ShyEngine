@@ -10,6 +10,7 @@
 #include <Components/BoxBody.h>
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
+#include <Scripting/Script.h>
 #include <Components/ChainBody.h>
 #include <Components/TestComponent.h>
 #include <ECSUtilities/FunctionManager.h>
@@ -38,25 +39,25 @@ void Game::firstScene() {
 	// 2.- Entities
 
 		// Player
-		ECS::Entity* player = scene->createEntity("Player");
+	ECS::Entity* player = scene->createEntity("Player");
 
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
 
-		// Ground
-		ECS::Entity* ground = scene->createEntity("Ground");
+	// Ground
+	ECS::Entity* ground = scene->createEntity("Ground");
 
 		auto grTr = ground->addComponent<ECS::Transform>();
 		auto grIm = ground->addComponent<ECS::Image>("ground.png");
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
-		std::map<std::string, CallableFunction> funciones;
-		FunctionManager::CreateFunctionMap(funciones);
+	std::map<std::string, CallableFunction> funciones;
+	FunctionManager::CreateFunctionMap(funciones);
 
 
-		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
+	// Ball
+	ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
@@ -89,11 +90,11 @@ void Game::firstScene() {
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
-		
+
 		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
 		body->setBounciness(0.5f);
 		body->setCollisionLayer("Player");
-		
+
 		// Ground
 		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
@@ -107,6 +108,14 @@ void Game::firstScene() {
 		ballBody->setBounciness(0.5f);
 
 	// 5.- Start
+
+
+	//Yojhan - Scripts
+	player->addComponent<ECS::Script>()->Initialise("printGameObjectName.json");
+	player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
+	player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
+
+
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 

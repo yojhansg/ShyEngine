@@ -2,11 +2,20 @@
 #include <iostream>
 #include "Engine.h"
 
+
+//#define DEBUG_SCRIPT
+
+
+#ifdef DEBUG_SCRIPT
 #include "Scripting/Script.h"
+#endif // DEBUG_SCRIPT
+
 
 int main(int argc, char* args[]) {
 
-	/*ECS::Script script;
+#ifdef DEBUG_SCRIPT
+
+	ECS::Script script;
 
 	script.Initialise("prueba.json");
 
@@ -15,6 +24,10 @@ int main(int argc, char* args[]) {
 	std::cout << "=== Udate ===" << std::endl;
 
 	return 0;*/
+
+#endif // DEBUG_SCRIPT
+
+
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 

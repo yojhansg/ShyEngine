@@ -22,7 +22,7 @@ void Scripting::Function::Operate(Node*& nextNode)
 		inputVariable.push_back(in->output);
 	}
 
-	ScriptManager::CallFunction(methodName, inputVariable);
+	output = ScriptManager::CallFunction(methodName, inputVariable);
 
 	//Default -> suma
 	//TODO: resto de operaciones

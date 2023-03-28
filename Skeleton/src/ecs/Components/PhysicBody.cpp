@@ -37,7 +37,7 @@ namespace ECS {
 		scale = nullptr;
 
 		layerName = "Default";
-		
+
 	}
 
 	PhysicsBody::~PhysicsBody() {

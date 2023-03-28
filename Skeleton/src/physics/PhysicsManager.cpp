@@ -48,7 +48,7 @@ namespace Physics {
 
 	void PhysicsManager::addCollisionLayer(const std::string& layerName) {
 
-		assert(layersCount < MAX_COLLISION_LAYERS, "Número máximo de capas de colision alcanzado!");
+		assert(layersCount < MAX_COLLISION_LAYERS, "Nï¿½mero mï¿½ximo de capas de colision alcanzado!");
 
 		layers.insert(std::make_pair(layerName, layersCount));
 
@@ -79,7 +79,7 @@ namespace Physics {
 
 			if (collision_matrix[layerN][i])
 				flags += std::pow(2, i);
-				
+
 		}
 
 		return flags;

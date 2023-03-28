@@ -14,7 +14,8 @@
 #include <Component.h>
 
 #include <ECSUtilities/FunctionManager.h>
-#include "Scripting/ScriptManager.h"
+#include <Scripting/ScriptManager.h>
+#include <Scripting/ScriptFunctionality.h>
 
 #include "Game.h"
 #include <iostream>
@@ -29,7 +30,9 @@ using namespace std::chrono;
 Engine::Engine() {
 
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; contactListener = nullptr;
-	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr; scriptManager = nullptr;
+	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr;
+	scriptManager = nullptr;
+	scriptFunctionality = nullptr;
 }
 
 void Engine::init() {
@@ -47,6 +50,7 @@ void Engine::init() {
 	resourcesManager = ResourcesManager::ResourcesManager::init();
 	engineTime = Utilities::EngineTime::init();
 	scriptManager = Scripting::ScriptManager::init();
+	scriptFunctionality = Scripting::ScriptFunctionality::init();
 
 	physicsManager->enableDebugDraw(true);
 
