@@ -2,7 +2,7 @@
 #include "FunctionManager.h"
 #include "Entity.h"
 
-//Creation time: Mon Mar 27 22:32:54 2023
+//Creation time: Tue Mar 28 19:18:09 2023
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
@@ -47,6 +47,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
 	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
+	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
 	map.emplace("ScriptFunctionality_Print_Number",ScriptFunctionality_Print_Number);
 	map.emplace("ScriptFunctionality_Print_Vector2D",ScriptFunctionality_Print_Vector2D);
 	map.emplace("ScriptFunctionality_Math_Add",ScriptFunctionality_Math_Add);
@@ -85,7 +86,7 @@ Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const
 }
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec){
 	Image* self = vec[0].value.entity->getComponent<Image>();
-	self->setSrcRect(vec[1].value.Int, vec[2].value.Int, vec[3].value.Int, vec[4].value.Int);
+	self->setSrcRect(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
@@ -100,7 +101,7 @@ Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
 }
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec){
 	Image* self = vec[0].value.entity->getComponent<Image>();
-	self->setRotaionPoint(vec[1].value.Int, vec[2].value.Int);
+	self->setRotaionPoint(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
@@ -207,6 +208,11 @@ Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variab
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	ECS::Entity* ret = manager->GameObject();
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Print(vec[0]);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();

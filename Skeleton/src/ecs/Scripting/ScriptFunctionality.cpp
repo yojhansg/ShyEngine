@@ -1,6 +1,7 @@
 #include "ScriptFunctionality.h"
 #include <math.h>
 #include <iostream>
+#include "Entity.h"
 #include <Script.h>
 
 #define DELTA 0.001f
@@ -19,6 +20,38 @@ ECS::Entity* Scripting::ScriptFunctionality::GameObject()
 	return ECS::Script::currentScript->getEntity();
 }
 
+
+void Scripting::ScriptFunctionality::Print(Variable val)
+{
+	switch (val.type)
+	{
+	case Scripting::Variable::Type::Bool:
+		std::cout << val.value.Bool ? "True" : "False";
+		break;
+	case Scripting::Variable::Type::Float:
+		std::cout << val.value.Float;
+		break;
+	case Scripting::Variable::Type::Char:
+		std::cout << val.value.Char;
+		break;
+	case Scripting::Variable::Type::Entity:
+		std::cout << val.value.entity->getEntityName();
+		break;
+	case Scripting::Variable::Type::Vector2D:
+		std::cout << val.vector;
+		break;
+	case Scripting::Variable::Type::String:
+		std::cout << val.str;
+		break;
+	case Scripting::Variable::Type::Null:
+		std::cout << "null";
+		break;
+	default:
+		break;
+	}
+
+	std::cout << "\n";
+}
 
 void Scripting::ScriptFunctionality::Print_Number(float n)
 {

@@ -112,6 +112,10 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				std::string vec = constValue["value"].get<std::string>();
 				value = (Utilities::Vector2D)vec;
 			}
+			else if (type == "string") {
+				std::string vec = constValue["value"].get<std::string>();
+				value = vec;
+			}
 
 			ConstNode* constValueNode = new ConstNode(nodeIdx, value);
 			allScriptNodes[nodeIdx] = constValueNode;

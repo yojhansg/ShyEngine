@@ -7,15 +7,32 @@
 
         {
             "index" : 0,
-            "function": "Transform_Print_GameObject_Name",
+            "function": "ScriptFunctionality_Print",
             "input" : [
-                1
-            ]
+                2
+            ],
+            "next": 3
         },
         {
             "index" : 1,
             "function": "ScriptFunctionality_GameObject"
+        },
+        {
+            "index" : 3,
+            "function": "ScriptFunctionality_Print",
+            "input" : [
+                1
+            ]
         }
 
+    ],
+
+    "consts" : [
+
+        {
+            "index" : 2,
+            "type": "string",
+            "value": "hola parseiro"
+        }
     ]
  }

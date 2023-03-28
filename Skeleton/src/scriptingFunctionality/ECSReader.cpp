@@ -373,7 +373,7 @@ std::string ECSReader::Method::FunctionDefinition()
 	int i = 1;
 	for (auto& in : input) {
 
-		definition << "vec[" << i << "]." << String2ScriptingVariable(in.type) << ", ";
+		definition << "vec[" << i << "]" << String2ScriptingVariable(in.type) << ", ";
 
 		i++;
 	}
@@ -416,7 +416,7 @@ std::string ECSReader::Method::ManagerFunctionDeclaration()
 	int i = 0;
 	for (auto& in : input) {
 
-		declaration << "vec[" << i << "]." << String2ScriptingVariable(in.type) << ", ";
+		declaration << "vec[" << i << "]" << String2ScriptingVariable(in.type) << ", ";
 
 		i++;
 	}
@@ -443,18 +443,27 @@ std::string ECSReader::Method::ManagerFunctionDeclaration()
 std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 {
 	if (in == "int")
-		return "value.Int";
+		return ".value.Float";
 	if (in == "float")
-		return "value.Float";
+		return ".value.Float";
 	if (in == "bool")
-		return "value.Bool";
+		return ".value.Bool";
 	if (in == "char")
-		return "value.Char";
-	if (in == "Utilities::Vector2D" || in == "Vector2D") {
-		return "vector";
+		return ".value.Char";
+
+	if (in == "std::string" || in == "string") {
+		return ".str";
 	}
 
-	return "value." + in;
+	if (in == "Utilities::Vector2D" || in == "Vector2D") {
+		return ".vector";
+	}
+
+	if (in == "Variable" || in == "Scripting::Variable") {
+		return "";
+	}
+
+	return ".value." + in;
 }
 
 

@@ -3,7 +3,7 @@
 #include "Singleton.h"
 #include "EditorExport.h"
 #include "Vector2D.h"
-
+#include "Scripting/Variable.h"
 
 namespace ECS {
 
@@ -28,6 +28,7 @@ publish:
 
 	ECS::Entity* GameObject();
 	//print
+	void Print(Scripting::Variable val);
 	void Print_Number(float n);
 	void Print_Vector2D(Vector2D n);
 

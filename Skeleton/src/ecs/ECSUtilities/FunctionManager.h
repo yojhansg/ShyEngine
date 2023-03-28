@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Mar 27 22:32:54 2023
+//Creation time : Tue Mar 28 19:18:09 2023
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
@@ -46,6 +46,7 @@ Scripting::Variable InputManager_print(std::vector<Scripting::Variable>const& ve
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print_Vector2D(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);

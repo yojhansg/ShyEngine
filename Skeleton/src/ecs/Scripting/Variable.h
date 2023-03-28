@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector2D.h"
+#include <string>
 
 namespace ECS {
 	class Entity;
@@ -14,11 +15,10 @@ namespace Scripting {
 	struct Variable {
 
 		enum class Type {
-			Null, Int, Float, Bool, Char, Entity, Vector2D
+			Null, Float, Bool, Char, Entity, Vector2D, String
 		};
 
 		union Value {
-			int Int;
 			float Float;
 			bool Bool;
 			char Char;
@@ -29,6 +29,7 @@ namespace Scripting {
 		Type type;
 		Value value;
 
+		std::string str;
 		Utilities::Vector2D vector;
 
 		Variable();
@@ -42,6 +43,7 @@ namespace Scripting {
 		static Variable Char(char value);
 		static Variable Entity(ECS::Entity* entity);
 		static Variable Vector2D(Utilities::Vector2D vector);
+		static Variable String(std::string const& str);
 
 		Variable(int value);
 		Variable(float value);
@@ -49,14 +51,7 @@ namespace Scripting {
 		Variable(char value);
 		Variable(ECS::Entity* entity);
 		Variable(Utilities::Vector2D vector);
-
-		Variable operator +(Variable const& other) const;
-		Variable operator -(Variable const& other) const;
-		Variable operator *(Variable const& other) const;
-		Variable operator /(Variable const& other) const;
-		Variable operator %(Variable const& other) const;
-
-		Variable Pow(Variable const& other) const;
+		Variable(std::string const& str);
 
 
 		/*
