@@ -6,6 +6,7 @@
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
+#include <SceneManager.h>
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
 #include <PhysicsManager.h>
@@ -32,6 +33,8 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicsBody_getFriction",PhysicsBody_getFriction);
 	map.emplace("PhysicsBody_setBounciness",PhysicsBody_setBounciness);
 	map.emplace("PhysicsBody_getBounciness",PhysicsBody_getBounciness);
+	map.emplace("PhysicsBody_setLinearVelocity",PhysicsBody_setLinearVelocity);
+	map.emplace("PhysicsBody_getLinearVelocity",PhysicsBody_getLinearVelocity);
 	map.emplace("Transform_Print_GameObject_Name",Transform_Print_GameObject_Name);
 	map.emplace("Transform_getPosition",Transform_getPosition);
 	map.emplace("Transform_getScale",Transform_getScale);
@@ -43,13 +46,11 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Transform_scale",Transform_scale);
 	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
 	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
-	map.emplace("InputManager_print",InputManager_print);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
+	map.emplace("SceneManager_resetScene",SceneManager_resetScene);
 	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
 	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
-	map.emplace("ScriptFunctionality_Print_Number",ScriptFunctionality_Print_Number);
-	map.emplace("ScriptFunctionality_Print_Vector2D",ScriptFunctionality_Print_Vector2D);
 	map.emplace("ScriptFunctionality_Math_Add",ScriptFunctionality_Math_Add);
 	map.emplace("ScriptFunctionality_Math_Subtract",ScriptFunctionality_Math_Subtract);
 	map.emplace("ScriptFunctionality_Math_Multiply",ScriptFunctionality_Math_Multiply);
@@ -72,6 +73,14 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("ScriptFunctionality_Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
 	map.emplace("ScriptFunctionality_Vector2D_Angle",ScriptFunctionality_Vector2D_Angle);
 	map.emplace("ScriptFunctionality_Vector2D_AngleWithVector",ScriptFunctionality_Vector2D_AngleWithVector);
+	map.emplace("ScriptFunctionality_String_Concatenate",ScriptFunctionality_String_Concatenate);
+	map.emplace("ScriptFunctionality_String_Substring",ScriptFunctionality_String_Substring);
+	map.emplace("ScriptFunctionality_String_Begining",ScriptFunctionality_String_Begining);
+	map.emplace("ScriptFunctionality_String_End",ScriptFunctionality_String_End);
+	map.emplace("ScriptFunctionality_String_Trim",ScriptFunctionality_String_Trim);
+	map.emplace("ScriptFunctionality_String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
+	map.emplace("ScriptFunctionality_String_GetLetter",ScriptFunctionality_String_GetLetter);
+	map.emplace("ScriptFunctionality_String_Find",ScriptFunctionality_String_Find);
 
 };
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){
@@ -134,6 +143,16 @@ Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>co
 	float ret = self->getBounciness();
 	return ret;
 }
+Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	self->setLinearVelocity(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
+	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	Vector2D ret = self->getLinearVelocity();
+	return ret;
+}
 Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	self->Print_GameObject_Name();
@@ -189,11 +208,6 @@ Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>cons
 	bool ret = manager->keyUpEvent();
 	return ret;
 }
-Scripting::Variable InputManager_print(std::vector<Scripting::Variable>const& vec){
-	InputManager* manager = InputManager::instance();
-	manager->print();
-	return Scripting::Variable::Null();
-}
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->debugDraw();
@@ -204,6 +218,11 @@ Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variab
 	manager->enableDebugDraw(vec[0].value.Bool);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	manager->resetScene();
+	return Scripting::Variable::Null();
+}
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	ECS::Entity* ret = manager->GameObject();
@@ -212,16 +231,6 @@ Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variab
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->Print(vec[0]);
-	return Scripting::Variable::Null();
-}
-Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Print_Number(vec[0].value.Float);
-	return Scripting::Variable::Null();
-}
-Scripting::Variable ScriptFunctionality_Print_Vector2D(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Print_Vector2D(vec[0].vector);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec){
@@ -332,5 +341,45 @@ Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Vector2D_AngleWithVector(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_Concatenate(vec[0].str, vec[1].str);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_Substring(vec[0].str, vec[1].value.Float, vec[2].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_Begining(vec[0].str, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_End(vec[0].str, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_Trim(vec[0].str, vec[1].str);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_TrimBlanks(vec[0].str);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	char ret = manager->String_GetLetter(vec[0].str, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	int ret = manager->String_Find(vec[0].str, vec[1].value.Char);
 	return ret;
 }

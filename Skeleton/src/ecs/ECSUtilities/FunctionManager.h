@@ -31,6 +31,8 @@ Scripting::Variable PhysicsBody_setFriction(std::vector<Scripting::Variable>cons
 Scripting::Variable PhysicsBody_getFriction(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsBody_setBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec);
@@ -42,13 +44,11 @@ Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable InputManager_print(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Print_Number(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Print_Vector2D(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Subtract(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Multiply(std::vector<Scripting::Variable>const& vec);
@@ -71,3 +71,11 @@ Scripting::Variable ScriptFunctionality_Vector2D_Y(std::vector<Scripting::Variab
 Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);

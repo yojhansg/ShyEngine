@@ -1,0 +1,23 @@
+{
+    "nodeCount": 20,
+    "onCollisionEnter": 0,
+
+    "functions" : [
+
+        {
+            "index" : 0,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                1
+            ]
+        }
+    ],
+
+    "consts" : [
+        {
+            "index" : 1,
+            "type" : "string",
+            "value": "perdiste guarro"
+        }
+    ]
+ }

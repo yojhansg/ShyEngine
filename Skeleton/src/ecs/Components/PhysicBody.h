@@ -91,8 +91,10 @@ namespace ECS {
         void setCollisionLayer(const std::string& layerName);
 
         // Force methods
+    publish:
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();
+    public:
 
         void setAngularVelocity(float a);
         float getAngularVelocity();

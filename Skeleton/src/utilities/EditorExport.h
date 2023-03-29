@@ -54,6 +54,7 @@
 		-No pueden haber comentarios de asterisco. Para comentar usar doble barra (//)
 		-Los tipos de entrada o salida tienen que ser los tipos permitidos. (pe. no se pueden tener enums por ejemplo)
 		-No se puede usar sobre metodos estaticos
+		-No se permite la sobrecarga de metodos
 
 */
 #define publish public

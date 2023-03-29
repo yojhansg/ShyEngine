@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Entity.h"
 #include <Script.h>
+#include "StringTrim.h"
 
 #define DELTA 0.001f
 
@@ -51,17 +52,6 @@ void Scripting::ScriptFunctionality::Print(Variable val)
 	}
 
 	std::cout << "\n";
-}
-
-void Scripting::ScriptFunctionality::Print_Number(float n)
-{
-	std::cout << n << std::endl;
-}
-
-
-void Scripting::ScriptFunctionality::Print_Vector2D(Vector2D n)
-{
-	std::cout << n << std::endl;
 }
 
 
@@ -184,4 +174,35 @@ float Scripting::ScriptFunctionality::Vector2D_Angle(Vector2D vec)
 float Scripting::ScriptFunctionality::Vector2D_AngleWithVector(Vector2D vec, Vector2D other)
 {
 	return vec.angle(other);
+}
+
+
+std::string Scripting::ScriptFunctionality::String_Concatenate(std::string a, std::string b)
+{
+	return a + b;
+}
+
+std::string Scripting::ScriptFunctionality::String_Substring(std::string a, int begin, int end)
+{
+	return a.substr(begin, end - begin);
+}
+
+std::string Scripting::ScriptFunctionality::String_Begining(std::string a, int b) {
+	return a.substr(0, b);
+}
+std::string Scripting::ScriptFunctionality::String_End(std::string a, int b) {
+	return a.substr(a.size() - b);
+}
+std::string Scripting::ScriptFunctionality::String_Trim(std::string a, std::string values) {
+	return Utilities::trim(a, values);
+}
+std::string Scripting::ScriptFunctionality::String_TrimBlanks(std::string a) {
+	return Utilities::trim(a);
+
+}
+char Scripting::ScriptFunctionality::String_GetLetter(std::string a, int b) {
+	return a[b];
+}
+int Scripting::ScriptFunctionality::String_Find(std::string a, char c) {
+	return a.find(c);
 }

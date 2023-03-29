@@ -66,6 +66,9 @@
         "getFriction": {
             "return": "float"
         },
+        "getLinearVelocity": {
+            "return": "Vector2D"
+        },
         "isTrigger": {
             "return": "bool"
         },
@@ -82,6 +85,19 @@
             "input": [
                 {
                     "name": "friction",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setLinearVelocity": {
+            "input": [
+                {
+                    "name": "x",
+                    "type": "float"
+                },
+                {
+                    "name": "y",
                     "type": "float"
                 }
             ],

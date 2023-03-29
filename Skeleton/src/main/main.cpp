@@ -9,7 +9,7 @@
 #ifdef DEBUG_SCRIPT
 #include "Scripting/Script.h"
 #endif // DEBUG_SCRIPT
-
+#include "Scripting/ScriptFunctionality.h"
 
 int main(int argc, char* args[]) {
 

@@ -423,8 +423,4 @@ namespace Input {
 		return joystickNames[joystickId];
 	}
 
-	void InputManager::print()
-	{
-		std::cout << "hola imprimo por consola" << std::endl;
-	}
 }
