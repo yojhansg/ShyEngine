@@ -16,11 +16,8 @@ namespace ECS {
 		vertex2 = { 0, 0 };
 	}
 
-	EdgeBody::~EdgeBody() {
+	EdgeBody::~EdgeBody() {}
 
-		body->DestroyFixture(fixture);
-		world->DestroyBody(body);
-	}
 
 	void EdgeBody::init() {
 

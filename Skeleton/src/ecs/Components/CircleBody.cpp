@@ -17,11 +17,7 @@ namespace ECS {
 
 	}
 
-	CircleBody::~CircleBody() {
-
-		body->DestroyFixture(fixture);
-		world->DestroyBody(body);
-	}
+	CircleBody::~CircleBody() {}
 
 	void CircleBody::init() {
 

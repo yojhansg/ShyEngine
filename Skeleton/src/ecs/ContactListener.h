@@ -9,18 +9,16 @@ namespace ECS {
 	class ContactListener : public b2ContactListener, public Utilities::Singleton<ContactListener> {
 
 		friend Singleton<ContactListener>;
-
 	public:
 
-		~ContactListener() {};
+		~ContactListener() {};
+	private:
+
+		ContactListener();
 
 		void BeginContact(b2Contact* contact) override;
 
 		void EndContact(b2Contact* contact) override;
-
-	private:
-
-		ContactListener();
 
 	};
 
