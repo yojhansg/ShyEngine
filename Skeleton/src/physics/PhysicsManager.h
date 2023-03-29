@@ -4,6 +4,7 @@
 #include <Vector2D.h>
 #include <vector>
 #include <unordered_map>
+#include <stack>
 
 #include "EditorExport.h"
 
@@ -45,13 +46,13 @@ namespace Physics {
 
 		void removeCollisionLayer(const std::string& layerName);
 
-		int getLayerNumber(const std::string& layerName);
-
 		int getLayerBits(const std::string& layerName);
 
 		int getMaskBits(const std::string& layerName);
 
 		void setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide);
+
+		bool layersExists(const std::string& layerName);
 
 	private:
 
@@ -78,6 +79,8 @@ namespace Physics {
 		std::vector<std::vector<bool>> collision_matrix;
 
 		std::unordered_map<std::string, int> layers;
+
+		std::stack<int> freeLayers;
 
 		int layersCount;
 

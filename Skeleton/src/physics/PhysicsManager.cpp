@@ -29,10 +29,13 @@ namespace Physics {
 		b2draw->SetFlags(flags);
 
 		// Collision Matrix
-
 		layersCount = 0;
 
 		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, true));
+
+		freeLayers = std::stack<int>();
+
+		for (int i = MAX_COLLISION_LAYERS - 1; i >= 0; i--) freeLayers.push(i);
 
 		addCollisionLayer("Default");
 
@@ -48,9 +51,15 @@ namespace Physics {
 
 	void PhysicsManager::addCollisionLayer(const std::string& layerName) {
 
-		assert(layersCount < MAX_COLLISION_LAYERS, "N�mero m�ximo de capas de colision alcanzado!");
+		// Can not add more layers than the maximum
+		assert(layersCount < MAX_COLLISION_LAYERS, "Numero maximo de capas de colision alcanzado!");
 
-		layers.insert(std::make_pair(layerName, layersCount));
+		// Layers name must be unique
+		assert(layers.find(layerName) == layers.end(), "Ya existe una capa con el mismo nombre!");
+
+		layers.insert(std::make_pair(layerName, freeLayers.top()));
+
+		freeLayers.pop();
 
 		layersCount++;
 
@@ -58,20 +67,39 @@ namespace Physics {
 
 	void PhysicsManager::removeCollisionLayer(const std::string& layerName) {
 
-		assert(layersCount > 0, "No se puede eliminar la capa por defecto!");
+		// Default layer can not be deleted, so at least there is always one layer
+		assert(layerName != "Default", "No se puede eliminar la capa por defecto!");
+
+		// A non-existing layer can not be deleted
+		assert(layers.find(layerName) != layers.end(), "La capa con nombre " + layerName + " no existe!");
+
+		int removedLayerIndex = layers.at(layerName);
 
 		layers.erase(layerName);
+
+		for (const auto& par : layers) {
+			if (par.second > removedLayerIndex)
+				layers[par.first]--;
+		}
+
+		freeLayers.push(removedLayerIndex);
+
+		for (int i = removedLayerIndex; i < layersCount - 1; i++) {
+			collision_matrix[i] = collision_matrix[i + 1];
+		}
+
+		for (int i = 0; i < layersCount; i++) {
+			for (int c = removedLayerIndex; c < layersCount - 1; c++) {
+				collision_matrix[i][c] = collision_matrix[i][c + 1];
+			}
+		}
 
 		layersCount--;
 	}
 
-	int PhysicsManager::getLayerNumber(const std::string& layerName) {
-		return layers.at(layerName);
-	}
-
 	int PhysicsManager::getMaskBits(const std::string& layerName) {
 
-		int layerN = getLayerNumber(layerName);
+		int layerN = layers.at(layerName);
 
 		int flags = 0;
 
@@ -91,12 +119,16 @@ namespace Physics {
 
 	void PhysicsManager::setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide) {
 
-		int layerA = getLayerNumber(layerNameA);
-		int layerB = getLayerNumber(layerNameB);
+		int layerA = layers.at(layerNameA);
+		int layerB = layers.at(layerNameB);
 
 		collision_matrix[layerA][layerB] = collide;
 		collision_matrix[layerB][layerA] = collide;
 
+	}
+
+	bool PhysicsManager::layersExists(const std::string& layerName) {
+		return layers.find(layerName) != layers.end();
 	}
 
 	void PhysicsManager::setContactListener(b2ContactListener* contactListener) {

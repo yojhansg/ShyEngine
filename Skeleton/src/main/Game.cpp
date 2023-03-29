@@ -55,7 +55,6 @@ void Game::firstScene() {
 	std::map<std::string, CallableFunction> funciones;
 	FunctionManager::CreateFunctionMap(funciones);
 
-
 	// Ball
 	ECS::Entity* ball = scene->createEntity("Ball");
 
@@ -74,8 +73,8 @@ void Game::firstScene() {
 	map["miVector2d"] = "1, 89";
 	ClassReflection::ReflectTransform(tr, map);
 
-	/*std::cout << tr->x << std::endl;
-	std::cout << tr->miVector2d << std::endl;*/
+	std::cout << tr->x << std::endl;
+	std::cout << tr->miVector2d << std::endl;
 
 	// Scripting
 
@@ -83,7 +82,10 @@ void Game::firstScene() {
 	auto pm = Physics::PhysicsManager::instance();
 
 	pm->addCollisionLayer("Player");
-	pm->setCollisionBetweenLayers("Default", "Player", false);
+	pm->addCollisionLayer("Ground");
+	pm->addCollisionLayer("Ball");
+
+	pm->setCollisionBetweenLayers("Ball", "Player", false);
 
 	// 4.- Components settings
 
@@ -93,12 +95,14 @@ void Game::firstScene() {
 
 		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
 		body->setBounciness(0.5f);
+		body->setGravityScale(0.6f);
 		body->setCollisionLayer("Player");
 
 		// Ground
 		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
 		grBody->addOffSet(0, -1);
+		grBody->setCollisionLayer("Ground");
 
 		//// Ball
 		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
@@ -106,6 +110,7 @@ void Game::firstScene() {
 
 		ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
 		ballBody->setBounciness(0.5f);
+		ballBody->setCollisionLayer("Ball");
 
 	// 5.- Start
 

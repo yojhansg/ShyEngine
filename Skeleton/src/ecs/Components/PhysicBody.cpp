@@ -4,6 +4,8 @@
 #include "Transform.h"
 #include "Entity.h"
 
+#include <iostream>
+
 namespace ECS {
 
 	PhysicsBody::PhysicsBody() {
@@ -88,6 +90,8 @@ namespace ECS {
 	}
 
 	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
+
+		//std::cout << this->getEntity()->getEntityName() << " Layer: " << fixture->GetFilterData().categoryBits << " Collides with: " << fixture->GetFilterData().maskBits << std::endl;
 
 		if (bodyType != STATIC) {
 
@@ -242,6 +246,9 @@ namespace ECS {
 	}
 
 	void PhysicsBody::setCollisionLayer(const std::string& layerName) {
+
+		assert(pm->layersExists(layerName), "La capa con nombre " + layerName + " no existe");
+
 		this->layerName = layerName;
 	}
 
