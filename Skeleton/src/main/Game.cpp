@@ -39,6 +39,15 @@ void Game::firstScene() {
 	// 2.- Entities
 
 		// Player
+
+	ECS::Entity* background = scene->createEntity("fondo");
+	auto bgTr = background->addComponent<ECS::Transform>();
+	auto bg = background->addComponent<ECS::Image>("fondo.png");
+	background->addComponent<ECS::Script>()->Initialise("Parallax.json");
+
+
+
+
 	ECS::Entity* player = scene->createEntity("Player");
 
 	auto tr = player->addComponent<ECS::Transform>();
@@ -84,6 +93,9 @@ void Game::firstScene() {
 
 	// 3.- Init
 	scene->init();
+
+	bgTr->setScale(1.6f, 1.6f);
+	bgTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 
 
 	auto pm = Physics::PhysicsManager::instance();
