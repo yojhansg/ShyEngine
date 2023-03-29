@@ -25,4 +25,6 @@ private:
 
 	void firstScene();
 
+	void flappyBird();
+
 };
