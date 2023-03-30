@@ -43,7 +43,10 @@ void Game::firstScene() {
 		// Link
 		ECS::Entity* player = scene->createEntity("Player");
 
-		auto tr = player->addComponent<ECS::Transform>();
+		//auto tr = player->addComponent<ECS::Transform>();
+
+		auto tr = static_cast<Transform*>(player->addComponent("Transform"));
+
 		auto im = player->addComponent<ECS::Image>("link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
 		auto tComp = player->addComponent<ECS::TestComponent>();

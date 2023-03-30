@@ -1,9 +1,13 @@
 #include "ClassCreator.h"
 
-ClassCreator::ClassCreator(std::string className, bool pragmaOnce): className(className)
+ClassCreator::ClassCreator(std::string className, bool pragmaOnce, bool isSingleton) : className(className), isSingleton(isSingleton)
 {
+	addConstructor = addDestructor = false;
+
 	if (pragmaOnce)
 		classStream << "#pragma once\n\n";
+	if (isSingleton)
+		IncludeRelative("Singleton.h");
 }
 
 ClassCreator& ClassCreator::IncludeRelative(cstring path)
@@ -28,7 +32,7 @@ ClassCreator& ClassCreator::IncludeRelatives(std::vector<std::string> const& pat
 	return *this;
 }
 
-ClassCreator& ClassCreator::IncludeAbsolutes(std::vector<std::string> const&  paths)
+ClassCreator& ClassCreator::IncludeAbsolutes(std::vector<std::string> const& paths)
 {
 	for (auto const& p : paths) {
 		IncludeAbsolute(p);
@@ -38,7 +42,16 @@ ClassCreator& ClassCreator::IncludeAbsolutes(std::vector<std::string> const&  pa
 
 ClassCreator& ClassCreator::BeginClass()
 {
-	classStream << "class " << className << "{\n";
+	if (isSingleton) {
+
+		classStream << "class " << className << ": public Utilities::Singleton<" << className << ">{\n";
+
+		classStream << "\n";
+
+		classStream << "\t friend Singleton<" + className << ">;\n";
+	}
+	else
+		classStream << "class " << className << "{\n";
 
 	return *this;
 }
@@ -135,6 +148,26 @@ ClassCreator& ClassCreator::AddCppInclude(std::string const& inc)
 	return *this;
 }
 
+ClassCreator& ClassCreator::AddConstructor(std::string const& constructorContent)
+{
+	addConstructor = true;
+	constructor = constructorContent;
+
+	classStream << "\t" << className << "();\n";
+
+	return *this;
+}
+
+ClassCreator& ClassCreator::AddDestructor(std::string const& destructorContent)
+{
+	addDestructor = true;
+	destructor = destructorContent;
+
+	classStream << "\t~" << className << "();\n";
+
+	return *this;
+}
+
 std::string ClassCreator::Header()
 {
 	return classStream.str();
@@ -146,15 +179,27 @@ std::string ClassCreator::Source()
 	ClassCreator source(className, false);
 
 
-	source.classStream << "\t";
 	source.IncludeRelative(className + ".h");
 	source.Empty();
 
 	for (auto& inc : includeCpp) {
 
-		source.classStream << "\t";
 		source.IncludeRelative(inc);
 	}
+	source.Empty(3);
+
+	if (addConstructor) {
+
+		source.classStream << className << "::" << className << "(){\n";
+		source.classStream << constructor << "\n}";
+	}
+
+	if (addDestructor) {
+		source.classStream << className << "::~" << className << "(){\n";
+		source.classStream << destructor << "\n}";
+	}
+
+
 	source.Empty(3);
 
 	for (auto& m : methods) {

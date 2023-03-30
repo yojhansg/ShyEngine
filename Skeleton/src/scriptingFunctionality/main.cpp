@@ -14,6 +14,7 @@ int main() {
 
 	reader.Method2Function();
 	reader.ClassReflection();
+	reader.ComponentFactory();
 	reader.Convert2JSON();
 
 	return 0;

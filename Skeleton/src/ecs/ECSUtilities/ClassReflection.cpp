@@ -1,8 +1,11 @@
-	#include "ClassReflection.h"
+#include "ClassReflection.h"
 
-	#include "Components/Image.h"
-	#include "Components/PhysicBody.h"
-	#include "Components/Transform.h"
+#include "Components/Image.h"
+#include "Components/PhysicBody.h"
+#include "Components/Transform.h"
+
+
+
 
 
 

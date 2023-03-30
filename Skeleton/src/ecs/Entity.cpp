@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "Component.h"
 #include "Scene.h"
+#include "ECSUtilities/ComponentFactory.h"
 
 namespace ECS {
 
@@ -169,4 +170,17 @@ namespace ECS {
 			it++;
 		}
 	}
+
+	Component* Entity::addComponent(std::string const& comp)
+	{
+		Component* c = ComponentFactory::instance()->CreateComponent(comp);
+
+		c->entity = this;
+		components.push_back(c);
+
+		return c;
+	}
+
+
+
 }

@@ -35,6 +35,9 @@ namespace Scripting {
 	class ScriptFunctionality;
 }
 
+
+class ComponentFactory;
+
 class Engine {
 
 public:
@@ -57,5 +60,7 @@ private:
 	Scripting::ScriptManager* scriptManager;
 	Scripting::ScriptFunctionality* scriptFunctionality;
 	Utilities::EngineTime* engineTime;
+
+	ComponentFactory* componentFactory;
 };
 
