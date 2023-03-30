@@ -1,0 +1,42 @@
+[
+
+    {
+
+        "name": "Mi escena inicial",
+        "index": 0,
+
+        "objects": [
+
+
+            {
+                "name": "background",
+                "components": [
+                    {
+                        "component": "Transform",
+                        "values" : [
+                                
+                        ]
+                    },
+                    {
+                        "component": "Image",
+                        "values" : [
+                           { "fileName": "fondo.png"}
+                        ]
+                    }
+                ],
+
+                "scripts": [
+                    
+                ]
+            },
+
+
+
+
+        ]
+
+    }
+
+
+
+]

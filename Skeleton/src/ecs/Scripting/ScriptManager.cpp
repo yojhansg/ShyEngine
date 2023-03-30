@@ -100,8 +100,8 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 			}
 			else if (type == "bool") {
 
-				int b = constValue["value"].get<int>();
-				value = (bool)b;
+				bool b = constValue["value"].get<bool>();
+				value = b;
 			}
 			else if (type == "char") {
 

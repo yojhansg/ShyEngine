@@ -41,14 +41,14 @@ namespace ECS {
 
 		Transform* transform;
 
-		std::string fileName;
+		reflect std::string fileName;
 
 		SDL_Rect srcRect;
 		SDL_Rect dstRect;
 
 		// Real size of texture
-		reflect int width;
-		reflect int height;
+		int width;
+		int height;
 
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;

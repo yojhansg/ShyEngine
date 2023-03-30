@@ -487,6 +487,10 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 		return "std::stof(" + convertName + ")";
 	}
 
+	if (type == "double") {
+		return "std::stod(" + convertName + ")";
+	}
+
 	if (type == "bool") {
 
 		return convertName + " == \"true\" ? true : false";
@@ -629,13 +633,12 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	return *this;
 }
 
-
 ECSReader& ECSReader::ClassReflection()
 {
 	std::ofstream h(output + "/ClassReflection.h  ");
 	std::ofstream cpp(output + "/ClassReflection.cpp");
 
-	ClassCreator creator = ClassCreator("ClassReflection");
+	ClassCreator creator = ClassCreator("ClassReflection", true, true);
 
 	creator.IncludeAbsolutes({ "string" , "map" });
 	creator.AddLine("namespace ECS { class Component; }");
@@ -648,11 +651,38 @@ ECSReader& ECSReader::ClassReflection()
 		.BeginClass()
 		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
 		.Empty(1)
+		.Private()
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
 		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
-		.Empty(1)
-		.Public();
+		.Empty(1);
 
+
+
+	std::stringstream constructor;
+
+	constructor << "\n";
+
+	for (auto& className : attributes) {
+
+		constructor << "\treflectionMethods[\"" << className.first << "\"] = &ClassReflection::Reflect" << className.first << ";\n";
+	}
+
+	creator.AddConstructor(constructor.str()).Public().AddDestructor();
+
+
+
+	std::stringstream reflector;
+
+	reflector << "\tif(reflectionMethods.contains(component))\n";
+	reflector << "\t\t(this->*reflectionMethods[component])(pointer, map);\n";
+
+	//TODO: dar errores o algo asi no se
+
+	creator.AddMethod("void", "ReflectComponent", { {"std::string const&", "component"}, {"ECS::Component*", "pointer"},
+			{"std::map<std::string, std::string> const&", "map"} }, reflector.str(), false);
+
+
+	creator.Private();
 
 	for (auto& className : attributes) {
 
@@ -665,12 +695,12 @@ ECSReader& ECSReader::ClassReflection()
 
 			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
 
-			method << "\t\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
+			method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
 		}
 
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
-			{"std::map<std::string, std::string> const&", "map"} }, method.str(), true);
+			{"std::map<std::string, std::string> const&", "map"} }, method.str(), false);
 
 		creator.AddLine();
 	}
@@ -761,7 +791,7 @@ ECSReader& ECSReader::ComponentFactory()
 		auto FileName = std::filesystem::path(component.second);
 
 		std::string filename = FileName.filename().string();
-		std::string root = filename == "Script.h" ? "Scripting":"Components";
+		std::string root = filename == "Script.h" ? "Scripting" : "Components";
 
 		creator.AddCppInclude(root + "/" + filename);
 	}

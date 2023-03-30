@@ -27,8 +27,8 @@ Game::Game(ECS::SceneManager* sm) {
 
 void Game::initScenes() {
 
-	firstScene();
-	//flappyBird();
+	//firstScene();
+	flappyBird();
 }
 
 void Game::firstScene() {
@@ -152,8 +152,14 @@ void Game::flappyBird() {
 	// 4.- Components settings
 
 		// Fondo
-		bgTr->setScale(1.6f, 1.6f);
-		bgTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
+	std::map<std::string, std::string> trMap;
+	trMap["position_"] = "(" + std::to_string(renderer->getWidth() / 2) + "," + std::to_string(renderer->getHeight() / 2) + ")";
+	trMap["scale_"] = "(1.6f, 1.6f)";
+
+	ClassReflection::instance()->ReflectComponent("Transform", bgTr, trMap);
+
+		//bgTr->setScale(1.6f, 1.6f);
+		//bgTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 
 		// Pollo
 		tr->setPosition(200 / 2, renderer->getHeight() / 2);
