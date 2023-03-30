@@ -12,11 +12,7 @@ namespace ECS {
 		shape = nullptr;
 	}
 
-	BoxBody::~BoxBody() {
-
-		body->DestroyFixture(fixture);
-		world->DestroyBody(body);
-	}
+	BoxBody::~BoxBody() {}
 
 	void BoxBody::init() {
 

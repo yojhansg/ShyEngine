@@ -14,11 +14,8 @@ namespace ECS {
 
 	}
 
-	ChainBody::~ChainBody() {
+	ChainBody::~ChainBody() {}
 
-		body->DestroyFixture(fixture);
-		world->DestroyBody(body);
-	}
 
 	void ChainBody::init() {
 
