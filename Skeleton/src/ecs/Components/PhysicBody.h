@@ -25,7 +25,7 @@ namespace ECS {
 
     public:
 
-        enum BODY_TYPE {
+        enum class BODY_TYPE {
             STATIC = 0, KINEMATIC = 1, DYNAMIC = 2
         };
 
@@ -69,8 +69,8 @@ namespace ECS {
         void setRotationFreezed(bool freezed);
         bool isRotationFreezed();
         
-        void setBodyType(BODY_TYPE type);
-        BODY_TYPE getBodyType();
+        void setBodyType(int type);
+        int getBodyType();
         
         void setLinearDrag(float drag);
         float getLinearDrag();
@@ -120,7 +120,7 @@ namespace ECS {
 
         float screenToWorldFactor;
 
-        BODY_TYPE bodyType;
+        reflect int bodyType;
 
         // Box2d
         b2World* world;
@@ -131,8 +131,8 @@ namespace ECS {
         Vector2D* scale;
 
         // Fixture properties
-        float mass;
-
+        reflect float mass;
+        reflect float bounciness;
         // Box2d properties
         b2BodyDef* bodyDef;
         b2Body* body;

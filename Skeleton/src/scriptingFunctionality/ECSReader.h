@@ -179,6 +179,10 @@ public:
 		*/
 		bool valid = true;
 
+		/*
+			Conocer la clase de la que hereda el componente
+		*/
+		std::string inheritance = "";
 	};
 
 	/*
@@ -211,6 +215,8 @@ private:
 	std::map<std::string, std::vector<Method>> methods;
 	std::map<std::string, std::vector<Attribute>> attributes;
 	std::map<std::string, std::vector<Method>> managerMethods;
+
+	std::map<std::string, std::string> classInheritance;
 
 	std::vector<std::pair<std::string, std::string>> components;
 	/*

@@ -4,6 +4,8 @@
 * A class to test if ECS works
 */
 
+#include <string>
+
 namespace ECS {
 	class SceneManager;
 	class Scene;
@@ -26,5 +28,7 @@ private:
 	void firstScene();
 
 	void flappyBird();
+
+	void readScene(std::string const& sceneName);
 
 };

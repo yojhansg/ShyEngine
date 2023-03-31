@@ -17,7 +17,8 @@
 #include <ECSUtilities/ClassReflection.h>
 #include <map>
 #include <iostream>
-
+#include <fstream>
+#include <json.hpp>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -28,7 +29,9 @@ Game::Game(ECS::SceneManager* sm) {
 void Game::initScenes() {
 
 	//firstScene();
-	flappyBird();
+	//flappyBird();
+
+	readScene("DefaultScene.json");
 }
 
 void Game::firstScene() {
@@ -83,7 +86,7 @@ void Game::firstScene() {
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
 
-		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
+		body->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::DYNAMIC);
 		body->setBounciness(0.5f);
 		body->setCollisionLayer("Player");
 
@@ -97,7 +100,7 @@ void Game::firstScene() {
 		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
 
-		ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
+		ballBody->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::DYNAMIC);
 		ballBody->setBounciness(0.5f);
 		ballBody->setCollisionLayer("Ball");
 
@@ -165,7 +168,6 @@ void Game::flappyBird() {
 		tr->setPosition(200 / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
 
-		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
 		body->setBounciness(0.5f);
 		body->setRotationFreezed(true);
 
@@ -174,10 +176,10 @@ void Game::flappyBird() {
 		tubTrInv->setPosition(1400, 150);
 		tubTr->setPosition(1400, renderer->getHeight() - 150);
 
-		tubBody->setBodyType(ECS::PhysicsBody::KINEMATIC);
+		tubBody->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::KINEMATIC);
 		tubBody->setGravityScale(0);
 
-		tubBodyInv->setBodyType(ECS::PhysicsBody::KINEMATIC);
+		tubBodyInv->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::KINEMATIC);
 		tubBodyInv->setGravityScale(0);
 
 	// 5.- Start
@@ -186,6 +188,77 @@ void Game::flappyBird() {
 	//player->addComponent<ECS::Script>()->Initialise("printGameObjectName.json");
 	//player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
 	//player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
+
+	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
+}
+
+using namespace nlohmann;
+using jsonarray = std::vector<json>;
+
+void Game::readScene(std::string const& sceneName)
+{
+
+	std::ifstream fileStream("Scenes/" + sceneName);
+
+	if (!fileStream.good())
+	{
+		std::cout << "Error leyendo el archivo" << std::endl;
+		return;
+	}
+	json file = json::parse(fileStream);
+
+
+	scene = sceneManager->createScene(file["name"].get<std::string>());
+
+
+	jsonarray objects = file["objects"].get<jsonarray>();
+
+	for (auto& obj : objects) {
+
+		
+		std::string objectName = "New Entity";
+
+		if (obj.contains("name"))
+			objectName = obj["name"].get<std::string>();
+
+		ECS::Entity* entity = scene->createEntity(objectName);
+
+
+		jsonarray components = obj["components"].get<jsonarray>();
+		for (auto& compInfo : components) {
+
+			std::string componentStr = compInfo["component"].get<std::string>();
+
+			ECS::Component* component = entity->addComponent(componentStr);
+
+
+			std::map<std::string, std::string> attributeMap;
+
+
+			jsonarray attributes = compInfo["attributes"].get<jsonarray>();
+
+			for (auto& attribute : attributes) {
+
+				std::string attributeName = attribute["name"].get<std::string>();
+				std::string attributeValue = attribute["value"].get<std::string>();
+
+				attributeMap[attributeName] = attributeValue;
+
+			}
+
+			ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
+		}
+
+		jsonarray scripts = obj["scripts"].get<jsonarray>();
+		for (auto& script : scripts) {
+
+			entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+		}
+	}
+
+
+	scene->init();
 
 	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();

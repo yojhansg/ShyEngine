@@ -5,7 +5,7 @@
 #include <map>
 namespace ECS { class Component; }
 
-//Creation time : Thu Mar 30 13:18:38 2023
+//Creation time : Fri Mar 31 03:15:28 2023
 #define ECSreflection_Version 1.0
 
 using namespace ECS;
@@ -22,7 +22,17 @@ public:
 	~ClassReflection();
 	void ReflectComponent(std::string const& component, ECS::Component* pointer, std::map<std::string, std::string> const& map);
 private: 
+	void ReflectBoxBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
+	void ReflectChainBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
+	void ReflectCircleBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
+	void ReflectEdgeBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
 	void ReflectImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
+	void ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
 
 	void ReflectTransform(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
 

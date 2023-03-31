@@ -10,6 +10,9 @@ typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> 
 
 class FunctionManager;
 
+
+//TODO: Limpiar basura
+
 namespace Scripting {
 
 	class Node;

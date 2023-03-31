@@ -2,7 +2,11 @@
 #include "FunctionManager.h"
 #include "Entity.h"
 
-//Creation time: Thu Mar 30 13:18:38 2023
+//Creation time: Fri Mar 31 03:15:28 2023
+#include <Components/BoxBody.h>
+#include <Components/ChainBody.h>
+#include <Components/CircleBody.h>
+#include <Components/EdgeBody.h>
 #include <Components/Image.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>

@@ -16,7 +16,7 @@ namespace ECS {
 
 		world = nullptr;
 
-		this->bodyType = STATIC;
+		this->bodyType = (int)BODY_TYPE::STATIC;
 
 		size = { 1, 1 };
 		offSet = { 0, 0 };
@@ -28,6 +28,8 @@ namespace ECS {
 		transform = nullptr;
 
 		mass = 1;
+
+		bounciness = .5f;
 
 		body = nullptr;
 		bodyDef = nullptr;
@@ -60,6 +62,7 @@ namespace ECS {
 
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
+
 	}
 
 	void PhysicsBody::start() {
@@ -87,13 +90,16 @@ namespace ECS {
 		filter.maskBits = pm->getMaskBits(layerName);
 
 		fixture->SetFilterData(filter);
+
+		setBodyType(bodyType);
+		setBounciness(bounciness);
 	}
 
 	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
 
 		//std::cout << this->getEntity()->getEntityName() << " Layer: " << fixture->GetFilterData().categoryBits << " Collides with: " << fixture->GetFilterData().maskBits << std::endl;
 
-		if (bodyType != STATIC) {
+		if (bodyType != (int)BODY_TYPE::STATIC) {
 
 			// Position
 			Vector2D trPosOffSet = *position - lastPositionSync;
@@ -186,30 +192,30 @@ namespace ECS {
 		return body->IsFixedRotation();
 	}
 
-	void PhysicsBody::setBodyType(BODY_TYPE type) {
+	void PhysicsBody::setBodyType(int type) {
 
 		bodyType = type;
 
 		b2BodyType t = b2_staticBody;
 
-		switch (type) {
-			case ECS::PhysicsBody::STATIC:
-				t = b2_staticBody;
-				break;
-			case ECS::PhysicsBody::KINEMATIC:
-				t = b2_kinematicBody;
-				break;
-			case ECS::PhysicsBody::DYNAMIC:
-				t = b2_dynamicBody;
-				break;
-			default:
-				break;
+		switch ((BODY_TYPE)type) {
+		case ECS::PhysicsBody::BODY_TYPE::STATIC:
+			t = b2_staticBody;
+			break;
+		case ECS::PhysicsBody::BODY_TYPE::KINEMATIC:
+			t = b2_kinematicBody;
+			break;
+		case ECS::PhysicsBody::BODY_TYPE::DYNAMIC:
+			t = b2_dynamicBody;
+			break;
+		default:
+			break;
 		}
 
 		body->SetType(t);
 	}
 
-	PhysicsBody::BODY_TYPE PhysicsBody::getBodyType() {
+	int PhysicsBody::getBodyType() {
 		return bodyType;
 	}
 

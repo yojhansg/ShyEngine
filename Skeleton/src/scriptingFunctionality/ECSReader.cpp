@@ -103,7 +103,10 @@ void ECSReader::ProcessFile(std::string const& path)
 	bool fileIncluded = false;
 	std::string currentClassName = "";
 
+
 	bool currentClassIsManager = false;
+
+
 
 	while (stream) {
 		std::string line;
@@ -142,6 +145,9 @@ void ECSReader::ProcessFile(std::string const& path)
 		if (line.contains("class")) {
 
 			if (line.contains(";")) //Forward declaration -> ignore
+				continue;
+
+			if (line.contains("enum"))
 				continue;
 
 			textToRemove = "class";
@@ -188,6 +194,7 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			currentClassName = Utilities::trim(className);
 
+
 			if (forceAddClassName) {
 
 				methods[currentClassName];
@@ -199,6 +206,15 @@ void ECSReader::ProcessFile(std::string const& path)
 
 				if (currentClassName == "PhysicsBody")
 					continue;
+
+				if (line.contains("PhysicsBody")) {
+					classInheritance[currentClassName] = "PhysicsBody";
+					if (!fileIncluded) {
+
+						filesToInclude.push_back(path);
+						fileIncluded = true;
+					}
+				}
 
 				components.push_back(std::make_pair(currentClassName, path));
 			}
@@ -658,6 +674,13 @@ ECSReader& ECSReader::ClassReflection()
 
 
 
+	for (auto& inh : classInheritance) {
+
+		attributes[inh.first];
+	}
+
+
+
 	std::stringstream constructor;
 
 	constructor << "\n";
@@ -684,6 +707,7 @@ ECSReader& ECSReader::ClassReflection()
 
 	creator.Private();
 
+
 	for (auto& className : attributes) {
 
 		std::stringstream method;
@@ -698,6 +722,17 @@ ECSReader& ECSReader::ClassReflection()
 			method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
 		}
 
+		if (classInheritance.contains(className.first)) {
+
+			std::string inheritance = classInheritance[className.first];
+			if (attributes.contains(inheritance))
+				for (auto& attribute : attributes[inheritance]){
+
+					method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
+
+					method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
+				}
+		}
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
 			{"std::map<std::string, std::string> const&", "map"} }, method.str(), false);
