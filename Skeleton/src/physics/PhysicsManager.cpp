@@ -45,6 +45,27 @@ namespace Physics {
 		initPhysicsManager(Utilities::Vector2D(0, 9.8f), 6, 3);
 	}
 
+	void PhysicsManager::setBodyEnabled(b2Body* body, bool enabled) {
+
+		if (enabled)
+			enabledBodies.push_back(body);
+		else
+			disabledBodies.push_back(body);
+
+	}
+
+	void PhysicsManager::handleBodies() {
+
+		for (int i = 0; i < disabledBodies.size(); i++) disabledBodies[i]->SetEnabled(false);
+
+		disabledBodies.clear();
+
+		for (int i = 0; i < enabledBodies.size(); i++) enabledBodies[i]->SetEnabled(true);
+
+		enabledBodies.clear();
+
+	}
+
 	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
 		initPhysicsManager(gravity, velocityIterations, positionIterations);
 	}

@@ -20,8 +20,15 @@ namespace ECS {
 		Entity* entA = static_cast<Entity*>(static_cast<void*>(punteroA));
 		Entity* entB = static_cast<Entity*>(static_cast<void*>(punteroB));
 
-		entA->onCollisionEnter(entB);
-		entB->onCollisionEnter(entA);
+		if (contact->GetFixtureA()->IsSensor())
+			entA->onTriggerEnter(entB);
+		else 
+			entA->onCollisionEnter(entB);
+
+		if (contact->GetFixtureB()->IsSensor())
+			entB->onTriggerEnter(entA);
+		else
+			entB->onCollisionEnter(entA);
 	}
 
 	void ContactListener::EndContact(b2Contact* contact) {
@@ -34,8 +41,15 @@ namespace ECS {
 		Entity* entA = static_cast<Entity*>(static_cast<void*>(punteroA));
 		Entity* entB = static_cast<Entity*>(static_cast<void*>(punteroB));
 
-		entA->onCollisionExit(entB);
-		entB->onCollisionExit(entA);
+		if (contact->GetFixtureA()->IsSensor())
+			entA->onTriggerExit(entB);
+		else
+			entA->onCollisionExit(entB);
+
+		if (contact->GetFixtureB()->IsSensor())
+			entB->onTriggerExit(entA);
+		else
+			entB->onCollisionExit(entA);
 	}
 
 }

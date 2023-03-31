@@ -5,7 +5,7 @@
 namespace ECS {
 
 	class Transform;
-	class CircleBody;
+	class BoxBody;
 
 	class TestComponent : public Component {
 
@@ -21,11 +21,15 @@ namespace ECS {
 
 		void onCollisionExit(Entity* b) override;
 
+		void onTriggerEnter(Entity* b) override;
+
+		void onTriggerExit(Entity* b) override;
+
 	private:
 
 		Transform* transform;
 
-		CircleBody* body;
+		BoxBody* body;
 
 		bool onGround;
 

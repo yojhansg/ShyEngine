@@ -11,7 +11,8 @@ namespace ECS {
 		friend Singleton<ContactListener>;
 	public:
 
-		~ContactListener() {};
+		~ContactListener() {};
+
 	private:
 
 		ContactListener();

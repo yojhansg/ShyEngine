@@ -137,19 +137,19 @@ namespace ECS {
 	}
 
 	void PhysicsBody::onActive() {
-		body->SetAwake(true);
+		pm->setBodyEnabled(body, true);
 	}
 
 	void PhysicsBody::onDeacitve() {
-		body->SetAwake(false);
+		pm->setBodyEnabled(body, false);
 	}
 
 	void PhysicsBody::onSceneUp() {
-		body->SetAwake(true);
+		pm->setBodyEnabled(body, true);
 	}
 
 	void PhysicsBody::onSceneDown() {
-		body->SetAwake(false);
+		pm->setBodyEnabled(body, false);
 	}
 
 	void PhysicsBody::setTrigger(bool trigger) {

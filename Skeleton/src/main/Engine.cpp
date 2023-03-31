@@ -104,6 +104,9 @@ void Engine::update() {
 		// Remove dead entities
 		scene->removeEntities();
 
+		// Handling physics bodies
+		physicsManager->handleBodies();
+
 		// Change scene if necessary
 		sceneManager->manageScenes();
 
