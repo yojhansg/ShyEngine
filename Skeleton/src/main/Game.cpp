@@ -67,7 +67,7 @@ void Game::firstScene() {
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
-		auto tComp = ball->addComponent<ECS::TestComponent>();*/
+		ball->addComponent<ECS::TestComponent>();
 
 
 	// 3.- Init
