@@ -1,12 +1,12 @@
 #include "ScriptManager.h"
 #include "ECSUtilities/FunctionManager.h"
-#include "json.hpp"
 #include <fstream>
 #include "Node.h"
 #include "Function.h"
 #include "ConstNode.h"
 #include "Fork.h"
 
+#include "json.hpp"
 using namespace nlohmann;
 
 using jsonarray = std::vector<json>;
@@ -20,7 +20,10 @@ Scripting::ScriptManager::ScriptManager()
 
 Scripting::ScriptManager::~ScriptManager()
 {
-
+	for (auto node : allNodes) {
+		delete node;
+	}
+	allNodes.clear();
 }
 
 
@@ -173,7 +176,6 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 		fork.fork->SetFork(A, B);
 		fork.fork->SetCondition(static_cast<OutputNode*>(allScriptNodes[fork.condition]));
-		//static_cast<Fork*>(allScriptNodes[fork[0]])->SetFork(allScriptNodes[fork[1]], allScriptNodes[fork[2]]);
 	}
 
 

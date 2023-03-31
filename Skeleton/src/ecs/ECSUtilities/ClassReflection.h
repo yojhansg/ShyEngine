@@ -32,6 +32,10 @@ private:
 
 	void ReflectImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
 
+	void ReflectOverlayElement(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
+	void ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
+
 	void ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map);
 
 	void ReflectTransform(ECS::Component* selfComp, std::map<std::string, std::string> const& map);

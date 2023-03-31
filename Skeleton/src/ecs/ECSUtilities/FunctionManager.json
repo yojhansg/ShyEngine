@@ -59,6 +59,167 @@
             "return": "void"
         }
     },
+    "OverlayElement": {
+        "GetAnchor": {
+            "return": "Utilities::Vector2D"
+        },
+        "GetBottom": {
+            "return": "int"
+        },
+        "GetLeft": {
+            "return": "int"
+        },
+        "GetPlacement": {
+            "return": "int"
+        },
+        "GetPosition": {
+            "return": "Utilities::Vector2D"
+        },
+        "GetRight": {
+            "return": "int"
+        },
+        "GetSize": {
+            "return": "Utilities::Vector2D"
+        },
+        "GetTop": {
+            "return": "int"
+        },
+        "Move": {
+            "input": [
+                {
+                    "name": "position",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "MoveTo": {
+            "input": [
+                {
+                    "name": "position",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetAnchor": {
+            "input": [
+                {
+                    "name": "anchor",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetAnchorBottomLeft": {
+            "return": "void"
+        },
+        "SetAnchorBottomRight": {
+            "return": "void"
+        },
+        "SetAnchorCenter": {
+            "return": "void"
+        },
+        "SetAnchorTopLeft": {
+            "return": "void"
+        },
+        "SetAnchorTopRight": {
+            "return": "void"
+        },
+        "SetBottom": {
+            "input": [
+                {
+                    "name": "pos",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetLeft": {
+            "input": [
+                {
+                    "name": "pos",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetPositioned": {
+            "input": [
+                {
+                    "name": "position",
+                    "type": "Utilities::Vector2D"
+                },
+                {
+                    "name": "size",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetRight": {
+            "input": [
+                {
+                    "name": "pos",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetSize": {
+            "input": [
+                {
+                    "name": "size",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetStreched": {
+            "input": [
+                {
+                    "name": "left",
+                    "type": "int"
+                },
+                {
+                    "name": "top",
+                    "type": "int"
+                },
+                {
+                    "name": "right",
+                    "type": "int"
+                },
+                {
+                    "name": "bottom",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetTop": {
+            "input": [
+                {
+                    "name": "pos",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        }
+    },
+    "OverlayImage": {
+        "GetTexture": {
+            "return": "std::string"
+        },
+        "SetTexture": {
+            "input": [
+                {
+                    "name": "texture",
+                    "type": "std::string"
+                }
+            ],
+            "return": "void"
+        }
+    },
     "PhysicsBody": {
         "getBounciness": {
             "return": "float"

@@ -4,6 +4,10 @@ Scripting::Node::Node(int idx) : nodeIdx(idx)
 {
 }
 
+Scripting::Node::~Node()
+{
+}
+
 void Scripting::Node::Cicle()
 {
 	Scripting::Node* current = this;

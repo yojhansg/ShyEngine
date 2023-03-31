@@ -5,6 +5,8 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
+#include "Components/OverlayElement.h"
+#include "Components/OverlayImage.h"
 #include "Components/PhysicBody.h"
 #include "Components/Transform.h"
 
@@ -17,6 +19,8 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
 	reflectionMethods["EdgeBody"] = &ClassReflection::ReflectEdgeBody;
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
+	reflectionMethods["OverlayElement"] = &ClassReflection::ReflectOverlayElement;
+	reflectionMethods["OverlayImage"] = &ClassReflection::ReflectOverlayImage;
 	reflectionMethods["PhysicsBody"] = &ClassReflection::ReflectPhysicsBody;
 	reflectionMethods["Transform"] = &ClassReflection::ReflectTransform;
 
@@ -74,6 +78,32 @@ ClassReflection::ClassReflection(){
 		Image* self = static_cast<Image*>(selfComp);
 		if(map.contains("fileName"))
 			self->fileName = map.at("fileName");
+
+}
+	void ClassReflection::ReflectOverlayElement(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+		OverlayElement* self = static_cast<OverlayElement*>(selfComp);
+		if(map.contains("placement"))
+			self->placement = std::stoi(map.at("placement"));
+		if(map.contains("position"))
+			self->position = map.at("position");
+		if(map.contains("size"))
+			self->size = map.at("size");
+		if(map.contains("anchor"))
+			self->anchor = map.at("anchor");
+		if(map.contains("left"))
+			self->left = std::stoi(map.at("left"));
+		if(map.contains("top"))
+			self->top = std::stoi(map.at("top"));
+		if(map.contains("right"))
+			self->right = std::stoi(map.at("right"));
+		if(map.contains("bottom"))
+			self->bottom = std::stoi(map.at("bottom"));
+
+}
+	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+		OverlayImage* self = static_cast<OverlayImage*>(selfComp);
+		if(map.contains("path"))
+			self->path = map.at("path");
 
 }
 	void ClassReflection::ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

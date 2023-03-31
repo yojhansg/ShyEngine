@@ -4,6 +4,8 @@
 #include <string>
 #include <list>
 
+//TODO: Separar scripts de componentes
+
 namespace ECS {
 
 	class Component;

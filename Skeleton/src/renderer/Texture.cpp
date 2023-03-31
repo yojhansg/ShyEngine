@@ -15,9 +15,12 @@ RendererManager::Texture::Texture(const std::string& filepath) {
 	width = surface->w; height = surface->h;
 }
 
+
 RendererManager::Texture::~Texture() {
-	if (texture != nullptr)
+	if (texture != nullptr) {
 		SDL_DestroyTexture(texture);
+		texture = nullptr;
+	}
 }
 
 SDL_Texture* RendererManager::Texture::getSDLTexture() {

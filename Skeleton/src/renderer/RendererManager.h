@@ -4,6 +4,8 @@
 #include <string>
 #include <SDL.h>
 
+//TODO: no incluir aqui SDL
+
 namespace RendererManager {
 
 	class RendererManager : public Utilities::Singleton<RendererManager> {

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <json.hpp>
 #include <SceneManager.h>
 #include <RendererManager.h>
 #include <PhysicsManager.h>
@@ -18,7 +19,10 @@
 #include <map>
 #include <iostream>
 #include <fstream>
-#include <json.hpp>
+
+#include <Components/OverlayElement.h>
+#include <Components/OverlayImage.h>
+
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -69,7 +73,7 @@ void Game::firstScene() {
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
 		ball->addComponent<ECS::TestComponent>();
 
-
+	
 	// 3.- Init
 	scene->init();
 
@@ -190,7 +194,6 @@ using jsonarray = std::vector<json>;
 
 void Game::readScene(std::string const& sceneName)
 {
-
 	std::ifstream fileStream("Scenes/" + sceneName);
 
 	if (!fileStream.good())
@@ -248,6 +251,17 @@ void Game::readScene(std::string const& sceneName)
 			entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
 		}
 	}
+
+
+	// OverlayElement
+	ECS::Entity* overlay = scene->createEntity("Overlay");
+	auto elem = overlay->addComponent<ECS::OverlayElement>();
+	auto img = overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 0, 0 }, { 400, 400 });
+	elem->SetAnchorCenter();
+
+	elem->SetStreched(10, 10, 10, 10);
 
 
 	scene->init();

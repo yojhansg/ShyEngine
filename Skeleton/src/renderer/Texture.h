@@ -11,7 +11,7 @@ namespace RendererManager {
 	public:
 
 		Texture(const std::string& filepath);
-		
+
 		~Texture();
 
 		SDL_Texture* getSDLTexture();

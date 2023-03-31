@@ -111,6 +111,18 @@
     <ClInclude Include="..\..\src\ecs\ECSUtilities\ComponentFactory.h">
       <Filter>Archivos de encabezado\ECSUtilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\OverlayElement.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\OverlayText.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -190,6 +202,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\ECSUtilities\ComponentFactory.cpp">
       <Filter>Archivos de origen\ECSUtilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\OverlayElement.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\OverlayText.cpp">
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

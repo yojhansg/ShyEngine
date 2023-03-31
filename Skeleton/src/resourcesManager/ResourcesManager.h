@@ -6,6 +6,7 @@
 
 namespace RendererManager {
 	class Texture;
+	class Font;
 }
 
 namespace ResourcesManager {
@@ -23,11 +24,14 @@ namespace ResourcesManager {
 
 		RendererManager::Texture* addTexture(const std::string& key);
 
+		RendererManager::Font* addFont(std::string const& key);
+
 	private:
 
 		ResourcesManager();
 		
 		resources_map<RendererManager::Texture*> textures;
+		resources_map<RendererManager::Font*> fonts;
 	};
 }
 

@@ -21,6 +21,7 @@ namespace Scripting {
 	public:
 
 		Node(int idx);
+		virtual ~Node();
 
 		virtual void Operate(Node*& nextNode) = 0;
 

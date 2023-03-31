@@ -1,5 +1,6 @@
 #include "RendererManager.h"
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 
 namespace RendererManager {
@@ -37,6 +38,10 @@ namespace RendererManager {
         // initialize SDL_image
         int imgInit_ret = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
         assert(imgInit_ret != 0);
+
+
+        int ttfInit_ret = TTF_Init();
+        assert(ttfInit_ret == 0);
     }
 
     void RendererManager::closeSDL() {

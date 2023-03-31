@@ -6,6 +6,8 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
+#include "Components/OverlayElement.h"
+#include "Components/OverlayImage.h"
 #include "Components/TestComponent.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
@@ -20,6 +22,8 @@ ComponentFactory::ComponentFactory(){
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
+	components["OverlayElement"] = &ComponentFactory::CreateOverlayElement;
+	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
 	components["TestComponent"] = &ComponentFactory::CreateTestComponent;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
@@ -51,6 +55,14 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateImage(){
 		return new ECS::Image();
+
+}
+	ECS::Component* ComponentFactory::CreateOverlayElement(){
+		return new ECS::OverlayElement();
+
+}
+	ECS::Component* ComponentFactory::CreateOverlayImage(){
+		return new ECS::OverlayImage();
 
 }
 	ECS::Component* ComponentFactory::CreateTestComponent(){

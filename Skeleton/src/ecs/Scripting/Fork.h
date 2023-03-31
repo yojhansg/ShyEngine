@@ -2,7 +2,6 @@
 
 #include "Node.h"
 
-
 namespace Scripting {
 
 	//TODO: cambiar nomrbe de fork a forkNode para mayor claridad

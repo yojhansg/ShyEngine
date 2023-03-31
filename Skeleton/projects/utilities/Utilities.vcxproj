@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\utilities\CheckML.h" />
     <ClInclude Include="..\..\src\utilities\EditorExport.h" />
     <ClInclude Include="..\..\src\utilities\EngineTime.h" />
     <ClInclude Include="..\..\src\utilities\SDLUtils.h" />

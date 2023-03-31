@@ -8,6 +8,8 @@
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
+#include <Components/OverlayElement.h>
+#include <Components/OverlayImage.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
 #include <SceneManager.h>
@@ -31,6 +33,31 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Image_setFlipX",Image_setFlipX);
 	map.emplace("Image_setFlipY",Image_setFlipY);
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
+	map.emplace("OverlayElement_GetPlacement",OverlayElement_GetPlacement);
+	map.emplace("OverlayElement_SetPositioned",OverlayElement_SetPositioned);
+	map.emplace("OverlayElement_SetStreched",OverlayElement_SetStreched);
+	map.emplace("OverlayElement_Move",OverlayElement_Move);
+	map.emplace("OverlayElement_MoveTo",OverlayElement_MoveTo);
+	map.emplace("OverlayElement_SetSize",OverlayElement_SetSize);
+	map.emplace("OverlayElement_GetPosition",OverlayElement_GetPosition);
+	map.emplace("OverlayElement_GetSize",OverlayElement_GetSize);
+	map.emplace("OverlayElement_GetTop",OverlayElement_GetTop);
+	map.emplace("OverlayElement_GetLeft",OverlayElement_GetLeft);
+	map.emplace("OverlayElement_GetRight",OverlayElement_GetRight);
+	map.emplace("OverlayElement_GetBottom",OverlayElement_GetBottom);
+	map.emplace("OverlayElement_SetTop",OverlayElement_SetTop);
+	map.emplace("OverlayElement_SetLeft",OverlayElement_SetLeft);
+	map.emplace("OverlayElement_SetRight",OverlayElement_SetRight);
+	map.emplace("OverlayElement_SetBottom",OverlayElement_SetBottom);
+	map.emplace("OverlayElement_GetAnchor",OverlayElement_GetAnchor);
+	map.emplace("OverlayElement_SetAnchor",OverlayElement_SetAnchor);
+	map.emplace("OverlayElement_SetAnchorCenter",OverlayElement_SetAnchorCenter);
+	map.emplace("OverlayElement_SetAnchorTopLeft",OverlayElement_SetAnchorTopLeft);
+	map.emplace("OverlayElement_SetAnchorTopRight",OverlayElement_SetAnchorTopRight);
+	map.emplace("OverlayElement_SetAnchorBottomLeft",OverlayElement_SetAnchorBottomLeft);
+	map.emplace("OverlayElement_SetAnchorBottomRight",OverlayElement_SetAnchorBottomRight);
+	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
+	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
 	map.emplace("PhysicsBody_setTrigger",PhysicsBody_setTrigger);
 	map.emplace("PhysicsBody_isTrigger",PhysicsBody_isTrigger);
 	map.emplace("PhysicsBody_setFriction",PhysicsBody_setFriction);
@@ -52,6 +79,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
+	map.emplace("PhysicsManager_handleBodies",PhysicsManager_handleBodies);
 	map.emplace("SceneManager_resetScene",SceneManager_resetScene);
 	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
 	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
@@ -116,6 +144,131 @@ Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const&
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	self->setRotaionPoint(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_GetPlacement(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	int ret = self->GetPlacement();
+	return ret;
+}
+Scripting::Variable OverlayElement_SetPositioned(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetPositioned(vec[1].vector, vec[2].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetStreched(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetStreched(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_Move(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->Move(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_MoveTo(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->MoveTo(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetSize(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetSize(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_GetPosition(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	Utilities::Vector2D ret = self->GetPosition();
+	return ret;
+}
+Scripting::Variable OverlayElement_GetSize(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	Utilities::Vector2D ret = self->GetSize();
+	return ret;
+}
+Scripting::Variable OverlayElement_GetTop(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	int ret = self->GetTop();
+	return ret;
+}
+Scripting::Variable OverlayElement_GetLeft(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	int ret = self->GetLeft();
+	return ret;
+}
+Scripting::Variable OverlayElement_GetRight(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	int ret = self->GetRight();
+	return ret;
+}
+Scripting::Variable OverlayElement_GetBottom(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	int ret = self->GetBottom();
+	return ret;
+}
+Scripting::Variable OverlayElement_SetTop(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetTop(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetLeft(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetLeft(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetRight(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetRight(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetBottom(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetBottom(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_GetAnchor(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	Utilities::Vector2D ret = self->GetAnchor();
+	return ret;
+}
+Scripting::Variable OverlayElement_SetAnchor(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchor(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetAnchorCenter(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchorCenter();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchorTopLeft();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchorTopRight();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchorBottomLeft();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	self->SetAnchorBottomRight();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec){
+	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();
+	self->SetTexture(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>const& vec){
+	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();
+	std::string ret = self->GetTexture();
+	return ret;
 }
 Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
 	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
@@ -220,6 +373,11 @@ Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->enableDebugDraw(vec[0].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsManager_handleBodies(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager* manager = PhysicsManager::instance();
+	manager->handleBodies();
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec){

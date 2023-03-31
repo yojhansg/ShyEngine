@@ -81,3 +81,7 @@
 	Forward declaration de <ClassReflection> para evitar errores de link 	
 */
 class ClassReflection;
+
+
+//TODO: implementar el paso por referencia para evitar copias de las cosas
+//#define REF const&

@@ -36,6 +36,7 @@ namespace ECS {
 
 		void flipMode();
 
+		//TODO: ver si encapsular estas cosas de SDL para que el en main no se incluya SDL
 		SDL_Renderer* renderer;
 		SDL_Texture* texture;
 

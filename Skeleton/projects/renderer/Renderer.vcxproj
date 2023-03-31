@@ -120,8 +120,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib;$(SolutionDir)dependencies\SDL2_image\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;SDL2_ttf.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib;$(SolutionDir)dependencies\SDL2_ttf\lib;$(SolutionDir)dependencies\SDL2_image\lib</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,15 +142,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib;$(SolutionDir)dependencies\SDL2_image\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;SDL2_ttf.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\SDL2\lib;$(SolutionDir)dependencies\SDL2_ttf\lib;$(SolutionDir)dependencies\SDL2_image\lib</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\renderer\Font.h" />
     <ClInclude Include="..\..\src\renderer\RendererManager.h" />
     <ClInclude Include="..\..\src\renderer\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\renderer\Font.cpp" />
     <ClCompile Include="..\..\src\renderer\RendererManager.cpp" />
     <ClCompile Include="..\..\src\renderer\Texture.cpp" />
   </ItemGroup>

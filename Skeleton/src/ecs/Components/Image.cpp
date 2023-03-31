@@ -64,6 +64,7 @@ namespace ECS {
 
 		dstRect = { x, y, w, h };
 
+		//TODO: porque rotation point es un puntero
 		rotationPoint->x = w / 2;
 		rotationPoint->y = h / 2;
 
