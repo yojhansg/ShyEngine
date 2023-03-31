@@ -108,6 +108,9 @@
     <ClInclude Include="..\..\src\ecs\Scripting\ScriptFunctionality.h">
       <Filter>Archivos de encabezado\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\ECSUtilities\ComponentFactory.h">
+      <Filter>Archivos de encabezado\ECSUtilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Scripting\ScriptFunctionality.cpp">
       <Filter>Archivos de origen\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\ECSUtilities\ComponentFactory.cpp">
+      <Filter>Archivos de origen\ECSUtilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -17,15 +17,6 @@ namespace ECS {
 
 		friend Game;
 
-	private:
-		reflect int x;
-
-		reflect bool tonto;
-		reflect float hmmmm;
-	public:
-
-		reflect Utilities::Vector2D miVector2d;
-
 	publish:
 		// Getters
 
@@ -67,9 +58,9 @@ namespace ECS {
 
 	private:
 
-		Utilities::Vector2D position_;
-		Utilities::Vector2D scale_;
-		double rotation_;
+		reflect Utilities::Vector2D position_;
+		reflect Utilities::Vector2D scale_;
+		reflect double rotation_;
 	};
 
 }

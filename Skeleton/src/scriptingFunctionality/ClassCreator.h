@@ -6,6 +6,8 @@
 
 using cstring = std::string const&;
 
+//TODO: arreglar las tabulaciones de los cpp
+
 class ClassCreator {
 
 public:
@@ -25,7 +27,7 @@ public:
 		bool isStatic = false;
 	};
 
-	ClassCreator(std::string className, bool pramaOnce = true);
+	ClassCreator(std::string className, bool pragmaOnce = true, bool isSingleton = false);
 
 	ClassCreator& BeginClass();
 	ClassCreator& EndClass();
@@ -51,6 +53,9 @@ public:
 
 	ClassCreator& AddCppInclude(std::string const& inc);
 
+	ClassCreator& AddConstructor(std::string const& constructorContent = "");
+	ClassCreator& AddDestructor(std::string const& destructorContent = "");
+
 	std::string Header();
 	std::string Source();
 
@@ -60,4 +65,12 @@ private:
 	std::stringstream classStream;
 	std::vector<Method> methods;
 	std::vector<std::string> includeCpp;
+
+	bool addConstructor;
+	bool addDestructor;
+
+	std::string constructor;
+	std::string destructor;
+
+	bool isSingleton;
 };

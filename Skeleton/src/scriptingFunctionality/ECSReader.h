@@ -107,6 +107,11 @@ public:
 	ECSReader& Convert2JSON();
 
 	/*
+		TODO: Comentario descriptivo
+	*/
+	ECSReader& ComponentFactory();
+
+	/*
 		Abre la carpeta dada por la ruta. 
 		Lee el contenido de cada fichero en la carpeta con <ProcessFile>
 
@@ -205,9 +210,9 @@ private:
 	std::vector<std::string> managerFiles;
 	std::map<std::string, std::vector<Method>> methods;
 	std::map<std::string, std::vector<Attribute>> attributes;
-
 	std::map<std::string, std::vector<Method>> managerMethods;
 
+	std::vector<std::pair<std::string, std::string>> components;
 	/*
 		Crea la carpeta de salida en caso de que no exista
 	*/

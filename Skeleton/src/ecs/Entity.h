@@ -46,6 +46,10 @@ namespace ECS {
 		// Remove a component from a pointer to that component
 		void removeComponent(Component* c);
 
+		//Create a component given a string with its type
+		Component* addComponent(std::string const& comp);
+
+
 		// Adds a T component to the entity
 		template <typename T, typename ...Ts>
 		requires isComponent<T>

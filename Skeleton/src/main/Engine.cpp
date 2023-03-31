@@ -14,6 +14,7 @@
 #include <Component.h>
 
 #include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ComponentFactory.h>
 #include <Scripting/ScriptManager.h>
 #include <Scripting/ScriptFunctionality.h>
 
@@ -33,6 +34,7 @@ Engine::Engine() {
 	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr;
 	scriptManager = nullptr;
 	scriptFunctionality = nullptr;
+	componentFactory = nullptr;
 }
 
 void Engine::init() {
@@ -51,6 +53,9 @@ void Engine::init() {
 	engineTime = Utilities::EngineTime::init();
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();
+	componentFactory = ComponentFactory::init();
+
+	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	physicsManager->enableDebugDraw(true);
 

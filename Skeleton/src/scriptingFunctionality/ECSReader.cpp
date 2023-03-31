@@ -78,7 +78,7 @@ void ECSReader::ProcessFolder(std::string const& path)
 
 	for (auto const& it : std::filesystem::directory_iterator(currentPath)) {
 
-		if (it.is_directory() && it.path().filename() == "scriptingFunctionality") {
+		if (it.is_directory() && (it.path().filename() == "scriptingFunctionality") || it.path().string() == output) {
 			continue;
 		}
 
@@ -191,6 +191,16 @@ void ECSReader::ProcessFile(std::string const& path)
 			if (forceAddClassName) {
 
 				methods[currentClassName];
+			}
+
+
+
+			if (line.contains(":") && (line.contains("Component") || line.contains("PhysicsBody"))) {
+
+				if (currentClassName == "PhysicsBody")
+					continue;
+
+				components.push_back(std::make_pair(currentClassName, path));
 			}
 
 			continue;
@@ -477,6 +487,10 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 		return "std::stof(" + convertName + ")";
 	}
 
+	if (type == "double") {
+		return "std::stod(" + convertName + ")";
+	}
+
 	if (type == "bool") {
 
 		return convertName + " == \"true\" ? true : false";
@@ -619,13 +633,12 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	return *this;
 }
 
-
 ECSReader& ECSReader::ClassReflection()
 {
 	std::ofstream h(output + "/ClassReflection.h  ");
 	std::ofstream cpp(output + "/ClassReflection.cpp");
 
-	ClassCreator creator = ClassCreator("ClassReflection");
+	ClassCreator creator = ClassCreator("ClassReflection", true, true);
 
 	creator.IncludeAbsolutes({ "string" , "map" });
 	creator.AddLine("namespace ECS { class Component; }");
@@ -638,11 +651,38 @@ ECSReader& ECSReader::ClassReflection()
 		.BeginClass()
 		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
 		.Empty(1)
+		.Private()
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
 		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
-		.Empty(1)
-		.Public();
+		.Empty(1);
 
+
+
+	std::stringstream constructor;
+
+	constructor << "\n";
+
+	for (auto& className : attributes) {
+
+		constructor << "\treflectionMethods[\"" << className.first << "\"] = &ClassReflection::Reflect" << className.first << ";\n";
+	}
+
+	creator.AddConstructor(constructor.str()).Public().AddDestructor();
+
+
+
+	std::stringstream reflector;
+
+	reflector << "\tif(reflectionMethods.contains(component))\n";
+	reflector << "\t\t(this->*reflectionMethods[component])(pointer, map);\n";
+
+	//TODO: dar errores o algo asi no se
+
+	creator.AddMethod("void", "ReflectComponent", { {"std::string const&", "component"}, {"ECS::Component*", "pointer"},
+			{"std::map<std::string, std::string> const&", "map"} }, reflector.str(), false);
+
+
+	creator.Private();
 
 	for (auto& className : attributes) {
 
@@ -655,12 +695,12 @@ ECSReader& ECSReader::ClassReflection()
 
 			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
 
-			method << "\t\t\tself->" << attribute.name << "= " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
+			method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
 		}
 
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
-			{"std::map<std::string, std::string> const&", "map"} }, method.str(), true);
+			{"std::map<std::string, std::string> const&", "map"} }, method.str(), false);
 
 		creator.AddLine();
 	}
@@ -686,9 +726,91 @@ ECSReader& ECSReader::ClassReflection()
 }
 
 
+ECSReader& ECSReader::ComponentFactory()
+{
+	std::ofstream h(output + "/ComponentFactory.h  ");
+	std::ofstream cpp(output + "/ComponentFactory.cpp");
+
+	ClassCreator creator = ClassCreator("ComponentFactory", true, true);
+
+	creator.IncludeAbsolutes({ "string" , "map" });
+	creator.AddLine("namespace ECS { class Component; }");
+
+
+	std::stringstream constructor;
+
+	constructor << "\n";
+
+	for (auto& component : components) {
+
+		constructor << "\tcomponents[\"" << component.first << "\"] = &ComponentFactory::Create" << component.first << ";\n";
+	}
+
+
+	creator.Empty()
+		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddDefine("ECSreflection_Version", ECS_Version)
+		.AddLine()
+		.AddLine("using namespace ECS;")
+		.BeginClass()
+		.Public()
+		.AddDestructor()
+		.Private()
+		.AddLine("typedef ECS::Component*(ComponentFactory::*ComponentCreation)();")
+		.Empty(1)
+		.AddConstructor(constructor.str())
+		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
+		.AddAtribute("std::map<std::string, ComponentCreation>", "components")
+		.Empty(1);
+
+
+	for (auto& component : components) {
+
+		std::stringstream method;
+
+		method << "\t\treturn new ECS::" << component.first << "();\n";
+
+		creator.AddMethod("ECS::Component*", "Create" + component.first, {}, method.str(), false);
+	}
+
+	std::stringstream factoryMethod;
+
+	factoryMethod << "\tif(components.contains(comp))\n";
+	factoryMethod << "\t\treturn (this->*components[comp])();\n";
+	factoryMethod << "\treturn nullptr;";
+
+	creator.Public().AddLine().AddMethod("ECS::Component*", "CreateComponent", { {"std::string const&", "comp"} }, factoryMethod.str(), false);
+
+	//TODO: Buscar las clases que tengo que añadir para reflexionar
+
+	creator.EndClass();
+
+
+	for (auto& component : components) {
+
+		auto FileName = std::filesystem::path(component.second);
+
+		std::string filename = FileName.filename().string();
+		std::string root = filename == "Script.h" ? "Scripting" : "Components";
+
+		creator.AddCppInclude(root + "/" + filename);
+	}
+
+	h << creator.Header();
+	cpp << creator.Source();
+
+	h.close();
+	cpp.close();
+
+	return *this;
+}
+
 
 #include "json.hpp"
 using namespace nlohmann;
+
+
+
 
 ECSReader& ECSReader::Convert2JSON()
 {
