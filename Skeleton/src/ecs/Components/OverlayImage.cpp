@@ -28,7 +28,7 @@ void ECS::OverlayImage::render()
 	
 	overlay->CalculateDestinationRect(destination.x, destination.y, destination.w, destination.h);
 
-	SDL_RenderCopy(RendererManager::RendererManager::instance()->getRenderer(),
+	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
 		texture->getSDLTexture(), NULL, &destination);
 }
 
@@ -37,7 +37,7 @@ void ECS::OverlayImage::SetTexture(std::string newpath)
 {
 	path = newpath;
 
-	texture = ResourcesManager::ResourcesManager::instance()->addTexture(path);
+	texture = Resources::ResourcesManager::instance()->addTexture(path);
 }
 
 

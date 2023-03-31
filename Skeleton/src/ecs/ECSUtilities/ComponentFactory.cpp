@@ -8,6 +8,7 @@
 #include "Components/Image.h"
 #include "Components/OverlayElement.h"
 #include "Components/OverlayImage.h"
+#include "Components/OverlayText.h"
 #include "Components/TestComponent.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
@@ -24,6 +25,7 @@ ComponentFactory::ComponentFactory(){
 	components["Image"] = &ComponentFactory::CreateImage;
 	components["OverlayElement"] = &ComponentFactory::CreateOverlayElement;
 	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
+	components["OverlayText"] = &ComponentFactory::CreateOverlayText;
 	components["TestComponent"] = &ComponentFactory::CreateTestComponent;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
@@ -63,6 +65,10 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateOverlayImage(){
 		return new ECS::OverlayImage();
+
+}
+	ECS::Component* ComponentFactory::CreateOverlayText(){
+		return new ECS::OverlayText();
 
 }
 	ECS::Component* ComponentFactory::CreateTestComponent(){

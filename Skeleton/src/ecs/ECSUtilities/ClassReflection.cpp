@@ -7,6 +7,7 @@
 #include "Components/Image.h"
 #include "Components/OverlayElement.h"
 #include "Components/OverlayImage.h"
+#include "Components/OverlayText.h"
 #include "Components/PhysicBody.h"
 #include "Components/Transform.h"
 
@@ -21,6 +22,7 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
 	reflectionMethods["OverlayElement"] = &ClassReflection::ReflectOverlayElement;
 	reflectionMethods["OverlayImage"] = &ClassReflection::ReflectOverlayImage;
+	reflectionMethods["OverlayText"] = &ClassReflection::ReflectOverlayText;
 	reflectionMethods["PhysicsBody"] = &ClassReflection::ReflectPhysicsBody;
 	reflectionMethods["Transform"] = &ClassReflection::ReflectTransform;
 
@@ -104,6 +106,22 @@ ClassReflection::ClassReflection(){
 		OverlayImage* self = static_cast<OverlayImage*>(selfComp);
 		if(map.contains("path"))
 			self->path = map.at("path");
+
+}
+	void ClassReflection::ReflectOverlayText(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+		OverlayText* self = static_cast<OverlayText*>(selfComp);
+		if(map.contains("pointSize"))
+			self->pointSize = std::stoi(map.at("pointSize"));
+		if(map.contains("path"))
+			self->path = map.at("path");
+		if(map.contains("text"))
+			self->text = map.at("text");
+		if(map.contains("horizontalAlignment"))
+			self->horizontalAlignment = std::stoi(map.at("horizontalAlignment"));
+		if(map.contains("verticalAlignment"))
+			self->verticalAlignment = std::stoi(map.at("verticalAlignment"));
+		if(map.contains("fit"))
+			self->fit = std::stoi(map.at("fit"));
 
 }
 	void ClassReflection::ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

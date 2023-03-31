@@ -10,6 +10,7 @@
 #include <Components/Image.h>
 #include <Components/OverlayElement.h>
 #include <Components/OverlayImage.h>
+#include <Components/OverlayText.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
 #include <SceneManager.h>
@@ -58,6 +59,18 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("OverlayElement_SetAnchorBottomRight",OverlayElement_SetAnchorBottomRight);
 	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
 	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
+	map.emplace("OverlayText_GetFit",OverlayText_GetFit);
+	map.emplace("OverlayText_SetFit",OverlayText_SetFit);
+	map.emplace("OverlayText_GetVerticalAlignment",OverlayText_GetVerticalAlignment);
+	map.emplace("OverlayText_GetHorizontalAlignment",OverlayText_GetHorizontalAlignment);
+	map.emplace("OverlayText_SetVerticalAlignment",OverlayText_SetVerticalAlignment);
+	map.emplace("OverlayText_SetHorizontalAlignment",OverlayText_SetHorizontalAlignment);
+	map.emplace("OverlayText_GetFont",OverlayText_GetFont);
+	map.emplace("OverlayText_SetFont",OverlayText_SetFont);
+	map.emplace("OverlayText_GetText",OverlayText_GetText);
+	map.emplace("OverlayText_SetText",OverlayText_SetText);
+	map.emplace("OverlayText_GetPointSize",OverlayText_GetPointSize);
+	map.emplace("OverlayText_SetPointSize",OverlayText_SetPointSize);
 	map.emplace("PhysicsBody_setTrigger",PhysicsBody_setTrigger);
 	map.emplace("PhysicsBody_isTrigger",PhysicsBody_isTrigger);
 	map.emplace("PhysicsBody_setFriction",PhysicsBody_setFriction);
@@ -269,6 +282,66 @@ Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>cons
 	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();
 	std::string ret = self->GetTexture();
 	return ret;
+}
+Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	int ret = self->GetFit();
+	return ret;
+}
+Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetFit(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayText_GetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	int ret = self->GetVerticalAlignment();
+	return ret;
+}
+Scripting::Variable OverlayText_GetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	int ret = self->GetHorizontalAlignment();
+	return ret;
+}
+Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetVerticalAlignment(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetHorizontalAlignment(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayText_GetFont(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	std::string ret = self->GetFont();
+	return ret;
+}
+Scripting::Variable OverlayText_SetFont(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetFont(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayText_GetText(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	std::string ret = self->GetText();
+	return ret;
+}
+Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetText(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	int ret = self->GetPointSize();
+	return ret;
+}
+Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec){
+	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
+	self->SetPointSize(vec[1].value.Float);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
 	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();

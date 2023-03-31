@@ -6,7 +6,7 @@
 
 //TODO: no incluir aqui SDL
 
-namespace RendererManager {
+namespace Renderer {
 
 	class RendererManager : public Utilities::Singleton<RendererManager> {
 

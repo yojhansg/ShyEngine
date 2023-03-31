@@ -4,7 +4,7 @@ namespace Physics {
 	class PhysicsManager;
 }
 
-namespace RendererManager {
+namespace Renderer {
 	class RendererManager;
 }
 
@@ -21,7 +21,7 @@ namespace ECS {
 	class SceneManager;
 }
 
-namespace ResourcesManager {
+namespace Resources {
 	class ResourcesManager;
 }
 
@@ -53,10 +53,10 @@ private:
 	ECS::ContactListener* contactListener;
 	ECS::SceneManager* sceneManager;
 	Physics::PhysicsManager* physicsManager;
-	RendererManager::RendererManager* rendererManager;
+	Renderer::RendererManager* rendererManager;
 	Input::InputManager* inputManager;
 	SoundManager::SoundManager* soundManager;
-	ResourcesManager::ResourcesManager* resourcesManager;
+	Resources::ResourcesManager* resourcesManager;
 	Scripting::ScriptManager* scriptManager;
 	Scripting::ScriptFunctionality* scriptFunctionality;
 	Utilities::EngineTime* engineTime;

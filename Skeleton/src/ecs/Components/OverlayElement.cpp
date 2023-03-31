@@ -153,8 +153,8 @@ void ECS::OverlayElement::CalculateDestinationRect(int& x, int& y, int& w, int& 
 	}
 	case OverlayElement::Placement::Stretched:
 	{
-		int winWidth = RendererManager::RendererManager::instance()->getWidth();
-		int winHeight = RendererManager::RendererManager::instance()->getHeight();
+		int winWidth = Renderer::RendererManager::instance()->getWidth();
+		int winHeight = Renderer::RendererManager::instance()->getHeight();
 
 		x = left;
 		y = top;

@@ -3,9 +3,9 @@
 #include <Texture.h>
 #include <Font.h>
 
-ResourcesManager::ResourcesManager::ResourcesManager() {}
+Resources::ResourcesManager::ResourcesManager() {}
 
-ResourcesManager::ResourcesManager::~ResourcesManager() {
+Resources::ResourcesManager::~ResourcesManager() {
 
 	for (auto it = textures.begin(); it != textures.end(); it++) delete it->second;
 	textures.clear();
@@ -14,12 +14,12 @@ ResourcesManager::ResourcesManager::~ResourcesManager() {
 	fonts.clear();
 }
 
-RendererManager::Texture* ResourcesManager::ResourcesManager::addTexture(const std::string& key) {
+Renderer::Texture* Resources::ResourcesManager::addTexture(const std::string& key) {
 
 	if (textures.contains(key))
 		return textures.at(key);
 
-	RendererManager::Texture* t = new RendererManager::Texture(key);
+	Renderer::Texture* t = new Renderer::Texture(key);
 
 	textures.insert(std::make_pair(key, t));
 
@@ -27,14 +27,16 @@ RendererManager::Texture* ResourcesManager::ResourcesManager::addTexture(const s
 
 }
 
-RendererManager::Font* ResourcesManager::ResourcesManager::addFont(std::string const& key)
+Renderer::Font* Resources::ResourcesManager::addFont(std::string const& key, int pointSize)
 {
-	if (fonts.contains(key))
-		return fonts.at(key);
+	std::string newkey = key + std::to_string(pointSize);
 
-	RendererManager::Font* t = new RendererManager::Font(key);
+	if (fonts.contains(newkey))
+		return fonts.at(newkey);
 
-	fonts.insert(std::make_pair(key, t));
+	Renderer::Font* t = new Renderer::Font(key, pointSize);
+
+	fonts.insert(std::make_pair(newkey, t));
 
 	return t;
 }

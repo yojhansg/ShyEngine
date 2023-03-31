@@ -4,13 +4,14 @@
 
 struct SDL_Texture;
 
-namespace RendererManager {
+namespace Renderer {
 	
 	class Texture {
 
 	public:
 
 		Texture(const std::string& filepath);
+		Texture(SDL_Texture* text);
 
 		~Texture();
 

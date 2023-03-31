@@ -7,7 +7,7 @@
 namespace Physics {
 
 	DebugDraw::DebugDraw() {
-		renderer = RendererManager::RendererManager::instance()->getRenderer();
+		renderer = Renderer::RendererManager::instance()->getRenderer();
 
 	}
 

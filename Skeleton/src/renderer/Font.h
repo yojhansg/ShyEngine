@@ -4,20 +4,20 @@
 
 
 typedef struct _TTF_Font TTF_Font;
-namespace RendererManager {
+namespace Renderer {
 
 	class Texture;
 	class Font {
 
 	public:
 
-		Font(const std::string& filepat, int pointSize = 32);
+		Font(const std::string& filepat, int pointSize);
 
 		~Font();
 
 		TTF_Font* getSDLFont();
 		Texture* CreateText(std::string const& message);
-
+		Texture* CreateWrappedText(std::string const& message, int maxSize);
 
 	private:
 

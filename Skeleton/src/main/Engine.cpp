@@ -44,12 +44,12 @@ void Engine::init() {
 	}
 
 	sceneManager = ECS::SceneManager::init();
-	rendererManager = RendererManager::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
+	rendererManager = Renderer::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
 	physicsManager = Physics::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
 	contactListener = ECS::ContactListener::init();
 	inputManager = Input::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
-	resourcesManager = ResourcesManager::ResourcesManager::init();
+	resourcesManager = Resources::ResourcesManager::init();
 	engineTime = Utilities::EngineTime::init();
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();

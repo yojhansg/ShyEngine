@@ -3,7 +3,7 @@
 #include <string>
 #include <Component.h>
 
-namespace RendererManager {
+namespace Renderer {
 	class Texture;
 }
 
@@ -22,8 +22,7 @@ namespace ECS {
 
 		OverlayElement* overlay;
 
-		//TODO: quitar de aqui las cosas de SDL
-		RendererManager::Texture* texture;
+		Renderer::Texture* texture;
 		reflect std::string path;
 
 		void start() override;

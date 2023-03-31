@@ -3,7 +3,7 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
-namespace RendererManager {
+namespace Renderer {
 
     RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400) {
         initSDL();

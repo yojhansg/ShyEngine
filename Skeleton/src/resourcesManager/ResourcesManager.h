@@ -4,12 +4,12 @@
 #include <unordered_map>
 #include <string>
 
-namespace RendererManager {
+namespace Renderer {
 	class Texture;
 	class Font;
 }
 
-namespace ResourcesManager {
+namespace Resources {
 
 	template<typename T>
 	using resources_map = std::unordered_map<std::string, T>;
@@ -22,16 +22,16 @@ namespace ResourcesManager {
 
 		~ResourcesManager();
 
-		RendererManager::Texture* addTexture(const std::string& key);
+		Renderer::Texture* addTexture(const std::string& key);
 
-		RendererManager::Font* addFont(std::string const& key);
+		Renderer::Font* addFont(std::string const& key, int pointSize);
 
 	private:
 
 		ResourcesManager();
 		
-		resources_map<RendererManager::Texture*> textures;
-		resources_map<RendererManager::Font*> fonts;
+		resources_map<Renderer::Texture*> textures;
+		resources_map<Renderer::Font*> fonts;
 	};
 }
 

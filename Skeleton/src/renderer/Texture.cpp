@@ -3,7 +3,7 @@
 #include <SDL_image.h>
 #include <cassert>
 
-RendererManager::Texture::Texture(const std::string& filepath) {
+Renderer::Texture::Texture(const std::string& filepath) {
 	
 	// Surface and texture
 	SDL_Surface* surface = IMG_Load(filepath.c_str());
@@ -13,24 +13,33 @@ RendererManager::Texture::Texture(const std::string& filepath) {
 	assert(texture != nullptr, "Couldn't load image: " + filepath);
 
 	width = surface->w; height = surface->h;
+
+	SDL_FreeSurface(surface);
+}
+
+Renderer::Texture::Texture(SDL_Texture* text)
+{
+	texture = text;
+
+	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
 }
 
 
-RendererManager::Texture::~Texture() {
+Renderer::Texture::~Texture() {
 	if (texture != nullptr) {
 		SDL_DestroyTexture(texture);
 		texture = nullptr;
 	}
 }
 
-SDL_Texture* RendererManager::Texture::getSDLTexture() {
+SDL_Texture* Renderer::Texture::getSDLTexture() {
 	return texture;
 }
 
-int RendererManager::Texture::getWidth() {
+int Renderer::Texture::getWidth() {
 	return width;
 }
 
-int RendererManager::Texture::getHeight() {
+int Renderer::Texture::getHeight() {
 	return height;
 }

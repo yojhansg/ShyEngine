@@ -22,6 +22,7 @@
 
 #include <Components/OverlayElement.h>
 #include <Components/OverlayImage.h>
+#include <Components/OverlayText.h>
 
 
 Game::Game(ECS::SceneManager* sm) {
@@ -40,7 +41,7 @@ void Game::initScenes() {
 
 void Game::firstScene() {
 
-	RendererManager::RendererManager* renderer = RendererManager::RendererManager::instance();
+	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -109,7 +110,7 @@ void Game::firstScene() {
 
 void Game::flappyBird() {
 
-	RendererManager::RendererManager* renderer = RendererManager::RendererManager::instance();
+	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -254,14 +255,107 @@ void Game::readScene(std::string const& sceneName)
 
 
 	// OverlayElement
-	ECS::Entity* overlay = scene->createEntity("Overlay");
-	auto elem = overlay->addComponent<ECS::OverlayElement>();
-	auto img = overlay->addComponent<ECS::OverlayImage>();
+	ECS::Entity *overlay, *text;
 
-	elem->SetPositioned({ 0, 0 }, { 400, 400 });
-	elem->SetAnchorCenter();
+	ECS::OverlayElement* elem;
+	ECS::OverlayText* textText;
 
-	elem->SetStreched(10, 10, 10, 10);
+	overlay = scene->createEntity("Overlay");
+	elem = overlay->addComponent<ECS::OverlayElement>();
+	overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 10, 10 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+
+	//====
+
+	overlay = scene->createEntity("Overlay 2");
+	elem = overlay->addComponent<ECS::OverlayElement>();
+	overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 10, 120 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+
+	//====
+
+	overlay = scene->createEntity("Overlay 2");
+	elem = overlay->addComponent<ECS::OverlayElement>();
+	overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 10, 230 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+
+
+	//====
+
+	overlay = scene->createEntity("Overlay 3");
+	elem = overlay->addComponent<ECS::OverlayElement>();
+	overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 10, 340 }, { 400, 100 });
+	elem->SetAnchorTopLeft();
+
+
+
+	overlay = scene->createEntity("Overlay 3");
+	elem = overlay->addComponent<ECS::OverlayElement>();
+	overlay->addComponent<ECS::OverlayImage>();
+
+	elem->SetPositioned({ 500, 340 }, { 400, 100 });
+	elem->SetAnchorTopLeft();
+
+
+
+	// OverlayElement
+	text = scene->createEntity("Clamp");
+	elem = text->addComponent<ECS::OverlayElement>();
+	textText = text->addComponent<ECS::OverlayText>();
+
+	elem->SetPositioned({ 10, 10 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+	textText->SetText("Clamp y se corta el texto");
+
+
+	// OverlayElement
+	text = scene->createEntity("Overlay");
+	elem = text->addComponent<ECS::OverlayElement>();
+	textText = text->addComponent<ECS::OverlayText>();
+
+	elem->SetPositioned({ 10, 120 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+	textText->SetFit(1);
+	textText->SetText("Este es un ejemplo de Overflow");
+
+
+	text = scene->createEntity("Overlay");
+	elem = text->addComponent<ECS::OverlayElement>();
+	textText = text->addComponent<ECS::OverlayText>();
+
+	elem->SetPositioned({ 10, 230 }, { 200, 100 });
+	elem->SetAnchorTopLeft();
+	textText->SetFit(4);
+	textText->SetPointSize(100);
+	textText->SetText("Me expando");
+
+
+	text = scene->createEntity("Wrapped");
+	elem = text->addComponent<ECS::OverlayElement>();
+	textText = text->addComponent<ECS::OverlayText>();
+
+	elem->SetPositioned({ 10, 340 }, { 400, 100 });
+	elem->SetAnchorTopLeft();
+	textText->SetFit((int)OverlayText::Fit::WrapClamp);
+	textText->SetText("HOLA ME CAMBIO DE LINEA");
+
+
+	text = scene->createEntity("Wrapped overflow");
+	elem = text->addComponent<ECS::OverlayElement>();
+	textText = text->addComponent<ECS::OverlayText>();
+
+	elem->SetPositioned({ 500, 340 }, { 400, 100 });
+	elem->SetAnchorTopLeft();
+	textText->SetFit((int)OverlayText::Fit::WrapOverflow);
+	textText->SetText("Hola soy un texto que se expande entre varias lineas y encima me salgo del total mama mia soy un loco");
 
 
 	scene->init();

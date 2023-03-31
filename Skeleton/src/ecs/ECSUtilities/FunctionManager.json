@@ -220,6 +220,80 @@
             "return": "void"
         }
     },
+    "OverlayText": {
+        "GetFit": {
+            "return": "int"
+        },
+        "GetFont": {
+            "return": "std::string"
+        },
+        "GetHorizontalAlignment": {
+            "return": "int"
+        },
+        "GetPointSize": {
+            "return": "int"
+        },
+        "GetText": {
+            "return": "std::string"
+        },
+        "GetVerticalAlignment": {
+            "return": "int"
+        },
+        "SetFit": {
+            "input": [
+                {
+                    "name": "fit",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetFont": {
+            "input": [
+                {
+                    "name": "font",
+                    "type": "std::string"
+                }
+            ],
+            "return": "void"
+        },
+        "SetHorizontalAlignment": {
+            "input": [
+                {
+                    "name": "align",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetPointSize": {
+            "input": [
+                {
+                    "name": "size",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetText": {
+            "input": [
+                {
+                    "name": "text",
+                    "type": "std::string"
+                }
+            ],
+            "return": "void"
+        },
+        "SetVerticalAlignment": {
+            "input": [
+                {
+                    "name": "align",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        }
+    },
     "PhysicsBody": {
         "getBounciness": {
             "return": "float"

@@ -28,6 +28,7 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	ECS::Component* CreateImage();
 	ECS::Component* CreateOverlayElement();
 	ECS::Component* CreateOverlayImage();
+	ECS::Component* CreateOverlayText();
 	ECS::Component* CreateTestComponent();
 	ECS::Component* CreateTransform();
 	ECS::Component* CreateScript();

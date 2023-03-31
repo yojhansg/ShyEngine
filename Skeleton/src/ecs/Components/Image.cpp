@@ -22,12 +22,12 @@ namespace ECS {
 	
 	void Image::init() {
 
-		renderer = RendererManager::RendererManager::instance()->getRenderer();
+		renderer = Renderer::RendererManager::instance()->getRenderer();
 
 		transform = getEntity()->getComponent<Transform>();
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		auto t = ResourcesManager::ResourcesManager::instance()->addTexture(fileName);
+		auto t = Resources::ResourcesManager::instance()->addTexture(fileName);
 
 		texture = t->getSDLTexture(); width = t->getWidth(); height = t->getHeight();
 
