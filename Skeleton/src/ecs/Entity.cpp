@@ -120,9 +120,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onTriggerEnter() {
+	void Entity::onTriggerEnter(Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onTriggerEnter();
+			if (c->isActive()) c->onTriggerEnter(b);
 		}
 	}
 
@@ -132,9 +132,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onTriggerExit() {
+	void Entity::onTriggerExit(Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onTriggerExit();
+			if (c->isActive()) c->onTriggerExit(b);
 		}
 	}
 

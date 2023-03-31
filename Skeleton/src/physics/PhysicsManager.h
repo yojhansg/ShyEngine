@@ -37,6 +37,8 @@ namespace Physics {
 
 		void enableDebugDraw(bool enable);
 
+		void handleBodies();
+
 	public:
 		void setContactListener(b2ContactListener* contactListener);
 
@@ -54,6 +56,8 @@ namespace Physics {
 
 		bool layersExists(const std::string& layerName);
 
+		void setBodyEnabled(b2Body* body, bool enabled);
+
 	private:
 
 		void initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations);
@@ -69,6 +73,11 @@ namespace Physics {
 		b2World* world;
 
 		bool debugDrawEnabled;
+
+		// Disabled/Enable bodies handling
+		std::vector<b2Body*> disabledBodies;
+
+		std::vector<b2Body*> enabledBodies;
 
 		// Debug draw class inherited from b2draw
 		DebugDraw* b2draw;

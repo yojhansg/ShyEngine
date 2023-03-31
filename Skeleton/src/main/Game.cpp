@@ -56,47 +56,37 @@ void Game::firstScene() {
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
+		/*ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
+		auto tComp = ball->addComponent<ECS::TestComponent>();*/
 
 
 	// 3.- Init
 	scene->init();
-
-	auto pm = Physics::PhysicsManager::instance();
-
-	pm->addCollisionLayer("Player");
-	pm->addCollisionLayer("Ground");
-	pm->addCollisionLayer("Ball");
-
-	pm->setCollisionBetweenLayers("Ball", "Player", false);
 
 	// 4.- Components settings
 
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
-
 		body->setBodyType(ECS::PhysicsBody::DYNAMIC);
 		body->setBounciness(0.5f);
-		body->setCollisionLayer("Player");
+		//body->setTrigger(true);
 
 		// Ground
 		grTr->setScale(1, 1);
 		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
 		grBody->addOffSet(0, -1);
-		grBody->setCollisionLayer("Ground");
 
-		//// Ball
-		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
+		// Ball
+		/*trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
 
 		ballBody->setBodyType(ECS::PhysicsBody::DYNAMIC);
-		ballBody->setBounciness(0.5f);
-		ballBody->setCollisionLayer("Ball");
+		ballBody->setCollisionLayer("Ball");*/
 
 	// 5.- Start
 

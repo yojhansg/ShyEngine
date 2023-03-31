@@ -146,13 +146,13 @@ namespace ECS {
 		void onCollisionExit(Entity* b);
 
 		// Called when the entity starts trigging an entity marked as trigger
-		void onTriggerEnter();
+		void onTriggerEnter(Entity * b);
 
 		// Called when the entity is trigging and entity marked as trigger
 		void onTriggerStay();
 
 		// Called when the entity exits the trigger of the other entity marked as trigger
-		void onTriggerExit();
+		void onTriggerExit(Entity* b);
 
 		// Name of the entity
 		std::string name;

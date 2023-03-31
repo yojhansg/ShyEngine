@@ -91,8 +91,6 @@ namespace ECS {
 
 	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
 
-		//std::cout << this->getEntity()->getEntityName() << " Layer: " << fixture->GetFilterData().categoryBits << " Collides with: " << fixture->GetFilterData().maskBits << std::endl;
-
 		if (bodyType != STATIC) {
 
 			// Position
@@ -131,19 +129,19 @@ namespace ECS {
 	}
 
 	void PhysicsBody::onActive() {
-		body->SetAwake(true);
+		pm->setBodyEnabled(body, true);
 	}
 
 	void PhysicsBody::onDeacitve() {
-		body->SetAwake(false);
+		pm->setBodyEnabled(body, false);
 	}
 
 	void PhysicsBody::onSceneUp() {
-		body->SetAwake(true);
+		pm->setBodyEnabled(body, true);
 	}
 
 	void PhysicsBody::onSceneDown() {
-		body->SetAwake(false);
+		pm->setBodyEnabled(body, false);
 	}
 
 	void PhysicsBody::setTrigger(bool trigger) {

@@ -64,11 +64,11 @@ namespace ECS {
 
 		virtual void onCollisionExit(Entity* b) {};
 
-		virtual void onTriggerEnter() {};
+		virtual void onTriggerEnter(Entity* b) {};
 
 		virtual void onTriggerStay() {};
 
-		virtual void onTriggerExit() {};
+		virtual void onTriggerExit(Entity* b) {};
 
 		
 	protected:
