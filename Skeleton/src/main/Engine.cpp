@@ -17,11 +17,14 @@
 
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ComponentFactory.h>
+#include <ECSUtilities/ClassReflection.h>
+
 #include <Scripting/ScriptManager.h>
 #include <Scripting/ScriptFunctionality.h>
 
+#include <ConsoleManager.h>
+
 #include "Game.h"
-#include <iostream>
 
 #include <chrono>
 
@@ -44,8 +47,13 @@ Engine::Engine() {
 void Engine::init() {
 
 	if (ECS_Version != ECSfunc_Version) {
-		std::cout << "Warning: La version del motor no coincide con la version de las funciones de los scripts" << std::endl;
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
 	}
+
+	if (ECS_Version != ECSreflection_Version) {
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
+	}
+
 
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = Renderer::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);

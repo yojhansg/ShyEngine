@@ -4,7 +4,6 @@
 #include "ECSUtilities/ComponentFactory.h"
 
 #include "RenderManager.h"
-#include <iostream>
 namespace ECS {
 
 	Entity::Entity(const std::string& ent_name, int renderOrder) {

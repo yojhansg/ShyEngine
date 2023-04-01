@@ -19,8 +19,14 @@ void ECS::Script::onCollisionEnter(Entity* entity)
 	Iteration(nodes.onCollisionEnter);
 }
 
+std::string ECS::Script::GetName()
+{
+	return name;
+}
+
 void ECS::Script::Initialise(std::string path)
 {
+	name = path;
 	nodes = Scripting::ScriptManager::LoadScript(path);
 }
 

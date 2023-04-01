@@ -1,6 +1,5 @@
 #include "Function.h"
 #include "ScriptManager.h"
-#include <iostream>
 
 Scripting::Function::Function(int idx, std::string const& method): OutputNode(idx), methodName(method), next(nullptr)
 {

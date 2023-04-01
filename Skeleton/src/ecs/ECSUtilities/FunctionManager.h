@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Apr  1 15:05:08 2023
+//Creation time : Sat Apr  1 20:23:04 2023
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
@@ -62,15 +62,14 @@ Scripting::Variable OverlayText_GetText(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_isTrigger(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_setFriction(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_getFriction(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_setBounciness(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getFriction(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec);

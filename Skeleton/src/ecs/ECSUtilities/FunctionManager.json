@@ -294,7 +294,7 @@
             "return": "void"
         }
     },
-    "PhysicsBody": {
+    "PhysicBody": {
         "getBounciness": {
             "return": "float"
         },
@@ -349,9 +349,6 @@
         }
     },
     "Transform": {
-        "Print_GameObject_Name": {
-            "return": "void"
-        },
         "getPosition": {
             "return": "Utilities::Vector2D"
         },

@@ -6,12 +6,14 @@
 #include "ConstNode.h"
 #include "Fork.h"
 
+#include <ConsoleManager.h>
+
 #include "json.hpp"
+
 using namespace nlohmann;
 
 using jsonarray = std::vector<json>;
 
-#include <iostream>
 
 Scripting::ScriptManager::ScriptManager()
 {
@@ -41,7 +43,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	if (!fileStream.good())
 	{
-		std::cout << "Error leyendo el archivo" << std::endl;
+		Console::Output::PrintError("Script loading", "Cannot open file <" + path + ">");
 		return ScriptNodes();
 	}
 	json file = json::parse(fileStream);

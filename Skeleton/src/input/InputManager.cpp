@@ -5,8 +5,6 @@
 #define STICK_DEADZONE 3276
 #define TRIGGER_DEADZONE 1000
 
-#include <iostream>
-
 namespace Input {
 
 	InputManager::InputManager() {

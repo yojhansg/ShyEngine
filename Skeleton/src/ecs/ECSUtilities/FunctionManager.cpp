@@ -2,7 +2,7 @@
 #include "FunctionManager.h"
 #include "Entity.h"
 
-//Creation time: Sat Apr  1 15:05:08 2023
+//Creation time: Sat Apr  1 20:23:04 2023
 #include <Components/BoxBody.h>
 #include <Components/ChainBody.h>
 #include <Components/CircleBody.h>
@@ -71,15 +71,14 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("OverlayText_SetText",OverlayText_SetText);
 	map.emplace("OverlayText_GetPointSize",OverlayText_GetPointSize);
 	map.emplace("OverlayText_SetPointSize",OverlayText_SetPointSize);
-	map.emplace("PhysicsBody_setTrigger",PhysicsBody_setTrigger);
-	map.emplace("PhysicsBody_isTrigger",PhysicsBody_isTrigger);
-	map.emplace("PhysicsBody_setFriction",PhysicsBody_setFriction);
-	map.emplace("PhysicsBody_getFriction",PhysicsBody_getFriction);
-	map.emplace("PhysicsBody_setBounciness",PhysicsBody_setBounciness);
-	map.emplace("PhysicsBody_getBounciness",PhysicsBody_getBounciness);
-	map.emplace("PhysicsBody_setLinearVelocity",PhysicsBody_setLinearVelocity);
-	map.emplace("PhysicsBody_getLinearVelocity",PhysicsBody_getLinearVelocity);
-	map.emplace("Transform_Print_GameObject_Name",Transform_Print_GameObject_Name);
+	map.emplace("PhysicBody_setTrigger",PhysicBody_setTrigger);
+	map.emplace("PhysicBody_isTrigger",PhysicBody_isTrigger);
+	map.emplace("PhysicBody_setFriction",PhysicBody_setFriction);
+	map.emplace("PhysicBody_getFriction",PhysicBody_getFriction);
+	map.emplace("PhysicBody_setBounciness",PhysicBody_setBounciness);
+	map.emplace("PhysicBody_getBounciness",PhysicBody_getBounciness);
+	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
+	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
 	map.emplace("Transform_getPosition",Transform_getPosition);
 	map.emplace("Transform_getScale",Transform_getScale);
 	map.emplace("Transform_setPosition",Transform_setPosition);
@@ -343,50 +342,45 @@ Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>con
 	self->SetPointSize(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setTrigger(vec[1].value.Bool);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsBody_isTrigger(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	bool ret = self->isTrigger();
 	return ret;
 }
-Scripting::Variable PhysicsBody_setFriction(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setFriction(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsBody_getFriction(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_getFriction(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	float ret = self->getFriction();
 	return ret;
 }
-Scripting::Variable PhysicsBody_setBounciness(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setBounciness(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	float ret = self->getBounciness();
 	return ret;
 }
-Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setLinearVelocity(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	Vector2D ret = self->getLinearVelocity();
 	return ret;
-}
-Scripting::Variable Transform_Print_GameObject_Name(std::vector<Scripting::Variable>const& vec){
-	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	self->Print_GameObject_Name();
-	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();

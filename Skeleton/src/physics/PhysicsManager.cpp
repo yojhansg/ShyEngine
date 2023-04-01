@@ -2,7 +2,6 @@
 #include "box2d/box2d.h"
 #include "DebugDraw.h"
 #include "box2d/b2_contact.h"
-#include <iostream>
 
 const int MAX_COLLISION_LAYERS = 16;
 

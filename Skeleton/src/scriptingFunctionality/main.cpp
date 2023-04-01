@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include "ECSReader.h"
 #include "ClassCreator.h"

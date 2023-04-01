@@ -201,13 +201,13 @@ void ECSReader::ProcessFile(std::string const& path)
 
 
 
-			if (line.contains(":") && (line.contains("Component") || line.contains("PhysicsBody"))) {
+			if (line.contains(":") && (line.contains("Component") || line.contains("PhysicBody"))) {
 
-				if (currentClassName == "PhysicsBody")
+				if (currentClassName == "PhysicBody")
 					continue;
 
-				if (line.contains("PhysicsBody")) {
-					classInheritance[currentClassName] = "PhysicsBody";
+				if (line.contains("PhysicBody")) {
+					classInheritance[currentClassName] = "PhysicBody";
 					if (!fileIncluded) {
 
 						filesToInclude.push_back(path);

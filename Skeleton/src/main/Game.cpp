@@ -17,13 +17,13 @@
 #include <ECSUtilities/ClassReflection.h>
 
 #include <map>
-#include <iostream>
 #include <fstream>
 
 #include <Components/OverlayElement.h>
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
 
+#include <ConsoleManager.h>
 
 using namespace nlohmann;
 
@@ -35,10 +35,10 @@ Game::Game(ECS::SceneManager* sm) {
 
 void Game::initScenes() {
 
-	//firstScene();
+	firstScene();
 	//flappyBird();
 
-	readScene("DefaultScene.json");
+	//readScene("DefaultScene.json");
 }
 
 void Game::firstScene() {
@@ -191,7 +191,8 @@ void Game::readScene(std::string const& sceneName)
 
 	if (!fileStream.good())
 	{
-		std::cout << "Error leyendo el archivo" << std::endl;
+		Console::Output::PrintError("Scene loading", "Cannot open scene <" + sceneName + ">");
+
 		return;
 	}
 	json file = json::parse(fileStream);

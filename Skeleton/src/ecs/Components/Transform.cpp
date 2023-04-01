@@ -2,7 +2,6 @@
 #include "Vector2D.h"
 
 #include "Entity.h"
-#include <iostream>
 
 namespace ECS {
 
@@ -21,11 +20,7 @@ namespace ECS {
 	}
 
 	// ------------- Getters -----------------
-
-	void Transform::Print_GameObject_Name() {
-
-		std::cout << getEntity()->getEntityName() << std::endl;
-	}
+	
 
 	Utilities::Vector2D Transform::getPosition() {
 		return position_;

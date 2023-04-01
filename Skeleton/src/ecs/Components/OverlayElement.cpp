@@ -1,6 +1,5 @@
 #include "OverlayElement.h"
 #include "RendererManager.h"
-#include <iostream>
 
 #include "OverlayManager.h"
 
@@ -246,7 +245,8 @@ void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
 	}
 	default:
 		//TODO: error
-		std::cout << "Posicionamiento del elemento no valido" << std::endl;
+		
+		print("Entidad con posicionamiento invalido", "OverlayElement");
 		break;
 	}
 

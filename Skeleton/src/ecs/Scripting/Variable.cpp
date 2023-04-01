@@ -1,5 +1,4 @@
 #include "Variable.h"
-#include <iostream>
 
 namespace Scripting {
 
@@ -101,5 +100,37 @@ namespace Scripting {
 		type = Type::String;
 		this->str = str;
 		value.Float = 0;
+	}
+	std::string Variable::Type2String(Type type)
+	{
+		std::string value;
+
+		switch (type)
+		{
+		case Scripting::Variable::Type::Null:
+			return "Null";
+		case Scripting::Variable::Type::Float:
+			return "Number";
+		case Scripting::Variable::Type::Bool:
+			return "Toggle";
+		case Scripting::Variable::Type::Char:
+			return "Letter";
+		case Scripting::Variable::Type::Entity:
+			return "Entity";
+		case Scripting::Variable::Type::Vector2D:
+			return "Point";
+		case Scripting::Variable::Type::String:
+			return "Word";
+		default:
+			break;
+		}
+
+		return value;
+	}
+
+
+	std::string Variable::Type2String()
+	{
+		return Type2String(type);
 	}
 }

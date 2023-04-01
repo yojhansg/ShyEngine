@@ -14,7 +14,8 @@
             "function": "Transform_setPosition",
             "input": [
                 1, 6, 4
-            ]
+            ],
+            "next": 7
         },
         {
             "index" : 2,
@@ -47,6 +48,15 @@
             "input":[
                 3, 5
             ]
+        },
+        {
+
+            "index": 7,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                6
+            ]
+
         }
 
     ],

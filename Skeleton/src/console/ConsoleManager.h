@@ -16,18 +16,18 @@ namespace Console {
 		};
 
 
-		static void Print(cstring file, cstring time, cstring message, cstring title = "");
+		static void Print(cstring info, cstring message);
 
-		static void PrintError(cstring file, cstring time, cstring message);
+		static void PrintError(cstring info, cstring message);
 
-		static void PrintWarning(cstring file, cstring time, cstring message);
+		static void PrintWarning(cstring info,  cstring message);
 
-		static void PrintColor(Output::Color infoColor, Output::Color messageColor, cstring file, cstring time, cstring message, cstring title = "");
+		static void PrintColor(Output::Color infoColor, Output::Color messageColor, cstring info, cstring message);
 
 
 	private:
 
-		static void PrintInfo(cstring file, cstring time, cstring title);
+		static void PrintInfo(cstring info);
 
 
 	};
