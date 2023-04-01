@@ -9,7 +9,11 @@ int main(int argc, char* args[]) {
 
 	Engine engine;
 
-	engine.init();
+	bool ret = engine.init();
+
+	if (!ret) {
+		return -1;
+	}
 
 	engine.update();
 

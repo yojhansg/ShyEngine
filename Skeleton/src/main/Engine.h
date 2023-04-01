@@ -46,7 +46,7 @@ public:
 
 	Engine();
 
-	void init();
+	bool init();
 	void update();
 	void close();
 

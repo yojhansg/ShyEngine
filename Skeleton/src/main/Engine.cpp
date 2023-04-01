@@ -28,10 +28,9 @@
 
 #include <chrono>
 
-using namespace std::chrono;
+#include "DataLoader.h"
 
-#define WIN_WIDTH 1920
-#define WIN_HEIGHT 1080
+using namespace std::chrono;
 
 Engine::Engine() {
 
@@ -44,7 +43,16 @@ Engine::Engine() {
 	overlayManager = nullptr;
 }
 
-void Engine::init() {
+bool Engine::init() {
+
+	DataLoader data = DataLoader::Load("config");
+
+	if (!data.valid) {
+
+		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
+		return false;
+	}
+
 
 	if (ECS_Version != ECSfunc_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
@@ -58,8 +66,8 @@ void Engine::init() {
 
 
 	sceneManager = ECS::SceneManager::init();
-	rendererManager = Renderer::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
-	physicsManager = Physics::PhysicsManager::init(Utilities::Vector2D(0, 9.81f));
+	rendererManager = Renderer::RendererManager::init(data.windowName, data.windowSize.getX(), data.windowSize.getY());
+	physicsManager = Physics::PhysicsManager::init(data.gravity);
 	contactListener = ECS::ContactListener::init();
 	inputManager = Input::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
@@ -71,7 +79,7 @@ void Engine::init() {
 	renderManager = ECS::RenderManager::init();
 	overlayManager = ECS::OverlayManager::init();
 
-	physicsManager->enableDebugDraw(true);
+	physicsManager->enableDebugDraw(data.debugPhysics);
 
 
 	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
@@ -79,6 +87,7 @@ void Engine::init() {
 
 	//sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
 	//sceneManager->manageScenes();
+	return true;
 }
 
 void Engine::update() {

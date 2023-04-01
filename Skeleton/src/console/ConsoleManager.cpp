@@ -23,7 +23,7 @@ void Console::Output::PrintWarning(cstring info, cstring message)
 }
 
 
-void Console::Output::PrintColor(Output::Color infoColor, Output::Color messageColor, cstring info, cstring message)
+void Console::Output::PrintColor(Color infoColor, Color messageColor, cstring info, cstring message)
 {
 	HANDLE hConsole;
 
@@ -40,6 +40,7 @@ void Console::Output::PrintColor(Output::Color infoColor, Output::Color messageC
 	SetConsoleTextAttribute(hConsole, (int)Color::White);
 }
 
+
 void Console::Output::PrintInfo(cstring info)
 {
 	std::string time = Utilities::EngineTime::Time2String(Utilities::EngineTime::instance()->timeSinceStart);
@@ -48,4 +49,19 @@ void Console::Output::PrintInfo(cstring info)
 
 	if (info.size() > 0)
 		std::cout << info << ": ";
+}
+
+
+void Console::Output::PrintNoFormat(cstring message, Color color)
+{
+	HANDLE hConsole;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hConsole, (int)color);
+
+	std::cout << message << std::endl;
+
+	SetConsoleTextAttribute(hConsole, (int)Color::White);
+
 }
