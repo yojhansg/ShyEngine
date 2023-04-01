@@ -100,6 +100,8 @@ namespace ECS {
 	{
 		delete bodyDef;
 		delete fixtureDef;
+
+		pm->setBodyRemoved(body);
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
