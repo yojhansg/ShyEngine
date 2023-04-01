@@ -10,6 +10,8 @@
 #include <Scene.h>
 #include <SDLUtils.h>
 #include <EngineTime.h>
+#include <RenderManager.h>
+#include <OverlayManager.h>
 
 #include <Component.h>
 
@@ -35,6 +37,8 @@ Engine::Engine() {
 	scriptManager = nullptr;
 	scriptFunctionality = nullptr;
 	componentFactory = nullptr;
+	renderManager = nullptr;
+	overlayManager = nullptr;
 }
 
 void Engine::init() {
@@ -54,6 +58,8 @@ void Engine::init() {
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();
 	componentFactory = ComponentFactory::init();
+	renderManager = ECS::RenderManager::init();
+	overlayManager = ECS::OverlayManager::init();
 
 	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
@@ -97,8 +103,12 @@ void Engine::update() {
 
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
-		scene->render();
+		//scene->render();
+		renderManager->Render();
 		physicsManager->debugDraw();
+		overlayManager->Render();
+
+
 		rendererManager->presentRenderer();
 
 		// Remove dead entities
@@ -125,4 +135,8 @@ void Engine::update() {
 	}
 }
 
-void Engine::close() {}
+void Engine::close() {
+
+	sceneManager->close();
+
+}

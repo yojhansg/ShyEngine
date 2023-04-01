@@ -2,11 +2,20 @@
 #include "RendererManager.h"
 #include <iostream>
 
+#include "OverlayManager.h"
+
 ECS::OverlayElement::OverlayElement() {
 
 	parent = nullptr;
 	SetPositioned({ 0, 0 }, { 100, 100 });
 	SetAnchorCenter();
+
+	OverlayManager::instance()->AddElement(this);
+}
+
+ECS::OverlayElement::~OverlayElement()
+{
+	OverlayManager::instance()->RemoveElement(this);
 }
 
 

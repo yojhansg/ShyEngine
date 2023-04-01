@@ -212,12 +212,19 @@ void Game::readScene(std::string const& sceneName)
 	for (auto& obj : objects) {
 
 		
+		int renderOrder = 0;
 		std::string objectName = "New Entity";
+
+
 
 		if (obj.contains("name"))
 			objectName = obj["name"].get<std::string>();
 
-		ECS::Entity* entity = scene->createEntity(objectName);
+		if (obj.contains("order")) {
+			renderOrder = obj["order"].get<int>();
+		}
+
+		ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
 
 
 		jsonarray components = obj["components"].get<jsonarray>();

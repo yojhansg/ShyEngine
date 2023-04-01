@@ -3,6 +3,7 @@
     "objects": [
         {
             "name": "background",
+            "order": -10, 
             "components": [
                 {
                     "component": "Transform",
@@ -37,6 +38,7 @@
         },
         {
             "name": "player",
+            "order": -1,
             "components": [
                 {
                     "component": "Transform",

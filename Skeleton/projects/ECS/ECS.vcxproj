@@ -172,6 +172,8 @@
     <ClInclude Include="..\..\src\ecs\ECSUtilities\ComponentFactory.h" />
     <ClInclude Include="..\..\src\ecs\ECSUtilities\FunctionManager.h" />
     <ClInclude Include="..\..\src\ecs\Entity.h" />
+    <ClInclude Include="..\..\src\ecs\OverlayManager.h" />
+    <ClInclude Include="..\..\src\ecs\RenderManager.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
     <ClInclude Include="..\..\src\ecs\SceneManager.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\Fork.h" />
@@ -204,6 +206,8 @@
     <ClCompile Include="..\..\src\ecs\ECSUtilities\ComponentFactory.cpp" />
     <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
+    <ClCompile Include="..\..\src\ecs\OverlayManager.cpp" />
+    <ClCompile Include="..\..\src\ecs\RenderManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\Fork.cpp" />
