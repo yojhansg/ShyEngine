@@ -73,8 +73,15 @@ void Engine::init() {
 
 	physicsManager->enableDebugDraw(true);
 
-	Game g(sceneManager);
-	g.initScenes();
+
+	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
+	//Game(sceneManager).initScenes();
+
+	sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
+
+
+	Console::Output::Print("Info", "Inicializando");
 }
 
 void Engine::update() {
