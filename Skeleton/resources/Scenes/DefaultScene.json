@@ -82,5 +82,79 @@
                 "FlappyBirdJump.json", "RestartOnCollision.json"
             ]
         }
+    ],
+
+    "overlays": [
+
+        {
+            "name": "Overlay papa",
+            "placement": "0",
+            "anchor": "0.5f, 0.5f",
+
+            "top": "10",
+            "left": "10",
+            "right": "10", 
+            "bottom": "10",
+
+            "position": "800, 100",
+            "size": "100, 100",
+
+
+            "components": [
+
+                {
+                    "component": "OverlayImage",
+                    "attributes": [
+                        {
+                            "name":"path",
+                            "value": "ground.png"
+                        }
+                    ]
+                }
+
+            ],
+
+
+            "childs": [
+                {
+                    "name": "Overlay hijo",
+                    "placement": "1",
+                    "anchor": "0.5f, 0.5f",
+        
+                    "top": "0",
+                    "left": "0",
+                    "right": "-50", 
+                    "bottom": "0",
+        
+                    "position": "100, 100",
+                    "size": "100, 100",
+        
+        
+                    "components": [
+        
+                        {
+                            "component": "OverlayImage",
+                            "attributes": [
+                                {
+                                    "name":"path",
+                                    "value": "pollo.png"
+                                }
+                            ]
+                        }
+        
+                    ],
+        
+        
+                    "childs": [
+                        
+                    ]
+        
+                }
+            ]
+
+        }
+
+
+
     ]
 }

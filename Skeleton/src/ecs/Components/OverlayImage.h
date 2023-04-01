@@ -17,13 +17,15 @@ namespace ECS {
 
 		OverlayImage();
 
+
+		//TODO: path privado
+		reflect std::string path;
 	private:
 
 
 		OverlayElement* overlay;
 
 		Renderer::Texture* texture;
-		reflect std::string path;
 
 		void start() override;
 		void render() override;

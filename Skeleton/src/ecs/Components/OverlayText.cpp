@@ -76,7 +76,7 @@ void ECS::OverlayText::render()
 
 	SDL_Rect destination = { 0, 0, 0, 0 };
 
-	overlay->CalculateDestinationRect(destination.x, destination.y, destination.w, destination.h);
+	overlay->CalculateRenderRect(destination.x, destination.y, destination.w, destination.h);
 
 
 	SDL_Rect source = { 0, 0, texture->getWidth(), texture->getHeight() };

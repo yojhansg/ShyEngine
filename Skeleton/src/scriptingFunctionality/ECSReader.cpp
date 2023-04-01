@@ -705,7 +705,6 @@ ECSReader& ECSReader::ClassReflection()
 			{"std::map<std::string, std::string> const&", "map"} }, reflector.str(), false);
 
 
-	creator.Private();
 
 
 	for (auto& className : attributes) {

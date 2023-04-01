@@ -122,6 +122,8 @@ ClassReflection::ClassReflection(){
 			self->verticalAlignment = std::stoi(map.at("verticalAlignment"));
 		if(map.contains("fit"))
 			self->fit = std::stoi(map.at("fit"));
+		if(map.contains("lineSpacing"))
+			self->lineSpacing = std::stoi(map.at("lineSpacing"));
 
 }
 	void ClassReflection::ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

@@ -7,7 +7,7 @@
 
 namespace ECS {
 
-
+	//TODO: isDirty para no tener que recalcular toda la ui cuando se mueva algo
 	class OverlayElement : public Component {
 
 	public:
@@ -31,6 +31,10 @@ namespace ECS {
 		reflect int top;
 		reflect int right;
 		reflect int bottom;
+
+
+		OverlayElement* parent;
+
 
 	publish:
 
@@ -69,6 +73,9 @@ namespace ECS {
 
 	public:
 
-		void CalculateDestinationRect(int& x, int& y, int& w, int& h);
+		void SetParent(OverlayElement* element);
+		void CalculateRenderRect(int& x, int& y, int& w, int& h);
+
+		Utilities::Vector2D CalculateCenterPosition();
 	};
 }
