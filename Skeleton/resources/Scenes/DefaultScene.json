@@ -33,7 +33,7 @@
 
             "scripts": [
 
-                "Parallax.json"
+                "Parallax"
             ]
         },
         {
@@ -81,7 +81,7 @@
 
             "scripts": [
 
-                "FlappyBirdJump.json", "RestartOnCollision.json"
+                "FlappyBirdJump", "RestartOnCollision"
             ]
         }
     ],

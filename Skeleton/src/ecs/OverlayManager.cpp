@@ -4,7 +4,7 @@
 #include "Entity.h"
 ECS::OverlayManager::OverlayManager()
 {
-	isDirty = false;
+	isDirty = true;
 }
 
 ECS::OverlayManager::~OverlayManager()
@@ -16,7 +16,10 @@ void ECS::OverlayManager::Render()
 {
 	if (isDirty) {
 
-		//TODO: Recalcular overlay
+		for (OverlayElement* overlay : overlays) {
+
+			overlay->RecalculatePosition();
+		}
 
 		isDirty = false;
 	}

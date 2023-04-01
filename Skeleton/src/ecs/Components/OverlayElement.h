@@ -34,9 +34,6 @@ namespace ECS {
 		reflect int bottom;
 
 
-		OverlayElement* parent;
-
-
 	publish:
 
 		int GetPlacement();
@@ -72,11 +69,31 @@ namespace ECS {
 		void SetAnchorBottomLeft();
 		void SetAnchorBottomRight();
 
+		//TODO: Set anchors con las posiciones centradas
+
+
 	public:
 
 		void SetParent(OverlayElement* element);
+
+		void RecalculatePosition();
+
+		void GetRenderRect(int& x, int& y, int& w, int& h);
+
+
+
+	private:
+
+		void SetDirty();
+		Utilities::Vector2D CalculateCenterPosition();
 		void CalculateRenderRect(int& x, int& y, int& w, int& h);
 
-		Utilities::Vector2D CalculateCenterPosition();
+		int render_x;
+		int render_y;
+		int render_w;
+		int render_h;
+
+		OverlayElement* parent;
+
 	};
 }

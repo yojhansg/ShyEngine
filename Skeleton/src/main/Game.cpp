@@ -35,10 +35,10 @@ Game::Game(ECS::SceneManager* sm) {
 
 void Game::initScenes() {
 
-	firstScene();
+	//firstScene();
 	//flappyBird();
 
-	//readScene("DefaultScene.json");
+	readScene("DefaultScene.json");
 }
 
 void Game::firstScene() {
@@ -116,7 +116,7 @@ void Game::flappyBird() {
 		ECS::Entity* background = scene->createEntity("fondo");
 		auto bgTr = background->addComponent<ECS::Transform>();
 		auto bg = background->addComponent<ECS::Image>("fondo.png");
-		background->addComponent<ECS::Script>()->Initialise("Parallax.json");
+		background->addComponent<ECS::Script>()->Initialise("Parallax");
 
 		// Pollo
 		ECS::Entity* player = scene->createEntity("Player");
@@ -135,11 +135,11 @@ void Game::flappyBird() {
 		auto tubImInv = tuberiaInv->addComponent<ECS::Image>("tuberiaFlappyBird.png");
 		auto tubBodyInv = tuberiaInv->addComponent<ECS::BoxBody>();
 
-		player->addComponent<ECS::Script>()->Initialise("FlappyBirdJump.json");
-		player->addComponent<ECS::Script>()->Initialise("RestartOnCollision.json");
+		player->addComponent<ECS::Script>()->Initialise("FlappyBirdJump");
+		player->addComponent<ECS::Script>()->Initialise("RestartOnCollision");
 
-		tuberia->addComponent<ECS::Script>()->Initialise("MovimientoTuberia.json");
-		tuberiaInv->addComponent<ECS::Script>()->Initialise("MovimientoTuberia.json");
+		tuberia->addComponent<ECS::Script>()->Initialise("MovimientoTuberia");
+		tuberiaInv->addComponent<ECS::Script>()->Initialise("MovimientoTuberia");
 
 	// 3.- Init
 	scene->init();

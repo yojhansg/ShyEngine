@@ -10,6 +10,8 @@ ECS::OverlayElement::OverlayElement() {
 	SetPositioned({ 0, 0 }, { 100, 100 });
 	SetAnchorCenter();
 
+	render_x = render_y = render_w = render_h = 0;
+
 	OverlayManager::instance()->AddElement(this);
 }
 
@@ -25,12 +27,19 @@ int ECS::OverlayElement::GetPlacement()
 }
 
 
+void ECS::OverlayElement::SetDirty()
+{
+	OverlayManager::instance()->SetDirty();
+}
+
 void ECS::OverlayElement::SetPositioned(Utilities::Vector2D position, Utilities::Vector2D size)
 {
 	placement = 0;
 
 	this->position = position;
 	this->size = size;
+
+	SetDirty();
 }
 
 void ECS::OverlayElement::SetStreched(int left, int top, int right, int bottom)
@@ -42,6 +51,8 @@ void ECS::OverlayElement::SetStreched(int left, int top, int right, int bottom)
 	this->right = right;
 	this->top = top;
 	this->bottom = bottom;
+
+	SetDirty();
 }
 
 void ECS::OverlayElement::Move(Utilities::Vector2D position)
@@ -57,6 +68,9 @@ void ECS::OverlayElement::MoveTo(Utilities::Vector2D position)
 void ECS::OverlayElement::SetSize(Utilities::Vector2D size)
 {
 	this->size = size;
+
+	if (placement == (int)Placement::Positioned)
+		SetDirty();
 }
 
 Utilities::Vector2D ECS::OverlayElement::GetPosition()
@@ -92,21 +106,37 @@ int ECS::OverlayElement::GetBottom()
 void ECS::OverlayElement::SetTop(int pos)
 {
 	this->top = pos;
+
+	if (placement == (int)Placement::Stretched) {
+		SetDirty();
+	}
 }
 
 void ECS::OverlayElement::SetLeft(int pos)
 {
 	this->left = pos;
+
+	if (placement == (int)Placement::Stretched) {
+		SetDirty();
+	}
 }
 
 void ECS::OverlayElement::SetRight(int pos)
 {
 	this->right = pos;
+
+	if (placement == (int)Placement::Stretched) {
+		SetDirty();
+	}
 }
 
 void ECS::OverlayElement::SetBottom(int pos)
 {
 	this->bottom = pos;
+
+	if (placement == (int)Placement::Stretched) {
+		SetDirty();
+	}
 }
 
 Utilities::Vector2D ECS::OverlayElement::GetAnchor()
@@ -117,36 +147,53 @@ Utilities::Vector2D ECS::OverlayElement::GetAnchor()
 void ECS::OverlayElement::SetAnchor(Utilities::Vector2D anchor)
 {
 	this->anchor = anchor;
+
+	SetDirty();
 }
 
 void ECS::OverlayElement::SetAnchorCenter()
 {
-	anchor = { 0.5f, 0.5f };
+	SetAnchor({ 0.5f, 0.5f });
 }
 
 void ECS::OverlayElement::SetAnchorTopLeft()
 {
-	anchor = { 0, 0 };
+	SetAnchor({ 0, 0 });
 }
 
 void ECS::OverlayElement::SetAnchorTopRight()
 {
-	anchor = { 1, 0 };
+	SetAnchor({ 1, 0 });
 }
 
 void ECS::OverlayElement::SetAnchorBottomLeft()
 {
-	anchor = { 0, 1 };
+	SetAnchor({ 0, 1 });
 }
 
 void ECS::OverlayElement::SetAnchorBottomRight()
 {
-	anchor = { 1, 1 };
+	SetAnchor({ 1, 1 });
 }
 
 void ECS::OverlayElement::SetParent(OverlayElement* element)
 {
 	parent = element;
+
+	SetDirty();
+}
+
+void ECS::OverlayElement::RecalculatePosition()
+{
+	CalculateRenderRect(render_x, render_y, render_w, render_h);
+}
+
+void ECS::OverlayElement::GetRenderRect(int& x, int& y, int& w, int& h)
+{
+	x = render_x;
+	y = render_y;
+	w = render_w;
+	h = render_h;
 }
 
 void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
@@ -189,12 +236,12 @@ void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
 			parent_width = rend->getWidth();
 			parent_height = rend->getHeight();
 		}
-		
+
 		x = parent_left + left;
 		y = parent_top + top;
 		w = parent_width - right - left;
 		h = parent_height - bottom - top;
-			
+
 		break;
 	}
 	default:

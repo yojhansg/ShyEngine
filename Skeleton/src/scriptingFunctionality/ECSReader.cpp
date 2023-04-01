@@ -117,7 +117,6 @@ void ECSReader::ProcessFile(std::string const& path)
 		if (line == "")
 			continue;
 
-		//TODO: esto no hacerlo asi, mejor hacer que importe el fichero .h y ya
 		if (line.contains("ECS_Version")) {
 
 			ECS_Version = Utilities::trim(line.substr(line.find("ECS_Version") + 12));

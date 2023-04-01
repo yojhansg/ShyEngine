@@ -37,7 +37,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		return manager->scripts[path];
 	}
 
-	std::ifstream fileStream("Scripts/" + path);
+	std::ifstream fileStream("Scripts/" + path + manager->extension);
 
 	if (!fileStream.good())
 	{
