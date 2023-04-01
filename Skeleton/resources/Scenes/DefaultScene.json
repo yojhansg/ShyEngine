@@ -38,7 +38,7 @@
         },
         {
             "name": "player",
-            "order": -1,
+            "order": 10,
             "components": [
                 {
                     "component": "Transform",

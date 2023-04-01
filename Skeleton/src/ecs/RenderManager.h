@@ -29,7 +29,7 @@ namespace ECS {
 
 	private:
 
-		std::set<Entity*, EntityComparer> set;
+		std::multiset<Entity*, EntityComparer> set;
 	};
 
 }
