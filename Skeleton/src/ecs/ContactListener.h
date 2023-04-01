@@ -9,6 +9,7 @@ namespace ECS {
 	class ContactListener : public b2ContactListener, public Utilities::Singleton<ContactListener> {
 
 		friend Singleton<ContactListener>;
+
 	public:
 
 		~ContactListener() {};

@@ -25,6 +25,10 @@ namespace ECS {
 
 		void onTriggerExit(Entity* b) override;
 
+		void onCollisionStay(Entity* b) override;
+
+		void onTriggerStay(Entity* b) override;
+
 	private:
 
 		Transform* transform;

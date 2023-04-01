@@ -1,6 +1,7 @@
 #include "ContactListener.h"
 #include <PhysicsManager.h>
 #include <box2d/b2_contact.h>
+#include "Components/PhysicBody.h"
 #include <Entity.h>
 
 namespace ECS {
@@ -17,39 +18,61 @@ namespace ECS {
 
 		if (punteroA == nullptr || punteroB == nullptr) return;
 
-		Entity* entA = static_cast<Entity*>(static_cast<void*>(punteroA));
-		Entity* entB = static_cast<Entity*>(static_cast<void*>(punteroB));
+		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
+		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
 
-		if (contact->GetFixtureA()->IsSensor())
+		auto entA = phyA->getEntity();
+		auto entB = phyB->getEntity();
+
+		if (contact->GetFixtureA()->IsSensor()) {
 			entA->onTriggerEnter(entB);
-		else 
+			phyA->setTriggerStay(true, entB);
+		}
+		else {
 			entA->onCollisionEnter(entB);
+			phyA->setCollisionStay(true, entB);
+		}
 
-		if (contact->GetFixtureB()->IsSensor())
+		if (contact->GetFixtureB()->IsSensor()) {
 			entB->onTriggerEnter(entA);
-		else
+			phyB->setTriggerStay(true, entA);
+		}
+		else {
 			entB->onCollisionEnter(entA);
+			phyB->setCollisionStay(true, entA);
+		}
 	}
 
 	void ContactListener::EndContact(b2Contact* contact) {
 
-		unsigned int* punteroA = (unsigned int*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
-		unsigned int* punteroB = (unsigned int*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroA = (unsigned int*) contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroB = (unsigned int*) contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
 		if (punteroA == nullptr || punteroB == nullptr) return;
 
-		Entity* entA = static_cast<Entity*>(static_cast<void*>(punteroA));
-		Entity* entB = static_cast<Entity*>(static_cast<void*>(punteroB));
+		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
+		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
 
-		if (contact->GetFixtureA()->IsSensor())
+		auto entA = phyA->getEntity();
+		auto entB = phyB->getEntity();
+
+		if (contact->GetFixtureA()->IsSensor()) {
 			entA->onTriggerExit(entB);
-		else
+			phyA->setTriggerStay(false, entB);
+		}
+		else {
 			entA->onCollisionExit(entB);
+			phyA->setCollisionStay(false, entB);
+		}
 
-		if (contact->GetFixtureB()->IsSensor())
+		if (contact->GetFixtureB()->IsSensor()) {
 			entB->onTriggerExit(entA);
-		else
+			phyB->setTriggerStay(false, entA);
+		}
+		else {
 			entB->onCollisionExit(entA);
+			phyB->setCollisionStay(false, entA);
+		}
 	}
 
 }

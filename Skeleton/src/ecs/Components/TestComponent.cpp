@@ -20,10 +20,6 @@ void ECS::TestComponent::start() {
 
 void ECS::TestComponent::update(float deltaTime) {
 
-	//transform->translate(1, 0);
-	//transform->setScale(Utilities::Vector2D(transform->getScale()->getX() * 0.9995f, transform->getScale()->getY() * 0.9995f));
-	//transform->rotate(deltaTime * 20);
-
 	auto im = Input::InputManager::instance();
 
 	if (im->keyDownEvent() && im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
@@ -42,8 +38,8 @@ void ECS::TestComponent::onCollisionEnter(Entity* b) {
 
 	std::cout << "En el suelo" << std::endl;
 
-	/*if (b->hasComponent<EdgeBody>())
-		b->setActive(false);*/
+	if (b->hasComponent<EdgeBody>())
+		b->setActive(false);
 
 	onGround = true;
 }
@@ -57,10 +53,20 @@ void ECS::TestComponent::onCollisionExit(Entity* b) {
 
 void ECS::TestComponent::onTriggerEnter(Entity* b) {
 
-	std::cout << "Entro en el trigger" << std::endl;
+	//std::cout << "Entro en el trigger" << std::endl;
 }
 
 void ECS::TestComponent::onTriggerExit(Entity* b) {
 
-	std::cout << "Salio del trigger" << std::endl;
+	//std::cout << "Salio del trigger" << std::endl;
+}
+
+void ECS::TestComponent::onCollisionStay(Entity* b) {
+
+	//std::cout << "Colisionando!" << std::endl;
+}
+
+void ECS::TestComponent::onTriggerStay(Entity* b) {
+
+	//std::cout << "Triggereando!" << std::endl;
 }

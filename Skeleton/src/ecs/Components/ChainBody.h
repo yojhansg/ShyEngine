@@ -7,7 +7,7 @@ class b2ChainShape;
 
 namespace ECS {
 
-    class ChainBody : public PhysicsBody {
+    class ChainBody : public PhysicBody {
 
     public:
 

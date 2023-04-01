@@ -4,7 +4,7 @@
 
 namespace ECS {
 
-    class EdgeBody : public PhysicsBody {
+    class EdgeBody : public PhysicBody {
 
     public:
 

@@ -125,7 +125,7 @@ ClassReflection::ClassReflection(){
 
 }
 	void ClassReflection::ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
-		PhysicsBody* self = static_cast<PhysicsBody*>(selfComp);
+		PhysicBody* self = static_cast<PhysicBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))

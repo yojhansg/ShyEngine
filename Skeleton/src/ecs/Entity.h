@@ -11,6 +11,7 @@ namespace ECS {
 	class Component;
 	class Scene;
 	class ContactListener;
+	class PhysicBody;
 
 	// This is a way to ensure that T is a Component
 	template <typename T>
@@ -19,7 +20,9 @@ namespace ECS {
 	class Entity final {
 
 		friend Scene;
+		friend Component;
 		friend ContactListener;
+		friend PhysicBody;
 
 	public:
 
@@ -146,7 +149,7 @@ namespace ECS {
 		void onCollisionEnter(Entity* b);
 
 		// Called when the entity is colliding with other entity
-		void onCollisionStay();
+		void onCollisionStay(Entity* b);
 
 		// Called when the entity exit the collider of the other entity
 		void onCollisionExit(Entity* b);
@@ -155,7 +158,7 @@ namespace ECS {
 		void onTriggerEnter(Entity * b);
 
 		// Called when the entity is trigging and entity marked as trigger
-		void onTriggerStay();
+		void onTriggerStay(Entity* b);
 
 		// Called when the entity exits the trigger of the other entity marked as trigger
 		void onTriggerExit(Entity* b);

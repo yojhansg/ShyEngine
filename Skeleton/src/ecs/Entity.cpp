@@ -109,9 +109,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onCollisionStay() {
+	void Entity::onCollisionStay(Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onCollisionStay();
+			if (c->isActive()) c->onCollisionStay(b);
 		}
 	}
 
@@ -127,9 +127,9 @@ namespace ECS {
 		}
 	}
 
-	void Entity::onTriggerStay() {
+	void Entity::onTriggerStay(Entity* b) {
 		for (auto c : components) {
-			if (c->isActive()) c->onTriggerStay();
+			if (c->isActive()) c->onTriggerStay(b);
 		}
 	}
 
