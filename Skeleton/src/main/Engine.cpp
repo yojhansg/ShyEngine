@@ -49,6 +49,8 @@ void Engine::init() {
 	if (ECS_Version != ECSfunc_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
 	}
+	
+	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	if (ECS_Version != ECSreflection_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
@@ -68,8 +70,6 @@ void Engine::init() {
 	componentFactory = ComponentFactory::init();
 	renderManager = ECS::RenderManager::init();
 	overlayManager = ECS::OverlayManager::init();
-
-	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	physicsManager->enableDebugDraw(true);
 

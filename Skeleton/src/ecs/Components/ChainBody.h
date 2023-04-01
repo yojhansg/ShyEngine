@@ -13,8 +13,6 @@ namespace ECS {
 
         ChainBody();
 
-        ~ChainBody();
-
         void init() override;
 
         Vector2D getSize();

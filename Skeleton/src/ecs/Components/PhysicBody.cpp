@@ -48,7 +48,6 @@ namespace ECS {
 	}
 
 	PhysicBody::~PhysicBody() {
-
 	}
 
 	void PhysicBody::init() {

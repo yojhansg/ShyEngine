@@ -14,9 +14,6 @@ namespace ECS {
 
 	}
 
-	ChainBody::~ChainBody() {}
-
-
 	void ChainBody::init() {
 
 		PhysicBody::init();

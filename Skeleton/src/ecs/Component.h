@@ -80,7 +80,9 @@ namespace ECS {
 		void printWarning(std::string const& message, std::string const& className = "");
 
 		Entity* entity;
+
 		bool active;
+
 	};
 }
 

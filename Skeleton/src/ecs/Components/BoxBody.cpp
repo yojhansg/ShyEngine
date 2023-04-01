@@ -12,8 +12,6 @@ namespace ECS {
 		shape = nullptr;
 	}
 
-	BoxBody::~BoxBody() {}
-
 	void BoxBody::init() {
 
 		PhysicBody::init();

@@ -10,8 +10,6 @@ namespace ECS {
 
         EdgeBody();
 
-        ~EdgeBody();
-
         void init() override;
 
         void setEdgeVertices(const Vector2D& v1, const Vector2D& v2);

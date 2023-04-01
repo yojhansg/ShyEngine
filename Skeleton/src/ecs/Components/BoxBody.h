@@ -10,8 +10,6 @@ namespace ECS {
 
         BoxBody();
 
-        ~BoxBody();
-
         void init() override;
 
         Vector2D getSize();

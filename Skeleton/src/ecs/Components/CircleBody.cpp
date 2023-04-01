@@ -17,8 +17,6 @@ namespace ECS {
 
 	}
 
-	CircleBody::~CircleBody() {}
-
 	void CircleBody::init() {
 
 		PhysicBody::init();
