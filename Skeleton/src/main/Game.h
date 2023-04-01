@@ -5,10 +5,21 @@
 */
 
 #include <string>
+#include <vector>
+
+#include <json.hpp>
+
+namespace nlohmann {
+	using jsonarray = std::vector<json>;
+
+}
 
 namespace ECS {
 	class SceneManager;
 	class Scene;
+
+
+	class OverlayElement;
 }
 
 class Game {
@@ -31,4 +42,6 @@ private:
 
 	void readScene(std::string const& sceneName);
 
+
+	void processOverlay(nlohmann::json& overlay, ECS::OverlayElement* parent);
 };

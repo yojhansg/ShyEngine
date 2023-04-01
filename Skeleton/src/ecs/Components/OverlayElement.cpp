@@ -4,6 +4,7 @@
 
 ECS::OverlayElement::OverlayElement() {
 
+	parent = nullptr;
 	SetPositioned({ 0, 0 }, { 100, 100 });
 	SetAnchorCenter();
 }
@@ -134,10 +135,15 @@ void ECS::OverlayElement::SetAnchorBottomRight()
 	anchor = { 1, 1 };
 }
 
-void ECS::OverlayElement::CalculateDestinationRect(int& x, int& y, int& w, int& h)
+void ECS::OverlayElement::SetParent(OverlayElement* element)
+{
+	parent = element;
+}
+
+void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
 {
 
-	switch ((OverlayElement::Placement) placement)
+	switch ((OverlayElement::Placement)placement)
 	{
 	case OverlayElement::Placement::Positioned:
 	{
@@ -149,18 +155,37 @@ void ECS::OverlayElement::CalculateDestinationRect(int& x, int& y, int& w, int& 
 		x -= anchor.getX() * size.getX();
 		y -= anchor.getY() * size.getY();
 
+		if (parent != nullptr) {
+			auto parentPos = parent->CalculateCenterPosition();
+			x += parentPos.getX();
+			y += parentPos.getY();
+		}
+
 		break;
 	}
 	case OverlayElement::Placement::Stretched:
 	{
-		int winWidth = Renderer::RendererManager::instance()->getWidth();
-		int winHeight = Renderer::RendererManager::instance()->getHeight();
 
-		x = left;
-		y = top;
-		w = winWidth - right - left;
-		h = winHeight - bottom - top;
+		int parent_left, parent_top, parent_width, parent_height;
 
+		if (parent != nullptr) {
+
+			parent->CalculateRenderRect(parent_left, parent_top, parent_width, parent_height);
+		}
+		else {
+
+			auto rend = Renderer::RendererManager::instance();
+			parent_left = 0;
+			parent_top = 0;
+			parent_width = rend->getWidth();
+			parent_height = rend->getHeight();
+		}
+		
+		x = parent_left + left;
+		y = parent_top + top;
+		w = parent_width - right - left;
+		h = parent_height - bottom - top;
+			
 		break;
 	}
 	default:
@@ -170,4 +195,31 @@ void ECS::OverlayElement::CalculateDestinationRect(int& x, int& y, int& w, int& 
 	}
 
 
+}
+
+Utilities::Vector2D ECS::OverlayElement::CalculateCenterPosition()
+{
+	Utilities::Vector2D center;
+	switch ((OverlayElement::Placement)placement)
+	{
+	case OverlayElement::Placement::Positioned:
+
+		center = position;
+
+		if (parent != nullptr)
+			center += parent->CalculateCenterPosition();
+
+		break;
+
+	case OverlayElement::Placement::Stretched:
+
+		int x, y, w, h;
+		CalculateRenderRect(x, y, w, h);
+
+		center = { x + w * anchor.getX(), y + h * anchor.getY() };
+
+		break;
+
+	}
+	return center;
 }

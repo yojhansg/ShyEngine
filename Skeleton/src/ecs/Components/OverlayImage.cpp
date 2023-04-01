@@ -26,7 +26,7 @@ void ECS::OverlayImage::render()
 {
 	SDL_Rect destination = { 0, 0, 0, 0 };
 	
-	overlay->CalculateDestinationRect(destination.x, destination.y, destination.w, destination.h);
+	overlay->CalculateRenderRect(destination.x, destination.y, destination.w, destination.h);
 
 	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
 		texture->getSDLTexture(), NULL, &destination);
