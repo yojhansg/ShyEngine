@@ -65,6 +65,7 @@ namespace ECS {
             entities.erase(it);
         }
         entitiesRemoved.clear();
+
     }
 
     void Scene::onSceneUp() {

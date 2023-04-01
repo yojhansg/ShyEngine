@@ -146,9 +146,9 @@ namespace ECS {
         // Entity Components
         Transform* transform;
 
-    private:
-
         Physics::PhysicsManager* pm;
+
+    private:
 
         Vector2D lastPositionSync;
         float lastRotationSync;

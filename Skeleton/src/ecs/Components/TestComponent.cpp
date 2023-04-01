@@ -39,7 +39,7 @@ void ECS::TestComponent::onCollisionEnter(Entity* b) {
 	std::cout << "En el suelo" << std::endl;
 
 	if (b->hasComponent<EdgeBody>())
-		b->setActive(false);
+		b->removeEntity();
 
 	onGround = true;
 }

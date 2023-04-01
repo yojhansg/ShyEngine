@@ -75,7 +75,9 @@ namespace ECS {
 	protected:
 
 		Entity* entity;
+
 		bool active;
+
 	};
 }
 

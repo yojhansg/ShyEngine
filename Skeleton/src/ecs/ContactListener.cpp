@@ -16,13 +16,13 @@ namespace ECS {
 		unsigned int* punteroA = (unsigned int*) contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 		unsigned int* punteroB = (unsigned int*) contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-		if (punteroA == nullptr || punteroB == nullptr) return;
-
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
 
 		auto entA = phyA->getEntity();
 		auto entB = phyB->getEntity();
+
+		if (entA == nullptr || entB == nullptr) return;
 
 		if (contact->GetFixtureA()->IsSensor()) {
 			entA->onTriggerEnter(entB);
@@ -48,13 +48,13 @@ namespace ECS {
 		unsigned int* punteroA = (unsigned int*) contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 		unsigned int* punteroB = (unsigned int*) contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
-		if (punteroA == nullptr || punteroB == nullptr) return;
-
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
 
 		auto entA = phyA->getEntity();
 		auto entB = phyB->getEntity();
+
+		if (entA == nullptr || entB == nullptr) return;
 
 		if (contact->GetFixtureA()->IsSensor()) {
 			entA->onTriggerExit(entB);

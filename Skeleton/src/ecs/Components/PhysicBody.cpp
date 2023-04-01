@@ -50,6 +50,8 @@ namespace ECS {
 	PhysicBody::~PhysicBody() {
 		delete bodyDef;
 		delete fixtureDef;
+
+		pm->setBodyRemoved(body);
 	}
 
 	void PhysicBody::init() {

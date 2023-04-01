@@ -10,8 +10,6 @@ namespace ECS {
 
         CircleBody();
 
-        ~CircleBody();
-
         void init() override;
 
         void setRadiusToShorterAxis(bool value);

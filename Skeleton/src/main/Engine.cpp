@@ -42,6 +42,8 @@ void Engine::init() {
 	if (ECS_Version != ECSfunc_Version) {
 		std::cout << "Warning: La version del motor no coincide con la version de las funciones de los scripts" << std::endl;
 	}
+	
+	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = Renderer::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
@@ -54,8 +56,6 @@ void Engine::init() {
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();
 	componentFactory = ComponentFactory::init();
-
-	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	physicsManager->enableDebugDraw(true);
 
@@ -101,7 +101,7 @@ void Engine::update() {
 		physicsManager->debugDraw();
 		rendererManager->presentRenderer();
 
-		// Remove dead entities
+		// Remove dead entities and components
 		scene->removeEntities();
 
 		// Handling physics bodies

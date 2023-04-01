@@ -16,9 +16,6 @@ namespace ECS {
 		vertex2 = { 0, 0 };
 	}
 
-	EdgeBody::~EdgeBody() {}
-
-
 	void EdgeBody::init() {
 
 		PhysicBody::init();

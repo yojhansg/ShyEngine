@@ -66,11 +66,11 @@ void Game::firstScene() {
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
+		/*ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto ballBody = ball->addComponent<ECS::CircleBody>();
+		auto ballBody = ball->addComponent<ECS::CircleBody>();*/
 
 	
 	// 3.- Init
@@ -91,10 +91,10 @@ void Game::firstScene() {
 		grBody->addOffSet(0, -1);
 
 		// Ball
-		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
+		/*trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
 		ballBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballBody->setBounciness(0.5f); 
+		ballBody->setBounciness(0.5f); */
 
 	// 5.- Start
 
