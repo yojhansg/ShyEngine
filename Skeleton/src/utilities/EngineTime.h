@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Singleton.h"
+#include <string>
 
 namespace Utilities {
 
@@ -16,6 +17,8 @@ namespace Utilities {
 		float fixedDeltaTime;
 		float timeSinceStart;
 		unsigned long long frames;
+
+		static std::string Time2String(float time);
 
 	private:
 

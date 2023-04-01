@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <ostream>
+#include <string>
 
 /*
  * A class implementing a 2-dimensional vector and corresponding
@@ -177,6 +178,12 @@ namespace Utilities {
 		inline float operator *(const Vector2D& d) const {
 			return d.x_ * x_ + d.y_ * y_;
 		}
+
+
+		inline operator std::string() {
+			return "(" + std::to_string(x_)+ "," + std::to_string(y_) + ")";
+		}
+
 
 	private:
 		float x_;  // first coordinate

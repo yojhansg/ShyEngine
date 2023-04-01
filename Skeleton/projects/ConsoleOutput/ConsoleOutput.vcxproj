@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c98d0e6a-a838-4cfd-88aa-cefe6ed55268}</ProjectGuid>
-    <RootNamespace>ECS</RootNamespace>
+    <ProjectGuid>{7ebc9344-46cc-4cc9-a03a-857e87343869}</ProjectGuid>
+    <RootNamespace>ConsoleOutput</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Console</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -113,19 +114,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -136,7 +130,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,100 +138,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\ecs\Component.h" />
-    <ClInclude Include="..\..\src\ecs\Components\BoxBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
-    <ClInclude Include="..\..\src\ecs\Components\ChainBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\CircleBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h" />
-    <ClInclude Include="..\..\src\ecs\Components\OverlayElement.h" />
-    <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h" />
-    <ClInclude Include="..\..\src\ecs\Components\OverlayText.h" />
-    <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Image.h" />
-    <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
-    <ClInclude Include="..\..\src\ecs\ContactListener.h" />
-    <ClInclude Include="..\..\src\ecs\ECSUtilities\ClassReflection.h" />
-    <ClInclude Include="..\..\src\ecs\ECSUtilities\ComponentFactory.h" />
-    <ClInclude Include="..\..\src\ecs\ECSUtilities\FunctionManager.h" />
-    <ClInclude Include="..\..\src\ecs\Entity.h" />
-    <ClInclude Include="..\..\src\ecs\OverlayManager.h" />
-    <ClInclude Include="..\..\src\ecs\RenderManager.h" />
-    <ClInclude Include="..\..\src\ecs\Scene.h" />
-    <ClInclude Include="..\..\src\ecs\SceneLoader.h" />
-    <ClInclude Include="..\..\src\ecs\SceneManager.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\Fork.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\Function.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\Node.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\OutputNode.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\Script.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\ScriptFunctionality.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\ScriptManager.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\Variable.h" />
-    <ClInclude Include="..\..\src\ecs\Scripting\ConstNode.h" />
+    <ClCompile Include="..\..\src\console\ConsoleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ecs\Component.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\OverlayElement.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\OverlayText.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
-    <ClCompile Include="..\..\src\ecs\ContactListener.cpp" />
-    <ClCompile Include="..\..\src\ecs\ECSUtilities\ClassReflection.cpp" />
-    <ClCompile Include="..\..\src\ecs\ECSUtilities\ComponentFactory.cpp" />
-    <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp" />
-    <ClCompile Include="..\..\src\ecs\Entity.cpp" />
-    <ClCompile Include="..\..\src\ecs\OverlayManager.cpp" />
-    <ClCompile Include="..\..\src\ecs\RenderManager.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scene.cpp" />
-    <ClCompile Include="..\..\src\ecs\SceneLoader.cpp" />
-    <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\Fork.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\Function.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\Node.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\OutputNode.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\Script.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\ScriptFunctionality.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\ScriptManager.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp" />
-    <ClCompile Include="..\..\src\ecs\Scripting\ConstNode.cpp" />
+    <ClInclude Include="..\..\src\console\ConsoleManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleOutput\ConsoleOutput.vcxproj">
-      <Project>{7ebc9344-46cc-4cc9-a03a-857e87343869}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\input\Input.vcxproj">
-      <Project>{0025c5f8-2dd5-440e-9127-f230c1c41788}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\physics\Physics.vcxproj">
-      <Project>{ee72aafb-b4aa-4f0c-8e86-3802b8051aa9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\renderer\Renderer.vcxproj">
-      <Project>{dbb8cf48-5ace-435b-85b7-a3606a772488}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ResourcesManager\ResourcesManager.vcxproj">
-      <Project>{a6afae84-be86-4f88-9b4c-00a44bad9582}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>
     </ProjectReference>

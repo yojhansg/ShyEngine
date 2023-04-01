@@ -24,6 +24,8 @@ namespace Scripting {
 
 		friend Singleton<ScriptManager>;
 
+		const std::string extension = ".json";
+
 	public:
 
 		struct ScriptNodes {

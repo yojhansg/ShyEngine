@@ -1,9 +1,10 @@
 #include "ScriptFunctionality.h"
 #include <math.h>
-#include <iostream>
 #include "Entity.h"
 #include <Script.h>
 #include "StringTrim.h"
+
+#include "ConsoleManager.h"
 
 #define DELTA 0.001f
 
@@ -24,34 +25,37 @@ ECS::Entity* Scripting::ScriptFunctionality::GameObject()
 
 void Scripting::ScriptFunctionality::Print(Variable val)
 {
+	std::string objectName = ECS::Script::currentScript->getEntity()->getEntityName();
+
+	std::string scriptName = ECS::Script::currentScript->GetName();
+
 	switch (val.type)
 	{
 	case Scripting::Variable::Type::Bool:
-		std::cout << val.value.Bool ? "True" : "False";
+		Console::Output::Print( objectName + ": " + scriptName, val.value.Bool ? "Yes" : "No");
 		break;
 	case Scripting::Variable::Type::Float:
-		std::cout << val.value.Float;
+		Console::Output::Print(objectName + ": " + scriptName, std::to_string(val.value.Float));
 		break;
 	case Scripting::Variable::Type::Char:
-		std::cout << val.value.Char;
+		Console::Output::Print(objectName + ": " + scriptName, std::to_string(val.value.Char));
 		break;
 	case Scripting::Variable::Type::Entity:
-		std::cout << val.value.entity->getEntityName();
+		Console::Output::Print(objectName + ": " + scriptName, val.value.entity->getEntityName());
 		break;
 	case Scripting::Variable::Type::Vector2D:
-		std::cout << val.vector;
+		Console::Output::Print(objectName + ": " + scriptName, val.vector);
 		break;
 	case Scripting::Variable::Type::String:
-		std::cout << val.str;
+		Console::Output::Print(objectName + ": " + scriptName, val.str);
 		break;
 	case Scripting::Variable::Type::Null:
-		std::cout << "null";
+		Console::Output::Print(objectName + ": " + scriptName, "null");
 		break;
 	default:
+		Console::Output::PrintWarning(objectName + ": " + scriptName, "Unknown value");
 		break;
 	}
-
-	std::cout << "\n";
 }
 
 

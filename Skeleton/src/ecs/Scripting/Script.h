@@ -26,7 +26,12 @@ namespace ECS {
 		void update(float dt) override;
 		void onCollisionEnter(Entity* entity) override;
 
+
+		std::string GetName();
+
 	private:
+
+		std::string name;
 
 		Scripting::ScriptManager::ScriptNodes nodes;
 

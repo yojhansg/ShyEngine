@@ -10,16 +10,21 @@
 #include <Scene.h>
 #include <SDLUtils.h>
 #include <EngineTime.h>
+#include <RenderManager.h>
+#include <OverlayManager.h>
 
 #include <Component.h>
 
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ComponentFactory.h>
+#include <ECSUtilities/ClassReflection.h>
+
 #include <Scripting/ScriptManager.h>
 #include <Scripting/ScriptFunctionality.h>
 
+#include <ConsoleManager.h>
+
 #include "Game.h"
-#include <iostream>
 
 #include <chrono>
 
@@ -35,15 +40,22 @@ Engine::Engine() {
 	scriptManager = nullptr;
 	scriptFunctionality = nullptr;
 	componentFactory = nullptr;
+	renderManager = nullptr;
+	overlayManager = nullptr;
 }
 
 void Engine::init() {
 
 	if (ECS_Version != ECSfunc_Version) {
-		std::cout << "Warning: La version del motor no coincide con la version de las funciones de los scripts" << std::endl;
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
 	}
 	
 	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
+
+	if (ECS_Version != ECSreflection_Version) {
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
+	}
+
 
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = Renderer::RendererManager::init("MyEngine Window", WIN_WIDTH, WIN_HEIGHT);
@@ -56,11 +68,20 @@ void Engine::init() {
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();
 	componentFactory = ComponentFactory::init();
+	renderManager = ECS::RenderManager::init();
+	overlayManager = ECS::OverlayManager::init();
 
 	physicsManager->enableDebugDraw(true);
 
-	Game g(sceneManager);
-	g.initScenes();
+
+	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
+	//Game(sceneManager).initScenes();
+
+	sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
+
+
+	Console::Output::Print("Info", "Inicializando");
 }
 
 void Engine::update() {
@@ -97,8 +118,12 @@ void Engine::update() {
 
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
-		scene->render();
+		//scene->render();
+		renderManager->Render();
 		physicsManager->debugDraw();
+		overlayManager->Render();
+
+
 		rendererManager->presentRenderer();
 
 		// Remove dead entities and components
@@ -125,4 +150,8 @@ void Engine::update() {
 	}
 }
 
-void Engine::close() {}
+void Engine::close() {
+
+	sceneManager->close();
+
+}

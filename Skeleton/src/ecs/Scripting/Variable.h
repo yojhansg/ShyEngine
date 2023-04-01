@@ -54,18 +54,10 @@ namespace Scripting {
 		Variable(std::string const& str);
 
 
-		/*
-			Arithmetic grid
 
-			-------   Null Int Float   Char Component
+		static std::string Type2String(Type type);
 
-			Int        x    o    o      o       x  
-			Float      x    o    o      x       x
-			Char       x    o    x      o       x
-		
-		*/
-
-		static bool ArithmeticCheck(Variable const& a, Variable const& b);
+		std::string Type2String();
 	};
 
 

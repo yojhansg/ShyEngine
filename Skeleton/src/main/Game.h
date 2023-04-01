@@ -9,10 +9,6 @@
 
 #include <json.hpp>
 
-namespace nlohmann {
-	using jsonarray = std::vector<json>;
-
-}
 
 namespace ECS {
 	class SceneManager;
@@ -40,8 +36,4 @@ private:
 
 	void flappyBird();
 
-	void readScene(std::string const& sceneName);
-
-
-	void processOverlay(nlohmann::json& overlay, ECS::OverlayElement* parent);
 };

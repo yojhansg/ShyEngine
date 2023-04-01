@@ -1,7 +1,6 @@
 #include "TestComponent.h"
 #include "InputManager.h"
 #include "SceneManager.h"
-#include <iostream>
 #include <Vector2D.h>
 #include "CircleBody.h"
 #include "Entity.h"
@@ -36,7 +35,7 @@ void ECS::TestComponent::fixedUpdate(float fixedDeltaTime) {
 
 void ECS::TestComponent::onCollisionEnter(Entity* b) {
 
-	std::cout << "En el suelo" << std::endl;
+	print("En el suelo", "TestComponent");
 
 	if (b->hasComponent<EdgeBody>())
 		b->removeEntity();
@@ -46,7 +45,7 @@ void ECS::TestComponent::onCollisionEnter(Entity* b) {
 
 void ECS::TestComponent::onCollisionExit(Entity* b) {
 
-	std::cout << "En el aire" << std::endl;
+	print("En el aire", "TestComponent");
 
 	onGround = false;
 }

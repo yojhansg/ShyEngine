@@ -58,6 +58,7 @@ namespace ECS {
 		// Creates, starts and adds a scene to the stack
 		Scene* createScene(const std::string& sce_name = "New Scene");
 
+		ECS::Scene* LoadScene(std::string const& scenePath);
 		void changeScene(Scene* sce, LOAD_MODE m);
 
 	publish:

@@ -2,16 +2,10 @@
 #include <iostream>
 #include "Engine.h"
 
-#include "Scripting/ScriptManager.h"
-#include "Scripting/Function.h"
-
-
 int main(int argc, char* args[]) {
 
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//Scripting::ScriptManager::LoadScript("Parallax.json");
-	//return 0;
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	Engine engine;
 

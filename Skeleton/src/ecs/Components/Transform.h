@@ -22,8 +22,6 @@ namespace ECS {
 
 		//TODO: temporal
 
-		void Print_GameObject_Name();
-
 		Utilities::Vector2D getPosition();
 		Utilities::Vector2D getScale();
 

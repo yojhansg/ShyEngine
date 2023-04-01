@@ -19,6 +19,8 @@ namespace SoundManager {
 namespace ECS {
 	class ContactListener;
 	class SceneManager;
+	class RenderManager;
+	class OverlayManager;
 }
 
 namespace Resources {
@@ -52,6 +54,8 @@ private:
 
 	ECS::ContactListener* contactListener;
 	ECS::SceneManager* sceneManager;
+	ECS::RenderManager* renderManager;
+	ECS::OverlayManager* overlayManager;
 	Physics::PhysicsManager* physicsManager;
 	Renderer::RendererManager* rendererManager;
 	Input::InputManager* inputManager;

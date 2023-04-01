@@ -1,6 +1,9 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+#include "SceneLoader.h"
+
+
 namespace ECS {
 
 	SceneManager::SceneManager() {
@@ -107,6 +110,14 @@ namespace ECS {
 	void SceneManager::removeAllScenes() {
 		auto size = scenes.size();
 		for (int i = 0; i < size; i++) popScene();
+	}
+
+
+	Scene* SceneManager::LoadScene(std::string const& scenePath)
+	{
+		Scene* scene = SceneLoader::LoadScene(scenePath);
+		scene->init();
+		return scene;
 	}
 
 }

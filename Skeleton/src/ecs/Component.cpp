@@ -1,6 +1,8 @@
 #include "Component.h"
 #include "Entity.h"
-#include <iostream>
+
+#include "ConsoleManager.h"
+#include "EngineTime.h"
 
 namespace ECS {
 
@@ -33,6 +35,21 @@ namespace ECS {
 
 	void Component::remove(Component* c) {
 		entity->removeComponent(c);
+	}
+
+	void Component::print(std::string const& message, std::string const& className)
+	{
+		Console::Output::Print(className + ": " + entity->name, message);
+	}
+
+	void Component::printError(std::string const& message, std::string const& className)
+	{
+		Console::Output::PrintError(className + ": " + entity->name, message);
+	}
+
+	void Component::printWarning(std::string const& message, std::string const& className)
+	{
+		Console::Output::PrintWarning(className + ": " + entity->name, message);
 	}
 
 	Scene* Component::getScene() {

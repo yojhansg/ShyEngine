@@ -3,6 +3,7 @@
     "objects": [
         {
             "name": "background",
+            "order": -10, 
             "components": [
                 {
                     "component": "Transform",
@@ -32,11 +33,12 @@
 
             "scripts": [
 
-                "Parallax.json"
+                "Parallax"
             ]
         },
         {
             "name": "player",
+            "order": 10,
             "components": [
                 {
                     "component": "Transform",
@@ -79,7 +81,7 @@
 
             "scripts": [
 
-                "FlappyBirdJump.json", "RestartOnCollision.json"
+                "FlappyBirdJump", "RestartOnCollision"
             ]
         }
     ],

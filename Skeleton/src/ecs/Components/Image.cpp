@@ -38,6 +38,9 @@ namespace ECS {
 
 		// Rotation point
 		rotationPoint = new SDL_Point({ width / 2, height / 2 });
+
+
+		entity->AddToRenderSet();
 	}
 
 	void Image::render() {

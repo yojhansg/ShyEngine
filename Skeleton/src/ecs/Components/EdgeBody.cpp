@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "Image.h"
 
-#include <iostream>
 
 namespace ECS {
 

@@ -11,6 +11,8 @@ namespace ECS {
 	class Component;
 	class Scene;
 	class ContactListener;
+	class RenderManager;
+	class OverlayManager;
 	class PhysicBody;
 
 	// This is a way to ensure that T is a Component
@@ -22,13 +24,15 @@ namespace ECS {
 		friend Scene;
 		friend Component;
 		friend ContactListener;
+		friend RenderManager;
+		friend OverlayManager;
 		friend PhysicBody;
 
 	public:
 
-		Entity(const std::string& ent_name);
+		Entity(const std::string& ent_name, int renderOrder);
 
-		Entity(const std::string& ent_name, Scene* ent_scene);
+		Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder);
 
 		~Entity();
 
@@ -118,6 +122,11 @@ namespace ECS {
 			return vec;
 		}
 
+		void AddToRenderSet();
+
+		int GetRenderOrder();
+		void SetRenderOrder(int neworder);
+
 	private:
 
 		void init();
@@ -171,6 +180,12 @@ namespace ECS {
 
 		// Pointer to the scene where this entity is located
 		Scene* scene;
+
+		// Order to render elements
+		int renderOrder;
+
+		// Has the object already been added to the set
+		bool inRenderSet;
 
 		// List of components associated with this entity
 		std::list<Component*> components;

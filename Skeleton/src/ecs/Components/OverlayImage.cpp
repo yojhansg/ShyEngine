@@ -17,16 +17,23 @@ void ECS::OverlayImage::start()
 {
 	//TODO: Ver si deberia dar error o añadirse uno automaticamente
 	overlay = entity->getComponent<OverlayElement>();
+
+	if (overlay == nullptr) {
+		printError("La entidad no tiene overlay", "OverlayImage");
+
+	}
 	assert(overlay != nullptr, "La entidad debe contener un componente Overlay");
 
 	SetTexture(path);
+
+
 }
 
 void ECS::OverlayImage::render()
 {
 	SDL_Rect destination = { 0, 0, 0, 0 };
 	
-	overlay->CalculateRenderRect(destination.x, destination.y, destination.w, destination.h);
+	overlay->GetRenderRect(destination.x, destination.y, destination.w, destination.h);
 
 	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
 		texture->getSDLTexture(), NULL, &destination);

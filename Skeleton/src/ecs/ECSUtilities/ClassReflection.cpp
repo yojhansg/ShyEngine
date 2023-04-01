@@ -23,7 +23,7 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["OverlayElement"] = &ClassReflection::ReflectOverlayElement;
 	reflectionMethods["OverlayImage"] = &ClassReflection::ReflectOverlayImage;
 	reflectionMethods["OverlayText"] = &ClassReflection::ReflectOverlayText;
-	reflectionMethods["PhysicsBody"] = &ClassReflection::ReflectPhysicsBody;
+	reflectionMethods["PhysicBody"] = &ClassReflection::ReflectPhysicBody;
 	reflectionMethods["Transform"] = &ClassReflection::ReflectTransform;
 
 }ClassReflection::~ClassReflection(){
@@ -126,7 +126,7 @@ ClassReflection::ClassReflection(){
 			self->lineSpacing = std::stoi(map.at("lineSpacing"));
 
 }
-	void ClassReflection::ReflectPhysicsBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectPhysicBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
 		PhysicBody* self = static_cast<PhysicBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));

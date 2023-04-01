@@ -3,22 +3,27 @@
 #include "Scene.h"
 #include "ECSUtilities/ComponentFactory.h"
 
+#include "RenderManager.h"
 namespace ECS {
 
-	Entity::Entity(const std::string& ent_name) {
+	Entity::Entity(const std::string& ent_name, int renderOrder) {
 
 		name = ent_name;
 		active = true;
 		removed = false;
 		scene = nullptr;
+
+		this->renderOrder = renderOrder;
 	}
 
-	Entity::Entity(const std::string& ent_name, Scene* ent_scene) {
+	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder) {
 
 		name = ent_name;
 		active = true;
 		removed = false;
 		scene = ent_scene;
+
+		this->renderOrder = renderOrder;
 	}
 
 	Entity::~Entity() {
@@ -27,6 +32,11 @@ namespace ECS {
 		}
 		components.clear();
 		componentsRemoved.clear();
+
+		if (inRenderSet)
+			RenderManager::instance()->RemoveElement(this);
+
+		inRenderSet = false;
 	}
 
 	Scene* Entity::getScene() {
@@ -35,6 +45,26 @@ namespace ECS {
 
 	std::string Entity::getEntityName() {
 		return name;
+	}
+
+	void Entity::AddToRenderSet() {
+
+		if (inRenderSet)
+			return;
+
+		RenderManager::instance()->AddElement(this);
+
+		inRenderSet = true;
+	}
+
+	int Entity::GetRenderOrder()
+	{
+		return renderOrder;
+	}
+
+	void Entity::SetRenderOrder(int neworder)
+	{
+		renderOrder = neworder;
 	}
 
 	void Entity::init() {
@@ -180,7 +210,6 @@ namespace ECS {
 
 		return c;
 	}
-
 
 
 }
