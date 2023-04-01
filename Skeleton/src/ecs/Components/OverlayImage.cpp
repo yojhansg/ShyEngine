@@ -17,9 +17,16 @@ void ECS::OverlayImage::start()
 {
 	//TODO: Ver si deberia dar error o añadirse uno automaticamente
 	overlay = entity->getComponent<OverlayElement>();
+
+	if (overlay == nullptr) {
+		printError("La entidad no tiene overlay", "OverlayImage");
+
+	}
 	assert(overlay != nullptr, "La entidad debe contener un componente Overlay");
 
 	SetTexture(path);
+
+
 }
 
 void ECS::OverlayImage::render()

@@ -17,6 +17,7 @@ namespace ECS {
 		position_ = position; 
 		scale_ = scale;
 		rotation_ = rotation;
+
 	}
 
 	// ------------- Getters -----------------

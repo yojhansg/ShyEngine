@@ -74,6 +74,10 @@ namespace ECS {
 		
 	protected:
 
+		void print(std::string const& message, std::string const& className = "");
+		void printError(std::string const& message, std::string const& className = "");
+		void printWarning(std::string const& message, std::string const& className = "");
+
 		Entity* entity;
 		bool active;
 	};

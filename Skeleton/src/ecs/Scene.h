@@ -58,9 +58,6 @@ namespace ECS {
 		std::list<std::list<Entity*>::iterator> entitiesRemoved;
 		std::list<Entity*> entities;
 
-
-		float cameraScale;
-		Utilities::Vector2D cameraPosition;
 	};
 }
 
