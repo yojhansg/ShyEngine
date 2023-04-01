@@ -48,8 +48,7 @@ namespace ECS {
 	}
 
 	PhysicBody::~PhysicBody() {
-		delete bodyDef;
-		delete fixtureDef;
+
 	}
 
 	void PhysicBody::init() {
@@ -96,6 +95,12 @@ namespace ECS {
 
 		setBodyType(bodyType);
 		setBounciness(bounciness);
+	}
+
+	void PhysicBody::onDestroy()
+	{
+		delete bodyDef;
+		delete fixtureDef;
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {

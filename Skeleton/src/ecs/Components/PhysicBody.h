@@ -37,6 +37,8 @@ namespace ECS {
 
         void start() override;
 
+        void onDestroy() override;
+
         void fixedUpdate(float fixedDeltaTime) override;
 
         void onActive() override;

@@ -182,6 +182,12 @@ namespace ECS {
 
 	void Entity::removeEntity() {
 		removed = true;
+
+		for (auto comp : components) {
+
+			comp->onDestroy();
+		}
+
 	}
 
 	bool Entity::isRemoved() {

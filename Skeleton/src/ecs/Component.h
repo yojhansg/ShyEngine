@@ -71,6 +71,7 @@ namespace ECS {
 
 		virtual void onTriggerExit(Entity* b) {};
 
+		virtual void onDestroy() {};
 		
 	protected:
 

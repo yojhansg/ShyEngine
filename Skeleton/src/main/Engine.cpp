@@ -75,13 +75,10 @@ void Engine::init() {
 
 
 	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
-	//Game(sceneManager).initScenes();
+	Game(sceneManager).initScenes();
 
-	sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
-
-
-	Console::Output::Print("Info", "Inicializando");
+	//sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
+	//sceneManager->manageScenes();
 }
 
 void Engine::update() {
@@ -126,11 +123,11 @@ void Engine::update() {
 
 		rendererManager->presentRenderer();
 
-		// Remove dead entities
-		scene->removeEntities();
-
 		// Handling physics bodies
 		physicsManager->handleBodies();
+
+		// Remove dead entities
+		scene->removeEntities();
 
 		// Change scene if necessary
 		sceneManager->manageScenes();
