@@ -344,42 +344,42 @@ Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>con
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_setTrigger(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setTrigger(vec[1].value.Bool);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_isTrigger(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	bool ret = self->isTrigger();
 	return ret;
 }
 Scripting::Variable PhysicsBody_setFriction(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setFriction(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_getFriction(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	float ret = self->getFriction();
 	return ret;
 }
 Scripting::Variable PhysicsBody_setBounciness(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setBounciness(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_getBounciness(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	float ret = self->getBounciness();
 	return ret;
 }
 Scripting::Variable PhysicsBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	self->setLinearVelocity(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
-	PhysicsBody* self = vec[0].value.entity->getComponent<PhysicsBody>();
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	Vector2D ret = self->getLinearVelocity();
 	return ret;
 }

@@ -35,10 +35,10 @@ Game::Game(ECS::SceneManager* sm) {
 
 void Game::initScenes() {
 
-	//firstScene();
+	firstScene();
 	//flappyBird();
 
-	readScene("DefaultScene.json");
+	//readScene("DefaultScene.json");
 }
 
 void Game::firstScene() {
@@ -53,10 +53,7 @@ void Game::firstScene() {
 		// Link
 		ECS::Entity* player = scene->createEntity("Player");
 
-		//auto tr = player->addComponent<ECS::Transform>();
-
-		auto tr = static_cast<Transform*>(player->addComponent("Transform"));
-
+		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
 		auto tComp = player->addComponent<ECS::TestComponent>();
@@ -74,7 +71,6 @@ void Game::firstScene() {
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("ball.png");
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
-		ball->addComponent<ECS::TestComponent>();
 
 	
 	// 3.- Init
@@ -85,8 +81,7 @@ void Game::firstScene() {
 		// Player
 		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 		tr->setScale(0.35f, 0.35f);
-
-		body->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::DYNAMIC);
+		body->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setBounciness(0.5f);
 		//body->setTrigger(true);
 
@@ -98,10 +93,8 @@ void Game::firstScene() {
 		// Ball
 		trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
 		trBall->setScale(0.25f, 0.25f);
-
-		ballBody->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::DYNAMIC);
-		ballBody->setBounciness(0.5f);
-		ballBody->setCollisionLayer("Ball");
+		ballBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+		ballBody->setBounciness(0.5f); 
 
 	// 5.- Start
 
@@ -175,10 +168,10 @@ void Game::flappyBird() {
 		tubTrInv->setPosition(1400, 150);
 		tubTr->setPosition(1400, renderer->getHeight() - 150);
 
-		tubBody->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::KINEMATIC);
+		tubBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
 		tubBody->setGravityScale(0);
 
-		tubBodyInv->setBodyType((int)ECS::PhysicsBody::BODY_TYPE::KINEMATIC);
+		tubBodyInv->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
 		tubBodyInv->setGravityScale(0);
 
 	// 5.- Start

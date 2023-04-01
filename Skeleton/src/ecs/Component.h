@@ -16,6 +16,7 @@ namespace ECS {
 	class Scene;
 
 	class Component {
+
 		friend Entity;
 
 	public:
@@ -60,13 +61,13 @@ namespace ECS {
 
 		virtual void onCollisionEnter(Entity* b) {};
 
-		virtual void onCollisionStay() {};
+		virtual void onCollisionStay(Entity* b) {};
 
 		virtual void onCollisionExit(Entity* b) {};
 
 		virtual void onTriggerEnter(Entity* b) {};
 
-		virtual void onTriggerStay() {};
+		virtual void onTriggerStay(Entity* b) {};
 
 		virtual void onTriggerExit(Entity* b) {};
 

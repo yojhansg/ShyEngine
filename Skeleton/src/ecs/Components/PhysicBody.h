@@ -21,7 +21,7 @@ namespace ECS {
 
     class Transform;
 
-    class PhysicsBody : public Component {
+    class PhysicBody : public Component {
 
     public:
 
@@ -29,9 +29,9 @@ namespace ECS {
             STATIC = 0, KINEMATIC = 1, DYNAMIC = 2
         };
 
-        PhysicsBody();
+        PhysicBody();
 
-        ~PhysicsBody();
+        ~PhysicBody();
 
         void init() override;
 
@@ -90,11 +90,15 @@ namespace ECS {
         // Collision Filtering
         void setCollisionLayer(const std::string& layerName);
 
-        // Force methods
+        // Collison/Trigger Stay
+        void setCollisionStay(bool stay, Entity* b);
+        void setTriggerStay(bool stay, Entity* b);
     publish:
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();
     public:
+
+        // Force methods
 
         void setAngularVelocity(float a);
         float getAngularVelocity();
@@ -152,6 +156,12 @@ namespace ECS {
 
         // Collision Layer
         std::string layerName;
+
+        // Collison/Trigger Stay
+        bool onCollisonStay;
+        bool onTriggerStay;
+
+        Entity* b;
 
     };
 }

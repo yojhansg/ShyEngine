@@ -16,7 +16,7 @@ namespace ECS {
 
 	void BoxBody::init() {
 
-		PhysicsBody::init();
+		PhysicBody::init();
 
 		shape = new b2PolygonShape();
 
@@ -30,7 +30,7 @@ namespace ECS {
 
 		bodyDef->type = b2_staticBody;
 		bodyDef->position.Set(0, 0);
-		bodyDef->userData.pointer = uintptr_t(static_cast<void*>(this->getEntity()));
+		bodyDef->userData.pointer = uintptr_t(static_cast<void*>(this));
 
 		fixtureDef->shape = shape;
 		fixtureDef->density = 1.0f;

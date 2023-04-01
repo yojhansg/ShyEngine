@@ -2,13 +2,11 @@
 #include "PhysicsManager.h"
 #include "box2d/b2_world.h"
 #include "Transform.h"
-#include "Entity.h"
-
-#include <iostream>
+#include <Entity.h>
 
 namespace ECS {
 
-	PhysicsBody::PhysicsBody() {
+	PhysicBody::PhysicBody() {
 
 		pm = Physics::PhysicsManager::instance();
 
@@ -42,14 +40,19 @@ namespace ECS {
 
 		layerName = "Default";
 
+		onCollisonStay = false;
+		onTriggerStay = false;
+
+		b = nullptr;
+
 	}
 
-	PhysicsBody::~PhysicsBody() {
+	PhysicBody::~PhysicBody() {
 		delete bodyDef;
 		delete fixtureDef;
 	}
 
-	void PhysicsBody::init() {
+	void PhysicBody::init() {
 
 		transform = this->getEntity()->getComponent<Transform>();
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
@@ -65,7 +68,7 @@ namespace ECS {
 
 	}
 
-	void PhysicsBody::start() {
+	void PhysicBody::start() {
 
 		// Radians
 		float radians = (b2_pi / 180) * (*rotation);
@@ -95,11 +98,14 @@ namespace ECS {
 		setBounciness(bounciness);
 	}
 
-	void PhysicsBody::fixedUpdate(float fixedDeltaTime) {
+	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
 
-		//std::cout << this->getEntity()->getEntityName() << " Layer: " << fixture->GetFilterData().categoryBits << " Collides with: " << fixture->GetFilterData().maskBits << std::endl;
+		if (onCollisonStay)
+			getEntity()->onCollisionStay(b);
+		else if (onTriggerStay)
+			getEntity()->onTriggerStay(b);
 
-		if (bodyType != (int)BODY_TYPE::STATIC) {
+		if (bodyType != (int) BODY_TYPE::STATIC) {
 
 			// Position
 			Vector2D trPosOffSet = *position - lastPositionSync;
@@ -136,76 +142,76 @@ namespace ECS {
 
 	}
 
-	void PhysicsBody::onActive() {
+	void PhysicBody::onActive() {
 		pm->setBodyEnabled(body, true);
 	}
 
-	void PhysicsBody::onDeacitve() {
+	void PhysicBody::onDeacitve() {
 		pm->setBodyEnabled(body, false);
 	}
 
-	void PhysicsBody::onSceneUp() {
+	void PhysicBody::onSceneUp() {
 		pm->setBodyEnabled(body, true);
 	}
 
-	void PhysicsBody::onSceneDown() {
+	void PhysicBody::onSceneDown() {
 		pm->setBodyEnabled(body, false);
 	}
 
-	void PhysicsBody::setTrigger(bool trigger) {
+	void PhysicBody::setTrigger(bool trigger) {
 		fixture->SetSensor(trigger);
 	}
 
-	bool PhysicsBody::isTrigger() {
+	bool PhysicBody::isTrigger() {
 		return fixture->IsSensor();
 	}
 
-	void PhysicsBody::setFriction(float friction) {
+	void PhysicBody::setFriction(float friction) {
 		fixture->SetFriction(friction);
 	}
 
-	float PhysicsBody::getFriction() {
+	float PhysicBody::getFriction() {
 		return fixture->GetFriction();
 	}
 
-	void PhysicsBody::setBounciness(float bounciness) {
+	void PhysicBody::setBounciness(float bounciness) {
 		fixture->SetRestitution(bounciness);
 	}
 
-	float PhysicsBody::getBounciness() {
+	float PhysicBody::getBounciness() {
 		return fixture->GetRestitution();
 	}
 
-	void PhysicsBody::addOffSet(float x, float y) {
+	void PhysicBody::addOffSet(float x, float y) {
 		offSet.set(offSet.getX() + x, offSet.getY() + y);
 	}
 
-	Vector2D PhysicsBody::getOffSet() {
+	Vector2D PhysicBody::getOffSet() {
 		return offSet;
 	}
 
-	void PhysicsBody::setRotationFreezed(bool freezed) {
+	void PhysicBody::setRotationFreezed(bool freezed) {
 		body->SetFixedRotation(freezed);
 	}
 
-	bool PhysicsBody::isRotationFreezed() {
+	bool PhysicBody::isRotationFreezed() {
 		return body->IsFixedRotation();
 	}
 
-	void PhysicsBody::setBodyType(int type) {
+	void PhysicBody::setBodyType(int type) {
 
 		bodyType = type;
 
 		b2BodyType t = b2_staticBody;
 
 		switch ((BODY_TYPE)type) {
-		case ECS::PhysicsBody::BODY_TYPE::STATIC:
+		case ECS::PhysicBody::BODY_TYPE::STATIC:
 			t = b2_staticBody;
 			break;
-		case ECS::PhysicsBody::BODY_TYPE::KINEMATIC:
+		case ECS::PhysicBody::BODY_TYPE::KINEMATIC:
 			t = b2_kinematicBody;
 			break;
-		case ECS::PhysicsBody::BODY_TYPE::DYNAMIC:
+		case ECS::PhysicBody::BODY_TYPE::DYNAMIC:
 			t = b2_dynamicBody;
 			break;
 		default:
@@ -215,86 +221,98 @@ namespace ECS {
 		body->SetType(t);
 	}
 
-	int PhysicsBody::getBodyType() {
+	int PhysicBody::getBodyType() {
 		return bodyType;
 	}
 
-	void PhysicsBody::setLinearDrag(float drag) {
+	void PhysicBody::setLinearDrag(float drag) {
 		body->SetLinearDamping(drag);
 	}
 
-	float PhysicsBody::getLinearDrag() {
+	float PhysicBody::getLinearDrag() {
 		return body->GetLinearDamping();
 	}
 
-	void PhysicsBody::setAngularDrag(float drag) {
+	void PhysicBody::setAngularDrag(float drag) {
 		body->SetAngularDamping(drag);
 	}
 
-	float PhysicsBody::getAngularDrag() {
+	float PhysicBody::getAngularDrag() {
 		return body->GetAngularDamping();
 	}
 
-	void PhysicsBody::setGravityScale(float scale) {
+	void PhysicBody::setGravityScale(float scale) {
 		body->SetGravityScale(scale);
 	}
 
-	float PhysicsBody::getGravityScale() {
+	float PhysicBody::getGravityScale() {
 		return body->GetGravityScale();
 	}
 
-	float PhysicsBody::getMass() {
+	float PhysicBody::getMass() {
 		return mass;
 	}
 
-	float PhysicsBody::getAngle() {
+	float PhysicBody::getAngle() {
 		return body->GetAngle() * (180 / b2_pi);
 	}
 
-	void PhysicsBody::setCollisionLayer(const std::string& layerName) {
+	void PhysicBody::setCollisionLayer(const std::string& layerName) {
 
 		assert(pm->layersExists(layerName), "La capa con nombre " + layerName + " no existe");
 
 		this->layerName = layerName;
 	}
 
-	void PhysicsBody::setLinearVelocity(float x, float y) {
+	void PhysicBody::setCollisionStay(bool stay, Entity* b) {
+		onCollisonStay = stay;
+
+		this->b = b;
+	}
+
+	void PhysicBody::setTriggerStay(bool stay, Entity* b) {
+		onTriggerStay = stay;
+
+		this->b = b;
+	}
+
+	void PhysicBody::setLinearVelocity(float x, float y) {
 		body->SetLinearVelocity({ x, y });
 	}
 
-	Vector2D PhysicsBody::getLinearVelocity() {
+	Vector2D PhysicBody::getLinearVelocity() {
 		return { body->GetLinearVelocity().x, body->GetLinearVelocity().y };
 	}
 
-	void PhysicsBody::setAngularVelocity(float a) {
+	void PhysicBody::setAngularVelocity(float a) {
 		body->SetAngularVelocity(a);
 	}
 
-	float PhysicsBody::getAngularVelocity() {
+	float PhysicBody::getAngularVelocity() {
 		return body->GetAngularVelocity();
 	}
 
-	void PhysicsBody::applyForce(const Vector2D& force, const Vector2D& point) {
+	void PhysicBody::applyForce(const Vector2D& force, const Vector2D& point) {
 		body->ApplyForce({ force.getX(), force.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicsBody::applyForceToCenter(const Vector2D& force) {
+	void PhysicBody::applyForceToCenter(const Vector2D& force) {
 		body->ApplyForceToCenter({ force.getX(), force.getY() }, true);
 	}
 
-	void PhysicsBody::applyTorque(float torque) {
+	void PhysicBody::applyTorque(float torque) {
 		body->ApplyTorque(torque, true);
 	}
 
-	void PhysicsBody::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point) {
+	void PhysicBody::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point) {
 		body->ApplyLinearImpulse({ impulse.getX(), impulse.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicsBody::applyLinearImpulseToCenter(const Vector2D& impulse) {
+	void PhysicBody::applyLinearImpulseToCenter(const Vector2D& impulse) {
 		body->ApplyLinearImpulseToCenter({ impulse.getX(), impulse.getY() }, true);
 	}
 
-	void PhysicsBody::applyAngularImpulse(float impulse) {
+	void PhysicBody::applyAngularImpulse(float impulse) {
 		body->ApplyAngularImpulse(impulse, true);
 	}
 
