@@ -1,34 +1,28 @@
 #include "Engine.h"
-
-#include <PhysicsManager.h>
-#include <RendererManager.h>
-#include <SoundManager.h>
-#include <InputManager.h>
-#include <SceneManager.h>
-#include <ResourcesManager.h>
-#include <ContactListener.h>
-#include <Scene.h>
-#include <SDLUtils.h>
-#include <EngineTime.h>
-#include <RenderManager.h>
-#include <OverlayManager.h>
-
-#include <Component.h>
+#include "Game.h"
+#include "DataLoader.h"
 
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ComponentFactory.h>
 #include <ECSUtilities/ClassReflection.h>
-
-#include <Scripting/ScriptManager.h>
 #include <Scripting/ScriptFunctionality.h>
+#include <Scripting/ScriptManager.h>
 
+#include <ResourcesManager.h>
+#include <ContactListener.h>
+#include <RendererManager.h>
+#include <OverlayManager.h>
+#include <PhysicsManager.h>
 #include <ConsoleManager.h>
-
-#include "Game.h"
-
+#include <RenderManager.h>
+#include <SoundManager.h>
+#include <InputManager.h>
+#include <SceneManager.h>
+#include <EngineTime.h>
+#include <Component.h>
+#include <SDLUtils.h>
+#include <Scene.h>
 #include <chrono>
-
-#include "DataLoader.h"
 
 using namespace std::chrono;
 
@@ -58,12 +52,11 @@ bool Engine::init() {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
 	}
 	
-	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
-
 	if (ECS_Version != ECSreflection_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
 	}
 
+	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
 
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = Renderer::RendererManager::init(data.windowName, data.windowSize.getX(), data.windowSize.getY());
@@ -81,12 +74,11 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
+	Game(sceneManager).initScenes();
 
-	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
-	//Game(sceneManager).initScenes();
+	/*sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();*/
 
-	sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
 	return true;
 }
 
@@ -129,14 +121,16 @@ void Engine::update() {
 		physicsManager->debugDraw();
 		overlayManager->Render();
 
-
 		rendererManager->presentRenderer();
+
+		// OnDestroy on dead entities and components
+		scene->preRemoveEntitiesAndComponents();
 
 		// Handling physics bodies
 		physicsManager->handleBodies();
 
-		// Remove dead entities
-		scene->removeEntities();
+		// Remove dead entities and components
+		scene->postRemoveEntitiesAndComponents();
 
 		// Change scene if necessary
 		sceneManager->manageScenes();

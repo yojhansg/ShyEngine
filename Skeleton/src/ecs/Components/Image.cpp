@@ -19,7 +19,7 @@ namespace ECS {
 	Image::~Image() {
 		delete rotationPoint;
 	}
-	
+
 	void Image::init() {
 
 		renderer = Renderer::RendererManager::instance()->getRenderer();
@@ -39,14 +39,12 @@ namespace ECS {
 		// Rotation point
 		rotationPoint = new SDL_Point({ width / 2, height / 2 });
 
-
 		entity->AddToRenderSet();
 	}
 
 	void Image::render() {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
-
 
 		auto trPos = transform->getPosition();
 		auto trScale = transform->getScale();

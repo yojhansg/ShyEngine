@@ -1,9 +1,10 @@
 #include "Entity.h"
 #include "Component.h"
+#include "RenderManager.h"
 #include "Scene.h"
+
 #include "ECSUtilities/ComponentFactory.h"
 
-#include "RenderManager.h"
 namespace ECS {
 
 	Entity::Entity(const std::string& ent_name, int renderOrder) {
@@ -12,6 +13,7 @@ namespace ECS {
 		active = true;
 		removed = false;
 		scene = nullptr;
+		inRemovedEntityList = false;
 
 		this->renderOrder = renderOrder;
 
@@ -35,7 +37,7 @@ namespace ECS {
 			delete c; c = nullptr;
 		}
 		components.clear();
-		componentsRemoved.clear();
+		removedComponents.clear();
 
 		if (inRenderSet)
 			RenderManager::instance()->RemoveElement(this);
@@ -85,19 +87,19 @@ namespace ECS {
 
 	void Entity::udpate(float deltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->update(deltaTime);
+			if (c->isActive() && !c->isRemoved())
+				c->update(deltaTime);
+			else if (c->isRemoved() && !c->inRemovedComponentList)
+				removeComponent(c);
 		}
-
-		for (auto it : componentsRemoved) {
-			delete *it;
-			components.erase(it);
-		}
-		componentsRemoved.clear();
 	}
 
 	void Entity::lateUpdate(float deltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->lateUpdate(deltaTime);
+			if (c->isActive() && !c->isRemoved()) 
+				c->lateUpdate(deltaTime);
+			else if (c->isRemoved() && !c->inRemovedComponentList)
+				removeComponent(c);
 		}
 	}
 
@@ -109,7 +111,11 @@ namespace ECS {
 
 	void Entity::fixedUpdate(float fixedDeltaTime) {
 		for (auto c : components) {
-			if (c->isActive()) c->fixedUpdate(fixedDeltaTime);
+			if (c->isActive() && !c->isRemoved())
+				c->fixedUpdate(fixedDeltaTime);
+			else if (c->isRemoved() && !c->inRemovedComponentList) {
+				removeComponent(c);
+			}
 		}
 	}
 
@@ -208,6 +214,35 @@ namespace ECS {
 		}
 	}
 
+	void Entity::onDestroy() {
+		for (auto c : components) {
+			c->onDestroy();
+		}
+	}
+
+	void Entity::removeComponents() {
+		for (auto it : removedComponents) {
+			delete* it;
+			components.erase(it);
+		}
+		removedComponents.clear();
+	}
+
+	void Entity::addComponentToList(const std::list<Component*>::iterator& it, Component* c) {
+
+		c->remove();
+
+		removedComponents.push_back(it);
+
+		c->inRemovedComponentList = true;
+	}
+
+	void Entity::executeOnDestroyOnRemovedComponents() {
+		for (auto c : components) {
+			if (c->isRemoved()) c->onDestroy();
+		}
+	}
+
 	void Entity::setActive(bool ent_active) {
 		active = ent_active;
 
@@ -221,12 +256,6 @@ namespace ECS {
 
 	void Entity::removeEntity() {
 		removed = true;
-
-		for (auto comp : components) {
-
-			comp->onDestroy();
-		}
-
 	}
 
 	bool Entity::isRemoved() {
@@ -239,7 +268,7 @@ namespace ECS {
 
 			if (*it == c)
 			{
-				componentsRemoved.push_back(it);
+				addComponentToList(it, c);
 				return;
 			}
 			it++;

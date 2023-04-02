@@ -1,30 +1,26 @@
 #include "Game.h"
-
-#include <SceneManager.h>
-#include <RendererManager.h>
-#include <PhysicsManager.h>
-#include <Scene.h>
 #include <Entity.h>
-#include <Components/Transform.h>
-#include <Components/Image.h>
-#include <Components/BoxBody.h>
-#include <Components/CircleBody.h>
-#include <Components/EdgeBody.h>
-#include <Scripting/Script.h>
-#include <Components/ChainBody.h>
-#include <Components/TestComponent.h>
-#include <ECSUtilities/FunctionManager.h>
-#include <ECSUtilities/ClassReflection.h>
+#include <Scene.h>
 
-#include <map>
-#include <fstream>
+#include <RendererManager.h> 
+#include <PhysicsManager.h>
+#include <ConsoleManager.h>
+#include <SceneManager.h>
 
 #include <Components/OverlayElement.h>
+#include <Components/TestComponent.h>
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
+#include <Components/CircleBody.h>
+#include <Components/Transform.h>
+#include <Components/ChainBody.h>
+#include <Components/EdgeBody.h>
+#include <Components/BoxBody.h>
+#include <Components/Image.h>
 
-#include <ConsoleManager.h>
-
+#include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ClassReflection.h>
+#include <Scripting/Script.h>
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -35,6 +31,7 @@ Game::Game(ECS::SceneManager* sm) {
 void Game::initScenes() {
 
 	firstScene();
+
 	//flappyBird();
 
 	//readScene("DefaultScene.json");

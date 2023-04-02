@@ -33,16 +33,22 @@ namespace ECS {
 
             if (e->isActive() && !e->isRemoved())
                 e->udpate(deltaTime);
-            else if (e->isRemoved())
-                entitiesRemoved.push_back(it);
+            else if (e->isRemoved() && !e->inRemovedEntityList)
+                removeEntity(e);
         }
     }
 
     void Scene::lateUpdate(float deltaTime) {
-        for (auto e : entities) {
+
+        for (auto it = entities.begin(); it != entities.end(); it++) {
+            Entity* e = *it;
+
             if (e->isActive() && !e->isRemoved())
                 e->lateUpdate(deltaTime);
+            else if (e->isRemoved() && !e->inRemovedEntityList)
+                removeEntity(e);
         }
+
     }
 
     void Scene::render() {
@@ -53,19 +59,35 @@ namespace ECS {
     }
 
     void Scene::fixedUpdate(float fixedDeltaTime) {
-        for (auto e : entities) {
+        for (auto it = entities.begin(); it != entities.end(); it++) {
+            Entity* e = *it;
+
             if (e->isActive() && !e->isRemoved())
                 e->fixedUpdate(fixedDeltaTime);
+            else if (e->isRemoved() && !e->inRemovedEntityList)
+                removeEntity(e);
         }
     }
 
-    void Scene::removeEntities() {
-        for (auto it : entitiesRemoved) {
+    void Scene::postRemoveEntitiesAndComponents() {
+        for (auto it : removedEntities) {
             delete* it;
             entities.erase(it);
         }
-        entitiesRemoved.clear();
+        removedEntities.clear();
 
+        for (auto e : entities) {
+            if (!e->removedComponents.empty()) {
+                e->removeComponents();
+            }
+        }
+
+    }
+
+    void Scene::onDestroy() {
+        for (auto e : entities) {
+            e->onDestroy();
+        }
     }
 
     void Scene::onSceneUp() {
@@ -99,8 +121,18 @@ namespace ECS {
 
     }
 
-    void Scene::destroyEntity(Entity* ent) {
-        ent->removeEntity();
+    void Scene::removeEntity(Entity* ent) {
+        std::list<Entity*>::iterator it = entities.begin();
+        while (it != entities.end()) {
+
+            if (*it == ent)
+            {
+                ent->inRemovedEntityList = true;
+                removedEntities.push_back(it);
+                return;
+            }
+            it++;
+        }
     }
 
     Entity* Scene::findEntityByName(const std::string& ent_name) {
@@ -110,4 +142,15 @@ namespace ECS {
 
         return nullptr;
     }
+
+    void Scene::preRemoveEntitiesAndComponents() {
+        for (auto e : entities) {
+            if (e->isRemoved())
+                e->onDestroy();
+        }
+
+        for (auto e : entities)
+            e->executeOnDestroyOnRemovedComponents();
+    }
+
 }

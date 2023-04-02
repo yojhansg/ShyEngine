@@ -40,7 +40,7 @@ namespace ECS {
 	void SceneManager::resetScene() {
 		
 		//TODO: intentar hacer esto un pelin mejor
-		scenes.top()->onSceneDown();
+		scenes.top()->onDestroy();
 		scenes.top()->~Scene();
 		scenes.top()->start();
 	}
@@ -88,7 +88,7 @@ namespace ECS {
 
 	void SceneManager::popScene() {
 		if (scenes.size() > 0) {
-			scenes.top()->onSceneDown();
+			scenes.top()->onDestroy();
 			delete scenes.top();
 			scenes.pop();
 
@@ -98,7 +98,7 @@ namespace ECS {
 
 	void SceneManager::popAndPushScene() {
 		if (scenes.size() > 0) {
-			scenes.top()->onSceneDown();
+			scenes.top()->onDestroy();
 			delete scenes.top();
 			scenes.pop();
 
