@@ -174,6 +174,7 @@
     <ClInclude Include="..\..\src\ecs\Entity.h" />
     <ClInclude Include="..\..\src\ecs\OverlayManager.h" />
     <ClInclude Include="..\..\src\ecs\RenderManager.h" />
+    <ClInclude Include="..\..\src\ecs\Save.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
     <ClInclude Include="..\..\src\ecs\SceneLoader.h" />
     <ClInclude Include="..\..\src\ecs\SceneManager.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
     <ClCompile Include="..\..\src\ecs\OverlayManager.cpp" />
     <ClCompile Include="..\..\src\ecs\RenderManager.cpp" />
+    <ClCompile Include="..\..\src\ecs\Save.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneLoader.cpp" />
     <ClCompile Include="..\..\src\ecs\SceneManager.cpp" />

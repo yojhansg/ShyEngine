@@ -14,12 +14,12 @@ void Console::Output::Print(cstring info, cstring message)
 
 void Console::Output::PrintError(cstring info, cstring message)
 {
-	PrintColor(Color::White, Color::White, "ERROR: " + info, message);
+	PrintColor(Color::LightRed, Color::White, "ERROR: " + info, message);
 }
 
 void Console::Output::PrintWarning(cstring info, cstring message)
 {
-	PrintColor(Color::White, Color::White, "WARNING: " + info, message);
+	PrintColor(Color::Yellow, Color::White, "WARNING: " + info, message);
 }
 
 

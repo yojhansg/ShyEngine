@@ -46,5 +46,7 @@ DataLoader DataLoader::Load(std::string const& path) {
 	bool fullScreen = file["fullScreen"].get<bool>();
 	bool debugPhysics = file["debugPhysics"].get<bool>();
 
+	fileStream.close();
+
 	return DataLoader(game, creator, windowTitle, windowIcon, windowSize, splashScreen, initialScene, vsync, fullScreen, gravity, debugPhysics);
 }

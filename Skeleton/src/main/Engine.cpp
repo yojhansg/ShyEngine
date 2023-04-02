@@ -83,10 +83,10 @@ bool Engine::init() {
 
 
 	//Pablo esto es lo tuyo, descomenta esto y comenta lo siguiente
-	Game(sceneManager).initScenes();
+	//Game(sceneManager).initScenes();
 
-	//sceneManager->changeScene(sceneManager->LoadScene("DefaultScene.json"), ECS::SceneManager::PUSH);
-	//sceneManager->manageScenes();
+	sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 	return true;
 }
 

@@ -101,6 +101,7 @@ namespace Scripting {
 		this->str = str;
 		value.Float = 0;
 	}
+	
 	std::string Variable::Type2String(Type type)
 	{
 		std::string value;
@@ -108,19 +109,19 @@ namespace Scripting {
 		switch (type)
 		{
 		case Scripting::Variable::Type::Null:
-			return "Null";
+			return "null";
 		case Scripting::Variable::Type::Float:
-			return "Number";
+			return "float";
 		case Scripting::Variable::Type::Bool:
-			return "Toggle";
+			return "bool";
 		case Scripting::Variable::Type::Char:
-			return "Letter";
+			return "char";
 		case Scripting::Variable::Type::Entity:
-			return "Entity";
+			return "entity";
 		case Scripting::Variable::Type::Vector2D:
-			return "Point";
+			return "Vector2D";
 		case Scripting::Variable::Type::String:
-			return "Word";
+			return "string";
 		default:
 			break;
 		}

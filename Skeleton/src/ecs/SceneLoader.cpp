@@ -202,6 +202,8 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	//elem->SetAnchorCenter();
 	//elem->SetParent(papa);
 
+	fileStream.close();
+
 	return scene;
 }
 

@@ -56,7 +56,6 @@ namespace Scripting {
 
 
 		static std::string Type2String(Type type);
-
 		std::string Type2String();
 	};
 
