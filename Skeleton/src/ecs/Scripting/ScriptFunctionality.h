@@ -26,7 +26,11 @@ public:
 
 publish:
 
-	ECS::Entity* GameObject();
+	ECS::Entity* Entity();
+
+	std::string EntityName();
+	std::string Script();
+
 
 	void Print(Scripting::Variable val);
 

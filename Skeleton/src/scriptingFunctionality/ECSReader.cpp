@@ -390,6 +390,20 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	definition << TAB << className << "* self = vec[0].value.entity->getComponent<" + className + ">();" NEWLINE;
 
+
+	//TODO: comprobar los tipos: [0] entity -> [1] float etc...
+	//Manejo de errores:
+	//DebugComponentError(entity, script, function, entityError, missingComponent)
+	// 
+	//DebugComponentError(ScriptFunctionality_EntityName(), ScriptFunctionality_Script(), "Image_getTextureWidth", vec[0].value.entity->getEntityName(), Image);
+
+
+	definition << TAB "if(self == nullptr){" NEWLINE;
+	definition << TAB TAB"DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + FunctionName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
+	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
+	definition << TAB"}" NEWLINE;
+
+
 	definition << TAB;
 	if (returnType != "void") {
 
@@ -578,10 +592,25 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 	cpp << R"(
 #include "FunctionManager.h"
 #include "Entity.h"
+#include "ConsoleManager.h"
 
 )";
 
 	cpp << "//Creation time: " << GetTimeStamp() << "\n";
+
+cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
+#define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
+#define _DebugError(entity, script, function, title, error) _Console(_ErrorInfo(entity, script, function, title), error)
+
+#define _ComponentErrorMessage(entityError, missingComponent) "The entity <" + entityError + "> does not contain <" + missingComponent + "> component"
+#define _NullErrorMessage(i, expected) "Empty input given to input(" + i + "). Expected type: <" + expected + ">"
+#define _InvalidInputErrorMessage(i, expected, given) "Expected <" + expected + "> but received <" + given + "> for input(" + i + ")"
+
+#define DebugComponentError(entity, script, function, entityError, missingComponent) _DebugError(entity, script, function, "Entity error", _ComponentErrorMessage(entityError, #missingComponent))
+#define DebugNullError(entity, script, function, i, expected) _DebugError(entity, script, function, "Empty value", _NullErrorMessage(i, expected))
+#define DebugInvalidInputError(entity, script, function, i, expected, given) _DebugError(entity, script, function, "Invalid input", _InvalidInputErrorMessage(i, expected, given))
+)~";
+
 
 	for (auto& file : filesToInclude) {
 

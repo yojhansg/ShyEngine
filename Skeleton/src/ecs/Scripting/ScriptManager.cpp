@@ -219,5 +219,11 @@ Scripting::Variable Scripting::ScriptManager::CallFunction(std::string const& fu
 {
 	ScriptManager* manager = instance();
 
+	if (!manager->functionMap.contains(func))
+	{
+		Console::Output::PrintError("Node error", "The node <" + func + "> does not exist");
+		return Scripting::Variable::Null();
+	}
+
 	return manager->functionMap[func](vec);
 }

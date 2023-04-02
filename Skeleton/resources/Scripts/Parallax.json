@@ -11,9 +11,9 @@
 
         {
             "index" : 0,
-            "function": "Transform_setPosition",
+            "function": "Transform_setPositionX",
             "input": [
-                1, 6, 4
+                1, 6
             ],
             "next": 7
         },
@@ -26,18 +26,11 @@
         },
         {
             "index" : 1,
-            "function": "ScriptFunctionality_GameObject"
+            "function": "ScriptFunctionality_Entity"
         },
         {
             "index" : 3,
             "function": "ScriptFunctionality_Vector2D_X",
-            "input":[
-                2
-            ]
-        },
-        {
-            "index" : 4,
-            "function": "ScriptFunctionality_Vector2D_Y",
             "input":[
                 2
             ]

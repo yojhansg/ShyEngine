@@ -17,9 +17,19 @@ Scripting::ScriptFunctionality::ScriptFunctionality()
 }
 
 
-ECS::Entity* Scripting::ScriptFunctionality::GameObject()
+ECS::Entity* Scripting::ScriptFunctionality::Entity()
 {
 	return ECS::Script::currentScript->getEntity();
+}
+
+std::string Scripting::ScriptFunctionality::EntityName()
+{
+	return Entity()->getEntityName();
+}
+
+std::string Scripting::ScriptFunctionality::Script()
+{
+	return ECS::Script::currentScript->GetName();
 }
 
 
