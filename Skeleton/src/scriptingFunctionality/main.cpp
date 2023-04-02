@@ -2,7 +2,10 @@
 #include "ECSReader.h"
 #include "ClassCreator.h"
 
+
+#include <iostream>
 int main() {
+
 	ECSReader reader(
 		ECSReader::GetDefaultRoot()
 	);

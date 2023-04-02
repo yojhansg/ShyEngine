@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sun Apr  2 16:12:37 2023
+//Creation time : Sun Apr  2 21:04:33 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -102,7 +102,9 @@ Scripting::Variable SaveManager_ClearSlot(std::vector<Scripting::Variable>const&
 Scripting::Variable SaveManager_Exists(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_EntityName(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Subtract(std::vector<Scripting::Variable>const& vec);

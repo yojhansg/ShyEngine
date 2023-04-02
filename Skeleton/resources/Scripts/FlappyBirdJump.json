@@ -14,7 +14,7 @@
         },
         {
             "index" : 2,
-            "function": "ScriptFunctionality_GameObject"
+            "function": "ScriptFunctionality_Entity"
         },
         
         {

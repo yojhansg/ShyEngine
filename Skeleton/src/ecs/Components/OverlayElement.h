@@ -7,7 +7,6 @@
 
 namespace ECS {
 
-	//TODO: isDirty para no tener que recalcular toda la ui cuando se mueva algo
 	class OverlayElement : public Component {
 
 	public:
