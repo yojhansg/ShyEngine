@@ -94,7 +94,8 @@ namespace ECS {
 
         // Collison/Trigger Stay
         void setCollisionStay(bool stay, Entity* b);
-        void setTriggerStay(bool stay, Entity* b);
+        void setTriggerStay(bool stay, Entity* b);
+
     publish:
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();

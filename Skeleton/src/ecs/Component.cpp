@@ -2,7 +2,6 @@
 #include "Entity.h"
 
 #include "ConsoleManager.h"
-#include "EngineTime.h"
 
 namespace ECS {
 
@@ -10,6 +9,8 @@ namespace ECS {
 
 		entity = nullptr;
 		active = true;
+		removed = false;
+		inRemovedComponentList = false;
 	}
 
 	bool Component::isActive() {
@@ -30,11 +31,15 @@ namespace ECS {
 	}
 
 	void Component::remove() {
-		entity->removeComponent(this);
+		removed = true;
 	}
 
 	void Component::remove(Component* c) {
-		entity->removeComponent(c);
+		c->removed = true;
+	}
+
+	bool Component::isRemoved() {
+		return removed;
 	}
 
 	void Component::print(std::string const& message, std::string const& className)

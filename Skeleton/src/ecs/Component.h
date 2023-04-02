@@ -37,6 +37,8 @@ namespace ECS {
 
 		void remove(Component* c);
 
+		bool isRemoved();
+
 	private:
 
 		virtual void init() {};
@@ -82,6 +84,10 @@ namespace ECS {
 		Entity* entity;
 
 		bool active;
+
+		bool removed;
+
+		bool inRemovedComponentList;
 
 	};
 }

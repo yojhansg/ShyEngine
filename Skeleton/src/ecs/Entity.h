@@ -58,7 +58,6 @@ namespace ECS {
 		//Create a component given a string with its type
 		Component* addComponent(std::string const& comp);
 
-
 		// Adds a T component to the entity
 		template <typename T, typename ...Ts>
 		requires isComponent<T>
@@ -87,9 +86,11 @@ namespace ECS {
 			std::list<Component*>::iterator it = components.begin();
 			while (it != components.end()) {
 
-				if (dynamic_cast<T*>(*it) != nullptr)
+				T* c = dynamic_cast<T*>(*it);
+
+				if (c != nullptr)
 				{
-					componentsRemoved.push_back(it);
+					addComponentToList(it, c);
 					return;
 				}
 				it++;
@@ -172,11 +173,23 @@ namespace ECS {
 		// Called when the entity exits the trigger of the other entity marked as trigger
 		void onTriggerExit(Entity* b);
 
+		// Called when the entity is removed
+		void onDestroy();
+
+		// Called by the scene to clear the removed components at the end of the main loop
+		void removeComponents();
+
+		void addComponentToList(const std::list<Component*>::iterator& it, Component* c);
+
+		void executeOnDestroyOnRemovedComponents();
+
 		// Name of the entity
 		std::string name;
 
 		// Flags to indicate if the entity is active or removed
 		bool active, removed;
+
+		bool inRemovedEntityList;
 
 		// Pointer to the scene where this entity is located
 		Scene* scene;
@@ -191,7 +204,7 @@ namespace ECS {
 		std::list<Component*> components;
 
 		// List of components to remove in the end of the update
-		std::list<std::list<Component*>::iterator> componentsRemoved;
+		std::list<std::list<Component*>::iterator> removedComponents;
 	};
 
 }

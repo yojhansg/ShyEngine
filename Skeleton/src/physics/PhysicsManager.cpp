@@ -197,6 +197,9 @@ namespace Physics {
 	}
 
 	PhysicsManager::~PhysicsManager() {
+
+		handleBodies();
+
 		delete gravity;
 		delete world;
 		delete b2draw;
