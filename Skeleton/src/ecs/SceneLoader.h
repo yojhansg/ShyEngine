@@ -2,7 +2,10 @@
 
 #include <string>
 #include <vector>
+
+#undef new
 #include "json.hpp"
+#include "CheckML.h"
 
 namespace nlohmann {
 	using jsonarray = std::vector<json>;

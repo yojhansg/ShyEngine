@@ -175,6 +175,15 @@ void ECS::OverlayElement::SetAnchorBottomRight()
 	SetAnchor({ 1, 1 });
 }
 
+bool ECS::OverlayElement::PointInsideBounds(Utilities::Vector2D const& p)
+{
+	if (OverlayManager::instance()->IsDirty())
+		OverlayManager::instance()->RecalculateOverlay();
+
+	return p.x_ > render_x && p.x_ < render_x + render_w &&
+		p.y_ > render_y && p.y_ < render_y + render_h;
+}
+
 void ECS::OverlayElement::SetParent(OverlayElement* element)
 {
 	parent = element;

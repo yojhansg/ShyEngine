@@ -172,6 +172,17 @@ namespace ECS {
 		// Called when the entity exits the trigger of the other entity marked as trigger
 		void onTriggerExit(Entity* b);
 
+
+		//Overlay
+		void onClickBegin();
+		void onClick();
+		void onClickHold();
+		void onDoubleClick();
+		void onRightClick();
+
+
+
+
 		// Name of the entity
 		std::string name;
 

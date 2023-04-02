@@ -34,7 +34,7 @@ namespace Input {
 	void InputManager::clearState() {
 
 		isKeyDownEvent_ = isKeyUpEvent_ = isMouseButtonEventDown_ = false;
-		isMouseButtonEventUp_ = isMouseMotionEvent_ = isMouseWheelEvent_ =  false;
+		isMouseButtonEventUp_ = isMouseMotionEvent_ = isMouseWheelEvent_ = false;
 		isJoystickButtonDownEvent_ = isJoystickButtonUpEvent_ = false; joystickConnected_ = false;
 		joystickDisconnected_ = false;
 	}
@@ -48,37 +48,42 @@ namespace Input {
 			joystickDisconnected();
 
 		switch (event.type) {
-			case SDL_KEYDOWN:
-				onKeyDown(event);
-				break;
-			case SDL_KEYUP:
-				onKeyUp(event);
-				break;
-			case SDL_MOUSEWHEEL:
-				onMouseWheelMotion(event);
-				break;
-			case SDL_MOUSEMOTION:
-				onMouseMotion(event);
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				onMouseButtonChange(event, true);
-				break;
-			case SDL_MOUSEBUTTONUP:
-				onMouseButtonChange(event, false);
-				break;
-			case SDL_JOYAXISMOTION:
-				onJoystickAxisMotion(event);
-				break;
-			case SDL_JOYBUTTONDOWN:
-				onJoystickButtonDown(event);
-				break;
-			case SDL_JOYBUTTONUP:
-				onJoystickButtonUp(event);
-				break;
-			default:
-				break;
+		case SDL_KEYDOWN:
+			onKeyDown(event);
+			break;
+		case SDL_KEYUP:
+			onKeyUp(event);
+			break;
+		case SDL_MOUSEWHEEL:
+			onMouseWheelMotion(event);
+			break;
+		case SDL_MOUSEMOTION:
+			onMouseMotion(event);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			onMouseButtonChange(event, true);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			onMouseButtonChange(event, false);
+			break;
+		case SDL_JOYAXISMOTION:
+			onJoystickAxisMotion(event);
+			break;
+		case SDL_JOYBUTTONDOWN:
+			onJoystickButtonDown(event);
+			break;
+		case SDL_JOYBUTTONUP:
+			onJoystickButtonUp(event);
+			break;
+		default:
+			break;
 		}
 
+		int mouse_x, mouse_y;
+		SDL_GetMouseState(&mouse_x, &mouse_y);
+
+		mousePos_.setX(mouse_x);
+		mousePos_.setY(mouse_y);
 	}
 
 	// --------- KB ------------
@@ -117,7 +122,7 @@ namespace Input {
 		return isMouseWheelEvent_;
 	}
 
-	const std::pair<Sint32, Sint32>& InputManager::getMousePos() {
+	Utilities::Vector2D InputManager::getMousePos() {
 		return mousePos_;
 	}
 
@@ -143,8 +148,6 @@ namespace Input {
 
 	void InputManager::onMouseMotion(const SDL_Event& event) {
 		isMouseMotionEvent_ = true;
-		mousePos_.first = event.motion.x;
-		mousePos_.second = event.motion.y;
 	}
 
 	void InputManager::onMouseWheelMotion(const SDL_Event& event) {
@@ -265,12 +268,12 @@ namespace Input {
 				if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
 				{
 					switch (event.jaxis.axis) {
-						case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
-						case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
-						case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
-						case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-						default: 
-							break;
+					case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
+					case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
+					case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
+					case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
+					default:
+						break;
 					}
 				}
 				else {
@@ -291,10 +294,10 @@ namespace Input {
 				if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
 
 					switch (event.jaxis.axis) {
-						case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-						case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-						default: 
-							break;
+					case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+					case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+					default:
+						break;
 					}
 				}
 				else {
@@ -345,14 +348,14 @@ namespace Input {
 		Utilities::Vector2D v = Utilities::Vector2D();
 
 		switch (ct) {
-			case LEFT_STICK:
-				v = joystickValues[joystickId].first;
-				break;
-			case RIGHT_STICK:
-				v = joystickValues[joystickId].second;
-				break;
-			default:
-				break;
+		case LEFT_STICK:
+			v = joystickValues[joystickId].first;
+			break;
+		case RIGHT_STICK:
+			v = joystickValues[joystickId].second;
+			break;
+		default:
+			break;
 		}
 
 		return v / (MAX_STICK_VALUE);
@@ -363,14 +366,14 @@ namespace Input {
 		float v = 0.0f;
 
 		switch (ct) {
-			case LEFT_TRIGGER:
-				v = joystickTriggerValues[joystickId].first;
-				break;
-			case RIGHT_TRIGGER:
-				v = joystickTriggerValues[joystickId].second;
-				break;
-			default:
-				break;
+		case LEFT_TRIGGER:
+			v = joystickTriggerValues[joystickId].first;
+			break;
+		case RIGHT_TRIGGER:
+			v = joystickTriggerValues[joystickId].second;
+			break;
+		default:
+			break;
 		}
 
 		return v / (float)(MAX_STICK_VALUE);

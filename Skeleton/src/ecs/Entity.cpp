@@ -14,6 +14,8 @@ namespace ECS {
 		scene = nullptr;
 
 		this->renderOrder = renderOrder;
+
+		inRenderSet = false;
 	}
 
 	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder) {
@@ -24,6 +26,8 @@ namespace ECS {
 		scene = ent_scene;
 
 		this->renderOrder = renderOrder;
+
+		inRenderSet = false;
 	}
 
 	Entity::~Entity() {
@@ -166,6 +170,41 @@ namespace ECS {
 	void Entity::onTriggerExit(Entity* b) {
 		for (auto c : components) {
 			if (c->isActive()) c->onTriggerExit(b);
+		}
+	}
+
+	void Entity::onClickBegin()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onClickBegin();
+		}
+	}
+
+	void Entity::onClick()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onClick();
+		}
+	}
+
+	void Entity::onClickHold()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onClickHold();
+		}
+	}
+
+	void Entity::onDoubleClick()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onDoubleClick();
+		}
+	}
+
+	void Entity::onRightClick()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onRightClick();
 		}
 	}
 

@@ -73,6 +73,8 @@ namespace ECS {
 
 	public:
 
+		bool PointInsideBounds(Utilities::Vector2D const& p);
+
 		void SetParent(OverlayElement* element);
 
 		void RecalculatePosition();

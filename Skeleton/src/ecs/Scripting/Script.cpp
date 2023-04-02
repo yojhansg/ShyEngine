@@ -19,6 +19,41 @@ void ECS::Script::onCollisionEnter(Entity* entity)
 	Iteration(nodes.onCollisionEnter);
 }
 
+void ECS::Script::onCollisionStay(Entity* entity)
+{
+	Iteration(nodes.onCollision);
+}
+
+void ECS::Script::onCollisionExit(Entity* entity)
+{
+	Iteration(nodes.onCollisionExit);
+}
+
+void ECS::Script::onClick()
+{
+	Iteration(nodes.onClick);
+}
+
+void ECS::Script::onClickBegin()
+{
+	Iteration(nodes.onClickBegin);
+}
+
+void ECS::Script::onClickHold()
+{
+	Iteration(nodes.onClickHold);
+}
+
+void ECS::Script::onDoubleClick()
+{
+	Iteration(nodes.onDoubleClick);
+}
+
+void ECS::Script::onRightClick()
+{
+	Iteration(nodes.onRightClick);
+}
+
 std::string ECS::Script::GetName()
 {
 	return name;

@@ -25,7 +25,14 @@ namespace ECS {
 		void start() override;
 		void update(float dt) override;
 		void onCollisionEnter(Entity* entity) override;
+		void onCollisionStay(Entity* entity) override;
+		void onCollisionExit(Entity* entity) override;
 
+		void onClick() override;
+		void onClickBegin() override;
+		void onClickHold() override;
+		void onDoubleClick() override;
+		void onRightClick() override;
 
 		std::string GetName();
 

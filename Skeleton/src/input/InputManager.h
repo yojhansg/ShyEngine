@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include <string>
+#include <Vector2D.h>
 #include <EditorExport.h>
 /*
 Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
@@ -71,7 +72,7 @@ namespace Input {
 
 		bool isMouseButtonUpEvent(MOUSEBUTTON b);
 
-		const std::pair<Sint32, Sint32>& getMousePos();
+		Utilities::Vector2D getMousePos();
 
 		int getWheelMotionY();
 
@@ -137,7 +138,7 @@ namespace Input {
 		bool isMouseWheelEvent_;
 		bool isMouseButtonEventDown_;
 		bool isMouseButtonEventUp_;
-		std::pair<Sint32, Sint32> mousePos_;
+		Utilities::Vector2D mousePos_;
 		std::array<bool, 3> mbState_;
 		int wheelMotionY_;
 		const Uint8* kbState_;

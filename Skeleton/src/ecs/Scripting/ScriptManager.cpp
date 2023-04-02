@@ -187,7 +187,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 	}
 
 
-	ScriptNodes scriptNodeInfo = { nullptr, nullptr };
+	ScriptNodes scriptNodeInfo;
 
 
 	//Ver una forma de hacer esto en un bucle o algo asi para que sea mas comodo de hacer la verdad
@@ -226,4 +226,13 @@ Scripting::Variable Scripting::ScriptManager::CallFunction(std::string const& fu
 	}
 
 	return manager->functionMap[func](vec);
+}
+
+Scripting::ScriptManager::ScriptNodes::ScriptNodes()
+{
+	start = update = nullptr;
+
+	onCollisionEnter = onCollision = onCollisionExit = nullptr;
+
+	onClick = onClickBegin = onClickHold = onDoubleClick = onRightClick = nullptr;
 }

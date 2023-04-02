@@ -30,9 +30,20 @@ namespace Scripting {
 
 		struct ScriptNodes {
 
+			ScriptNodes();
+
 			Node* start;
 			Node* update;
+
+			Node* onCollision;
 			Node* onCollisionEnter;
+			Node* onCollisionExit;
+
+			Node* onClick;
+			Node* onClickBegin;
+			Node* onClickHold;
+			Node* onDoubleClick;
+			Node* onRightClick;
 		};
 
 

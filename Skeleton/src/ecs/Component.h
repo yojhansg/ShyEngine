@@ -72,7 +72,17 @@ namespace ECS {
 		virtual void onTriggerExit(Entity* b) {};
 
 		virtual void onDestroy() {};
-		
+
+		virtual void onClickBegin() {};
+
+		virtual void onClickHold() {};
+
+		virtual void onClick() {};
+
+		virtual void onDoubleClick() {};
+
+		virtual void onRightClick() {};
+
 	protected:
 
 		void print(std::string const& message, std::string const& className = "");

@@ -187,7 +187,6 @@ namespace Utilities {
 		}
 
 
-	private:
 		float x_;  // first coordinate
 		float y_;  // second coordinate
 	};
