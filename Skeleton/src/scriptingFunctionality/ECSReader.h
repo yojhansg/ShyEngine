@@ -233,6 +233,12 @@ private:
 		Genera el fichero .cpp de la clase <FunctionManager>
 	*/
 	ECSReader& CreateFunctionManagerSource();
+
+
+	/*
+		Devuelve el tiempo actual
+	*/
+	std::string GetTimeStamp();
 	
 };
 

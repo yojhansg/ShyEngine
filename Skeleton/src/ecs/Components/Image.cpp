@@ -71,7 +71,7 @@ namespace ECS {
 		rotationPoint->x = w / 2;
 		rotationPoint->y = h / 2;
 
-		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotation(), rotationPoint, mode);
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotationPointer(), rotationPoint, mode);
 	}
 
 	int Image::getTextureWidth() {

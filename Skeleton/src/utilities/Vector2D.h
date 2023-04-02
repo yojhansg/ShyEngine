@@ -16,6 +16,8 @@ namespace Utilities {
 
 	class Vector2D {
 
+		//TODO: Dot product y Cross product
+
 	public:
 
 		// various constructors

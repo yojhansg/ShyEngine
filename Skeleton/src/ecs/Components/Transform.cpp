@@ -30,6 +30,11 @@ namespace ECS {
 		return scale_;
 	}
 
+	float Transform::getRotation()
+	{
+		return rotation_;
+	}
+
 	Utilities::Vector2D* Transform::getPositionPointer()
 	{
 		return &position_;
@@ -40,27 +45,36 @@ namespace ECS {
 		return &scale_;
 	}
 
-	const double* Transform::getRotation() {
+	const double* Transform::getRotationPointer() {
 		return &rotation_;
 	}
 
 	// ------------- Setters -----------------
 
-	void Transform::setPosition(const Utilities::Vector2D& position) {
+	void Transform::setPosition(Utilities::Vector2D position) {
 		this->position_ = position;
 	}
 
-	void Transform::setPosition(float x, float y) {
-		this->position_.set(x, y);
+	void Transform::setPositionX(float x) {
+		this->position_.set(x, position_.getY());
 	}
 
-	void Transform::setScale(const Utilities::Vector2D& scale) {
+	void Transform::setPositionY(float y) {
+		this->position_.set(position_.getX(), y);
+	}
+
+	void Transform::setScale(Utilities::Vector2D scale) {
 		this->scale_ = scale;
 	}
 
-	void Transform::setScale(float x, float y) {
-		this->scale_.set(x, y);
+	void Transform::setScaleX(float x) {
+		this->scale_.set(x, scale_.getY());
 	}
+
+	void Transform::setScaleY(float x) {
+		this->scale_.set(x, scale_.getY());
+	}
+
 
 	void Transform::setRotation(float rotation) {
 		this->rotation_ = rotation;
@@ -68,12 +82,16 @@ namespace ECS {
 
 	// ------------ Modifiers ------------------
 
-	void Transform::translate(const Utilities::Vector2D& direction) {
+	void Transform::translate(Utilities::Vector2D direction) {
 		this->position_ += direction;
 	}
 
-	void Transform::translate(float x, float y) {
-		this->position_.set(this->position_.getX() + x, this->position_.getY() + y);
+	void Transform::translateX(float x) {
+		this->position_.set(this->position_.getX() + x, this->position_.getY());
+	}
+
+	void Transform::translateY(float y) {
+		this->position_.set(this->position_.getX(), this->position_.getY() + y);
 	}
 
 	void Transform::rotate(float rotation) {

@@ -1,6 +1,11 @@
 #pragma once
 
 
+
+//TODO: ver si editor componente y editor manager iria mejor delante de la palabra class porque asi no llora el compilador
+
+
+
 /*
 	Todo: Descripcion
 

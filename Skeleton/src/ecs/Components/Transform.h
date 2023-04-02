@@ -25,32 +25,32 @@ namespace ECS {
 		Utilities::Vector2D getPosition();
 		Utilities::Vector2D getScale();
 
+		float getRotation();
 
 	public:
 		Utilities::Vector2D* getPositionPointer();
 		Utilities::Vector2D* getScalePointer();
 
-		int y;
-
 	public:
 		//TODO: que esto no devuelva un puntero o hacer otro metodo para las fisicas
-		const double* getRotation();
+		const double* getRotationPointer();
 
 		// Setters
-		void setPosition(const Utilities::Vector2D& position);
 	publish:
-		void setPosition(float x, float y);
-	public:
-		void setScale(const Utilities::Vector2D& scale);
-	publish:
-		void setScale(float x, float y);
+		void setPosition(Utilities::Vector2D position);
+		void setPositionX(float x);
+		void setPositionY(float y);
+
+		void setScale(Utilities::Vector2D scale);
+		void setScaleX(float x);
+		void setScaleY(float y);
 		void setRotation(float rotation);
 
-		// Modifiers
-	public:
-		void translate(const Utilities::Vector2D& direction);
-	publish:
-		void translate(float x, float y);
+		void translate(Utilities::Vector2D direction);
+
+		void translateX(float x);
+		void translateY(float y);
+
 		void rotate(float rotation);
 		void scale(float scale);
 

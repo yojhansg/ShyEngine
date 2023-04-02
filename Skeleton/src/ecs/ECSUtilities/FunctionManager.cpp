@@ -2,7 +2,8 @@
 #include "FunctionManager.h"
 #include "Entity.h"
 
-//Creation time: Sat Apr  1 20:23:04 2023
+//Creation time: Sun Apr  2 16:12:37 2023
+
 #include <Components/BoxBody.h>
 #include <Components/ChainBody.h>
 #include <Components/CircleBody.h>
@@ -13,6 +14,7 @@
 #include <Components/OverlayText.h>
 #include <Components/PhysicBody.h>
 #include <Components/Transform.h>
+#include <Save.h>
 #include <SceneManager.h>
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
@@ -81,10 +83,17 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
 	map.emplace("Transform_getPosition",Transform_getPosition);
 	map.emplace("Transform_getScale",Transform_getScale);
+	map.emplace("Transform_getRotation",Transform_getRotation);
 	map.emplace("Transform_setPosition",Transform_setPosition);
+	map.emplace("Transform_setPositionX",Transform_setPositionX);
+	map.emplace("Transform_setPositionY",Transform_setPositionY);
 	map.emplace("Transform_setScale",Transform_setScale);
+	map.emplace("Transform_setScaleX",Transform_setScaleX);
+	map.emplace("Transform_setScaleY",Transform_setScaleY);
 	map.emplace("Transform_setRotation",Transform_setRotation);
 	map.emplace("Transform_translate",Transform_translate);
+	map.emplace("Transform_translateX",Transform_translateX);
+	map.emplace("Transform_translateY",Transform_translateY);
 	map.emplace("Transform_rotate",Transform_rotate);
 	map.emplace("Transform_scale",Transform_scale);
 	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
@@ -92,6 +101,16 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
 	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
 	map.emplace("PhysicsManager_handleBodies",PhysicsManager_handleBodies);
+	map.emplace("SaveManager_SaveAll",SaveManager_SaveAll);
+	map.emplace("SaveManager_Save",SaveManager_Save);
+	map.emplace("SaveManager_Load",SaveManager_Load);
+	map.emplace("SaveManager_SetSlot",SaveManager_SetSlot);
+	map.emplace("SaveManager_GetSlot",SaveManager_GetSlot);
+	map.emplace("SaveManager_Set",SaveManager_Set);
+	map.emplace("SaveManager_Get",SaveManager_Get);
+	map.emplace("SaveManager_ClearSlot",SaveManager_ClearSlot);
+	map.emplace("SaveManager_Exists",SaveManager_Exists);
+	map.emplace("SaveManager_DeleteSave",SaveManager_DeleteSave);
 	map.emplace("SceneManager_resetScene",SceneManager_resetScene);
 	map.emplace("ScriptFunctionality_GameObject",ScriptFunctionality_GameObject);
 	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
@@ -117,6 +136,12 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("ScriptFunctionality_Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
 	map.emplace("ScriptFunctionality_Vector2D_Angle",ScriptFunctionality_Vector2D_Angle);
 	map.emplace("ScriptFunctionality_Vector2D_AngleWithVector",ScriptFunctionality_Vector2D_AngleWithVector);
+	map.emplace("ScriptFunctionality_Vector2D_Rotate",ScriptFunctionality_Vector2D_Rotate);
+	map.emplace("ScriptFunctionality_Vector2D_Add",ScriptFunctionality_Vector2D_Add);
+	map.emplace("ScriptFunctionality_Vector2D_Subtract",ScriptFunctionality_Vector2D_Subtract);
+	map.emplace("ScriptFunctionality_Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
+	map.emplace("ScriptFunctionality_Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
+	map.emplace("ScriptFunctionality_Vector2D_Mult",ScriptFunctionality_Vector2D_Mult);
 	map.emplace("ScriptFunctionality_String_Concatenate",ScriptFunctionality_String_Concatenate);
 	map.emplace("ScriptFunctionality_String_Substring",ScriptFunctionality_String_Substring);
 	map.emplace("ScriptFunctionality_String_Begining",ScriptFunctionality_String_Begining);
@@ -392,14 +417,39 @@ Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& ve
 	Utilities::Vector2D ret = self->getScale();
 	return ret;
 }
+Scripting::Variable Transform_getRotation(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	float ret = self->getRotation();
+	return ret;
+}
 Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	self->setPosition(vec[1].value.Float, vec[2].value.Float);
+	self->setPosition(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_setPositionX(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->setPositionX(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_setPositionY(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->setPositionY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_setScale(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	self->setScale(vec[1].value.Float, vec[2].value.Float);
+	self->setScale(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_setScaleX(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->setScaleX(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_setScaleY(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->setScaleY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const& vec){
@@ -409,7 +459,17 @@ Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const&
 }
 Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec){
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	self->translate(vec[1].value.Float, vec[2].value.Float);
+	self->translate(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_translateX(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->translateX(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_translateY(std::vector<Scripting::Variable>const& vec){
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	self->translateY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec){
@@ -445,6 +505,56 @@ Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variab
 Scripting::Variable PhysicsManager_handleBodies(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
 	manager->handleBodies();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->SaveAll();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_Save(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->Save(vec[0].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_Load(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->Load(vec[0].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_SetSlot(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->SetSlot(vec[0].str, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_GetSlot(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	Scripting::Variable ret = manager->GetSlot(vec[0].str);
+	return ret;
+}
+Scripting::Variable SaveManager_Set(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->Set(vec[0].str, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_Get(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	Scripting::Variable ret = manager->Get(vec[0].str);
+	return ret;
+}
+Scripting::Variable SaveManager_ClearSlot(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->ClearSlot();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SaveManager_Exists(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	bool ret = manager->Exists(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const& vec){
+	SaveManager* manager = SaveManager::instance();
+	manager->DeleteSave(vec[0].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec){
@@ -570,6 +680,36 @@ Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Vector2D_AngleWithVector(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Rotate(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Rotate(vec[0].vector, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Add(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Add(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Subtract(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Dot(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Cross(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Mult(vec[0].vector, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec){

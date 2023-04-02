@@ -8,7 +8,8 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Apr  1 20:23:04 2023
+//Creation time : Sun Apr  2 16:12:37 2023
+
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
@@ -72,10 +73,17 @@ Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_getRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_setPositionX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_setPositionY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_setScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_setScaleX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_setScaleY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_translateX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_translateY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
@@ -83,6 +91,16 @@ Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>cons
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_handleBodies(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_Save(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_Load(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_SetSlot(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_GetSlot(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_Set(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_Get(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_ClearSlot(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_Exists(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GameObject(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
@@ -108,6 +126,12 @@ Scripting::Variable ScriptFunctionality_Vector2D_Y(std::vector<Scripting::Variab
 Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Rotate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Add(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec);

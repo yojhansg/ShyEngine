@@ -7,6 +7,9 @@
 
 #define _2str(x) #x
 
+
+
+
 ECSReader::ECSReader(std::string const& root) : root(root)
 {
 	output = root + "\\ecs\\ECSUtilities";
@@ -533,7 +536,7 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 		.IncludeRelative("Scripting/Variable.h")
 		.Empty(3)
 		.AddDefine("ECSfunc_Version", ECS_Version)
-		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddComment("Creation time : " + GetTimeStamp())
 		.Empty()
 		.AddLine("typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);")
 		.Empty()
@@ -578,7 +581,7 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 
 )";
 
-	cpp << "//Creation time: " << __TIMESTAMP__ << "\n";
+	cpp << "//Creation time: " << GetTimeStamp() << "\n";
 
 	for (auto& file : filesToInclude) {
 
@@ -648,6 +651,19 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	return *this;
 }
 
+#include <chrono>
+#include <ctime>
+
+std::string ECSReader::GetTimeStamp()
+{
+	char buff[26];
+	time_t currtime = std::time(NULL);
+
+	ctime_s(buff, sizeof buff, &currtime);
+
+	return std::string(buff);
+}
+
 ECSReader& ECSReader::ClassReflection()
 {
 	std::ofstream h(output + "/ClassReflection.h  ");
@@ -659,7 +675,7 @@ ECSReader& ECSReader::ClassReflection()
 	creator.AddLine("namespace ECS { class Component; }");
 
 	creator.Empty()
-		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddComment("Creation time : " + GetTimeStamp())
 		.AddDefine("ECSreflection_Version", ECS_Version)
 		.AddLine()
 		.AddLine("using namespace ECS;")
@@ -781,7 +797,7 @@ ECSReader& ECSReader::ComponentFactory()
 
 
 	creator.Empty()
-		.AddComment("Creation time : " __TIMESTAMP__)
+		.AddComment("Creation time : " + GetTimeStamp())
 		.AddDefine("ECSreflection_Version", ECS_Version)
 		.AddLine()
 		.AddLine("using namespace ECS;")

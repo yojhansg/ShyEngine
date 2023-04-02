@@ -78,15 +78,15 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
-		tr->setScale(0.35f, 0.35f);
+		tr->setPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 2));
+		tr->setScale(Utilities::Vector2D(0.35f, 0.35f));
 		body->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setBounciness(0.5f);
 		//body->setTrigger(true);
 
 		// Ground
-		grTr->setScale(1, 1);
-		grTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 1.2f);
+		grTr->setScale(Utilities::Vector2D(1, 1));
+		grTr->setPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 1.2f));
 		grBody->addOffSet(0, -1);
 
 		// Ball
@@ -155,23 +155,23 @@ void Game::flappyBird() {
 		//bgTr->setScale(1.6f, 1.6f);
 		//bgTr->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 2);
 
-		// Pollo
-		tr->setPosition(200 / 2, renderer->getHeight() / 2);
-		tr->setScale(0.35f, 0.35f);
+		//// Pollo
+		//tr->setPosition(200 / 2, renderer->getHeight() / 2);
+		//tr->setScale(0.35f, 0.35f);
 
-		body->setBounciness(0.5f);
-		body->setRotationFreezed(true);
+		//body->setBounciness(0.5f);
+		//body->setRotationFreezed(true);
 
-		// Tuberias
-		tubTrInv->setRotation(180);
-		tubTrInv->setPosition(1400, 150);
-		tubTr->setPosition(1400, renderer->getHeight() - 150);
+		//// Tuberias
+		//tubTrInv->setRotation(180);
+		//tubTrInv->setPosition(1400, 150);
+		//tubTr->setPosition(1400, renderer->getHeight() - 150);
 
-		tubBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
-		tubBody->setGravityScale(0);
+		//tubBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
+		//tubBody->setGravityScale(0);
 
-		tubBodyInv->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
-		tubBodyInv->setGravityScale(0);
+		//tubBodyInv->setBodyType((int)ECS::PhysicBody::BODY_TYPE::KINEMATIC);
+		//tubBodyInv->setGravityScale(0);
 
 	// 5.- Start
 

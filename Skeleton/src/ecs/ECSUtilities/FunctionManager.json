@@ -352,6 +352,9 @@
         "getPosition": {
             "return": "Utilities::Vector2D"
         },
+        "getRotation": {
+            "return": "float"
+        },
         "getScale": {
             "return": "Utilities::Vector2D"
         },
@@ -376,9 +379,23 @@
         "setPosition": {
             "input": [
                 {
+                    "name": "position",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "setPositionX": {
+            "input": [
+                {
                     "name": "x",
                     "type": "float"
-                },
+                }
+            ],
+            "return": "void"
+        },
+        "setPositionY": {
+            "input": [
                 {
                     "name": "y",
                     "type": "float"
@@ -398,9 +415,23 @@
         "setScale": {
             "input": [
                 {
+                    "name": "scale",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "setScaleX": {
+            "input": [
+                {
                     "name": "x",
                     "type": "float"
-                },
+                }
+            ],
+            "return": "void"
+        },
+        "setScaleY": {
+            "input": [
                 {
                     "name": "y",
                     "type": "float"
@@ -411,9 +442,23 @@
         "translate": {
             "input": [
                 {
+                    "name": "direction",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "translateX": {
+            "input": [
+                {
                     "name": "x",
                     "type": "float"
-                },
+                }
+            ],
+            "return": "void"
+        },
+        "translateY": {
+            "input": [
                 {
                     "name": "y",
                     "type": "float"

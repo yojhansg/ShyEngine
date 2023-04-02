@@ -15,7 +15,7 @@ using Utilities::Vector2D;
 
 namespace Scripting {
 
-	EditorManager ScriptFunctionality : public Utilities::Singleton<ScriptFunctionality>{
+	EditorManager ScriptFunctionality: public Utilities::Singleton<ScriptFunctionality>{
 
 		friend Singleton<ScriptFunctionality>;
 
@@ -59,6 +59,12 @@ publish:
 	Vector2D Vector2D_Normalize(Vector2D vec);
 	float Vector2D_Angle(Vector2D vec);
 	float Vector2D_AngleWithVector(Vector2D vec, Vector2D other);
+	Vector2D Vector2D_Rotate(Vector2D vec, float angle);
+	Vector2D Vector2D_Add(Vector2D a, Vector2D b);
+	Vector2D Vector2D_Subtract(Vector2D a, Vector2D b);
+	Vector2D Vector2D_Dot(Vector2D a, Vector2D b);
+	Vector2D Vector2D_Cross(Vector2D a, Vector2D b);
+	Vector2D Vector2D_Mult(Vector2D a, float b);
 
 
 	//String
@@ -70,6 +76,7 @@ publish:
 	std::string String_TrimBlanks(std::string a);
 	char String_GetLetter(std::string a, int b);
 	int String_Find(std::string a, char c);
+
 
 private:
 

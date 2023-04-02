@@ -97,7 +97,6 @@ bool Scripting::ScriptFunctionality::Logic_Equals(float a, float b)
 bool Scripting::ScriptFunctionality::Logic_NotEquals(float a, float b)
 {
 	return abs(a - b) > DELTA;
-
 }
 
 bool Scripting::ScriptFunctionality::Logic_Lesser(float a, float b)
@@ -178,6 +177,40 @@ float Scripting::ScriptFunctionality::Vector2D_Angle(Vector2D vec)
 float Scripting::ScriptFunctionality::Vector2D_AngleWithVector(Vector2D vec, Vector2D other)
 {
 	return vec.angle(other);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Rotate(Vector2D vec, float angle)
+{
+	return vec.rotate(angle);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Add(Vector2D a, Vector2D b)
+{
+	return a + b;
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Subtract(Vector2D a, Vector2D b)
+{
+	return a - b;
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Dot(Vector2D a, Vector2D b)
+{
+	//TODO: Dot product
+	Console::Output::PrintWarning("Not implemented", "Vector2D_Dot operation is not implemented yet");
+	return Vector2D();
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Cross(Vector2D a, Vector2D b)
+{
+	//TODO: Dot product
+	Console::Output::PrintWarning("Not implemented", "Vector2D_Cross operation is not implemented yet");
+	return Vector2D();
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Mult(Vector2D a, float b)
+{
+	return a * b;
 }
 
 

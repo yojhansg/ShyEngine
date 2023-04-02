@@ -58,7 +58,7 @@ namespace ECS {
 		world = Physics::PhysicsManager::instance()->getWorld();
 
 		position = transform->getPositionPointer();
-		rotation = transform->getRotation();
+		rotation = transform->getRotationPointer();
 		scale = transform->getScalePointer();
 
 		bodyDef = new b2BodyDef();
