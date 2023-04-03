@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <string>
 #include <list>
+#include <set>
 
 //TODO: Separar scripts de componentes
 
@@ -205,6 +206,9 @@ namespace ECS {
 
 		// Order to render elements
 		int renderOrder;
+
+		//Iterator to render set
+		std::multiset<Entity*>::iterator renderIt;
 
 		// Has the object already been added to the set
 		bool inRenderSet;

@@ -24,8 +24,8 @@ namespace ECS {
 
 		void Render();
 
-		void AddElement(Entity* elem);
-		void RemoveElement(Entity* elem);
+		std::multiset<Entity*>::iterator AddElement(Entity* elem);
+		void RemoveElement(std::multiset<Entity*>::iterator elem);
 
 	private:
 

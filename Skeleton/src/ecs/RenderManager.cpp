@@ -18,12 +18,12 @@ void ECS::RenderManager::Render()
 	}
 }
 
-void ECS::RenderManager::AddElement(Entity* elem)
+std::multiset<ECS::Entity*>::iterator ECS::RenderManager::AddElement(Entity* elem)
 {
-	set.insert(elem);
+	return set.insert(elem);
 }
 
-void ECS::RenderManager::RemoveElement(Entity* elem)
+void ECS::RenderManager::RemoveElement(std::multiset<ECS::Entity*>::iterator elem)
 {
 	set.erase(elem);
 }

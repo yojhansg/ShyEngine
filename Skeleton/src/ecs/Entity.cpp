@@ -40,7 +40,7 @@ namespace ECS {
 		removedComponents.clear();
 
 		if (inRenderSet)
-			RenderManager::instance()->RemoveElement(this);
+			RenderManager::instance()->RemoveElement(renderIt);
 
 		inRenderSet = false;
 	}
@@ -58,7 +58,7 @@ namespace ECS {
 		if (inRenderSet)
 			return;
 
-		RenderManager::instance()->AddElement(this);
+		renderIt = RenderManager::instance()->AddElement(this);
 
 		inRenderSet = true;
 	}
