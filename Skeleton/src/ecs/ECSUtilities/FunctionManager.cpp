@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Sun Apr  2 21:04:33 2023
+//Creation time: Mon Apr  3 02:25:31 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -31,6 +31,7 @@
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
 #include <PhysicsManager.h>
+#include <EngineTime.h>
 
 
 using namespace ECS;
@@ -123,7 +124,10 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("SaveManager_ClearSlot",SaveManager_ClearSlot);
 	map.emplace("SaveManager_Exists",SaveManager_Exists);
 	map.emplace("SaveManager_DeleteSave",SaveManager_DeleteSave);
-	map.emplace("SceneManager_resetScene",SceneManager_resetScene);
+	map.emplace("SceneManager_ChangeScene",SceneManager_ChangeScene);
+	map.emplace("SceneManager_ResetScene",SceneManager_ResetScene);
+	map.emplace("SceneManager_getNumberOfScenes",SceneManager_getNumberOfScenes);
+	map.emplace("SceneManager_GetCurrentScenePath",SceneManager_GetCurrentScenePath);
 	map.emplace("ScriptFunctionality_Entity",ScriptFunctionality_Entity);
 	map.emplace("ScriptFunctionality_EntityName",ScriptFunctionality_EntityName);
 	map.emplace("ScriptFunctionality_Script",ScriptFunctionality_Script);
@@ -164,6 +168,11 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("ScriptFunctionality_String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
 	map.emplace("ScriptFunctionality_String_GetLetter",ScriptFunctionality_String_GetLetter);
 	map.emplace("ScriptFunctionality_String_Find",ScriptFunctionality_String_Find);
+	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
+	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
+	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
+	map.emplace("Time_GetFrameRate",Time_GetFrameRate);
+	map.emplace("Time_GetPhysicsDeltaTime",Time_GetPhysicsDeltaTime);
 
 };
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){
@@ -835,10 +844,25 @@ Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const
 	manager->DeleteSave(vec[0].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>const& vec){
 	SceneManager* manager = SceneManager::instance();
-	manager->resetScene();
+	manager->ChangeScene(vec[0].str, vec[1].value.Float);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	manager->ResetScene();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	int ret = manager->getNumberOfScenes();
+	return ret;
+}
+Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	std::string ret = manager->GetCurrentScenePath();
+	return ret;
 }
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
@@ -1038,5 +1062,30 @@ Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	int ret = manager->String_Find(vec[0].str, vec[1].value.Char);
+	return ret;
+}
+Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->GetTimeSinceBegining();
+	return ret;
+}
+Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->GetTimeSinceBeginingMilliseconds();
+	return ret;
+}
+Scripting::Variable Time_GetDeltaTime(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->GetDeltaTime();
+	return ret;
+}
+Scripting::Variable Time_GetFrameRate(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->GetFrameRate();
+	return ret;
+}
+Scripting::Variable Time_GetPhysicsDeltaTime(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->GetPhysicsDeltaTime();
 	return ret;
 }

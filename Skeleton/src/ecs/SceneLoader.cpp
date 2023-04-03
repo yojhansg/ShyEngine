@@ -14,6 +14,9 @@
 
 #include "Components/OverlayElement.h"
 
+#include "ConsoleManager.h"
+
+
 using namespace nlohmann;
 
 const std::string ECS::SceneLoader::extension = ".json";
@@ -28,6 +31,16 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 		return nullptr;
 	}
+
+	if (!json::accept(fileStream))
+	{
+		Console::Output::PrintError("Scene Manager", "Trying to read an invalid scene <" + scenePath + ">");
+		return nullptr;
+	}
+
+	fileStream.clear();
+	fileStream.seekg(0);
+
 	json file = json::parse(fileStream);
 
 

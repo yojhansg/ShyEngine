@@ -43,11 +43,20 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	if (!fileStream.good())
 	{
-		Console::Output::PrintError("Script loading", "Cannot open file <" + path + ">");
+		Console::Output::PrintError("Script initialisation", "Cannot open file <" + path + ">");
 		return ScriptNodes();
 	}
-	json file = json::parse(fileStream);
 
+	if (!json::accept(fileStream)) {
+
+		Console::Output::PrintError("Script initialisation", "Trying to read an invalid script <" + path + ">");
+		return ScriptNodes();
+	}
+
+	fileStream.clear();
+	fileStream.seekg(0);
+
+	json file = json::parse(fileStream);
 
 	int nodeCount = file["nodeCount"].get<int>();
 	std::vector<Node*> allScriptNodes(nodeCount);

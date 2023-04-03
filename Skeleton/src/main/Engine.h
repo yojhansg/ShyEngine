@@ -28,7 +28,7 @@ namespace Resources {
 }
 
 namespace Utilities {
-	class EngineTime;
+	class Time;
 }
 
 
@@ -63,7 +63,7 @@ private:
 	Resources::ResourcesManager* resourcesManager;
 	Scripting::ScriptManager* scriptManager;
 	Scripting::ScriptFunctionality* scriptFunctionality;
-	Utilities::EngineTime* engineTime;
+	Utilities::Time* engineTime;
 
 	ComponentFactory* componentFactory;
 };

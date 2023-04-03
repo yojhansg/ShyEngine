@@ -30,6 +30,14 @@ DataLoader DataLoader::Load(std::string const& path) {
 		return DataLoader();
 	}
 
+	if (!json::accept(fileStream)) {
+
+		return DataLoader();
+	}
+
+	fileStream.clear();
+	fileStream.seekg(0);
+
 	json file = json::parse(fileStream);
 
 	std::string game = file["game"].get<std::string>();

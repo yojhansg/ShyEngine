@@ -86,7 +86,7 @@ void ECS::OverlayManager::Update()
 
 		selected->getEntity()->onClick();
 
-		float currentTime = Utilities::EngineTime::instance()->timeSinceStart;
+		float currentTime = Utilities::Time::instance()->timeSinceStart;
 
 		if (currentTime - lastClickTime < timeToDoubleClick) {
 
@@ -101,7 +101,7 @@ void ECS::OverlayManager::Update()
 
 	if (hold && selected != nullptr) {
 
-		holdTimer += Utilities::EngineTime::instance()->deltaTime;
+		holdTimer += Utilities::Time::instance()->deltaTime;
 
 		if (holdTimer > timeToHold) {
 

@@ -2,12 +2,21 @@
 
 #include "Singleton.h"
 #include <string>
+#include "EditorExport.h"
 
 namespace Utilities {
 
-	class EngineTime : public Utilities::Singleton<EngineTime> {
+	EditorManager Time : public Utilities::Singleton<Time> {
 
-		friend Singleton<EngineTime>;
+		friend Singleton<Time>;
+
+
+	publish:
+		float GetTimeSinceBegining();
+		float GetTimeSinceBeginingMilliseconds();
+		float GetDeltaTime();
+		float GetFrameRate();
+		float GetPhysicsDeltaTime();
 
 	public:
 
@@ -22,6 +31,6 @@ namespace Utilities {
 
 	private:
 
-		EngineTime();
+		Time();
 	};
 }

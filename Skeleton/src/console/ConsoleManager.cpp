@@ -43,7 +43,7 @@ void Console::Output::PrintColor(Color infoColor, Color messageColor, cstring in
 
 void Console::Output::PrintInfo(cstring info)
 {
-	std::string time = Utilities::EngineTime::Time2String(Utilities::EngineTime::instance()->timeSinceStart);
+	std::string time = Utilities::Time::Time2String(Utilities::Time::instance()->timeSinceStart);
 
 	std::cout << "[" << time << "] ";
 

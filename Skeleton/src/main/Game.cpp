@@ -32,6 +32,8 @@ void Game::initScenes() {
 
 	firstScene();
 
+	sceneManager->SetScene(scene);
+
 	//flappyBird();
 
 	//readScene("DefaultScene.json");
@@ -94,8 +96,6 @@ void Game::firstScene() {
 
 	// 5.- Start
 
-	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
 
 }
 
@@ -177,6 +177,4 @@ void Game::flappyBird() {
 	//player->addComponent<ECS::Script>()->Initialise("printWhenKeyDown.json");
 	//player->addComponent<ECS::Script>()->Initialise("moveUpWhenKeyDown.json");
 
-	sceneManager->changeScene(scene, ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
 }

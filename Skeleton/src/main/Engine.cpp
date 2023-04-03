@@ -65,7 +65,7 @@ bool Engine::init() {
 	inputManager = Input::InputManager::init();
 	soundManager = SoundManager::SoundManager::init();
 	resourcesManager = Resources::ResourcesManager::init();
-	engineTime = Utilities::EngineTime::init();
+	engineTime = Utilities::Time::init();
 	scriptManager = Scripting::ScriptManager::init();
 	scriptFunctionality = Scripting::ScriptFunctionality::init();
 	componentFactory = ComponentFactory::init();
@@ -74,10 +74,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	//Game(sceneManager).initScenes();
+	Game(sceneManager).initScenes();
 
-	sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
+	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	//sceneManager->manageScenes();
 
 	return true;
 }
@@ -142,7 +142,7 @@ void Engine::update() {
 		duration<float, std::milli> timeSinceStart = endTime - startTime;
 		duration<double, std::milli> frameTime = endTime - beginTime;
 
-		engineTime->timeSinceStart = timeSinceStart.count() * 0.001f;
+		engineTime->timeSinceStart = timeSinceStart.count();
 		engineTime->deltaTime = frameTime.count() * 0.001f;
 		engineTime->frames++;
 

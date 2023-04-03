@@ -7,7 +7,6 @@
 namespace ECS {
 
 	SceneManager::SceneManager() {
-		newScene = nullptr;
 		mode = PUSH;
 		change = false;
 	}
@@ -27,22 +26,24 @@ namespace ECS {
 		return scenes.size();
 	}
 
+	std::string SceneManager::GetCurrentScenePath() {
+		return currentScenePath;
+	}
+
 	Scene* SceneManager::createScene(const std::string& sce_name) {
 		return new Scene(sce_name);
 	}
 
-	void SceneManager::changeScene(Scene* sce, LOAD_MODE m) {
-		newScene = sce;
-		mode = m;
+
+	void SceneManager::ChangeScene(std::string scene, int m) {
+		currentScenePath = scene;
+		mode = (LOAD_MODE) m;
 		change = true;
 	}
 
-	void SceneManager::resetScene() {
+	void SceneManager::ResetScene() {
 		
-		//TODO: intentar hacer esto un pelin mejor
-		scenes.top()->onDestroy();
-		scenes.top()->~Scene();
-		scenes.top()->start();
+		ChangeScene(currentScenePath, LOAD_MODE::POP_AND_PUSH);
 	}
 
 	void SceneManager::manageScenes() {
@@ -82,7 +83,7 @@ namespace ECS {
 
 		if (scenes.size() > 0) scenes.top()->onSceneDown();
 
-		scenes.push(newScene);
+		scenes.push(LoadScene(currentScenePath));
 		scenes.top()->start();
 	}
 
@@ -102,7 +103,7 @@ namespace ECS {
 			delete scenes.top();
 			scenes.pop();
 
-			scenes.push(newScene);
+			scenes.push(LoadScene(currentScenePath));
 			scenes.top()->start();
 		}
 	}
@@ -116,8 +117,19 @@ namespace ECS {
 	Scene* SceneManager::LoadScene(std::string const& scenePath)
 	{
 		Scene* scene = SceneLoader::LoadScene(scenePath);
+
+		if (scene == nullptr) {
+			return nullptr;
+		}
+
 		scene->init();
 		return scene;
+	}
+
+	void SceneManager::SetScene(ECS::Scene* scene) {
+
+		scenes.push(scene);
+		scene->start();
 	}
 
 }

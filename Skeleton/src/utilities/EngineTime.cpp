@@ -4,19 +4,38 @@
 
 namespace Utilities {
 
-	EngineTime::EngineTime() {
+	Time::Time() {
 		deltaTime = 1.0f / 60.0f;
 		fixedDeltaTime = 1.0f / 50.0f;
 		timeSinceStart = 0;
 		frames = 0;
 	}
 
-	float EngineTime::calculateFrameRate() {
+	float Time::calculateFrameRate() {
 		return frames / timeSinceStart * 1000.0f;
 	}
 
+	float Time::GetTimeSinceBegining() {
+		return timeSinceStart * 0.001;
+	}
 
-	std::string EngineTime::Time2String(float time) {
+	float Time::GetTimeSinceBeginingMilliseconds() {
+		return timeSinceStart;
+	}
+
+	float Time::GetFrameRate() {
+		return calculateFrameRate();
+	}
+
+	float Time::GetDeltaTime() {
+		return deltaTime;
+	}
+
+	float Time::GetPhysicsDeltaTime() {
+		return fixedDeltaTime;
+	}
+
+	std::string Time::Time2String(float time) {
 
 
 		float whole;

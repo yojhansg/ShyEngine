@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sun Apr  2 21:04:33 2023
+//Creation time : Mon Apr  3 02:25:31 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -101,7 +101,10 @@ Scripting::Variable SaveManager_Get(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_ClearSlot(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_Exists(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable SceneManager_resetScene(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_EntityName(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec);
@@ -142,3 +145,8 @@ Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Varia
 Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Time_GetDeltaTime(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Time_GetFrameRate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Time_GetPhysicsDeltaTime(std::vector<Scripting::Variable>const& vec);

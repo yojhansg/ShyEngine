@@ -4,49 +4,15 @@
     "nodeCount": 20,
 
     "onClick": 0,
-    "onDoubleClick": 2,
-    "onClickHold": 4,
-    "onRightClick": 6,
-    "onClickBegin": 8,
 
 
     "functions": [
 
+       
         {
             "index": 0,
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                1
-            ]
-        },
-
-        {
-            "index": 2,
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                3
-            ]
-        },
-        {
-            "index": 4,
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                5
-            ]
-        },
-        {
-            "index": 6,
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                7
-            ]
-        },
-        {
-            "index": 8,
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                9
-            ]
+            "function": "SceneManager_ResetScene"
+            
         }
 
     ],

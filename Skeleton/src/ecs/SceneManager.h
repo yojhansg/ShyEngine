@@ -53,16 +53,23 @@ namespace ECS {
 		Scene* getActualScene();
 
 		// Returns the number of scenes in the stack
-		int getNumberOfScenes();
 
 		// Creates, starts and adds a scene to the stack
 		Scene* createScene(const std::string& sce_name = "New Scene");
-
 		ECS::Scene* LoadScene(std::string const& scenePath);
-		void changeScene(Scene* sce, LOAD_MODE m);
 
+
+		//TODO: esto es temporal
+
+		void SetScene(ECS::Scene* scene);
+		
 	publish:
-		void resetScene();
+
+		void ChangeScene(std::string scenePath, int pushMode);
+		void ResetScene();
+		int getNumberOfScenes();
+		std::string GetCurrentScenePath();
+
 	public:
 		/// <summary>
 		/// Manage the scenes.
@@ -72,6 +79,8 @@ namespace ECS {
 		void manageScenes();
 
 	private:
+
+		std::string currentScenePath;
 
 		// Remove all the scenes on the stack
 		void removeAllScenes();
@@ -88,8 +97,6 @@ namespace ECS {
 		std::stack<Scene*> scenes;
 
 		LOAD_MODE mode;
-
-		Scene* newScene;
 
 		bool change;
 	};

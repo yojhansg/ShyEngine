@@ -1,0 +1,166 @@
+{
+    "name": "Mi escena inicial",
+    "objects": [
+        {
+            "name": "background",
+            "order": -10, 
+            "components": [
+                {
+                    "component": "Transform",
+                    "attributes": [
+
+                        {
+                            "name":"position_",
+                            "value": "(960, 540)"
+                        },
+                        {
+                            "name":"scale_",
+                            "value": "(1.6f, 1.6f)"
+                        }
+
+                    ]
+                },
+                {
+                    "component": "Image",
+                    "attributes": [
+                        {
+                            "name":"fileName",
+                            "value": "fondo.png"
+                        }
+                    ]
+                }
+            ],
+
+            "scripts": [
+
+                "Parallax"
+            ]
+        },
+        {
+            "name": "player",
+            "order": 10,
+            "components": [
+                {
+                    "component": "Transform",
+                    "attributes": [
+
+                        {
+                            "name":"position_",
+                            "value": "(100, 540)"
+                        },
+                        {
+                            "name":"scale_",
+                            "value": "(0.35f, 0.35f)"
+                        }
+
+                    ]
+                },
+                {
+                    "component": "Image",
+                    "attributes": [
+                        {
+                            "name":"fileName",
+                            "value": "pollo.png"
+                        }
+                    ]
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": [
+                       {
+                        "name":"bodyType",
+                        "value": "2"
+                       },
+                       {
+                        "name":"bounciness",
+                        "value": "0.5f"
+                       }
+                    ]
+                }
+            ],
+
+            "scripts": [
+
+                "FlappyBirdJump", "RestartOnCollision"
+            ]
+        }
+    ],
+
+    "overlays": [
+
+        {
+            "name": "Overlay papa",
+            "placement": "0",
+            "anchor": "0.5f, 0.5f",
+
+            "top": "10",
+            "left": "10",
+            "right": "10", 
+            "bottom": "10",
+
+            "position": "800, 100",
+            "size": "100, 100",
+
+
+            "components": [
+
+                {
+                    "component": "OverlayImage",
+                    "attributes": [
+                        {
+                            "name":"path",
+                            "value": "ground.png"
+                        }
+                    ]
+                }
+
+            ],
+
+
+            "childs": [
+                {
+                    "name": "Overlay hijo",
+                    "placement": "1",
+                    "anchor": "0.5f, 0.5f",
+        
+                    "top": "0",
+                    "left": "0",
+                    "right": "-50", 
+                    "bottom": "0",
+        
+                    "position": "100, 100",
+                    "size": "100, 100",
+        
+        
+                    "components": [
+        
+                        {
+                            "component": "OverlayImage",
+                            "attributes": [
+                                {
+                                    "name":"path",
+                                    "value": "pollo.png"
+                                }
+                            ]
+                        }
+        
+                    ],
+
+                    "scripts": [
+
+                        "OverlayTest"
+                    ],
+        
+                    "childs": [
+                        
+                    ]
+        
+                }
+            ]
+
+        }
+
+
+
+    ]
+}
