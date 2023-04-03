@@ -56,6 +56,7 @@ publish:
 	bool Logic_Negate(bool b);
 
 	//Vector2D
+	//TODO: constructoras predeterminadas vector2d: left, up, one, zero...
 	Vector2D Vector2D_Create(float x, float y);
 	float Vector2D_Magnitude(Vector2D vec);
 	float Vector2D_X(Vector2D vec);

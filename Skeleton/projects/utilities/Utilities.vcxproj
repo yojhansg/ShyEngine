@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\utilities\CheckML.h" />
+    <ClInclude Include="..\..\src\utilities\Color.h" />
     <ClInclude Include="..\..\src\utilities\EditorExport.h" />
     <ClInclude Include="..\..\src\utilities\EngineTime.h" />
     <ClInclude Include="..\..\src\utilities\SDLUtils.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="..\..\src\utilities\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\utilities\Color.cpp" />
     <ClCompile Include="..\..\src\utilities\EngineTime.cpp" />
     <ClCompile Include="..\..\src\utilities\Vector2D.cpp" />
   </ItemGroup>

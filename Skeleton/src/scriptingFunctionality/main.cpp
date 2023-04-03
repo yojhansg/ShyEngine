@@ -3,7 +3,6 @@
 #include "ClassCreator.h"
 
 
-#include <iostream>
 int main() {
 
 	ECSReader reader(
