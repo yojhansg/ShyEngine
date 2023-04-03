@@ -210,6 +210,51 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 	}
 
 
+	if (file.contains("onCollisionStay")) {
+		int collisionIdx = file["onCollisionStay"].get<int>();
+		Node* collisionNode = allScriptNodes[collisionIdx];
+		scriptNodeInfo.onCollision = collisionNode;
+	}
+
+
+	if (file.contains("onCollisionExit")) {
+		int collisionIdx = file["onCollisionExit"].get<int>();
+		Node* collisionNode = allScriptNodes[collisionIdx];
+		scriptNodeInfo.onCollisionExit = collisionNode;
+	}
+
+
+	if (file.contains("onClick")) {
+		int clickIdx = file["onClick"].get<int>();
+		Node* clickNode = allScriptNodes[clickIdx];
+		scriptNodeInfo.onClick = clickNode;
+	}
+
+
+	if (file.contains("onClickBegin")) {
+		int clickIdx = file["onClickBegin"].get<int>();
+		Node* clickNode = allScriptNodes[clickIdx];
+		scriptNodeInfo.onClickBegin = clickNode;
+	}
+
+	if (file.contains("onClickHold")) {
+		int clickIdx = file["onClickHold"].get<int>();
+		Node* clickNode = allScriptNodes[clickIdx];
+		scriptNodeInfo.onClickHold = clickNode;
+	}
+
+	if (file.contains("onDoubleClick")) {
+		int clickIdx = file["onDoubleClick"].get<int>();
+		Node* clickNode = allScriptNodes[clickIdx];
+		scriptNodeInfo.onDoubleClick = clickNode;
+	}
+
+	if (file.contains("onRightClick")) {
+		int clickIdx = file["onRightClick"].get<int>();
+		Node* clickNode = allScriptNodes[clickIdx];
+		scriptNodeInfo.onRightClick = clickNode;
+	}
+
 	fileStream.close();
 	manager->scripts[path] = scriptNodeInfo;
 	return scriptNodeInfo;

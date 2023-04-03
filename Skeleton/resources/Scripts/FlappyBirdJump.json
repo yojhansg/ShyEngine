@@ -7,7 +7,7 @@
 
         {
             "index" : 1,
-            "function": "PhysicsBody_setLinearVelocity",
+            "function": "PhysicBody_setLinearVelocity",
             "input" : [
                 2, 3, 5
             ]

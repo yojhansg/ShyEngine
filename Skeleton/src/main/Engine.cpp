@@ -74,10 +74,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Game(sceneManager).initScenes();
+	//Game(sceneManager).initScenes();
 
-	/*sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();*/
+	sceneManager->changeScene(sceneManager->LoadScene(data.initialScene), ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
 	return true;
 }
@@ -110,9 +110,10 @@ void Engine::update() {
 
 		// Update
 		scene->update(engineTime->deltaTime);
-
 		// LateUpdate
 		scene->lateUpdate(engineTime->deltaTime);
+
+		overlayManager->Update();
 
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
@@ -141,7 +142,7 @@ void Engine::update() {
 		duration<float, std::milli> timeSinceStart = endTime - startTime;
 		duration<double, std::milli> frameTime = endTime - beginTime;
 
-		engineTime->timeSinceStart = timeSinceStart.count();
+		engineTime->timeSinceStart = timeSinceStart.count() * 0.001f;
 		engineTime->deltaTime = frameTime.count() * 0.001f;
 		engineTime->frames++;
 

@@ -14,8 +14,7 @@
             "function": "Transform_setPositionX",
             "input": [
                 1, 6
-            ],
-            "next": 7
+            ]
         },
         {
             "index" : 2,

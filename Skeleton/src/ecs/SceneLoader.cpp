@@ -258,8 +258,21 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 		}
 
 		ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
-
 	}
+
+
+	if (overlay.contains("scripts")) {
+
+
+		jsonarray scripts = overlay["scripts"].get<jsonarray>();
+
+
+		for (auto& script : scripts)
+		{
+			entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+		}
+	}
+
 
 	jsonarray childs = overlay["childs"].get<jsonarray>();
 

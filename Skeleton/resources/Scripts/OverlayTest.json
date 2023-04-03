@@ -1,0 +1,90 @@
+{
+    
+
+    "nodeCount": 20,
+
+    "onClick": 0,
+    "onDoubleClick": 2,
+    "onClickHold": 4,
+    "onRightClick": 6,
+    "onClickBegin": 8,
+
+
+    "functions": [
+
+        {
+            "index": 0,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                1
+            ]
+        },
+
+        {
+            "index": 2,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                3
+            ]
+        },
+        {
+            "index": 4,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                5
+            ]
+        },
+        {
+            "index": 6,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                7
+            ]
+        },
+        {
+            "index": 8,
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                9
+            ]
+        }
+
+    ],
+
+
+    "consts": [
+
+        {
+            "index": 1,
+            "type": "string",
+            "value": "Me hiciste click mijito"
+        },
+
+        {
+            "index": 3,
+            "type": "string",
+            "value": "Y ahora me haces doble click la concha de la chingada"
+        },
+
+        {
+            "index": 5,
+            "type": "string",
+            "value": "A quien agarras ctm"
+        },
+
+        {
+            "index": 7,
+            "type": "string",
+            "value": "Click derecho eso si que no"
+        },
+
+        {
+            "index": 9,
+            "type": "string",
+            "value": "Y me aprietas el puntero encima jodeeeer"
+        }
+
+
+    ]
+
+}

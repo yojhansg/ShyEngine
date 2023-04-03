@@ -17,7 +17,7 @@ namespace ECS {
 		~OverlayManager();
 
 		void Render();
-		void Update(float dt);
+		void Update();
 
 		void AddElement(OverlayElement* elem);
 		void RemoveElement(OverlayElement* elem);

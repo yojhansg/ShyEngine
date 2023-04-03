@@ -145,7 +145,11 @@
                         }
         
                     ],
-        
+
+                    "scripts": [
+
+                        "OverlayTest"
+                    ],
         
                     "childs": [
                         

@@ -35,7 +35,7 @@ void ECS::OverlayManager::Render()
 	}
 }
 
-void ECS::OverlayManager::Update(float dt)
+void ECS::OverlayManager::Update()
 {
 	/*
 		TODO:
@@ -84,6 +84,8 @@ void ECS::OverlayManager::Update(float dt)
 	}
 	else if (click && selected != nullptr) {
 
+		selected->getEntity()->onClick();
+
 		float currentTime = Utilities::EngineTime::instance()->timeSinceStart;
 
 		if (currentTime - lastClickTime < timeToDoubleClick) {
@@ -95,12 +97,11 @@ void ECS::OverlayManager::Update(float dt)
 
 			lastClickTime = currentTime;
 		}
-		selected->getEntity()->onClick();
 	}
 
 	if (hold && selected != nullptr) {
 
-		holdTimer += dt;
+		holdTimer += Utilities::EngineTime::instance()->deltaTime;
 
 		if (holdTimer > timeToHold) {
 
