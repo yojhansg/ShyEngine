@@ -1,0 +1,91 @@
+{
+    
+    "nodeCount": 20,
+
+    "onClick": 0,
+
+
+    "functions": [
+
+       
+        {
+            "index": 10,
+            "comment": "@Reiniciar",
+            "function": "SceneManager_ChangeScene",
+            "input": [
+                5, 6
+            ],
+            "next": 19
+        },
+
+
+        {
+            "index": 1, 
+            "comment": "@Compare text",
+            "function": "ScriptFunctionality_String_Equals",
+            "input": [
+                2, 4
+            ]
+        },
+
+        {
+            "index": 2, 
+            "comment": "@Compare text",
+            "function": "OverlayText_GetText",
+            "input": [
+                3
+            ]
+        },
+        {
+            "index": 3, 
+            "comment": "@Get entity",
+            "function": "ScriptFunctionality_Entity"
+        }
+
+
+        ,{
+            "index": 19, 
+            "comment": "@Get entity",
+            "function": "ScriptFunctionality_Print",
+            "input": [
+                1
+            ]
+        }
+
+
+    ],
+
+
+    "consts": [
+
+        {
+            "index": 4,
+            "type": "string",
+            "value": "Jugar"
+        },
+        {
+            "index": 5,
+            "type": "string",
+            "value": "DefaultScene"
+        },
+        {
+            "index": 6,
+            "type": "float",
+            "value": 2
+        }
+
+    ],
+
+    "forks": [
+
+        {
+            "index": 0,
+            "condition": 1, 
+            "A": 10,
+            "B": 19,
+            "type": 0
+        }
+
+    ]
+
+}

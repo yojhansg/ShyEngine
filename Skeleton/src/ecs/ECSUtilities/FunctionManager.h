@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Apr  3 02:25:31 2023
+//Creation time : Mon Apr  3 14:06:30 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -137,6 +137,7 @@ Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting:
 Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec);

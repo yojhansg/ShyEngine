@@ -223,6 +223,10 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Mult(Vector2D a, float b)
 	return a * b;
 }
 
+bool Scripting::ScriptFunctionality::String_Equals(std::string a, std::string b)
+{
+	return a == b;
+}
 
 std::string Scripting::ScriptFunctionality::String_Concatenate(std::string a, std::string b)
 {

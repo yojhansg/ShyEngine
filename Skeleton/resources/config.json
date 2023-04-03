@@ -3,7 +3,7 @@
     "game": "Batalla final", 
     "creator": "Yojhan Pablo e Ivan",
     "windowTitle": "Casa de los espiritus",
-    "initialScene": "DefaultScene.json",
+    "initialScene": "DefaultScene",
     "windowIcon": "",
     "windowSize": "1920, 1080",
     "gravity": "0, 9.81f",

@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Apr  3 02:25:31 2023
+//Creation time: Mon Apr  3 14:06:30 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -160,6 +160,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("ScriptFunctionality_Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
 	map.emplace("ScriptFunctionality_Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
 	map.emplace("ScriptFunctionality_Vector2D_Mult",ScriptFunctionality_Vector2D_Mult);
+	map.emplace("ScriptFunctionality_String_Equals",ScriptFunctionality_String_Equals);
 	map.emplace("ScriptFunctionality_String_Concatenate",ScriptFunctionality_String_Concatenate);
 	map.emplace("ScriptFunctionality_String_Substring",ScriptFunctionality_String_Substring);
 	map.emplace("ScriptFunctionality_String_Begining",ScriptFunctionality_String_Begining);
@@ -1022,6 +1023,11 @@ Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	Vector2D ret = manager->Vector2D_Mult(vec[0].vector, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	bool ret = manager->String_Equals(vec[0].str, vec[1].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec){

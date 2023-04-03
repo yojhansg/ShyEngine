@@ -1,102 +1,20 @@
 {
     "name": "Mi escena inicial",
     "objects": [
-        {
-            "name": "background",
-            "order": -10, 
-            "components": [
-                {
-                    "component": "Transform",
-                    "attributes": [
-
-                        {
-                            "name":"position_",
-                            "value": "(960, 540)"
-                        },
-                        {
-                            "name":"scale_",
-                            "value": "(1.6f, 1.6f)"
-                        }
-
-                    ]
-                },
-                {
-                    "component": "Image",
-                    "attributes": [
-                        {
-                            "name":"fileName",
-                            "value": "fondo.png"
-                        }
-                    ]
-                }
-            ],
-
-            "scripts": [
-
-                "Parallax"
-            ]
-        },
-        {
-            "name": "player",
-            "order": 10,
-            "components": [
-                {
-                    "component": "Transform",
-                    "attributes": [
-
-                        {
-                            "name":"position_",
-                            "value": "(100, 540)"
-                        },
-                        {
-                            "name":"scale_",
-                            "value": "(0.35f, 0.35f)"
-                        }
-
-                    ]
-                },
-                {
-                    "component": "Image",
-                    "attributes": [
-                        {
-                            "name":"fileName",
-                            "value": "pollo.png"
-                        }
-                    ]
-                },
-                {
-                    "component": "BoxBody",
-                    "attributes": [
-                       {
-                        "name":"bodyType",
-                        "value": "2"
-                       },
-                       {
-                        "name":"bounciness",
-                        "value": "0.5f"
-                       }
-                    ]
-                }
-            ],
-
-            "scripts": [
-
-                "FlappyBirdJump", "RestartOnCollision"
-            ]
-        }
+        
     ],
 
     "overlays": [
 
         {
-            "name": "Overlay papa",
-            "placement": "0",
+            "name": "Fondo",
+            "placement": "1",
             "anchor": "0.5f, 0.5f",
 
-            "top": "10",
-            "left": "10",
-            "right": "10", 
-            "bottom": "10",
+            "top": "0",
+            "left": "0",
+            "right": "0", 
+            "bottom": "0",
 
             "position": "800, 100",
             "size": "100, 100",
@@ -109,7 +27,7 @@
                     "attributes": [
                         {
                             "name":"path",
-                            "value": "ground.png"
+                            "value": "cosa.jpg"
                         }
                     ]
                 }
@@ -119,27 +37,35 @@
 
             "childs": [
                 {
-                    "name": "Overlay hijo",
-                    "placement": "1",
+                    "name": "Jugar",
+                    "placement": "0",
                     "anchor": "0.5f, 0.5f",
         
-                    "top": "0",
-                    "left": "0",
-                    "right": "-50", 
-                    "bottom": "0",
+                    "top": "200",
+                    "left": "50",
+                    "right": "50", 
+                    "bottom": "700",
         
-                    "position": "100, 100",
-                    "size": "100, 100",
+                    "position": "0, -200",
+                    "size": "500, 100",
         
         
                     "components": [
         
                         {
-                            "component": "OverlayImage",
+                            "component": "OverlayText",
                             "attributes": [
                                 {
                                     "name":"path",
-                                    "value": "pollo.png"
+                                    "value": "1up.ttf"
+                                },
+                                {
+                                    "name":"fit",
+                                    "value": "4"
+                                },
+                                {
+                                    "name":"text",
+                                    "value": "Jugar"
                                 }
                             ]
                         }
@@ -148,7 +74,53 @@
 
                     "scripts": [
 
-                        "OverlayTest"
+                        "MainMenuBehaviour"
+                    ],
+        
+                    "childs": [
+                        
+                    ]
+        
+                },
+                {
+                    "name": "Salir",
+                    "placement": "0",
+                    "anchor": "0.5f, 0.5f",
+        
+                    "top": "200",
+                    "left": "50",
+                    "right": "50", 
+                    "bottom": "700",
+        
+                    "position": "0, 200",
+                    "size": "500, 100",
+        
+        
+                    "components": [
+        
+                        {
+                            "component": "OverlayText",
+                            "attributes": [
+                                {
+                                    "name":"path",
+                                    "value": "1up.ttf"
+                                },
+                                {
+                                    "name":"fit",
+                                    "value": "4"
+                                },
+                                {
+                                    "name":"text",
+                                    "value": "Salir"
+                                }
+                            ]
+                        }
+        
+                    ],
+
+                    "scripts": [
+
+                        "MainMenuBehaviour"
                     ],
         
                     "childs": [

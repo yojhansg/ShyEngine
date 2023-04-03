@@ -39,7 +39,7 @@ Engine::Engine() {
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("config");
+	DataLoader data = DataLoader::Load("flappyBird");
 
 	if (!data.valid) {
 
@@ -74,10 +74,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Game(sceneManager).initScenes();
+	//Game(sceneManager).initScenes();
 
-	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	//sceneManager->manageScenes();
+	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
 	return true;
 }

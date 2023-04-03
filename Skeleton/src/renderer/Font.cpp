@@ -23,7 +23,7 @@ TTF_Font* Renderer::Font::getSDLFont()
 
 Renderer::Texture* Renderer::Font::CreateText(std::string const& message)
 {
-	SDL_Surface* surface = TTF_RenderText_Solid(font, message.c_str(), {0, 0, 0, 0});
+	SDL_Surface* surface = TTF_RenderText_Solid(font, message.c_str(), {255, 255, 255, 255});
 
 	auto sdlText = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
 	assert(sdlText != nullptr, "Couldn't load image: " + filepath);

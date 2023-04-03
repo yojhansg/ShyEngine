@@ -72,6 +72,7 @@ publish:
 
 
 	//String
+	bool String_Equals(std::string a, std::string b);
 	std::string String_Concatenate(std::string a, std::string b);
 	std::string String_Substring(std::string a, int begin, int end);
 	std::string String_Begining(std::string a, int b);

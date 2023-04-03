@@ -23,7 +23,7 @@ const std::string ECS::SceneLoader::extension = ".json";
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
-	std::ifstream fileStream("Scenes/" + scenePath);
+	std::ifstream fileStream("Scenes/" + scenePath + extension);
 
 	if (!fileStream.good())
 	{
