@@ -12,33 +12,15 @@ namespace Input {
 	class InputManager;
 }
 
-namespace SoundManager {
-	class SoundManager;
-}
-
 namespace ECS {
-	class ContactListener;
-	class SceneManager;
-	class RenderManager;
 	class OverlayManager;
-}
-
-namespace Resources {
-	class ResourcesManager;
+	class RenderManager;
+	class SceneManager;
 }
 
 namespace Utilities {
 	class Time;
 }
-
-
-namespace Scripting {
-	class ScriptManager;
-	class ScriptFunctionality;
-}
-
-
-class ComponentFactory;
 
 class Engine {
 
@@ -52,19 +34,13 @@ public:
 
 private:
 
-	ECS::ContactListener* contactListener;
-	ECS::SceneManager* sceneManager;
-	ECS::RenderManager* renderManager;
-	ECS::OverlayManager* overlayManager;
-	Physics::PhysicsManager* physicsManager;
 	Renderer::RendererManager* rendererManager;
+	Physics::PhysicsManager* physicsManager;
+	ECS::OverlayManager* overlayManager;
 	Input::InputManager* inputManager;
-	SoundManager::SoundManager* soundManager;
-	Resources::ResourcesManager* resourcesManager;
-	Scripting::ScriptManager* scriptManager;
-	Scripting::ScriptFunctionality* scriptFunctionality;
+	ECS::RenderManager* renderManager;
+	ECS::SceneManager* sceneManager;
 	Utilities::Time* engineTime;
 
-	ComponentFactory* componentFactory;
 };
 

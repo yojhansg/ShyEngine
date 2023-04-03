@@ -24,16 +24,14 @@
 #include <Scene.h>
 #include <chrono>
 
+#include <iostream>
+
 using namespace std::chrono;
 
 Engine::Engine() {
 
-	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr; contactListener = nullptr;
-	soundManager = nullptr; sceneManager = nullptr; engineTime = nullptr; resourcesManager = nullptr;
-	scriptManager = nullptr;
-	scriptFunctionality = nullptr;
-	componentFactory = nullptr;
-	renderManager = nullptr;
+	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr;
+	sceneManager = nullptr; engineTime = nullptr; renderManager = nullptr; 
 	overlayManager = nullptr;
 }
 
@@ -42,11 +40,9 @@ bool Engine::init() {
 	DataLoader data = DataLoader::Load("flappyBird");
 
 	if (!data.valid) {
-
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
 		return false;
 	}
-
 
 	if (ECS_Version != ECSfunc_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
@@ -56,21 +52,19 @@ bool Engine::init() {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
 	}
 
-	//TODO: Se guardan algunos punteros a managers que realmente no son necesarios
-
 	sceneManager = ECS::SceneManager::init();
 	rendererManager = Renderer::RendererManager::init(data.windowName, data.windowSize.getX(), data.windowSize.getY());
 	physicsManager = Physics::PhysicsManager::init(data.gravity);
-	contactListener = ECS::ContactListener::init();
-	inputManager = Input::InputManager::init();
-	soundManager = SoundManager::SoundManager::init();
-	resourcesManager = Resources::ResourcesManager::init();
-	engineTime = Utilities::Time::init();
-	scriptManager = Scripting::ScriptManager::init();
-	scriptFunctionality = Scripting::ScriptFunctionality::init();
-	componentFactory = ComponentFactory::init();
 	renderManager = ECS::RenderManager::init();
 	overlayManager = ECS::OverlayManager::init();
+	inputManager = Input::InputManager::init();
+	engineTime = Utilities::Time::init();
+	Resources::ResourcesManager::init();
+	ECS::ContactListener::init();
+	SoundManager::SoundManager::init();
+	Scripting::ScriptManager::init();
+	Scripting::ScriptFunctionality::init();
+	ComponentFactory::init();
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
@@ -110,6 +104,7 @@ void Engine::update() {
 
 		// Update
 		scene->update(engineTime->deltaTime);
+
 		// LateUpdate
 		scene->lateUpdate(engineTime->deltaTime);
 
@@ -117,21 +112,19 @@ void Engine::update() {
 
 		// Render
 		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
-		//scene->render();
 		renderManager->Render();
 		physicsManager->debugDraw();
 		overlayManager->Render();
-
 		rendererManager->presentRenderer();
 
-		// OnDestroy on dead entities and components
-		scene->preRemoveEntitiesAndComponents();
+		// OnDestroy
+		scene->onDestroyOnRemovedEntities();
 
 		// Handling physics bodies
 		physicsManager->handleBodies();
 
 		// Remove dead entities and components
-		scene->postRemoveEntitiesAndComponents();
+		scene->handleRemovedEntities();
 
 		// Change scene if necessary
 		sceneManager->manageScenes();
@@ -152,7 +145,5 @@ void Engine::update() {
 }
 
 void Engine::close() {
-
 	sceneManager->close();
-
 }

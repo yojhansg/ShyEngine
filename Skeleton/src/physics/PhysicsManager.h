@@ -58,8 +58,6 @@ namespace Physics {
 
 		void setBodyEnabled(b2Body* body, bool enabled);
 
-		void setBodyRemoved(b2Body* body);
-
 	private:
 
 		void initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations);
@@ -78,10 +76,7 @@ namespace Physics {
 
 		// Disabled/Enable bodies handling
 		std::vector<b2Body*> disabledBodies;
-
 		std::vector<b2Body*> enabledBodies;
-
-		std::vector<b2Body*> removedBodies;
 
 		// Debug draw class inherited from b2draw
 		DebugDraw* b2draw;

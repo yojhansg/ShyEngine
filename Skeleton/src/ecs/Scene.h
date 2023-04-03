@@ -28,9 +28,11 @@ namespace ECS {
 
 		void fixedUpdate(float fixedDeltaTime);
 
-		void postRemoveEntitiesAndComponents();
+		void handleRemovedEntities();
 
 		void onDestroy();
+
+		void onDestroyOnRemovedEntities();
 
 		// Called when the scene is up
 		void onSceneUp();
@@ -52,8 +54,6 @@ namespace ECS {
 
 		// Returns the pointer to an entity that matches with the name, nullptr otherwise (Not an efficient way to find an entity)
 		Entity* findEntityByName(const std::string& ent_name);
-
-		void preRemoveEntitiesAndComponents();
 
 	private:
 

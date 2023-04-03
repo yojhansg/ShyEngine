@@ -14,6 +14,7 @@ namespace ECS {
 		removed = false;
 		scene = nullptr;
 		inRemovedEntityList = false;
+		hasRemovedComponents = false;
 
 		this->renderOrder = renderOrder;
 
@@ -237,7 +238,7 @@ namespace ECS {
 		c->inRemovedComponentList = true;
 	}
 
-	void Entity::executeOnDestroyOnRemovedComponents() {
+	void Entity::onDestroyRemovedComponents() {
 		for (auto c : components) {
 			if (c->isRemoved()) c->onDestroy();
 		}

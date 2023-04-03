@@ -32,10 +32,14 @@ namespace ECS {
 
 	void Component::remove() {
 		removed = true;
+
+		entity->hasRemovedComponents = true;
 	}
 
 	void Component::remove(Component* c) {
 		c->removed = true;
+
+		c->entity->hasRemovedComponents = true;
 	}
 
 	bool Component::isRemoved() {

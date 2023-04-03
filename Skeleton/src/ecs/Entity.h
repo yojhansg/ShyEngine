@@ -191,7 +191,7 @@ namespace ECS {
 
 		void addComponentToList(const std::list<Component*>::iterator& it, Component* c);
 
-		void executeOnDestroyOnRemovedComponents();
+		void onDestroyRemovedComponents();
 
 		// Name of the entity
 		std::string name;
@@ -200,6 +200,8 @@ namespace ECS {
 		bool active, removed;
 
 		bool inRemovedEntityList;
+
+		bool hasRemovedComponents;
 
 		// Pointer to the scene where this entity is located
 		Scene* scene;

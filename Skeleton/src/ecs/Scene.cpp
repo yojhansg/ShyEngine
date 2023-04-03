@@ -69,7 +69,7 @@ namespace ECS {
         }
     }
 
-    void Scene::postRemoveEntitiesAndComponents() {
+    void Scene::handleRemovedEntities() {
         for (auto it : removedEntities) {
             delete* it;
             entities.erase(it);
@@ -90,11 +90,23 @@ namespace ECS {
         }
     }
 
+    void Scene::onDestroyOnRemovedEntities() {
+        for (auto e : entities) {
+            if (e->isRemoved())
+                e->onDestroy();
+            else if (e->hasRemovedComponents) {
+                e->onDestroyRemovedComponents();
+                e->hasRemovedComponents = false;
+            }
+        }
+    }
+
     void Scene::onSceneUp() {
         for (auto e : entities) {
             if (e->isActive() && !e->isRemoved())
                 e->onSceneUp();
         }
+
     }
 
     void Scene::onSceneDown() {
@@ -141,16 +153,6 @@ namespace ECS {
         }
 
         return nullptr;
-    }
-
-    void Scene::preRemoveEntitiesAndComponents() {
-        for (auto e : entities) {
-            if (e->isRemoved())
-                e->onDestroy();
-        }
-
-        for (auto e : entities)
-            e->executeOnDestroyOnRemovedComponents();
     }
 
 }

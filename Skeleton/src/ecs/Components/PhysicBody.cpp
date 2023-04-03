@@ -14,7 +14,7 @@ namespace ECS {
 
 		world = nullptr;
 
-		this->bodyType = (int)BODY_TYPE::STATIC;
+		this->bodyType = (int) BODY_TYPE::STATIC;
 
 		size = { 1, 1 };
 		offSet = { 0, 0 };
@@ -53,7 +53,7 @@ namespace ECS {
 	}
 
 	void PhysicBody::onDestroy() {
-		pm->setBodyRemoved(body);
+		world->DestroyBody(body);
 	}
 
 	void PhysicBody::init() {

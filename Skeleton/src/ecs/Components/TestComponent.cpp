@@ -21,9 +21,15 @@ void ECS::TestComponent::update(float deltaTime) {
 
 	auto im = Input::InputManager::instance();
 
-	if (im->keyDownEvent() && im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
-		body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
-		body->applyLinearImpulseToCenter({ 0, -100 });
+	if (im->keyDownEvent()) {
+
+		if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
+			body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
+			body->applyLinearImpulseToCenter({ 0, -100 });
+		}
+		else if (im->isKeyDown(SDL_SCANCODE_A)) {
+		}
+
 	}
 
 }
@@ -37,8 +43,10 @@ void ECS::TestComponent::onCollisionEnter(Entity* b) {
 
 	print("En el suelo", "TestComponent");
 
-	if (b->hasComponent<EdgeBody>())
-		b->removeEntity();
+	auto edge = b->getComponent<EdgeBody>();
+
+	if (edge != nullptr)
+		b->setActive(false);
 
 	onGround = true;
 }

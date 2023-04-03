@@ -53,11 +53,6 @@ namespace Physics {
 
 	}
 
-	void PhysicsManager::setBodyRemoved(b2Body* body) {
-
-		removedBodies.push_back(body);
-	}
-
 	void PhysicsManager::handleBodies() {
 
 		for (int i = 0; i < disabledBodies.size(); i++) disabledBodies[i]->SetEnabled(false);
@@ -67,10 +62,6 @@ namespace Physics {
 		for (int i = 0; i < enabledBodies.size(); i++) enabledBodies[i]->SetEnabled(true);
 
 		enabledBodies.clear();
-
-		for (int i = 0; i < removedBodies.size(); i++) world->DestroyBody(removedBodies[i]);
-
-		removedBodies.clear();
 
 	}
 
