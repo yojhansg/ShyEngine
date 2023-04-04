@@ -122,7 +122,13 @@
                         },
                         
                         {
-                            "component": "OverlayButton"
+                            "component": "OverlayButton",
+                            "attributes": [
+                                {
+                                    "name":"scale",
+                                    "value": "1.1"
+                                }
+                            ]
                         }
         
                     ],

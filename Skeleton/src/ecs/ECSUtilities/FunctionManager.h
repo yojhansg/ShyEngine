@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Apr  4 03:33:42 2023
+//Creation time : Tue Apr  4 04:32:54 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -51,6 +51,9 @@ Scripting::Variable Overlay_SetAnchorBottomLeft(std::vector<Scripting::Variable>
 Scripting::Variable Overlay_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_GetColor(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetRenderScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetRenderScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_ResetRenderScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& vec);

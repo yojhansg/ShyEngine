@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 03:33:42 2023
+//Creation time: Tue Apr  4 04:32:54 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -75,6 +75,9 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Overlay_SetAnchorBottomRight",Overlay_SetAnchorBottomRight);
 	map.emplace("Overlay_GetColor",Overlay_GetColor);
 	map.emplace("Overlay_SetColor",Overlay_SetColor);
+	map.emplace("Overlay_GetRenderScale",Overlay_GetRenderScale);
+	map.emplace("Overlay_SetRenderScale",Overlay_SetRenderScale);
+	map.emplace("Overlay_ResetRenderScale",Overlay_ResetRenderScale);
 	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
 	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
 	map.emplace("OverlayText_GetFit",OverlayText_GetFit);
@@ -457,6 +460,33 @@ Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec)
 		return Scripting::Variable::Null();
 	}
 	self->SetColor(vec[1].value.color);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Overlay_GetRenderScale(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->GetRenderScale();
+	return ret;
+}
+Scripting::Variable Overlay_SetRenderScale(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		return Scripting::Variable::Null();
+	}
+	self->SetRenderScale(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Overlay_ResetRenderScale(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_ResetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		return Scripting::Variable::Null();
+	}
+	self->ResetRenderScale();
 	return Scripting::Variable::Null();
 }
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec){

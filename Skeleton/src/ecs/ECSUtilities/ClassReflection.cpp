@@ -104,6 +104,8 @@ ClassReflection::ClassReflection(){
 			self->bottom = std::stoi(map.at("bottom"));
 		if(map.contains("color"))
 			self->color = Utilities::Color::CreateColor(map.at("color"));
+		if(map.contains("renderScale"))
+			self->renderScale = std::stof(map.at("renderScale"));
 
 }
 	void ClassReflection::ReflectOverlayButton(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
@@ -114,6 +116,8 @@ ClassReflection::ClassReflection(){
 			self->hoverColor = Utilities::Color::CreateColor(map.at("hoverColor"));
 		if(map.contains("downColor"))
 			self->downColor = Utilities::Color::CreateColor(map.at("downColor"));
+		if(map.contains("scale"))
+			self->scale = std::stof(map.at("scale"));
 
 }
 	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

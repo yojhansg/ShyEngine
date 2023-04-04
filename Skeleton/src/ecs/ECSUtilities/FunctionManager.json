@@ -78,6 +78,9 @@
         "GetPosition": {
             "return": "Utilities::Vector2D"
         },
+        "GetRenderScale": {
+            "return": "float"
+        },
         "GetRight": {
             "return": "int"
         },
@@ -103,6 +106,9 @@
                     "type": "Utilities::Vector2D"
                 }
             ],
+            "return": "void"
+        },
+        "ResetRenderScale": {
             "return": "void"
         },
         "SetAnchor": {
@@ -165,6 +171,15 @@
                 {
                     "name": "size",
                     "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetRenderScale": {
+            "input": [
+                {
+                    "name": "newRenderScale",
+                    "type": "float"
                 }
             ],
             "return": "void"

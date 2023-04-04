@@ -241,7 +241,7 @@ void ECS::Overlay::RenderTexture(Renderer::Texture* texture, SDL_Rect* source, S
 	SDL_SetTextureColorMod(SDL_texture, color.r, color.g, color.b);
 
 
-	if (renderScale != 1) {
+	if (renderScale != 1.f) {
 
 		int new_w = (int)std::round(destination->w * renderScale);
 		int new_h = (int)std::round(destination->h * renderScale);
