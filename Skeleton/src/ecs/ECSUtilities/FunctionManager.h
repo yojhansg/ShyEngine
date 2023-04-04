@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Apr  4 02:40:51 2023
+//Creation time : Tue Apr  4 03:33:42 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -26,31 +26,31 @@ Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetPlacement(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetPositioned(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetStreched(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_Move(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_MoveTo(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetSize(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetPosition(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetSize(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetTop(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetLeft(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetRight(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetBottom(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetTop(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetLeft(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetRight(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetBottom(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetAnchor(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchor(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchorCenter(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_GetColor(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable OverlayElement_SetColor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_Move(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_MoveTo(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetTop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetLeft(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetRight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetBottom(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetTop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetLeft(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetRight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetBottom(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetAnchor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchorCenter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_GetColor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& vec);

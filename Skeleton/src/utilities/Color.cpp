@@ -2,7 +2,7 @@
 #include <format>
 #include <cassert>
 #include "StringTrim.h"
-
+#include <map>
 
 Utilities::Color Utilities::Color::CreateColor(int r, int g, int b)
 {
@@ -16,6 +16,25 @@ Utilities::Color Utilities::Color::CreateColor(int r, int g, int b)
 
 Utilities::Color Utilities::Color::CreateColor(std::string const& str)
 {
+	//Temporal: mapa de colores para no poner los colores a mano en los scripts:
+	std::map<std::string, Utilities::Color> colores;
+
+	colores["red"] = Red();
+	colores["green"] = Green();
+	colores["blue"] = Blue();
+	colores["yellow"] = Yellow();
+	colores["purple"] = Purple();
+	colores["orange"] = Orange();
+	colores["black"] = Black();
+	colores["white"] = White();
+	colores["grey"] = Grey();
+	colores["darkGrey"] = DarkGrey();
+
+	if (colores.contains(str)) {
+		return colores[str];
+	}
+
+
 	std::string trimed = Utilities::trim(str, "([ )]");
 
 	size_t coma = trimed.find(",");
@@ -78,6 +97,20 @@ Utilities::Color Utilities::Color::White()
 {
 	return CreateColor(255, 255, 255);
 }
+
+
+Utilities::Color Utilities::Color::Grey()
+{
+	return CreateColor(200, 200, 200);
+}
+
+
+Utilities::Color Utilities::Color::DarkGrey()
+{
+	return CreateColor(51, 51, 51);
+}
+
+
 
 Utilities::Color::operator std::string() const {
 

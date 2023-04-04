@@ -10,7 +10,7 @@ namespace Renderer {
 namespace ECS {
 
 
-	class OverlayElement;
+	class Overlay;
 	class OverlayImage : public Component {
 
 	public:
@@ -23,11 +23,11 @@ namespace ECS {
 	private:
 
 
-		OverlayElement* overlay;
+		Overlay* overlay;
 
 		Renderer::Texture* texture;
 
-		void start() override;
+		void init() override;
 		void render() override;
 
 	publish:

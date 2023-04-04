@@ -1,9 +1,9 @@
-#include "OverlayElement.h"
+#include "Overlay.h"
 #include "RendererManager.h"
 
 #include "OverlayManager.h"
 
-ECS::OverlayElement::OverlayElement() {
+ECS::Overlay::Overlay() {
 
 	color = Utilities::Color::White();
 
@@ -16,24 +16,24 @@ ECS::OverlayElement::OverlayElement() {
 	OverlayManager::instance()->AddElement(this);
 }
 
-ECS::OverlayElement::~OverlayElement()
+ECS::Overlay::~Overlay()
 {
 	OverlayManager::instance()->RemoveElement(this);
 }
 
 
-int ECS::OverlayElement::GetPlacement()
+int ECS::Overlay::GetPlacement()
 {
 	return placement;
 }
 
 
-void ECS::OverlayElement::SetDirty()
+void ECS::Overlay::SetDirty()
 {
 	OverlayManager::instance()->SetDirty();
 }
 
-void ECS::OverlayElement::SetPositioned(Utilities::Vector2D position, Utilities::Vector2D size)
+void ECS::Overlay::SetPositioned(Utilities::Vector2D position, Utilities::Vector2D size)
 {
 	placement = 0;
 
@@ -43,7 +43,7 @@ void ECS::OverlayElement::SetPositioned(Utilities::Vector2D position, Utilities:
 	SetDirty();
 }
 
-void ECS::OverlayElement::SetStreched(int left, int top, int right, int bottom)
+void ECS::Overlay::SetStreched(int left, int top, int right, int bottom)
 {
 	placement = 1;
 
@@ -56,17 +56,17 @@ void ECS::OverlayElement::SetStreched(int left, int top, int right, int bottom)
 	SetDirty();
 }
 
-void ECS::OverlayElement::Move(Utilities::Vector2D position)
+void ECS::Overlay::Move(Utilities::Vector2D position)
 {
 	SetPositioned(this->position + position, size);
 }
 
-void ECS::OverlayElement::MoveTo(Utilities::Vector2D position)
+void ECS::Overlay::MoveTo(Utilities::Vector2D position)
 {
 	SetPositioned(position, size);
 }
 
-void ECS::OverlayElement::SetSize(Utilities::Vector2D size)
+void ECS::Overlay::SetSize(Utilities::Vector2D size)
 {
 	this->size = size;
 
@@ -74,37 +74,37 @@ void ECS::OverlayElement::SetSize(Utilities::Vector2D size)
 		SetDirty();
 }
 
-Utilities::Vector2D ECS::OverlayElement::GetPosition()
+Utilities::Vector2D ECS::Overlay::GetPosition()
 {
 	return position;
 }
 
-Utilities::Vector2D ECS::OverlayElement::GetSize()
+Utilities::Vector2D ECS::Overlay::GetSize()
 {
 	return size;
 }
 
-int ECS::OverlayElement::GetTop()
+int ECS::Overlay::GetTop()
 {
 	return top;
 }
 
-int ECS::OverlayElement::GetLeft()
+int ECS::Overlay::GetLeft()
 {
 	return left;
 }
 
-int ECS::OverlayElement::GetRight()
+int ECS::Overlay::GetRight()
 {
 	return right;
 }
 
-int ECS::OverlayElement::GetBottom()
+int ECS::Overlay::GetBottom()
 {
 	return bottom;
 }
 
-void ECS::OverlayElement::SetTop(int pos)
+void ECS::Overlay::SetTop(int pos)
 {
 	this->top = pos;
 
@@ -113,7 +113,7 @@ void ECS::OverlayElement::SetTop(int pos)
 	}
 }
 
-void ECS::OverlayElement::SetLeft(int pos)
+void ECS::Overlay::SetLeft(int pos)
 {
 	this->left = pos;
 
@@ -122,7 +122,7 @@ void ECS::OverlayElement::SetLeft(int pos)
 	}
 }
 
-void ECS::OverlayElement::SetRight(int pos)
+void ECS::Overlay::SetRight(int pos)
 {
 	this->right = pos;
 
@@ -131,7 +131,7 @@ void ECS::OverlayElement::SetRight(int pos)
 	}
 }
 
-void ECS::OverlayElement::SetBottom(int pos)
+void ECS::Overlay::SetBottom(int pos)
 {
 	this->bottom = pos;
 
@@ -140,54 +140,54 @@ void ECS::OverlayElement::SetBottom(int pos)
 	}
 }
 
-Utilities::Vector2D ECS::OverlayElement::GetAnchor()
+Utilities::Vector2D ECS::Overlay::GetAnchor()
 {
 	return anchor;
 }
 
-void ECS::OverlayElement::SetAnchor(Utilities::Vector2D anchor)
+void ECS::Overlay::SetAnchor(Utilities::Vector2D anchor)
 {
 	this->anchor = anchor;
 
 	SetDirty();
 }
 
-void ECS::OverlayElement::SetAnchorCenter()
+void ECS::Overlay::SetAnchorCenter()
 {
 	SetAnchor({ 0.5f, 0.5f });
 }
 
-void ECS::OverlayElement::SetAnchorTopLeft()
+void ECS::Overlay::SetAnchorTopLeft()
 {
 	SetAnchor({ 0, 0 });
 }
 
-void ECS::OverlayElement::SetAnchorTopRight()
+void ECS::Overlay::SetAnchorTopRight()
 {
 	SetAnchor({ 1, 0 });
 }
 
-void ECS::OverlayElement::SetAnchorBottomLeft()
+void ECS::Overlay::SetAnchorBottomLeft()
 {
 	SetAnchor({ 0, 1 });
 }
 
-void ECS::OverlayElement::SetAnchorBottomRight()
+void ECS::Overlay::SetAnchorBottomRight()
 {
 	SetAnchor({ 1, 1 });
 }
 
-Utilities::Color ECS::OverlayElement::GetColor()
+Utilities::Color ECS::Overlay::GetColor()
 {
 	return color;
 }
 
-void ECS::OverlayElement::SetColor(Utilities::Color color)
+void ECS::Overlay::SetColor(Utilities::Color color)
 {
 	this->color = color;
 }
 
-bool ECS::OverlayElement::PointInsideBounds(Utilities::Vector2D const& p)
+bool ECS::Overlay::PointInsideBounds(Utilities::Vector2D const& p)
 {
 	if (OverlayManager::instance()->IsDirty())
 		OverlayManager::instance()->RecalculateOverlay();
@@ -196,19 +196,19 @@ bool ECS::OverlayElement::PointInsideBounds(Utilities::Vector2D const& p)
 		p.y_ > render_y && p.y_ < render_y + render_h;
 }
 
-void ECS::OverlayElement::SetParent(OverlayElement* element)
+void ECS::Overlay::SetParent(Overlay* element)
 {
 	parent = element;
 
 	SetDirty();
 }
 
-void ECS::OverlayElement::RecalculatePosition()
+void ECS::Overlay::RecalculatePosition()
 {
 	CalculateRenderRect(render_x, render_y, render_w, render_h);
 }
 
-void ECS::OverlayElement::GetRenderRect(int& x, int& y, int& w, int& h)
+void ECS::Overlay::GetRenderRect(int& x, int& y, int& w, int& h)
 {
 	x = render_x;
 	y = render_y;
@@ -216,12 +216,12 @@ void ECS::OverlayElement::GetRenderRect(int& x, int& y, int& w, int& h)
 	h = render_h;
 }
 
-void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
+void ECS::Overlay::CalculateRenderRect(int& x, int& y, int& w, int& h)
 {
 
-	switch ((OverlayElement::Placement)placement)
+	switch ((Overlay::Placement)placement)
 	{
-	case OverlayElement::Placement::Positioned:
+	case Overlay::Placement::Positioned:
 	{
 		x = (int)std::round(position.getX());
 		y = (int)std::round(position.getY());
@@ -239,7 +239,7 @@ void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
 
 		break;
 	}
-	case OverlayElement::Placement::Stretched:
+	case Overlay::Placement::Stretched:
 	{
 
 		int parent_left, parent_top, parent_width, parent_height;
@@ -267,19 +267,19 @@ void ECS::OverlayElement::CalculateRenderRect(int& x, int& y, int& w, int& h)
 	default:
 		//TODO: error
 		
-		print("Entidad con posicionamiento invalido", "OverlayElement");
+		print("Entity with invalid placement", "Overlay");
 		break;
 	}
 
 
 }
 
-Utilities::Vector2D ECS::OverlayElement::CalculateCenterPosition()
+Utilities::Vector2D ECS::Overlay::CalculateCenterPosition()
 {
 	Utilities::Vector2D center;
-	switch ((OverlayElement::Placement)placement)
+	switch ((Overlay::Placement)placement)
 	{
-	case OverlayElement::Placement::Positioned:
+	case Overlay::Placement::Positioned:
 
 		center = position;
 
@@ -288,7 +288,7 @@ Utilities::Vector2D ECS::OverlayElement::CalculateCenterPosition()
 
 		break;
 
-	case OverlayElement::Placement::Stretched:
+	case Overlay::Placement::Stretched:
 
 		int x, y, w, h;
 		CalculateRenderRect(x, y, w, h);

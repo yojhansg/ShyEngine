@@ -22,6 +22,8 @@ namespace Utilities {
 		static Color Orange();
 		static Color Black();
 		static Color White();
+		static Color Grey();
+		static Color DarkGrey();
 
 		operator std::string() const;
 	};

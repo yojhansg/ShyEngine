@@ -114,7 +114,7 @@
     <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\OverlayElement.h">
+    <ClInclude Include="..\..\src\ecs\Components\Overlay.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h">
@@ -218,7 +218,7 @@
     <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\OverlayElement.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\Overlay.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp">

@@ -6,7 +6,8 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
-#include "Components/OverlayElement.h"
+#include "Components/Overlay.h"
+#include "Components/OverlayButton.h"
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
 #include "Components/TestComponent.h"
@@ -23,7 +24,8 @@ ComponentFactory::ComponentFactory(){
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
-	components["OverlayElement"] = &ComponentFactory::CreateOverlayElement;
+	components["Overlay"] = &ComponentFactory::CreateOverlay;
+	components["OverlayButton"] = &ComponentFactory::CreateOverlayButton;
 	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
 	components["OverlayText"] = &ComponentFactory::CreateOverlayText;
 	components["TestComponent"] = &ComponentFactory::CreateTestComponent;
@@ -59,8 +61,12 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::Image();
 
 }
-	ECS::Component* ComponentFactory::CreateOverlayElement(){
-		return new ECS::OverlayElement();
+	ECS::Component* ComponentFactory::CreateOverlay(){
+		return new ECS::Overlay();
+
+}
+	ECS::Component* ComponentFactory::CreateOverlayButton(){
+		return new ECS::OverlayButton();
 
 }
 	ECS::Component* ComponentFactory::CreateOverlayImage(){

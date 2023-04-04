@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\src\ecs\Components\ChainBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\CircleBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h" />
-    <ClInclude Include="..\..\src\ecs\Components\OverlayElement.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Overlay.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayText.h" />
     <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
@@ -195,7 +195,7 @@
     <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\OverlayElement.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Overlay.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayText.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />

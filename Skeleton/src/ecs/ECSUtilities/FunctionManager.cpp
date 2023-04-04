@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 02:40:51 2023
+//Creation time: Tue Apr  4 03:33:42 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -21,7 +21,8 @@
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
-#include <Components/OverlayElement.h>
+#include <Components/Overlay.h>
+#include <Components/OverlayButton.h>
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
 #include <Components/PhysicBody.h>
@@ -49,31 +50,31 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Image_setFlipX",Image_setFlipX);
 	map.emplace("Image_setFlipY",Image_setFlipY);
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
-	map.emplace("OverlayElement_GetPlacement",OverlayElement_GetPlacement);
-	map.emplace("OverlayElement_SetPositioned",OverlayElement_SetPositioned);
-	map.emplace("OverlayElement_SetStreched",OverlayElement_SetStreched);
-	map.emplace("OverlayElement_Move",OverlayElement_Move);
-	map.emplace("OverlayElement_MoveTo",OverlayElement_MoveTo);
-	map.emplace("OverlayElement_SetSize",OverlayElement_SetSize);
-	map.emplace("OverlayElement_GetPosition",OverlayElement_GetPosition);
-	map.emplace("OverlayElement_GetSize",OverlayElement_GetSize);
-	map.emplace("OverlayElement_GetTop",OverlayElement_GetTop);
-	map.emplace("OverlayElement_GetLeft",OverlayElement_GetLeft);
-	map.emplace("OverlayElement_GetRight",OverlayElement_GetRight);
-	map.emplace("OverlayElement_GetBottom",OverlayElement_GetBottom);
-	map.emplace("OverlayElement_SetTop",OverlayElement_SetTop);
-	map.emplace("OverlayElement_SetLeft",OverlayElement_SetLeft);
-	map.emplace("OverlayElement_SetRight",OverlayElement_SetRight);
-	map.emplace("OverlayElement_SetBottom",OverlayElement_SetBottom);
-	map.emplace("OverlayElement_GetAnchor",OverlayElement_GetAnchor);
-	map.emplace("OverlayElement_SetAnchor",OverlayElement_SetAnchor);
-	map.emplace("OverlayElement_SetAnchorCenter",OverlayElement_SetAnchorCenter);
-	map.emplace("OverlayElement_SetAnchorTopLeft",OverlayElement_SetAnchorTopLeft);
-	map.emplace("OverlayElement_SetAnchorTopRight",OverlayElement_SetAnchorTopRight);
-	map.emplace("OverlayElement_SetAnchorBottomLeft",OverlayElement_SetAnchorBottomLeft);
-	map.emplace("OverlayElement_SetAnchorBottomRight",OverlayElement_SetAnchorBottomRight);
-	map.emplace("OverlayElement_GetColor",OverlayElement_GetColor);
-	map.emplace("OverlayElement_SetColor",OverlayElement_SetColor);
+	map.emplace("Overlay_GetPlacement",Overlay_GetPlacement);
+	map.emplace("Overlay_SetPositioned",Overlay_SetPositioned);
+	map.emplace("Overlay_SetStreched",Overlay_SetStreched);
+	map.emplace("Overlay_Move",Overlay_Move);
+	map.emplace("Overlay_MoveTo",Overlay_MoveTo);
+	map.emplace("Overlay_SetSize",Overlay_SetSize);
+	map.emplace("Overlay_GetPosition",Overlay_GetPosition);
+	map.emplace("Overlay_GetSize",Overlay_GetSize);
+	map.emplace("Overlay_GetTop",Overlay_GetTop);
+	map.emplace("Overlay_GetLeft",Overlay_GetLeft);
+	map.emplace("Overlay_GetRight",Overlay_GetRight);
+	map.emplace("Overlay_GetBottom",Overlay_GetBottom);
+	map.emplace("Overlay_SetTop",Overlay_SetTop);
+	map.emplace("Overlay_SetLeft",Overlay_SetLeft);
+	map.emplace("Overlay_SetRight",Overlay_SetRight);
+	map.emplace("Overlay_SetBottom",Overlay_SetBottom);
+	map.emplace("Overlay_GetAnchor",Overlay_GetAnchor);
+	map.emplace("Overlay_SetAnchor",Overlay_SetAnchor);
+	map.emplace("Overlay_SetAnchorCenter",Overlay_SetAnchorCenter);
+	map.emplace("Overlay_SetAnchorTopLeft",Overlay_SetAnchorTopLeft);
+	map.emplace("Overlay_SetAnchorTopRight",Overlay_SetAnchorTopRight);
+	map.emplace("Overlay_SetAnchorBottomLeft",Overlay_SetAnchorBottomLeft);
+	map.emplace("Overlay_SetAnchorBottomRight",Overlay_SetAnchorBottomRight);
+	map.emplace("Overlay_GetColor",Overlay_GetColor);
+	map.emplace("Overlay_SetColor",Overlay_SetColor);
 	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
 	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
 	map.emplace("OverlayText_GetFit",OverlayText_GetFit);
@@ -233,226 +234,226 @@ Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const&
 	self->setRotaionPoint(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_GetPlacement(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetPlacement", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPlacement", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetPlacement();
 	return ret;
 }
-Scripting::Variable OverlayElement_SetPositioned(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetPositioned", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetPositioned(vec[1].vector, vec[2].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetStreched(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetStreched", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetStreched(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_Move(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_Move(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_Move", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->Move(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_MoveTo(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_MoveTo(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_MoveTo", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->MoveTo(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetSize(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetSize(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetSize", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetSize(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_GetPosition(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetPosition(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetPosition", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPosition", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetPosition();
 	return ret;
 }
-Scripting::Variable OverlayElement_GetSize(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetSize(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetSize", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetSize", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetSize();
 	return ret;
 }
-Scripting::Variable OverlayElement_GetTop(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetTop(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetTop", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetTop", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetTop();
 	return ret;
 }
-Scripting::Variable OverlayElement_GetLeft(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetLeft(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetLeft", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetLeft();
 	return ret;
 }
-Scripting::Variable OverlayElement_GetRight(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetRight(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetRight", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetRight();
 	return ret;
 }
-Scripting::Variable OverlayElement_GetBottom(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetBottom(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetBottom", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetBottom", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetBottom();
 	return ret;
 }
-Scripting::Variable OverlayElement_SetTop(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetTop(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetTop", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetTop(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetLeft(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetLeft(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetLeft", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetLeft(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetRight(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetRight(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetRight", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetRight(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetBottom(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetBottom(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetBottom", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetBottom(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_GetAnchor(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetAnchor(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetAnchor", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetAnchor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetAnchor();
 	return ret;
 }
-Scripting::Variable OverlayElement_SetAnchor(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchor(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchor", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchor(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetAnchorCenter(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchorCenter(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchorCenter", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorCenter", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorCenter();
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchorTopLeft", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorTopLeft();
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchorTopRight", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorTopRight();
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchorBottomLeft", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorBottomLeft();
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetAnchorBottomRight", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorBottomRight();
 	return Scripting::Variable::Null();
 }
-Scripting::Variable OverlayElement_GetColor(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_GetColor(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetColor", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetColor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Color ret = self->GetColor();
 	return ret;
 }
-Scripting::Variable OverlayElement_SetColor(std::vector<Scripting::Variable>const& vec){
-	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetColor", vec[0].value.entity->getEntityName(), OverlayElement);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetColor(vec[1].value.color);

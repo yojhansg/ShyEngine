@@ -5,7 +5,7 @@
 #include <map>
 namespace ECS { class Component; }
 
-//Creation time : Tue Apr  4 02:40:51 2023
+//Creation time : Tue Apr  4 03:33:42 2023
 
 #define ECSreflection_Version 1.0
 
@@ -27,7 +27,8 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	ECS::Component* CreateCircleBody();
 	ECS::Component* CreateEdgeBody();
 	ECS::Component* CreateImage();
-	ECS::Component* CreateOverlayElement();
+	ECS::Component* CreateOverlay();
+	ECS::Component* CreateOverlayButton();
 	ECS::Component* CreateOverlayImage();
 	ECS::Component* CreateOverlayText();
 	ECS::Component* CreateTestComponent();

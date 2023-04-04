@@ -5,7 +5,8 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
-#include "Components/OverlayElement.h"
+#include "Components/Overlay.h"
+#include "Components/OverlayButton.h"
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
 #include "Components/PhysicBody.h"
@@ -20,7 +21,8 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
 	reflectionMethods["EdgeBody"] = &ClassReflection::ReflectEdgeBody;
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
-	reflectionMethods["OverlayElement"] = &ClassReflection::ReflectOverlayElement;
+	reflectionMethods["Overlay"] = &ClassReflection::ReflectOverlay;
+	reflectionMethods["OverlayButton"] = &ClassReflection::ReflectOverlayButton;
 	reflectionMethods["OverlayImage"] = &ClassReflection::ReflectOverlayImage;
 	reflectionMethods["OverlayText"] = &ClassReflection::ReflectOverlayText;
 	reflectionMethods["PhysicBody"] = &ClassReflection::ReflectPhysicBody;
@@ -82,8 +84,8 @@ ClassReflection::ClassReflection(){
 			self->fileName = map.at("fileName");
 
 }
-	void ClassReflection::ReflectOverlayElement(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
-		OverlayElement* self = static_cast<OverlayElement*>(selfComp);
+	void ClassReflection::ReflectOverlay(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+		Overlay* self = static_cast<Overlay*>(selfComp);
 		if(map.contains("placement"))
 			self->placement = std::stoi(map.at("placement"));
 		if(map.contains("position"))
@@ -102,6 +104,16 @@ ClassReflection::ClassReflection(){
 			self->bottom = std::stoi(map.at("bottom"));
 		if(map.contains("color"))
 			self->color = Utilities::Color::CreateColor(map.at("color"));
+
+}
+	void ClassReflection::ReflectOverlayButton(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+		OverlayButton* self = static_cast<OverlayButton*>(selfComp);
+		if(map.contains("defaultColor"))
+			self->defaultColor = Utilities::Color::CreateColor(map.at("defaultColor"));
+		if(map.contains("hoverColor"))
+			self->hoverColor = Utilities::Color::CreateColor(map.at("hoverColor"));
+		if(map.contains("downColor"))
+			self->downColor = Utilities::Color::CreateColor(map.at("downColor"));
 
 }
 	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

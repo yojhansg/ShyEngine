@@ -12,7 +12,7 @@
 
 #include "ECSUtilities/ClassReflection.h"
 
-#include "Components/OverlayElement.h"
+#include "Components/Overlay.h"
 
 #include "ConsoleManager.h"
 
@@ -221,7 +221,7 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 }
 
 
-void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::OverlayElement* parent)
+void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent)
 {
 	std::string name = "New Overlay";
 
@@ -232,7 +232,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 	ECS::Entity* entity = scene->createEntity(name);
 
-	ECS::OverlayElement* overlayElement = entity->addComponent<ECS::OverlayElement>();
+	ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();
 
 	std::map<std::string, std::string> map;
 
@@ -245,7 +245,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 		}
 	}
 
-	ClassReflection::instance()->ReflectOverlayElement(overlayElement, map);
+	ClassReflection::instance()->ReflectOverlay(overlayElement, map);
 	overlayElement->SetParent(parent);
 
 	jsonarray components = overlay["components"].get<jsonarray>();
@@ -259,15 +259,17 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 		std::map<std::string, std::string> attributeMap;
 
 
-		jsonarray attributes = compInfo["attributes"].get<jsonarray>();
+		if (compInfo.contains("attributes")) {
+			jsonarray attributes = compInfo["attributes"].get<jsonarray>();
 
-		for (auto& attribute : attributes) {
+			for (auto& attribute : attributes) {
 
-			std::string attributeName = attribute["name"].get<std::string>();
-			std::string attributeValue = attribute["value"].get<std::string>();
+				std::string attributeName = attribute["name"].get<std::string>();
+				std::string attributeValue = attribute["value"].get<std::string>();
 
-			attributeMap[attributeName] = attributeValue;
+				attributeMap[attributeName] = attributeValue;
 
+			}
 		}
 
 		ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);

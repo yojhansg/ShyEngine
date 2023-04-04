@@ -6,7 +6,7 @@
 namespace ECS {
 
 	class Entity;
-	class OverlayElement;
+	class Overlay;
 	class OverlayManager : public Utilities::Singleton<OverlayManager> {
 
 	public:
@@ -19,8 +19,8 @@ namespace ECS {
 		void Render();
 		void Update();
 
-		void AddElement(OverlayElement* elem);
-		void RemoveElement(OverlayElement* elem);
+		void AddElement(Overlay* elem);
+		void RemoveElement(Overlay* elem);
 
 		void SetDirty();
 		bool IsDirty();
@@ -40,8 +40,8 @@ namespace ECS {
 		float holdTimer;
 
 
-		OverlayElement* selected;
-		std::vector<OverlayElement*> overlays;
+		Overlay* selected;
+		std::vector<Overlay*> overlays;
 	};
 
 }

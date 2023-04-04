@@ -8,7 +8,7 @@
 
 namespace ECS {
 
-	class OverlayElement : public Component {
+	class Overlay : public Component {
 
 	public:
 
@@ -17,8 +17,8 @@ namespace ECS {
 			Positioned, Stretched
 		};
 
-		OverlayElement();
-		~OverlayElement();
+		Overlay();
+		~Overlay();
 
 	private:
 
@@ -78,7 +78,7 @@ namespace ECS {
 
 		bool PointInsideBounds(Utilities::Vector2D const& p);
 
-		void SetParent(OverlayElement* element);
+		void SetParent(Overlay* element);
 
 		void RecalculatePosition();
 
@@ -97,7 +97,7 @@ namespace ECS {
 		int render_w;
 		int render_h;
 
-		OverlayElement* parent;
+		Overlay* parent;
 
 	};
 }

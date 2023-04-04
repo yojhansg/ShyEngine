@@ -7,7 +7,7 @@
 #include <ConsoleManager.h>
 #include <SceneManager.h>
 
-#include <Components/OverlayElement.h>
+#include <Components/Overlay.h>
 #include <Components/TestComponent.h>
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>

@@ -1,5 +1,5 @@
 #include "OverlayImage.h"
-#include "OverlayElement.h"
+#include "Overlay.h"
 #include "Entity.h"
 #include "ResourcesManager.h"
 #include "Texture.h"
@@ -13,20 +13,17 @@ ECS::OverlayImage::OverlayImage()
 	overlay = nullptr;
 }
 
-void ECS::OverlayImage::start()
+void ECS::OverlayImage::init()
 {
-	//TODO: Ver si deberia dar error o añadirse uno automaticamente
-	overlay = entity->getComponent<OverlayElement>();
+	overlay = entity->getComponent<Overlay>();
 
 	if (overlay == nullptr) {
-		printError("La entidad no tiene overlay", "OverlayImage");
-
+		printError("Entity does not contain overlay component. Removing component", "OverlayImage");
+		this->remove();
+		return;
 	}
-	assert(overlay != nullptr, "La entidad debe contener un componente Overlay");
 
 	SetTexture(path);
-
-
 }
 
 void ECS::OverlayImage::render()

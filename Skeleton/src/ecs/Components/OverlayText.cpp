@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "Font.h"
 #include "Texture.h"
-#include "OverlayElement.h"
+#include "Overlay.h"
 
 #include "SDL.h"
 #include "SDL_ttf.h"
@@ -35,9 +35,9 @@ ECS::OverlayText::~OverlayText()
 	freeTexture();
 }
 
-void ECS::OverlayText::start()
+void ECS::OverlayText::init()
 {
-	overlay = entity->getComponent<ECS::OverlayElement>();
+	overlay = entity->getComponent<ECS::Overlay>();
 
 	if (font == nullptr)
 		createFont();

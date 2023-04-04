@@ -1,5 +1,5 @@
 #include "OverlayManager.h"
-#include "Components/OverlayElement.h"
+#include "Components/Overlay.h"
 #include "InputManager.h"
 #include "Entity.h"
 #include "EngineTime.h"
@@ -9,8 +9,8 @@
 ECS::OverlayManager::OverlayManager()
 {
 	isDirty = true;
-
-	timeToHold = 0.3f;
+		
+	timeToHold = 0.1f;
 	timeToDoubleClick = 0.5f;
 	selected = nullptr;
 	lastClickTime = 0;
@@ -29,7 +29,7 @@ void ECS::OverlayManager::Render()
 		RecalculateOverlay();
 	}
 
-	for (OverlayElement* overlay : overlays) {
+	for (Overlay* overlay : overlays) {
 
 		Entity* ent = overlay->getEntity();
 		if (ent->active)
@@ -55,11 +55,11 @@ void ECS::OverlayManager::Update()
 	const bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::RIGHT);
 
 
-	OverlayElement* newelem = nullptr;
+	Overlay* newelem = nullptr;
 
 	for (int i = overlays.size() - 1; i >= 0; i--) {
 
-		OverlayElement* elem = overlays[i];
+		Overlay* elem = overlays[i];
 
 		if (elem->isActive() && elem->getEntity()->active && elem->PointInsideBounds(mousePosition)) {
 
@@ -88,6 +88,7 @@ void ECS::OverlayManager::Update()
 
 		selected->getEntity()->onMouseExit();
 		selected = newelem;
+		selected->getEntity()->onMouseEnter();
 	}
 
 	selected->getEntity()->onMouseHover();
@@ -115,7 +116,7 @@ void ECS::OverlayManager::Update()
 		}
 	}
 
-	if (hold) {
+	else if (hold) {
 
 		holdTimer += Utilities::Time::instance()->deltaTime;
 
@@ -124,6 +125,7 @@ void ECS::OverlayManager::Update()
 			selected->getEntity()->onClickHold();
 		}
 	}
+
 
 	if (rightClick) {
 
@@ -143,7 +145,7 @@ bool ECS::OverlayManager::IsDirty()
 
 void ECS::OverlayManager::RecalculateOverlay()
 {
-	for (OverlayElement* overlay : overlays) {
+	for (Overlay* overlay : overlays) {
 
 		overlay->RecalculatePosition();
 	}
@@ -151,12 +153,12 @@ void ECS::OverlayManager::RecalculateOverlay()
 	isDirty = false;
 }
 
-void ECS::OverlayManager::AddElement(ECS::OverlayElement* elem)
+void ECS::OverlayManager::AddElement(ECS::Overlay* elem)
 {
 	overlays.push_back(elem);
 }
 
-void ECS::OverlayManager::RemoveElement(ECS::OverlayElement* elem)
+void ECS::OverlayManager::RemoveElement(ECS::Overlay* elem)
 {
 	if (selected == elem)
 		selected = nullptr;

@@ -15,7 +15,7 @@ namespace ECS {
 
 	class Scene;
 	class Entity;
-	class OverlayElement;
+	class Overlay;
 
 	class SceneLoader {
 
@@ -29,7 +29,7 @@ namespace ECS {
 
 
 	private:
-		static void ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::OverlayElement* parent);
+		static void ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent);
 		static void ProcessComponent(ECS::Entity* scene, nlohmann::json& component);
 	};
 

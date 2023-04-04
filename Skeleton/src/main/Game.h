@@ -15,7 +15,7 @@ namespace ECS {
 	class Scene;
 
 
-	class OverlayElement;
+	class Overlay;
 }
 
 class Game {

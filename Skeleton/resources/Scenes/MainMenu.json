@@ -70,6 +70,9 @@
                                     "value": "Jugar"
                                 }
                             ]
+                        },
+                        {
+                            "component": "OverlayButton"
                         }
         
                     ],
@@ -116,6 +119,10 @@
                                     "value": "Salir"
                                 }
                             ]
+                        },
+                        
+                        {
+                            "component": "OverlayButton"
                         }
         
                     ],

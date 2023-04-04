@@ -12,7 +12,7 @@ namespace Renderer {
 namespace ECS {
 
 
-	class OverlayElement;
+	class Overlay;
 	class OverlayText : public Component {
 
 	public:
@@ -38,7 +38,7 @@ namespace ECS {
 		~OverlayText();
 	private:
 
-		OverlayElement* overlay;
+		Overlay* overlay;
 
 		Renderer::Font* font;
 		Renderer::Texture* texture;
@@ -54,7 +54,7 @@ namespace ECS {
 
 		reflect int lineSpacing;
 
-		void start() override;
+		void init() override;
 		void render() override;
 
 		void createFont();

@@ -59,7 +59,7 @@
             "return": "void"
         }
     },
-    "OverlayElement": {
+    "Overlay": {
         "GetAnchor": {
             "return": "Utilities::Vector2D"
         },
