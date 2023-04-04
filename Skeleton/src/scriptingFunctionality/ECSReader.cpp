@@ -501,6 +501,10 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 		return ".vector";
 	}
 
+	if (in == "Utilities::Color" || in == "Color") {
+		return ".value.color";
+	}
+
 	if (in == "Variable" || in == "Scripting::Variable") {
 		return "";
 	}
@@ -535,6 +539,11 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 	if (type == "Utilities::Vector2D" || type == "Vector2D") {
 
 		return convertName;
+	}
+
+	if (type == "Utilities::Color" || type == "Color") {
+
+		return "Utilities::Color::CreateColor(" + convertName + ")";
 	}
 
 	return convertName;

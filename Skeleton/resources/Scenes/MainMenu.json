@@ -19,6 +19,7 @@
             "position": "800, 100",
             "size": "100, 100",
 
+            "color": "255, 255, 255",
 
             "components": [
 
@@ -49,7 +50,8 @@
                     "position": "0, -200",
                     "size": "500, 100",
         
-        
+                    "color": "255, 0, 0",
+
                     "components": [
         
                         {

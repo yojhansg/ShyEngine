@@ -132,4 +132,9 @@ namespace ECS {
 		scene->start();
 	}
 
+	void SceneManager::EndGame()
+	{
+		ChangeScene("", LOAD_MODE::CLEAR);
+	}
+
 }

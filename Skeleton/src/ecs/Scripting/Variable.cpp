@@ -46,9 +46,14 @@ namespace Scripting {
 		return comp;
 	}
 
-	Variable Variable::Vector2D(Utilities::Vector2D vector)
+	Variable Variable::Vector2D(Utilities::Vector2D const& vector)
 	{
 		return vector;
+	}
+
+	Variable Variable::Color(Utilities::Color const& color)
+	{
+		return color;
 	}
 
 	Variable Variable::String(std::string const& str)
@@ -88,12 +93,19 @@ namespace Scripting {
 		value.entity = entity;
 	}
 
-	Variable::Variable(Utilities::Vector2D vector)
+	Variable::Variable(Utilities::Vector2D const& vector)
 	{
 		type = Type::Vector2D;
 		this->vector = vector;
 		value.Float = 0;
 	}
+
+	Variable::Variable(Utilities::Color const& color)
+	{
+		type = Type::Color;
+		this->value.color = color;
+		value.Float = 0;
+	}	
 
 	Variable::Variable(std::string const& str)
 	{

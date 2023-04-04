@@ -9,9 +9,8 @@ namespace Utilities {
 
 	public:
 
-		Color();
-		Color(int r, int g, int b);
-		Color(std::string const& str);
+		static Color CreateColor(int r, int g, int b);
+		static Color CreateColor(std::string const& str);
 
 		int r, g, b;
 

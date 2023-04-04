@@ -108,8 +108,18 @@ void ECS::OverlayText::render()
 	}
 
 
+	auto SDL_texture = texture->getSDLTexture();
+
+	auto color = overlay->GetColor();
+
+	SDL_SetTextureColorMod(SDL_texture, color.r, color.g, color.b);
+
+
 	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
-		texture->getSDLTexture(), &source, &destination);
+		SDL_texture, &source, &destination);
+
+	SDL_SetTextureColorMod(SDL_texture, 255, 255, 255);
+
 }
 
 

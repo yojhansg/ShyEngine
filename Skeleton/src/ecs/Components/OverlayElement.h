@@ -3,6 +3,7 @@
 
 #include <Component.h>
 #include <Vector2D.h>
+#include <Color.h>
 
 
 namespace ECS {
@@ -32,6 +33,7 @@ namespace ECS {
 		reflect int right;
 		reflect int bottom;
 
+		reflect Utilities::Color color;
 
 	publish:
 
@@ -58,7 +60,6 @@ namespace ECS {
 		void SetRight(int pos);
 		void SetBottom(int pos);
 
-
 		Utilities::Vector2D GetAnchor();
 		void SetAnchor(Utilities::Vector2D anchor);
 
@@ -70,6 +71,8 @@ namespace ECS {
 
 		//TODO: Set anchors con las posiciones centradas
 
+		Utilities::Color GetColor();
+		void SetColor(Utilities::Color color);
 
 	public:
 

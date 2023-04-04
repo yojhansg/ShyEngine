@@ -100,6 +100,8 @@ ClassReflection::ClassReflection(){
 			self->right = std::stoi(map.at("right"));
 		if(map.contains("bottom"))
 			self->bottom = std::stoi(map.at("bottom"));
+		if(map.contains("color"))
+			self->color = Utilities::Color::CreateColor(map.at("color"));
 
 }
 	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

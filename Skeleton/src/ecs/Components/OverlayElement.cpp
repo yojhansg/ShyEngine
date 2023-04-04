@@ -5,6 +5,8 @@
 
 ECS::OverlayElement::OverlayElement() {
 
+	color = Utilities::Color::White();
+
 	parent = nullptr;
 	SetPositioned({ 0, 0 }, { 100, 100 });
 	SetAnchorCenter();
@@ -173,6 +175,16 @@ void ECS::OverlayElement::SetAnchorBottomLeft()
 void ECS::OverlayElement::SetAnchorBottomRight()
 {
 	SetAnchor({ 1, 1 });
+}
+
+Utilities::Color ECS::OverlayElement::GetColor()
+{
+	return color;
+}
+
+void ECS::OverlayElement::SetColor(Utilities::Color color)
+{
+	this->color = color;
 }
 
 bool ECS::OverlayElement::PointInsideBounds(Utilities::Vector2D const& p)

@@ -66,6 +66,9 @@
         "GetBottom": {
             "return": "int"
         },
+        "GetColor": {
+            "return": "Utilities::Color"
+        },
         "GetLeft": {
             "return": "int"
         },
@@ -131,6 +134,15 @@
                 {
                     "name": "pos",
                     "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetColor": {
+            "input": [
+                {
+                    "name": "color",
+                    "type": "Utilities::Color"
                 }
             ],
             "return": "void"

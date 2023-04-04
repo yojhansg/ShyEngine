@@ -66,7 +66,10 @@ namespace ECS {
 	publish:
 
 		void ChangeScene(std::string scenePath, int pushMode);
+
 		void ResetScene();
+		void EndGame();
+
 		int getNumberOfScenes();
 		std::string GetCurrentScenePath();
 

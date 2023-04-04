@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Apr  3 14:06:30 2023
+//Creation time: Tue Apr  4 02:40:51 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -72,6 +72,8 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("OverlayElement_SetAnchorTopRight",OverlayElement_SetAnchorTopRight);
 	map.emplace("OverlayElement_SetAnchorBottomLeft",OverlayElement_SetAnchorBottomLeft);
 	map.emplace("OverlayElement_SetAnchorBottomRight",OverlayElement_SetAnchorBottomRight);
+	map.emplace("OverlayElement_GetColor",OverlayElement_GetColor);
+	map.emplace("OverlayElement_SetColor",OverlayElement_SetColor);
 	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
 	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
 	map.emplace("OverlayText_GetFit",OverlayText_GetFit);
@@ -126,6 +128,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("SaveManager_DeleteSave",SaveManager_DeleteSave);
 	map.emplace("SceneManager_ChangeScene",SceneManager_ChangeScene);
 	map.emplace("SceneManager_ResetScene",SceneManager_ResetScene);
+	map.emplace("SceneManager_EndGame",SceneManager_EndGame);
 	map.emplace("SceneManager_getNumberOfScenes",SceneManager_getNumberOfScenes);
 	map.emplace("SceneManager_GetCurrentScenePath",SceneManager_GetCurrentScenePath);
 	map.emplace("ScriptFunctionality_Entity",ScriptFunctionality_Entity);
@@ -435,6 +438,24 @@ Scripting::Variable OverlayElement_SetAnchorBottomRight(std::vector<Scripting::V
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorBottomRight();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable OverlayElement_GetColor(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_GetColor", vec[0].value.entity->getEntityName(), OverlayElement);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Color ret = self->GetColor();
+	return ret;
+}
+Scripting::Variable OverlayElement_SetColor(std::vector<Scripting::Variable>const& vec){
+	OverlayElement* self = vec[0].value.entity->getComponent<OverlayElement>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayElement_SetColor", vec[0].value.entity->getEntityName(), OverlayElement);
+		return Scripting::Variable::Null();
+	}
+	self->SetColor(vec[1].value.color);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec){
@@ -853,6 +874,11 @@ Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>con
 Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec){
 	SceneManager* manager = SceneManager::instance();
 	manager->ResetScene();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SceneManager_EndGame(std::vector<Scripting::Variable>const& vec){
+	SceneManager* manager = SceneManager::instance();
+	manager->EndGame();
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variable>const& vec){

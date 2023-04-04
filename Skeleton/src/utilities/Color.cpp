@@ -3,18 +3,19 @@
 #include <cassert>
 #include "StringTrim.h"
 
-Utilities::Color::Color()
+
+Utilities::Color Utilities::Color::CreateColor(int r, int g, int b)
 {
-	r = g = b = 255;
+	Color color;
+
+	color.r = r;
+	color.g= g;
+	color.b = b;
+	return color;
 }
 
-Utilities::Color::Color(int r, int g, int b) : r(r), g(g), b(b)
+Utilities::Color Utilities::Color::CreateColor(std::string const& str)
 {
-}
-
-Utilities::Color::Color(std::string const& str)
-{
-
 	std::string trimed = Utilities::trim(str, "([ )]");
 
 	size_t coma = trimed.find(",");
@@ -31,49 +32,51 @@ Utilities::Color::Color(std::string const& str)
 	std::string b_ = secondPart.substr(coma + 1);
 
 
-	r = std::stoi(r_);
-	g = std::stoi(g_);
-	b = std::stoi(b_);
+	Utilities::Color color;
+	color.r = std::stoi(r_);
+	color.g = std::stoi(g_);
+	color.b = std::stoi(b_);
+	return color;
 }
 
 Utilities::Color Utilities::Color::Red()
 {
-	return Color();
+	return CreateColor(255, 0, 0);
 }
 
 Utilities::Color Utilities::Color::Green()
 {
-	return Color();
+	return CreateColor(255, 0, 0);
 }
 
 Utilities::Color Utilities::Color::Blue()
 {
-	return Color();
+	return CreateColor(255, 0, 0);
 }
 
 Utilities::Color Utilities::Color::Yellow()
 {
-	return Color();
+	return CreateColor(255, 255, 0);
 }
 
 Utilities::Color Utilities::Color::Purple()
 {
-	return Color();
+	return CreateColor(255, 0, 255);
 }
 
 Utilities::Color Utilities::Color::Orange()
 {
-	return Color();
+	return CreateColor(255, 165, 0);
 }
 
 Utilities::Color Utilities::Color::Black()
 {
-	return Color();
+	return CreateColor(0, 0, 0);
 }
 
 Utilities::Color Utilities::Color::White()
 {
-	return Color();
+	return CreateColor(255, 255, 255);
 }
 
 Utilities::Color::operator std::string() const {

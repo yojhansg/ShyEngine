@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Apr  3 14:06:30 2023
+//Creation time : Tue Apr  4 02:40:51 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -49,6 +49,8 @@ Scripting::Variable OverlayElement_SetAnchorTopLeft(std::vector<Scripting::Varia
 Scripting::Variable OverlayElement_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayElement_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayElement_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable OverlayElement_GetColor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable OverlayElement_SetColor(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& vec);
@@ -103,6 +105,7 @@ Scripting::Variable SaveManager_Exists(std::vector<Scripting::Variable>const& ve
 Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SceneManager_EndGame(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);

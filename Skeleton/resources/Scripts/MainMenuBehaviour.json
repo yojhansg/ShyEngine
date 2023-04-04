@@ -44,12 +44,9 @@
 
 
         ,{
-            "index": 19, 
-            "comment": "@Get entity",
-            "function": "ScriptFunctionality_Print",
-            "input": [
-                1
-            ]
+            "index": 11, 
+            "comment": "@End game",
+            "function": "SceneManager_EndGame"
         }
 
 
@@ -82,7 +79,7 @@
             "index": 0,
             "condition": 1, 
             "A": 10,
-            "B": 19,
+            "B": 11,
             "type": 0
         }
 
