@@ -31,15 +31,7 @@
         {
             "index": 2, 
             "comment": "@Compare text",
-            "function": "OverlayText_GetText",
-            "input": [
-                3
-            ]
-        },
-        {
-            "index": 3, 
-            "comment": "@Get entity",
-            "function": "Entity"
+            "function": "EntityName"
         }
 
 

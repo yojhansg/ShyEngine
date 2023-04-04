@@ -106,6 +106,8 @@ ClassReflection::ClassReflection(){
 			self->color = Utilities::Color::CreateColor(map.at("color"));
 		if(map.contains("renderScale"))
 			self->renderScale = std::stof(map.at("renderScale"));
+		if(map.contains("interactable"))
+			self->interactable = map.at("interactable") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectOverlayButton(ECS::Component* selfComp, std::map<std::string, std::string> const& map){

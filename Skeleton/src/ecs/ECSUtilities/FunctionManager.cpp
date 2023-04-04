@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 14:17:40 2023
+//Creation time: Tue Apr  4 14:44:08 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -78,6 +78,8 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Overlay_GetRenderScale",Overlay_GetRenderScale);
 	map.emplace("Overlay_SetRenderScale",Overlay_SetRenderScale);
 	map.emplace("Overlay_ResetRenderScale",Overlay_ResetRenderScale);
+	map.emplace("Overlay_SetInteractable",Overlay_SetInteractable);
+	map.emplace("Overlay_IsInteractable",Overlay_IsInteractable);
 	map.emplace("OverlayImage_SetTexture",OverlayImage_SetTexture);
 	map.emplace("OverlayImage_GetTexture",OverlayImage_GetTexture);
 	map.emplace("OverlayText_GetFit",OverlayText_GetFit);
@@ -489,6 +491,24 @@ Scripting::Variable Overlay_ResetRenderScale(std::vector<Scripting::Variable>con
 	}
 	self->ResetRenderScale();
 	return Scripting::Variable::Null();
+}
+Scripting::Variable Overlay_SetInteractable(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", vec[0].value.entity->getEntityName(), Overlay);
+		return Scripting::Variable::Null();
+	}
+	self->SetInteractable(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Overlay_IsInteractable(std::vector<Scripting::Variable>const& vec){
+	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_IsInteractable", vec[0].value.entity->getEntityName(), Overlay);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->IsInteractable();
+	return ret;
 }
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec){
 	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();

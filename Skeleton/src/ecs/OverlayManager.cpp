@@ -61,7 +61,7 @@ void ECS::OverlayManager::Update()
 
 		Overlay* elem = overlays[i];
 
-		if (elem->isActive() && elem->getEntity()->active && elem->PointInsideBounds(mousePosition)) {
+		if (elem->isActive() && elem->getEntity()->active && elem->IsInteractable() && elem->PointInsideBounds(mousePosition)) {
 
 			newelem = elem;
 			break;

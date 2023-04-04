@@ -38,111 +38,160 @@
 
             "childs": [
                 {
-                    "name": "Jugar",
+                    "name": "Button parent",
                     "placement": "0",
-                    "anchor": "0.5f, 0.5f",
-        
-                    "top": "200",
-                    "left": "50",
-                    "right": "50", 
-                    "bottom": "700",
-        
-                    "position": "0, -200",
-                    "size": "500, 100",
-        
-                    "color": "255, 0, 0",
+                    "anchor":"0.5f, 0.5f",
 
-                    "components": [
-        
+                    "position": "0, 0",
+                    "size": "500, 500",
+
+                    "childs": [
+
                         {
-                            "component": "OverlayText",
-                            "attributes": [
+                            "name": "Jugar",
+                            "placement": "0",
+                            "anchor": "0.5f, 0.5f",
+                
+                            "position": "0, 0",
+                            "size": "460, 150",
+                
+                            "color": "255, 0, 0",
+        
+                            "components": [
                                 {
-                                    "name":"path",
-                                    "value": "1up.ttf"
+                                    "component": "OverlayImage",
+                                    "attributes": [
+                                        {
+                                            "name": "path",
+                                            "value": "button.png"
+                                        }
+                                    ]
+        
                                 },
                                 {
-                                    "name":"fit",
-                                    "value": "4"
-                                },
+                                    "component": "OverlayButton"
+                                }
+                            ],
+        
+                            "scripts": [
+        
+                                "MainMenuBehaviour"
+                            ],
+                
+                            "childs": [
                                 {
-                                    "name":"text",
-                                    "value": "Jugar"
+                                    "name": "jugar_text",
+                                    "placement": "1",
+                                    "anchor":"0.5f, 0.5f",
+        
+                                    "top":"5",
+                                    "left": "20",
+                                    "right": "20",
+                                    "bottom": "30",
+        
+                                    "color": "255, 255, 255",
+                                    "interactable": "false",
+        
+                                    "components": [
+                                       
+                                        {
+                                            "component": "OverlayText",
+                                            "attributes": [
+                                                {
+                                                    "name":"path",
+                                                    "value": "1up.ttf"
+                                                },
+                                                {
+                                                    "name":"fit",
+                                                    "value": "4"
+                                                },
+                                                {
+                                                    "name":"text",
+                                                    "value": "Jugar"
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 }
                             ]
+                
                         },
                         {
-                            "component": "OverlayButton"
-                        }
+                            "name": "Salir",
+                            "placement": "0",
+                            "anchor": "0.5f, 0.5f",
+                
+                            "top": "200",
+                            "left": "50",
+                            "right": "50", 
+                            "bottom": "700",
+                
+                            "position": "0, 160",
+                            "size": "460, 150",
+                
+                            "color": "255, 0, 0",
         
-                    ],
-
-                    "scripts": [
-
-                        "MainMenuBehaviour"
-                    ],
-        
-                    "childs": [
-                        
-                    ]
-        
-                },
-                {
-                    "name": "Salir",
-                    "placement": "0",
-                    "anchor": "0.5f, 0.5f",
-        
-                    "top": "200",
-                    "left": "50",
-                    "right": "50", 
-                    "bottom": "700",
-        
-                    "position": "0, 200",
-                    "size": "500, 100",
-        
-        
-                    "components": [
-        
-                        {
-                            "component": "OverlayText",
-                            "attributes": [
+                            "components": [
                                 {
-                                    "name":"path",
-                                    "value": "1up.ttf"
+                                    "component": "OverlayImage",
+                                    "attributes": [
+                                        {
+                                            "name": "path",
+                                            "value": "button.png"
+                                        }
+                                    ]
+        
                                 },
                                 {
-                                    "name":"fit",
-                                    "value": "4"
-                                },
+                                    "component": "OverlayButton"
+                                }
+                            ],
+        
+                            "scripts": [
+        
+                                "MainMenuBehaviour"
+                            ],
+                
+                            "childs": [
                                 {
-                                    "name":"text",
-                                    "value": "Salir"
+                                    "name": "salir_text",
+                                    "placement": "0",
+                                    "anchor":"0.5f, 0.5f",
+        
+                                    "position": "5, -15",
+                                    "size": "430, 120",
+        
+                                    "color": "255, 255, 255",
+                                    "interactable": "false",
+        
+                                    "components": [
+                                       
+                                        {
+                                            "component": "OverlayText",
+                                            "attributes": [
+                                                {
+                                                    "name":"path",
+                                                    "value": "1up.ttf"
+                                                },
+                                                {
+                                                    "name":"fit",
+                                                    "value": "4"
+                                                },
+                                                {
+                                                    "name":"text",
+                                                    "value": "Salir"
+                                                }
+                                            ]
+                                        }
+                                    ]
                                 }
                             ]
-                        },
-                        
-                        {
-                            "component": "OverlayButton",
-                            "attributes": [
-                                {
-                                    "name":"scale",
-                                    "value": "1.1"
-                                }
-                            ]
+                
                         }
-        
-                    ],
 
-                    "scripts": [
-
-                        "MainMenuBehaviour"
-                    ],
-        
-                    "childs": [
-                        
                     ]
-        
                 }
+                
             ]
 
         }

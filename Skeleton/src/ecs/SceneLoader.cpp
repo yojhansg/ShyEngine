@@ -236,7 +236,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 	std::map<std::string, std::string> map;
 
-	const std::vector<std::string> overlayAttributes = { "placement", "anchor", "top", "left", "right", "bottom", "position", "size" , "color"};
+	const std::vector<std::string> overlayAttributes = { "placement", "anchor", "top", "left", "right", "bottom", "position", "size" , "color" , "interactable"};
 
 	for (auto& attr : overlayAttributes) {
 
@@ -248,33 +248,35 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 	ClassReflection::instance()->ReflectOverlay(overlayElement, map);
 	overlayElement->SetParent(parent);
 
-	jsonarray components = overlay["components"].get<jsonarray>();
+	if (overlay.contains("components")) {
+		jsonarray components = overlay["components"].get<jsonarray>();
 
-	for (auto& compInfo : components) {
+		for (auto& compInfo : components) {
 
-		std::string componentStr = compInfo["component"].get<std::string>();
+			std::string componentStr = compInfo["component"].get<std::string>();
 
-		ECS::Component* component = entity->addComponent(componentStr);
+			ECS::Component* component = entity->addComponent(componentStr);
 
-		std::map<std::string, std::string> attributeMap;
+			std::map<std::string, std::string> attributeMap;
 
 
-		if (compInfo.contains("attributes")) {
-			jsonarray attributes = compInfo["attributes"].get<jsonarray>();
+			if (compInfo.contains("attributes")) {
+				jsonarray attributes = compInfo["attributes"].get<jsonarray>();
 
-			for (auto& attribute : attributes) {
+				for (auto& attribute : attributes) {
 
-				std::string attributeName = attribute["name"].get<std::string>();
-				std::string attributeValue = attribute["value"].get<std::string>();
+					std::string attributeName = attribute["name"].get<std::string>();
+					std::string attributeValue = attribute["value"].get<std::string>();
 
-				attributeMap[attributeName] = attributeValue;
+					attributeMap[attributeName] = attributeValue;
 
+				}
 			}
+
+			ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
 		}
 
-		ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
 	}
-
 
 	if (overlay.contains("scripts")) {
 
@@ -289,11 +291,14 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 	}
 
 
-	jsonarray childs = overlay["childs"].get<jsonarray>();
+	if (overlay.contains("childs")) {
 
-	for (auto& child : childs) {
+		jsonarray childs = overlay["childs"].get<jsonarray>();
 
-		ProcessOverlay(scene, child, overlayElement);
+		for (auto& child : childs) {
+
+			ProcessOverlay(scene, child, overlayElement);
+		}
 	}
 
 }

@@ -90,6 +90,9 @@
         "GetTop": {
             "return": "int"
         },
+        "IsInteractable": {
+            "return": "bool"
+        },
         "Move": {
             "input": [
                 {
@@ -149,6 +152,15 @@
                 {
                     "name": "color",
                     "type": "Utilities::Color"
+                }
+            ],
+            "return": "void"
+        },
+        "SetInteractable": {
+            "input": [
+                {
+                    "name": "value",
+                    "type": "bool"
                 }
             ],
             "return": "void"

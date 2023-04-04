@@ -41,6 +41,8 @@ namespace ECS {
 		reflect Utilities::Color color;
 
 		reflect float renderScale;
+		reflect bool interactable;
+
 	publish:
 
 		int GetPlacement();
@@ -84,6 +86,9 @@ namespace ECS {
 		void SetRenderScale(float newRenderScale);
 		void ResetRenderScale();
 
+		void SetInteractable(bool value);
+		bool IsInteractable();
+
 	public:
 
 		bool PointInsideBounds(Utilities::Vector2D const& p);
@@ -95,6 +100,8 @@ namespace ECS {
 		void GetRenderRect(int& x, int& y, int& w, int& h);
 
 		void RenderTexture(Renderer::Texture* texture, SDL_Rect* source, SDL_Rect* destination);
+
+		float RenderScale();
 
 	private:
 

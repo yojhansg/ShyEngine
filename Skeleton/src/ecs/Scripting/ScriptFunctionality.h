@@ -29,6 +29,7 @@ publish:
 
 	ECS::Entity* Entity();
 
+	//TODO: esto deberia depender de la entidad no dar la del propio objeto
 	std::string EntityName();
 	std::string Script();
 

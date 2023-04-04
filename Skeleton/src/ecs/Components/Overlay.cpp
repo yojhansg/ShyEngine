@@ -15,6 +15,7 @@ ECS::Overlay::Overlay() {
 	render_x = render_y = render_w = render_h = 0;
 
 	renderScale = 1;
+	interactable = true;
 
 	OverlayManager::instance()->AddElement(this);
 }
@@ -205,6 +206,16 @@ void ECS::Overlay::ResetRenderScale()
 	SetRenderScale(1);
 }
 
+void ECS::Overlay::SetInteractable(bool value)
+{
+	interactable = value;
+}
+
+bool ECS::Overlay::IsInteractable()
+{
+	return interactable;
+}
+
 bool ECS::Overlay::PointInsideBounds(Utilities::Vector2D const& p)
 {
 	if (OverlayManager::instance()->IsDirty())
@@ -240,11 +251,12 @@ void ECS::Overlay::RenderTexture(Renderer::Texture* texture, SDL_Rect* source, S
 
 	SDL_SetTextureColorMod(SDL_texture, color.r, color.g, color.b);
 
+	float scale = RenderScale();
 
-	if (renderScale != 1.f) {
+	if (scale != 1.f) {
 
-		int new_w = (int)std::round(destination->w * renderScale);
-		int new_h = (int)std::round(destination->h * renderScale);
+		int new_w = (int)std::round(destination->w * scale);
+		int new_h = (int)std::round(destination->h * scale);
 
 		destination->x += (int)std::round((destination->w - new_w) * 0.5f);
 		destination->y += (int)std::round((destination->h - new_h) * 0.5f);
@@ -257,6 +269,16 @@ void ECS::Overlay::RenderTexture(Renderer::Texture* texture, SDL_Rect* source, S
 		SDL_texture, source, destination);
 
 	SDL_SetTextureColorMod(SDL_texture, 255, 255, 255);
+}
+
+float ECS::Overlay::RenderScale()
+{
+	if (parent != nullptr) {
+
+		return renderScale * parent->RenderScale();
+	}
+
+	return renderScale;
 }
 
 
