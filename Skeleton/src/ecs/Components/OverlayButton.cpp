@@ -26,14 +26,17 @@ void ECS::OverlayButton::start()
 void ECS::OverlayButton::onMouseEnter()
 {
 	overlay->SetColor(hoverColor);
-	overlay->SetSize(overlay->GetSize() * scale);
-
+	//overlay->SetSize(overlay->GetSize() * scale);
+	overlay->SetRenderScale(scale);
 }
 
 void ECS::OverlayButton::onMouseExit()
 {
 	overlay->SetColor(defaultColor);
-	overlay->SetSize(overlay->GetSize() / scale);
+	//overlay->SetSize(overlay->GetSize() / scale);
+	//TODO: guardar el valor que tenia antes
+	overlay->ResetRenderScale();
+
 }
 
 void ECS::OverlayButton::onClickBegin()

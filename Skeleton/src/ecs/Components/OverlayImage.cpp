@@ -32,16 +32,7 @@ void ECS::OverlayImage::render()
 	
 	overlay->GetRenderRect(destination.x, destination.y, destination.w, destination.h);
 
-	auto SDL_texture = texture->getSDLTexture();
-
-	auto color = overlay->GetColor();
-
-	SDL_SetTextureColorMod(SDL_texture, color.r, color.g, color.b);
-	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
-		SDL_texture, NULL, &destination);
-
-	SDL_SetTextureColorMod(SDL_texture, 255, 255, 255);
-
+	overlay->RenderTexture(texture, NULL, &destination);
 }
 
 

@@ -2,6 +2,7 @@
 #include "RendererManager.h"
 
 #include "OverlayManager.h"
+#include "Texture.h"
 
 ECS::Overlay::Overlay() {
 
@@ -12,6 +13,8 @@ ECS::Overlay::Overlay() {
 	SetAnchorCenter();
 
 	render_x = render_y = render_w = render_h = 0;
+
+	renderScale = 1;
 
 	OverlayManager::instance()->AddElement(this);
 }
@@ -187,6 +190,21 @@ void ECS::Overlay::SetColor(Utilities::Color color)
 	this->color = color;
 }
 
+float ECS::Overlay::GetRenderScale()
+{
+	return renderScale;
+}
+
+void ECS::Overlay::SetRenderScale(float newRenderScale)
+{
+	renderScale = newRenderScale;
+}
+
+void ECS::Overlay::ResetRenderScale()
+{
+	SetRenderScale(1);
+}
+
 bool ECS::Overlay::PointInsideBounds(Utilities::Vector2D const& p)
 {
 	if (OverlayManager::instance()->IsDirty())
@@ -215,6 +233,32 @@ void ECS::Overlay::GetRenderRect(int& x, int& y, int& w, int& h)
 	w = render_w;
 	h = render_h;
 }
+
+void ECS::Overlay::RenderTexture(Renderer::Texture* texture, SDL_Rect* source, SDL_Rect* destination)
+{
+	auto SDL_texture = texture->getSDLTexture();
+
+	SDL_SetTextureColorMod(SDL_texture, color.r, color.g, color.b);
+
+
+	if (renderScale != 1) {
+
+		int new_w = (int)std::round(destination->w * renderScale);
+		int new_h = (int)std::round(destination->h * renderScale);
+
+		destination->x += (int)std::round((destination->w - new_w) * 0.5f);
+		destination->y += (int)std::round((destination->h - new_h) * 0.5f);
+
+		destination->w = new_w;
+		destination->h = new_h;
+	}
+
+	SDL_RenderCopy(Renderer::RendererManager::instance()->getRenderer(),
+		SDL_texture, source, destination);
+
+	SDL_SetTextureColorMod(SDL_texture, 255, 255, 255);
+}
+
 
 void ECS::Overlay::CalculateRenderRect(int& x, int& y, int& w, int& h)
 {

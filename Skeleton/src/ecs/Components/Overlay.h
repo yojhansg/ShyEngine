@@ -5,6 +5,11 @@
 #include <Vector2D.h>
 #include <Color.h>
 
+namespace Renderer {
+	class Texture;
+}
+
+typedef struct SDL_Rect;
 
 namespace ECS {
 
@@ -35,6 +40,7 @@ namespace ECS {
 
 		reflect Utilities::Color color;
 
+		reflect float renderScale;
 	publish:
 
 		int GetPlacement();
@@ -74,6 +80,10 @@ namespace ECS {
 		Utilities::Color GetColor();
 		void SetColor(Utilities::Color color);
 
+		float GetRenderScale();
+		void SetRenderScale(float newRenderScale);
+		void ResetRenderScale();
+
 	public:
 
 		bool PointInsideBounds(Utilities::Vector2D const& p);
@@ -84,7 +94,7 @@ namespace ECS {
 
 		void GetRenderRect(int& x, int& y, int& w, int& h);
 
-
+		void RenderTexture(Renderer::Texture* texture, SDL_Rect* source, SDL_Rect* destination);
 
 	private:
 
