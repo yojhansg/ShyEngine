@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 04:32:54 2023
+//Creation time: Tue Apr  4 14:00:09 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -176,6 +176,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("ScriptFunctionality_String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
 	map.emplace("ScriptFunctionality_String_GetLetter",ScriptFunctionality_String_GetLetter);
 	map.emplace("ScriptFunctionality_String_Find",ScriptFunctionality_String_Find);
+	map.emplace("ScriptFunctionality_Open_URL",ScriptFunctionality_Open_URL);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
 	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
@@ -1126,6 +1127,11 @@ Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Varia
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	int ret = manager->String_Find(vec[0].str, vec[1].value.Char);
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Open_URL(vec[0].str);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec){
 	Time* manager = Time::instance();

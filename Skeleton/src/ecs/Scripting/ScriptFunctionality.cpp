@@ -6,6 +6,10 @@
 
 #include "ConsoleManager.h"
 
+#include <Windows.h>
+#include <shellapi.h>
+
+
 #define DELTA 0.001f
 
 Scripting::ScriptFunctionality::~ScriptFunctionality()
@@ -256,4 +260,10 @@ char Scripting::ScriptFunctionality::String_GetLetter(std::string a, int b) {
 }
 int Scripting::ScriptFunctionality::String_Find(std::string a, char c) {
 	return a.find(c);
+}
+
+
+void Scripting::ScriptFunctionality::Open_URL(std::string url) {
+
+	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }

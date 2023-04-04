@@ -12,6 +12,7 @@ namespace ECS {
 
 using Utilities::Vector2D;
 
+//TODO: Creo que para las funciones es mejor quitar el nombre script functionality
 
 namespace Scripting {
 
@@ -83,6 +84,9 @@ publish:
 	char String_GetLetter(std::string a, int b);
 	int String_Find(std::string a, char c);
 
+
+	//Misc
+	void Open_URL(std::string url);
 
 private:
 

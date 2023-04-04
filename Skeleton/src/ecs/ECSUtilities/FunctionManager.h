@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Apr  4 04:32:54 2023
+//Creation time : Tue Apr  4 14:00:09 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -152,6 +152,7 @@ Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Varia
 Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetDeltaTime(std::vector<Scripting::Variable>const& vec);

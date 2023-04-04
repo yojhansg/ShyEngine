@@ -46,10 +46,18 @@
         ,{
             "index": 11, 
             "comment": "@End game",
-            "function": "SceneManager_EndGame"
+            "function": "SceneManager_EndGame",
+            "next": 12
         }
 
-
+        ,{
+            "index": 12,
+            "comment": "@Open a link",
+            "function": "ScriptFunctionality_Open_URL",
+            "input": [
+                13
+            ]
+        }
     ],
 
 
@@ -69,6 +77,11 @@
             "index": 6,
             "type": "float",
             "value": 2
+        },
+        {
+            "index": 13,
+            "type": "string",
+            "value": "https://github.com/ivasan07/TFG"
         }
 
     ],
