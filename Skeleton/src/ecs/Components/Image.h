@@ -32,6 +32,8 @@ namespace ECS {
 
 		void setRotaionPoint(int x, int y);
 
+		Utilities::Vector2D scaledSize();
+
 	private:
 
 		void flipMode();
@@ -53,7 +55,7 @@ namespace ECS {
 
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;
-
+			
 		bool flipX, flipY;
 
 		SDL_RendererFlip mode;

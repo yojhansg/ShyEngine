@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Apr  4 14:44:08 2023
+//Creation time : Wed Apr  5 00:24:03 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -26,6 +26,7 @@ Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec);

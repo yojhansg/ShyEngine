@@ -6,6 +6,9 @@
         "getTextureWidth": {
             "return": "int"
         },
+        "scaledSize": {
+            "return": "Utilities::Vector2D"
+        },
         "setFlipX": {
             "input": [
                 {

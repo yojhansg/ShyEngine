@@ -100,6 +100,12 @@ namespace ECS {
 		rotationPoint->y = y;
 	}
 
+	Utilities::Vector2D Image::scaledSize()
+	{
+		auto scale = transform->getScale();
+		return { width * scale.getX(), height * scale.getY() };
+	}
+
 	void Image::flipMode() {
 		if (!flipX && !flipY) mode = SDL_FLIP_NONE;
 		else {

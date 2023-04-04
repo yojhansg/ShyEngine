@@ -25,11 +25,6 @@ namespace Scripting {
 	private:
 
 
-		void If();
-		void While();
-		void Else();
-
-
 		Node* A;
 		Node* B;
 

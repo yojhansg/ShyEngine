@@ -14,7 +14,8 @@
             "function": "Transform_setPositionX",
             "input": [
                 1, 6
-            ]
+            ],
+            "next": 8
         },
         {
             "index" : 2,
@@ -29,6 +30,7 @@
         },
         {
             "index" : 3,
+            "comment": "@ posicion x del tranform",
             "function": "Vector2D_X",
             "input":[
                 2
@@ -46,9 +48,55 @@
             "index": 7,
             "function": "Print",
             "input": [
-                6
+                3
             ]
+        },
+        {
+            "index" : 9,
+            "function": "Transform_setPositionX",
+            "input": [
+                1, 16
+            ],
+            "next": 7
+        },
+        {
+            "index" : 10,
+            "function": "Image_scaledSize",
+            "input": [
+                1
+            ]
+        },
+        {
 
+            "index": 11,
+            "function": "Logic_LesserOrEqual",
+            "input":[
+                3, 12
+            ]
+        },
+        {
+
+            "index": 12,
+            "function": "Math_Subtract",
+            "input":[
+                13, 14
+            ]
+        },
+        {
+
+            "index": 14,
+            "comment": "@ size x de la imagen",
+            "function": "Vector2D_X",
+            "input":[
+                10
+            ]
+        },
+        {
+            "index": 15,
+            "function": "Math_Multiply",
+            "input":[
+                16, 14
+            ]
         }
 
     ],
@@ -60,8 +108,30 @@
             "index": 5,
             "type": "float",
             "value": -1
+        },
+        {
+            "index": 13,
+            "type": "float",
+            "value": 0
+        },
+        {
+            "index": 16,
+            "type": "float",
+            "value": 2
         }
 
+    ],
+
+
+    "forks":[
+
+        {
+            "index": 8, 
+            "type": 0,
+            "A": 9,
+            "B": 7,
+            "condition": 11
+        }
     ]
 
 }

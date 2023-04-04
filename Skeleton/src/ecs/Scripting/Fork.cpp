@@ -39,7 +39,7 @@ void Scripting::Fork::Operate(Node*& next)
 
 
 		if (condition->output.value.Bool)
-			next = A;
+ 			next = A;
 		else next = B;
 
 		break;

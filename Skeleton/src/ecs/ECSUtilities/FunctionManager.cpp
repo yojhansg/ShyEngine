@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 14:44:08 2023
+//Creation time: Wed Apr  5 00:24:03 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -50,6 +50,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Image_setFlipX",Image_setFlipX);
 	map.emplace("Image_setFlipY",Image_setFlipY);
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
+	map.emplace("Image_scaledSize",Image_scaledSize);
 	map.emplace("Overlay_GetPlacement",Overlay_GetPlacement);
 	map.emplace("Overlay_SetPositioned",Overlay_SetPositioned);
 	map.emplace("Overlay_SetStreched",Overlay_SetStreched);
@@ -239,6 +240,15 @@ Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const&
 	}
 	self->setRotaionPoint(vec[1].value.Float, vec[2].value.Float);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec){
+	Image* self = vec[0].value.entity->getComponent<Image>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_scaledSize", vec[0].value.entity->getEntityName(), Image);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Vector2D ret = self->scaledSize();
+	return ret;
 }
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec){
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
