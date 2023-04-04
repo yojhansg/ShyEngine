@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "EngineTime.h"
 
+#include <iostream>
+
 ECS::OverlayManager::OverlayManager()
 {
 	isDirty = true;
@@ -39,50 +41,64 @@ void ECS::OverlayManager::Update()
 {
 	/*
 		TODO:
-		
+
 		hoverEnter
 		hover
 		hoverExit
 	*/
 
-	Utilities::Vector2D mousePosition = Input::InputManager::instance()->getMousePos();
+	const Utilities::Vector2D mousePosition = Input::InputManager::instance()->getMousePos();
 
-	bool hold = Input::InputManager::instance()->isMouseButtonDown(Input::InputManager::LEFT);
-	bool clickBegin = Input::InputManager::instance()->isMouseButtonDownEvent(Input::InputManager::LEFT);
-	bool click = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::LEFT);
+	const bool hold = Input::InputManager::instance()->isMouseButtonDown(Input::InputManager::LEFT);
+	const bool clickBegin = Input::InputManager::instance()->isMouseButtonDownEvent(Input::InputManager::LEFT);
+	const bool click = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::LEFT);
+	const bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::RIGHT);
 
-	bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::RIGHT);
 
+	OverlayElement* newelem = nullptr;
 
-	if (selected != nullptr) {
+	for (int i = overlays.size() - 1; i >= 0; i--) {
 
-		if (!selected->PointInsideBounds(mousePosition)) {
+		OverlayElement* elem = overlays[i];
 
-			selected = nullptr;
+		if (elem->isActive() && elem->getEntity()->active && elem->PointInsideBounds(mousePosition)) {
+
+			newelem = elem;
+			break;
 		}
 	}
 
+	if (newelem == nullptr) {
+
+		if (selected != nullptr) {
+			selected->getEntity()->onMouseExit();
+		}
+
+		selected = nullptr;
+		return;
+	}
+
+	if (selected == nullptr) {
+
+		selected = newelem;
+		selected->getEntity()->onMouseEnter();
+	}
+
+	else if (selected != newelem) {
+
+		selected->getEntity()->onMouseExit();
+		selected = newelem;
+	}
+
+	selected->getEntity()->onMouseHover();
 
 	if (clickBegin) {
 
-		for (int i = overlays.size() - 1; clickBegin && i >= 0; i--) {
-
-			OverlayElement* elem = overlays[i];
-
-			if (elem->isActive() && elem->getEntity()->active && elem->PointInsideBounds(mousePosition)) {
-
-				selected = elem;
-				clickBegin = false;
-			}
-		}
-
-		if (selected != nullptr) {
-			selected->getEntity()->onClickBegin();
-		}
+		selected->getEntity()->onClickBegin();
 
 		holdTimer = 0;
 	}
-	else if (click && selected != nullptr) {
+	else if (click) {
 
 		selected->getEntity()->onClick();
 
@@ -99,7 +115,7 @@ void ECS::OverlayManager::Update()
 		}
 	}
 
-	if (hold && selected != nullptr) {
+	if (hold) {
 
 		holdTimer += Utilities::Time::instance()->deltaTime;
 
@@ -109,19 +125,9 @@ void ECS::OverlayManager::Update()
 		}
 	}
 
-
 	if (rightClick) {
 
-		for (int i = overlays.size() - 1; clickBegin && i >= 0; i--) {
-
-			OverlayElement* elem = overlays[i];
-
-			if (elem->isActive() && elem->getEntity()->active && elem->PointInsideBounds(mousePosition)) {
-
-				elem->getEntity()->onRightClick();
-				break;
-			}
-		}
+		selected->getEntity()->onRightClick();
 	}
 }
 

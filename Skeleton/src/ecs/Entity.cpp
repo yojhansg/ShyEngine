@@ -187,6 +187,27 @@ namespace ECS {
 		}
 	}
 
+	void Entity::onMouseHover()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onMouseHover();
+		}
+	}
+
+	void Entity::onMouseEnter()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onMouseEnter();
+		}
+	}
+
+	void Entity::onMouseExit()
+	{
+		for (auto c : components) {
+			if (c->isActive()) c->onMouseExit();
+		}
+	}
+
 	void Entity::onClick()
 	{
 		for (auto c : components) {

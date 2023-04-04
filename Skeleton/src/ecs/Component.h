@@ -85,6 +85,12 @@ namespace ECS {
 
 		virtual void onRightClick() {};
 
+		virtual void onMouseEnter() {};
+		
+		virtual void onMouseHover() {};
+
+		virtual void onMouseExit() {};
+
 	protected:
 
 		void print(std::string const& message, std::string const& className = "");

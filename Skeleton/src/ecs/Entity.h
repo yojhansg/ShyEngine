@@ -182,6 +182,10 @@ namespace ECS {
 		void onDoubleClick();
 		void onRightClick();
 
+		void onMouseHover();
+		void onMouseEnter();
+		void onMouseExit();
+
 
 		// Called when the entity is removed
 		void onDestroy();
