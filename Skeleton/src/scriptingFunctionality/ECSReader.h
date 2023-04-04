@@ -167,8 +167,16 @@ public:
 
 		std::string ManagerFunctionDeclaration();
 
-
+		/*
+			Nombre de la funcion en el scripting
+		*/
+		std::string ScriptName();
+		/*
+			Nombre de la funcion
+		*/
 		std::string FunctionName();
+
+
 		/*
 			Dado un string conteniendo un tipo devuelve su representacion en una variable de scripting
 		*/

@@ -6,7 +6,7 @@
 
         {
             "index" : 0,
-            "function": "ScriptFunctionality_Print",
+            "function": "Print",
             "input": [
                 1
             ]

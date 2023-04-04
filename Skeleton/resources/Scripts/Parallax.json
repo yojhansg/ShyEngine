@@ -25,18 +25,18 @@
         },
         {
             "index" : 1,
-            "function": "ScriptFunctionality_Entity"
+            "function": "Entity"
         },
         {
             "index" : 3,
-            "function": "ScriptFunctionality_Vector2D_X",
+            "function": "Vector2D_X",
             "input":[
                 2
             ]
         },
         {
             "index" : 6,
-            "function": "ScriptFunctionality_Math_Add",
+            "function": "Math_Add",
             "input":[
                 3, 5
             ]
@@ -44,7 +44,7 @@
         {
 
             "index": 7,
-            "function": "ScriptFunctionality_Print",
+            "function": "Print",
             "input": [
                 6
             ]

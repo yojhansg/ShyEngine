@@ -22,7 +22,7 @@
         {
             "index": 1, 
             "comment": "@Compare text",
-            "function": "ScriptFunctionality_String_Equals",
+            "function": "String_Equals",
             "input": [
                 2, 4
             ]
@@ -39,7 +39,7 @@
         {
             "index": 3, 
             "comment": "@Get entity",
-            "function": "ScriptFunctionality_Entity"
+            "function": "Entity"
         }
 
 
@@ -53,7 +53,7 @@
         ,{
             "index": 12,
             "comment": "@Open a link",
-            "function": "ScriptFunctionality_Open_URL",
+            "function": "Open_URL",
             "input": [
                 13
             ]

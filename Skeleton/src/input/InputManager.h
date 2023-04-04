@@ -11,6 +11,8 @@
 Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
 */
 
+
+//TODO: terminar partida con escape que sea un parametro que se lea del fichero global
 namespace Utilities {
 	class Vector2D;
 }

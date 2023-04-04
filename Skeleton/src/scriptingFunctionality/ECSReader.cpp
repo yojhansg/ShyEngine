@@ -360,6 +360,14 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 #define CAST(className, cast) "static_cast<" + className + "*>(" + cast + ")"
 
 
+std::string ECSReader::Method::ScriptName()
+{
+	if (className == "ScriptFunctionality")
+		return methodName;
+
+	return className + "_" + methodName;
+}
+
 std::string ECSReader::Method::FunctionName()
 {
 	return className + "_" + methodName;
@@ -393,13 +401,9 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	//TODO: comprobar los tipos: [0] entity -> [1] float etc...
 	//Manejo de errores:
-	//DebugComponentError(entity, script, function, entityError, missingComponent)
-	// 
-	//DebugComponentError(ScriptFunctionality_EntityName(), ScriptFunctionality_Script(), "Image_getTextureWidth", vec[0].value.entity->getEntityName(), Image);
-
 
 	definition << TAB "if(self == nullptr){" NEWLINE;
-	definition << TAB TAB"DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + FunctionName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
+	definition << TAB TAB"DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 	definition << TAB"}" NEWLINE;
 
@@ -661,8 +665,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 
 		for (auto& method : currentClass.second) {
 
-			std::string functionName = method.FunctionName();
-			cpp << "\tmap.emplace(\"" << functionName << "\"," << functionName << ");\n";
+			cpp << "\tmap.emplace(\"" << method.ScriptName() << "\"," << method.FunctionName() << ");\n";
 		}
 	}
 

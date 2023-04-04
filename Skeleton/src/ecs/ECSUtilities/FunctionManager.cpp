@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr  4 14:00:09 2023
+//Creation time: Tue Apr  4 14:17:40 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -135,48 +135,48 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("SceneManager_EndGame",SceneManager_EndGame);
 	map.emplace("SceneManager_getNumberOfScenes",SceneManager_getNumberOfScenes);
 	map.emplace("SceneManager_GetCurrentScenePath",SceneManager_GetCurrentScenePath);
-	map.emplace("ScriptFunctionality_Entity",ScriptFunctionality_Entity);
-	map.emplace("ScriptFunctionality_EntityName",ScriptFunctionality_EntityName);
-	map.emplace("ScriptFunctionality_Script",ScriptFunctionality_Script);
-	map.emplace("ScriptFunctionality_Print",ScriptFunctionality_Print);
-	map.emplace("ScriptFunctionality_Math_Add",ScriptFunctionality_Math_Add);
-	map.emplace("ScriptFunctionality_Math_Subtract",ScriptFunctionality_Math_Subtract);
-	map.emplace("ScriptFunctionality_Math_Multiply",ScriptFunctionality_Math_Multiply);
-	map.emplace("ScriptFunctionality_Math_Divide",ScriptFunctionality_Math_Divide);
-	map.emplace("ScriptFunctionality_Math_Power",ScriptFunctionality_Math_Power);
-	map.emplace("ScriptFunctionality_Math_Root",ScriptFunctionality_Math_Root);
-	map.emplace("ScriptFunctionality_Logic_Equals",ScriptFunctionality_Logic_Equals);
-	map.emplace("ScriptFunctionality_Logic_NotEquals",ScriptFunctionality_Logic_NotEquals);
-	map.emplace("ScriptFunctionality_Logic_Lesser",ScriptFunctionality_Logic_Lesser);
-	map.emplace("ScriptFunctionality_Logic_Greater",ScriptFunctionality_Logic_Greater);
-	map.emplace("ScriptFunctionality_Logic_LesserOrEqual",ScriptFunctionality_Logic_LesserOrEqual);
-	map.emplace("ScriptFunctionality_Logic_GreaterOrEqual",ScriptFunctionality_Logic_GreaterOrEqual);
-	map.emplace("ScriptFunctionality_Logic_And",ScriptFunctionality_Logic_And);
-	map.emplace("ScriptFunctionality_Logic_Or",ScriptFunctionality_Logic_Or);
-	map.emplace("ScriptFunctionality_Logic_Negate",ScriptFunctionality_Logic_Negate);
-	map.emplace("ScriptFunctionality_Vector2D_Create",ScriptFunctionality_Vector2D_Create);
-	map.emplace("ScriptFunctionality_Vector2D_Magnitude",ScriptFunctionality_Vector2D_Magnitude);
-	map.emplace("ScriptFunctionality_Vector2D_X",ScriptFunctionality_Vector2D_X);
-	map.emplace("ScriptFunctionality_Vector2D_Y",ScriptFunctionality_Vector2D_Y);
-	map.emplace("ScriptFunctionality_Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
-	map.emplace("ScriptFunctionality_Vector2D_Angle",ScriptFunctionality_Vector2D_Angle);
-	map.emplace("ScriptFunctionality_Vector2D_AngleWithVector",ScriptFunctionality_Vector2D_AngleWithVector);
-	map.emplace("ScriptFunctionality_Vector2D_Rotate",ScriptFunctionality_Vector2D_Rotate);
-	map.emplace("ScriptFunctionality_Vector2D_Add",ScriptFunctionality_Vector2D_Add);
-	map.emplace("ScriptFunctionality_Vector2D_Subtract",ScriptFunctionality_Vector2D_Subtract);
-	map.emplace("ScriptFunctionality_Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
-	map.emplace("ScriptFunctionality_Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
-	map.emplace("ScriptFunctionality_Vector2D_Mult",ScriptFunctionality_Vector2D_Mult);
-	map.emplace("ScriptFunctionality_String_Equals",ScriptFunctionality_String_Equals);
-	map.emplace("ScriptFunctionality_String_Concatenate",ScriptFunctionality_String_Concatenate);
-	map.emplace("ScriptFunctionality_String_Substring",ScriptFunctionality_String_Substring);
-	map.emplace("ScriptFunctionality_String_Begining",ScriptFunctionality_String_Begining);
-	map.emplace("ScriptFunctionality_String_End",ScriptFunctionality_String_End);
-	map.emplace("ScriptFunctionality_String_Trim",ScriptFunctionality_String_Trim);
-	map.emplace("ScriptFunctionality_String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
-	map.emplace("ScriptFunctionality_String_GetLetter",ScriptFunctionality_String_GetLetter);
-	map.emplace("ScriptFunctionality_String_Find",ScriptFunctionality_String_Find);
-	map.emplace("ScriptFunctionality_Open_URL",ScriptFunctionality_Open_URL);
+	map.emplace("Entity",ScriptFunctionality_Entity);
+	map.emplace("EntityName",ScriptFunctionality_EntityName);
+	map.emplace("Script",ScriptFunctionality_Script);
+	map.emplace("Print",ScriptFunctionality_Print);
+	map.emplace("Math_Add",ScriptFunctionality_Math_Add);
+	map.emplace("Math_Subtract",ScriptFunctionality_Math_Subtract);
+	map.emplace("Math_Multiply",ScriptFunctionality_Math_Multiply);
+	map.emplace("Math_Divide",ScriptFunctionality_Math_Divide);
+	map.emplace("Math_Power",ScriptFunctionality_Math_Power);
+	map.emplace("Math_Root",ScriptFunctionality_Math_Root);
+	map.emplace("Logic_Equals",ScriptFunctionality_Logic_Equals);
+	map.emplace("Logic_NotEquals",ScriptFunctionality_Logic_NotEquals);
+	map.emplace("Logic_Lesser",ScriptFunctionality_Logic_Lesser);
+	map.emplace("Logic_Greater",ScriptFunctionality_Logic_Greater);
+	map.emplace("Logic_LesserOrEqual",ScriptFunctionality_Logic_LesserOrEqual);
+	map.emplace("Logic_GreaterOrEqual",ScriptFunctionality_Logic_GreaterOrEqual);
+	map.emplace("Logic_And",ScriptFunctionality_Logic_And);
+	map.emplace("Logic_Or",ScriptFunctionality_Logic_Or);
+	map.emplace("Logic_Negate",ScriptFunctionality_Logic_Negate);
+	map.emplace("Vector2D_Create",ScriptFunctionality_Vector2D_Create);
+	map.emplace("Vector2D_Magnitude",ScriptFunctionality_Vector2D_Magnitude);
+	map.emplace("Vector2D_X",ScriptFunctionality_Vector2D_X);
+	map.emplace("Vector2D_Y",ScriptFunctionality_Vector2D_Y);
+	map.emplace("Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
+	map.emplace("Vector2D_Angle",ScriptFunctionality_Vector2D_Angle);
+	map.emplace("Vector2D_AngleWithVector",ScriptFunctionality_Vector2D_AngleWithVector);
+	map.emplace("Vector2D_Rotate",ScriptFunctionality_Vector2D_Rotate);
+	map.emplace("Vector2D_Add",ScriptFunctionality_Vector2D_Add);
+	map.emplace("Vector2D_Subtract",ScriptFunctionality_Vector2D_Subtract);
+	map.emplace("Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
+	map.emplace("Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
+	map.emplace("Vector2D_Mult",ScriptFunctionality_Vector2D_Mult);
+	map.emplace("String_Equals",ScriptFunctionality_String_Equals);
+	map.emplace("String_Concatenate",ScriptFunctionality_String_Concatenate);
+	map.emplace("String_Substring",ScriptFunctionality_String_Substring);
+	map.emplace("String_Begining",ScriptFunctionality_String_Begining);
+	map.emplace("String_End",ScriptFunctionality_String_End);
+	map.emplace("String_Trim",ScriptFunctionality_String_Trim);
+	map.emplace("String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
+	map.emplace("String_GetLetter",ScriptFunctionality_String_GetLetter);
+	map.emplace("String_Find",ScriptFunctionality_String_Find);
+	map.emplace("Open_URL",ScriptFunctionality_Open_URL);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
 	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
