@@ -11,7 +11,6 @@
 namespace ECS {
 
 
-	//Los scripts comparten nodos
 	class Script : public Component
 	{
 
@@ -35,6 +34,9 @@ namespace ECS {
 		void onRightClick() override;
 
 		std::string GetName();
+
+		Scripting::Variable Get(std::string const& name);
+		void Set(std::string const& name, Scripting::Variable variable);
 
 	private:
 

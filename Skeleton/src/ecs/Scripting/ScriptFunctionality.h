@@ -46,7 +46,7 @@ publish:
 	float Math_Root(float a, float b);
 
 	//Logic
-	//TODO: logica con mas tipos diferentes ademas de numeros
+	//TODO: cambiar equals para que funciones con una variable
 	bool Logic_Equals(float a, float b);
 	bool Logic_NotEquals(float a, float b);
 	bool Logic_Lesser(float a, float b);
@@ -84,6 +84,18 @@ publish:
 	std::string String_TrimBlanks(std::string a);
 	char String_GetLetter(std::string a, int b);
 	int String_Find(std::string a, char c);
+
+
+	//Attributes
+
+	void Set(std::string name, Scripting::Variable val);
+	Scripting::Variable Get(std::string name);
+
+	void SetLocal(std::string name, Scripting::Variable val);
+	Scripting::Variable GetLocal(std::string name);
+
+	void SetGlobal(std::string name, Scripting::Variable val);
+	Scripting::Variable GetGlobal(std::string name);
 
 
 	//Misc

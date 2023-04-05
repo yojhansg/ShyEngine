@@ -4,6 +4,7 @@
 #include "Scene.h"
 
 #include "ECSUtilities/ComponentFactory.h"
+#include "ConsoleManager.h"
 
 namespace ECS {
 
@@ -72,6 +73,22 @@ namespace ECS {
 	void Entity::SetRenderOrder(int neworder)
 	{
 		renderOrder = neworder;
+	}
+
+	void Entity::SetAttribute(std::string const& name, Scripting::Variable const& val)
+	{
+		entityAttributes[name] = val;
+	}
+
+	Scripting::Variable Entity::GetAttribute(std::string const& name)
+	{
+		if (!entityAttributes.contains(name)) {
+
+			Console::Output::PrintWarning("Entity attribute: " + getEntityName(), "Trying to access non existing attribute. Returning empty instead");
+			return Scripting::Variable::Null();
+		}
+
+		return entityAttributes[name];
 	}
 
 	void Entity::init() {

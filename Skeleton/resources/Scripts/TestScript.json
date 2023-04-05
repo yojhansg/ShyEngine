@@ -1,0 +1,30 @@
+{
+    "nodeCount": 20,
+    "update": 0, 
+
+    "functions" : [
+
+        {
+            "index": 6, 
+            "function": "GetGlobal",
+            "input": [
+                1
+            ]
+        },
+        {
+            "index": 0, 
+            "function": "Print",
+            "input": [
+                6
+            ]
+        }
+    ],
+
+    "consts" : [
+        {
+            "index": 1,
+            "type": "string",
+            "value": "dineroActual"
+        }
+    ]
+ }

@@ -267,3 +267,33 @@ void Scripting::ScriptFunctionality::Open_URL(std::string url) {
 
 	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }
+
+void Scripting::ScriptFunctionality::Set(std::string name, Scripting::Variable val)
+{
+	ECS::Script::currentScript->Set(name, val);
+}
+
+Scripting::Variable Scripting::ScriptFunctionality::Get(std::string name)
+{
+	return ECS::Script::currentScript->Get(name);
+}
+
+void Scripting::ScriptFunctionality::SetLocal(std::string name, Scripting::Variable val)
+{
+	Entity()->SetAttribute(name, val);
+}
+
+Scripting::Variable Scripting::ScriptFunctionality::GetLocal(std::string name)
+{
+	return Entity()->GetAttribute(name);
+}
+
+void Scripting::ScriptFunctionality::SetGlobal(std::string name, Scripting::Variable val)
+{
+	ScriptManager::instance()->SetGlobal(name, val);
+}
+
+Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(std::string name)
+{
+	return ScriptManager::instance()->GetGlobal(name);
+}

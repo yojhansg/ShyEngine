@@ -5,6 +5,9 @@
 #include <list>
 #include <set>
 
+#include <Scripting/Variable.h>
+#include <map>
+
 //TODO: Separar scripts de componentes
 
 namespace ECS {
@@ -129,6 +132,9 @@ namespace ECS {
 		int GetRenderOrder();
 		void SetRenderOrder(int neworder);
 
+		void SetAttribute(std::string const& name, Scripting::Variable const& val);
+		Scripting::Variable GetAttribute(std::string const& name);
+
 	private:
 
 		void init();
@@ -224,6 +230,8 @@ namespace ECS {
 
 		// List of components to remove in the end of the update
 		std::list<std::list<Component*>::iterator> removedComponents;
+
+		std::map<std::string, Scripting::Variable> entityAttributes;
 	};
 
 }

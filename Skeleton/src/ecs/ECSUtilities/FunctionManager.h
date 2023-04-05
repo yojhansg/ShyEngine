@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Wed Apr  5 00:24:03 2023
+//Creation time : Wed Apr  5 01:50:49 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -155,6 +155,12 @@ Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Varia
 Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Set(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Get(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_SetLocal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_GetLocal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_SetGlobal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_GetGlobal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);

@@ -59,6 +59,21 @@ std::string ECS::Script::GetName()
 	return name;
 }
 
+Scripting::Variable ECS::Script::Get(std::string const& name)
+{
+	if (!attributes.contains(name))
+	{
+		printWarning("Trying to access non existing attribute. Returning Empty", "Script");
+		return Scripting::Variable::Null();
+	}
+	return attributes[name];
+}
+
+void ECS::Script::Set(std::string const& name, Scripting::Variable variable)
+{
+	attributes[name] = variable;
+}
+
 void ECS::Script::Initialise(std::string path)
 {
 	name = path;

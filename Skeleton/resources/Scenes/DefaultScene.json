@@ -52,7 +52,7 @@
             ],
             "scripts": [
                 "FlappyBirdJump",
-                "RestartOnCollision"
+                "TestScript"
             ]
         }
     ],

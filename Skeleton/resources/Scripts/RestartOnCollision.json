@@ -1,23 +1,41 @@
 {
     "nodeCount": 20,
-    "onCollisionEnter": 0,
+    "start": 0,
 
     "functions" : [
 
         {
             "index" : 0,
-            "function": "Print",
+            "function": "SetGlobal",
             "input": [
-                1
+                1, 4
+            ]
+        },
+        {
+            "index": 4, 
+            "function": "Math_Add", 
+            "input": [
+                2, 3
             ]
         }
     ],
 
     "consts" : [
         {
-            "index" : 1,
-            "type" : "string",
-            "value": "perdiste guarro"
+            "index": 1,
+            "type": "string",
+            "value": "dineroActual"
+        },
+        {
+            "index": 2,
+            "type": "float",
+            "value": 1000
+        }
+        ,
+        {
+            "index": 3,
+            "type": "float",
+            "value": 19
         }
     ]
  }

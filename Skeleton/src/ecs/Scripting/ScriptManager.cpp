@@ -28,6 +28,23 @@ Scripting::ScriptManager::~ScriptManager()
 	allNodes.clear();
 }
 
+void Scripting::ScriptManager::SetGlobal(std::string const& name, Scripting::Variable const& val)
+{
+	globalAttributes[name] = val;
+}
+
+Scripting::Variable Scripting::ScriptManager::GetGlobal(std::string const& name)
+{
+
+	if (!globalAttributes.contains(name)) {
+
+		Console::Output::PrintWarning("Global attributes", "Trying to access unexisting global variable. Returing empty instead");
+		return Scripting::Variable::Null();
+	}
+
+	return globalAttributes[name];
+}
+
 
 
 Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::string const& path)

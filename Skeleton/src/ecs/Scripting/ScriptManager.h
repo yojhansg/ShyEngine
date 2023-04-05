@@ -53,6 +53,11 @@ namespace Scripting {
 
 		~ScriptManager();
 
+
+		void SetGlobal(std::string const& name, Scripting::Variable const& val);
+		Scripting::Variable GetGlobal(std::string const& name);
+
+
 	private:
 
 		ScriptManager();
@@ -62,6 +67,7 @@ namespace Scripting {
 
 		std::map<std::string, CallableFunction> functionMap;
 
+		std::map<std::string, Scripting::Variable> globalAttributes;
 
 		struct NodeInfo {
 			Fork* fork;

@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Wed Apr  5 00:24:03 2023
+//Creation time: Wed Apr  5 01:50:49 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -179,6 +179,12 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
 	map.emplace("String_GetLetter",ScriptFunctionality_String_GetLetter);
 	map.emplace("String_Find",ScriptFunctionality_String_Find);
+	map.emplace("Set",ScriptFunctionality_Set);
+	map.emplace("Get",ScriptFunctionality_Get);
+	map.emplace("SetLocal",ScriptFunctionality_SetLocal);
+	map.emplace("GetLocal",ScriptFunctionality_GetLocal);
+	map.emplace("SetGlobal",ScriptFunctionality_SetGlobal);
+	map.emplace("GetGlobal",ScriptFunctionality_GetGlobal);
 	map.emplace("Open_URL",ScriptFunctionality_Open_URL);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
@@ -1156,6 +1162,36 @@ Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	int ret = manager->String_Find(vec[0].str, vec[1].value.Char);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Set(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Set(vec[0].str, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Get(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Scripting::Variable ret = manager->Get(vec[0].str);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_SetLocal(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->SetLocal(vec[0].str, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_GetLocal(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Scripting::Variable ret = manager->GetLocal(vec[0].str);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_SetGlobal(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->SetGlobal(vec[0].str, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_GetGlobal(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Scripting::Variable ret = manager->GetGlobal(vec[0].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec){
