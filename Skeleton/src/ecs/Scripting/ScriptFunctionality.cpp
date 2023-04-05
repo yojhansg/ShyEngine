@@ -6,9 +6,7 @@
 
 #include "ConsoleManager.h"
 
-#include <Windows.h>
-#include <shellapi.h>
-
+#include <ctime>
 
 #define DELTA 0.001f
 
@@ -263,11 +261,6 @@ int Scripting::ScriptFunctionality::String_Find(std::string a, char c) {
 }
 
 
-void Scripting::ScriptFunctionality::Open_URL(std::string url) {
-
-	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
-}
-
 void Scripting::ScriptFunctionality::Set(std::string name, Scripting::Variable val)
 {
 	ECS::Script::currentScript->Set(name, val);
@@ -296,4 +289,51 @@ void Scripting::ScriptFunctionality::SetGlobal(std::string name, Scripting::Vari
 Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(std::string name)
 {
 	return ScriptManager::instance()->GetGlobal(name);
+}
+
+int Scripting::ScriptFunctionality::Now()
+{
+	return std::time(0);
+}
+
+std::string Scripting::ScriptFunctionality::DayOfWeek(int time)
+{
+	const std::time_t t(time);
+	std::tm now;
+	localtime_s(&now, &t);
+
+	switch (now.tm_wday) {
+
+	case 0:
+		return "Sunday";
+	case 1:
+		return "Monday";
+	case 2:
+		return "Tuesday";
+	case 3:
+		return "Wednesday";
+	case 4:
+		return "Thursday";
+	case 5:
+		return "Friday";
+	case 6:
+		return "Saturday";
+	default:
+		return ":)";
+	}
+}
+
+std::string Scripting::ScriptFunctionality::GetTimeStamp(int time)
+{
+	return std::string();
+}
+
+
+#include <Windows.h>
+#include <shellapi.h>
+
+
+void Scripting::ScriptFunctionality::Open_URL(std::string url) {
+
+	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }

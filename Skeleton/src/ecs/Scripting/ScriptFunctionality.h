@@ -101,6 +101,10 @@ publish:
 	//TODO: englobal en espacio de nombres Set
 
 
+	//Current time
+	int Now();
+	std::string DayOfWeek(int time);
+	std::string GetTimeStamp(int time);
 
 	//Misc
 	void Open_URL(std::string url);

@@ -6,8 +6,14 @@
 #include <string>
 #include <format>
 
+#include "Scripting/ScriptFunctionality.h"
+
 
 int main(int argc, char* args[]) {
+
+	std::cout << Scripting::ScriptFunctionality::instance()->DayOfWeek(Scripting::ScriptFunctionality::instance()->Now());
+	return 1;
+
 
 	/*ECS::SaveManager* save = ECS::SaveManager::instance();
 
