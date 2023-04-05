@@ -97,6 +97,10 @@ publish:
 	void SetGlobal(std::string name, Scripting::Variable val);
 	Scripting::Variable GetGlobal(std::string name);
 
+	//TODO: set local -> Poder acceder a otra entidad
+	//TODO: englobal en espacio de nombres Set
+
+
 
 	//Misc
 	void Open_URL(std::string url);
