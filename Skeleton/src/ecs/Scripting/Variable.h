@@ -4,6 +4,7 @@
 #include "Color.h"
 #include <string>
 
+
 namespace ECS {
 	class Entity;
 }
@@ -64,9 +65,9 @@ namespace Scripting {
 		std::string Type2String();
 	};
 
-
-
-
-	using Input = Variable;
-	using Output = Variable;
 }
+
+using cstring = std::string const&;
+using cVector2D = Utilities::Vector2D const&;
+using cColor = Utilities::Color const&;
+using cVariable = Scripting::Variable const&;

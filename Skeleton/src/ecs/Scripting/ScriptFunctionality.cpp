@@ -42,7 +42,7 @@ std::string Scripting::ScriptFunctionality::Script()
 }
 
 
-void Scripting::ScriptFunctionality::Print(Variable val)
+void Scripting::ScriptFunctionality::Print(cVariable val)
 {
 	std::string objectName = Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity()->getEntityName();
 
@@ -138,27 +138,27 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Create(float x, float y)
 	return Vector2D(x, y);
 }
 
-float Scripting::ScriptFunctionality::Vector2D_Magnitude(Vector2D vec)
+float Scripting::ScriptFunctionality::Vector2D_Magnitude(cVector2D vec)
 {
 	return vec.magnitude();
 }
 
-float Scripting::ScriptFunctionality::Vector2D_X(Vector2D vec)
+float Scripting::ScriptFunctionality::Vector2D_X(cVector2D vec)
 {
 	return vec.getX();
 }
 
-float Scripting::ScriptFunctionality::Vector2D_Y(Vector2D vec)
+float Scripting::ScriptFunctionality::Vector2D_Y(cVector2D vec)
 {
 	return vec.getY();
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Normalize(Vector2D vec)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Normalize(cVector2D vec)
 {
 	return Vector2D(vec).normalize();
 }
 
-float Scripting::ScriptFunctionality::Vector2D_Angle(Vector2D vec)
+float Scripting::ScriptFunctionality::Vector2D_Angle(cVector2D vec)
 {
 	Vector2D norm(vec);
 	norm.normalize();
@@ -167,77 +167,77 @@ float Scripting::ScriptFunctionality::Vector2D_Angle(Vector2D vec)
 }
 
 
-float Scripting::ScriptFunctionality::Vector2D_AngleWithVector(Vector2D vec, Vector2D other)
+float Scripting::ScriptFunctionality::Vector2D_AngleWithVector(cVector2D vec, cVector2D other)
 {
 	return vec.angle(other);
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Rotate(Vector2D vec, float angle)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Rotate(cVector2D vec, float angle)
 {
 	return vec.rotate(angle);
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Add(Vector2D a, Vector2D b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Add(cVector2D a, cVector2D b)
 {
 	return a + b;
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Subtract(Vector2D a, Vector2D b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Subtract(cVector2D a, cVector2D b)
 {
 	return a - b;
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Dot(Vector2D a, Vector2D b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Dot(cVector2D a, cVector2D b)
 {
 	//TODO: Dot product
 	Console::Output::PrintWarning("Not implemented", "Vector2D_Dot operation is not implemented yet");
 	return Vector2D();
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Cross(Vector2D a, Vector2D b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Cross(cVector2D a, cVector2D b)
 {
 	//TODO: Dot product
 	Console::Output::PrintWarning("Not implemented", "Vector2D_Cross operation is not implemented yet");
 	return Vector2D();
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Mult(Vector2D a, float b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Mult(cVector2D a, float b)
 {
 	return a * b;
 }
 
-bool Scripting::ScriptFunctionality::String_Equals(std::string a, std::string b)
+bool Scripting::ScriptFunctionality::String_Equals(cstring a, cstring b)
 {
 	return a == b;
 }
 
-std::string Scripting::ScriptFunctionality::String_Concatenate(std::string a, std::string b)
+std::string Scripting::ScriptFunctionality::String_Concatenate(cstring a, cstring b)
 {
 	return a + b;
 }
 
-std::string Scripting::ScriptFunctionality::String_Substring(std::string a, int begin, int end)
+std::string Scripting::ScriptFunctionality::String_Substring(cstring a, int begin, int end)
 {
 	return a.substr(begin, end - begin);
 }
 
-std::string Scripting::ScriptFunctionality::String_Begining(std::string a, int b) {
+std::string Scripting::ScriptFunctionality::String_Begining(cstring a, int b) {
 	return a.substr(0, b);
 }
-std::string Scripting::ScriptFunctionality::String_End(std::string a, int b) {
+std::string Scripting::ScriptFunctionality::String_End(cstring a, int b) {
 	return a.substr(a.size() - b);
 }
-std::string Scripting::ScriptFunctionality::String_Trim(std::string a, std::string values) {
+std::string Scripting::ScriptFunctionality::String_Trim(cstring a, cstring values) {
 	return Utilities::trim(a, values);
 }
-std::string Scripting::ScriptFunctionality::String_TrimBlanks(std::string a) {
+std::string Scripting::ScriptFunctionality::String_TrimBlanks(cstring a) {
 	return Utilities::trim(a);
 
 }
-char Scripting::ScriptFunctionality::String_GetLetter(std::string a, int b) {
+char Scripting::ScriptFunctionality::String_GetLetter(cstring a, int b) {
 	return a[b];
 }
-int Scripting::ScriptFunctionality::String_Find(std::string a, char c) {
+int Scripting::ScriptFunctionality::String_Find(cstring a, char c) {
 	return a.find(c);
 }
 
@@ -249,7 +249,7 @@ std::string Scripting::ScriptFunctionality::String_LeadingZeros(int number, int 
 }
 
 
-std::string Scripting::ScriptFunctionality::String_ToString(Scripting::Variable variable) {
+std::string Scripting::ScriptFunctionality::String_ToString(cVariable variable) {
 
 	switch (variable.type)
 	{
@@ -275,32 +275,32 @@ std::string Scripting::ScriptFunctionality::String_ToString(Scripting::Variable 
 	}
 }
 
-void Scripting::ScriptFunctionality::Set(std::string name, Scripting::Variable val)
+void Scripting::ScriptFunctionality::Set(cstring name, cVariable val)
 {
 	Scripting::ScriptManager::instance()->GetCurrentScript()->Set(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::Get(std::string name)
+Scripting::Variable Scripting::ScriptFunctionality::Get(cstring name)
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->Get(name);
 }
 
-void Scripting::ScriptFunctionality::SetLocal(std::string name, Scripting::Variable val)
+void Scripting::ScriptFunctionality::SetLocal(cstring name, cVariable val)
 {
 	Entity()->SetAttribute(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::GetLocal(std::string name)
+Scripting::Variable Scripting::ScriptFunctionality::GetLocal(cstring name)
 {
 	return Entity()->GetAttribute(name);
 }
 
-void Scripting::ScriptFunctionality::SetGlobal(std::string name, Scripting::Variable val)
+void Scripting::ScriptFunctionality::SetGlobal(cstring name, cVariable val)
 {
 	ScriptManager::instance()->SetGlobal(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(std::string name)
+Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(cstring name)
 {
 	return ScriptManager::instance()->GetGlobal(name);
 }
@@ -552,7 +552,7 @@ int Scripting::ScriptFunctionality::GetRealTime(int time) {
 #include <shellapi.h>
 
 
-void Scripting::ScriptFunctionality::Open_URL(std::string url) {
+void Scripting::ScriptFunctionality::Open_URL(cstring url) {
 
 	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }

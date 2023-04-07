@@ -15,7 +15,6 @@ using namespace nlohmann;
 using jsonarray = std::vector<json>;
 
 
-
 Scripting::ScriptManager::ScriptManager()
 {
 	nodeIteration = 0;
@@ -311,13 +310,11 @@ Scripting::ScriptManager::ScriptNodes::ScriptNodes()
 
 }
 
-
 void Scripting::ScriptManager::NewIteration(ECS::Script* script, Node* beginNode)
 {
 	currentScript = script;
 	beginNode->Cicle(nodeIteration++);
 	currentScript = nullptr;
-
 }
 
 ECS::Script* Scripting::ScriptManager::GetCurrentScript()

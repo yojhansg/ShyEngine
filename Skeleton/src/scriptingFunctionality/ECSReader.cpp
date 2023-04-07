@@ -497,19 +497,19 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 	if (in == "char")
 		return ".value.Char";
 
-	if (in == "std::string" || in == "string") {
+	if (in == "std::string" || in == "string" || in == "cstring") {
 		return ".str";
 	}
 
-	if (in == "Utilities::Vector2D" || in == "Vector2D") {
+	if (in == "Utilities::Vector2D" || in == "Vector2D" || in == "cVector2D") {
 		return ".vector";
 	}
 
-	if (in == "Utilities::Color" || in == "Color") {
+	if (in == "Utilities::Color" || in == "Color" || in == "cColor") {
 		return ".value.color";
 	}
 
-	if (in == "Variable" || in == "Scripting::Variable") {
+	if (in == "Variable" || in == "Scripting::Variable" || in == "cVariable") {
 		return "";
 	}
 
@@ -536,16 +536,16 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 		return convertName + " == \"true\" ? true : false";
 	}
 
-	if (type == "string") {
+	if (type == "string" || type == "std::string" || type == "cstring") {
 		return convertName;
 	}
 
-	if (type == "Utilities::Vector2D" || type == "Vector2D") {
+	if (type == "Utilities::Vector2D" || type == "Vector2D" || type == "cVector2D") {
 
 		return convertName;
 	}
 
-	if (type == "Utilities::Color" || type == "Color") {
+	if (type == "Utilities::Color" || type == "Color" || type == "cColor") {
 
 		return "Utilities::Color::CreateColor(" + convertName + ")";
 	}

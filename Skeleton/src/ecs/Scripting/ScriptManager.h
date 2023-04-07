@@ -27,7 +27,10 @@ namespace Scripting {
 
 		friend Singleton<ScriptManager>;
 
+		friend class Engine;
+
 		const std::string extension = ".json";
+
 
 	public:
 

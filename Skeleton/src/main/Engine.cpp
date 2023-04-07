@@ -84,7 +84,6 @@ void Engine::update() {
 	steady_clock::time_point physicsTime = beginTime;
 	steady_clock::time_point startTime = beginTime;
 
-	//int maxNodeCount = 0;
 	while (true) {
 
 		// Scene
@@ -141,18 +140,6 @@ void Engine::update() {
 		engineTime->frames++;
 
 		beginTime = endTime;
-
-
-		//int nodeCount = Scripting::ScriptManager::nodeIteration;
-
-
-
-		//Console::Output::PrintColor(Console::Color::Aqua, Console::Color::Green, std::to_string(maxNodeCount), std::to_string(Scripting::ScriptManager::nodeIteration));
-
-		//if (nodeCount > maxNodeCount) {
-		//	maxNodeCount = nodeCount;
-		//}
-		//Scripting::ScriptManager::nodeIteration = 0;
 	}
 }
 

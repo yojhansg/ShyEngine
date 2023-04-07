@@ -182,7 +182,7 @@ namespace Utilities {
 		}
 
 
-		inline operator std::string() {
+		inline operator std::string() const{
 			return "(" + std::to_string(x_)+ "," + std::to_string(y_) + ")";
 		}
 

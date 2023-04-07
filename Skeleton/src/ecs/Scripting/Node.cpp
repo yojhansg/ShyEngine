@@ -18,10 +18,8 @@ void Scripting::Node::Cicle(int iterationIdx)
 {
 	this->iterationIdx = iterationIdx;
 
-	Scripting::Node* current = this;
-
 	Node* next = nullptr;
-	current->Operate(next, iterationIdx);
+	Operate(next, iterationIdx);
 
 	if (next)
 		next->Cicle(iterationIdx);
