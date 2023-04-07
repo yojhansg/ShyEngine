@@ -37,7 +37,7 @@ Engine::Engine() {
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("flappyBird");
+	DataLoader data = DataLoader::Load("config");
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -68,10 +68,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	//Game(sceneManager).initScenes();
+	Game(sceneManager).initScenes();
 
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
+	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	//sceneManager->manageScenes();
 
 	return true;
 }

@@ -62,17 +62,20 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 		ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
 
+		if (obj.contains("components")) {
 
-		jsonarray components = obj["components"].get<jsonarray>();
-		for (auto& compInfo : components) {
+			jsonarray components = obj["components"].get<jsonarray>();
+			for (auto& compInfo : components) {
 
-			ProcessComponent(entity, compInfo);
+				ProcessComponent(entity, compInfo);
+			}
 		}
+		if (obj.contains("scripts")) {
+			jsonarray scripts = obj["scripts"].get<jsonarray>();
+			for (auto& script : scripts) {
 
-		jsonarray scripts = obj["scripts"].get<jsonarray>();
-		for (auto& script : scripts) {
-
-			entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+				entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+			}
 		}
 	}
 

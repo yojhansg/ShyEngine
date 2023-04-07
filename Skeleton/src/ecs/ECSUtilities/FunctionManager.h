@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Wed Apr  5 01:50:49 2023
+//Creation time : Fri Apr  7 16:29:02 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -155,12 +155,30 @@ Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Varia
 Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Set(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Get(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_SetLocal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GetLocal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_SetGlobal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_GetGlobal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Now(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_WeekDay(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_ShortWeekDay(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Month(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_ShortMonth(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_DayOfWeekIndex(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_MonthIndex(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_MonthDay(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Year(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Hours(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Minutes(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Seconds(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_TimeHHMM(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_TimeHHMMSS(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_TimeStamp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_DDMMYY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);

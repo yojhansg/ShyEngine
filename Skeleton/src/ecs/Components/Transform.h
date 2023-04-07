@@ -36,6 +36,7 @@ namespace ECS {
 		const double* getRotationPointer();
 
 		// Setters
+		//TODO: get rotation
 	publish:
 		void setPosition(Utilities::Vector2D position);
 		void setPositionX(float x);

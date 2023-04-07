@@ -47,6 +47,7 @@ namespace ECS {
 		reflect std::string path;
 		reflect std::string text;
 
+		//TODO: text alignment
 		reflect int horizontalAlignment;
 		reflect int verticalAlignment;
 

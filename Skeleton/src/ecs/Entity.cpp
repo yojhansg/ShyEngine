@@ -317,7 +317,7 @@ namespace ECS {
 	Component* Entity::addComponent(std::string const& comp)
 	{
 		Component* c = ComponentFactory::instance()->CreateComponent(comp);
-
+		//TODO: lanzar error si no existe
 		c->entity = this;
 		components.push_back(c);
 

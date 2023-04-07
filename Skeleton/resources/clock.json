@@ -1,0 +1,14 @@
+{
+   
+    "game": "Clock", 
+    "creator": "Yojhan",
+    "windowTitle": "Clock",
+    "initialScene": "Clock",
+    "windowIcon": "",
+    "windowSize": "800, 800",
+    "gravity": "0, 0f",
+    "splashScreen": false,
+    "vsync": true,
+    "fullScreen": false,
+    "debugPhysics": false
+}

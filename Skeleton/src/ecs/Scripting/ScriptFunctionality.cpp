@@ -485,7 +485,7 @@ int Scripting::ScriptFunctionality::Time_Minutes(int time)
 
 int Scripting::ScriptFunctionality::Time_Seconds(int time)
 {
-	const std::time_t t(time);
+	const std::time_t t(GetRealTime(time));
 	std::tm now;
 	localtime_s(&now, &t);
 
@@ -494,17 +494,26 @@ int Scripting::ScriptFunctionality::Time_Seconds(int time)
 
 std::string Scripting::ScriptFunctionality::Time_TimeHHMM(int time)
 {
-	int hour = Time_Hours(time);
-	int minute = Time_Minutes(time);
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
 
-	return String_LeadingZeros(hour, 2) + ":" + String_LeadingZeros(minute, 2);
+	return
+		String_LeadingZeros(now.tm_hour, 2) + ":" +
+		String_LeadingZeros(now.tm_min, 2);
 }
 
 
 std::string Scripting::ScriptFunctionality::Time_TimeHHMMSS(int time)
 {
-	std::string seconds = String_LeadingZeros(Time_Seconds(time), 2);
-	return Time_TimeHHMM(time) + ":" + seconds;
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return
+		String_LeadingZeros(now.tm_hour, 2) + ":" +
+		String_LeadingZeros(now.tm_min, 2) + ":" +
+		String_LeadingZeros(now.tm_sec, 2);
 }
 
 std::string Scripting::ScriptFunctionality::Time_TimeStamp(int time)

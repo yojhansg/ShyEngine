@@ -9,6 +9,8 @@
 #include "Scripting/ScriptFunctionality.h"
 
 
+//TODO: ver nombres mejores para el set y el get del guardado (save y load ? y que el otro save y load pasen a ser saveToDisk y loadFromDisk)
+
 int main(int argc, char* args[]) {
 
 	//float time = Scripting::ScriptFunctionality::instance()->Time_Now();
