@@ -16,7 +16,7 @@ using Utilities::Vector2D;
 
 namespace Scripting {
 
-	EditorManager ScriptFunctionality: public Utilities::Singleton<ScriptFunctionality>{
+	EditorManager ScriptFunctionality : public Utilities::Singleton<ScriptFunctionality>{
 
 		friend Singleton<ScriptFunctionality>;
 
@@ -84,8 +84,8 @@ publish:
 	std::string String_TrimBlanks(std::string a);
 	char String_GetLetter(std::string a, int b);
 	int String_Find(std::string a, char c);
-
-
+	std::string String_ToString(Scripting::Variable variable);
+	std::string String_LeadingZeros(int number, int zeroCount);
 	//Attributes
 
 	void Set(std::string name, Scripting::Variable val);
@@ -100,16 +100,38 @@ publish:
 	//TODO: set local -> Poder acceder a otra entidad
 	//TODO: englobal en espacio de nombres Set
 
-
+	//TODO: min, max, etc...
+	
+	
+	//TODO: llevar esto a la clase time
 	//Current time
-	int Now();
-	std::string DayOfWeek(int time);
-	std::string GetTimeStamp(int time);
+	int Time_Now();
+	std::string Time_WeekDay(int time);
+	std::string Time_ShortWeekDay(int time);
 
+	std::string Time_Month(int time);
+	std::string Time_ShortMonth(int time);
+
+	int Time_DayOfWeekIndex(int time);
+	int Time_MonthIndex(int time);
+
+	int Time_MonthDay(int time);
+	int Time_Year(int time);
+
+	int Time_Hours(int time);
+	int Time_Minutes(int time);
+	int Time_Seconds(int time);
+
+	std::string Time_TimeHHMM(int time);
+	std::string Time_TimeHHMMSS(int time);
+	std::string Time_TimeStamp(int time);
+	std::string Time_DDMMYY(int time);
 	//Misc
 	void Open_URL(std::string url);
 
 private:
+
+	int GetRealTime(int time);
 
 	ScriptFunctionality();
 

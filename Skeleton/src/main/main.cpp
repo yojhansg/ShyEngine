@@ -11,9 +11,17 @@
 
 int main(int argc, char* args[]) {
 
-	std::cout << Scripting::ScriptFunctionality::instance()->DayOfWeek(Scripting::ScriptFunctionality::instance()->Now());
-	return 1;
+	//float time = Scripting::ScriptFunctionality::instance()->Time_Now();
 
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_WeekDay(time) << std::endl;
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_Month(time) << std::endl;
+
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeStamp(time) << std::endl;
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_DDMMYY(time) << std::endl;
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeHHMMSS(time) << std::endl;
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeHHMMSS(Scripting::ScriptFunctionality::instance()->Time_Now()) << std::endl;
+	//std::cout << time << std::endl;
+	//std::cout << Scripting::ScriptFunctionality::instance()->Time_Now() << std::endl;
 
 	/*ECS::SaveManager* save = ECS::SaveManager::instance();
 

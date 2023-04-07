@@ -3,12 +3,19 @@
 #include "Entity.h"
 #include <Script.h>
 #include "StringTrim.h"
+#include <format>
 
 #include "ConsoleManager.h"
+
+#include <sstream>
+#include <iomanip>
 
 #include <ctime>
 
 #define DELTA 0.001f
+
+
+#define TIME_DIFF 1680833948
 
 Scripting::ScriptFunctionality::~ScriptFunctionality()
 {
@@ -41,33 +48,7 @@ void Scripting::ScriptFunctionality::Print(Variable val)
 
 	std::string scriptName = ECS::Script::currentScript->GetName();
 
-	switch (val.type)
-	{
-	case Scripting::Variable::Type::Bool:
-		Console::Output::Print( objectName + ": " + scriptName, val.value.Bool ? "Yes" : "No");
-		break;
-	case Scripting::Variable::Type::Float:
-		Console::Output::Print(objectName + ": " + scriptName, std::to_string(val.value.Float));
-		break;
-	case Scripting::Variable::Type::Char:
-		Console::Output::Print(objectName + ": " + scriptName, std::to_string(val.value.Char));
-		break;
-	case Scripting::Variable::Type::Entity:
-		Console::Output::Print(objectName + ": " + scriptName, val.value.entity->getEntityName());
-		break;
-	case Scripting::Variable::Type::Vector2D:
-		Console::Output::Print(objectName + ": " + scriptName, val.vector);
-		break;
-	case Scripting::Variable::Type::String:
-		Console::Output::Print(objectName + ": " + scriptName, val.str);
-		break;
-	case Scripting::Variable::Type::Null:
-		Console::Output::Print(objectName + ": " + scriptName, "null");
-		break;
-	default:
-		Console::Output::PrintWarning(objectName + ": " + scriptName, "Unknown value");
-		break;
-	}
+	Console::Output::Print(objectName + ": " + scriptName, String_ToString(val));
 }
 
 
@@ -260,6 +241,39 @@ int Scripting::ScriptFunctionality::String_Find(std::string a, char c) {
 	return a.find(c);
 }
 
+std::string Scripting::ScriptFunctionality::String_LeadingZeros(int number, int leadingZeros) {
+
+	std::stringstream ss;
+	ss << std::setw(leadingZeros) << std::setfill('0') << number;
+	return ss.str();
+}
+
+
+std::string Scripting::ScriptFunctionality::String_ToString(Scripting::Variable variable) {
+
+	switch (variable.type)
+	{
+	case Scripting::Variable::Type::Bool:
+		return variable.value.Bool ? "Yes" : "No";
+	case Scripting::Variable::Type::Char:
+		return std::to_string(variable.value.Char);
+	case Scripting::Variable::Type::Float:
+		return std::to_string(variable.value.Float);
+	case Scripting::Variable::Type::String:
+		return variable.str;
+	case Scripting::Variable::Type::Entity:
+		return variable.value.entity->getEntityName();
+	case Scripting::Variable::Type::Color:
+		return variable.value.color;
+	case Scripting::Variable::Type::Vector2D:
+		return variable.vector;
+	case Scripting::Variable::Type::Null:
+		return "Empty";
+	default:
+		return "Conversion to string not defined to this variable type";
+		break;
+	}
+}
 
 void Scripting::ScriptFunctionality::Set(std::string name, Scripting::Variable val)
 {
@@ -291,18 +305,14 @@ Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(std::string name)
 	return ScriptManager::instance()->GetGlobal(name);
 }
 
-int Scripting::ScriptFunctionality::Now()
+int Scripting::ScriptFunctionality::Time_Now()
 {
-	return std::time(0);
+	return std::time(0) - TIME_DIFF;
 }
 
-std::string Scripting::ScriptFunctionality::DayOfWeek(int time)
+std::string Scripting::ScriptFunctionality::Time_WeekDay(int time)
 {
-	const std::time_t t(time);
-	std::tm now;
-	localtime_s(&now, &t);
-
-	switch (now.tm_wday) {
+	switch (Time_DayOfWeekIndex(time) - 1) {
 
 	case 0:
 		return "Sunday";
@@ -323,9 +333,209 @@ std::string Scripting::ScriptFunctionality::DayOfWeek(int time)
 	}
 }
 
-std::string Scripting::ScriptFunctionality::GetTimeStamp(int time)
+
+std::string Scripting::ScriptFunctionality::Time_ShortWeekDay(int time)
 {
-	return std::string();
+	switch (Time_DayOfWeekIndex(time) - 1) {
+
+	case 0:
+		return "Sun";
+	case 1:
+		return "Mon";
+	case 2:
+		return "Tues";
+	case 3:
+		return "Wed";
+	case 4:
+		return "Thurs";
+	case 5:
+		return "Fri";
+	case 6:
+		return "Sat";
+	default:
+		return ":)";
+	}
+}
+
+
+std::string Scripting::ScriptFunctionality::Time_Month(int time)
+{
+	switch (Time_MonthIndex(time) - 1) {
+
+	case 0:
+		return "January";
+	case 1:
+		return "February";
+	case 2:
+		return "March";
+	case 3:
+		return "April";
+	case 4:
+		return "May";
+	case 5:
+		return "June";
+	case 6:
+		return "July";
+	case 7:
+		return "August";
+	case 8:
+		return "September";
+	case 9:
+		return "October";
+	case 10:
+		return "November";
+	case 11:
+		return "December";
+	default:
+		return ":)";
+	}
+}
+
+
+std::string Scripting::ScriptFunctionality::Time_ShortMonth(int time)
+{
+	switch (Time_MonthIndex(time) - 1) {
+
+	case 0:
+		return "Jan";
+	case 1:
+		return "Feb";
+	case 2:
+		return "Mar";
+	case 3:
+		return "Apr";
+	case 4:
+		return "May";
+	case 5:
+		return "Jun";
+	case 6:
+		return "Jul";
+	case 7:
+		return "Aug";
+	case 8:
+		return "Sept";
+	case 9:
+		return "Oct";
+	case 10:
+		return "Nov";
+	case 11:
+		return "Dec";
+	default:
+		return ":)";
+	}
+}
+
+
+int Scripting::ScriptFunctionality::Time_DayOfWeekIndex(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_wday + 1;
+}
+
+int Scripting::ScriptFunctionality::Time_MonthIndex(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_mon + 1;
+}
+
+
+int Scripting::ScriptFunctionality::Time_MonthDay(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_mday;
+}
+
+
+int Scripting::ScriptFunctionality::Time_Year(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_year + 1900;
+}
+
+int Scripting::ScriptFunctionality::Time_Hours(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_hour;
+}
+
+
+int Scripting::ScriptFunctionality::Time_Minutes(int time)
+{
+	const std::time_t t(GetRealTime(time));
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_min;
+}
+
+int Scripting::ScriptFunctionality::Time_Seconds(int time)
+{
+	const std::time_t t(time);
+	std::tm now;
+	localtime_s(&now, &t);
+
+	return now.tm_sec;
+}
+
+std::string Scripting::ScriptFunctionality::Time_TimeHHMM(int time)
+{
+	int hour = Time_Hours(time);
+	int minute = Time_Minutes(time);
+
+	return String_LeadingZeros(hour, 2) + ":" + String_LeadingZeros(minute, 2);
+}
+
+
+std::string Scripting::ScriptFunctionality::Time_TimeHHMMSS(int time)
+{
+	std::string seconds = String_LeadingZeros(Time_Seconds(time), 2);
+	return Time_TimeHHMM(time) + ":" + seconds;
+}
+
+std::string Scripting::ScriptFunctionality::Time_TimeStamp(int time)
+{
+	//Monday
+	//Wed Apr  5 01:50 : 49 2023
+	return std::format("{} {} {} {} {} ",
+		Time_ShortWeekDay(time),
+		Time_ShortMonth(time),
+		Time_MonthDay(time),
+		Time_TimeHHMM(time),
+		Time_Year(time)
+		);
+}
+
+
+
+std::string Scripting::ScriptFunctionality::Time_DDMMYY(int time)
+{
+	//Monday
+	//Wed Apr  5 01:50 : 49 2023
+	return std::format("{}/{}/{} ",
+		Time_MonthDay(time),
+		Time_MonthIndex(time),
+		Time_Year(time)
+	);
+}
+
+int Scripting::ScriptFunctionality::GetRealTime(int time) {
+
+	return time + TIME_DIFF;
 }
 
 
