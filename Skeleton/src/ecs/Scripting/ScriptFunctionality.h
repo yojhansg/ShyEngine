@@ -71,7 +71,7 @@ publish:
 	Vector2D Vector2D_Subtract(cVector2D a, cVector2D b);
 	Vector2D Vector2D_Dot(cVector2D a, cVector2D b);
 	Vector2D Vector2D_Cross(cVector2D a, cVector2D b);
-	Vector2D Vector2D_Mult(cVector2D a, float b);
+	Vector2D Vector2D_Multiply(cVector2D a, float b);
 
 
 	//String
@@ -100,7 +100,7 @@ publish:
 	//TODO: set local -> Poder acceder a otra entidad
 	//TODO: englobal en espacio de nombres Set
 
-	//TODO: min, max, etc...
+	//TODO: min, max, random, etc...
 	
 	
 	//TODO: llevar esto a la clase time
@@ -121,6 +121,8 @@ publish:
 	int Time_Hours(int time);
 	int Time_Minutes(int time);
 	int Time_Seconds(int time);
+
+	//TODO: string -> time since
 
 	std::string Time_TimeHHMM(int time);
 	std::string Time_TimeHHMMSS(int time);

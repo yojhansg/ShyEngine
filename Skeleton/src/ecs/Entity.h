@@ -6,7 +6,7 @@
 #include <set>
 
 #include <Scripting/Variable.h>
-#include <map>
+#include <unordered_map>
 
 //TODO: Separar scripts de componentes
 
@@ -236,7 +236,7 @@ namespace ECS {
 		// List of components to remove in the end of the update
 		std::list<std::list<Component*>::iterator> removedComponents;
 
-		std::map<std::string, Scripting::Variable> entityAttributes;
+		std::unordered_map<std::string, Scripting::Variable> entityAttributes;
 	};
 
 }

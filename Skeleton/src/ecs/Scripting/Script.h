@@ -19,7 +19,6 @@ namespace ECS {
 
 		void Initialise(std::string path);
 
-
 		void start() override;
 		void update(float dt) override;
 		void onCollisionEnter(Entity* entity) override;

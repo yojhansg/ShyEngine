@@ -2,10 +2,10 @@
 
 #include "Singleton.h"
 #include <string>
-#include <map>
+#include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Sat Apr  8 00:02:37 2023
+//Creation time : Sat Apr  8 01:15:54 2023
 
 #define ECSreflection_Version 1.0
 
@@ -19,7 +19,7 @@ private:
 typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 
 	ComponentFactory();
-	std::map<std::string, ComponentCreation> components;
+	std::unordered_map<std::string, ComponentCreation> components;
 
 	ECS::Component* CreateBoxBody();
 	ECS::Component* CreateCamera();

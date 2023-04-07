@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Singleton.h>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <Scripting/Variable.h>
@@ -73,11 +73,11 @@ namespace Scripting {
 		ECS::Script* currentScript;
 
 		std::vector<Node*> allNodes;
-		std::map<std::string, ScriptNodes> scripts;
+		std::unordered_map<std::string, ScriptNodes> scripts;
 
-		std::map<std::string, CallableFunction> functionMap;
+		std::unordered_map<std::string, CallableFunction> functionMap;
 
-		std::map<std::string, Scripting::Variable> globalAttributes;
+		std::unordered_map<std::string, Scripting::Variable> globalAttributes;
 
 		struct NodeInfo {
 			Fork* fork;

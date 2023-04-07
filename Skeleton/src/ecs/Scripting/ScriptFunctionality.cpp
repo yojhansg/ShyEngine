@@ -201,7 +201,7 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Cross(cVector2D a, cVector2D b
 	return Vector2D();
 }
 
-Vector2D Scripting::ScriptFunctionality::Vector2D_Mult(cVector2D a, float b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Multiply(cVector2D a, float b)
 {
 	return a * b;
 }

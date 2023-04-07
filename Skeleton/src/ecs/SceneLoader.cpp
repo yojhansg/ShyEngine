@@ -9,6 +9,7 @@
 #include "Entity.h"
 #include "Scene.h"
 #include "Script.h"
+#include <unordered_map>
 
 #include "ECSUtilities/ClassReflection.h"
 
@@ -108,7 +109,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 	ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();
 
-	std::map<std::string, std::string> map;
+	std::unordered_map<std::string, std::string> map;
 
 	const std::vector<std::string> overlayAttributes = { "placement", "anchor", "top", "left", "right", "bottom", "position", "size" , "color" , "interactable" };
 
@@ -131,7 +132,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 			ECS::Component* component = entity->addComponent(componentStr);
 
-			std::map<std::string, std::string> attributeMap;
+			std::unordered_map<std::string, std::string> attributeMap;
 
 
 			if (compInfo.contains("attributes")) {
@@ -177,7 +178,7 @@ void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& com
 	ECS::Component* component = entity->addComponent(componentStr);
 
 
-	std::map<std::string, std::string> attributeMap;
+	std::unordered_map<std::string, std::string> attributeMap;
 
 
 	if (compInfo.contains("attributes")) {

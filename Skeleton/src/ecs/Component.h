@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Scripting/Variable.h"
-#include <map>
-#include <vector>
 #include <string>
 
 #include <EditorExport.h>

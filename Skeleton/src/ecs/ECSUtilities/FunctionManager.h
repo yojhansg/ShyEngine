@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include "Scripting/Variable.h"
@@ -8,14 +8,14 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Apr  8 00:02:37 2023
+//Creation time : Sat Apr  8 01:15:54 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
 
 class FunctionManager{
 public: 
-	static void CreateFunctionMap(std::map<std::string, CallableFunction>& map);
+	static void CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map);
 };
 
 
@@ -145,7 +145,7 @@ Scripting::Variable ScriptFunctionality_Vector2D_Add(std::vector<Scripting::Vari
 Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Multiply(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);

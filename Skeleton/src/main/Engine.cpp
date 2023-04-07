@@ -37,7 +37,7 @@ Engine::Engine() {
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("flappyBird");
+	DataLoader data = DataLoader::Load("clock");
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);

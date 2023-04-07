@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Sat Apr  8 00:02:37 2023
+//Creation time: Sat Apr  8 01:15:54 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -42,7 +42,7 @@ using namespace Scripting;
 
 
 
-void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>& map){
+void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){
 
 	map.emplace("Image_getTextureWidth",Image_getTextureWidth);
 	map.emplace("Image_getTextureHeight",Image_getTextureHeight);
@@ -169,7 +169,7 @@ void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>&
 	map.emplace("Vector2D_Subtract",ScriptFunctionality_Vector2D_Subtract);
 	map.emplace("Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
 	map.emplace("Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
-	map.emplace("Vector2D_Mult",ScriptFunctionality_Vector2D_Mult);
+	map.emplace("Vector2D_Multiply",ScriptFunctionality_Vector2D_Multiply);
 	map.emplace("String_Equals",ScriptFunctionality_String_Equals);
 	map.emplace("String_Concatenate",ScriptFunctionality_String_Concatenate);
 	map.emplace("String_Substring",ScriptFunctionality_String_Substring);
@@ -1132,9 +1132,9 @@ Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Va
 	Vector2D ret = manager->Vector2D_Cross(vec[0].vector, vec[1].vector);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Vector2D_Mult(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Vector2D_Multiply(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Vector2D ret = manager->Vector2D_Mult(vec[0].vector, vec[1].value.Float);
+	Vector2D ret = manager->Vector2D_Multiply(vec[0].vector, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec){

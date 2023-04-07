@@ -33,12 +33,12 @@ ClassReflection::ClassReflection(){
 }
 
 
-	void ClassReflection::ReflectComponent(std::string const& component, ECS::Component* pointer, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectComponent(std::string const& component, ECS::Component* pointer, std::unordered_map<std::string, std::string> const& map){
 	if(reflectionMethods.contains(component))
 		(this->*reflectionMethods[component])(pointer, map);
 
 }
-	void ClassReflection::ReflectBoxBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		BoxBody* self = static_cast<BoxBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
@@ -48,7 +48,7 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 
 }
-	void ClassReflection::ReflectChainBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectChainBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		ChainBody* self = static_cast<ChainBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
@@ -58,7 +58,7 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 
 }
-	void ClassReflection::ReflectCircleBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		CircleBody* self = static_cast<CircleBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
@@ -68,7 +68,7 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 
 }
-	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		EdgeBody* self = static_cast<EdgeBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
@@ -78,13 +78,13 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 
 }
-	void ClassReflection::ReflectImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectImage(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		Image* self = static_cast<Image*>(selfComp);
 		if(map.contains("fileName"))
 			self->fileName = map.at("fileName");
 
 }
-	void ClassReflection::ReflectOverlay(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectOverlay(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		Overlay* self = static_cast<Overlay*>(selfComp);
 		if(map.contains("placement"))
 			self->placement = std::stoi(map.at("placement"));
@@ -110,7 +110,7 @@ ClassReflection::ClassReflection(){
 			self->interactable = map.at("interactable") == "true" ? true : false;
 
 }
-	void ClassReflection::ReflectOverlayButton(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectOverlayButton(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		OverlayButton* self = static_cast<OverlayButton*>(selfComp);
 		if(map.contains("defaultColor"))
 			self->defaultColor = Utilities::Color::CreateColor(map.at("defaultColor"));
@@ -122,13 +122,13 @@ ClassReflection::ClassReflection(){
 			self->scale = std::stof(map.at("scale"));
 
 }
-	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectOverlayImage(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		OverlayImage* self = static_cast<OverlayImage*>(selfComp);
 		if(map.contains("path"))
 			self->path = map.at("path");
 
 }
-	void ClassReflection::ReflectOverlayText(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectOverlayText(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		OverlayText* self = static_cast<OverlayText*>(selfComp);
 		if(map.contains("pointSize"))
 			self->pointSize = std::stoi(map.at("pointSize"));
@@ -146,7 +146,7 @@ ClassReflection::ClassReflection(){
 			self->lineSpacing = std::stoi(map.at("lineSpacing"));
 
 }
-	void ClassReflection::ReflectPhysicBody(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectPhysicBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		PhysicBody* self = static_cast<PhysicBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
@@ -156,7 +156,7 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 
 }
-	void ClassReflection::ReflectTransform(ECS::Component* selfComp, std::map<std::string, std::string> const& map){
+	void ClassReflection::ReflectTransform(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		Transform* self = static_cast<Transform*>(selfComp);
 		if(map.contains("position_"))
 			self->position_ = map.at("position_");

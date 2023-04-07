@@ -559,7 +559,7 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 	std::ofstream h(output + "/FunctionManager.h");
 
 	h << ClassCreator("FunctionManager")
-		.IncludeAbsolutes({ "map", "string", "vector" })
+		.IncludeAbsolutes({ "unordered_map", "string", "vector" })
 		.IncludeRelative("Scripting/Variable.h")
 		.Empty(3)
 		.AddDefine("ECSfunc_Version", ECS_Version)
@@ -569,7 +569,7 @@ ECSReader& ECSReader::CreateFunctionManagerHeader()
 		.Empty()
 		.BeginClass()
 		.Public()
-		.AddMethod("void", "CreateFunctionMap", { {"std::map<std::string, CallableFunction>&", "map"} }, "", true)
+		.AddMethod("void", "CreateFunctionMap", { {"std::unordered_map<std::string, CallableFunction>&", "map"} }, "", true)
 		.EndClass()
 		.Empty(3)
 		.Header();
@@ -648,7 +648,7 @@ using namespace Scripting;
 
 
 
-void FunctionManager::CreateFunctionMap(std::map<std::string, CallableFunction>& map){
+void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){
 
 )";
 
@@ -712,7 +712,7 @@ ECSReader& ECSReader::ClassReflection()
 
 	ClassCreator creator = ClassCreator("ClassReflection", true, true);
 
-	creator.IncludeAbsolutes({ "string" , "map" });
+	creator.IncludeAbsolutes({ "string" , "unordered_map" });
 	creator.AddLine("namespace ECS { class Component; }");
 
 	creator.Empty()
@@ -721,11 +721,11 @@ ECSReader& ECSReader::ClassReflection()
 		.AddLine()
 		.AddLine("using namespace ECS;")
 		.BeginClass()
-		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::map<std::string, std::string> const&);")
+		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::unordered_map<std::string, std::string> const&);")
 		.Empty(1)
 		.Private()
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
-		.AddAtribute("std::map<std::string, ReflectionMethod>", "reflectionMethods")
+		.AddAtribute("std::unordered_map<std::string, ReflectionMethod>", "reflectionMethods")
 		.Empty(1);
 
 
@@ -758,7 +758,7 @@ ECSReader& ECSReader::ClassReflection()
 	//TODO: dar errores o algo asi no se
 
 	creator.AddMethod("void", "ReflectComponent", { {"std::string const&", "component"}, {"ECS::Component*", "pointer"},
-			{"std::map<std::string, std::string> const&", "map"} }, reflector.str(), false);
+			{"std::unordered_map<std::string, std::string> const&", "map"} }, reflector.str(), false);
 
 
 
@@ -790,7 +790,7 @@ ECSReader& ECSReader::ClassReflection()
 		}
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
-			{"std::map<std::string, std::string> const&", "map"} }, method.str(), false);
+			{"std::unordered_map<std::string, std::string> const&", "map"} }, method.str(), false);
 
 		creator.AddLine();
 	}
@@ -823,7 +823,7 @@ ECSReader& ECSReader::ComponentFactory()
 
 	ClassCreator creator = ClassCreator("ComponentFactory", true, true);
 
-	creator.IncludeAbsolutes({ "string" , "map" });
+	creator.IncludeAbsolutes({ "string" , "unordered_map" });
 	creator.AddLine("namespace ECS { class Component; }");
 
 
@@ -850,7 +850,7 @@ ECSReader& ECSReader::ComponentFactory()
 		.Empty(1)
 		.AddConstructor(constructor.str())
 		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
-		.AddAtribute("std::map<std::string, ComponentCreation>", "components")
+		.AddAtribute("std::unordered_map<std::string, ComponentCreation>", "components")
 		.Empty(1);
 
 

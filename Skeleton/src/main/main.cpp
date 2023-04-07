@@ -8,22 +8,10 @@
 
 #include "Scripting/ScriptFunctionality.h"
 
-
 //TODO: ver nombres mejores para el set y el get del guardado (save y load ? y que el otro save y load pasen a ser saveToDisk y loadFromDisk)
 
 int main(int argc, char* args[]) {
 
-	//float time = Scripting::ScriptFunctionality::instance()->Time_Now();
-
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_WeekDay(time) << std::endl;
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_Month(time) << std::endl;
-
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeStamp(time) << std::endl;
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_DDMMYY(time) << std::endl;
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeHHMMSS(time) << std::endl;
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_TimeHHMMSS(Scripting::ScriptFunctionality::instance()->Time_Now()) << std::endl;
-	//std::cout << time << std::endl;
-	//std::cout << Scripting::ScriptFunctionality::instance()->Time_Now() << std::endl;
 
 	/*ECS::SaveManager* save = ECS::SaveManager::instance();
 
