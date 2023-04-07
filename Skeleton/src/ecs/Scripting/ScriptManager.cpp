@@ -15,8 +15,11 @@ using namespace nlohmann;
 using jsonarray = std::vector<json>;
 
 
+
 Scripting::ScriptManager::ScriptManager()
 {
+	nodeIteration = 0;
+	currentScript = nullptr;
 	FunctionManager::CreateFunctionMap(functionMap);
 }
 
@@ -44,7 +47,6 @@ Scripting::Variable Scripting::ScriptManager::GetGlobal(std::string const& name)
 
 	return globalAttributes[name];
 }
-
 
 
 Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::string const& path)
@@ -306,4 +308,21 @@ Scripting::ScriptManager::ScriptNodes::ScriptNodes()
 	onCollisionEnter = onCollision = onCollisionExit = nullptr;
 
 	onClick = onClickBegin = onClickHold = onDoubleClick = onRightClick = nullptr;
+
 }
+
+
+void Scripting::ScriptManager::NewIteration(ECS::Script* script, Node* beginNode)
+{
+	currentScript = script;
+	beginNode->Cicle(nodeIteration++);
+	currentScript = nullptr;
+
+}
+
+ECS::Script* Scripting::ScriptManager::GetCurrentScript()
+{
+	return currentScript;
+}
+
+

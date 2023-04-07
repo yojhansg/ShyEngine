@@ -1,7 +1,6 @@
 #include "Script.h"
 #include "ScriptManager.h"
 
-ECS::Script* ECS::Script::currentScript = nullptr;
 
 void ECS::Script::start()
 {
@@ -85,9 +84,7 @@ void ECS::Script::Iteration(Scripting::Node* beginNode)
 	if (beginNode == nullptr)
 		return;
 
-	currentScript = this;
-	beginNode->Cicle();
-	currentScript = nullptr;
+	Scripting::ScriptManager::instance()->NewIteration(this, beginNode);
 }
 
 

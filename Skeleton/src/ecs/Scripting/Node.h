@@ -23,14 +23,16 @@ namespace Scripting {
 		Node(int idx);
 		virtual ~Node();
 
-		virtual void Operate(Node*& nextNode) = 0;
-
+		virtual void Operate(Node*& nextNode, int iterationIdx) = 0;
 		/*
 			Procesa este nodo y todos sus nodos siguientes
 		*/
 
-		void Cicle();
+		virtual void ForceReevaluation();
 
+		void Cicle(int iterationIdx);
+
+		int iterationIdx;
 	protected:
 
 		int nodeIdx;

@@ -74,7 +74,7 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 			jsonarray scripts = obj["scripts"].get<jsonarray>();
 			for (auto& script : scripts) {
 
-				entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+				entity->AddScript(script.get<std::string>());
 			}
 		}
 	}
@@ -153,7 +153,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 		for (auto& script : scripts)
 		{
-			entity->addComponent<ECS::Script>()->Initialise(script.get<std::string>());
+			entity->AddScript(script.get<std::string>());
 		}
 	}
 

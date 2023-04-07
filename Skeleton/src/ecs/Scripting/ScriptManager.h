@@ -13,12 +13,15 @@ class FunctionManager;
 
 //TODO: Limpiar basura
 
+namespace ECS {
+	class Script;
+}
+
 namespace Scripting {
 
 	class Node;
 	class Fork;
 	class Function;
-
 
 	class ScriptManager : public Utilities::Singleton<ScriptManager> {
 
@@ -51,16 +54,20 @@ namespace Scripting {
 
 		static Variable CallFunction(std::string const& func, std::vector<Variable> const& params);
 
-		~ScriptManager();
-
-
 		void SetGlobal(std::string const& name, Scripting::Variable const& val);
 		Scripting::Variable GetGlobal(std::string const& name);
 
+		void NewIteration(ECS::Script* script, Node* beginNode);
 
+		ECS::Script* GetCurrentScript();
+
+		~ScriptManager();
 	private:
 
 		ScriptManager();
+
+		int nodeIteration;
+		ECS::Script* currentScript;
 
 		std::vector<Node*> allNodes;
 		std::map<std::string, ScriptNodes> scripts;

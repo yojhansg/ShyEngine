@@ -16,7 +16,6 @@ namespace ECS {
 
 	public:
 
-		static Script* currentScript;
 
 		void Initialise(std::string path);
 

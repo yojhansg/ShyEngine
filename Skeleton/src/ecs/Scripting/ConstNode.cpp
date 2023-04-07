@@ -5,7 +5,7 @@ Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val): Scripting::Ou
 	output = value;
 }
 
-void Scripting::ConstNode::Operate(Node*& next)
+void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 {
 	next = nullptr;
 }

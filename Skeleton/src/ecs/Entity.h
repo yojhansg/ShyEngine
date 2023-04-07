@@ -18,6 +18,7 @@ namespace ECS {
 	class RenderManager;
 	class OverlayManager;
 	class PhysicBody;
+	class Script;
 
 	// This is a way to ensure that T is a Component
 	template <typename T>
@@ -127,6 +128,9 @@ namespace ECS {
 			return vec;
 		}
 
+
+		ECS::Script* AddScript(std::string const& script);
+
 		void AddToRenderSet();
 
 		int GetRenderOrder();
@@ -227,6 +231,7 @@ namespace ECS {
 
 		// List of components associated with this entity
 		std::list<Component*> components;
+		std::list<Script*> scripts;
 
 		// List of components to remove in the end of the update
 		std::list<std::list<Component*>::iterator> removedComponents;

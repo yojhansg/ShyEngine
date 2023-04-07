@@ -12,7 +12,7 @@ namespace Scripting {
 
 		ConstNode(int idx, Variable val);
 
-		void Operate(Node*& next) override;
+		void Operate(Node*& next, int iterationIdx) override;
 
 	private:
 

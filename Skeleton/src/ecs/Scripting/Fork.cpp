@@ -1,7 +1,7 @@
 #include "Fork.h"
 #include "OutputNode.h"
 
-Scripting::Fork::Fork(int idx, ForkType type): Scripting::Node(idx), type(type)
+Scripting::Fork::Fork(int idx, ForkType type) : Scripting::Node(idx), type(type)
 {
 	A = B = condition = nullptr;
 }
@@ -17,9 +17,12 @@ void Scripting::Fork::SetCondition(OutputNode* node)
 	condition = node;
 }
 
-void Scripting::Fork::Operate(Node*& next)
+
+//TODO: no se comprueba si tiene condition
+
+void Scripting::Fork::Operate(Node*& next, int iterationIdx)
 {
-	condition->Cicle();
+	condition->Cicle(iterationIdx);
 
 	switch (type)
 	{
@@ -27,8 +30,10 @@ void Scripting::Fork::Operate(Node*& next)
 
 		while (condition->output.value.Bool) {
 
-			A->Cicle();
-			condition->Cicle();
+			A->Cicle(iterationIdx);
+
+
+			condition->Cicle(iterationIdx);
 		}
 		next = B;
 
@@ -39,9 +44,20 @@ void Scripting::Fork::Operate(Node*& next)
 
 
 		if (condition->output.value.Bool)
- 			next = A;
+			next = A;
 		else next = B;
 
 		break;
 	}
 }
+
+void Scripting::Fork::ForceReevaluation()
+{
+	if (condition)
+		condition->ForceReevaluation();
+	if (A)
+		A->ForceReevaluation();
+	if (B)
+		B->ForceReevaluation();
+}
+

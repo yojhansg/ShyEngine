@@ -12,6 +12,7 @@ namespace Scripting {
 
 		OutputNode(int idx);
 
+
 		Scripting::Variable output;
 	};
 

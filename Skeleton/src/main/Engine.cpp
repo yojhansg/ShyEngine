@@ -37,7 +37,7 @@ Engine::Engine() {
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("config");
+	DataLoader data = DataLoader::Load("flappyBird");
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -68,10 +68,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Game(sceneManager).initScenes();
+	//Game(sceneManager).initScenes();
 
-	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	//sceneManager->manageScenes();
+	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
 	return true;
 }
@@ -84,6 +84,7 @@ void Engine::update() {
 	steady_clock::time_point physicsTime = beginTime;
 	steady_clock::time_point startTime = beginTime;
 
+	//int maxNodeCount = 0;
 	while (true) {
 
 		// Scene
@@ -141,6 +142,17 @@ void Engine::update() {
 
 		beginTime = endTime;
 
+
+		//int nodeCount = Scripting::ScriptManager::nodeIteration;
+
+
+
+		//Console::Output::PrintColor(Console::Color::Aqua, Console::Color::Green, std::to_string(maxNodeCount), std::to_string(Scripting::ScriptManager::nodeIteration));
+
+		//if (nodeCount > maxNodeCount) {
+		//	maxNodeCount = nodeCount;
+		//}
+		//Scripting::ScriptManager::nodeIteration = 0;
 	}
 }
 

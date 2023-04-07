@@ -18,8 +18,9 @@ namespace Scripting {
 
 		Function(int idx, std::string const& method = "");
 
-		void Operate(Node*& nextNode) override;
+		void Operate(Node*& nextNode, int iterationIdx) override;
 
+		void ForceReevaluation() override;
 
 		void SetNextNode(Node* nextNode);
 

@@ -6,6 +6,8 @@
 #include "ECSUtilities/ComponentFactory.h"
 #include "ConsoleManager.h"
 
+#include "Scripting/Script.h"
+
 namespace ECS {
 
 	Entity::Entity(const std::string& ent_name, int renderOrder) {
@@ -53,6 +55,17 @@ namespace ECS {
 
 	std::string Entity::getEntityName() {
 		return name;
+	}
+
+	ECS::Script* Entity::AddScript(std::string const& scriptName)
+	{
+		ECS::Script* script = addComponent<ECS::Script>();
+
+		script->Initialise(scriptName);
+
+		scripts.push_back(script);
+
+		return script;
 	}
 
 	void Entity::AddToRenderSet() {

@@ -6,7 +6,7 @@
 #include <format>
 
 #include "ConsoleManager.h"
-
+#include "ScriptManager.h"
 #include <sstream>
 #include <iomanip>
 
@@ -28,7 +28,7 @@ Scripting::ScriptFunctionality::ScriptFunctionality()
 
 ECS::Entity* Scripting::ScriptFunctionality::Entity()
 {
-	return ECS::Script::currentScript->getEntity();
+	return Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity();
 }
 
 std::string Scripting::ScriptFunctionality::EntityName()
@@ -38,15 +38,15 @@ std::string Scripting::ScriptFunctionality::EntityName()
 
 std::string Scripting::ScriptFunctionality::Script()
 {
-	return ECS::Script::currentScript->GetName();
+	return Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 }
 
 
 void Scripting::ScriptFunctionality::Print(Variable val)
 {
-	std::string objectName = ECS::Script::currentScript->getEntity()->getEntityName();
+	std::string objectName = Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity()->getEntityName();
 
-	std::string scriptName = ECS::Script::currentScript->GetName();
+	std::string scriptName = Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 
 	Console::Output::Print(objectName + ": " + scriptName, String_ToString(val));
 }
@@ -277,12 +277,12 @@ std::string Scripting::ScriptFunctionality::String_ToString(Scripting::Variable 
 
 void Scripting::ScriptFunctionality::Set(std::string name, Scripting::Variable val)
 {
-	ECS::Script::currentScript->Set(name, val);
+	Scripting::ScriptManager::instance()->GetCurrentScript()->Set(name, val);
 }
 
 Scripting::Variable Scripting::ScriptFunctionality::Get(std::string name)
 {
-	return ECS::Script::currentScript->Get(name);
+	return Scripting::ScriptManager::instance()->GetCurrentScript()->Get(name);
 }
 
 void Scripting::ScriptFunctionality::SetLocal(std::string name, Scripting::Variable val)
