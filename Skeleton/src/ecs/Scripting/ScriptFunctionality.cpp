@@ -11,6 +11,7 @@
 #include <iomanip>
 
 #include <ctime>
+#include <RendererManager.h>
 #include <SceneManager.h>
 
 #define DELTA 0.001f
@@ -585,21 +586,23 @@ std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
 
 Utilities::Vector2D Scripting::ScriptFunctionality::Camera_GetPosition()
 {
-	return ECS::SceneManager::instance()->CameraPosition();
+	return Renderer::RendererManager::instance()->CameraPosition();
 }
 
 void Scripting::ScriptFunctionality::Camera_SetPosition(cVector2D newPosition)
 {
+	Renderer::RendererManager::instance()->SetCameraPosition(newPosition);
 	ECS::SceneManager::instance()->SetCameraPosition(newPosition);
 }
 
 float Scripting::ScriptFunctionality::Camera_GetScale()
 {
-	return ECS::SceneManager::instance()->CameraScale();
+	return Renderer::RendererManager::instance()->CameraScale();
 }
 
 void Scripting::ScriptFunctionality::Camera_SetScale(float newScale)
 {
+	Renderer::RendererManager::instance()->SetCameraScale(newScale);
 	ECS::SceneManager::instance()->SetCameraScale(newScale);
 }
 

@@ -6,7 +6,6 @@
 #include <ResourcesManager.h>
 #include <ScriptFunctionality.h>
 #include <RendererManager.h>
-#include <SceneManager.h>
 
 namespace ECS {
 
@@ -66,7 +65,7 @@ namespace ECS {
 		int w = std::round(trScale.getX() * width);
 		int h = std::round(trScale.getY() * height);
 
-		SceneManager::instance()->AdjustRectToCamera(x, y, w, h);
+		Renderer::RendererManager::instance()->AdjustRectToCamera(x, y, w, h);
 
 		dstRect = { x, y, w, h };
 

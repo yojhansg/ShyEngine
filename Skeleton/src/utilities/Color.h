@@ -33,3 +33,5 @@ namespace Utilities {
 	std::ostream& operator<<(std::ostream& os, const Color& v);
 
 }
+
+using cColor = Utilities::Color const&;

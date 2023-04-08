@@ -196,3 +196,5 @@ namespace Utilities {
 	std::ostream& operator<<(std::ostream& os, const Vector2D& v);
 
 }
+
+using cVector2D = Utilities::Vector2D const&;

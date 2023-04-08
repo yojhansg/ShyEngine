@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include "Entity.h"
 
+#include "RendererManager.h"
+
 namespace ECS {
 
     Scene::Scene(const std::string& sce_name) {
@@ -18,6 +20,10 @@ namespace ECS {
     }
 
     void Scene::init() {
+        
+        Renderer::RendererManager::instance()->SetCameraPosition(cameraPosition);
+        Renderer::RendererManager::instance()->SetCameraScale(cameraScale);
+
         for (auto e : entities) {
             e->init();
         }
@@ -105,11 +111,15 @@ namespace ECS {
     }
 
     void Scene::onSceneUp() {
+
+        Renderer::RendererManager::instance()->SetCameraPosition(cameraPosition);
+        Renderer::RendererManager::instance()->SetCameraScale(cameraScale);
+
+
         for (auto e : entities) {
             if (e->isActive() && !e->isRemoved())
                 e->onSceneUp();
         }
-
     }
 
     void Scene::onSceneDown() {

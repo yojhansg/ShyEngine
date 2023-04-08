@@ -3,15 +3,23 @@
 #include <Singleton.h>
 #include <string>
 #include <SDL.h>
+#include <Vector2D.h>
+#include <Color.h>
 
 //TODO: no incluir aqui SDL
 
+namespace Scripting {
+	class ScriptFunctionality;
+}
+
 namespace Renderer {
+
 
 	class RendererManager : public Utilities::Singleton<RendererManager> {
 
 		friend Singleton<RendererManager>;
 
+		friend Scripting::ScriptFunctionality;
 	public:
 
 		~RendererManager();
@@ -19,7 +27,7 @@ namespace Renderer {
 		SDL_Window* getWindow();
 		SDL_Renderer* getRenderer();
 
-		void clearRenderer(SDL_Color bg = SDL_Color());
+		void clearRenderer(cColor color = Utilities::Color(255, 255, 255));
 		void presentRenderer();
 
 		int getWidth();
@@ -31,6 +39,13 @@ namespace Renderer {
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
 
+		void AdjustRectToCamera(int& x, int& y, int& w, int& h);
+
+		Utilities::Vector2D CameraPosition();
+		float CameraScale();
+
+		void SetCameraPosition(cVector2D vec);
+		void SetCameraScale(float scale);
 
 	private:
 
@@ -46,5 +61,8 @@ namespace Renderer {
 
 		SDL_Window* window; // the window
 		SDL_Renderer* renderer; // the renderer
+
+		float cameraScale;
+		Utilities::Vector2D cameraPosition;
 	};
 }

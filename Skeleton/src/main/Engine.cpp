@@ -76,9 +76,7 @@ bool Engine::init() {
 
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
-	Scripting::ScriptFunctionality::instance()->Camera_SetScale(.5);
-
-
+	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1);
 
 	return true;
 }
@@ -118,7 +116,7 @@ void Engine::update() {
 		overlayManager->Update();
 
 		// Render
-		rendererManager->clearRenderer(Utilities::createColor(0x835CF3FF));
+		rendererManager->clearRenderer(Utilities::Color(131, 92, 243));
 		renderManager->Render();
 		physicsManager->debugDraw();
 		overlayManager->Render();

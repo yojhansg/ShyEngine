@@ -76,15 +76,6 @@ namespace ECS {
 
 	public:
 
-
-
-		void AdjustRectToCamera(int& x, int& y, int& w, int& h);
-
-
-
-		float CameraScale();
-		Utilities::Vector2D CameraPosition();
-
 		void SetCameraScale(float newscale);
 		void SetCameraPosition(Utilities::Vector2D const& newpos);
 
