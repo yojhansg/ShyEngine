@@ -180,7 +180,18 @@ public:
 		/*
 			Dado un string conteniendo un tipo devuelve su representacion en una variable de scripting
 		*/
-		std::string String2ScriptingVariable(std::string& in);
+		std::string String2ScriptingVariable(std::string const& in);
+
+
+		/*
+			Dado un string conteniendo un tipo devuelve su representacion el tipo de enum de variable
+		*/
+		std::string String2ScriptingEnum(std::string const& in);
+
+		/*
+			Dado un string conteniendo un tipo devuelve si el tipo en cuestion es de tipo variable
+		 */
+		bool IsVariable(std::string const& in);
 
 		/*
 			Variable de comprobacion en caso en caso de que haya habido un error generando el metodo

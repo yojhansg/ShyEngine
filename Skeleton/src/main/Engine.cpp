@@ -31,13 +31,13 @@ using namespace std::chrono;
 Engine::Engine() {
 
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr;
-	sceneManager = nullptr; engineTime = nullptr; renderManager = nullptr; 
+	sceneManager = nullptr; engineTime = nullptr; renderManager = nullptr;
 	overlayManager = nullptr;
 }
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("clock");
+	DataLoader data = DataLoader::Load("config");
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -47,7 +47,7 @@ bool Engine::init() {
 	if (ECS_Version != ECSfunc_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
 	}
-	
+
 	if (ECS_Version != ECSreflection_Version) {
 		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
 	}
@@ -99,7 +99,7 @@ void Engine::update() {
 			scene->fixedUpdate(engineTime->fixedDeltaTime);
 			physicsManager->fixedUpdate(engineTime->fixedDeltaTime);
 
-			physicsTime += std::chrono::milliseconds((int) (engineTime->fixedDeltaTime * 1000));
+			physicsTime += std::chrono::milliseconds((int)(engineTime->fixedDeltaTime * 1000));
 		}
 
 		// Update

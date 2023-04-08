@@ -4,7 +4,7 @@
 #include "EngineTime.h"
 
 
-//TODO, no inicializar todo el rato el hconsole sino guardarlo en la clase que sera un singleton en algun momento
+//TODO: no inicializar todo el rato el hconsole sino guardarlo en la clase que sera un singleton en algun momento
 //TODO: mandar todos los logs a un fichero
 
 void Console::Output::Print(cstring info, cstring message)

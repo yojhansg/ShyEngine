@@ -48,7 +48,7 @@
             "index": 7,
             "function": "Print",
             "input": [
-                3
+                17
             ]
         },
         {
@@ -56,8 +56,7 @@
             "function": "Transform_setPositionX",
             "input": [
                 1, 16
-            ],
-            "next": 7
+            ]
         },
         {
             "index" : 10,
@@ -96,6 +95,13 @@
             "function": "Math_Multiply",
             "input":[
                 16, 14
+            ]
+        },
+        {
+            "index": 17,
+            "function": "Overlay_SetInteractable",
+            "input":[
+                1, 5
             ]
         }
 

@@ -8,7 +8,6 @@
 #include <Scripting/Variable.h>
 #include <unordered_map>
 
-//TODO: Separar scripts de componentes
 
 namespace ECS {
 
@@ -107,7 +106,6 @@ namespace ECS {
 		requires isComponent<T>
 		T* getComponent() {
 
-			//TODO: se puede mejorar el rendimiento asociando a cada componente una posicion fija del array
 			for (Component* comp : components) {
 				T* v = dynamic_cast<T*>(comp);
 				if (v != nullptr) {

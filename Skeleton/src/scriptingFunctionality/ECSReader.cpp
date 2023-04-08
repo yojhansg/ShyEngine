@@ -139,8 +139,6 @@ void ECSReader::ProcessFile(std::string const& path)
 			continue;
 		}
 
-		//TODO: comprobar si pertecene a una clase exportada o a una clase manager
-
 		bool forceAddClassName = false;
 		std::string textToRemove = "";
 
@@ -149,7 +147,7 @@ void ECSReader::ProcessFile(std::string const& path)
 			if (line.contains(";")) //Forward declaration -> ignore
 				continue;
 
-			if (line.contains("enum"))
+			if (line.contains("enum")) //TODO: enum processing
 				continue;
 
 			textToRemove = "class";
@@ -236,7 +234,6 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			attributes[currentClassName].push_back({ attReturnType, attName });
 
-			//TODO: ver si deberia separar la reflexion de la funcionalizacion a la hora de incluir ficheros
 			if (!fileIncluded) {
 
 				filesToInclude.push_back(path);
@@ -252,8 +249,6 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			if (!method.valid)
 			{
-
-				//TODO: hacer algo asi para el manejo de errores con colores que puede quedar bastante chulo
 				HANDLE hConsole;
 
 				hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -273,8 +268,6 @@ void ECSReader::ProcessFile(std::string const& path)
 			else
 				managerMethods[currentClassName].push_back(method);
 
-
-			//TODO: distinguir entre includes de componentes y de managers
 
 			if (!fileIncluded) {
 
@@ -390,22 +383,55 @@ std::string ECSReader::Method::FunctionDefinition()
 {
 	std::stringstream definition;
 
+
 	definition << VARIABLE << " ";
 
 	definition << FunctionName();
 
-	definition << "(" VECTOR "){" NEWLINE;
+	definition << "(" VECTOR "){" NEWLINE NEWLINE;
+
+
+	//TODO: manejo de errores: { input diferente al necesario } { metodos de managers }
+
+	std::string expectedEntity = "Scripting::Variable::Type::Entity";
+	std::string givenEntity = "vec[0].type";
+
+	definition << TAB "if(" << givenEntity << " != " << expectedEntity << "){" NEWLINE;
+	//entity, script, function, i, expected, given
+	definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+		"\", std::to_string(0)" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
+	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
+
+	definition << TAB"}" NEWLINE NEWLINE;
+
+	for (int i = 0; i < input.size(); i++) {
+
+		if (!IsVariable(input[i].type)) {
+
+			std::string expected = "Scripting::Variable::Type::" + String2ScriptingEnum(input[i].type);
+			std::string given = "vec[" + std::to_string(i + 1) + "].type";
+
+			definition << TAB "if(" << given << " != " << expected << "){" NEWLINE;
+			//entity, script, function, i, expected, given
+			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+				"\", std::to_string(" << i + 1 << ")" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
+			definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
+			
+			definition << TAB"}" NEWLINE NEWLINE;
+		}
+	}
+
+
 
 	definition << TAB << className << "* self = vec[0].value.entity->getComponent<" + className + ">();" NEWLINE;
 
 
-	//TODO: comprobar los tipos: [0] entity -> [1] float etc...
-	//Manejo de errores:
 
 	definition << TAB "if(self == nullptr){" NEWLINE;
 	definition << TAB TAB"DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 	definition << TAB"}" NEWLINE;
+
 
 
 	definition << TAB;
@@ -485,8 +511,7 @@ std::string ECSReader::Method::ManagerFunctionDeclaration()
 
 
 
-//TODO: rellenar con el resto de valores
-std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
+std::string ECSReader::Method::String2ScriptingVariable(std::string const& in)
 {
 	if (in == "int")
 		return ".value.Float";
@@ -513,7 +538,42 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string& in)
 		return "";
 	}
 
+	if (in == "Entity*" || in == "ECS::Entity*") {
+		return "";
+	}
+
 	return ".value." + in;
+}
+
+std::string ECSReader::Method::String2ScriptingEnum(std::string const& in)
+{
+	if (in == "int")
+		return "Float";
+	if (in == "float")
+		return "Float";
+	if (in == "bool")
+		return "Bool";
+	if (in == "char")
+		return "Char";
+	if (in == "std::string" || in == "string" || in == "cstring") {
+		return "String";
+	}
+	if (in == "Utilities::Vector2D" || in == "Vector2D" || in == "cVector2D") {
+		return "Vector2D";
+	}
+	if (in == "Utilities::Color" || in == "Color" || in == "cColor") {
+		return "Color";
+	}
+	if (in == "Entity*" || in == "ECS::Entity*") {
+		return "Entity";
+	}
+
+	return "Null";
+}
+
+bool ECSReader::Method::IsVariable(std::string const& in)
+{
+	return in == "Variable" || in == "Scripting::Variable" || in == "cVariable";
 }
 
 
@@ -611,6 +671,8 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 
 	cpp << "//Creation time: " << GetTimeStamp() << "\n";
 
+	//TODO: por muy epico que sea el codigo realmente quedaria mejor sin los defines estos
+
 cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
 #define _DebugError(entity, script, function, title, error) _Console(_ErrorInfo(entity, script, function, title), error)
@@ -622,6 +684,8 @@ cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , val
 #define DebugComponentError(entity, script, function, entityError, missingComponent) _DebugError(entity, script, function, "Entity error", _ComponentErrorMessage(entityError, #missingComponent))
 #define DebugNullError(entity, script, function, i, expected) _DebugError(entity, script, function, "Empty value", _NullErrorMessage(i, expected))
 #define DebugInvalidInputError(entity, script, function, i, expected, given) _DebugError(entity, script, function, "Invalid input", _InvalidInputErrorMessage(i, expected, given))
+
+
 )~";
 
 
@@ -724,7 +788,6 @@ ECSReader& ECSReader::ClassReflection()
 		.AddLine("typedef void(ClassReflection::*ReflectionMethod)(ECS::Component*, std::unordered_map<std::string, std::string> const&);")
 		.Empty(1)
 		.Private()
-		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
 		.AddAtribute("std::unordered_map<std::string, ReflectionMethod>", "reflectionMethods")
 		.Empty(1);
 
@@ -755,7 +818,7 @@ ECSReader& ECSReader::ClassReflection()
 	reflector << "\tif(reflectionMethods.contains(component))\n";
 	reflector << "\t\t(this->*reflectionMethods[component])(pointer, map);\n";
 
-	//TODO: dar errores o algo asi no se
+	//TODO: lanzar un error en el else
 
 	creator.AddMethod("void", "ReflectComponent", { {"std::string const&", "component"}, {"ECS::Component*", "pointer"},
 			{"std::unordered_map<std::string, std::string> const&", "map"} }, reflector.str(), false);
@@ -870,8 +933,6 @@ ECSReader& ECSReader::ComponentFactory()
 	factoryMethod << "\treturn nullptr;";
 
 	creator.Public().AddLine().AddMethod("ECS::Component*", "CreateComponent", { {"std::string const&", "comp"} }, factoryMethod.str(), false);
-
-	//TODO: Buscar las clases que tengo que añadir para reflexionar
 
 	creator.EndClass();
 
