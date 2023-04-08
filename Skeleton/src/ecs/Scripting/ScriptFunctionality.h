@@ -123,7 +123,7 @@ publish:
 	int Time_Seconds(int time);
 
 	//TODO: string -> time since
-
+	std::string Time_Since(int time, int now);
 	std::string Time_TimeHHMM(int time);
 	std::string Time_TimeHHMMSS(int time);
 	std::string Time_TimeStamp(int time);

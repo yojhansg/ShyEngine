@@ -12,7 +12,6 @@
 
 int main(int argc, char* args[]) {
 
-
 	/*ECS::SaveManager* save = ECS::SaveManager::instance();
 
 	int slot = 1;

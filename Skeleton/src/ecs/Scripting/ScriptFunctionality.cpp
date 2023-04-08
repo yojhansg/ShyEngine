@@ -548,6 +548,41 @@ int Scripting::ScriptFunctionality::GetRealTime(int time) {
 }
 
 
+std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
+{
+	int dif = std::abs(now - time);
+
+	if (dif < 30) {
+		return std::to_string(dif) + " seconds ago";
+	}
+
+	if (dif < 60)
+		return "Less than a minute ago";
+
+	if (dif < 60 * 60)
+		return std::to_string(dif / 60) + " minutes ago";
+
+	if (dif < 60 * 60 * 24) {
+		return std::to_string(dif / (60 * 24)) + " hours ago";
+	}
+
+	if (dif < 60 * 60 * 24 * 2) {
+		return "Yesterday";
+	}
+
+	if (dif < 60 * 60 * 24 * 7) {
+		return Time_WeekDay(time);
+	}
+
+	if (Time_Year(time) != Time_Year(now)) {
+		return Time_DDMMYY(time);
+	}
+
+	return std::format("{}-{}", Time_MonthDay(time), Time_ShortMonth(time));
+}
+
+
+
 #include <Windows.h>
 #include <shellapi.h>
 

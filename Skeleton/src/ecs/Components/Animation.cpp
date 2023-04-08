@@ -16,6 +16,7 @@ ECS::Animation::Animation()
 
 	frameWidth = 0;
 	frameHeight = 0;
+	animationLenght = 0;
 }
 
 ECS::Animation::~Animation()
