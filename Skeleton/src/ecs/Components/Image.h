@@ -3,11 +3,18 @@
 #include "Component.h"
 #include <RendererManager.h>
 
+namespace Renderer {
+	class Texture;
+}
+
 namespace ECS {
 
 	class Transform;
 
+	//TODO: change texture
 	class Image : public Component {
+
+		friend class Animation;
 
 	public:
 
@@ -34,13 +41,15 @@ namespace ECS {
 
 		Utilities::Vector2D scaledSize();
 
+		void ChangeTexture(cstring texturePath);
+
 	private:
 
 		void flipMode();
 
 		//TODO: ver si encapsular estas cosas de SDL para que el en main no se incluya SDL
 		SDL_Renderer* renderer;
-		SDL_Texture* texture;
+		Renderer::Texture* texture;
 
 		Transform* transform;
 
@@ -48,10 +57,6 @@ namespace ECS {
 
 		SDL_Rect srcRect;
 		SDL_Rect dstRect;
-
-		// Real size of texture
-		int width;
-		int height;
 
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;

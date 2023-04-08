@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Apr  8 02:05:16 2023
+//Creation time : Sat Apr  8 17:01:40 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -20,6 +20,15 @@ public:
 
 
 
+Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_AdvanceFrame(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_AdvanceAnimation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_SetFrame(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_SetAnimation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_GetAnimation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_SetAnimationLenght(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec);
@@ -27,6 +36,7 @@ Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec);

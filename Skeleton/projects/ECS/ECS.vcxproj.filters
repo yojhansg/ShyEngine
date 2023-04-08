@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\src\ecs\Save.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\Animation.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Save.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\Animation.cpp">
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

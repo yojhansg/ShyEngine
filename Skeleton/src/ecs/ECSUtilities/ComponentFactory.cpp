@@ -1,5 +1,6 @@
 #include "ComponentFactory.h"
 
+#include "Components/Animation.h"
 #include "Components/BoxBody.h"
 #include "Components/Camera.h"
 #include "Components/ChainBody.h"
@@ -18,6 +19,7 @@
 
 ComponentFactory::ComponentFactory(){
 
+	components["Animation"] = &ComponentFactory::CreateAnimation;
 	components["BoxBody"] = &ComponentFactory::CreateBoxBody;
 	components["Camera"] = &ComponentFactory::CreateCamera;
 	components["ChainBody"] = &ComponentFactory::CreateChainBody;
@@ -37,6 +39,10 @@ ComponentFactory::ComponentFactory(){
 }
 
 
+	ECS::Component* ComponentFactory::CreateAnimation(){
+		return new ECS::Animation();
+
+}
 	ECS::Component* ComponentFactory::CreateBoxBody(){
 		return new ECS::BoxBody();
 

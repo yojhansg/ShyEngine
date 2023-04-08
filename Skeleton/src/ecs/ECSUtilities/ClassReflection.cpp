@@ -1,5 +1,6 @@
 #include "ClassReflection.h"
 
+#include "Components/Animation.h"
 #include "Components/BoxBody.h"
 #include "Components/ChainBody.h"
 #include "Components/CircleBody.h"
@@ -16,6 +17,7 @@
 
 ClassReflection::ClassReflection(){
 
+	reflectionMethods["Animation"] = &ClassReflection::ReflectAnimation;
 	reflectionMethods["BoxBody"] = &ClassReflection::ReflectBoxBody;
 	reflectionMethods["ChainBody"] = &ClassReflection::ReflectChainBody;
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
@@ -36,6 +38,24 @@ ClassReflection::ClassReflection(){
 	void ClassReflection::ReflectComponent(std::string const& component, ECS::Component* pointer, std::unordered_map<std::string, std::string> const& map){
 	if(reflectionMethods.contains(component))
 		(this->*reflectionMethods[component])(pointer, map);
+
+}
+	void ClassReflection::ReflectAnimation(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
+		Animation* self = static_cast<Animation*>(selfComp);
+		if(map.contains("speed"))
+			self->speed = std::stof(map.at("speed"));
+		if(map.contains("currentFrame"))
+			self->currentFrame = std::stoi(map.at("currentFrame"));
+		if(map.contains("currentAnimation"))
+			self->currentAnimation = std::stoi(map.at("currentAnimation"));
+		if(map.contains("animationColumns"))
+			self->animationColumns = std::stoi(map.at("animationColumns"));
+		if(map.contains("animationRows"))
+			self->animationRows = std::stoi(map.at("animationRows"));
+		if(map.contains("animationSheetStyle"))
+			self->animationSheetStyle = std::stoi(map.at("animationSheetStyle"));
+		if(map.contains("animationLenght"))
+			self->animationLenght = std::stoi(map.at("animationLenght"));
 
 }
 	void ClassReflection::ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

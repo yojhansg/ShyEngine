@@ -1,5 +1,83 @@
 {
+    "Animation": {
+        "AdvanceAnimation": {
+            "return": "void"
+        },
+        "AdvanceFrame": {
+            "return": "void"
+        },
+        "ChangeAnimationPath": {
+            "input": [
+                {
+                    "name": "str",
+                    "type": "cstring"
+                },
+                {
+                    "name": "frame",
+                    "type": "int"
+                },
+                {
+                    "name": "animation",
+                    "type": "int"
+                },
+                {
+                    "name": "column",
+                    "type": "int"
+                },
+                {
+                    "name": "row",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "GetAnimation": {
+            "return": "int"
+        },
+        "GetFrame": {
+            "return": "int"
+        },
+        "SetAnimation": {
+            "input": [
+                {
+                    "name": "idx",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetAnimationLenght": {
+            "input": [
+                {
+                    "name": "lenght",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "SetFrame": {
+            "input": [
+                {
+                    "name": "idx",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "getAnimationLenght": {
+            "return": "int"
+        }
+    },
     "Image": {
+        "ChangeTexture": {
+            "input": [
+                {
+                    "name": "texturePath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
+        },
         "getTextureHeight": {
             "return": "int"
         },
@@ -508,6 +586,5 @@
             ],
             "return": "void"
         }
-    },
-    "pudiendo generar errores o comportamientos no deseados": null
+    }
 }

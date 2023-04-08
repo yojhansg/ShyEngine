@@ -9,7 +9,7 @@ namespace ECS {
 
 	Image::Image(const std::string& fileName) {
 		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
-		width = height = srcX = srcY = srcWidth = srcHeight = 0;
+		srcX = srcY = srcWidth = srcHeight = 0;
 
 		flipX = flipY = false;
 
@@ -27,17 +27,14 @@ namespace ECS {
 		transform = getEntity()->getComponent<Transform>();
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		auto t = Resources::ResourcesManager::instance()->addTexture(fileName);
 
-		texture = t->getSDLTexture(); width = t->getWidth(); height = t->getHeight();
-
-		srcWidth = width; srcHeight = height;
+		ChangeTexture(fileName);
 
 		// Flip
 		flipMode();
 
 		// Rotation point
-		rotationPoint = new SDL_Point({ width / 2, height / 2 });
+		rotationPoint = new SDL_Point({ srcWidth / 2, srcHeight / 2 });
 
 		entity->AddToRenderSet();
 	}
@@ -45,6 +42,9 @@ namespace ECS {
 	void Image::render() {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
+
+		int width = texture->getWidth();
+		int height = texture->getHeight();
 
 		auto trPos = transform->getPosition();
 		auto trScale = transform->getScale();
@@ -69,15 +69,15 @@ namespace ECS {
 		rotationPoint->x = w / 2;
 		rotationPoint->y = h / 2;
 
-		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, *transform->getRotationPointer(), rotationPoint, mode);
+		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, *transform->getRotationPointer(), rotationPoint, mode);
 	}
 
 	int Image::getTextureWidth() {
-		return width;
+		return texture->getWidth();
 	}
 
 	int Image::getTextureHeight() {
-		return height;
+		return texture->getHeight();
 	}
 
 	void Image::setSrcRect(int x, int y, int w, int h) {
@@ -103,7 +103,14 @@ namespace ECS {
 	Utilities::Vector2D Image::scaledSize()
 	{
 		auto scale = transform->getScale();
-		return { width * scale.getX(), height * scale.getY() };
+		return { texture->getWidth() * scale.getX(), texture->getHeight() * scale.getY() };
+	}
+
+	void Image::ChangeTexture(cstring texturePath)
+	{
+		fileName = texturePath;
+		texture = Resources::ResourcesManager::instance()->addTexture(fileName);
+		srcWidth = texture->getWidth(); srcHeight = texture->getHeight();
 	}
 
 	void Image::flipMode() {

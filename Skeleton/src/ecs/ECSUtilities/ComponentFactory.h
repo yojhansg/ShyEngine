@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Sat Apr  8 02:05:16 2023
+//Creation time : Sat Apr  8 17:01:40 2023
 
 #define ECSreflection_Version 1.0
 
@@ -21,6 +21,7 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	ComponentFactory();
 	std::unordered_map<std::string, ComponentCreation> components;
 
+	ECS::Component* CreateAnimation();
 	ECS::Component* CreateBoxBody();
 	ECS::Component* CreateCamera();
 	ECS::Component* CreateChainBody();

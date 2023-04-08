@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ecs\Component.h" />
+    <ClInclude Include="..\..\src\ecs\Components\Animation.h" />
     <ClInclude Include="..\..\src\ecs\Components\BoxBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
     <ClInclude Include="..\..\src\ecs\Components\ChainBody.h" />
@@ -190,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\Animation.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp" />

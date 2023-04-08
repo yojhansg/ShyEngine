@@ -54,6 +54,43 @@
                 "FlappyBirdJump",
                 "TestScript"
             ]
+        },
+        {
+            "name": "player animado",
+            "order": 11,
+            "components": [
+                {
+                    "component": "Transform",
+                    "attributes": {
+                        "position_": "(300, 540)",
+                        "scale_": "(0.35f, 0.35f)"
+                    }
+                },
+                {
+                    "component": "Image",
+                    "attributes": 
+                        {
+                            "fileName": "animation.png"
+                        }
+                    
+                },
+                {
+                    "component": "Animation",
+                    "attributes": 
+                        {
+                            "speed": "10", 
+                            "animationColumns": "8",
+                            "animationRows": "9",
+                            "animationSheetStyle": "0",
+                            "animationLenght": "9",
+                            "currentFrame": "0",
+                            "currentAnimation": "8"
+                        }
+                    
+                }
+            ],
+            "scripts": [
+            ]
         }
     ],
     "overlays": [
