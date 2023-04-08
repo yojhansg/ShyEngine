@@ -5,6 +5,9 @@ namespace ECS {
 
     Scene::Scene(const std::string& sce_name) {
         name = sce_name;
+
+        cameraPosition = { 0 ,0 };
+        cameraScale = 1;
     }
 
     Scene::~Scene() {

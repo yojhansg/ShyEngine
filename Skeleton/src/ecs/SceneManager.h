@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include "EditorExport.h"
+#include "Vector2D.h"
 
 /*
 * 
@@ -74,6 +75,19 @@ namespace ECS {
 		std::string GetCurrentScenePath();
 
 	public:
+
+
+
+		void AdjustRectToCamera(int& x, int& y, int& w, int& h);
+
+
+
+		float CameraScale();
+		Utilities::Vector2D CameraPosition();
+
+		void SetCameraScale(float newscale);
+		void SetCameraPosition(Utilities::Vector2D const& newpos);
+
 		/// <summary>
 		/// Manage the scenes.
 		/// If the user changed the scene in the current iteration, this method actually change it

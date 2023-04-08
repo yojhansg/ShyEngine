@@ -56,7 +56,7 @@ bool Engine::init() {
 	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
 	physicsManager = Physics::PhysicsManager::init(data.gravity);
 	renderManager = ECS::RenderManager::init();
-	inputManager = Input::InputManager::init(data.closeWithEscape); //TODO: exit to close
+	inputManager = Input::InputManager::init(data.closeWithEscape); 
 	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
 	ECS::ContactListener::init(); 
@@ -69,10 +69,16 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	//Game(sceneManager).initScenes();
+	Game(sceneManager).initScenes();
 
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
+	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	//sceneManager->manageScenes();
+
+
+	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
+	Scripting::ScriptFunctionality::instance()->Camera_SetScale(.5);
+
+
 
 	return true;
 }

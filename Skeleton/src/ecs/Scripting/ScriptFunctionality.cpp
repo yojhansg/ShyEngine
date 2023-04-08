@@ -11,6 +11,7 @@
 #include <iomanip>
 
 #include <ctime>
+#include <SceneManager.h>
 
 #define DELTA 0.001f
 
@@ -581,6 +582,26 @@ std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
 	return std::format("{}-{}", Time_MonthDay(time), Time_ShortMonth(time));
 }
 
+
+Utilities::Vector2D Scripting::ScriptFunctionality::Camera_GetPosition()
+{
+	return ECS::SceneManager::instance()->CameraPosition();
+}
+
+void Scripting::ScriptFunctionality::Camera_SetPosition(cVector2D newPosition)
+{
+	ECS::SceneManager::instance()->SetCameraPosition(newPosition);
+}
+
+float Scripting::ScriptFunctionality::Camera_GetScale()
+{
+	return ECS::SceneManager::instance()->CameraScale();
+}
+
+void Scripting::ScriptFunctionality::Camera_SetScale(float newScale)
+{
+	ECS::SceneManager::instance()->SetCameraScale(newScale);
+}
 
 
 #include <Windows.h>

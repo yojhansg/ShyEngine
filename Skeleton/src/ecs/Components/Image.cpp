@@ -4,6 +4,9 @@
 #include <SDL_image.h>
 #include <Texture.h>
 #include <ResourcesManager.h>
+#include <ScriptFunctionality.h>
+#include <RendererManager.h>
+#include <SceneManager.h>
 
 namespace ECS {
 
@@ -63,7 +66,12 @@ namespace ECS {
 		int w = std::round(trScale.getX() * width);
 		int h = std::round(trScale.getY() * height);
 
+		SceneManager::instance()->AdjustRectToCamera(x, y, w, h);
+
 		dstRect = { x, y, w, h };
+
+		//dstRect.x += Renderer::RendererManager::instance()->getWidth() * 0.5f * camscale;
+		//dstRect.x += Renderer::RendererManager::instance()->getHeight() * 0.5f * camscale;
 
 		//TODO: porque rotation point es un puntero
 		rotationPoint->x = w / 2;

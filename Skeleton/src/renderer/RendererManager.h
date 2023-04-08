@@ -31,6 +31,7 @@ namespace Renderer {
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
 
+
 	private:
 
 		RendererManager();

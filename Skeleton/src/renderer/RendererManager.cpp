@@ -87,6 +87,7 @@ namespace Renderer {
         SDL_SetWindowPosition(window, x, y);
     }
 
+
     void RendererManager::showCursor(bool show) {
         SDL_ShowCursor(show);
     }

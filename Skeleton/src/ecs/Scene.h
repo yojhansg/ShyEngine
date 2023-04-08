@@ -10,8 +10,8 @@ namespace ECS {
 
 	class Scene {
 
+		friend class SceneManager;
 	public:
-
 		Scene(const std::string& sce_name = "New Scene");
 
 		~Scene();
@@ -56,6 +56,10 @@ namespace ECS {
 		Entity* findEntityByName(const std::string& ent_name);
 
 	private:
+
+
+		float cameraScale;
+		Utilities::Vector2D cameraPosition;
 
 		std::string name;
 

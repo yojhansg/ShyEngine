@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #include "SceneLoader.h"
-
+#include "RendererManager.h"
 
 namespace ECS {
 
@@ -136,5 +136,47 @@ namespace ECS {
 	{
 		ChangeScene("", LOAD_MODE::CLEAR);
 	}
+
+	float SceneManager::CameraScale()
+	{
+		return scenes.top()->cameraScale;
+	}
+
+	Utilities::Vector2D SceneManager::CameraPosition()
+	{
+		return scenes.top()->cameraPosition;
+	}
+
+	void SceneManager::SetCameraScale(float newScale)
+	{
+		scenes.top()->cameraScale = newScale;
+	}
+
+	void SceneManager::SetCameraPosition(Utilities::Vector2D const& newPosition)
+	{
+		scenes.top()->cameraPosition = newPosition;
+	}
+
+
+	void SceneManager::AdjustRectToCamera(int& x, int& y, int& w, int& h) {
+
+		auto campos = CameraPosition();
+		float camscale = CameraScale();
+
+		x += campos.x_;
+		y += campos.y_;
+
+		x *= camscale;
+		y *= camscale;
+		w *= camscale;
+		h *= camscale;
+
+		int winwid = Renderer::RendererManager::instance()->getWidth() * 0.5f;
+		int winhei = Renderer::RendererManager::instance()->getHeight() * 0.5f;
+
+		x += winwid - (winwid * camscale);
+		y += winhei - (winhei * camscale);
+	}
+
 
 }

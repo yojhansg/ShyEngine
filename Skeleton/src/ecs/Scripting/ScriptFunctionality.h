@@ -128,8 +128,16 @@ publish:
 	std::string Time_TimeHHMMSS(int time);
 	std::string Time_TimeStamp(int time);
 	std::string Time_DDMMYY(int time);
+
+	Utilities::Vector2D Camera_GetPosition();
+	void Camera_SetPosition(cVector2D newPosition);
+	float Camera_GetScale();
+	void Camera_SetScale(float newScale);
+
 	//Misc
 	void Open_URL(cstring url);
+
+
 
 private:
 
