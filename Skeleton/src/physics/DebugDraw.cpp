@@ -24,7 +24,15 @@ namespace Physics {
 			v1 *= screenToWorldFactor;
 			v2 *= screenToWorldFactor;
 
-			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
+			int ax = v1.x;
+			int ay = v1.y;
+			int bx = v2.x;
+			int by = v2.y;
+
+			Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+			Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+
+			SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 		}
 
 		b2Vec2 v1 = vertices[vertexCount - 1];
@@ -33,7 +41,15 @@ namespace Physics {
 		v1 *= screenToWorldFactor;
 		v2 *= screenToWorldFactor;
 
-		SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
+		int ax = v1.x;
+		int ay = v1.y;
+		int bx = v2.x;
+		int by = v2.y;
+
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+
+		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 
 	}
 
@@ -81,7 +97,16 @@ namespace Physics {
 			v1 *= screenToWorldFactor;
 			v2 *= screenToWorldFactor;
 
-			SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
+
+			int ax = v1.x;
+			int ay = v1.y;
+			int bx = v2.x;
+			int by = v2.y;
+
+			Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+			Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+
+			SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 		}
 
 		b2Vec2 v1 = vertices[vertexCount - 1];
@@ -90,8 +115,17 @@ namespace Physics {
 		v1 *= screenToWorldFactor;
 		v2 *= screenToWorldFactor;
 
-		SDL_RenderDrawLine(renderer, v1.x, v1.y, v2.x, v2.y);
-		
+
+
+		int ax = v1.x;
+		int ay = v1.y;
+		int bx = v2.x;
+		int by = v2.y;
+
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
+
 	}
 
 	void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {
@@ -103,7 +137,15 @@ namespace Physics {
 		b2Vec2 a = { p1.x * screenToWorldFactor, p1.y * screenToWorldFactor };
 		b2Vec2 b = { p2.x * screenToWorldFactor, p2.y * screenToWorldFactor };
 
-		SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
+		int ax = a.x;
+		int ay = a.y;
+		int bx = b.x;
+		int by = b.y;
+
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+
+		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 
 	}
 
@@ -118,6 +160,8 @@ namespace Physics {
 		rect.y = p.y * screenToWorldFactor;
 		rect.w = size;
 		rect.h = size;
+
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&rect.x, &rect.y, &rect.w, &rect.h);
 
 		SDL_RenderFillRect(renderer, &rect);
 

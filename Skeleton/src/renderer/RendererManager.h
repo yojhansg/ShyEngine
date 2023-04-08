@@ -39,7 +39,7 @@ namespace Renderer {
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
 
-		void AdjustRectToCamera(int& x, int& y, int& w, int& h);
+		void AdjustRectToCamera(int* x, int* y, int* w, int* h);
 
 		Utilities::Vector2D CameraPosition();
 		float CameraScale();

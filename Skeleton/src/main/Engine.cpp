@@ -76,7 +76,7 @@ bool Engine::init() {
 
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
-	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1);
+	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);
 
 	return true;
 }

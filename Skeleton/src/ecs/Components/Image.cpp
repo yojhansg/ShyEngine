@@ -65,7 +65,7 @@ namespace ECS {
 		int w = std::round(trScale.getX() * width);
 		int h = std::round(trScale.getY() * height);
 
-		Renderer::RendererManager::instance()->AdjustRectToCamera(x, y, w, h);
+		Renderer::RendererManager::instance()->AdjustRectToCamera(&x, &y, &w, &h);
 
 		dstRect = { x, y, w, h };
 
