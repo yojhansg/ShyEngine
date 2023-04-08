@@ -1,25 +1,61 @@
 #include "OverlayManager.h"
 #include "Components/Overlay.h"
+#include "Components/OverlayText.h"
 #include "InputManager.h"
+
 #include "Entity.h"
 #include "EngineTime.h"
 
 #include <iostream>
 
-ECS::OverlayManager::OverlayManager()
-{
+ECS::OverlayManager::OverlayManager() {
+
 	isDirty = true;
-		
-	timeToHold = 0.1f;
-	timeToDoubleClick = 0.5f;
 	selected = nullptr;
 	lastClickTime = 0;
 	holdTimer = 0;
+	timeToDoubleClick = 0.5f;
+	timeToHold = 0.1f;
+	frameRateEntity = nullptr;
+	frameRateText = nullptr;
+}
+
+ECS::OverlayManager::OverlayManager(bool debugFrameRate, float timeToDoubleClick, float timeToHold) : timeToHold(timeToHold), timeToDoubleClick(timeToDoubleClick)
+{
+	isDirty = true;
+	selected = nullptr;
+	lastClickTime = 0;
+	holdTimer = 0;
+
+
+	if (debugFrameRate) {
+
+		frameRateEntity = new Entity("Frame rate", 0);
+
+		frameRateEntity->addComponent<ECS::Overlay>()->SetPositioned({ 0, 0 }, { 100, 10 });
+		frameRateText = frameRateEntity->addComponent<ECS::OverlayText>();
+
+		frameRateText->SetFit(1);
+		frameRateText->SetText("Frame rate: 60");
+
+		frameRateEntity->init();
+		frameRateEntity->start();
+	}
+	else {
+
+		frameRateEntity = nullptr;
+		frameRateText = nullptr;
+	}
 }
 
 ECS::OverlayManager::~OverlayManager()
 {
+	if (frameRateEntity) {
 
+		delete frameRateEntity;
+		frameRateEntity = nullptr;
+		frameRateText = nullptr;
+	}
 }
 
 void ECS::OverlayManager::Render()
@@ -35,18 +71,15 @@ void ECS::OverlayManager::Render()
 		if (ent->active)
 			ent->render();
 	}
+
+	if (frameRateEntity) {
+		frameRateText->SetText("FrameRate: " + std::to_string((int)Utilities::Time::instance()->GetFrameRate()));
+		frameRateEntity->render();
+	}
 }
 
 void ECS::OverlayManager::Update()
 {
-	/*
-		TODO:
-
-		hoverEnter
-		hover
-		hoverExit
-	*/
-
 	const Utilities::Vector2D mousePosition = Input::InputManager::instance()->getMousePos();
 
 	const bool hold = Input::InputManager::instance()->isMouseButtonDown(Input::InputManager::LEFT);
@@ -163,5 +196,7 @@ void ECS::OverlayManager::RemoveElement(ECS::Overlay* elem)
 	if (selected == elem)
 		selected = nullptr;
 
-	overlays.erase(std::find(overlays.begin(), overlays.end(), elem));
+	auto it = std::find(overlays.begin(), overlays.end(), elem);
+	if (it != overlays.end())
+		overlays.erase(it);
 }

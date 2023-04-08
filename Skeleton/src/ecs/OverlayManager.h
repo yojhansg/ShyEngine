@@ -7,6 +7,7 @@ namespace ECS {
 
 	class Entity;
 	class Overlay;
+	class OverlayText;
 	class OverlayManager : public Utilities::Singleton<OverlayManager> {
 
 	public:
@@ -14,6 +15,7 @@ namespace ECS {
 		friend class Engine;
 
 		OverlayManager();
+		OverlayManager(bool debugFrameRate, float timeToDoubleClick, float timeToHold);
 		~OverlayManager();
 
 		void Render();
@@ -31,7 +33,6 @@ namespace ECS {
 
 		bool isDirty;
 
-
 		//Input:
 		//TODO: que esto vaya a la configuracion global
 		float lastClickTime;
@@ -39,6 +40,8 @@ namespace ECS {
 		float timeToHold;
 		float holdTimer;
 
+		Entity* frameRateEntity;
+		OverlayText* frameRateText;
 
 		Overlay* selected;
 		std::vector<Overlay*> overlays;

@@ -7,7 +7,11 @@
 
 namespace Input {
 
-	InputManager::InputManager() {
+	InputManager::InputManager(): InputManager(true){
+
+	}
+
+	InputManager::InputManager(bool closeWithEscape): closeWithEscape(closeWithEscape) {
 
 		kbState_ = SDL_GetKeyboardState(0);
 
@@ -25,7 +29,7 @@ namespace Input {
 		while (SDL_PollEvent(&e)) {
 			update(e);
 
-			if (isKeyDown(SDL_SCANCODE_ESCAPE) || e.type == SDL_QUIT) return false;
+			if ((closeWithEscape && isKeyDown(SDL_SCANCODE_ESCAPE)) || e.type == SDL_QUIT) return false;
 		}
 
 		return true;

@@ -10,5 +10,10 @@
     "splashScreen": false,
     "vsync": true,
     "fullScreen": false,
-    "debugPhysics": true
+    "debugPhysics": true,
+    "debugFrameRate": true,
+    "closeWithEscape": true,
+    "timeToDoubleClick": 0.5,
+    "timeToHoldClick": 0.1
+
 }

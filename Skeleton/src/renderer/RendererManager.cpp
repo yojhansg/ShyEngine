@@ -4,21 +4,21 @@
 
 namespace Renderer {
 
-    RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400) {
-        initSDL();
+    RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400, true) {
+        //initSDL();
     }
 
-    RendererManager::RendererManager(const std::string& title, int w, int h) {
+    RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync) {
         windowTitle = title;
         width = w;  height = h;
-        initSDL();
+        initSDL(vsync);
     }
 
     RendererManager::~RendererManager() {
         closeSDL();
     }
 
-    void RendererManager::initSDL() {
+    void RendererManager::initSDL(bool vsync) {
         // initialise SDL
         int sdlInit_ret = SDL_Init(SDL_INIT_EVERYTHING);
         assert(sdlInit_ret == 0);
@@ -30,8 +30,10 @@ namespace Renderer {
         assert(window != nullptr);
 
         // Create the renderer
+
+        int vsyncEnable = vsync ? SDL_RENDERER_PRESENTVSYNC : 0;
         renderer = SDL_CreateRenderer(window, -1,
-            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+            SDL_RENDERER_ACCELERATED | vsyncEnable);
         assert(renderer != nullptr);
 
         // initialize SDL_image

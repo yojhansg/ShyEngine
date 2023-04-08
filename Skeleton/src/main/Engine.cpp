@@ -53,18 +53,19 @@ bool Engine::init() {
 	}
 
 	sceneManager = ECS::SceneManager::init();
-	rendererManager = Renderer::RendererManager::init(data.windowName, data.windowSize.getX(), data.windowSize.getY());
+	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
 	physicsManager = Physics::PhysicsManager::init(data.gravity);
 	renderManager = ECS::RenderManager::init();
-	overlayManager = ECS::OverlayManager::init();
-	inputManager = Input::InputManager::init();
-	engineTime = Utilities::Time::init();
+	inputManager = Input::InputManager::init(data.closeWithEscape); //TODO: exit to close
+	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
-	ECS::ContactListener::init();
+	ECS::ContactListener::init(); 
 	SoundManager::SoundManager::init();
 	Scripting::ScriptManager::init();
 	Scripting::ScriptFunctionality::init();
 	ComponentFactory::init();
+
+	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate 
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 

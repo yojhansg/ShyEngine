@@ -114,6 +114,7 @@ namespace Input {
 	private:
 
 		InputManager();
+		InputManager(bool closeWithEscape);
 
 		// Clear the state
 		void clearState();
@@ -132,6 +133,9 @@ namespace Input {
 		void onMouseButtonChange(const SDL_Event& event, bool isDown);
 
 		void onMouseWheelMotion(const SDL_Event& event);
+
+
+		bool closeWithEscape;
 
 		bool isKeyUpEvent_;
 		bool isKeyDownEvent_;

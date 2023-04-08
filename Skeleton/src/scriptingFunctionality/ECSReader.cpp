@@ -832,8 +832,6 @@ ECSReader& ECSReader::ClassReflection()
 		method << "\t\t" << className.first << "* self = static_cast<" + className.first + "*>(selfComp);\n";
 
 		for (auto& attribute : className.second) {
-			//TODO hacer un metodo que convierta de string a un valor
-
 
 			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
 
@@ -859,7 +857,6 @@ ECSReader& ECSReader::ClassReflection()
 	}
 
 
-	//TODO: Buscar las clases que tengo que añadir para reflexionar
 
 	creator.EndClass();
 	for (auto& file : filesToInclude) {
@@ -912,7 +909,6 @@ ECSReader& ECSReader::ComponentFactory()
 		.AddLine("typedef ECS::Component*(ComponentFactory::*ComponentCreation)();")
 		.Empty(1)
 		.AddConstructor(constructor.str())
-		//TODO: mapa a funciones para simplificar aun mas el proceso.AddAtribute("std::map<std::string, ")
 		.AddAtribute("std::unordered_map<std::string, ComponentCreation>", "components")
 		.Empty(1);
 

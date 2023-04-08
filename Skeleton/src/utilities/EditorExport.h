@@ -32,7 +32,7 @@
 
 	Esta clase no puede tener atributos marcados con reflect.
 	En caso de marcar un metodo con publish pero no haber marcado la clase como <EditorManager>, la clase 
-	tratara como si fuera un EditorComponent pudiendo generar errores o comportamientos no deseados
+	tratara como si fuera un <EditorComponent> pudiendo generar errores o comportamientos no deseados
 
 	<ECSReader> ignora espacios de nombre, por lo que cuando se generen los managers se tendran que manejar los
 	espacios de nombres a mano
