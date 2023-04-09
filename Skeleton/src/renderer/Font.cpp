@@ -37,7 +37,7 @@ Renderer::Texture* Renderer::Font::CreateText(std::string const& message)
 
 Renderer::Texture* Renderer::Font::CreateWrappedText(std::string const& message, int maxSize)
 {
-	SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(font, message.c_str(), { 0, 0, 0, 0 }, maxSize);
+	SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(font, message.c_str(), { 255, 255, 255, 255 }, maxSize);
 
 	auto sdlText = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
 	assert(sdlText != nullptr, "Couldn't load image: " + filepath);

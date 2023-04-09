@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\src\ecs\Scripting\ScriptManager.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\Variable.h" />
     <ClInclude Include="..\..\src\ecs\Scripting\ConstNode.h" />
+    <ClInclude Include="..\..\src\ecs\SplashScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="..\..\src\ecs\Scripting\ScriptManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp" />
     <ClCompile Include="..\..\src\ecs\Scripting\ConstNode.cpp" />
+    <ClCompile Include="..\..\src\ecs\SplashScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleOutput\ConsoleOutput.vcxproj">

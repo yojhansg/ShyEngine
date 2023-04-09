@@ -67,13 +67,19 @@ bool Engine::init() {
 
 	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate 
 
+	//Maximun size = 64x64 pixels
+	rendererManager->SetWindowIcon(data.windowIcon);
+
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Game(sceneManager).initScenes();
+	//Game(sceneManager).initScenes();
 
-	//sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	//sceneManager->manageScenes();
+	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
+	if (data.useSplashScreen) {
+		sceneManager->SplashScreen();
+	}
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
 	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);

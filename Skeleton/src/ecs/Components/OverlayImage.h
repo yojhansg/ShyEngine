@@ -18,7 +18,6 @@ namespace ECS {
 		OverlayImage();
 
 
-		//TODO: path privado
 		reflect std::string path;
 	private:
 

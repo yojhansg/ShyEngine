@@ -85,27 +85,54 @@ void ECS::OverlayText::render()
 	case Fit::WrapClamp:
 	case Fit::Clamp: {
 
-		source.w = std::min(source.w, destination.w);
-		source.h = std::min(source.h, destination.h);
+
+		int w = std::min(source.w, destination.w);
+		int h = std::min(source.h, destination.h);
+
+
+		if (horizontalAlignment != (int)HorizontalAlignment::Left) {
+
+			float mult = horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
+
+			source.x = std::max(0, source.w - w) * mult;
+			destination.x += std::max(0, destination.w - w) * mult;
+		}
+
+		if (verticalAlignment != (int)VerticalAlignment::Top) {
+
+			float mult = verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
+
+			source.y = std::max(0, source.h - h) * mult;
+			destination.y += std::max(0, destination.h - h) * mult;
+		}
+
+		source.w = w;
+		source.h = h;
 
 		destination.w = source.w;
 		destination.h = source.h;
 
-		break;
 	}
 
 	case Fit::WrapOverflow:
 	case Fit::Overflow: {
 
-		destination.w = source.w;
+		float multx = horizontalAlignment == (int)HorizontalAlignment::Left ? 0 : horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
+		float multy = verticalAlignment == (int)VerticalAlignment::Top ? 0 : verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
+
+		destination.x += (destination.w - source.w) * multx;
+		destination.y += (destination.h - source.h) * multy;
+
 		destination.h = source.h;
 
+		destination.w = source.w;
 		break;
 	}
 
 	default:
 		break;
 	}
+
 
 	overlay->RenderTexture(texture, &source, &destination);
 }
@@ -118,7 +145,13 @@ int ECS::OverlayText::GetFit()
 
 void ECS::OverlayText::SetFit(int fit)
 {
-	this->fit = fit;
+	if (font != nullptr && this->fit / 2 != fit / 2)
+	{
+		this->fit = fit;
+		createTexture();
+	}
+	else
+		this->fit = fit;
 }
 
 int ECS::OverlayText::GetVerticalAlignment()
@@ -144,8 +177,10 @@ void ECS::OverlayText::SetHorizontalAlignment(int align)
 void ECS::OverlayText::SetFont(std::string font)
 {
 	path = font;
-	createFont();
-	createTexture();
+	if (this->font != nullptr) {
+		createFont();
+		createTexture();
+	}
 }
 
 std::string ECS::OverlayText::GetFont()
@@ -175,6 +210,8 @@ int ECS::OverlayText::GetPointSize()
 void ECS::OverlayText::SetPointSize(int size)
 {
 	pointSize = size;
-	createFont();
-	createTexture();
+	if (font != nullptr) {
+		createFont();
+		createTexture();
+	}
 }

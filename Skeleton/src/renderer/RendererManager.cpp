@@ -1,6 +1,7 @@
 #include "RendererManager.h"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "ConsoleManager.h"
 
 namespace Renderer {
 
@@ -11,6 +12,7 @@ namespace Renderer {
 	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync) {
 		windowTitle = title;
 		width = w;  height = h;
+		icon = nullptr;
 		initSDL(vsync);
 	}
 
@@ -145,4 +147,23 @@ namespace Renderer {
 		cameraScale = scale;
 	}
 
+
+	void RendererManager::SetWindowIcon(const std::string& path)
+	{
+		if (path == "") {
+
+			SetWindowIcon("icon.png");
+			return;
+		}
+
+		icon = IMG_Load(path.c_str());
+
+		if (icon == NULL) {
+
+			//TODO: error
+			Console::Output::PrintError("Window icon", "Cannot change window icon. Error loading file <" + path + ">");
+			return;
+		}
+		SDL_SetWindowIcon(window, icon);
+	}
 }

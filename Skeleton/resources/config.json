@@ -1,5 +1,4 @@
 {
-   
     "game": "Batalla final", 
     "creator": "Yojhan Pablo e Ivan",
     "windowTitle": "Casa de los espiritus",
@@ -7,13 +6,12 @@
     "windowIcon": "",
     "windowSize": "1920, 1080",
     "gravity": "0, 9.81f",
-    "splashScreen": false,
+    "splashScreen": true,
     "vsync": true,
     "fullScreen": false,
     "debugPhysics": true,
-    "debugFrameRate": true,
+    "debugFrameRate": false,
     "closeWithEscape": true,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.1
-
 }

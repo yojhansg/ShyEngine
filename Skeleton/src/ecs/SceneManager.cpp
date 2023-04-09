@@ -3,6 +3,10 @@
 
 #include "SceneLoader.h"
 #include "RendererManager.h"
+#include "Entity.h"
+#include "SplashScene.h"
+#include "Components/Overlay.h"
+#include "Components/OverlayImage.h"
 
 namespace ECS {
 
@@ -39,6 +43,19 @@ namespace ECS {
 		currentScenePath = scene;
 		mode = (LOAD_MODE) m;
 		change = true;
+	}
+
+	//TODO: llevar esto al fichero splash screen que sino queda feote
+	void SceneManager::SplashScreen() {
+
+		Scene* scene = new Scene("SplashScreen");
+	
+		SplashScene::CreateSplashScreen(scene);
+
+		scene->init();
+		scene->start();
+
+		scenes.push(scene);
 	}
 
 	void SceneManager::ResetScene() {

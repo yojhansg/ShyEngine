@@ -47,6 +47,8 @@ namespace Renderer {
 		void SetCameraPosition(cVector2D vec);
 		void SetCameraScale(float scale);
 
+		void SetWindowIcon(const std::string& path);
+
 	private:
 
 		RendererManager();
@@ -61,6 +63,8 @@ namespace Renderer {
 
 		SDL_Window* window; // the window
 		SDL_Renderer* renderer; // the renderer
+
+		SDL_Surface* icon;
 
 		float cameraScale;
 		Utilities::Vector2D cameraPosition;

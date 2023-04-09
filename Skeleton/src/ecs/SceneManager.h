@@ -64,6 +64,9 @@ namespace ECS {
 
 		void SetScene(ECS::Scene* scene);
 		
+
+		void SplashScreen();
+
 	publish:
 
 		void ChangeScene(std::string scenePath, int pushMode);
