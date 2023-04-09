@@ -48,8 +48,8 @@ namespace ECS {
 		int width = texture->getWidth();
 		int height = texture->getHeight();
 
-		auto trPos = transform->getPosition();
-		auto trScale = transform->getScale();
+		auto trPos = transform->GetWorldPosition();
+		auto trScale = transform->GetWorldScale();
 
 		float scaledX = (width * trScale.getX());
 		float scaledY = (height * trScale.getY());
@@ -69,14 +69,10 @@ namespace ECS {
 
 		dstRect = { x, y, w, h };
 
-		//dstRect.x += Renderer::RendererManager::instance()->getWidth() * 0.5f * camscale;
-		//dstRect.x += Renderer::RendererManager::instance()->getHeight() * 0.5f * camscale;
-
-		//TODO: porque rotation point es un puntero
 		rotationPoint->x = w / 2;
 		rotationPoint->y = h / 2;
 
-		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, *transform->getRotationPointer(), rotationPoint, mode);
+		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), rotationPoint, mode);
 	}
 
 	int Image::getTextureWidth() {
@@ -109,7 +105,7 @@ namespace ECS {
 
 	Utilities::Vector2D Image::scaledSize()
 	{
-		auto scale = transform->getScale();
+		auto scale = transform->GetLocalScale();
 		return { texture->getWidth() * scale.getX(), texture->getHeight() * scale.getY() };
 	}
 

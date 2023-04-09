@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Sat Apr  8 17:01:40 2023
+//Creation time: Mon Apr 10 01:12:24 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -116,21 +116,24 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getBounciness",PhysicBody_getBounciness);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
-	map.emplace("Transform_getPosition",Transform_getPosition);
-	map.emplace("Transform_getScale",Transform_getScale);
-	map.emplace("Transform_getRotation",Transform_getRotation);
-	map.emplace("Transform_setPosition",Transform_setPosition);
-	map.emplace("Transform_setPositionX",Transform_setPositionX);
-	map.emplace("Transform_setPositionY",Transform_setPositionY);
-	map.emplace("Transform_setScale",Transform_setScale);
-	map.emplace("Transform_setScaleX",Transform_setScaleX);
-	map.emplace("Transform_setScaleY",Transform_setScaleY);
-	map.emplace("Transform_setRotation",Transform_setRotation);
-	map.emplace("Transform_translate",Transform_translate);
-	map.emplace("Transform_translateX",Transform_translateX);
-	map.emplace("Transform_translateY",Transform_translateY);
-	map.emplace("Transform_rotate",Transform_rotate);
-	map.emplace("Transform_scale",Transform_scale);
+	map.emplace("Transform_GetLocalPosition",Transform_GetLocalPosition);
+	map.emplace("Transform_GetLocalScale",Transform_GetLocalScale);
+	map.emplace("Transform_SetLocalPosition",Transform_SetLocalPosition);
+	map.emplace("Transform_SetLocalPositionX",Transform_SetLocalPositionX);
+	map.emplace("Transform_SetLocalPositionY",Transform_SetLocalPositionY);
+	map.emplace("Transform_SetScale",Transform_SetScale);
+	map.emplace("Transform_SetScaleX",Transform_SetScaleX);
+	map.emplace("Transform_SetScaleY",Transform_SetScaleY);
+	map.emplace("Transform_GetLocalRotation",Transform_GetLocalRotation);
+	map.emplace("Transform_SetLocalRotation",Transform_SetLocalRotation);
+	map.emplace("Transform_GetWorldPosition",Transform_GetWorldPosition);
+	map.emplace("Transform_GetWorldScale",Transform_GetWorldScale);
+	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
+	map.emplace("Transform_Translate",Transform_Translate);
+	map.emplace("Transform_TranslateX",Transform_TranslateX);
+	map.emplace("Transform_TranslateY",Transform_TranslateY);
+	map.emplace("Transform_Rotate",Transform_Rotate);
+	map.emplace("Transform_Scale",Transform_Scale);
 	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
 	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
 	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
@@ -212,10 +215,15 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Time_Hours",ScriptFunctionality_Time_Hours);
 	map.emplace("Time_Minutes",ScriptFunctionality_Time_Minutes);
 	map.emplace("Time_Seconds",ScriptFunctionality_Time_Seconds);
+	map.emplace("Time_Since",ScriptFunctionality_Time_Since);
 	map.emplace("Time_TimeHHMM",ScriptFunctionality_Time_TimeHHMM);
 	map.emplace("Time_TimeHHMMSS",ScriptFunctionality_Time_TimeHHMMSS);
 	map.emplace("Time_TimeStamp",ScriptFunctionality_Time_TimeStamp);
 	map.emplace("Time_DDMMYY",ScriptFunctionality_Time_DDMMYY);
+	map.emplace("Camera_GetPosition",ScriptFunctionality_Camera_GetPosition);
+	map.emplace("Camera_SetPosition",ScriptFunctionality_Camera_SetPosition);
+	map.emplace("Camera_GetScale",ScriptFunctionality_Camera_GetScale);
+	map.emplace("Camera_SetScale",ScriptFunctionality_Camera_SetScale);
 	map.emplace("Open_URL",ScriptFunctionality_Open_URL);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
@@ -1489,289 +1497,334 @@ Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable
 	Vector2D ret = self->getLinearVelocity();
 	return ret;
 }
-Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getPosition", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	Utilities::Vector2D ret = self->getPosition();
+	Utilities::Vector2D ret = self->GetLocalPosition();
 	return ret;
 }
-Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getScale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	Utilities::Vector2D ret = self->getScale();
+	Utilities::Vector2D ret = self->GetLocalScale();
 	return ret;
 }
-Scripting::Variable Transform_getRotation(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getRotation", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_getRotation", vec[0].value.entity->getEntityName(), Transform);
-		return Scripting::Variable::Null();
-	}
-	float ret = self->getRotation();
-	return ret;
-}
-Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPosition", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPosition", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setPosition(vec[1].vector);
+	self->SetLocalPosition(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setPositionX(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setPositionX(vec[1].value.Float);
+	self->SetLocalPositionX(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setPositionY(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setPositionY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setPositionY(vec[1].value.Float);
+	self->SetLocalPositionY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setScale(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setScale(vec[1].vector);
+	self->SetScale(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setScaleX(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setScaleX(vec[1].value.Float);
+	self->SetScaleX(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setScaleY(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setScaleY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setScaleY(vec[1].value.Float);
+	self->SetScaleY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setRotation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->GetLocalRotation();
+	return ret;
+}
+Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setRotation", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_setRotation", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->setRotation(vec[1].value.Float);
+	self->SetLocalRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translate", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Vector2D ret = self->GetWorldPosition();
+	return ret;
+}
+Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Vector2D ret = self->GetWorldScale();
+	return ret;
+}
+Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->GetWorldRotation();
+	return ret;
+}
+Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translate", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translate", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->translate(vec[1].vector);
+	self->Translate(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_translateX(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->translateX(vec[1].value.Float);
+	self->TranslateX(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_translateY(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_translateY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->translateY(vec[1].value.Float);
+	self->TranslateY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_rotate", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_rotate", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_rotate", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->rotate(vec[1].value.Float);
+	self->Rotate(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_scale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_scale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_scale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	self->scale(vec[1].value.Float);
+	self->Scale(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec){
@@ -2179,6 +2232,11 @@ Scripting::Variable ScriptFunctionality_Time_Seconds(std::vector<Scripting::Vari
 	int ret = manager->Time_Seconds(vec[0].value.Float);
 	return ret;
 }
+Scripting::Variable ScriptFunctionality_Time_Since(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->Time_Since(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
 Scripting::Variable ScriptFunctionality_Time_TimeHHMM(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Time_TimeHHMM(vec[0].value.Float);
@@ -2198,6 +2256,26 @@ Scripting::Variable ScriptFunctionality_Time_DDMMYY(std::vector<Scripting::Varia
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Time_DDMMYY(vec[0].value.Float);
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_Camera_GetPosition(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Utilities::Vector2D ret = manager->Camera_GetPosition();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Camera_SetPosition(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Camera_SetPosition(vec[0].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Camera_GetScale(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Camera_GetScale();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Camera_SetScale(vec[0].value.Float);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();

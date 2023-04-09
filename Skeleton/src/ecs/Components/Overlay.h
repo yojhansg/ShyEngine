@@ -11,6 +11,14 @@ namespace Renderer {
 
 typedef struct SDL_Rect;
 
+
+//TODO:
+
+/*
+	Hay que anular al hijo en el momento en que destruyes una entidad
+*/
+
+
 namespace ECS {
 
 	class Overlay : public Component {

@@ -178,11 +178,11 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectTransform(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		Transform* self = static_cast<Transform*>(selfComp);
-		if(map.contains("position_"))
-			self->position_ = map.at("position_");
-		if(map.contains("scale_"))
-			self->scale_ = map.at("scale_");
-		if(map.contains("rotation_"))
-			self->rotation_ = std::stod(map.at("rotation_"));
+		if(map.contains("localPosition"))
+			self->localPosition = map.at("localPosition");
+		if(map.contains("localScale"))
+			self->localScale = map.at("localScale");
+		if(map.contains("localRotation"))
+			self->localRotation = std::stod(map.at("localRotation"));
 
 }

@@ -4,14 +4,11 @@
         {
             "name": "background",
             "order": -10,
+            "localPosition": "960, 540",
+            "localScale": "1.6f, 1.6f",
+
             "components": [
-                {
-                    "component": "Transform",
-                    "attributes": {
-                        "position_": "960, 540",
-                        "scale_": "1.6f, 1.6f"
-                    }
-                },
+                
                 {
                     "component": "Image",
                     "attributes": {
@@ -26,14 +23,10 @@
         {
             "name": "player",
             "order": 10,
+            "localPosition": "(100, 540)",
+            "localScale": "(0.35f, 0.35f)",
+            "localRotation": "-45", 
             "components": [
-                {
-                    "component": "Transform",
-                    "attributes": {
-                        "position_": "(100, 540)",
-                        "scale_": "(0.35f, 0.35f)"
-                    }
-                },
                 {
                     "component": "Image",
                     "attributes": 
@@ -53,45 +46,44 @@
             "scripts": [
                 "FlappyBirdJump",
                 "TestScript"
-            ]
-        },
-        {
-            "name": "player animado",
-            "order": 11,
-            "components": [
-                {
-                    "component": "Transform",
-                    "attributes": {
-                        "position_": "(300, 540)",
-                        "scale_": "(0.35f, 0.35f)"
-                    }
-                },
-                {
-                    "component": "Image",
-                    "attributes": 
-                        {
-                            "fileName": "animation.png"
-                        }
-                    
-                },
-                {
-                    "component": "Animation",
-                    "attributes": 
-                        {
-                            "speed": "10", 
-                            "animationColumns": "8",
-                            "animationRows": "9",
-                            "animationSheetStyle": "0",
-                            "animationLenght": "9",
-                            "currentFrame": "0",
-                            "currentAnimation": "8"
-                        }
-                    
-                }
             ],
-            "scripts": [
+            "childs": [
+
+                {
+                    "name": "player animado",
+                    "order": 11,
+                    "localPosition": "(300, 0)",
+                    "localScale": "1, 1",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": 
+                                {
+                                    "fileName": "animation.png"
+                                }
+                            
+                        },
+                        {
+                            "component": "Animation",
+                            "attributes": 
+                                {
+                                    "speed": "10", 
+                                    "animationColumns": "8",
+                                    "animationRows": "9",
+                                    "animationSheetStyle": "0",
+                                    "animationLenght": "9",
+                                    "currentFrame": "0",
+                                    "currentAnimation": "8"
+                                }
+                            
+                        }
+                    ],
+                    "scripts": [
+                    ]
+                }
             ]
         }
+        
     ],
     "overlays": [
         {

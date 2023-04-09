@@ -6,100 +6,156 @@
 namespace ECS {
 
 	Transform::Transform() {
-		position_ = Utilities::Vector2D(0, 0);
-		scale_ = Utilities::Vector2D(1, 1);
-		rotation_ = 0;
+		localPosition = Utilities::Vector2D(0, 0);
+		localScale = Utilities::Vector2D(1, 1);
+		localRotation = 0;
 
+		parent = nullptr;
 	}
 
 	Transform::Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation) {
-		position_ = position; 
-		scale_ = scale;
-		rotation_ = rotation;
+		localPosition = position;
+		localScale = scale;
+		localRotation = rotation;
 
+		parent = nullptr;
 	}
 
 	// ------------- Getters -----------------
-	
 
-	Utilities::Vector2D Transform::getPosition() {
-		return position_;
+
+	Utilities::Vector2D Transform::GetLocalPosition() {
+		return localPosition;
 	}
 
-	Utilities::Vector2D Transform::getScale() {
-		return scale_;
+	Utilities::Vector2D Transform::GetLocalScale() {
+		return localScale;
 	}
 
-	float Transform::getRotation()
+	float Transform::GetLocalRotation()
 	{
-		return rotation_;
+		return localRotation;
+	}
+
+	void Transform::onDestroy()
+	{
+		if (parent != nullptr) {
+
+			parent->RemoveChildren(this);
+		}
 	}
 
 	Utilities::Vector2D* Transform::getPositionPointer()
 	{
-		return &position_;
+		return &localPosition;
 	}
 
 	Utilities::Vector2D* Transform::getScalePointer()
 	{
-		return &scale_;
+		return &localScale;
 	}
 
 	const double* Transform::getRotationPointer() {
-		return &rotation_;
+		return &localRotation;
+	}
+
+	void Transform::SetParent(Transform* tr)
+	{
+		if (parent != nullptr) {
+			parent->RemoveChildren(this);
+		}
+
+		parent = tr;
+		if (tr != nullptr)
+			tr->SetChildren(this);
+	}
+
+	void Transform::SetChildren(Transform* tr)
+	{
+		children.push_back(tr);
+	}
+
+	void Transform::RemoveChildren(Transform* tr)
+	{
+		children.remove(tr);
 	}
 
 	// ------------- Setters -----------------
 
-	void Transform::setPosition(Utilities::Vector2D position) {
-		this->position_ = position;
+	void Transform::SetLocalPosition(Utilities::Vector2D position) {
+		this->localPosition = position;
 	}
 
-	void Transform::setPositionX(float x) {
-		this->position_.set(x, position_.getY());
+	void Transform::SetLocalPositionX(float x) {
+		this->localPosition.set(x, localPosition.getY());
 	}
 
-	void Transform::setPositionY(float y) {
-		this->position_.set(position_.getX(), y);
+	void Transform::SetLocalPositionY(float y) {
+		this->localPosition.set(localPosition.getX(), y);
 	}
 
-	void Transform::setScale(Utilities::Vector2D scale) {
-		this->scale_ = scale;
+	void Transform::SetScale(Utilities::Vector2D scale) {
+		this->localScale = scale;
 	}
 
-	void Transform::setScaleX(float x) {
-		this->scale_.set(x, scale_.getY());
+	void Transform::SetScaleX(float x) {
+		this->localScale.set(x, localScale.getY());
 	}
 
-	void Transform::setScaleY(float x) {
-		this->scale_.set(x, scale_.getY());
+	void Transform::SetScaleY(float x) {
+		this->localScale.set(x, localScale.getY());
 	}
 
 
-	void Transform::setRotation(float rotation) {
-		this->rotation_ = rotation;
+	void Transform::SetLocalRotation(float rotation) {
+		this->localRotation = rotation;
+	}
+
+
+	Utilities::Vector2D Transform::GetWorldPosition()
+	{
+		if (parent != nullptr)
+			return parent->GetWorldPosition() + localPosition.rotate(parent->GetWorldRotation());
+
+		return localPosition;
+	}
+
+	Utilities::Vector2D Transform::GetWorldScale()
+	{
+		if (parent != nullptr)
+			return localScale.mult(parent->GetWorldScale());
+
+		return localScale;
+	}
+
+	float Transform::GetWorldRotation()
+	{
+		if (parent != nullptr)
+			return localRotation + parent->GetLocalRotation();
+
+		return localRotation;
 	}
 
 	// ------------ Modifiers ------------------
 
-	void Transform::translate(Utilities::Vector2D direction) {
-		this->position_ += direction;
+	void Transform::Translate(Utilities::Vector2D direction) {
+		this->localPosition += direction;
 	}
 
-	void Transform::translateX(float x) {
-		this->position_.set(this->position_.getX() + x, this->position_.getY());
+	void Transform::TranslateX(float x) {
+		this->localPosition.set(this->localPosition.getX() + x, this->localPosition.getY());
 	}
 
-	void Transform::translateY(float y) {
-		this->position_.set(this->position_.getX(), this->position_.getY() + y);
+	void Transform::TranslateY(float y) {
+		this->localPosition.set(this->localPosition.getX(), this->localPosition.getY() + y);
 	}
 
-	void Transform::rotate(float rotation) {
-		this->rotation_ += rotation;
+	void Transform::Rotate(float rotation) {
+		this->localRotation += rotation;
 	}
 
-	void Transform::scale(float scale) {
-		this->scale_ *= scale;
+	void Transform::Scale(float scale) {
+		this->localScale *= scale;
 	}
 
 }

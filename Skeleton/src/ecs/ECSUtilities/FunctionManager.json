@@ -469,16 +469,25 @@
         }
     },
     "Transform": {
-        "getPosition": {
+        "GetLocalPosition": {
             "return": "Utilities::Vector2D"
         },
-        "getRotation": {
+        "GetLocalRotation": {
             "return": "float"
         },
-        "getScale": {
+        "GetLocalScale": {
             "return": "Utilities::Vector2D"
         },
-        "rotate": {
+        "GetWorldPosition": {
+            "return": "Utilities::Vector2D"
+        },
+        "GetWorldRotation": {
+            "return": "float"
+        },
+        "GetWorldScale": {
+            "return": "Utilities::Vector2D"
+        },
+        "Rotate": {
             "input": [
                 {
                     "name": "rotation",
@@ -487,7 +496,7 @@
             ],
             "return": "void"
         },
-        "scale": {
+        "Scale": {
             "input": [
                 {
                     "name": "scale",
@@ -496,7 +505,7 @@
             ],
             "return": "void"
         },
-        "setPosition": {
+        "SetLocalPosition": {
             "input": [
                 {
                     "name": "position",
@@ -505,7 +514,7 @@
             ],
             "return": "void"
         },
-        "setPositionX": {
+        "SetLocalPositionX": {
             "input": [
                 {
                     "name": "x",
@@ -514,7 +523,7 @@
             ],
             "return": "void"
         },
-        "setPositionY": {
+        "SetLocalPositionY": {
             "input": [
                 {
                     "name": "y",
@@ -523,7 +532,7 @@
             ],
             "return": "void"
         },
-        "setRotation": {
+        "SetLocalRotation": {
             "input": [
                 {
                     "name": "rotation",
@@ -532,7 +541,7 @@
             ],
             "return": "void"
         },
-        "setScale": {
+        "SetScale": {
             "input": [
                 {
                     "name": "scale",
@@ -541,7 +550,7 @@
             ],
             "return": "void"
         },
-        "setScaleX": {
+        "SetScaleX": {
             "input": [
                 {
                     "name": "x",
@@ -550,7 +559,7 @@
             ],
             "return": "void"
         },
-        "setScaleY": {
+        "SetScaleY": {
             "input": [
                 {
                     "name": "y",
@@ -559,7 +568,7 @@
             ],
             "return": "void"
         },
-        "translate": {
+        "Translate": {
             "input": [
                 {
                     "name": "direction",
@@ -568,7 +577,7 @@
             ],
             "return": "void"
         },
-        "translateX": {
+        "TranslateX": {
             "input": [
                 {
                     "name": "x",
@@ -577,7 +586,7 @@
             ],
             "return": "void"
         },
-        "translateY": {
+        "TranslateY": {
             "input": [
                 {
                     "name": "y",

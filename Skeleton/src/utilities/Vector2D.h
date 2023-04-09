@@ -181,6 +181,11 @@ namespace Utilities {
 			return d.x_ * x_ + d.y_ * y_;
 		}
 
+		// scalar multiplication
+		inline Vector2D mult(const Vector2D& d) const {
+			return Vector2D(d.x_ * x_ , d.y_ * y_);
+		}
+
 
 		inline operator std::string() const{
 			return "(" + std::to_string(x_)+ "," + std::to_string(y_) + ")";

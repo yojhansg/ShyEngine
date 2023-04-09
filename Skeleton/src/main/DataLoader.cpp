@@ -13,6 +13,8 @@ DataLoader::DataLoader() {
 }
 
 
+#define LoadValue(name, type, notFound) file.contains(name) ? file[name].get<type>() : notFound
+
 DataLoader DataLoader::Load(std::string const& path) {
 
 	std::ifstream fileStream(path + extension);
@@ -35,26 +37,22 @@ DataLoader DataLoader::Load(std::string const& path) {
 
 	DataLoader data;
 
-	data.game = file["game"].get<std::string>();
-	data.creator = file["creator"].get<std::string>();
-	data.windowTitle = file["windowTitle"].get<std::string>();
-	data.windowIcon = file["windowIcon"].get<std::string>();
-	data.initialScene = file["initialScene"].get<std::string>();
 
-	data.windowSize = file["windowSize"].get<std::string>();
-	data.gravity = file["gravity"].get<std::string>();
-
-	data.useSplashScreen = file["splashScreen"].get<bool>();
-	data.vsync = file["vsync"].get<bool>();
-	data.fullScreen = file["fullScreen"].get<bool>();
-	data.debugPhysics = file["debugPhysics"].get<bool>();
-
-	data.debugFrameRate = file["debugFrameRate"].get<bool>();
-
-	data.timeToHoldClick = file["timeToHoldClick"].get<float>();
-	data.timeToDoubleClick = file["timeToDoubleClick"].get<float>();
-
-	data.closeWithEscape = file["closeWithEscape"].get<bool>();
+	data.game = LoadValue("game", std::string, "La casa de los espiritus");
+	data.creator = LoadValue("creator", std::string, "Yojhan, Pablo e Ivan");
+	data.windowTitle = LoadValue("windowTitle", std::string, "La casa de los espiritus");
+	data.windowIcon = LoadValue("windowIcon", std::string, "icon.png");
+	data.initialScene = LoadValue("initialScene", std::string, "DefaultScene");
+	data.windowSize = LoadValue("windowSize", std::string, "800, 800");
+	data.gravity = LoadValue("gravity", std::string, "0, 9.81");
+	data.useSplashScreen = LoadValue("splashScreen", bool, true);
+	data.vsync = LoadValue("vsync", bool, true);
+	data.fullScreen = LoadValue("fullScreen", bool, false); 
+	data.debugPhysics = LoadValue("debugPhysics", bool, false); 
+	data.debugFrameRate = LoadValue("debugFrameRate", bool, false);
+	data.closeWithEscape = LoadValue("closeWithEscape", bool, true);
+	data.timeToHoldClick = LoadValue("timeToHoldClick", float, 0.1f); 
+	data.timeToDoubleClick = LoadValue("timeToDoubleClick", float, 0.5f);
 
 
 	data.valid = true;

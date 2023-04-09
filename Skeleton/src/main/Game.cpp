@@ -75,15 +75,15 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 		// Player
-		tr->setPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 2));
-		tr->setScale(Utilities::Vector2D(0.35f, 0.35f));
+		tr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 2));
+		tr->SetScale(Utilities::Vector2D(0.35f, 0.35f));
 		body->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setBounciness(0.8f);
 		//body->setTrigger(true);
 
 		// Ground
-		grTr->setScale(Utilities::Vector2D(1, 1));
-		grTr->setPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 1.2f));
+		grTr->SetScale(Utilities::Vector2D(1, 1));
+		grTr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 1.2f));
 		grBody->addOffSet(0, -1);
 
 		// Ball

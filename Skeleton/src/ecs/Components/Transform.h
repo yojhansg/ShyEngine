@@ -5,61 +5,75 @@
 
 #include "Scripting/Variable.h"
 
+#include <list>
+
 class Game;
 namespace ECS {
 
 	class Transform : public Component {
 	public:
-
-		Transform();
-
-		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
-
 		friend Game;
 
-	publish:
-		// Getters
+		Transform();
+		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
 
-		//TODO: temporal
+		void onDestroy() override;
 
-		Utilities::Vector2D getPosition();
-		Utilities::Vector2D getScale();
-
-		float getRotation();
-
-	public:
 		Utilities::Vector2D* getPositionPointer();
 		Utilities::Vector2D* getScalePointer();
 
-	public:
 		//TODO: que esto no devuelva un puntero o hacer otro metodo para las fisicas
 		const double* getRotationPointer();
 
-		// Setters
-		//TODO: get rotation
+		void SetParent(Transform* tr);
+
+	private:
+		void SetChildren(Transform* tr);
+		void RemoveChildren(Transform* tr);
+
+		//TODO: global setters
+
 	publish:
-		void setPosition(Utilities::Vector2D position);
-		void setPositionX(float x);
-		void setPositionY(float y);
 
-		void setScale(Utilities::Vector2D scale);
-		void setScaleX(float x);
-		void setScaleY(float y);
-		void setRotation(float rotation);
 
-		void translate(Utilities::Vector2D direction);
+		//	Local getters and setters
+		Utilities::Vector2D GetLocalPosition();
+		Utilities::Vector2D GetLocalScale();
 
-		void translateX(float x);
-		void translateY(float y);
+		void SetLocalPosition(Utilities::Vector2D position);
+		void SetLocalPositionX(float x);
+		void SetLocalPositionY(float y);
 
-		void rotate(float rotation);
-		void scale(float scale);
+		void SetScale(Utilities::Vector2D scale);
+		void SetScaleX(float x);
+		void SetScaleY(float y);
+
+		float GetLocalRotation();
+		void SetLocalRotation(float rotation);
+
+
+		Utilities::Vector2D GetWorldPosition();
+		Utilities::Vector2D GetWorldScale();
+		float GetWorldRotation();
+
+
+		void Translate(Utilities::Vector2D direction);
+
+		void TranslateX(float x);
+		void TranslateY(float y);
+
+		void Rotate(float rotation);
+		void Scale(float scale);
 
 	private:
 
-		reflect Utilities::Vector2D position_;
-		reflect Utilities::Vector2D scale_;
-		reflect double rotation_;
+		reflect Utilities::Vector2D localPosition;
+		reflect Utilities::Vector2D localScale;
+		reflect double localRotation;
+
+
+		Transform* parent;
+		std::list<Transform*> children;
 	};
 
 }

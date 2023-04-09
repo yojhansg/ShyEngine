@@ -6,7 +6,7 @@
 
         {
             "index": 0, 
-            "function": "Transform_setRotation",
+            "function": "Transform_SetLocalRotation",
             "input": [
                 1, 7
             ]

@@ -139,8 +139,8 @@ namespace ECS {
 			body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor, newPos.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
 
 			// Transform
-			transform->setPosition(newPos);
-			transform->setRotation(newRotation);
+			transform->SetLocalPosition(newPos);
+			transform->SetLocalRotation(newRotation);
 
 		}
 

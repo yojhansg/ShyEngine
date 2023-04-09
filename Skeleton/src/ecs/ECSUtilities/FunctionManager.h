@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Apr  8 17:01:40 2023
+//Creation time : Mon Apr 10 01:12:24 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -89,21 +89,24 @@ Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_getPosition(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_getScale(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_getRotation(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setPosition(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setPositionX(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setPositionY(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setScale(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setScaleX(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setScaleY(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_setRotation(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_translate(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_translateX(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_translateY(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_rotate(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_scale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
@@ -185,10 +188,15 @@ Scripting::Variable ScriptFunctionality_Time_Year(std::vector<Scripting::Variabl
 Scripting::Variable ScriptFunctionality_Time_Hours(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_Minutes(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_Seconds(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Time_Since(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_TimeHHMM(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_TimeHHMMSS(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_TimeStamp(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_DDMMYY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Camera_GetPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Camera_SetPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Camera_GetScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);

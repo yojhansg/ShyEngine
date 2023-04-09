@@ -14,6 +14,7 @@
 #include "ECSUtilities/ClassReflection.h"
 
 #include "Components/Overlay.h"
+#include "Components/Transform.h"
 
 #include "ConsoleManager.h"
 
@@ -51,33 +52,8 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 	for (auto& obj : objects) {
 
-		int renderOrder = 0;
-		std::string objectName = "New Entity";
+		ProcessTransform(scene, obj, nullptr);
 
-		if (obj.contains("name"))
-			objectName = obj["name"].get<std::string>();
-
-		if (obj.contains("order")) {
-			renderOrder = obj["order"].get<int>();
-		}
-
-		ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
-
-		if (obj.contains("components")) {
-
-			jsonarray components = obj["components"].get<jsonarray>();
-			for (auto& compInfo : components) {
-
-				ProcessComponent(entity, compInfo);
-			}
-		}
-		if (obj.contains("scripts")) {
-			jsonarray scripts = obj["scripts"].get<jsonarray>();
-			for (auto& script : scripts) {
-
-				entity->AddScript(script.get<std::string>());
-			}
-		}
 	}
 
 	if (file.contains("overlays")) {
@@ -95,6 +71,66 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	return scene;
 }
 
+
+void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, ECS::Transform* parent)
+{
+
+	int renderOrder = 0;
+	std::string objectName = "New Entity";
+
+	if (obj.contains("name"))
+		objectName = obj["name"].get<std::string>();
+
+	if (obj.contains("order")) { //TODO: mover el orden al transform ya que es la posicion z
+		renderOrder = obj["order"].get<int>();
+	}
+
+	ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
+
+	ECS::Transform* transform = entity->addComponent<ECS::Transform>();
+
+	std::unordered_map<std::string, std::string> map;
+
+	const std::vector<std::string> transformAttributes = { "localPosition", "localScale", "localRotation"};
+
+	for (auto& attr : transformAttributes) {
+
+		if (obj.contains(attr)) {
+			map[attr] = obj[attr].get<std::string>();
+		}
+	}
+
+
+	ClassReflection::instance()->ReflectTransform(transform, map);
+	transform->SetParent(parent);
+
+
+	if (obj.contains("components")) {
+
+		jsonarray components = obj["components"].get<jsonarray>();
+		for (auto& compInfo : components) {
+
+			ProcessComponent(entity, compInfo);
+		}
+	}
+	if (obj.contains("scripts")) {
+		jsonarray scripts = obj["scripts"].get<jsonarray>();
+		for (auto& script : scripts) {
+
+			entity->AddScript(script.get<std::string>());
+		}
+	}
+
+	if (obj.contains("childs")) {
+
+		jsonarray childs = obj["childs"].get<jsonarray>();
+
+		for (auto& child : childs) {
+
+			ProcessTransform(scene, child, transform);
+		}
+	}
+}
 
 void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent)
 {

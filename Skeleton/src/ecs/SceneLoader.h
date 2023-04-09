@@ -15,6 +15,7 @@ namespace ECS {
 	class Scene;
 	class Entity;
 	class Overlay;
+	class Transform;
 
 	class SceneLoader {
 
@@ -28,6 +29,8 @@ namespace ECS {
 
 
 	private:
+
+		static void ProcessTransform(ECS::Scene* scene, nlohmann::json& transform, ECS::Transform* parent);
 		static void ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent);
 		static void ProcessComponent(ECS::Entity* scene, nlohmann::json& component);
 	};

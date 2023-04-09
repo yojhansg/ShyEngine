@@ -11,14 +11,14 @@
 
         {
             "index" : 0,
-            "function": "Transform_setPositionX",
+            "function": "Transform_SetLocalPositionX",
             "input": [
                 1, 6
             ]
         },
         {
             "index" : 2,
-            "function": "Transform_getPosition",
+            "function": "Transform_GetLocalPosition",
             "input": [
                 1
             ]
@@ -52,7 +52,7 @@
         },
         {
             "index" : 9,
-            "function": "Transform_setPositionX",
+            "function": "Transform_SetLocalPositionX",
             "input": [
                 1, 16
             ]
