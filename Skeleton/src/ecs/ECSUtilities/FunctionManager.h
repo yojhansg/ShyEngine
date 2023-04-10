@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Apr 10 03:08:34 2023
+//Creation time : Mon Apr 10 18:01:04 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -90,21 +90,21 @@ Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetWorldPosition(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetWorldScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec);
@@ -130,16 +130,23 @@ Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>cons
 Scripting::Variable SceneManager_EndGame(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_EntityName(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity_Event(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_GlobalEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Subtract(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Multiply(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Divide(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Power(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Root(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_Max(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_Min(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_PlusOne(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_MinusOne(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_NotEquals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Lesser(std::vector<Scripting::Variable>const& vec);
@@ -173,6 +180,7 @@ Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_String_RemoveDecimals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_Get(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_SetLocal(std::vector<Scripting::Variable>const& vec);

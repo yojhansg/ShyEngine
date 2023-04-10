@@ -3,6 +3,7 @@
 
 #include "RendererManager.h"
 
+
 namespace ECS {
 
     Scene::Scene(const std::string& sce_name) {
@@ -166,6 +167,14 @@ namespace ECS {
         }
 
         return nullptr;
+    }
+
+    void Scene::Event(std::string const& name)
+    {
+        for (auto e : entities) {
+            if (e->isActive() && !e->isRemoved())
+                e->Event(name);
+        }
     }
 
 }

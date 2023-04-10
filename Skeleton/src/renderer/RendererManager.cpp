@@ -17,6 +17,12 @@ namespace Renderer {
 	}
 
 	RendererManager::~RendererManager() {
+
+		if (icon != nullptr)
+		{
+			SDL_FreeSurface(icon);
+			icon = nullptr;
+		}
 		closeSDL();
 	}
 

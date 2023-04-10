@@ -135,7 +135,8 @@ namespace ECS {
         // Fixture properties
         reflect float mass;
         reflect float bounciness;
-        reflect bool trigger;
+        reflect bool trigger;   
+        reflect bool freezeRotation;
 
         // Box2d properties
         b2BodyDef* bodyDef;

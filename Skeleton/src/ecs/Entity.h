@@ -137,6 +137,8 @@ namespace ECS {
 		void SetAttribute(std::string const& name, Scripting::Variable const& val);
 		Scripting::Variable GetAttribute(std::string const& name);
 
+		void Event(cstring name);
+
 	private:
 
 		void init();

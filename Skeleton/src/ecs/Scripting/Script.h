@@ -17,7 +17,7 @@ namespace ECS {
 	public:
 
 
-		void Initialise(std::string path);
+		void Initialise(cstring path);
 
 		void start() override;
 		void update(float dt) override;
@@ -29,17 +29,18 @@ namespace ECS {
 		void onTriggerStay(Entity* entity) override;
 		void onTriggerExit(Entity* entity) override;
 
-
 		void onClick() override;
 		void onClickBegin() override;
 		void onClickHold() override;
 		void onDoubleClick() override;
 		void onRightClick() override;
 
+		void Event(cstring name);
+
 		std::string GetName();
 
-		Scripting::Variable Get(std::string const& name);
-		void Set(std::string const& name, Scripting::Variable variable);
+		Scripting::Variable Get(cstring const& name);
+		void Set(cstring name, Scripting::Variable variable);
 
 	private:
 

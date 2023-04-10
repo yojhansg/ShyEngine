@@ -1,7 +1,6 @@
 {
     "nodeCount": 20,
     "update": 0,
-    "onTriggerEnter": 8,
 
 
     "functions" : [
@@ -11,7 +10,8 @@
             "function": "PhysicBody_setLinearVelocity",
             "input" : [
                 2, 3, 5
-            ]
+            ],
+            "next": 6
         },
         {
             "index" : 2,
@@ -25,22 +25,8 @@
 
         {
             "index" : 6,
-            "function": "Transform_Rotate",
+            "function": "GlobalEvent",
             "input": [
-                2, 7
-            ]
-        },
-        {
-            "index" : 8,
-            "function": "Print",
-            "input":[
-                9
-            ]
-        },
-        {
-            "index" : 9,
-            "function": "Attribute_GetGlobal",
-            "input":[
                 10
             ]
         }
@@ -53,7 +39,7 @@
             "index" : 0,
             "type" : 0,
             "A": 1,
-            "B": 6,
+            "B": -1,
             "condition": 4
         }
     ],
@@ -77,7 +63,7 @@
         {
             "index": 10,
             "type": "string",
-            "value": "Score"
+            "value": "Jump"
         }
 
     ]

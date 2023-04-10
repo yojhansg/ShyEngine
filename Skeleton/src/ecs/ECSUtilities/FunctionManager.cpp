@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Apr 10 03:08:34 2023
+//Creation time: Mon Apr 10 18:01:04 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -117,21 +117,21 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
 	map.emplace("Transform_GetLocalPosition",Transform_GetLocalPosition);
-	map.emplace("Transform_GetLocalScale",Transform_GetLocalScale);
+	map.emplace("Transform_GetWorldPosition",Transform_GetWorldPosition);
 	map.emplace("Transform_SetLocalPosition",Transform_SetLocalPosition);
 	map.emplace("Transform_SetLocalPositionX",Transform_SetLocalPositionX);
 	map.emplace("Transform_SetLocalPositionY",Transform_SetLocalPositionY);
 	map.emplace("Transform_SetWorldPosition",Transform_SetWorldPosition);
+	map.emplace("Transform_GetLocalScale",Transform_GetLocalScale);
+	map.emplace("Transform_GetWorldScale",Transform_GetWorldScale);
 	map.emplace("Transform_SetScale",Transform_SetScale);
 	map.emplace("Transform_SetScaleX",Transform_SetScaleX);
 	map.emplace("Transform_SetScaleY",Transform_SetScaleY);
 	map.emplace("Transform_SetWorldScale",Transform_SetWorldScale);
 	map.emplace("Transform_GetLocalRotation",Transform_GetLocalRotation);
+	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
 	map.emplace("Transform_SetLocalRotation",Transform_SetLocalRotation);
 	map.emplace("Transform_SetWorldRotation",Transform_SetWorldRotation);
-	map.emplace("Transform_GetWorldPosition",Transform_GetWorldPosition);
-	map.emplace("Transform_GetWorldScale",Transform_GetWorldScale);
-	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
 	map.emplace("Transform_Translate",Transform_Translate);
 	map.emplace("Transform_TranslateX",Transform_TranslateX);
 	map.emplace("Transform_TranslateY",Transform_TranslateY);
@@ -157,16 +157,23 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("SceneManager_EndGame",SceneManager_EndGame);
 	map.emplace("SceneManager_getNumberOfScenes",SceneManager_getNumberOfScenes);
 	map.emplace("SceneManager_GetCurrentScenePath",SceneManager_GetCurrentScenePath);
-	map.emplace("Entity",ScriptFunctionality_Entity);
-	map.emplace("EntityName",ScriptFunctionality_EntityName);
-	map.emplace("Script",ScriptFunctionality_Script);
 	map.emplace("Print",ScriptFunctionality_Print);
+	map.emplace("Entity",ScriptFunctionality_Entity);
+	map.emplace("Entity_Name",ScriptFunctionality_Entity_Name);
+	map.emplace("Entity_CurrentName",ScriptFunctionality_Entity_CurrentName);
+	map.emplace("Entity_Event",ScriptFunctionality_Entity_Event);
+	map.emplace("Script",ScriptFunctionality_Script);
+	map.emplace("GlobalEvent",ScriptFunctionality_GlobalEvent);
 	map.emplace("Math_Add",ScriptFunctionality_Math_Add);
 	map.emplace("Math_Subtract",ScriptFunctionality_Math_Subtract);
 	map.emplace("Math_Multiply",ScriptFunctionality_Math_Multiply);
 	map.emplace("Math_Divide",ScriptFunctionality_Math_Divide);
 	map.emplace("Math_Power",ScriptFunctionality_Math_Power);
 	map.emplace("Math_Root",ScriptFunctionality_Math_Root);
+	map.emplace("Math_Max",ScriptFunctionality_Math_Max);
+	map.emplace("Math_Min",ScriptFunctionality_Math_Min);
+	map.emplace("Math_PlusOne",ScriptFunctionality_Math_PlusOne);
+	map.emplace("Math_MinusOne",ScriptFunctionality_Math_MinusOne);
 	map.emplace("Logic_Equals",ScriptFunctionality_Logic_Equals);
 	map.emplace("Logic_NotEquals",ScriptFunctionality_Logic_NotEquals);
 	map.emplace("Logic_Lesser",ScriptFunctionality_Logic_Lesser);
@@ -200,6 +207,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("String_Find",ScriptFunctionality_String_Find);
 	map.emplace("String_ToString",ScriptFunctionality_String_ToString);
 	map.emplace("String_LeadingZeros",ScriptFunctionality_String_LeadingZeros);
+	map.emplace("String_RemoveDecimals",ScriptFunctionality_String_RemoveDecimals);
 	map.emplace("Attribute_Set",ScriptFunctionality_Attribute_Set);
 	map.emplace("Attribute_Get",ScriptFunctionality_Attribute_Get);
 	map.emplace("Attribute_SetLocal",ScriptFunctionality_Attribute_SetLocal);
@@ -238,38 +246,38 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[3].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(3), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(3), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[4].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(4), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(4), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[5].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(5), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", std::to_string(5), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_ChangeAnimationPath", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->ChangeAnimationPath(vec[1].str, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float, vec[5].value.Float);
@@ -278,13 +286,13 @@ Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variabl
 Scripting::Variable Animation_AdvanceFrame(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceFrame", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceFrame", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceFrame", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceFrame", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->AdvanceFrame();
@@ -293,13 +301,13 @@ Scripting::Variable Animation_AdvanceFrame(std::vector<Scripting::Variable>const
 Scripting::Variable Animation_AdvanceAnimation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceAnimation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceAnimation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceAnimation", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_AdvanceAnimation", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->AdvanceAnimation();
@@ -308,18 +316,18 @@ Scripting::Variable Animation_AdvanceAnimation(std::vector<Scripting::Variable>c
 Scripting::Variable Animation_SetFrame(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetFrame", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->SetFrame(vec[1].value.Float);
@@ -328,18 +336,18 @@ Scripting::Variable Animation_SetFrame(std::vector<Scripting::Variable>const& ve
 Scripting::Variable Animation_SetAnimation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimation", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnimation(vec[1].value.Float);
@@ -348,13 +356,13 @@ Scripting::Variable Animation_SetAnimation(std::vector<Scripting::Variable>const
 Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetFrame", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetFrame", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetFrame", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetFrame", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetFrame();
@@ -363,13 +371,13 @@ Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& ve
 Scripting::Variable Animation_GetAnimation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetAnimation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetAnimation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetAnimation", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_GetAnimation", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetAnimation();
@@ -378,18 +386,18 @@ Scripting::Variable Animation_GetAnimation(std::vector<Scripting::Variable>const
 Scripting::Variable Animation_SetAnimationLenght(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_SetAnimationLenght", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnimationLenght(vec[1].value.Float);
@@ -398,13 +406,13 @@ Scripting::Variable Animation_SetAnimationLenght(std::vector<Scripting::Variable
 Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_getAnimationLenght", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_getAnimationLenght", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Animation* self = vec[0].value.entity->getComponent<Animation>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Animation_getAnimationLenght", vec[0].value.entity->getEntityName(), Animation);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Animation_getAnimationLenght", vec[0].value.entity->getEntityName(), Animation);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->getAnimationLenght();
@@ -413,13 +421,13 @@ Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureWidth", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureWidth", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureWidth", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureWidth", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->getTextureWidth();
@@ -428,13 +436,13 @@ Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const&
 Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureHeight", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureHeight", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureHeight", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_getTextureHeight", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->getTextureHeight();
@@ -443,33 +451,33 @@ Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[3].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(3), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(3), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[4].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(4), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", std::to_string(4), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setSrcRect", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->setSrcRect(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
@@ -478,18 +486,18 @@ Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipX", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->setFlipX(vec[1].value.Bool);
@@ -498,18 +506,18 @@ Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setFlipY", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->setFlipY(vec[1].value.Bool);
@@ -518,23 +526,23 @@ Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_setRotaionPoint", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->setRotaionPoint(vec[1].value.Float, vec[2].value.Float);
@@ -543,13 +551,13 @@ Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const&
 Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_scaledSize", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_scaledSize", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_scaledSize", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_scaledSize", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->scaledSize();
@@ -558,18 +566,18 @@ Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Image_ChangeTexture", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->ChangeTexture(vec[1].str);
@@ -578,13 +586,13 @@ Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& v
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPlacement", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPlacement", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPlacement", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPlacement", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetPlacement();
@@ -593,23 +601,23 @@ Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& 
 Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetPositioned", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetPositioned(vec[1].vector, vec[2].vector);
@@ -618,33 +626,33 @@ Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const&
 Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[3].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(3), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(3), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[4].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(4), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", std::to_string(4), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetStreched", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetStreched(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
@@ -653,18 +661,18 @@ Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& v
 Scripting::Variable Overlay_Move(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_Move", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->Move(vec[1].vector);
@@ -673,18 +681,18 @@ Scripting::Variable Overlay_Move(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_MoveTo(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_MoveTo", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->MoveTo(vec[1].vector);
@@ -693,18 +701,18 @@ Scripting::Variable Overlay_MoveTo(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_SetSize(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetSize", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetSize(vec[1].vector);
@@ -713,13 +721,13 @@ Scripting::Variable Overlay_SetSize(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_GetPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPosition", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetPosition", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetPosition();
@@ -728,13 +736,13 @@ Scripting::Variable Overlay_GetPosition(std::vector<Scripting::Variable>const& v
 Scripting::Variable Overlay_GetSize(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetSize", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetSize", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetSize", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetSize", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetSize();
@@ -743,13 +751,13 @@ Scripting::Variable Overlay_GetSize(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_GetTop(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetTop", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetTop", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetTop", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetTop", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetTop();
@@ -758,13 +766,13 @@ Scripting::Variable Overlay_GetTop(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_GetLeft(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetLeft", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetLeft", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetLeft", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetLeft();
@@ -773,13 +781,13 @@ Scripting::Variable Overlay_GetLeft(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_GetRight(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRight", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRight", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRight", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetRight();
@@ -788,13 +796,13 @@ Scripting::Variable Overlay_GetRight(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Overlay_GetBottom(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetBottom", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetBottom", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetBottom", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetBottom", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetBottom();
@@ -803,18 +811,18 @@ Scripting::Variable Overlay_GetBottom(std::vector<Scripting::Variable>const& vec
 Scripting::Variable Overlay_SetTop(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetTop", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetTop(vec[1].value.Float);
@@ -823,18 +831,18 @@ Scripting::Variable Overlay_SetTop(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_SetLeft(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetLeft(vec[1].value.Float);
@@ -843,18 +851,18 @@ Scripting::Variable Overlay_SetLeft(std::vector<Scripting::Variable>const& vec){
 Scripting::Variable Overlay_SetRight(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetRight(vec[1].value.Float);
@@ -863,18 +871,18 @@ Scripting::Variable Overlay_SetRight(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Overlay_SetBottom(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetBottom", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetBottom(vec[1].value.Float);
@@ -883,13 +891,13 @@ Scripting::Variable Overlay_SetBottom(std::vector<Scripting::Variable>const& vec
 Scripting::Variable Overlay_GetAnchor(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetAnchor", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetAnchor", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetAnchor", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetAnchor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetAnchor();
@@ -898,18 +906,18 @@ Scripting::Variable Overlay_GetAnchor(std::vector<Scripting::Variable>const& vec
 Scripting::Variable Overlay_SetAnchor(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchor(vec[1].vector);
@@ -918,13 +926,13 @@ Scripting::Variable Overlay_SetAnchor(std::vector<Scripting::Variable>const& vec
 Scripting::Variable Overlay_SetAnchorCenter(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorCenter", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorCenter", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorCenter", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorCenter", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorCenter();
@@ -933,13 +941,13 @@ Scripting::Variable Overlay_SetAnchorCenter(std::vector<Scripting::Variable>cons
 Scripting::Variable Overlay_SetAnchorTopLeft(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopLeft", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopLeft", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopLeft", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorTopLeft();
@@ -948,13 +956,13 @@ Scripting::Variable Overlay_SetAnchorTopLeft(std::vector<Scripting::Variable>con
 Scripting::Variable Overlay_SetAnchorTopRight(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopRight", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopRight", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopRight", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorTopRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorTopRight();
@@ -963,13 +971,13 @@ Scripting::Variable Overlay_SetAnchorTopRight(std::vector<Scripting::Variable>co
 Scripting::Variable Overlay_SetAnchorBottomLeft(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomLeft", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomLeft", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomLeft", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomLeft", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorBottomLeft();
@@ -978,13 +986,13 @@ Scripting::Variable Overlay_SetAnchorBottomLeft(std::vector<Scripting::Variable>
 Scripting::Variable Overlay_SetAnchorBottomRight(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomRight", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomRight", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomRight", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetAnchorBottomRight", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetAnchorBottomRight();
@@ -993,13 +1001,13 @@ Scripting::Variable Overlay_SetAnchorBottomRight(std::vector<Scripting::Variable
 Scripting::Variable Overlay_GetColor(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetColor", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetColor", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetColor", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetColor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Color ret = self->GetColor();
@@ -1008,18 +1016,18 @@ Scripting::Variable Overlay_GetColor(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Color){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetColor", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetColor(vec[1].value.color);
@@ -1028,13 +1036,13 @@ Scripting::Variable Overlay_SetColor(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Overlay_GetRenderScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRenderScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRenderScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_GetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	float ret = self->GetRenderScale();
@@ -1043,18 +1051,18 @@ Scripting::Variable Overlay_GetRenderScale(std::vector<Scripting::Variable>const
 Scripting::Variable Overlay_SetRenderScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetRenderScale(vec[1].value.Float);
@@ -1063,13 +1071,13 @@ Scripting::Variable Overlay_SetRenderScale(std::vector<Scripting::Variable>const
 Scripting::Variable Overlay_ResetRenderScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_ResetRenderScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_ResetRenderScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_ResetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_ResetRenderScale", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->ResetRenderScale();
@@ -1078,18 +1086,18 @@ Scripting::Variable Overlay_ResetRenderScale(std::vector<Scripting::Variable>con
 Scripting::Variable Overlay_SetInteractable(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_SetInteractable", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	self->SetInteractable(vec[1].value.Bool);
@@ -1098,13 +1106,13 @@ Scripting::Variable Overlay_SetInteractable(std::vector<Scripting::Variable>cons
 Scripting::Variable Overlay_IsInteractable(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_IsInteractable", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_IsInteractable", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Overlay* self = vec[0].value.entity->getComponent<Overlay>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Overlay_IsInteractable", vec[0].value.entity->getEntityName(), Overlay);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Overlay_IsInteractable", vec[0].value.entity->getEntityName(), Overlay);
 		return Scripting::Variable::Null();
 	}
 	bool ret = self->IsInteractable();
@@ -1113,18 +1121,18 @@ Scripting::Variable Overlay_IsInteractable(std::vector<Scripting::Variable>const
 Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", vec[0].value.entity->getEntityName(), OverlayImage);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_SetTexture", vec[0].value.entity->getEntityName(), OverlayImage);
 		return Scripting::Variable::Null();
 	}
 	self->SetTexture(vec[1].str);
@@ -1133,13 +1141,13 @@ Scripting::Variable OverlayImage_SetTexture(std::vector<Scripting::Variable>cons
 Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_GetTexture", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_GetTexture", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayImage* self = vec[0].value.entity->getComponent<OverlayImage>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_GetTexture", vec[0].value.entity->getEntityName(), OverlayImage);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayImage_GetTexture", vec[0].value.entity->getEntityName(), OverlayImage);
 		return Scripting::Variable::Null();
 	}
 	std::string ret = self->GetTexture();
@@ -1148,13 +1156,13 @@ Scripting::Variable OverlayImage_GetTexture(std::vector<Scripting::Variable>cons
 Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFit", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFit", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFit", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFit", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetFit();
@@ -1163,18 +1171,18 @@ Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& ve
 Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFit", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetFit(vec[1].value.Float);
@@ -1183,13 +1191,13 @@ Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& ve
 Scripting::Variable OverlayText_GetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetVerticalAlignment", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetVerticalAlignment", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetVerticalAlignment();
@@ -1198,13 +1206,13 @@ Scripting::Variable OverlayText_GetVerticalAlignment(std::vector<Scripting::Vari
 Scripting::Variable OverlayText_GetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetHorizontalAlignment", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetHorizontalAlignment", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetHorizontalAlignment();
@@ -1213,18 +1221,18 @@ Scripting::Variable OverlayText_GetHorizontalAlignment(std::vector<Scripting::Va
 Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetVerticalAlignment(vec[1].value.Float);
@@ -1233,18 +1241,18 @@ Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Vari
 Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetHorizontalAlignment(vec[1].value.Float);
@@ -1253,13 +1261,13 @@ Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Va
 Scripting::Variable OverlayText_GetFont(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFont", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFont", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFont", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetFont", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	std::string ret = self->GetFont();
@@ -1268,18 +1276,18 @@ Scripting::Variable OverlayText_GetFont(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_SetFont(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetFont", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetFont(vec[1].str);
@@ -1288,13 +1296,13 @@ Scripting::Variable OverlayText_SetFont(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_GetText(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetText", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetText", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetText", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetText", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	std::string ret = self->GetText();
@@ -1303,18 +1311,18 @@ Scripting::Variable OverlayText_GetText(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetText", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetText(vec[1].str);
@@ -1323,13 +1331,13 @@ Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetPointSize", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetPointSize", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetPointSize", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_GetPointSize", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	int ret = self->GetPointSize();
@@ -1338,18 +1346,18 @@ Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>con
 Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	OverlayText* self = vec[0].value.entity->getComponent<OverlayText>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", vec[0].value.entity->getEntityName(), OverlayText);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "OverlayText_SetPointSize", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
 	self->SetPointSize(vec[1].value.Float);
@@ -1358,18 +1366,18 @@ Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setTrigger", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	self->setTrigger(vec[1].value.Bool);
@@ -1378,13 +1386,13 @@ Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const&
 Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_isTrigger", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_isTrigger", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_isTrigger", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_isTrigger", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	bool ret = self->isTrigger();
@@ -1393,18 +1401,18 @@ Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& 
 Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setFriction", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	self->setFriction(vec[1].value.Float);
@@ -1413,13 +1421,13 @@ Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const
 Scripting::Variable PhysicBody_getFriction(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getFriction", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getFriction", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getFriction", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getFriction", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	float ret = self->getFriction();
@@ -1428,18 +1436,18 @@ Scripting::Variable PhysicBody_getFriction(std::vector<Scripting::Variable>const
 Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setBounciness", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	self->setBounciness(vec[1].value.Float);
@@ -1448,13 +1456,13 @@ Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getBounciness", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getBounciness", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getBounciness", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getBounciness", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	float ret = self->getBounciness();
@@ -1463,23 +1471,23 @@ Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[2].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(2), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", std::to_string(2), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_setLinearVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	self->setLinearVelocity(vec[1].value.Float, vec[2].value.Float);
@@ -1488,13 +1496,13 @@ Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getLinearVelocity", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getLinearVelocity", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getLinearVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "PhysicBody_getLinearVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
 		return Scripting::Variable::Null();
 	}
 	Vector2D ret = self->getLinearVelocity();
@@ -1503,48 +1511,48 @@ Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable
 Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	Utilities::Vector2D ret = self->GetLocalPosition();
 	return ret;
 }
-Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
-	Utilities::Vector2D ret = self->GetLocalScale();
+	Utilities::Vector2D ret = self->GetWorldPosition();
 	return ret;
 }
 Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetLocalPosition(vec[1].vector);
@@ -1553,18 +1561,18 @@ Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>c
 Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetLocalPositionX(vec[1].value.Float);
@@ -1573,18 +1581,18 @@ Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>
 Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalPositionY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetLocalPositionY(vec[1].value.Float);
@@ -1593,38 +1601,68 @@ Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>
 Scripting::Variable Transform_SetWorldPosition(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetWorldPosition(vec[1].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalScale", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Vector2D ret = self->GetLocalScale();
+	return ret;
+}
+Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	Utilities::Vector2D ret = self->GetWorldScale();
+	return ret;
+}
+Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetScale(vec[1].vector);
@@ -1633,18 +1671,18 @@ Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& ve
 Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetScaleX(vec[1].value.Float);
@@ -1653,18 +1691,18 @@ Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& v
 Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetScaleY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetScaleY(vec[1].value.Float);
@@ -1673,18 +1711,18 @@ Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& v
 Scripting::Variable Transform_SetWorldScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetWorldScale(vec[1].vector);
@@ -1693,33 +1731,48 @@ Scripting::Variable Transform_SetWorldScale(std::vector<Scripting::Variable>cons
 Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	float ret = self->GetLocalRotation();
 	return ret;
 }
-Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->GetWorldRotation();
+	return ret;
+}
+Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetLocalRotation", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetLocalRotation(vec[1].value.Float);
@@ -1728,83 +1781,38 @@ Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>c
 Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->SetWorldRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
-		return Scripting::Variable::Null();
-	}
-	Utilities::Vector2D ret = self->GetWorldPosition();
-	return ret;
-}
-Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldScale", vec[0].value.entity->getEntityName(), Transform);
-		return Scripting::Variable::Null();
-	}
-	Utilities::Vector2D ret = self->GetWorldScale();
-	return ret;
-}
-Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Transform* self = vec[0].value.entity->getComponent<Transform>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_GetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
-		return Scripting::Variable::Null();
-	}
-	float ret = self->GetWorldRotation();
-	return ret;
-}
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Vector2D){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Translate", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->Translate(vec[1].vector);
@@ -1813,18 +1821,18 @@ Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& v
 Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateX", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->TranslateX(vec[1].value.Float);
@@ -1833,18 +1841,18 @@ Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& 
 Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_TranslateY", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->TranslateY(vec[1].value.Float);
@@ -1853,18 +1861,18 @@ Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& 
 Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Rotate", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->Rotate(vec[1].value.Float);
@@ -1873,18 +1881,18 @@ Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::Float){
-		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Transform* self = vec[0].value.entity->getComponent<Transform>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", vec[0].value.entity->getEntityName(), Transform);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, "Transform_Scale", vec[0].value.entity->getEntityName(), Transform);
 		return Scripting::Variable::Null();
 	}
 	self->Scale(vec[1].value.Float);
@@ -1990,24 +1998,39 @@ Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Vari
 	std::string ret = manager->GetCurrentScenePath();
 	return ret;
 }
+Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Print(vec[0]);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	ECS::Entity* ret = manager->Entity();
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_EntityName(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->EntityName();
+	std::string ret = manager->Entity_Name(vec[0].value.entity);
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->Entity_CurrentName();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Entity_Event(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Entity_Event(vec[0].value.entity, vec[1].str);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Script();
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_GlobalEvent(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Print(vec[0]);
+	manager->GlobalEvent(vec[0].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec){
@@ -2038,6 +2061,26 @@ Scripting::Variable ScriptFunctionality_Math_Power(std::vector<Scripting::Variab
 Scripting::Variable ScriptFunctionality_Math_Root(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Math_Root(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_Max(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_Max(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_Min(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_Min(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_PlusOne(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_PlusOne(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_MinusOne(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_MinusOne(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec){
@@ -2203,6 +2246,11 @@ Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::V
 Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->String_LeadingZeros(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_String_RemoveDecimals(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->String_RemoveDecimals(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec){

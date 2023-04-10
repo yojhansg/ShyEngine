@@ -19,7 +19,7 @@ namespace ECS {
 		removeAllScenes();
 	}
 
-	Scene* SceneManager::getActualScene() {
+	Scene* SceneManager::getCurrentScene() {
 
 		if (scenes.empty()) return nullptr;
 

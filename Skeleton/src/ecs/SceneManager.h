@@ -51,7 +51,7 @@ namespace ECS {
 		~SceneManager();
 
 		// Returns a pointer to the scene on top if the stack is not empty, nullptr otherwise
-		Scene* getActualScene();
+		Scene* getCurrentScene();
 
 		// Returns the number of scenes in the stack
 

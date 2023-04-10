@@ -98,7 +98,7 @@ void Engine::update() {
 	while (true) {
 
 		// Scene
-		auto scene = sceneManager->getActualScene();
+		auto scene = sceneManager->getCurrentScene();
 		if (scene == nullptr) break;
 
 		// Input

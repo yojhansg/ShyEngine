@@ -42,6 +42,7 @@ namespace ECS {
 		b = nullptr;
 
 		trigger = false;
+		freezeRotation = false;
 	}
 
 	PhysicBody::~PhysicBody() {
@@ -98,6 +99,7 @@ namespace ECS {
 		setBodyType(bodyType);
 		setBounciness(bounciness);
 		setTrigger(trigger);
+		setRotationFreezed(freezeRotation);
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {

@@ -105,6 +105,12 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				info.input = node["input"].get<std::vector<int>>();
 			}
 
+			if (allScriptNodes[nodeIdx] != nullptr) {
+
+				Console::Output::PrintError(path + ": Node index", "The script already contains a node with idx <" + std::to_string(nodeIdx) + ">");
+				continue;
+			}
+
 			Function* function = new Function(nodeIdx, methodCall);
 			allScriptNodes[nodeIdx] = function;
 
@@ -149,6 +155,12 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				value = vec;
 			}
 
+			if (allScriptNodes[nodeIdx] != nullptr) {
+
+				Console::Output::PrintError(path + ": Node index", "The script already contains a node with idx <" + std::to_string(nodeIdx) + ">");
+				continue;
+			}
+
 			ConstNode* constValueNode = new ConstNode(nodeIdx, value);
 			allScriptNodes[nodeIdx] = constValueNode;
 		}
@@ -169,8 +181,13 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 			int condition = forkNode["condition"].get<int>();
 
-			forks.push_back({ nodeIdx, A, B });
+			if (allScriptNodes[nodeIdx] != nullptr) {
 
+				Console::Output::PrintError(path + ": Node index", "The script already contains a node with idx <" + std::to_string(nodeIdx) + ">");
+				continue;
+			}
+
+			forks.push_back({ nodeIdx, A, B });
 			Fork* forkNode = new Fork(nodeIdx, (Fork::ForkType)forkType);
 			allScriptNodes[nodeIdx] = forkNode;
 
@@ -235,7 +252,19 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 	SetScriptNodeValue(onClickHold);
 	SetScriptNodeValue(onDoubleClick);
 	SetScriptNodeValue(onRightClick);
-	
+
+#undef SetScriptNodeValue
+
+	if (file.contains("names")) {
+
+		for (auto& name : file["names"].items()) {
+
+			Node* node = allScriptNodes[name.value().get<int>()];
+
+			if (node != nullptr)
+				scriptNodeInfo.names[name.key()] = node;
+		}
+	}
 
 	fileStream.close();
 	manager->scripts[path] = scriptNodeInfo;

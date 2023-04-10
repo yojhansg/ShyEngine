@@ -1,6 +1,7 @@
 #include "Script.h"
 #include "ScriptManager.h"
 
+#include "CheckML.h"
 
 void ECS::Script::start()
 {
@@ -30,7 +31,7 @@ void ECS::Script::onCollisionExit(Entity* entity)
 
 void ECS::Script::onTriggerEnter(Entity* entity)
 {
-	Iteration(nodes.onTriggerEnter);
+ 	Iteration(nodes.onTriggerEnter);
 }
 
 void ECS::Script::onTriggerStay(Entity* entity)
@@ -68,12 +69,20 @@ void ECS::Script::onRightClick()
 	Iteration(nodes.onRightClick);
 }
 
+void ECS::Script::Event(cstring name)
+{
+	if (nodes.names.contains(name)) {
+
+		Iteration(nodes.names[name]);
+	}
+}
+
 std::string ECS::Script::GetName()
 {
 	return name;
 }
 
-Scripting::Variable ECS::Script::Get(std::string const& name)
+Scripting::Variable ECS::Script::Get(cstring name)
 {
 	if (!attributes.contains(name))
 	{
@@ -83,12 +92,12 @@ Scripting::Variable ECS::Script::Get(std::string const& name)
 	return attributes[name];
 }
 
-void ECS::Script::Set(std::string const& name, Scripting::Variable variable)
+void ECS::Script::Set(cstring name, Scripting::Variable variable)
 {
 	attributes[name] = variable;
 }
 
-void ECS::Script::Initialise(std::string path)
+void ECS::Script::Initialise(cstring path)
 {
 	name = path;
 	nodes = Scripting::ScriptManager::LoadScript(path);

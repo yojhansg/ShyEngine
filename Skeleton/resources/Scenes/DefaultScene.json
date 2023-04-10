@@ -15,7 +15,7 @@
                 }
             ],
             "scripts": [
-                "Parallax", "Score"
+                "Parallax"
             ]
         },
         {
@@ -23,7 +23,7 @@
             "order": 10,
             "localPosition": "(100, 540)",
             "localScale": "(0.35f, 0.35f)",
-            "localRotation": "-45",
+            "localRotation": "0",
             "components": [
                 {
                     "component": "Image",
@@ -35,13 +35,15 @@
                     "component": "BoxBody",
                     "attributes": {
                         "bodyType": "2",
-                        "bounciness": "0.5f"
+                        "bounciness": "0.5f",
+                        "freezeRotation": "true"
                     }
                 }
             ],
             "scripts": [
                 "FlappyBirdJump",
-                "TestScript"
+                "BirdRotation",
+                "BirdCollision"
             ],
             "childs": [
                 {
@@ -79,8 +81,7 @@
             "localPosition": "(600, 500)",
             "localScale": "2, 4",
             "localRotation": "0",
-            "components":[
-
+            "components": [
                 {
                     "component": "BoxBody",
                     "attributes": {
@@ -89,9 +90,8 @@
                         "trigger": "true"
                     }
                 }
-
             ],
-            "scripts":[
+            "scripts": [
                 "Tuberia"
             ],
             "childs": [
@@ -151,8 +151,7 @@
             "localPosition": "(1200, 500)",
             "localScale": "2, 4",
             "localRotation": "0",
-            "components":[
-
+            "components": [
                 {
                     "component": "BoxBody",
                     "attributes": {
@@ -161,9 +160,8 @@
                         "trigger": "true"
                     }
                 }
-
             ],
-            "scripts":[
+            "scripts": [
                 "Tuberia"
             ],
             "childs": [
@@ -223,8 +221,7 @@
             "localPosition": "(1800, 500)",
             "localScale": "2, 4",
             "localRotation": "0",
-            "components":[
-
+            "components": [
                 {
                     "component": "BoxBody",
                     "attributes": {
@@ -233,9 +230,8 @@
                         "trigger": "true"
                     }
                 }
-
             ],
-            "scripts":[
+            "scripts": [
                 "Tuberia"
             ],
             "childs": [
@@ -289,52 +285,29 @@
                 }
             ]
         }
-        
-        
     ],
     "overlays": [
         {
-            "name": "Overlay papa",
-            "placement": "0",
+            "name": "Score",
+            "placement": "1",
             "anchor": "0.5f, 0.5f",
-            "top": "10",
-            "left": "10",
-            "right": "10",
-            "bottom": "10",
-            "position": "800, 100",
-            "size": "100, 100",
+            "top": "0",
+            "left": "0",
+            "right": "0",
+            "bottom": "0",
             "components": [
                 {
-                    "component": "OverlayImage",
+                    "component": "OverlayText",
                     "attributes": {
-                        "path": "ground.png"
+                        "path": "1up.ttf",
+                        "text": "hola nene",
+                        "pointSize": "100",
+                        "horizontalAlignment": "1"
                     }
                 }
             ],
-            "childs": [
-                {
-                    "name": "Overlay hijo",
-                    "placement": "1",
-                    "anchor": "0.5f, 0.5f",
-                    "top": "0",
-                    "left": "0",
-                    "right": "-50",
-                    "bottom": "0",
-                    "position": "100, 100",
-                    "size": "100, 100",
-                    "components": [
-                        {
-                            "component": "OverlayImage",
-                            "attributes": {
-                                "path": "pollo.png"
-                            }
-                        }
-                    ],
-                    "scripts": [
-                        "OverlayTest"
-                    ],
-                    "childs": []
-                }
+            "scripts": [
+                "Score"
             ]
         }
     ]

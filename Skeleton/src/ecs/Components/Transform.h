@@ -35,16 +35,18 @@ namespace ECS {
 
 	publish:
 
-
 		//	Local getters and setters
 		Utilities::Vector2D GetLocalPosition();
-		Utilities::Vector2D GetLocalScale();
+		Utilities::Vector2D GetWorldPosition();
 
 		void SetLocalPosition(Utilities::Vector2D position);
 		void SetLocalPositionX(float x);
 		void SetLocalPositionY(float y);
 
 		void SetWorldPosition(Utilities::Vector2D position);
+
+		Utilities::Vector2D GetLocalScale();
+		Utilities::Vector2D GetWorldScale();
 
 		void SetScale(Utilities::Vector2D scale);
 		void SetScaleX(float x);
@@ -53,14 +55,12 @@ namespace ECS {
 		void SetWorldScale(Utilities::Vector2D scale);
 
 		float GetLocalRotation();
+		float GetWorldRotation();
 
 		void SetLocalRotation(float rotation);
 		void SetWorldRotation(float rotation);
 
 
-		Utilities::Vector2D GetWorldPosition();
-		Utilities::Vector2D GetWorldScale();
-		float GetWorldRotation();
 
 
 		void Translate(Utilities::Vector2D direction);

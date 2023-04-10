@@ -104,6 +104,14 @@ namespace ECS {
 		return entityAttributes[name];
 	}
 
+	void Entity::Event(cstring name)
+	{
+		for (auto c : scripts) {
+			c->Event(name);
+		}
+	}
+
+	//TODO: comprobar si esta enabled antes
 	void Entity::init() {
 		for (auto c : components) {
 			c->init();

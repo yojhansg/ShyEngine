@@ -4,7 +4,7 @@
 #include <Script.h>
 #include "StringTrim.h"
 #include <format>
-
+#include "Scene.h"
 #include "ConsoleManager.h"
 #include "ScriptManager.h"
 #include <sstream>
@@ -33,16 +33,29 @@ ECS::Entity* Scripting::ScriptFunctionality::Entity()
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity();
 }
 
-std::string Scripting::ScriptFunctionality::EntityName()
+std::string Scripting::ScriptFunctionality::Entity_Name(ECS::Entity* ent)
+{
+	return ent->getEntityName();
+}
+
+std::string Scripting::ScriptFunctionality::Entity_CurrentName()
 {
 	return Entity()->getEntityName();
+}
+
+void Scripting::ScriptFunctionality::Entity_Event(ECS::Entity* ent, cstring name) {
+	ent->Event(name);
+}
+
+void Scripting::ScriptFunctionality::GlobalEvent(cstring name) {
+
+	ECS::SceneManager::instance()->getCurrentScene()->Event(name);
 }
 
 std::string Scripting::ScriptFunctionality::Script()
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 }
-
 
 void Scripting::ScriptFunctionality::Print(cVariable val)
 {
@@ -52,7 +65,6 @@ void Scripting::ScriptFunctionality::Print(cVariable val)
 
 	Console::Output::Print(objectName + ": " + scriptName, String_ToString(val));
 }
-
 
 float Scripting::ScriptFunctionality::Math_Add(float a, float b)
 {
@@ -82,6 +94,29 @@ float Scripting::ScriptFunctionality::Math_Power(float a, float b)
 float Scripting::ScriptFunctionality::Math_Root(float a, float b)
 {
 	return powf(a , 1.0f / b);
+}
+
+
+float Scripting::ScriptFunctionality::Math_Max(float a, float b)
+{
+	return std::max(a, b);
+}
+
+
+float Scripting::ScriptFunctionality::Math_Min(float a, float b)
+{
+	return std::min(a, b);
+}
+
+
+float Scripting::ScriptFunctionality::Math_PlusOne(float a)
+{
+	return a + 1;
+}
+
+float Scripting::ScriptFunctionality::Math_MinusOne(float a)
+{
+	return a - 1;
 }
 
 bool Scripting::ScriptFunctionality::Logic_Equals(float a, float b)
@@ -168,7 +203,6 @@ float Scripting::ScriptFunctionality::Vector2D_Angle(cVector2D vec)
 	return norm.angle(Vector2D(1, 0));
 }
 
-
 float Scripting::ScriptFunctionality::Vector2D_AngleWithVector(cVector2D vec, cVector2D other)
 {
 	return vec.angle(other);
@@ -250,6 +284,11 @@ std::string Scripting::ScriptFunctionality::String_LeadingZeros(int number, int 
 	return ss.str();
 }
 
+
+std::string Scripting::ScriptFunctionality::String_RemoveDecimals(float number) {
+
+	return std::to_string((int)number);
+}
 
 std::string Scripting::ScriptFunctionality::String_ToString(cVariable variable) {
 

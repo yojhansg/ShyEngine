@@ -27,16 +27,23 @@ public:
 
 publish:
 
-	ECS::Entity* Entity();
-
-	//TODO: esto deberia depender de la entidad no dar la del propio objeto
-	std::string EntityName();
-	std::string Script();
-
-
 	void Print(cVariable val);
 
+	ECS::Entity* Entity();
 
+	//TODO: entity_Destroy, entity_Create
+	std::string Entity_Name(ECS::Entity* ent);
+	std::string Entity_CurrentName();
+
+	//TODO: no me convence el nombre
+	void Entity_Event(ECS::Entity* ent, cstring name);
+
+	std::string Script();
+	void GlobalEvent(cstring name);
+
+
+
+	//TODO: plus one, minue one
 	//Math
 	float Math_Add(float a, float b);
 	float Math_Subtract(float a, float b);
@@ -44,6 +51,11 @@ publish:
 	float Math_Divide(float a, float b);
 	float Math_Power(float a, float b);
 	float Math_Root(float a, float b);
+	float Math_Max(float a, float b);
+	float Math_Min(float a, float b);
+	float Math_PlusOne(float a);
+	float Math_MinusOne(float a);
+
 
 	//Logic
 	//TODO: cambiar equals para que funciones con una variable
@@ -86,6 +98,7 @@ publish:
 	int String_Find(cstring a, char c);
 	std::string String_ToString(cVariable variable);
 	std::string String_LeadingZeros(int number, int zeroCount);
+	std::string String_RemoveDecimals(float number);
 	//Attributes
 
 	void Attribute_Set(cstring name, cVariable val);

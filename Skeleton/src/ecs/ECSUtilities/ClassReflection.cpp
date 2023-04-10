@@ -68,6 +68,8 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 		if(map.contains("trigger"))
 			self->trigger = map.at("trigger") == "true" ? true : false;
+		if(map.contains("freezeRotation"))
+			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectChainBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -80,6 +82,8 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 		if(map.contains("trigger"))
 			self->trigger = map.at("trigger") == "true" ? true : false;
+		if(map.contains("freezeRotation"))
+			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -92,6 +96,8 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 		if(map.contains("trigger"))
 			self->trigger = map.at("trigger") == "true" ? true : false;
+		if(map.contains("freezeRotation"))
+			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -104,6 +110,8 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 		if(map.contains("trigger"))
 			self->trigger = map.at("trigger") == "true" ? true : false;
+		if(map.contains("freezeRotation"))
+			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectImage(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -184,6 +192,8 @@ ClassReflection::ClassReflection(){
 			self->bounciness = std::stof(map.at("bounciness"));
 		if(map.contains("trigger"))
 			self->trigger = map.at("trigger") == "true" ? true : false;
+		if(map.contains("freezeRotation"))
+			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectTransform(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

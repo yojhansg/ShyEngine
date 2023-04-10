@@ -52,6 +52,8 @@ namespace Scripting {
 			Node* onClickHold;
 			Node* onDoubleClick;
 			Node* onRightClick;
+
+			std::unordered_map<std::string, Node*> names;
 		};
 
 

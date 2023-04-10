@@ -10,5 +10,5 @@
     "splashScreen": true,
     "vsync": true,
     "fullScreen": false,
-    "debugPhysics": true
+    "debugPhysics": false
 }

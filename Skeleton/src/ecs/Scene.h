@@ -55,6 +55,9 @@ namespace ECS {
 		// Returns the pointer to an entity that matches with the name, nullptr otherwise (Not an efficient way to find an entity)
 		Entity* findEntityByName(const std::string& ent_name);
 
+
+		void Event(std::string const& name);
+
 	private:
 
 

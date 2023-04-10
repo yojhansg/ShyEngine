@@ -48,8 +48,7 @@
                                 }
                             ],
                             "scripts": [
-                                "MainMenuBehaviour",
-                                "RestartOnCollision"
+                                "MainMenuBehaviour"
                             ],
                             "childs": [
                                 {
