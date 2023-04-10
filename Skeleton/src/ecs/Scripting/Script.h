@@ -25,6 +25,11 @@ namespace ECS {
 		void onCollisionStay(Entity* entity) override;
 		void onCollisionExit(Entity* entity) override;
 
+		void onTriggerEnter(Entity* entity) override;
+		void onTriggerStay(Entity* entity) override;
+		void onTriggerExit(Entity* entity) override;
+
+
 		void onClick() override;
 		void onClickBegin() override;
 		void onClickHold() override;

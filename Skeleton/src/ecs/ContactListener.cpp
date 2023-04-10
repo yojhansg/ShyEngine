@@ -13,8 +13,8 @@ namespace ECS {
 
 	void ContactListener::BeginContact(b2Contact* contact) {
 
-		unsigned int* punteroA = (unsigned int*) contact->GetFixtureA()->GetBody()->GetUserData().pointer;
-		unsigned int* punteroB = (unsigned int*) contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroA = (unsigned int*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroB = (unsigned int*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
@@ -24,29 +24,26 @@ namespace ECS {
 
 		if (entA == nullptr || entB == nullptr) return;
 
-		if (contact->GetFixtureA()->IsSensor()) {
+		if (contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()) {
 			entA->onTriggerEnter(entB);
-			phyA->setTriggerStay(true, entB);
-		}
-		else {
-			entA->onCollisionEnter(entB);
-			phyA->setCollisionStay(true, entB);
-		}
-
-		if (contact->GetFixtureB()->IsSensor()) {
 			entB->onTriggerEnter(entA);
+
+			phyA->setTriggerStay(true, entB);
 			phyB->setTriggerStay(true, entA);
 		}
 		else {
+			entA->onCollisionEnter(entB);
 			entB->onCollisionEnter(entA);
+
+			phyA->setCollisionStay(true, entB);
 			phyB->setCollisionStay(true, entA);
 		}
 	}
 
 	void ContactListener::EndContact(b2Contact* contact) {
 
-		unsigned int* punteroA = (unsigned int*) contact->GetFixtureA()->GetBody()->GetUserData().pointer;
-		unsigned int* punteroB = (unsigned int*) contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroA = (unsigned int*)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+		unsigned int* punteroB = (unsigned int*)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
 
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));

@@ -20,12 +20,27 @@ void ECS::Script::onCollisionEnter(Entity* entity)
 
 void ECS::Script::onCollisionStay(Entity* entity)
 {
-	Iteration(nodes.onCollision);
+	Iteration(nodes.onCollisionStay);
 }
 
 void ECS::Script::onCollisionExit(Entity* entity)
 {
 	Iteration(nodes.onCollisionExit);
+}
+
+void ECS::Script::onTriggerEnter(Entity* entity)
+{
+	Iteration(nodes.onTriggerEnter);
+}
+
+void ECS::Script::onTriggerStay(Entity* entity)
+{
+	Iteration(nodes.onTriggerStay);
+}
+
+void ECS::Script::onTriggerExit(Entity* entity)
+{
+	Iteration(nodes.onTriggerExit);
 }
 
 void ECS::Script::onClick()

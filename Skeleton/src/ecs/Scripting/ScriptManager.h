@@ -39,9 +39,13 @@ namespace Scripting {
 			Node* start;
 			Node* update;
 
-			Node* onCollision;
+			Node* onCollisionStay;
 			Node* onCollisionEnter;
 			Node* onCollisionExit;
+
+			Node* onTriggerStay;
+			Node* onTriggerEnter;
+			Node* onTriggerExit;
 
 			Node* onClick;
 			Node* onClickBegin;

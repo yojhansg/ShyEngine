@@ -216,7 +216,6 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	ScriptNodes scriptNodeInfo;
 
-
 	//Ver una forma de hacer esto en un bucle o algo asi para que sea mas comodo de hacer la verdad
 	if (file.contains("start")) {
 		int startIdx = file["start"].get<int>();
@@ -236,13 +235,11 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		scriptNodeInfo.onCollisionEnter = collisionNode;
 	}
 
-
 	if (file.contains("onCollisionStay")) {
 		int collisionIdx = file["onCollisionStay"].get<int>();
 		Node* collisionNode = allScriptNodes[collisionIdx];
-		scriptNodeInfo.onCollision = collisionNode;
+		scriptNodeInfo.onCollisionStay = collisionNode;
 	}
-
 
 	if (file.contains("onCollisionExit")) {
 		int collisionIdx = file["onCollisionExit"].get<int>();
@@ -250,13 +247,29 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		scriptNodeInfo.onCollisionExit = collisionNode;
 	}
 
+	if (file.contains("onTriggerEnter")) {
+		int triggerIdx = file["onTriggerEnter"].get<int>();
+		Node* triggerNode = allScriptNodes[triggerIdx];
+		scriptNodeInfo.onTriggerEnter = triggerNode;
+	}
+
+	if (file.contains("onTriggerStay")) {
+		int triggerIdx = file["onTriggerStay"].get<int>();
+		Node* triggerNode = allScriptNodes[triggerIdx];
+		scriptNodeInfo.onTriggerStay = triggerNode;
+	}
+
+	if (file.contains("onTriggerExit")) {
+		int triggerIdx = file["onTriggerExit"].get<int>();
+		Node* triggerNode = allScriptNodes[triggerIdx];
+		scriptNodeInfo.onTriggerExit = triggerNode;
+	}
 
 	if (file.contains("onClick")) {
 		int clickIdx = file["onClick"].get<int>();
 		Node* clickNode = allScriptNodes[clickIdx];
 		scriptNodeInfo.onClick = clickNode;
 	}
-
 
 	if (file.contains("onClickBegin")) {
 		int clickIdx = file["onClickBegin"].get<int>();
@@ -304,10 +317,11 @@ Scripting::ScriptManager::ScriptNodes::ScriptNodes()
 {
 	start = update = nullptr;
 
-	onCollisionEnter = onCollision = onCollisionExit = nullptr;
+	onCollisionEnter = onCollisionStay = onCollisionExit = nullptr;
 
 	onClick = onClickBegin = onClickHold = onDoubleClick = onRightClick = nullptr;
 
+	onTriggerStay = onTriggerEnter = onTriggerExit = nullptr;
 }
 
 void Scripting::ScriptManager::NewIteration(ECS::Script* script, Node* beginNode)

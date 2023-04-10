@@ -1,6 +1,7 @@
 {
     "nodeCount": 20,
     "update": 0,
+    "onTriggerEnter": 8,
 
 
     "functions" : [
@@ -27,6 +28,13 @@
             "function": "Transform_Rotate",
             "input": [
                 2, 7
+            ]
+        },
+        {
+            "index" : 8,
+            "function": "Print",
+            "input":[
+                2
             ]
         }
         
