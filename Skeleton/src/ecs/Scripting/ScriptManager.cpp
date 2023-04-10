@@ -216,84 +216,26 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 	ScriptNodes scriptNodeInfo;
 
-	//Ver una forma de hacer esto en un bucle o algo asi para que sea mas comodo de hacer la verdad
-	if (file.contains("start")) {
-		int startIdx = file["start"].get<int>();
-		Node* startNode = allScriptNodes[startIdx];
-		scriptNodeInfo.start = startNode;
-	}
+#define SetScriptNodeValue(x) \
+	if(file.contains(#x)){\
+	int nodeIdx = file[#x].get<int>();\
+	Node* node = allScriptNodes[nodeIdx];\
+	scriptNodeInfo.x = node;}
 
-	if (file.contains("update")) {
-		int updateIdx = file["update"].get<int>();
-		Node* updateNode = allScriptNodes[updateIdx];
-		scriptNodeInfo.update = updateNode;
-	}
-
-	if (file.contains("onCollisionEnter")) {
-		int collisionIdx = file["onCollisionEnter"].get<int>();
-		Node* collisionNode = allScriptNodes[collisionIdx];
-		scriptNodeInfo.onCollisionEnter = collisionNode;
-	}
-
-	if (file.contains("onCollisionStay")) {
-		int collisionIdx = file["onCollisionStay"].get<int>();
-		Node* collisionNode = allScriptNodes[collisionIdx];
-		scriptNodeInfo.onCollisionStay = collisionNode;
-	}
-
-	if (file.contains("onCollisionExit")) {
-		int collisionIdx = file["onCollisionExit"].get<int>();
-		Node* collisionNode = allScriptNodes[collisionIdx];
-		scriptNodeInfo.onCollisionExit = collisionNode;
-	}
-
-	if (file.contains("onTriggerEnter")) {
-		int triggerIdx = file["onTriggerEnter"].get<int>();
-		Node* triggerNode = allScriptNodes[triggerIdx];
-		scriptNodeInfo.onTriggerEnter = triggerNode;
-	}
-
-	if (file.contains("onTriggerStay")) {
-		int triggerIdx = file["onTriggerStay"].get<int>();
-		Node* triggerNode = allScriptNodes[triggerIdx];
-		scriptNodeInfo.onTriggerStay = triggerNode;
-	}
-
-	if (file.contains("onTriggerExit")) {
-		int triggerIdx = file["onTriggerExit"].get<int>();
-		Node* triggerNode = allScriptNodes[triggerIdx];
-		scriptNodeInfo.onTriggerExit = triggerNode;
-	}
-
-	if (file.contains("onClick")) {
-		int clickIdx = file["onClick"].get<int>();
-		Node* clickNode = allScriptNodes[clickIdx];
-		scriptNodeInfo.onClick = clickNode;
-	}
-
-	if (file.contains("onClickBegin")) {
-		int clickIdx = file["onClickBegin"].get<int>();
-		Node* clickNode = allScriptNodes[clickIdx];
-		scriptNodeInfo.onClickBegin = clickNode;
-	}
-
-	if (file.contains("onClickHold")) {
-		int clickIdx = file["onClickHold"].get<int>();
-		Node* clickNode = allScriptNodes[clickIdx];
-		scriptNodeInfo.onClickHold = clickNode;
-	}
-
-	if (file.contains("onDoubleClick")) {
-		int clickIdx = file["onDoubleClick"].get<int>();
-		Node* clickNode = allScriptNodes[clickIdx];
-		scriptNodeInfo.onDoubleClick = clickNode;
-	}
-
-	if (file.contains("onRightClick")) {
-		int clickIdx = file["onRightClick"].get<int>();
-		Node* clickNode = allScriptNodes[clickIdx];
-		scriptNodeInfo.onRightClick = clickNode;
-	}
+	SetScriptNodeValue(start);
+	SetScriptNodeValue(update);
+	SetScriptNodeValue(onCollisionEnter);
+	SetScriptNodeValue(onCollisionStay);
+	SetScriptNodeValue(onCollisionExit);
+	SetScriptNodeValue(onTriggerEnter);
+	SetScriptNodeValue(onTriggerStay);
+	SetScriptNodeValue(onTriggerExit);
+	SetScriptNodeValue(onClick);
+	SetScriptNodeValue(onClickBegin);
+	SetScriptNodeValue(onClickHold);
+	SetScriptNodeValue(onDoubleClick);
+	SetScriptNodeValue(onRightClick);
+	
 
 	fileStream.close();
 	manager->scripts[path] = scriptNodeInfo;
