@@ -88,14 +88,14 @@ publish:
 	std::string String_LeadingZeros(int number, int zeroCount);
 	//Attributes
 
-	void Set(cstring name, cVariable val);
-	Scripting::Variable Get(cstring name);
+	void Attribute_Set(cstring name, cVariable val);
+	Scripting::Variable Attribute_Get(cstring name);
 
-	void SetLocal(cstring name, cVariable val);
-	Scripting::Variable GetLocal(cstring name);
+	void Attribute_SetLocal(cstring name, cVariable val);
+	Scripting::Variable Attribute_GetLocal(cstring name);
 
-	void SetGlobal(cstring name, cVariable val);
-	Scripting::Variable GetGlobal(cstring name);
+	void Attribute_SetGlobal(cstring name, cVariable val);
+	Scripting::Variable Attribute_GetGlobal(cstring name);
 
 	//TODO: set local -> Poder acceder a otra entidad
 	//TODO: englobal en espacio de nombres Set

@@ -277,32 +277,32 @@ std::string Scripting::ScriptFunctionality::String_ToString(cVariable variable) 
 	}
 }
 
-void Scripting::ScriptFunctionality::Set(cstring name, cVariable val)
+void Scripting::ScriptFunctionality::Attribute_Set(cstring name, cVariable val)
 {
 	Scripting::ScriptManager::instance()->GetCurrentScript()->Set(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::Get(cstring name)
+Scripting::Variable Scripting::ScriptFunctionality::Attribute_Get(cstring name)
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->Get(name);
 }
 
-void Scripting::ScriptFunctionality::SetLocal(cstring name, cVariable val)
+void Scripting::ScriptFunctionality::Attribute_SetLocal(cstring name, cVariable val)
 {
 	Entity()->SetAttribute(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::GetLocal(cstring name)
+Scripting::Variable Scripting::ScriptFunctionality::Attribute_GetLocal(cstring name)
 {
 	return Entity()->GetAttribute(name);
 }
 
-void Scripting::ScriptFunctionality::SetGlobal(cstring name, cVariable val)
+void Scripting::ScriptFunctionality::Attribute_SetGlobal(cstring name, cVariable val)
 {
 	ScriptManager::instance()->SetGlobal(name, val);
 }
 
-Scripting::Variable Scripting::ScriptFunctionality::GetGlobal(cstring name)
+Scripting::Variable Scripting::ScriptFunctionality::Attribute_GetGlobal(cstring name)
 {
 	return ScriptManager::instance()->GetGlobal(name);
 }

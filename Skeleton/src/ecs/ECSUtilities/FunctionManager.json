@@ -568,6 +568,33 @@
             ],
             "return": "void"
         },
+        "SetWorldPosition": {
+            "input": [
+                {
+                    "name": "position",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
+        "SetWorldRotation": {
+            "input": [
+                {
+                    "name": "rotation",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "SetWorldScale": {
+            "input": [
+                {
+                    "name": "scale",
+                    "type": "Utilities::Vector2D"
+                }
+            ],
+            "return": "void"
+        },
         "Translate": {
             "input": [
                 {

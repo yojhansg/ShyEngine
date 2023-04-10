@@ -5,7 +5,7 @@
 #include "Function.h"
 #include "ConstNode.h"
 #include "Fork.h"
-
+#include "Script.h"
 #include <ConsoleManager.h>
 
 #include "json.hpp"
@@ -306,7 +306,8 @@ Scripting::Variable Scripting::ScriptManager::CallFunction(std::string const& fu
 
 	if (!manager->functionMap.contains(func))
 	{
-		Console::Output::PrintError("Node error", "The node <" + func + "> does not exist");
+
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Node error", "The node <" + func + "> does not exist");
 		return Scripting::Variable::Null();
 	}
 

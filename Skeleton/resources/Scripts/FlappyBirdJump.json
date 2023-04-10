@@ -34,7 +34,14 @@
             "index" : 8,
             "function": "Print",
             "input":[
-                2
+                9
+            ]
+        },
+        {
+            "index" : 9,
+            "function": "Attribute_GetGlobal",
+            "input":[
+                10
             ]
         }
         
@@ -66,6 +73,11 @@
             "index": 7,
             "type": "float",
             "value": 1
+        },
+        {
+            "index": 10,
+            "type": "string",
+            "value": "Score"
         }
 
     ]

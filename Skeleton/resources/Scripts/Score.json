@@ -1,0 +1,29 @@
+{
+    "nodeCount": 20,
+    "start": 0,
+
+
+    "functions" : [
+
+        {
+            "index" : 0,
+            "function": "Attribute_SetGlobal",
+            "input" : [
+                1, 2
+            ]
+        },
+        {
+            "index" : 2,
+            "function": "Entity"
+        }
+    ],
+
+    "consts": [
+
+        {
+            "index": 1,
+            "type": "string",
+            "value": "Score"
+        }
+    ]
+ }

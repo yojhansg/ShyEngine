@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Apr 10 01:49:22 2023
+//Creation time: Mon Apr 10 03:08:34 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -121,11 +121,14 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Transform_SetLocalPosition",Transform_SetLocalPosition);
 	map.emplace("Transform_SetLocalPositionX",Transform_SetLocalPositionX);
 	map.emplace("Transform_SetLocalPositionY",Transform_SetLocalPositionY);
+	map.emplace("Transform_SetWorldPosition",Transform_SetWorldPosition);
 	map.emplace("Transform_SetScale",Transform_SetScale);
 	map.emplace("Transform_SetScaleX",Transform_SetScaleX);
 	map.emplace("Transform_SetScaleY",Transform_SetScaleY);
+	map.emplace("Transform_SetWorldScale",Transform_SetWorldScale);
 	map.emplace("Transform_GetLocalRotation",Transform_GetLocalRotation);
 	map.emplace("Transform_SetLocalRotation",Transform_SetLocalRotation);
+	map.emplace("Transform_SetWorldRotation",Transform_SetWorldRotation);
 	map.emplace("Transform_GetWorldPosition",Transform_GetWorldPosition);
 	map.emplace("Transform_GetWorldScale",Transform_GetWorldScale);
 	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
@@ -197,12 +200,12 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("String_Find",ScriptFunctionality_String_Find);
 	map.emplace("String_ToString",ScriptFunctionality_String_ToString);
 	map.emplace("String_LeadingZeros",ScriptFunctionality_String_LeadingZeros);
-	map.emplace("Set",ScriptFunctionality_Set);
-	map.emplace("Get",ScriptFunctionality_Get);
-	map.emplace("SetLocal",ScriptFunctionality_SetLocal);
-	map.emplace("GetLocal",ScriptFunctionality_GetLocal);
-	map.emplace("SetGlobal",ScriptFunctionality_SetGlobal);
-	map.emplace("GetGlobal",ScriptFunctionality_GetGlobal);
+	map.emplace("Attribute_Set",ScriptFunctionality_Attribute_Set);
+	map.emplace("Attribute_Get",ScriptFunctionality_Attribute_Get);
+	map.emplace("Attribute_SetLocal",ScriptFunctionality_Attribute_SetLocal);
+	map.emplace("Attribute_GetLocal",ScriptFunctionality_Attribute_GetLocal);
+	map.emplace("Attribute_SetGlobal",ScriptFunctionality_Attribute_SetGlobal);
+	map.emplace("Attribute_GetGlobal",ScriptFunctionality_Attribute_GetGlobal);
 	map.emplace("Time_Now",ScriptFunctionality_Time_Now);
 	map.emplace("Time_WeekDay",ScriptFunctionality_Time_WeekDay);
 	map.emplace("Time_ShortWeekDay",ScriptFunctionality_Time_ShortWeekDay);
@@ -1587,6 +1590,26 @@ Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>
 	self->SetLocalPositionY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable Transform_SetWorldPosition(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldPosition", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	self->SetWorldPosition(vec[1].vector);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -1647,6 +1670,26 @@ Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& v
 	self->SetScaleY(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable Transform_SetWorldScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldScale", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	self->SetWorldScale(vec[1].vector);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -1680,6 +1723,26 @@ Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>c
 		return Scripting::Variable::Null();
 	}
 	self->SetLocalRotation(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_EntityName({}).str, ScriptFunctionality_Script({}).str, "Transform_SetWorldRotation", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	self->SetWorldRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec){
@@ -2142,34 +2205,34 @@ Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scriptin
 	std::string ret = manager->String_LeadingZeros(vec[0].value.Float, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Set(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Set(vec[0].str, vec[1]);
+	manager->Attribute_Set(vec[0].str, vec[1]);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_Get(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_Get(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Scripting::Variable ret = manager->Get(vec[0].str);
+	Scripting::Variable ret = manager->Attribute_Get(vec[0].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_SetLocal(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_SetLocal(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->SetLocal(vec[0].str, vec[1]);
+	manager->Attribute_SetLocal(vec[0].str, vec[1]);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_GetLocal(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_GetLocal(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Scripting::Variable ret = manager->GetLocal(vec[0].str);
+	Scripting::Variable ret = manager->Attribute_GetLocal(vec[0].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_SetGlobal(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_SetGlobal(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->SetGlobal(vec[0].str, vec[1]);
+	manager->Attribute_SetGlobal(vec[0].str, vec[1]);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_GetGlobal(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Attribute_GetGlobal(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Scripting::Variable ret = manager->GetGlobal(vec[0].str);
+	Scripting::Variable ret = manager->Attribute_GetGlobal(vec[0].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Time_Now(std::vector<Scripting::Variable>const& vec){

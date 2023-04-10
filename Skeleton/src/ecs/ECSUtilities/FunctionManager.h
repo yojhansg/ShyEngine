@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Apr 10 01:49:22 2023
+//Creation time : Mon Apr 10 03:08:34 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -94,11 +94,14 @@ Scripting::Variable Transform_GetLocalScale(std::vector<Scripting::Variable>cons
 Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPositionX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPositionY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScaleX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetScaleY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetWorldScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetWorldScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
@@ -170,12 +173,12 @@ Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Set(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Get(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_SetLocal(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_GetLocal(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_SetGlobal(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_GetGlobal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_Get(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_SetLocal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_GetLocal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_SetGlobal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Attribute_GetGlobal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_Now(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_WeekDay(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Time_ShortWeekDay(std::vector<Scripting::Variable>const& vec);
