@@ -17,7 +17,7 @@
         },
         {
             "index": 2,
-            "function": "Time_Seconds",
+            "function": "RealTime_Seconds",
             "input": [
                 3
             ]

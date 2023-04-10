@@ -45,7 +45,7 @@
         ,{
             "index": 12,
             "comment": "@Open a link",
-            "function": "Open_URL",
+            "function": "OpenURL",
             "input": [
                 13
             ]

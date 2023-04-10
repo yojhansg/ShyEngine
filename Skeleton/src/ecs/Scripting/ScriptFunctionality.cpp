@@ -14,6 +14,8 @@
 #include <RendererManager.h>
 #include <SceneManager.h>
 
+#include <random>
+
 #define DELTA 0.001f
 
 
@@ -25,6 +27,7 @@ Scripting::ScriptFunctionality::~ScriptFunctionality()
 
 Scripting::ScriptFunctionality::ScriptFunctionality()
 {
+	std::srand(std::time(NULL));
 }
 
 
@@ -52,7 +55,7 @@ void Scripting::ScriptFunctionality::GlobalEvent(cstring name) {
 	ECS::SceneManager::instance()->getCurrentScene()->Event(name);
 }
 
-std::string Scripting::ScriptFunctionality::Script()
+std::string Scripting::ScriptFunctionality::Graph()
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 }
@@ -346,14 +349,14 @@ Scripting::Variable Scripting::ScriptFunctionality::Attribute_GetGlobal(cstring 
 	return ScriptManager::instance()->GetGlobal(name);
 }
 
-int Scripting::ScriptFunctionality::Time_Now()
+int Scripting::ScriptFunctionality::RealTime_Now()
 {
 	return std::time(0) - TIME_DIFF;
 }
 
-std::string Scripting::ScriptFunctionality::Time_WeekDay(int time)
+std::string Scripting::ScriptFunctionality::RealTime_WeekDay(int time)
 {
-	switch (Time_DayOfWeekIndex(time) - 1) {
+	switch (RealTime_DayOfWeekIndex(time) - 1) {
 
 	case 0:
 		return "Sunday";
@@ -375,9 +378,9 @@ std::string Scripting::ScriptFunctionality::Time_WeekDay(int time)
 }
 
 
-std::string Scripting::ScriptFunctionality::Time_ShortWeekDay(int time)
+std::string Scripting::ScriptFunctionality::RealTime_ShortWeekDay(int time)
 {
-	switch (Time_DayOfWeekIndex(time) - 1) {
+	switch (RealTime_DayOfWeekIndex(time) - 1) {
 
 	case 0:
 		return "Sun";
@@ -399,9 +402,9 @@ std::string Scripting::ScriptFunctionality::Time_ShortWeekDay(int time)
 }
 
 
-std::string Scripting::ScriptFunctionality::Time_Month(int time)
+std::string Scripting::ScriptFunctionality::RealTime_Month(int time)
 {
-	switch (Time_MonthIndex(time) - 1) {
+	switch (RealTime_MonthIndex(time) - 1) {
 
 	case 0:
 		return "January";
@@ -433,9 +436,9 @@ std::string Scripting::ScriptFunctionality::Time_Month(int time)
 }
 
 
-std::string Scripting::ScriptFunctionality::Time_ShortMonth(int time)
+std::string Scripting::ScriptFunctionality::RealTime_ShortMonth(int time)
 {
-	switch (Time_MonthIndex(time) - 1) {
+	switch (RealTime_MonthIndex(time) - 1) {
 
 	case 0:
 		return "Jan";
@@ -467,7 +470,7 @@ std::string Scripting::ScriptFunctionality::Time_ShortMonth(int time)
 }
 
 
-int Scripting::ScriptFunctionality::Time_DayOfWeekIndex(int time)
+int Scripting::ScriptFunctionality::RealTime_DayOfWeekIndex(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -476,7 +479,7 @@ int Scripting::ScriptFunctionality::Time_DayOfWeekIndex(int time)
 	return now.tm_wday + 1;
 }
 
-int Scripting::ScriptFunctionality::Time_MonthIndex(int time)
+int Scripting::ScriptFunctionality::RealTime_MonthIndex(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -486,7 +489,7 @@ int Scripting::ScriptFunctionality::Time_MonthIndex(int time)
 }
 
 
-int Scripting::ScriptFunctionality::Time_MonthDay(int time)
+int Scripting::ScriptFunctionality::RealTime_MonthDay(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -496,7 +499,7 @@ int Scripting::ScriptFunctionality::Time_MonthDay(int time)
 }
 
 
-int Scripting::ScriptFunctionality::Time_Year(int time)
+int Scripting::ScriptFunctionality::RealTime_Year(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -505,7 +508,7 @@ int Scripting::ScriptFunctionality::Time_Year(int time)
 	return now.tm_year + 1900;
 }
 
-int Scripting::ScriptFunctionality::Time_Hours(int time)
+int Scripting::ScriptFunctionality::RealTime_Hours(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -515,7 +518,7 @@ int Scripting::ScriptFunctionality::Time_Hours(int time)
 }
 
 
-int Scripting::ScriptFunctionality::Time_Minutes(int time)
+int Scripting::ScriptFunctionality::RealTime_Minutes(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -524,7 +527,7 @@ int Scripting::ScriptFunctionality::Time_Minutes(int time)
 	return now.tm_min;
 }
 
-int Scripting::ScriptFunctionality::Time_Seconds(int time)
+int Scripting::ScriptFunctionality::RealTime_Seconds(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -533,7 +536,7 @@ int Scripting::ScriptFunctionality::Time_Seconds(int time)
 	return now.tm_sec;
 }
 
-std::string Scripting::ScriptFunctionality::Time_TimeHHMM(int time)
+std::string Scripting::ScriptFunctionality::RealTime_HourTime(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -545,7 +548,7 @@ std::string Scripting::ScriptFunctionality::Time_TimeHHMM(int time)
 }
 
 
-std::string Scripting::ScriptFunctionality::Time_TimeHHMMSS(int time)
+std::string Scripting::ScriptFunctionality::RealTime_PreciseHourTime(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -557,29 +560,29 @@ std::string Scripting::ScriptFunctionality::Time_TimeHHMMSS(int time)
 		String_LeadingZeros(now.tm_sec, 2);
 }
 
-std::string Scripting::ScriptFunctionality::Time_TimeStamp(int time)
+std::string Scripting::ScriptFunctionality::RealTime_TimeStamp(int time)
 {
 	//Monday
 	//Wed Apr  5 01:50 : 49 2023
 	return std::format("{} {} {} {} {} ",
-		Time_ShortWeekDay(time),
-		Time_ShortMonth(time),
-		Time_MonthDay(time),
-		Time_TimeHHMM(time),
-		Time_Year(time)
+		RealTime_ShortWeekDay(time),
+		RealTime_ShortMonth(time),
+		RealTime_MonthDay(time),
+		RealTime_HourTime(time),
+		RealTime_Year(time)
 		);
 }
 
 
 
-std::string Scripting::ScriptFunctionality::Time_DDMMYY(int time)
+std::string Scripting::ScriptFunctionality::RealTime_Date(int time)
 {
 	//Monday
 	//Wed Apr  5 01:50 : 49 2023
 	return std::format("{}/{}/{} ",
-		Time_MonthDay(time),
-		Time_MonthIndex(time),
-		Time_Year(time)
+		RealTime_MonthDay(time),
+		RealTime_MonthIndex(time),
+		RealTime_Year(time)
 	);
 }
 
@@ -589,7 +592,7 @@ int Scripting::ScriptFunctionality::GetRealTime(int time) {
 }
 
 
-std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
+std::string Scripting::ScriptFunctionality::RealTime_Since(int time, int now)
 {
 	int dif = std::abs(now - time);
 
@@ -612,14 +615,14 @@ std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
 	}
 
 	if (dif < 60 * 60 * 24 * 7) {
-		return Time_WeekDay(time);
+		return RealTime_WeekDay(time);
 	}
 
-	if (Time_Year(time) != Time_Year(now)) {
-		return Time_DDMMYY(time);
+	if (RealTime_Year(time) != RealTime_Year(now)) {
+		return RealTime_Date(time);
 	}
 
-	return std::format("{}-{}", Time_MonthDay(time), Time_ShortMonth(time));
+	return std::format("{}-{}", RealTime_MonthDay(time), RealTime_ShortMonth(time));
 }
 
 
@@ -646,11 +649,33 @@ void Scripting::ScriptFunctionality::Camera_SetScale(float newScale)
 }
 
 
+float Scripting::ScriptFunctionality::Random_UnitValue()
+{
+	return (float)std::rand() / RAND_MAX;
+}
+
+
+float Scripting::ScriptFunctionality::Random_Between(float a, float b)
+{
+	return a + Random_UnitValue() * (b - a);
+}
+
+Utilities::Vector2D Scripting::ScriptFunctionality::Random_UnitVector()
+{
+	return Utilities::Vector2D(Random_UnitValue(), Random_UnitValue()).normalize();
+}
+
+Utilities::Vector2D Scripting::ScriptFunctionality::Random_ScaledVector(float val)
+{
+	return Random_UnitVector() * val;
+}
+
+
+
 #include <Windows.h>
 #include <shellapi.h>
 
-
-void Scripting::ScriptFunctionality::Open_URL(cstring url) {
+void Scripting::ScriptFunctionality::OpenURL(cstring url) {
 
 	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }

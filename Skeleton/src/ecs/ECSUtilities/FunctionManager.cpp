@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Apr 10 18:01:04 2023
+//Creation time: Mon Apr 10 22:59:07 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -162,8 +162,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Entity_Name",ScriptFunctionality_Entity_Name);
 	map.emplace("Entity_CurrentName",ScriptFunctionality_Entity_CurrentName);
 	map.emplace("Entity_Event",ScriptFunctionality_Entity_Event);
-	map.emplace("Script",ScriptFunctionality_Script);
 	map.emplace("GlobalEvent",ScriptFunctionality_GlobalEvent);
+	map.emplace("Graph",ScriptFunctionality_Graph);
 	map.emplace("Math_Add",ScriptFunctionality_Math_Add);
 	map.emplace("Math_Subtract",ScriptFunctionality_Math_Subtract);
 	map.emplace("Math_Multiply",ScriptFunctionality_Math_Multiply);
@@ -214,33 +214,39 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Attribute_GetLocal",ScriptFunctionality_Attribute_GetLocal);
 	map.emplace("Attribute_SetGlobal",ScriptFunctionality_Attribute_SetGlobal);
 	map.emplace("Attribute_GetGlobal",ScriptFunctionality_Attribute_GetGlobal);
-	map.emplace("Time_Now",ScriptFunctionality_Time_Now);
-	map.emplace("Time_WeekDay",ScriptFunctionality_Time_WeekDay);
-	map.emplace("Time_ShortWeekDay",ScriptFunctionality_Time_ShortWeekDay);
-	map.emplace("Time_Month",ScriptFunctionality_Time_Month);
-	map.emplace("Time_ShortMonth",ScriptFunctionality_Time_ShortMonth);
-	map.emplace("Time_DayOfWeekIndex",ScriptFunctionality_Time_DayOfWeekIndex);
-	map.emplace("Time_MonthIndex",ScriptFunctionality_Time_MonthIndex);
-	map.emplace("Time_MonthDay",ScriptFunctionality_Time_MonthDay);
-	map.emplace("Time_Year",ScriptFunctionality_Time_Year);
-	map.emplace("Time_Hours",ScriptFunctionality_Time_Hours);
-	map.emplace("Time_Minutes",ScriptFunctionality_Time_Minutes);
-	map.emplace("Time_Seconds",ScriptFunctionality_Time_Seconds);
-	map.emplace("Time_Since",ScriptFunctionality_Time_Since);
-	map.emplace("Time_TimeHHMM",ScriptFunctionality_Time_TimeHHMM);
-	map.emplace("Time_TimeHHMMSS",ScriptFunctionality_Time_TimeHHMMSS);
-	map.emplace("Time_TimeStamp",ScriptFunctionality_Time_TimeStamp);
-	map.emplace("Time_DDMMYY",ScriptFunctionality_Time_DDMMYY);
+	map.emplace("RealTime_Now",ScriptFunctionality_RealTime_Now);
+	map.emplace("RealTime_WeekDay",ScriptFunctionality_RealTime_WeekDay);
+	map.emplace("RealTime_ShortWeekDay",ScriptFunctionality_RealTime_ShortWeekDay);
+	map.emplace("RealTime_Month",ScriptFunctionality_RealTime_Month);
+	map.emplace("RealTime_ShortMonth",ScriptFunctionality_RealTime_ShortMonth);
+	map.emplace("RealTime_DayOfWeekIndex",ScriptFunctionality_RealTime_DayOfWeekIndex);
+	map.emplace("RealTime_MonthIndex",ScriptFunctionality_RealTime_MonthIndex);
+	map.emplace("RealTime_MonthDay",ScriptFunctionality_RealTime_MonthDay);
+	map.emplace("RealTime_Year",ScriptFunctionality_RealTime_Year);
+	map.emplace("RealTime_Hours",ScriptFunctionality_RealTime_Hours);
+	map.emplace("RealTime_Minutes",ScriptFunctionality_RealTime_Minutes);
+	map.emplace("RealTime_Seconds",ScriptFunctionality_RealTime_Seconds);
+	map.emplace("RealTime_Since",ScriptFunctionality_RealTime_Since);
+	map.emplace("RealTime_HourTime",ScriptFunctionality_RealTime_HourTime);
+	map.emplace("RealTime_PreciseHourTime",ScriptFunctionality_RealTime_PreciseHourTime);
+	map.emplace("RealTime_TimeStamp",ScriptFunctionality_RealTime_TimeStamp);
+	map.emplace("RealTime_Date",ScriptFunctionality_RealTime_Date);
 	map.emplace("Camera_GetPosition",ScriptFunctionality_Camera_GetPosition);
 	map.emplace("Camera_SetPosition",ScriptFunctionality_Camera_SetPosition);
 	map.emplace("Camera_GetScale",ScriptFunctionality_Camera_GetScale);
 	map.emplace("Camera_SetScale",ScriptFunctionality_Camera_SetScale);
-	map.emplace("Open_URL",ScriptFunctionality_Open_URL);
+	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
+	map.emplace("Random_UnitValue",ScriptFunctionality_Random_UnitValue);
+	map.emplace("Random_Between",ScriptFunctionality_Random_Between);
+	map.emplace("Random_UnitVector",ScriptFunctionality_Random_UnitVector);
+	map.emplace("Random_ScaledVector",ScriptFunctionality_Random_ScaledVector);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
 	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
 	map.emplace("Time_GetFrameRate",Time_GetFrameRate);
 	map.emplace("Time_GetPhysicsDeltaTime",Time_GetPhysicsDeltaTime);
+	map.emplace("Time_ScaleWithDeltaTime",Time_ScaleWithDeltaTime);
+	map.emplace("Time_ScaleWithPhysicsDeltaTime",Time_ScaleWithPhysicsDeltaTime);
 
 };
 Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variable>const& vec){
@@ -2023,15 +2029,15 @@ Scripting::Variable ScriptFunctionality_Entity_Event(std::vector<Scripting::Vari
 	manager->Entity_Event(vec[0].value.entity, vec[1].str);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_Script(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Script();
-	return ret;
-}
 Scripting::Variable ScriptFunctionality_GlobalEvent(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->GlobalEvent(vec[0].str);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Graph(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	std::string ret = manager->Graph();
+	return ret;
 }
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
@@ -2283,89 +2289,89 @@ Scripting::Variable ScriptFunctionality_Attribute_GetGlobal(std::vector<Scriptin
 	Scripting::Variable ret = manager->Attribute_GetGlobal(vec[0].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Now(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Now(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_Now();
+	int ret = manager->RealTime_Now();
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_WeekDay(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_WeekDay(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_WeekDay(vec[0].value.Float);
+	std::string ret = manager->RealTime_WeekDay(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_ShortWeekDay(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_ShortWeekDay(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_ShortWeekDay(vec[0].value.Float);
+	std::string ret = manager->RealTime_ShortWeekDay(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Month(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Month(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_Month(vec[0].value.Float);
+	std::string ret = manager->RealTime_Month(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_ShortMonth(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_ShortMonth(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_ShortMonth(vec[0].value.Float);
+	std::string ret = manager->RealTime_ShortMonth(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_DayOfWeekIndex(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_DayOfWeekIndex(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_DayOfWeekIndex(vec[0].value.Float);
+	int ret = manager->RealTime_DayOfWeekIndex(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_MonthIndex(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_MonthIndex(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_MonthIndex(vec[0].value.Float);
+	int ret = manager->RealTime_MonthIndex(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_MonthDay(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_MonthDay(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_MonthDay(vec[0].value.Float);
+	int ret = manager->RealTime_MonthDay(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Year(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Year(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_Year(vec[0].value.Float);
+	int ret = manager->RealTime_Year(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Hours(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Hours(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_Hours(vec[0].value.Float);
+	int ret = manager->RealTime_Hours(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Minutes(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Minutes(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_Minutes(vec[0].value.Float);
+	int ret = manager->RealTime_Minutes(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Seconds(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Seconds(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->Time_Seconds(vec[0].value.Float);
+	int ret = manager->RealTime_Seconds(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_Since(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Since(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_Since(vec[0].value.Float, vec[1].value.Float);
+	std::string ret = manager->RealTime_Since(vec[0].value.Float, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_TimeHHMM(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_HourTime(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_TimeHHMM(vec[0].value.Float);
+	std::string ret = manager->RealTime_HourTime(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_TimeHHMMSS(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_PreciseHourTime(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_TimeHHMMSS(vec[0].value.Float);
+	std::string ret = manager->RealTime_PreciseHourTime(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_TimeStamp(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_TimeStamp(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_TimeStamp(vec[0].value.Float);
+	std::string ret = manager->RealTime_TimeStamp(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Time_DDMMYY(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_RealTime_Date(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->Time_DDMMYY(vec[0].value.Float);
+	std::string ret = manager->RealTime_Date(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Camera_GetPosition(std::vector<Scripting::Variable>const& vec){
@@ -2388,10 +2394,30 @@ Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::V
 	manager->Camera_SetScale(vec[0].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_Open_URL(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Open_URL(vec[0].str);
+	manager->OpenURL(vec[0].str);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Random_UnitValue();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_Between(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Random_Between(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Utilities::Vector2D ret = manager->Random_UnitVector();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Utilities::Vector2D ret = manager->Random_ScaledVector(vec[0].value.Float);
+	return ret;
 }
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec){
 	Time* manager = Time::instance();
@@ -2416,5 +2442,15 @@ Scripting::Variable Time_GetFrameRate(std::vector<Scripting::Variable>const& vec
 Scripting::Variable Time_GetPhysicsDeltaTime(std::vector<Scripting::Variable>const& vec){
 	Time* manager = Time::instance();
 	float ret = manager->GetPhysicsDeltaTime();
+	return ret;
+}
+Scripting::Variable Time_ScaleWithDeltaTime(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->ScaleWithDeltaTime(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable Time_ScaleWithPhysicsDeltaTime(std::vector<Scripting::Variable>const& vec){
+	Time* manager = Time::instance();
+	float ret = manager->ScaleWithPhysicsDeltaTime(vec[0].value.Float);
 	return ret;
 }

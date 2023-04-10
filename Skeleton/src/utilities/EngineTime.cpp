@@ -56,4 +56,14 @@ namespace Utilities {
 		return stream.str();
 	}
 
+	float Time::ScaleWithDeltaTime(float val)
+	{
+		return val * GetDeltaTime();
+	}
+
+	float Time::ScaleWithPhysicsDeltaTime(float val)
+	{
+		return val * GetPhysicsDeltaTime();
+	}
+
 }

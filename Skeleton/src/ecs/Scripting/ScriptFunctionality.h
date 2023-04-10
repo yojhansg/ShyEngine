@@ -24,7 +24,6 @@ public:
 
 	~ScriptFunctionality();
 
-
 publish:
 
 	void Print(cVariable val);
@@ -37,10 +36,9 @@ publish:
 
 	//TODO: no me convence el nombre
 	void Entity_Event(ECS::Entity* ent, cstring name);
-
-	std::string Script();
 	void GlobalEvent(cstring name);
 
+	std::string Graph();
 
 
 	//TODO: plus one, minue one
@@ -56,7 +54,6 @@ publish:
 	float Math_PlusOne(float a);
 	float Math_MinusOne(float a);
 
-
 	//Logic
 	//TODO: cambiar equals para que funciones con una variable
 	bool Logic_Equals(float a, float b);
@@ -69,7 +66,6 @@ publish:
 	bool Logic_Or(bool a, bool b);
 	bool Logic_Negate(bool b);
 
-	//Vector2D
 	//TODO: constructoras predeterminadas vector2d: left, up, one, zero...
 	Vector2D Vector2D_Create(float x, float y);
 	float Vector2D_Magnitude(cVector2D vec);
@@ -86,7 +82,7 @@ publish:
 	Vector2D Vector2D_Multiply(cVector2D a, float b);
 
 
-	//String
+	//Todo: cambiar el nombre de string a text
 	bool String_Equals(cstring a, cstring b);
 	std::string String_Concatenate(cstring a, cstring b);
 	std::string String_Substring(cstring a, int begin, int end);
@@ -112,35 +108,30 @@ publish:
 
 	//TODO: set local -> Poder acceder a otra entidad
 	//TODO: englobal en espacio de nombres Set
-
-	//TODO: min, max, random, etc...
 	
-	
-	//TODO: llevar esto a la clase time
 	//Current time
-	int Time_Now();
-	std::string Time_WeekDay(int time);
-	std::string Time_ShortWeekDay(int time);
+	int RealTime_Now();
+	std::string RealTime_WeekDay(int time);
+	std::string RealTime_ShortWeekDay(int time);
 
-	std::string Time_Month(int time);
-	std::string Time_ShortMonth(int time);
+	std::string RealTime_Month(int time);
+	std::string RealTime_ShortMonth(int time);
 
-	int Time_DayOfWeekIndex(int time);
-	int Time_MonthIndex(int time);
+	int RealTime_DayOfWeekIndex(int time);
+	int RealTime_MonthIndex(int time);
 
-	int Time_MonthDay(int time);
-	int Time_Year(int time);
+	int RealTime_MonthDay(int time);
+	int RealTime_Year(int time);
 
-	int Time_Hours(int time);
-	int Time_Minutes(int time);
-	int Time_Seconds(int time);
+	int RealTime_Hours(int time);
+	int RealTime_Minutes(int time);
+	int RealTime_Seconds(int time);
 
-	//TODO: string -> time since
-	std::string Time_Since(int time, int now);
-	std::string Time_TimeHHMM(int time);
-	std::string Time_TimeHHMMSS(int time);
-	std::string Time_TimeStamp(int time);
-	std::string Time_DDMMYY(int time);
+	std::string RealTime_Since(int time, int now);
+	std::string RealTime_HourTime(int time);
+	std::string RealTime_PreciseHourTime(int time);
+	std::string RealTime_TimeStamp(int time);
+	std::string RealTime_Date(int time);
 
 	Utilities::Vector2D Camera_GetPosition();
 	void Camera_SetPosition(cVector2D newPosition);
@@ -148,9 +139,14 @@ publish:
 	void Camera_SetScale(float newScale);
 
 	//Misc
-	void Open_URL(cstring url);
+	void OpenURL(cstring url);
 
+	//TODO: Collections
 
+	float Random_UnitValue();
+	float Random_Between(float a, float b);
+	Utilities::Vector2D Random_UnitVector();
+	Utilities::Vector2D Random_ScaledVector(float val);
 
 private:
 

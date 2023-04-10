@@ -17,7 +17,8 @@ namespace Utilities {
 		float GetDeltaTime();
 		float GetFrameRate();
 		float GetPhysicsDeltaTime();
-
+		float ScaleWithDeltaTime(float val);
+		float ScaleWithPhysicsDeltaTime(float val);
 	public:
 
 		float calculateFrameRate();
