@@ -44,12 +44,18 @@ namespace ECS {
 		void SetLocalPositionX(float x);
 		void SetLocalPositionY(float y);
 
+		void SetWorldPosition(Utilities::Vector2D position);
+
 		void SetScale(Utilities::Vector2D scale);
 		void SetScaleX(float x);
 		void SetScaleY(float y);
 
+		void SetWorldScale(Utilities::Vector2D scale);
+
 		float GetLocalRotation();
+
 		void SetLocalRotation(float rotation);
+		void SetWorldRotation(float rotation);
 
 
 		Utilities::Vector2D GetWorldPosition();

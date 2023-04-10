@@ -30,7 +30,7 @@ namespace ECS {
     }
 
     void Scene::start() {
-        for (auto e : entities) {
+            for (auto e : entities) {
             e->start();
         }
     }

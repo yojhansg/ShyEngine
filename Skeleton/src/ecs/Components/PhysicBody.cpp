@@ -34,10 +34,6 @@ namespace ECS {
 		fixture = nullptr;
 		fixtureDef = nullptr;
 
-		position = nullptr;
-		rotation = nullptr;
-		scale = nullptr;
-
 		layerName = "Default";
 
 		onCollisonStay = false;
@@ -45,6 +41,7 @@ namespace ECS {
 
 		b = nullptr;
 
+		trigger = false;
 	}
 
 	PhysicBody::~PhysicBody() {
@@ -63,23 +60,23 @@ namespace ECS {
 
 		world = Physics::PhysicsManager::instance()->getWorld();
 
-		position = transform->getPositionPointer();
-		rotation = transform->getRotationPointer();
-		scale = transform->getScalePointer();
-
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
-
 	}
 
 	void PhysicBody::start() {
 
+		auto position = transform->GetWorldPosition();
+		auto rotation = transform->GetWorldRotation();
+		auto scale = transform->GetWorldScale();
+
+
 		// Radians
-		float radians = (b2_pi / 180) * (*rotation);
+		float radians = (b2_pi / 180) * (rotation);
 
 		Vector2D v = Vector2D(offSet.getX() * std::cos(radians) - offSet.getY() * std::sin(radians), offSet.getX() * std::sin(radians) + offSet.getY() * std::cos(radians));
 
-		b2Vec2 p = { position->getX() / screenToWorldFactor + v.getX() * scale->getX(), position->getY() / screenToWorldFactor + v.getY() * scale->getY() };
+		b2Vec2 p = { position.getX() / screenToWorldFactor + v.getX() * scale.getX(), position.getY() / screenToWorldFactor + v.getY() * scale.getY() };
 
 		// Position + rotation
 		body->SetTransform(p, radians);
@@ -87,7 +84,7 @@ namespace ECS {
 		scaleShape();
 
 		lastPositionSync = position;
-		lastRotationSync = *rotation;
+		lastRotationSync = rotation;
 		lastScaleInfo = scale;
 
 		// Collision Filtering
@@ -100,9 +97,14 @@ namespace ECS {
 
 		setBodyType(bodyType);
 		setBounciness(bounciness);
+		setTrigger(trigger);
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
+
+		auto position = transform->GetWorldPosition();
+		auto rotation = transform->GetWorldRotation();
+		auto scale = transform->GetWorldScale();
 
 		if (onCollisonStay)
 			getEntity()->onCollisionStay(b);
@@ -112,7 +114,7 @@ namespace ECS {
 		if (bodyType != (int) BODY_TYPE::STATIC) {
 
 			// Position
-			Vector2D trPosOffSet = *position - lastPositionSync;
+			Vector2D trPosOffSet = position - lastPositionSync;
 
 			Vector2D bodyPosOffSet = { body->GetPosition().x * screenToWorldFactor - lastPositionSync.getX(), body->GetPosition().y * screenToWorldFactor - lastPositionSync.getY() };
 
@@ -121,7 +123,7 @@ namespace ECS {
 			lastPositionSync = newPos;
 
 			// Rotation
-			float trRotOffSet = *rotation - lastRotationSync;
+			float trRotOffSet = rotation - lastRotationSync;
 
 			float bodyRotOffSet = body->GetAngle() * (180 / b2_pi) - lastRotationSync;
 
@@ -139,8 +141,8 @@ namespace ECS {
 			body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor, newPos.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
 
 			// Transform
-			transform->SetLocalPosition(newPos);
-			transform->SetLocalRotation(newRotation);
+			transform->SetWorldPosition(newPos);
+			transform->SetWorldRotation(newRotation);
 
 		}
 

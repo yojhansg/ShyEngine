@@ -3,7 +3,7 @@
 #include "box2d/b2_edge_shape.h"
 #include "Entity.h"
 #include "Image.h"
-
+#include "Transform.h"
 
 namespace ECS {
 
@@ -65,12 +65,13 @@ namespace ECS {
 	}
 
 	void EdgeBody::scaleShape() {
+		auto scale = transform->GetWorldScale();
 
-		shape->m_vertex1.x = vertex1.x * scale->getX();
-		shape->m_vertex1.y = vertex1.y * scale->getY();
-
-		shape->m_vertex2.x = vertex2.x * scale->getX();
-		shape->m_vertex2.y = vertex2.y * scale->getY();
+		shape->m_vertex1.x = vertex1.x * scale.getX();
+		shape->m_vertex1.y = vertex1.y * scale.getY();
+											  
+		shape->m_vertex2.x = vertex2.x * scale.getX();
+		shape->m_vertex2.y = vertex2.y * scale.getY();
 	}
 
 }

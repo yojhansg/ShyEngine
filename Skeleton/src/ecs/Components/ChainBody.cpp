@@ -3,6 +3,7 @@
 #include "box2d/b2_chain_shape.h"
 #include "Entity.h"
 #include "Image.h"
+#include "Transform.h"
 
 namespace ECS {
 
@@ -88,10 +89,12 @@ namespace ECS {
 	// TO DO
 	void ChainBody::scaleShape() {
 
+		auto scale = transform->GetWorldScale();
+
 		for (int i = 0; i < m_vertices.size(); i++) {
 
-			shape->m_vertices[i].x = m_vertices[i].x * scale->getX();
-			shape->m_vertices[i].y = m_vertices[i].y * scale->getY();
+			shape->m_vertices[i].x = m_vertices[i].x * scale.getX();
+			shape->m_vertices[i].y = m_vertices[i].y * scale.getY();
 		}
 
 	}

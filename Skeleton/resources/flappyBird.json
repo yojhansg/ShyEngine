@@ -7,7 +7,7 @@
     "windowIcon": "",
     "windowSize": "800, 1000",
     "gravity": "0, 9.81f",
-    "splashScreen": false,
+    "splashScreen": true,
     "vsync": true,
     "fullScreen": false,
     "debugPhysics": true

@@ -5,6 +5,7 @@
 #include "Components/Overlay.h"
 #include "Components/OverlayText.h"
 #include "Components/OverlayImage.h"
+#include "RendererManager.h"
 
 ECS::SplashScene::SplashScene()
 {
@@ -43,8 +44,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	img->path = "fondoWindows.jpg";
 
 
-	float size = 600;
-	float sizey = 400;
+	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
+	float sizey = size / 1.5f;
 
 	int fit = 1;
 
@@ -55,7 +56,7 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	auto text = center->addComponent<ECS::OverlayText>();
 	text->SetText("Phoshorus");
 	text->SetFit(fit);
-	text->SetPointSize(150);
+	text->SetPointSize(size / 4);
 	text->SetFont("Cute Notes.ttf");
 	text->SetHorizontalAlignment(1);
 	text->SetVerticalAlignment(1);
@@ -63,12 +64,12 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 
 	center = scene->createEntity("text");
 	textOverlay = center->addComponent<ECS::Overlay>();
-	textOverlay->SetPositioned({ 0, 110 }, { size, sizey });
+	textOverlay->SetPositioned({ 0, size / 5.4f }, { size, sizey });
 	textOverlay->SetParent(overlay);
 	text = center->addComponent<ECS::OverlayText>();
 	text->SetText("game engine");
 	text->SetFit(fit);
-	text->SetPointSize(60);
+	text->SetPointSize(size / 10);
 	text->SetFont("Default.ttf");
 	text->SetHorizontalAlignment(1);
 	text->SetVerticalAlignment(1);

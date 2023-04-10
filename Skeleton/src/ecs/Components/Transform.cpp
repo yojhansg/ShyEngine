@@ -94,6 +94,17 @@ namespace ECS {
 		this->localPosition.set(localPosition.getX(), y);
 	}
 
+	void Transform::SetWorldPosition(Utilities::Vector2D position)
+	{
+		if (parent != nullptr) {
+
+			this->localPosition = position - parent->GetWorldPosition();
+			return;
+		}
+
+		this->localPosition = position;
+	}
+
 	void Transform::SetScale(Utilities::Vector2D scale) {
 		this->localScale = scale;
 	}
@@ -106,8 +117,32 @@ namespace ECS {
 		this->localScale.set(x, localScale.getY());
 	}
 
+	void Transform::SetWorldScale(Utilities::Vector2D scale)
+	{
+		if (parent != nullptr) {
+			
+			auto parentWorldScale = parent->GetWorldScale();
+			this->localScale.x_ = scale.x_ / parentWorldScale.x_;
+			this->localScale.y_ = scale.y_ / parentWorldScale.y_;
+			return;
+		}
+
+		this->localScale = scale;
+	}
+
 
 	void Transform::SetLocalRotation(float rotation) {
+		this->localRotation = rotation;
+	}
+
+	void Transform::SetWorldRotation(float rotation)
+	{
+		if (parent != nullptr) {
+
+			this->localRotation = rotation - parent->GetWorldRotation();
+			return;
+		}
+
 		this->localRotation = rotation;
 	}
 

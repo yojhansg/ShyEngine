@@ -132,14 +132,11 @@ namespace ECS {
         // Box2d
         b2World* world;
 
-        // References to transforms properties
-        Vector2D* position;
-        const double* rotation;
-        Vector2D* scale;
-
         // Fixture properties
         reflect float mass;
         reflect float bounciness;
+        reflect bool trigger;
+
         // Box2d properties
         b2BodyDef* bodyDef;
         b2Body* body;

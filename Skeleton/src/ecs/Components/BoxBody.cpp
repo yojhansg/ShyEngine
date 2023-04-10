@@ -4,6 +4,7 @@
 #include "box2d/b2_world.h"
 #include "Entity.h"
 #include "Image.h"
+#include "Transform.h"
 
 namespace ECS {
 
@@ -63,8 +64,8 @@ namespace ECS {
 
 	void BoxBody::scaleShape() {
 		// Scale
-		float scaledX = (size.getX() / 2.0f) * scale->getX();
-		float scaledY = (size.getY() / 2.0f) * scale->getY();
+		float scaledX = (size.getX() / 2.0f) * transform->GetWorldScale().getX();
+		float scaledY = (size.getY() / 2.0f) * transform->GetWorldScale().getY();
 
 		shape->SetAsBox(scaledX, scaledY);
 	}

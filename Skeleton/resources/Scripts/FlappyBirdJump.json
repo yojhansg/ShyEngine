@@ -20,6 +20,14 @@
         {
             "index" : 4,
             "function": "InputManager_keyDownEvent"
+        },
+
+        {
+            "index" : 6,
+            "function": "Transform_Rotate",
+            "input": [
+                2, 7
+            ]
         }
         
     ],
@@ -30,7 +38,7 @@
             "index" : 0,
             "type" : 0,
             "A": 1,
-            "B": -1,
+            "B": 6,
             "condition": 4
         }
     ],
@@ -45,6 +53,11 @@
             "index": 5,
             "type": "float",
             "value": -5
+        },
+        {
+            "index": 7,
+            "type": "float",
+            "value": 1
         }
 
     ]

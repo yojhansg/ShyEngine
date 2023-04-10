@@ -4,6 +4,7 @@
 #include "box2d/b2_world.h"
 #include "Entity.h"
 #include "Image.h"
+#include "Transform.h"
 
 namespace ECS {
 
@@ -29,7 +30,9 @@ namespace ECS {
 		if (image != nullptr)
 			size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
 
-		radius = std::max(size.getX() * scale->getX(), size.getY() * scale->getY()) / 2;
+
+		auto scale = transform->GetWorldScale();
+		radius = std::max(size.getX() * scale.getX(), size.getY() * scale.getY()) / 2;
 
 		shape->m_radius = radius;
 
@@ -80,9 +83,10 @@ namespace ECS {
 	}
 
 	float CircleBody::calculateRadius() {
+		auto scale = transform->GetWorldScale();
 
-		float scaledX = size.getX() * scale->getX();
-		float scaledY = size.getY() * scale->getY();
+		float scaledX = size.getX() * scale.getX();
+		float scaledY = size.getY() * scale.getY();
 
 		if (shorterAxis)
 			return std::min(scaledX, scaledY) / 2;
