@@ -398,7 +398,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	definition << TAB "if(" << givenEntity << " != " << expectedEntity << "){" NEWLINE;
 	//entity, script, function, i, expected, given
-	definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+	definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() <<
 		"\", std::to_string(0)" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 
@@ -413,7 +413,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 			definition << TAB "if(" << given << " != " << expected << "){" NEWLINE;
 			//entity, script, function, i, expected, given
-			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() <<
 				"\", std::to_string(" << i + 1 << ")" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
 			definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 			
@@ -428,7 +428,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 
 	definition << TAB "if(self == nullptr){" NEWLINE;
-	definition << TAB TAB"DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
+	definition << TAB TAB"DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 	definition << TAB"}" NEWLINE;
 

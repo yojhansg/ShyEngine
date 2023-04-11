@@ -51,19 +51,11 @@ namespace ECS {
 		auto trPos = transform->GetWorldPosition();
 		auto trScale = transform->GetWorldScale();
 
-		float scaledX = (width * trScale.getX());
-		float scaledY = (height * trScale.getY());
-
-		float distanceX = (abs(width - scaledX)) / 2;
-		float distanceY = (abs(height - scaledY)) / 2;
-
-		distanceX = (trScale.getX() > 1) ? -distanceX : distanceX;
-		distanceY = (trScale.getY() > 1) ? -distanceY : distanceY;
-
-		int x = std::round(trPos.getX() - width / 2 + distanceX);
-		int y = std::round(trPos.getY() - height / 2 + distanceY);
 		int w = std::round(trScale.getX() * width);
 		int h = std::round(trScale.getY() * height);
+
+		int x = std::round(trPos.getX() - w * 0.5f);
+		int y = std::round(trPos.getY() + h * 0.5f);
 
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&x, &y, &w, &h);
 

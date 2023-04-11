@@ -88,6 +88,8 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		CircleBody* self = static_cast<CircleBody*>(selfComp);
+		if(map.contains("radius"))
+			self->radius = std::stof(map.at("radius"));
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))

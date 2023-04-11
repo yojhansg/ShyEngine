@@ -81,6 +81,12 @@ publish:
 	Vector2D Vector2D_Cross(cVector2D a, cVector2D b);
 	Vector2D Vector2D_Multiply(cVector2D a, float b);
 
+	Vector2D Vector2D_Up();
+	Vector2D Vector2D_Left();
+	Vector2D Vector2D_Right();
+	Vector2D Vector2D_Down();
+	Vector2D Vector2D_One();
+	Vector2D Vector2D_Zero();
 
 	//Todo: cambiar el nombre de string a text
 	bool String_Equals(cstring a, cstring b);

@@ -245,6 +245,46 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Multiply(cVector2D a, float b)
 	return a * b;
 }
 
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Up()
+{
+	return Vector2D(0, -1);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Down()
+{
+	return Vector2D(0, 1);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Left()
+{
+	return Vector2D(-1, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Right()
+{
+	return Vector2D(1, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Zero()
+{
+	return Vector2D(0, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_One()
+{
+	return Vector2D(1, 1);
+}
+
+
+
+
+
+
+
+
+
+
 bool Scripting::ScriptFunctionality::String_Equals(cstring a, cstring b)
 {
 	return a == b;

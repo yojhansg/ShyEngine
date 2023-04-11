@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Apr 10 22:59:07 2023
+//Creation time : Tue Apr 11 19:48:46 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -169,6 +169,12 @@ Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting:
 Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Multiply(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Up(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Left(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Right(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Down(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_One(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Zero(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);

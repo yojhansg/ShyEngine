@@ -27,7 +27,7 @@ namespace ECS {
 
         float calculateRadius();
 
-        float radius;
+        reflect float radius;
 
         bool shorterAxis;
 

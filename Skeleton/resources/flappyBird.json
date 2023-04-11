@@ -6,9 +6,9 @@
     "initialScene": "MainMenu",
     "windowIcon": "",
     "windowSize": "800, 1000",
-    "gravity": "0, 9.81f",
-    "splashScreen": true,
+    "gravity": "0, -9.81f",
+    "splashScreen": false,
     "vsync": true,
     "fullScreen": false,
-    "debugPhysics": false
+    "debugPhysics": true
 }

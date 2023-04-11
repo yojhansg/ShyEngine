@@ -1,0 +1,59 @@
+{
+    "name": "Mi escena inicial",
+    "objects": [
+        {
+            "name": "player",
+            "order": 10,
+            "localPosition": "(0, 0)",
+            "localScale": "(0.35f, 0.35f)",
+            "localRotation": "0",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "pollo.png"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "bodyType": "0",
+                        "bounciness": "0.5f",
+                        "freezeRotation": "false"
+                    }
+                }
+            ],
+
+            "childs": [
+                {
+                    "name": "player animado",
+                    "order": 11,
+                    "localPosition": "(200, 0)",
+                    "localScale": "1, 1",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "animation.png"
+                            }
+                        },
+                        {
+                            "component": "Animation",
+                            "attributes": {
+                                "speed": "10",
+                                "animationColumns": "8",
+                                "animationRows": "9",
+                                "animationSheetStyle": "0",
+                                "animationLenght": "9",
+                                "currentFrame": "0",
+                                "currentAnimation": "8"
+                            }
+                        }
+                    ],
+                    "scripts": []
+                }
+            ]
+        }
+    ]
+   
+}

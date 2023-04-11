@@ -115,22 +115,35 @@ namespace Renderer {
 		auto campos = CameraPosition();
 		float camscale = CameraScale();
 
+		int winwid = Renderer::RendererManager::instance()->getWidth() * 0.5f;
+		int winhei = Renderer::RendererManager::instance()->getHeight() * 0.5f;
+
+		//	Invertir posicion en y
+		
+		*y *= -1;
+
+		//	Desplazar centro de coordenadas al centro de la pantalla
+		*x += winwid;
+		*y += winhei;
+
+		//	Calcular desplazamiento de la camara
 		*x += campos.x_;
 		*y += campos.y_;
 
+		//	Escalar posiciones con respecto a la escala de la camara
 		*x *= camscale;
 		*y *= camscale;
+		
+		//	Centrar escalado final al centro
+		*x += winwid - (winwid * camscale);
+		*y += winhei - (winhei * camscale);
+
 
 		if (w != NULL)
 			*w *= camscale;
 		if (h != NULL)
 			*h *= camscale;
 
-		int winwid = Renderer::RendererManager::instance()->getWidth() * 0.5f;
-		int winhei = Renderer::RendererManager::instance()->getHeight() * 0.5f;
-
-		*x += winwid - (winwid * camscale);
-		*y += winhei - (winhei * camscale);
 	}
 
 	Utilities::Vector2D RendererManager::CameraPosition()
