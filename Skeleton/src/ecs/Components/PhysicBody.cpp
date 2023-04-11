@@ -68,7 +68,7 @@ namespace ECS {
 	void PhysicBody::start() {
 
 		auto position = transform->GetWorldPosition();
-		auto rotation = transform->GetWorldRotation();
+		auto rotation = -transform->GetWorldRotation();
 		auto scale = transform->GetWorldScale();
 
 
@@ -105,7 +105,7 @@ namespace ECS {
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
 
 		auto position = transform->GetWorldPosition();
-		auto rotation = transform->GetWorldRotation();
+		auto rotation = -transform->GetWorldRotation();
 		auto scale = transform->GetWorldScale();
 
 		if (onCollisonStay)
@@ -144,7 +144,7 @@ namespace ECS {
 
 			// Transform
 			transform->SetWorldPosition(newPos);
-			transform->SetWorldRotation(newRotation);
+			transform->SetWorldRotation(-newRotation);
 
 		}
 

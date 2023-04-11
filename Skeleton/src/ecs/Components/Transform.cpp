@@ -150,7 +150,7 @@ namespace ECS {
 	Utilities::Vector2D Transform::GetWorldPosition()
 	{
 		if (parent != nullptr)
-			return parent->GetWorldPosition() + localPosition.rotate(parent->GetWorldRotation());
+			return parent->GetWorldPosition() + localPosition.rotate(-parent->GetWorldRotation());
 
 		return localPosition;
 	}
