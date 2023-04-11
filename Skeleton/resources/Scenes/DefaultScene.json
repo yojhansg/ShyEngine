@@ -76,7 +76,7 @@
             ]
         },
         {
-            "name": "tuberia",
+            "name": "tuberia1",
             "order": 10,
             "localPosition": "(600, 0)",
             "localScale": "2, 4",
@@ -146,7 +146,7 @@
             ]
         },
         {
-            "name": "tuberia",
+            "name": "tuberia2",
             "order": 10,
             "localPosition": "(1200, 0)",
             "localScale": "2, 4",
@@ -240,7 +240,7 @@
                     "order": 10,
                     "localPosition": "(0, 350)",
                     "localScale": ".5, .25",
-                    "localRotation": "0",
+                    "localRotation": "180",
                     "components": [
                         {
                             "component": "Image",
@@ -264,7 +264,7 @@
                     "order": 10,
                     "localPosition": "(0, -350)",
                     "localScale": ".5, .25",
-                    "localRotation": "180",
+                    "localRotation": "0",
                     "components": [
                         {
                             "component": "Image",

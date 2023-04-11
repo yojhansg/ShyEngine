@@ -79,12 +79,12 @@
         {
             "index": 9,
             "type": "Vector2D",
-            "value": "(1600, 500)"
+            "value": "(1200, 0)"
         },
         {
             "index": 10,
             "type": "float",
-            "value": -200
+            "value": -600
         }
 
     ]
