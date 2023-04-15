@@ -38,6 +38,7 @@ namespace ECS {
 			phyA->setCollisionStay(true, entB);
 			phyB->setCollisionStay(true, entA);
 		}
+
 	}
 
 	void ContactListener::EndContact(b2Contact* contact) {
@@ -53,21 +54,18 @@ namespace ECS {
 
 		if (entA == nullptr || entB == nullptr) return;
 
-		if (contact->GetFixtureA()->IsSensor()) {
+		if (contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()) {
 			entA->onTriggerExit(entB);
-			phyA->setTriggerStay(false, entB);
-		}
-		else {
-			entA->onCollisionExit(entB);
-			phyA->setCollisionStay(false, entB);
-		}
-
-		if (contact->GetFixtureB()->IsSensor()) {
 			entB->onTriggerExit(entA);
+
+			phyA->setTriggerStay(false, entB);
 			phyB->setTriggerStay(false, entA);
 		}
 		else {
+			entA->onCollisionExit(entB);
 			entB->onCollisionExit(entA);
+
+			phyA->setCollisionStay(false, entB);
 			phyB->setCollisionStay(false, entA);
 		}
 	}

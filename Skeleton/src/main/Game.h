@@ -13,8 +13,6 @@
 namespace ECS {
 	class SceneManager;
 	class Scene;
-
-
 	class Overlay;
 }
 

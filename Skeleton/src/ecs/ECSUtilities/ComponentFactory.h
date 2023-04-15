@@ -23,7 +23,6 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 
 	ECS::Component* CreateAnimation();
 	ECS::Component* CreateBoxBody();
-	ECS::Component* CreateCamera();
 	ECS::Component* CreateChainBody();
 	ECS::Component* CreateCircleBody();
 	ECS::Component* CreateEdgeBody();

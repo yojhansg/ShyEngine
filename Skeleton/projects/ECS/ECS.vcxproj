@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager;$(SolutionDir)src\sound;$(SolutionDir)dependencies\SDL2_mixer\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ecs;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)dependencies\SDL2_image\include;$(SolutionDir)dependencies\Box2D\include;$(SolutionDir)src\input;$(SolutionDir)src\renderer;$(SolutionDir)src\utilities;$(SolutionDir)src\physics;$(SolutionDir)src\ecs\scripting;$(SolutionDir)src\console;$(SolutionDir)src\resourcesmanager;$(SolutionDir)src\sound;$(SolutionDir)dependencies\SDL2_mixer\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,9 +156,9 @@
     <ClInclude Include="..\..\src\ecs\Component.h" />
     <ClInclude Include="..\..\src\ecs\Components\Animation.h" />
     <ClInclude Include="..\..\src\ecs\Components\BoxBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Camera.h" />
     <ClInclude Include="..\..\src\ecs\Components\ChainBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\CircleBody.h" />
+    <ClInclude Include="..\..\src\ecs\Components\MusicEmitter.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h" />
     <ClInclude Include="..\..\src\ecs\Components\Overlay.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h" />
@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Image.h" />
+    <ClInclude Include="..\..\src\ecs\Components\SoundEmitter.h" />
     <ClInclude Include="..\..\src\ecs\Components\TestComponent.h" />
     <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
     <ClInclude Include="..\..\src\ecs\ContactListener.h" />
@@ -194,9 +195,9 @@
     <ClCompile Include="..\..\src\ecs\Component.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Animation.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Camera.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\MusicEmitter.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Overlay.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp" />
@@ -204,6 +205,7 @@
     <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\SoundEmitter.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp" />
@@ -243,6 +245,9 @@
     </ProjectReference>
     <ProjectReference Include="..\ResourcesManager\ResourcesManager.vcxproj">
       <Project>{a6afae84-be86-4f88-9b4c-00a44bad9582}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sound\sound.vcxproj">
+      <Project>{53446c51-c540-4001-ac09-bbd92cc74904}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>

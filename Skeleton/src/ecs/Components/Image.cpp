@@ -29,7 +29,6 @@ namespace ECS {
 		transform = getEntity()->getComponent<Transform>();
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-
 		ChangeTexture(fileName);
 
 		// Flip
@@ -95,14 +94,12 @@ namespace ECS {
 		rotationPoint->y = y;
 	}
 
-	Utilities::Vector2D Image::scaledSize()
-	{
+	Utilities::Vector2D Image::scaledSize() {
 		auto scale = transform->GetLocalScale();
 		return { texture->getWidth() * scale.getX(), texture->getHeight() * scale.getY() };
 	}
 
-	void Image::ChangeTexture(cstring texturePath)
-	{
+	void Image::ChangeTexture(cstring texturePath) {
 		fileName = texturePath;
 		texture = Resources::ResourcesManager::instance()->addTexture(fileName);
 		srcWidth = texture->getWidth(); srcHeight = texture->getHeight();

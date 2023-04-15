@@ -1,7 +1,7 @@
 #include "SoundManager.h"
 #include "SDL.h"
 
-namespace SoundManager {
+namespace Sound {
 
 	SoundManager::SoundManager() {
 		initSDLMixer();
@@ -11,30 +11,28 @@ namespace SoundManager {
 		closeSDLMixer();
 	}
 
-	void SoundManager::load(const std::string& fileName, const std::string& id, SOUND_TYPE type)
-	{
-		if (type == SOUND_MUSIC)
-		{
-			Mix_Music* pMusic = Mix_LoadMUS(fileName.c_str());
-			assert(pMusic != NULL, Mix_GetError());
+	int SoundManager::loadSoundEffect(Mix_Chunk* s) {
+		int nSounds = sfxs.size();
 
-			music[id] = pMusic;
-		}
-		else if (type == SOUND_SFX)
-		{
-			Mix_Chunk* pChunk = Mix_LoadWAV(fileName.c_str());
-			assert(pChunk != NULL, Mix_GetError());
+		sfxs.push_back(s);
 
-			sfxs[id] = pChunk;
-		}
+		return nSounds;
 	}
 
-	int SoundManager::playSound(const std::string& id, int loop, int channel) {
+	int SoundManager::loadMusic(Mix_Music* m) {
+		int nMusic = music.size();
 
+		music.push_back(m);
+
+		return nMusic;
+	}
+
+
+	int SoundManager::playSound(int id, int loop, int channel) {
 		return Mix_PlayChannel(channel, sfxs[id], loop);
 	}
 
-	void SoundManager::playMusic(const std::string& id, int loop) {
+	void SoundManager::playMusic(int id, int loop) {
 
 		if (musicPlaying()) haltMusic();
 
@@ -42,12 +40,12 @@ namespace SoundManager {
 		assert(e == 0, Mix_GetError());
 	}
 
-	void SoundManager::playWithFadeIn(int channel, const std::string& id, int loops, int ms) {
-		Mix_FadeInChannel(channel, sfxs.at(id), loops, ms);
+	void SoundManager::playWithFadeIn(int channel, int id, int loops, int ms) {
+		Mix_FadeInChannel(channel, sfxs[id], loops, ms);
 	}
 
-	void SoundManager::playMusicWithFadeIn(const std::string& id, int loops, int ms) {
-		int e = Mix_FadeInMusic(music.at(id), loops, ms);
+	void SoundManager::playMusicWithFadeIn(int id, int loops, int ms) {
+		int e = Mix_FadeInMusic(music[id], loops, ms);
 		assert(e == 0, Mix_GetError());
 	}
 
@@ -112,7 +110,7 @@ namespace SoundManager {
 		return  Mix_Volume(channel, -1);
 	}
 
-	void SoundManager::setChannelPosition(int channel, Sint16 angle, Uint8 distance) {
+	void SoundManager::setChannelPosition(int channel, int angle, int distance) {
 		Mix_SetPosition(channel, angle, distance);
 	}
 
@@ -162,13 +160,6 @@ namespace SoundManager {
 	}
 
 	void SoundManager::closeSDLMixer() {
-
-		for (auto &s : sfxs)
-			Mix_FreeChunk(s.second);
-
-		for (auto &m : music) 
-			Mix_FreeMusic(m.second);
-
 		Mix_Quit(); 
 	}
 }

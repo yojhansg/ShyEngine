@@ -48,9 +48,6 @@
     <ClInclude Include="..\..\src\ecs\Scripting\Variable.h">
       <Filter>Archivos de encabezado\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\Camera.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -141,6 +138,12 @@
     <ClInclude Include="..\..\src\ecs\SplashScene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\SoundEmitter.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\MusicEmitter.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -157,9 +160,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Scripting\Variable.cpp">
       <Filter>Archivos de origen\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\Camera.cpp">
-      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
@@ -250,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\SplashScene.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\SoundEmitter.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\MusicEmitter.cpp">
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

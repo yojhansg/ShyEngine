@@ -9,6 +9,11 @@ namespace Renderer {
 	class Font;
 }
 
+namespace Sound {
+	class SoundEffect;
+	class Music;
+}
+
 namespace Resources {
 
 	template<typename T>
@@ -23,8 +28,9 @@ namespace Resources {
 		~ResourcesManager();
 
 		Renderer::Texture* addTexture(const std::string& key);
-
 		Renderer::Font* addFont(std::string const& key, int pointSize);
+		Sound::SoundEffect* addSound(std::string const& key);
+		Sound::Music* addMusic(std::string const& key);
 
 	private:
 
@@ -32,6 +38,8 @@ namespace Resources {
 		
 		resources_map<Renderer::Texture*> textures;
 		resources_map<Renderer::Font*> fonts;
+		resources_map<Sound::SoundEffect*> sounds;
+		resources_map<Sound::Music*> music;
 	};
 }
 

@@ -6,10 +6,12 @@
 #include <PhysicsManager.h>
 #include <ConsoleManager.h>
 #include <SceneManager.h>
+#include <SoundManager.h>
 
 #include <Components/Overlay.h>
 #include <Components/TestComponent.h>
 #include <Components/OverlayImage.h>
+#include <Components/SoundEmitter.h>
 #include <Components/OverlayText.h>
 #include <Components/CircleBody.h>
 #include <Components/Transform.h>
@@ -17,6 +19,7 @@
 #include <Components/EdgeBody.h>
 #include <Components/BoxBody.h>
 #include <Components/Image.h>
+
 
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ClassReflection.h>
@@ -40,6 +43,7 @@ void Game::initScenes() {
 void Game::firstScene() {
 
 	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
+	Sound::SoundManager::instance()->setChannelVolume(-1, 10);
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -50,15 +54,16 @@ void Game::firstScene() {
 		ECS::Entity* player = scene->createEntity("Player");
 
 		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("link.png");
+		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
+		auto soundEmitter = player->addComponent<ECS::SoundEmitter>("sounds/jump.mp3");
 		auto tComp = player->addComponent<ECS::TestComponent>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
 	
 		auto grTr = ground->addComponent<ECS::Transform>();
-		auto grIm = ground->addComponent<ECS::Image>("ground.png");
+		auto grIm = ground->addComponent<ECS::Image>("images/ground.png");
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
@@ -75,21 +80,19 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 		// Player
-		tr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 2));
-		tr->SetScale(Utilities::Vector2D(0.35f, 0.35f));
-		body->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		body->setBounciness(0.8f);
-		//body->setTrigger(true);
+		tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
+		tr->SetScale({0.35f, 0.35f});
+		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+		soundEmitter->enableStartPlaying(false);
 
 		// Ground
-		grTr->SetScale(Utilities::Vector2D(1, 1));
-		grTr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 1.2f));
-		grBody->addOffSet(0, -1);
+		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
+		grBody->addOffSet(0, grBody->getSize().getY() / 2);
+		
 
 		// Ball
-		/*trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
-		trBall->setScale(0.25f, 0.25f);
-		ballBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballBody->setBounciness(0.5f); */
+		/*trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
+		trBall->SetScale({ 0.25f, 0.25f });
+		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);*/
 
 }
