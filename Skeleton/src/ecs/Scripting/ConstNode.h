@@ -3,6 +3,8 @@
 #include "OutputNode.h"
 #include "Variable.h"
 
+#include <string>
+
 namespace Scripting {
 
 
@@ -14,9 +16,12 @@ namespace Scripting {
 
 		void Operate(Node*& next, int iterationIdx) override;
 
+		void SetName(cstring name);
+
 	private:
 
 		Variable value;
+		std::string name;
 	};
 
 }

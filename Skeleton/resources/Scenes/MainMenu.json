@@ -1,5 +1,5 @@
 {
-    "name": "Mi escena inicial",
+    "name": "Menu",
     "objects": [],
     "overlays": [
         {
@@ -47,9 +47,9 @@
                                     "component": "OverlayButton"
                                 }
                             ],
-                            "scripts": [
-                                "MainMenuBehaviour"
-                            ],
+                            "scripts": {
+                                "MainMenuBehaviour": []
+                            },
                             "childs": [
                                 {
                                     "name": "jugar_text",
@@ -99,9 +99,9 @@
                                     }
                                 }
                             ],
-                            "scripts": [
-                                "MainMenuBehaviour"
-                            ],
+                            "scripts": {
+                                "MainMenuBehaviour": []
+                            },
                             "childs": [
                                 {
                                     "name": "salir_text",
