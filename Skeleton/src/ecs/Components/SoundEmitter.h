@@ -1,10 +1,9 @@
 #pragma once
 #include "Component.h"
 
-#include <string>
-
 namespace Sound {
 	class SoundEffect;
+	class SoundManager;
 }
 
 namespace ECS {
@@ -29,21 +28,38 @@ namespace ECS {
 
 		void play();
 
+		void playWithfadeIn(int ms, int loops = -1);
+
+		void fadeOut(int ms);
+
 		// Setters & getters
 		void enableStartPlaying(bool enable);
 		bool startsPlaying();
 
+		void setLoop(bool loop);
+		bool isLoop();
+
+		void setVolume(int volume);
+		int getVolume();
+
 	private:
+
+		void resetChannel();
 
 		reflect std::string fileName;
 		reflect bool loop;
 		reflect bool startPlaying;
+		reflect int volume;
 
 		Transform* transform;
 
 		Sound::SoundEffect* soundEffect;
 
+		Sound::SoundManager* soundManager;
+
 		int channel;
+
+		bool playing;
 
 	};
 

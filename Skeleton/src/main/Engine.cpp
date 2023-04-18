@@ -24,8 +24,6 @@
 #include <Scene.h>
 #include <chrono>
 
-#include <iostream>
-
 using namespace std::chrono;
 
 Engine::Engine() {

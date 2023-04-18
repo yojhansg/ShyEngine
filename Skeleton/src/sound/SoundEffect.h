@@ -18,6 +18,10 @@ namespace Sound {
 
 		int play(int loop, int channel = -1);
 
+		int fadeInChannel(int ms, int loops = -1, int channel = -1);
+
+		int fadeOutChannel(int ms, int channel = -1);
+
 	private:
 
 		SoundManager* soundManager;

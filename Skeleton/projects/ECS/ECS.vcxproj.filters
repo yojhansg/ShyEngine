@@ -57,7 +57,7 @@
     <ClInclude Include="..\..\src\ecs\Components\Transform.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\TestComponent.h">
+    <ClInclude Include="..\..\src\ecs\Components\LinkComponent.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\ContactListener.h">
@@ -144,6 +144,9 @@
     <ClInclude Include="..\..\src\ecs\Components\MusicEmitter.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\BallComponent.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -170,7 +173,7 @@
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\TestComponent.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\LinkComponent.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp">
@@ -255,6 +258,9 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\MusicEmitter.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\BallComponent.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>

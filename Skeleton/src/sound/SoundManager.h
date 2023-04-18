@@ -4,42 +4,24 @@
 #include "SDL_mixer.h"
 #include <string>
 #include <vector>
+#include <functional>
 
 #define MAX_SOUND_DISTANCE 255
 
 namespace Sound {
 
 	class SoundEffect;
+	class Music;
 
 	class SoundManager : public Utilities::Singleton<SoundManager> {
 
 		friend Singleton<SoundManager>;
+		friend SoundEffect;
+		friend Music;
 
 	public:
 
 		~SoundManager();
-
-		// Load a sound into the vector
-		int loadSoundEffect(Mix_Chunk* s);
-
-		// Load a music into the vector
-		int loadMusic(Mix_Music* m);
-
-		// Play a sound specifying a channel. -1 to find the first available channel.
-		// Returns the selected channel or -1 if sound could not be played
-		int playSound(int id, int loop, int channel = -1);
-		
-		// No need to specify a channel, music has only 1 channel
-		void playMusic(int id, int loop);
-
-		// Play a sound with fade in specifying a channel. -1 to find the first available channel
-		void playWithFadeIn(int channel, int id, int loops, int ms);
-
-		// Play the music with ms of fade in
-		void playMusicWithFadeIn(int id, int loops, int ms);
-
-		// Halt the music channel after fading out for ms
-		void fadeOutMusic(int ms);
 
 		void setMasterVolume(float volume);
 
@@ -79,6 +61,9 @@ namespace Sound {
 			// Sets the position of the cannel relative to the listener. Angle is between 0-360 and distance is between 0-255
 			void setChannelPosition(int channel, int angle, int distance);
 
+			// Sets the panning of the channel
+			void setChannelPanning(int channel, int left, int right);
+
 		// Music API
 
 			// Pause the music channel. It can be resumed
@@ -103,11 +88,42 @@ namespace Sound {
 			int getMusicVolume();
 
 			// Rewinds the music
-			void rewingMusic();
+			void rewindMusic();
 		
 	private:
 
 		SoundManager();
+
+		// Channels
+
+			// Load a sound into the vector
+			int loadSoundEffect(Mix_Chunk* s);
+
+			// Play a sound specifying a channel. -1 to find the first available channel.
+			// Returns the selected channel or -1 if sound could not be played
+			int playSound(int id, int loop, int channel = -1);
+
+			// Play a sound with fade in specifying a channel. -1 to find the first available channel
+			int fadeInChannel(int channel, int id, int loops, int ms);
+
+			// Play a sound with fade out specifying a channel. -1 to find the first available channel
+			int fadeOutChannel(int channel, int ms);
+
+		// Music
+
+			// Load a music into the vector
+			int loadMusic(Mix_Music* m);
+
+			// No need to specify a channel, music has only 1 channel
+			void playMusic(int id, int loop);
+
+			// Play the music with ms of fade in
+			void fadeInMusic(int id, int loops, int ms);
+
+			// Halt the music channel after fading out for ms
+			void fadeOutMusic(int ms);
+
+
 
 		void initSDLMixer();
 		void closeSDLMixer();

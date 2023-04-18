@@ -17,6 +17,10 @@ namespace Sound {
 
 		void play(int loop);
 
+		void fadeIn(int ms, int loops = -1);
+
+		void fadeOut(int ms);
+
 	private:
 
 		SoundManager* soundManager;

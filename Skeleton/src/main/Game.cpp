@@ -9,9 +9,11 @@
 #include <SoundManager.h>
 
 #include <Components/Overlay.h>
-#include <Components/TestComponent.h>
+#include <Components/LinkComponent.h>
+#include <Components/BallComponent.h>
 #include <Components/OverlayImage.h>
 #include <Components/SoundEmitter.h>
+#include <Components/MusicEmitter.h>
 #include <Components/OverlayText.h>
 #include <Components/CircleBody.h>
 #include <Components/Transform.h>
@@ -19,7 +21,6 @@
 #include <Components/EdgeBody.h>
 #include <Components/BoxBody.h>
 #include <Components/Image.h>
-
 
 #include <ECSUtilities/FunctionManager.h>
 #include <ECSUtilities/ClassReflection.h>
@@ -43,7 +44,9 @@ void Game::initScenes() {
 void Game::firstScene() {
 
 	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
-	Sound::SoundManager::instance()->setChannelVolume(-1, 10);
+	Sound::SoundManager::instance()->setChannelVolume(-1, 20);
+	Sound::SoundManager::instance()->setMusicVolume(20);
+
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -57,7 +60,7 @@ void Game::firstScene() {
 		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
 		auto soundEmitter = player->addComponent<ECS::SoundEmitter>("sounds/jump.mp3");
-		auto tComp = player->addComponent<ECS::TestComponent>();
+		auto lComp = player->addComponent<ECS::LinkComponent>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
@@ -67,11 +70,13 @@ void Game::firstScene() {
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
-		/*ECS::Entity* ball = scene->createEntity("Ball");
+		ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
-		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto ballBody = ball->addComponent<ECS::CircleBody>();*/
+		auto imBall = ball->addComponent<ECS::Image>("images/ball.png");
+		auto ballSoundEmitter = ball->addComponent<ECS::SoundEmitter>("sounds/retro.wav");
+		auto ballBody = ball->addComponent<ECS::CircleBody>();
+		auto bComp = ball->addComponent<ECS::BallComponent>();
 
 	
 	// 3.- Init
@@ -89,10 +94,10 @@ void Game::firstScene() {
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
 		grBody->addOffSet(0, grBody->getSize().getY() / 2);
 		
-
 		// Ball
-		/*trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
+		trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
 		trBall->SetScale({ 0.25f, 0.25f });
-		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);*/
+		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+		ballSoundEmitter->enableStartPlaying(false);
 
 }

@@ -1,28 +1,54 @@
 #include "MusicEmitter.h"
 #include "Transform.h"
 #include "Entity.h"
+#include "Music.h"
 
 #include <ResourcesManager.h>
-#include <SoundManager.h>
 
-ECS::MusicEmitter::MusicEmitter(cstring fileName) {
-	transform = nullptr;
-	music = nullptr;
+namespace ECS {
 
-	this->fileName = fileName;
-}
+	MusicEmitter::MusicEmitter(cstring fileName) {
+		transform = nullptr;
+		music = nullptr;
 
-void ECS::MusicEmitter::init() {
+		loop = false;
+		startPlaying = true;
 
-	transform = getEntity()->getComponent<Transform>();
-	assert(transform != nullptr, "La entidad debe contener un componente Transform");
+		this->fileName = fileName;
+	}
 
-	changeMusic(fileName);
+	void MusicEmitter::init() {
 
-}
+		transform = getEntity()->getComponent<Transform>();
+		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-void ECS::MusicEmitter::changeMusic(cstring soundPath) {
-	fileName = soundPath;
+		changeMusic(fileName);
 
-	music = Resources::ResourcesManager::instance()->addMusic(fileName);
+	}
+
+	void MusicEmitter::start() {
+
+		if (startPlaying)
+			play();
+
+	}
+
+	void MusicEmitter::play() {
+		music->play(loop);
+	}
+
+	void MusicEmitter::changeMusic(cstring soundPath) {
+		fileName = soundPath;
+
+		music = Resources::ResourcesManager::instance()->addMusic(fileName);
+	}
+
+	void MusicEmitter::playWithFadeIn(int ms, int loops = -1) {
+		music->fadeIn(ms, loops);
+	}
+
+	void MusicEmitter::fadeOut(int ms) {
+		music->fadeOut(ms);
+	}
+
 }

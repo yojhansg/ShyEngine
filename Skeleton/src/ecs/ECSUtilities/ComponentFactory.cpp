@@ -10,7 +10,7 @@
 #include "Components/OverlayButton.h"
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
-#include "Components/TestComponent.h"
+#include "Components/LinkComponent.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
 
@@ -78,7 +78,7 @@ ComponentFactory::ComponentFactory(){
 
 }
 	ECS::Component* ComponentFactory::CreateTestComponent(){
-		return new ECS::TestComponent();
+		return new ECS::LinkComponent();
 
 }
 	ECS::Component* ComponentFactory::CreateTransform(){

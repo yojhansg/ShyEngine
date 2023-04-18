@@ -27,7 +27,6 @@ namespace Sound {
 		return nMusic;
 	}
 
-
 	int SoundManager::playSound(int id, int loop, int channel) {
 		return Mix_PlayChannel(channel, sfxs[id], loop);
 	}
@@ -40,11 +39,15 @@ namespace Sound {
 		assert(e == 0, Mix_GetError());
 	}
 
-	void SoundManager::playWithFadeIn(int channel, int id, int loops, int ms) {
-		Mix_FadeInChannel(channel, sfxs[id], loops, ms);
+	int SoundManager::fadeInChannel(int channel, int id, int loops, int ms) {
+		return Mix_FadeInChannel(channel, sfxs[id], loops, ms);
 	}
 
-	void SoundManager::playMusicWithFadeIn(int id, int loops, int ms) {
+	int SoundManager::fadeOutChannel(int channel, int ms) {
+		return Mix_FadeOutChannel(channel, ms);
+	}
+
+	void SoundManager::fadeInMusic(int id, int loops, int ms) {
 		int e = Mix_FadeInMusic(music[id], loops, ms);
 		assert(e == 0, Mix_GetError());
 	}
@@ -106,12 +109,15 @@ namespace Sound {
 	}
 
 	int SoundManager::getChannelVolume(int channel) {
-
-		return  Mix_Volume(channel, -1);
+		return Mix_Volume(channel, -1);
 	}
 
 	void SoundManager::setChannelPosition(int channel, int angle, int distance) {
 		Mix_SetPosition(channel, angle, distance);
+	}
+
+	void SoundManager::setChannelPanning(int channel, int left, int right) {
+		Mix_SetPanning(channel, left, right);
 	}
 
 
@@ -145,7 +151,7 @@ namespace Sound {
 		return Mix_VolumeMusic(-1);
 	}
 
-	void SoundManager::rewingMusic() {
+	void SoundManager::rewindMusic() {
 		Mix_RewindMusic();
 	}
 

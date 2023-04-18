@@ -18,15 +18,25 @@ namespace ECS {
 
         void init() override;
 
+        void start() override;
+
     publish:
 
         void changeMusic(cstring musicPath);
+
+        void play();
+
+        void playWithFadeIn(int ms, int loops = -1);
+
+        void fadeOut(int ms);
 
     private:
 
         Transform* transform;
 
         reflect std::string fileName;
+        reflect bool loop;
+        reflect bool startPlaying;
 
         Sound::Music* music;
 

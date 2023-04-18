@@ -22,4 +22,12 @@ namespace Sound {
 		soundManager->playMusic(music_id, loop);
 	}
 
+	void Music::fadeIn(int loops, int ms) {
+		soundManager->fadeInMusic(music_id, loops, ms);
+	}
+
+	void Music::fadeOut(int ms) {
+		soundManager->fadeOutMusic(ms);
+	}
+
 }
