@@ -1,21 +1,15 @@
 {
     "nodeCount": 20,
 
+    "start": 0,
 
     "functions" : [
 
         {
-            "index": 6, 
-            "function": "GetGlobal",
-            "input": [
-                1
-            ]
-        },
-        {
             "index": 0, 
             "function": "Print",
             "input": [
-                6
+                1
             ]
         }
     ],
@@ -23,8 +17,9 @@
     "consts" : [
         {
             "index": 1,
-            "type": "string",
-            "value": "dineroActual"
+            "type": "float",
+            "value": 10,
+            "name": "dinero"
         }
     ]
  }

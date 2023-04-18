@@ -92,9 +92,22 @@ Scripting::Variable ECS::Script::Get(cstring name)
 	return attributes[name];
 }
 
-void ECS::Script::Set(cstring name, Scripting::Variable variable)
+void ECS::Script::Set(cstring name, cVariable variable)
 {
 	attributes[name] = variable;
+}
+
+Scripting::Variable ECS::Script::GetConstValue(cstring name)
+{
+	if (constValues.contains(name))
+		return constValues[name];
+
+	return Scripting::Variable::Null();
+}
+
+void ECS::Script::SetConstValue(cstring name, cVariable val)
+{
+	constValues[name] = val;
 }
 
 void ECS::Script::Initialise(cstring path)

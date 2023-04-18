@@ -144,16 +144,20 @@ publish:
 	float Camera_GetScale();
 	void Camera_SetScale(float newScale);
 
-	//Misc
-	void OpenURL(cstring url);
 
 	//TODO: Collections
+	void Collection_Create(int size);
+	void Collection_Modify(int idx, cVariable value);
+	cVariable Collection_Peek(int idx);
+
 
 	float Random_UnitValue();
 	float Random_Between(float a, float b);
 	Utilities::Vector2D Random_UnitVector();
 	Utilities::Vector2D Random_ScaledVector(float val);
 
+	//Misc
+	void OpenURL(cstring url);
 private:
 
 	int GetRealTime(int time);

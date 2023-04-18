@@ -16,7 +16,6 @@ namespace ECS {
 
 	public:
 
-
 		void Initialise(cstring path);
 
 		void start() override;
@@ -39,8 +38,11 @@ namespace ECS {
 
 		std::string GetName();
 
-		Scripting::Variable Get(cstring const& name);
-		void Set(cstring name, Scripting::Variable variable);
+		Scripting::Variable Get(cstring name);
+		void Set(cstring name, cVariable variable);
+
+		Scripting::Variable GetConstValue(cstring name);
+		void SetConstValue(cstring name, cVariable val);
 
 	private:
 
@@ -48,6 +50,7 @@ namespace ECS {
 
 		Scripting::ScriptManager::ScriptNodes nodes;
 
+		std::map<std::string, Scripting::Variable> constValues;
 		std::map<std::string, Scripting::Variable> attributes;
 
 		void Iteration(Scripting::Node* beginNode);

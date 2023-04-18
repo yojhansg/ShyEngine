@@ -91,7 +91,7 @@ void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, 
 
 	std::unordered_map<std::string, std::string> map;
 
-	const std::vector<std::string> transformAttributes = { "localPosition", "localScale", "localRotation"};
+	const std::vector<std::string> transformAttributes = { "localPosition", "localScale", "localRotation" };
 
 	for (auto& attr : transformAttributes) {
 
@@ -113,11 +113,55 @@ void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, 
 			ProcessComponent(entity, compInfo);
 		}
 	}
-	if (obj.contains("scripts")) {
-		jsonarray scripts = obj["scripts"].get<jsonarray>();
-		for (auto& script : scripts) {
 
-			entity->AddScript(script.get<std::string>());
+	if (obj.contains("scripts")) {
+
+		//TODO: separar esto en un metodo 
+		json& scripts = obj["scripts"];
+
+		for (auto& script : scripts.items())
+		{
+			json& scriptAttributes = script.value();
+			ECS::Script* scriptCmp = entity->AddScript(script.key());
+
+			for (auto& attribute : scriptAttributes.items()) {
+
+				json& attr = attribute.value();
+
+				Scripting::Variable value;
+
+				std::string type = attr["type"].get<std::string>();
+
+				if (type == "float") {
+
+					float v = attr["value"].get<float>();
+					value = v;
+				}
+				else if (type == "bool") {
+
+					bool b = attr["value"].get<bool>();
+					value = b;
+				}
+				else if (type == "char") {
+
+					char c = attr["value"].get<char>();
+					value = c;
+				}
+				else if (type == "Vector2D") {
+					std::string vec = attr["value"].get<std::string>();
+					value = (Utilities::Vector2D)vec;
+				}
+				else if (type == "string") {
+					std::string vec = attr["value"].get<std::string>();
+					value = vec;
+				}
+				else if (type == "color") {
+					Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
+					value = col;
+				}
+
+				scriptCmp->SetConstValue(attribute.key(), value);
+			}
 		}
 	}
 
@@ -186,11 +230,53 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 
 	if (overlay.contains("scripts")) {
 
-		jsonarray scripts = overlay["scripts"].get<jsonarray>();
+		//TODO: separar esto en un metodo 
 
-		for (auto& script : scripts)
+		json& scripts = overlay["scripts"];
+
+		for (auto& script : scripts.items())
 		{
-			entity->AddScript(script.get<std::string>());
+			json& scriptAttributes = script.value();
+			ECS::Script* scriptCmp = entity->AddScript(script.key());
+
+			for (auto& attribute : scriptAttributes.items()) {
+
+				json& attr = attribute.value();
+
+				Scripting::Variable value;
+
+				std::string type = attr["type"].get<std::string>();
+
+				if (type == "float") {
+
+					float v = attr["value"].get<float>();
+					value = v;
+				}
+				else if (type == "bool") {
+
+					bool b = attr["value"].get<bool>();
+					value = b;
+				}
+				else if (type == "char") {
+
+					char c = attr["value"].get<char>();
+					value = c;
+				}
+				else if (type == "Vector2D") {
+					std::string vec = attr["value"].get<std::string>();
+					value = (Utilities::Vector2D)vec;
+				}
+				else if (type == "string") {
+					std::string vec = attr["value"].get<std::string>();
+					value = vec;
+				}
+				else if (type == "color") {
+					Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
+					value = col;
+				}
+
+				scriptCmp->SetConstValue(attribute.key(), value);
+			}
 		}
 	}
 

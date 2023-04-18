@@ -14,6 +14,7 @@ namespace Scripting {
 
 
 		Scripting::Variable output;
+		Scripting::Variable originalValue;
 	};
 
 }
