@@ -22,12 +22,44 @@ namespace Sound {
 		soundManager->playMusic(music_id, loop);
 	}
 
-	void Music::fadeIn(int loops, int ms) {
+	void Music::pause() {
+		soundManager->pauseMusic();
+	}
+
+	void Music::resume() {
+		soundManager->resumeMusic();
+	}
+
+	void Music::stop() {
+		soundManager->haltMusic();
+	}
+
+	void Music::fadeIn(int ms, int loops) {
 		soundManager->fadeInMusic(music_id, loops, ms);
 	}
 
 	void Music::fadeOut(int ms) {
 		soundManager->fadeOutMusic(ms);
+	}
+
+	bool Music::isPlaying() {
+		return soundManager->isMusicPlaying();
+	}
+
+	bool Music::isPaused() {
+		return soundManager->musicPaused();
+	}
+
+	void Music::setMusicVolume(float volume) {
+		soundManager->setMusicVolume(volume);
+	}
+
+	float Music::getMusicVolume() {
+		return soundManager->getMusicVolume();
+	}
+
+	void Music::rewindMusic() {
+		soundManager->rewindMusic();
 	}
 
 }

@@ -2,17 +2,21 @@
 
 #include "Component.h"
 
+namespace Input {
+	class InputManager;
+}
+
 namespace ECS {
 
 	class Transform;
 	class BoxBody;
-	class SoundEmitter;
+	class MusicEmitter;
 
 	class LinkComponent : public Component {
 
 	public:
 
-		void start() override;
+		void init() override;
 
 		void update(float deltaTime) override;
 
@@ -22,7 +26,9 @@ namespace ECS {
 
 	private:
 
-		SoundEmitter* soundEmitter;
+		Input::InputManager* im;
+
+		MusicEmitter* music;
 
 		Transform* transform;
 

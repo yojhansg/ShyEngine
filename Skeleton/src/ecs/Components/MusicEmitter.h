@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include <vector>
 
 namespace Sound {
     class Music;
@@ -16,6 +17,8 @@ namespace ECS {
 
         MusicEmitter(cstring fileName);
 
+        ~MusicEmitter();
+
         void init() override;
 
         void start() override;
@@ -26,19 +29,42 @@ namespace ECS {
 
         void play();
 
-        void playWithFadeIn(int ms, int loops = -1);
+        void pause();
 
-        void fadeOut(int ms);
+        void stop();
+
+        void resume();
+
+        void playWithFadeIn(float seconds, int loops = -1);
+
+        void fadeOut(float seconds);
+
+        bool isPlaying();
+
+        bool isPaused();
+
+        void rewind();
+
+        void setVolume(float volume);
+
+        float getVolume();
+
+        void shouldPlayOnStart(bool play);
 
     private:
 
-        Transform* transform;
+        static MusicEmitter* currentEmitterOnChannel;
 
         reflect std::string fileName;
         reflect bool loop;
-        reflect bool startPlaying;
+        reflect bool playOnStart;
+        reflect float volume;
+
+        Transform* transform;
 
         Sound::Music* music;
+
+        bool onChannel;
 
     };
 }

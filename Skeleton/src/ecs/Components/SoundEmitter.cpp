@@ -42,10 +42,10 @@ void ECS::SoundEmitter::start() {
 
 void ECS::SoundEmitter::update(float deltaTime) {
 
-	if (!soundManager->isChannelPlaying(channel) && playing) {
+	/*if (!soundManager->isChannelPlaying(channel) && playing) {
 		playing = false;
 		resetChannel();
-	}
+	}*/
 }
 
 void ECS::SoundEmitter::play() {
@@ -90,12 +90,12 @@ int ECS::SoundEmitter::getVolume() {
 }
 
 void ECS::SoundEmitter::resetChannel() {
-	// Pause
-	if (soundManager->pausedChannel(channel))
-		soundManager->resumeChannel(channel);
+	//// Pause
+	//if (soundManager->pausedChannel(channel))
+	//	soundManager->resumeChannel(channel);
 
-	// Volume
-	soundManager->setChannelVolume(channel, MIX_MAX_VOLUME);
+	//// Volume
+	//soundManager->setChannelVolume(channel, MIX_MAX_VOLUME);
 
 }
 

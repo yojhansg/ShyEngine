@@ -11,6 +11,13 @@ namespace Sound {
 		closeSDLMixer();
 	}
 
+	void SoundManager::setMasterVolume(float volume) {
+		Mix_MasterVolume(volume * MIX_MAX_VOLUME);
+	}
+
+
+	// ------------------ CHANNELS API --------------------------- //
+
 	int SoundManager::loadSoundEffect(Mix_Chunk* s) {
 		int nSounds = sfxs.size();
 
@@ -19,24 +26,8 @@ namespace Sound {
 		return nSounds;
 	}
 
-	int SoundManager::loadMusic(Mix_Music* m) {
-		int nMusic = music.size();
-
-		music.push_back(m);
-
-		return nMusic;
-	}
-
 	int SoundManager::playSound(int id, int loop, int channel) {
 		return Mix_PlayChannel(channel, sfxs[id], loop);
-	}
-
-	void SoundManager::playMusic(int id, int loop) {
-
-		if (musicPlaying()) haltMusic();
-
-		int e = Mix_PlayMusic(music[id], loop);
-		assert(e == 0, Mix_GetError());
 	}
 
 	int SoundManager::fadeInChannel(int channel, int id, int loops, int ms) {
@@ -46,22 +37,6 @@ namespace Sound {
 	int SoundManager::fadeOutChannel(int channel, int ms) {
 		return Mix_FadeOutChannel(channel, ms);
 	}
-
-	void SoundManager::fadeInMusic(int id, int loops, int ms) {
-		int e = Mix_FadeInMusic(music[id], loops, ms);
-		assert(e == 0, Mix_GetError());
-	}
-
-	void SoundManager::fadeOutMusic(int ms) {
-		Mix_FadeOutMusic(ms);
-	}
-
-	void SoundManager::setMasterVolume(float volume) {
-		Mix_MasterVolume(volume * MIX_MAX_VOLUME);
-	}
-
-
-	// ------------------ CHANNELS API --------------------------- //
 
 	void SoundManager::pauseChannel(int channel) {
 
@@ -123,6 +98,36 @@ namespace Sound {
 
 	// --------------------- MUSIC API -----------------------------
 
+	int SoundManager::loadMusic(Mix_Music* m) {
+		int nMusic = music.size();
+
+		music.push_back(m);
+
+		return nMusic;
+	}
+
+	void SoundManager::playMusic(int id, int loop) {
+
+		if (isMusicPlaying())
+			haltMusic();
+
+		int e = Mix_PlayMusic(music[id], loop);
+		assert(e == 0, Mix_GetError());
+	}
+
+	void SoundManager::fadeInMusic(int id, int loops, int ms) {
+
+		if (isMusicPlaying())
+			haltMusic();
+
+		int e = Mix_FadeInMusic(music[id], loops, ms);
+		assert(e == 0, Mix_GetError());
+	}
+
+	void SoundManager::fadeOutMusic(int ms) {
+		Mix_FadeOutMusic(ms);
+	}
+
 	void SoundManager::pauseMusic() {
 		Mix_PauseMusic();
 	}
@@ -139,7 +144,7 @@ namespace Sound {
 		Mix_ResumeMusic();
 	}
 
-	bool SoundManager::musicPlaying() {
+	bool SoundManager::isMusicPlaying() {
 		return Mix_PlayingMusic() != 0;
 	}
 
@@ -163,6 +168,7 @@ namespace Sound {
 
 		e = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 		assert(e >= 0, Mix_GetError());
+
 	}
 
 	void SoundManager::closeSDLMixer() {

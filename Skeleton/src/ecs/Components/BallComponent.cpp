@@ -3,17 +3,21 @@
 #include "Entity.h"
 #include "Transform.h"
 #include "CircleBody.h"
-#include "SoundEmitter.h"
+#include "MusicEmitter.h"
+
+#include <iostream>
 
 namespace ECS {
 
-	void BallComponent::start() {
+	void BallComponent::init() {
+
+		im = Input::InputManager::instance();
 
 		transform = this->getEntity()->getComponent<Transform>();
 
 		body = this->getEntity()->getComponent<CircleBody>();
 
-		soundEmitter = this->getEntity()->getComponent<SoundEmitter>();
+		music = this->getEntity()->getComponent<MusicEmitter>();
 
 		onGround = false;
 
@@ -21,15 +25,19 @@ namespace ECS {
 
 	void BallComponent::update(float deltaTime) {
 
-		auto im = Input::InputManager::instance();
+		if (music->isPlaying())
+			std::cout << "Ball Playing!" << std::endl;
 
 		if (im->keyDownEvent()) {
+
+			if (im->isKeyDown(SDL_SCANCODE_D)) {
+				music->play();
+			}
 
 			if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
 				body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
 				body->applyLinearImpulseToCenter({ 0, -50 });
 
-				soundEmitter->play();
 			}
 
 		}

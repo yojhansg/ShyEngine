@@ -43,10 +43,7 @@ void Game::initScenes() {
 
 void Game::firstScene() {
 
-	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
-	Sound::SoundManager::instance()->setChannelVolume(-1, 20);
-	Sound::SoundManager::instance()->setMusicVolume(20);
-
+	auto renderer = Renderer::RendererManager::instance();
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -59,7 +56,7 @@ void Game::firstScene() {
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
-		auto soundEmitter = player->addComponent<ECS::SoundEmitter>("sounds/jump.mp3");
+		auto musicEmitter = player->addComponent<ECS::MusicEmitter>("sounds/starwars.mp3");
 		auto lComp = player->addComponent<ECS::LinkComponent>();
 
 		// Ground
@@ -74,7 +71,7 @@ void Game::firstScene() {
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("images/ball.png");
-		auto ballSoundEmitter = ball->addComponent<ECS::SoundEmitter>("sounds/retro.wav");
+		auto ballMusicEmitter = ball->addComponent<ECS::MusicEmitter>("sounds/got.mp3");
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
 		auto bComp = ball->addComponent<ECS::BallComponent>();
 
@@ -88,7 +85,8 @@ void Game::firstScene() {
 		tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
 		tr->SetScale({0.35f, 0.35f});
 		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		soundEmitter->enableStartPlaying(false);
+		musicEmitter->shouldPlayOnStart(false);
+		musicEmitter->setVolume(0.1f);
 
 		// Ground
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
@@ -98,6 +96,7 @@ void Game::firstScene() {
 		trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
 		trBall->SetScale({ 0.25f, 0.25f });
 		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballSoundEmitter->enableStartPlaying(false);
+		ballMusicEmitter->shouldPlayOnStart(false);
+		ballMusicEmitter->setVolume(0.05f);
 
 }
