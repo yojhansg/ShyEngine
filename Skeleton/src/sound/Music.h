@@ -15,27 +15,7 @@ namespace Sound {
 
 		~Music();
 
-		void play(int loop);
-
-		void pause();
-
-		void resume();
-
-		void stop();
-
-		void fadeIn(int ms, int loops = -1);
-
-		void fadeOut(int ms);
-
-		bool isPlaying();
-
-		bool isPaused();
-
-		void setMusicVolume(float volume);
-
-		float getMusicVolume();
-
-		void rewindMusic();
+		int getMusicId();
 
 	private:
 

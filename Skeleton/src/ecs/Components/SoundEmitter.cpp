@@ -5,102 +5,221 @@
 
 #include <ResourcesManager.h>
 #include <SoundManager.h>
-#include <iostream>
+#include <ScriptFunctionality.h>
+#include <RendererManager.h>
+#include <cmath>
 
-ECS::SoundEmitter::SoundEmitter(cstring fileName) {
-	transform = nullptr;
-	soundEffect = nullptr;
+#define MIX_MAX_PANNING 255
+#define MIX_AUDIBLE_DISTANCE 255
 
-	loop = false;
-	startPlaying = true;
-	
-	playing = false;
-	volume = MIX_MAX_VOLUME;
+namespace ECS {
 
-	channel = -1;
+	std::vector<SoundEmitter*> SoundEmitter::soundEmitters = std::vector<SoundEmitter*>();
 
-	this->fileName = fileName;
-}
+	SoundEmitter::SoundEmitter(cstring fileName) {
 
-void ECS::SoundEmitter::init() {
+		sManager = Sound::SoundManager::instance();
 
-	transform = getEntity()->getComponent<Transform>();
-	assert(transform != nullptr, "La entidad debe contener un componente Transform");
+		sFunctionality = Scripting::ScriptFunctionality::instance();
 
-	soundManager = Sound::SoundManager::instance();
+		transform = nullptr;
+		soundEffect = nullptr;
 
-	changeSound(fileName);
+		loop = false;
+		playOnStart = true;
+		onChannel = false;
+		channel = -1;
+		panning = .5f;
+		spatialSound = false;
+		audibleDistance = 0;
 
-}
+		volume = .5f;	
 
-void ECS::SoundEmitter::start() {
+		this->fileName = fileName; 
 
-	if (startPlaying)
-		play();
+		soundEmitters.push_back(this);
+	}
 
-}
+	SoundEmitter::~SoundEmitter() {
+		stop();
+	}
 
-void ECS::SoundEmitter::update(float deltaTime) {
+	void SoundEmitter::init() {
 
-	/*if (!soundManager->isChannelPlaying(channel) && playing) {
-		playing = false;
-		resetChannel();
-	}*/
-}
+		transform = getEntity()->getComponent<Transform>();
+		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-void ECS::SoundEmitter::play() {
-	channel = soundEffect->play(loop);
+		changeSound(fileName);
 
-	playing = true;
+		sound_id = soundEffect->getSoundId();
 
-}
+		float halfWidth = Renderer::RendererManager::instance()->getWidth() / 2;
+		float haldHeight = Renderer::RendererManager::instance()->getHeight() / 2;
 
-void ECS::SoundEmitter::playWithfadeIn(int ms, int loops) {
-	channel = soundEffect->fadeInChannel(ms, loops);
+		audibleDistance = Utilities::Vector2D(halfWidth, haldHeight).magnitude();
 
-	playing = true;
-}
+	}
 
-void ECS::SoundEmitter::fadeOut(int ms) {
-	channel = soundEffect->fadeOutChannel(ms);
-}
+	void SoundEmitter::start() {
 
-void ECS::SoundEmitter::enableStartPlaying(bool enable) {
-	startPlaying = enable;
-}
+		if (playOnStart)
+			play();
 
-bool ECS::SoundEmitter::startsPlaying() {
-	return startPlaying;
-}
+	}
 
-void ECS::SoundEmitter::setLoop(bool loop) {
-	this->loop = loop;
-}
+	void SoundEmitter::update(float deltaTime) {
 
-bool ECS::SoundEmitter::isLoop() {
-	return loop;
-}
+		if (onChannel && spatialSound) {
 
-void ECS::SoundEmitter::setVolume(int volume) {
-	this->volume = volume;
-}
+			auto distanceToCamera = (transform->GetLocalPosition() - sFunctionality->Camera_GetPosition());
 
-int ECS::SoundEmitter::getVolume() {
-	return volume;
-}
+			auto dNormalized = distanceToCamera.normalize();
 
-void ECS::SoundEmitter::resetChannel() {
-	//// Pause
-	//if (soundManager->pausedChannel(channel))
-	//	soundManager->resumeChannel(channel);
+			int16_t angle = atan2(dNormalized.getX(), dNormalized.getY()) * 180 / M_PI;
 
-	//// Volume
-	//soundManager->setChannelVolume(channel, MIX_MAX_VOLUME);
+			int d = distanceToCamera.magnitude() * MIX_AUDIBLE_DISTANCE / audibleDistance;
 
-}
+			if (d > MIX_AUDIBLE_DISTANCE) d = MIX_AUDIBLE_DISTANCE;
 
-void ECS::SoundEmitter::changeSound(cstring soundPath) {
-	fileName = soundPath;
+			sManager->setChannelPosition(channel, angle, d);
 
-	soundEffect = Resources::ResourcesManager::instance()->addSound(fileName);
+		}
+
+	}
+
+	void SoundEmitter::changeSound(cstring soundPath) {
+		fileName = soundPath;
+
+		soundEffect = Resources::ResourcesManager::instance()->addSound(fileName);
+	}
+
+	void SoundEmitter::play() {
+
+		onChannel = true;
+
+		channel = sManager->playSound(sound_id, loop);
+
+		sManager->setChannelVolume(channel, volume * MIX_MAX_VOLUME);
+
+		applyPanning();
+
+		disableEmittersOnSameChannel();
+
+	}
+
+	void SoundEmitter::playWithfadeIn(int seconds, int loops) {
+
+		onChannel = true;
+
+		sManager->setChannelVolume(channel, volume * MIX_MAX_VOLUME);
+
+		channel = sManager->fadeInChannel(channel, sound_id, loops, seconds * 1000.0f);
+
+		applyPanning();
+
+		disableEmittersOnSameChannel();
+
+	}
+
+	void SoundEmitter::pause() {
+		if (onChannel)
+			sManager->pauseChannel(channel);
+	}
+
+	void SoundEmitter::stop() {
+		if (onChannel)
+			sManager->stopChannel(channel);
+	}
+
+	void SoundEmitter::resume() {
+		if (onChannel)
+			sManager->resumeChannel(channel);
+	}
+
+	void SoundEmitter::fadeOut(int seconds) {
+
+		if (onChannel)
+			sManager->fadeOutChannel(channel, seconds * 1000.0f);
+
+	}
+
+	bool SoundEmitter::isPlaying() {
+		if (onChannel)
+			return sManager->isChannelPlaying(channel);
+
+		return false;
+	}
+
+	bool SoundEmitter::isPaused() {
+		if (onChannel)
+			return sManager->pausedChannel(channel);
+
+		return false;
+	}
+
+	void SoundEmitter::setVolume(float volume) {
+
+		assert(volume >= 0.0f && volume <= 1.0f, "Volume value must be between 0 and 1!");
+
+		this->volume = volume;
+	}
+
+	int SoundEmitter::getVolume() {
+		return volume;
+	}
+
+	void SoundEmitter::shouldPlayOnStart(bool play) {
+		this->playOnStart = play;
+	}
+
+	void SoundEmitter::setLoop(bool loop) {
+		this->loop = loop;
+	}
+
+	bool SoundEmitter::isOnLoop() {
+		return loop;
+	}
+
+	void SoundEmitter::enableSpatialSound(bool enable) {
+		this->spatialSound = enable;
+	}
+
+	bool SoundEmitter::isSpatialSoundEnabled() {
+		return spatialSound;
+	}
+
+	void SoundEmitter::setPanning(float panning) {
+
+		assert(panning >= 0.0f && panning <= 1.0f, "Panning value must be between 0 and 1!");
+
+		this->panning = panning;
+
+		if (onChannel)
+			applyPanning();
+	}
+
+	float SoundEmitter::getPanning() {
+		return panning;
+	}
+
+	void SoundEmitter::setAudibleDistance(float distance) {
+		this->audibleDistance = distance;
+	}
+
+	float SoundEmitter::getAudibleDistance() {
+		return audibleDistance;
+	}
+
+	void SoundEmitter::disableEmittersOnSameChannel() {
+		for (auto s : soundEmitters)
+			if (s != nullptr && s != this)
+				if (s->onChannel && s->channel == channel)
+					s->onChannel = false;
+	}
+
+	void SoundEmitter::applyPanning() {
+		if (!spatialSound)
+			sManager->setChannelPanning(channel, MIX_MAX_PANNING - (panning * MIX_MAX_PANNING), panning * MIX_MAX_PANNING);
+	}
+
 }

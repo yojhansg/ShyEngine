@@ -7,25 +7,20 @@
 
 namespace Sound {
 
-	class SoundEffect;
-	class Music;
-
 	class SoundManager : public Utilities::Singleton<SoundManager> {
 
 		friend Singleton<SoundManager>;
-
-		friend SoundEffect;
-		friend Music;
 
 	public:
 
 		~SoundManager();
 
+		// Sets the master volume (affects music and sound channels)
+		// Volume should be between 0 and 1
 		void setMasterVolume(float volume);
-		
-	private:
 
-		SoundManager();
+		// Sets the number of channels handled by the audio engine
+		void setChannelsCapacity(float nChannels);
 
 		// Channels
 
@@ -40,31 +35,21 @@ namespace Sound {
 			int fadeInChannel(int channel, int id, int loops, int ms);
 
 			// Play a sound with fade out specifying a channel. -1 to find the first available channel
-			int fadeOutChannel(int channel, int ms);
+			void fadeOutChannel(int channel, int ms);
+
+			void stopChannel(int channel);
 
 			// Pause a particular channel
 			void pauseChannel(int channel);
 
-			// Pause all channels
-			void pauseAllChannels();
-
 			// Return 1 if channel is paused, 0 otherwise
 			bool pausedChannel(int channel);
-
-			// Returns the number of paused channels
-			int numberOfPausedChannels();
 
 			// Resume a channel
 			void resumeChannel(int channel);
 
-			// Resume all channels
-			void resumeAllChannels();
-
 			// Returns non-zero if channel is playing, zero otherwise.
 			bool isChannelPlaying(int channel);
-
-			// Return the total number of channel playings
-			int numberOfChannelsPlaying();
 
 			// Set volume to a channel. Volume is between 0 and 128
 			void setChannelVolume(int channel, int volume);
@@ -115,9 +100,15 @@ namespace Sound {
 
 			// Rewinds the music
 			void rewindMusic();
+		
+	private:
+
+		SoundManager();
 
 		void initSDLMixer();
 		void closeSDLMixer();
+
+		int nChannels;
 
 		std::vector<Mix_Chunk*> sfxs;
 		std::vector<Mix_Music*> music;

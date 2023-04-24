@@ -16,15 +16,9 @@ namespace Sound {
 
 		~SoundEffect();
 
-		int play(int loop, int channel = -1);
-
-		int fadeInChannel(int ms, int loops = -1, int channel = -1);
-
-		int fadeOutChannel(int ms, int channel = -1);
+		int getSoundId();
 
 	private:
-
-		SoundManager* soundManager;
 
 		int sound_id;
 

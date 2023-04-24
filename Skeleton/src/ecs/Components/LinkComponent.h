@@ -10,7 +10,7 @@ namespace ECS {
 
 	class Transform;
 	class BoxBody;
-	class MusicEmitter;
+	class SoundEmitter;
 
 	class LinkComponent : public Component {
 
@@ -28,7 +28,7 @@ namespace ECS {
 
 		Input::InputManager* im;
 
-		MusicEmitter* music;
+		SoundEmitter* sound;
 
 		Transform* transform;
 

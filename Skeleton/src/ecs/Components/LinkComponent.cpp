@@ -1,11 +1,9 @@
 #include "LinkComponent.h"
 #include "InputManager.h"
-#include "Entity.h"
+#include "SoundEmitter.h"
 #include "Transform.h"
 #include "BoxBody.h"
-#include "MusicEmitter.h"
-
-#include <iostream>
+#include "Entity.h"
 
 namespace ECS {
 
@@ -17,7 +15,7 @@ namespace ECS {
 
 		body = this->getEntity()->getComponent<BoxBody>();
 
-		music = this->getEntity()->getComponent<MusicEmitter>();
+		sound = this->getEntity()->getComponent<SoundEmitter>();
 
 		onGround = false;
 	}
@@ -25,18 +23,12 @@ namespace ECS {
 
 	void LinkComponent::update(float deltaTime) {
 
-		if (music->isPlaying())
-			std::cout << "Link Playing!" << std::endl;
-
 		if (im->keyDownEvent()) {
 
-			if (im->isKeyDown(SDL_SCANCODE_A)) {
-				music->play();
-			}
-
 			if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
-				body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
 				body->applyLinearImpulseToCenter({ 0, -300 });
+
+				sound->play();
 
 			}
 

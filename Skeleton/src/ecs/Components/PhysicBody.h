@@ -162,7 +162,7 @@ namespace ECS {
         bool onCollisonStay;
         bool onTriggerStay;
 
-        Entity* b;
+        Entity* collisionEntity;
 
     };
 }

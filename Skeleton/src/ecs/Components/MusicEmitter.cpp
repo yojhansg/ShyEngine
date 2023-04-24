@@ -8,9 +8,12 @@
 
 namespace ECS {
 	
-	MusicEmitter* MusicEmitter::currentEmitterOnChannel = nullptr;
+	MusicEmitter* MusicEmitter::emitterOnChannel = nullptr;
 
 	MusicEmitter::MusicEmitter(cstring fileName) {
+
+		sManager = Sound::SoundManager::instance();
+
 		transform = nullptr;
 		music = nullptr;
 
@@ -34,12 +37,8 @@ namespace ECS {
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
 		changeMusic(fileName);
-	}
-	
-	void MusicEmitter::changeMusic(cstring soundPath) {
-		fileName = soundPath;
 
-		music = Resources::ResourcesManager::instance()->addMusic(fileName);
+		music_id = music->getMusicId();
 	}
 
 	void MusicEmitter::start() {
@@ -48,31 +47,37 @@ namespace ECS {
 			play();
 
 	}
+	
+	void MusicEmitter::changeMusic(cstring soundPath) {
+		fileName = soundPath;
+
+		music = Resources::ResourcesManager::instance()->addMusic(fileName);
+	}
 
 	void MusicEmitter::play() {
 
-		if (MusicEmitter::currentEmitterOnChannel != nullptr)
-			MusicEmitter::currentEmitterOnChannel->onChannel = false;
+		if (emitterOnChannel != nullptr)
+			emitterOnChannel->onChannel = false;
 
-		MusicEmitter::currentEmitterOnChannel = this;
+		emitterOnChannel = this;
 
 		onChannel = true;
 
-		music->setMusicVolume(volume * MIX_MAX_VOLUME);
+		sManager->setMusicVolume(volume * MIX_MAX_VOLUME);
 
-		music->play(loop);
+		sManager->playMusic(music_id, loop);
 
 	}
 
 	void MusicEmitter::pause() {
 		if (onChannel)
-			music->pause();
+			sManager->pauseMusic();
 	}
 
 	void MusicEmitter::stop() {
 
 		if (onChannel) {
-			music->stop();
+			sManager->haltMusic();
 
 			onChannel = false;
 		}
@@ -80,45 +85,45 @@ namespace ECS {
 
 	void MusicEmitter::resume() {
 		if (onChannel)
-			music->resume();
+			sManager->resumeMusic();
 	}
 
 	void MusicEmitter::playWithFadeIn(float seconds, int loops) {
 
-		if (MusicEmitter::currentEmitterOnChannel != nullptr)
-			MusicEmitter::currentEmitterOnChannel->onChannel = false;
+		if (emitterOnChannel != nullptr)
+			emitterOnChannel->onChannel = false;
 
-		MusicEmitter::currentEmitterOnChannel = this;
+		emitterOnChannel = this;
 		
 		onChannel = true;
 
-		music->setMusicVolume(volume * MIX_MAX_VOLUME);
+		sManager->setMusicVolume(volume * MIX_MAX_VOLUME);
 
-		music->fadeIn(seconds * 1000.0f, loops);
+		sManager->fadeInMusic(music_id, seconds * 1000.0f, loops);
 	}
 
 	void MusicEmitter::fadeOut(float seconds) {
 		if (onChannel)
-			music->fadeOut(seconds * 1000.0f);
+			sManager->fadeOutMusic(seconds * 1000.0f);
 	}
 
 	bool MusicEmitter::isPlaying() {
 		if (onChannel)
-			return music->isPlaying();
+			return sManager->isMusicPlaying();
 
 		return false;
 	}
 
 	bool MusicEmitter::isPaused() {
 		if (onChannel)
-			return music->isPaused();
+			return sManager->musicPaused();
 
 		return false;
 	}
 
 	void MusicEmitter::rewind() {
 		if (onChannel)
-			music->rewindMusic(); 
+			sManager->rewindMusic();
 	}
 
 	void MusicEmitter::setVolume(float volume) {
@@ -134,6 +139,14 @@ namespace ECS {
 
 	void MusicEmitter::shouldPlayOnStart(bool play) {
 		playOnStart = play;
+	}
+
+	void MusicEmitter::setLoop(bool loop) {
+		this->loop = loop;
+	}
+
+	bool MusicEmitter::isOnLoop() {
+		return loop;
 	}
 
 }
