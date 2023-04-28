@@ -147,6 +147,12 @@
     <ClInclude Include="..\..\src\ecs\Components\BallComponent.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Particle.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\ParticleSystem.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -261,6 +267,12 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\BallComponent.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Particle.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\ParticleSystem.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>

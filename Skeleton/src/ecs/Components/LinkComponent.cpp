@@ -1,4 +1,5 @@
 #include "LinkComponent.h"
+#include "ParticleSystem.h"
 #include "InputManager.h"
 #include "SoundEmitter.h"
 #include "Transform.h"
@@ -15,8 +16,6 @@ namespace ECS {
 
 		body = this->getEntity()->getComponent<BoxBody>();
 
-		sound = this->getEntity()->getComponent<SoundEmitter>();
-
 		onGround = false;
 	}
 
@@ -27,8 +26,6 @@ namespace ECS {
 
 			if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
 				body->applyLinearImpulseToCenter({ 0, -300 });
-
-				sound->play();
 
 			}
 

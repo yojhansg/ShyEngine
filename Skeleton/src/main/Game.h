@@ -4,16 +4,9 @@
 * A class to test if ECS works
 */
 
-#include <string>
-#include <vector>
-
-#include <json.hpp>
-
-
 namespace ECS {
 	class SceneManager;
 	class Scene;
-	class Overlay;
 }
 
 class Game {

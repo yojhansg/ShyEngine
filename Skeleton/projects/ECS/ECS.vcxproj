@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\src\ecs\Components\Overlay.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayImage.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayText.h" />
+    <ClInclude Include="..\..\src\ecs\Components\ParticleSystem.h" />
     <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Image.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="..\..\src\ecs\ECSUtilities\FunctionManager.h" />
     <ClInclude Include="..\..\src\ecs\Entity.h" />
     <ClInclude Include="..\..\src\ecs\OverlayManager.h" />
+    <ClInclude Include="..\..\src\ecs\Particle.h" />
     <ClInclude Include="..\..\src\ecs\RenderManager.h" />
     <ClInclude Include="..\..\src\ecs\Save.h" />
     <ClInclude Include="..\..\src\ecs\Scene.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="..\..\src\ecs\Components\Overlay.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayImage.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayText.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\ParticleSystem.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
@@ -216,6 +219,7 @@
     <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Entity.cpp" />
     <ClCompile Include="..\..\src\ecs\OverlayManager.cpp" />
+    <ClCompile Include="..\..\src\ecs\Particle.cpp" />
     <ClCompile Include="..\..\src\ecs\RenderManager.cpp" />
     <ClCompile Include="..\..\src\ecs\Save.cpp" />
     <ClCompile Include="..\..\src\ecs\Scene.cpp" />

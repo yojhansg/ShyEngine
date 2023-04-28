@@ -59,8 +59,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Image_getTextureWidth",Image_getTextureWidth);
 	map.emplace("Image_getTextureHeight",Image_getTextureHeight);
 	map.emplace("Image_setSrcRect",Image_setSrcRect);
-	map.emplace("Image_setFlipX",Image_setFlipX);
-	map.emplace("Image_setFlipY",Image_setFlipY);
+	/*map.emplace("Image_setFlipX",Image_setFlipX);
+	map.emplace("Image_setFlipY",Image_setFlipY);*/
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
 	map.emplace("Image_scaledSize",Image_scaledSize);
 	map.emplace("Image_ChangeTexture",Image_ChangeTexture);
@@ -495,46 +495,46 @@ Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec)
 	self->setSrcRect(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(1), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Image* self = vec[0].value.entity->getComponent<Image>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", vec[0].value.entity->getEntityName(), Image);
-		return Scripting::Variable::Null();
-	}
-	self->setFlipX(vec[1].value.Bool);
-	return Scripting::Variable::Null();
-}
-Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
-
-	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(0), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	if(vec[1].type != Scripting::Variable::Type::Bool){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(1), std::string(""),  ""); 
-		return Scripting::Variable::Null();
-	}
-
-	Image* self = vec[0].value.entity->getComponent<Image>();
-	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", vec[0].value.entity->getEntityName(), Image);
-		return Scripting::Variable::Null();
-	}
-	self->setFlipY(vec[1].value.Bool);
-	return Scripting::Variable::Null();
-}
+//Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
+//
+//	if(vec[0].type != Scripting::Variable::Type::Entity){
+//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(0), std::string(""),  ""); 
+//		return Scripting::Variable::Null();
+//	}
+//
+//	if(vec[1].type != Scripting::Variable::Type::Bool){
+//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(1), std::string(""),  ""); 
+//		return Scripting::Variable::Null();
+//	}
+//
+//	Image* self = vec[0].value.entity->getComponent<Image>();
+//	if(self == nullptr){
+//		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", vec[0].value.entity->getEntityName(), Image);
+//		return Scripting::Variable::Null();
+//	}
+//	self->setFlipX(vec[1].value.Bool);
+//	return Scripting::Variable::Null();
+//}
+//Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
+//
+//	if(vec[0].type != Scripting::Variable::Type::Entity){
+//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(0), std::string(""),  ""); 
+//		return Scripting::Variable::Null();
+//	}
+//
+//	if(vec[1].type != Scripting::Variable::Type::Bool){
+//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(1), std::string(""),  ""); 
+//		return Scripting::Variable::Null();
+//	}
+//
+//	Image* self = vec[0].value.entity->getComponent<Image>();
+//	if(self == nullptr){
+//		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", vec[0].value.entity->getEntityName(), Image);
+//		return Scripting::Variable::Null();
+//	}
+//	self->setFlipY(vec[1].value.Bool);
+//	return Scripting::Variable::Null();
+//}
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){

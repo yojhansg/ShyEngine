@@ -8,7 +8,7 @@
 #include <SceneManager.h>
 #include <SoundManager.h>
 
-#include <Components/Overlay.h>
+#include <Components/ParticleSystem.h>
 #include <Components/LinkComponent.h>
 #include <Components/BallComponent.h>
 #include <Components/OverlayImage.h>
@@ -20,12 +20,8 @@
 #include <Components/ChainBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/BoxBody.h>
+#include <Components/Overlay.h>
 #include <Components/Image.h>
-
-#include <ECSUtilities/FunctionManager.h>
-#include <ECSUtilities/ClassReflection.h>
-#include <Scripting/Script.h>
-
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -59,8 +55,8 @@ void Game::firstScene() {
 		auto tr = player->addComponent<ECS::Transform>();
 		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
-		auto linkEmitter = player->addComponent<ECS::SoundEmitter>("sounds/jump.mp3");
 		auto lComp = player->addComponent<ECS::LinkComponent>();
+		auto pSys = player->addComponent<ECS::ParticleSystem>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
@@ -70,13 +66,13 @@ void Game::firstScene() {
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
+		/*ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
 		auto imBall = ball->addComponent<ECS::Image>("images/ball.png");
 		auto ballBody = ball->addComponent<ECS::CircleBody>();
 		auto ballEmitter = ball->addComponent<ECS::SoundEmitter>("sounds/retro.wav");
-		auto bComp = ball->addComponent<ECS::BallComponent>();
+		auto bComp = ball->addComponent<ECS::BallComponent>();*/
 
 	
 	// 3.- Init
@@ -89,17 +85,18 @@ void Game::firstScene() {
 		tr->SetScale({0.35f, 0.35f});
 		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setFriction(0.5f);
-		linkEmitter->shouldPlayOnStart(false);
-		linkEmitter->enableSpatialSound(true);
+
+			// Particle system
+			pSys->changeTexture("images/pluma.png");
 
 		// Ground
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
 		grBody->addOffSet(0, grBody->getSize().getY() / 2);
 		
 		// Ball
-		trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
+		/*trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
 		trBall->SetScale({ 0.25f, 0.25f });
 		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballEmitter->shouldPlayOnStart(false);
+		ballEmitter->shouldPlayOnStart(false);*/
 
 }

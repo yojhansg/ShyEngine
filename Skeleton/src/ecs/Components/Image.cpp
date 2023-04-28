@@ -4,16 +4,14 @@
 #include <SDL_image.h>
 #include <Texture.h>
 #include <ResourcesManager.h>
-#include <ScriptFunctionality.h>
 #include <RendererManager.h>
+#include <ScriptFunctionality.h>
 
 namespace ECS {
 
 	Image::Image(const std::string& fileName) {
 		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
-		srcX = srcY = srcWidth = srcHeight = 0;
-
-		flipX = flipY = false;
+		srcX = srcY = srcWidth = srcHeight = 0; flipmode = 0;
 
 		this->fileName = fileName;
 	}
@@ -30,9 +28,6 @@ namespace ECS {
 		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
 		ChangeTexture(fileName);
-
-		// Flip
-		flipMode();
 
 		// Rotation point
 		rotationPoint = new SDL_Point({ srcWidth / 2, srcHeight / 2 });
@@ -63,7 +58,7 @@ namespace ECS {
 		rotationPoint->x = w / 2;
 		rotationPoint->y = h / 2;
 
-		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), rotationPoint, mode);
+		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), rotationPoint, (SDL_RendererFlip) flipmode);
 	}
 
 	int Image::getTextureWidth() {
@@ -77,16 +72,6 @@ namespace ECS {
 	void Image::setSrcRect(int x, int y, int w, int h) {
 		srcX = x; srcY = y;
 		srcWidth = w; srcHeight = h;
-	}
-
-	void Image::setFlipX(bool flip) {
-		flipX = flip;
-		flipMode();
-	}
-
-	void Image::setFlipY(bool flip) {
-		flipY = flip;
-		flipMode();
 	}
 
 	void Image::setRotaionPoint(int x, int y) {
@@ -105,15 +90,7 @@ namespace ECS {
 		srcWidth = texture->getWidth(); srcHeight = texture->getHeight();
 	}
 
-	void Image::flipMode() {
-		if (!flipX && !flipY) mode = SDL_FLIP_NONE;
-		else {
-
-			assert(!flipX && flipY || flipX && !flipY, "Image can not be fliped horizontally and vertically.");
-
-			if (flipX) mode = SDL_FLIP_HORIZONTAL;
-			else mode = SDL_FLIP_VERTICAL;
-		}
+	void Image::setFlipMode(int flipmode) {
+		this->flipmode = flipmode;
 	}
-
 }
