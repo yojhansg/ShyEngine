@@ -16,6 +16,8 @@ namespace ECS {
 
 		body = this->getEntity()->getComponent<BoxBody>();
 
+		pSystem = this->getEntity()->getComponent<ParticleSystem>();
+
 		onGround = false;
 	}
 
@@ -24,9 +26,16 @@ namespace ECS {
 
 		if (im->keyDownEvent()) {
 
-			if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
-				body->applyLinearImpulseToCenter({ 0, -300 });
-
+			if (onGround) {
+				if (im->isKeyDown(SDL_SCANCODE_SPACE)) {
+					body->applyLinearImpulseToCenter({ 0, -300 });
+				}
+				else if (im->isKeyDown(SDL_SCANCODE_A)) {
+					body->applyLinearImpulseToCenter({ -7, 0 });
+				}
+				else if (im->isKeyDown(SDL_SCANCODE_D)) {
+					body->applyLinearImpulseToCenter({ 7, 0 });
+				}
 			}
 
 		}

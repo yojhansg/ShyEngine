@@ -82,15 +82,13 @@ void Game::firstScene() {
 
 		// Player
 		tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
-		tr->SetScale({0.35f, 0.35f});
+		tr->SetScale({0.25f, 0.25f});
 		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setFriction(0.5f);
 
-			// Particle system
-			pSys->changeTexture("images/pluma.png");
-
 		// Ground
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
+		grTr->SetScale({ 0.5f, 0.5f });
 		grBody->addOffSet(0, grBody->getSize().getY() / 2);
 		
 		// Ball

@@ -11,21 +11,50 @@ namespace Renderer {
     class Texture;
 }
 
+namespace Physics {
+    class PhysicsManager;
+}
+
 namespace ECS {
 
     class Transform;
     class Particle;
+    class ParticleSystem;
 
     class Burst {
 
     public:
 
-        Burst(float time, int particles, int cycles, float rate, float probability);
+        Burst(ParticleSystem* system, float time, int particles, int cycles, float rate, float probability);
+
+        void reset();
+
+        // Setters & getters
+        float getCurrentTime();
+        void setBurstTimer(float time);
+
+        float getIntervalTime();
+        void setIntervalTimer(float time);
+
+        float getRate();
+        int getNumberOfParticles();
+
+        int getCycles();
+        void decreaseCycles();
+
+        float getProbabilityToBurst();
+
+        float getTimeBetweenBursts();
 
     private:
 
+        ParticleSystem* system;
+
         // Delay time to generate the burst
         float timeToBurst;
+
+        // Time between bursts
+        float rate;
 
         // Particles to be generated
         int nParticles;
@@ -33,17 +62,19 @@ namespace ECS {
         // Times to generate the burst
         int cycles;
 
-        // Time between bursts
-        float rate;
-
         // Probability to burst
         float probability;
+
+        float burstTimer;
+        float intervalTimer;
+        int currentCycles;
 
     };
 
     class ParticleSystem : public Component {
 
         friend class Particle;
+        friend class Burst;
 
     public:
 
@@ -57,7 +88,7 @@ namespace ECS {
 
         void update(float deltaTime) override;
 
-        void fixedUpdate(float deltaTime) override;
+        void fixedUpdate(float fixedDeltaTime) override;
 
         void render() override;
 
@@ -65,11 +96,11 @@ namespace ECS {
 
         void startEmitting();
 
+        bool isEmitting();
+
         void changeTexture(cstring texturePath);
 
         void addBurst(float time, int particles, int cycles, float rate, float probability);
-
-        void setEmissionRateOverTime(float rate);
 
     private:
 
@@ -80,50 +111,98 @@ namespace ECS {
         reflect float delay; 
         reflect bool playOnStart; 
 
+
         // Particles START configuration
-        reflect float startLifeTime;
-        reflect float startSpeed;
-        reflect Utilities::Vector2D startDirection;
-        reflect Utilities::Vector2D startPosition;
-        reflect Utilities::Vector2D startSize;
-        reflect float startRotation;
-        reflect Utilities::Color startColor;
+
+            // Lifetime
+            reflect float lifeTime;
+            reflect bool randomLifeTimeBetweenTwoValues;
+            reflect float lifeTimeFirstValue;
+            reflect float lifeTimeSecondValue;
+
+            // Speed
+            reflect float speed;
+            reflect bool randomSpeedBetweenTwoValues;
+            reflect float speedFirstValue;
+            reflect float speedSecondValue;
+
+            // Size
+            reflect Utilities::Vector2D size;
+            reflect bool randomSizeBetweenTwoValues;
+            reflect Utilities::Vector2D sizeFirstValue;
+            reflect Utilities::Vector2D sizeSecondValue;
+
+            // Angle
+            reflect float angle;
+            reflect bool randomAngleBetweenTwoValues;
+            reflect float angleFirstValue;
+            reflect float angleSecondValue;
+        
+            // Rotation
+            reflect float rotation;
+            reflect bool randomRotationBetweenTwoValues;
+            reflect float rotationFirstValue;
+            reflect float rotationSecondValue;
+
+            // Color
+            reflect Utilities::Color color;
+            reflect bool randomColorBetweenTwoColors;
+            reflect Utilities::Color colorFirstValue;
+            reflect Utilities::Color colorSecondValue;
+
 
         // Physics particles configuration
         reflect bool useGravity;
         reflect float gravityScale;
 
+
         // Render configuration
-        reflect bool useImage;
+
         reflect std::string fileName;
-        reflect int alpha;
         reflect int flipmode;
-        reflect int renderOrder;
-        reflect int shape;
         reflect int srcX;
         reflect int srcY;
         reflect int srcWidth;
         reflect int srcHeight;
 
+            // Alpha
+            reflect int alpha;
+            reflect bool randomAlphaBetweenTwoValues;
+            reflect int alphaFirstValue;
+            reflect int alphaSecondValue;
+
         // Emission coniguration
         reflect float emissionRateOverTime;
         reflect float emissionRateOverDistance;
-        reflect bool inheritPosition;
-        reflect bool inheritRotation;
-        reflect bool inheritVelocity;
 
-        // Over lifetime configuration
-        reflect float speedOverLifeTime;
-        reflect Utilities::Color colorOverLifeTime;
-        reflect Utilities::Vector2D sizeOverLifeTime;
-        reflect float rotationOverLifeTime;
+        // End lifetime configuration
+        reflect bool overLifeTimeSpeed;
+        reflect float endSpeed;
+
+        reflect bool overLifeTimeColor;
+        reflect Utilities::Color endColor;
+
+        reflect bool overLifeTimeSize;
+        reflect Utilities::Vector2D endSize;
+
+        reflect bool overLifeTimeRotation;
+        reflect float endRotation;
+
+        reflect bool overLifeTimeAlpha;
+        reflect int endAlpha;
+
+        reflect bool overLifeTimeAngle;
+        reflect bool endAngle;
+
 
         // Private methods
         void takeParticleFromPool();
         void returnParticleToPool(int idx);
         void handleUnusedParticles();
+        void handleBursts(float deltaTime);
         void closeSystem();
         void debugSystemInfo();
+        void reset();
 
         // Private attributes
         bool emitting;
@@ -133,14 +212,17 @@ namespace ECS {
         int nParticles;
 
         Transform* tr;
+        Physics::PhysicsManager* physicsManager;
+        Utilities::Vector2D prevPosition;
         Renderer::Texture* texture;
 
+        // Bursts
         std::vector<Burst*> bursts;
 
+        // Particles pool
         std::stack<int> particlesPool;
         std::vector<Particle*> particles;
         std::list<Particle*> unusedParticles;
-
 
 
         //TODO ANIMATOR

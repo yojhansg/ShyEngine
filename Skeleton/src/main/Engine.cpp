@@ -37,7 +37,7 @@ bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("flappyBird");
 
-	data.windowSize.set(1920, 1080);
+	data.windowSize.set(1080, 720);
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);

@@ -1,45 +1,217 @@
 #include "ParticleSystem.h"
 #include <ResourcesManager.h>
+#include <PhysicsManager.h>
+#include <ConsoleManager.h>
 #include "EngineTime.h"
 #include "Transform.h"
 #include "Particle.h"
 #include "Entity.h"
 #include "Texture.h"
 #include <cassert>
-#include <ConsoleManager.h>
-
-#include <iostream>
-#include <windows.h>
+#include <Utils.h>
 
 namespace ECS {
 
 	// ------------------ BURST ----------------------
 
-	Burst::Burst(float time, int particles, int cycles, float rate, float probability) {
+	Burst::Burst(ParticleSystem* system, float time, int particles, int cycles, float rate, float probability) {
+
+		this->system = system;
+
 		this->timeToBurst = time;
+		this->rate = rate;
 		this->nParticles = particles;
 		this->cycles = cycles;
 		this->rate = rate;
 		this->probability = probability;
+
+		burstTimer = 0;
+		intervalTimer = 0;
+		currentCycles = cycles;
+	}
+
+	void Burst::reset() {
+		burstTimer = 0;
+		currentCycles = cycles;
+		intervalTimer = 0;
+	}
+
+	float Burst::getCurrentTime() {
+		return burstTimer;
+	}
+
+	void Burst::setBurstTimer(float time) {
+		burstTimer = time;
+	}
+
+	float Burst::getIntervalTime() {
+		return intervalTimer;
+	}
+
+	void Burst::setIntervalTimer(float time) {
+		intervalTimer = time;
+	}
+
+	float Burst::getRate() {
+		return timeToBurst;
+	}
+
+	int Burst::getNumberOfParticles() {
+		return nParticles;
+	}
+
+	int Burst::getCycles() {
+		return currentCycles;
+	}
+
+	void Burst::decreaseCycles() {
+		currentCycles--;
+	}
+
+	float Burst::getProbabilityToBurst() {
+		return probability;
+	}
+
+	float Burst::getTimeBetweenBursts() {
+		return rate;
 	}
 
 	// -------------- PARTICLE SYSTEM ----------------
 
 	ParticleSystem::ParticleSystem() {
+
+		std::srand(std::time(nullptr));
+
+		physicsManager = Physics::PhysicsManager::instance();
+
 		tr = nullptr;
 
-		duration = 0; loop = false; delay = 0; startLifeTime = 0;
-		startSpeed = 0; startSize = { 0, 0 }; startRotation = 0; startPosition = { 0, 0 };
-		maxParticles = 0; playOnStart = false; useImage = false; 
-		fileName = ""; startColor = { 0, 0, 0 }; alpha = 0;
-		flipmode = 0; renderOrder = 0; emissionRateOverTime = 0;
-		emissionRateOverDistance = 0; shape = 0; gravityScale = 0;
-		speedOverLifeTime = 0; colorOverLifeTime = { 0, 0 };
-		sizeOverLifeTime = { 0, 0 }; rotationOverLifeTime = 0;
-		inheritPosition = false; inheritRotation = false;
-		inheritVelocity = false; emitting = false; useGravity = false;
-		currentTime = 0; timer = 0; startDirection = { 0, 0 };
-		texture = nullptr; srcX = 0; srcY = 0; nParticles = 0;
+		// General system configuration
+		duration = 10.0f;
+		maxParticles = 1000;
+		loop = true;
+		delay = 0.0f;
+		playOnStart = true;
+
+		// Particles START configuration
+		lifeTime = 5.0f;
+		randomLifeTimeBetweenTwoValues = false;
+
+		speed = 50.0f;
+		randomSpeedBetweenTwoValues = false;
+
+		size = { 30.0f, 30.0f };
+		randomSizeBetweenTwoValues = false;
+
+		angle = 0.0f;
+		randomAngleBetweenTwoValues = false;
+
+		rotation = 0.0f;
+		randomRotationBetweenTwoValues = false;
+
+		color = { 255, 255, 255 };
+		randomColorBetweenTwoColors = false;
+
+		alpha = 255;
+		randomAlphaBetweenTwoValues = false;
+
+		// Physics particles configuration
+		useGravity = false;
+		gravityScale = 1;
+
+		// Render configuration
+		alpha = 255;
+		flipmode = 0;
+		srcX = 0;
+		srcY = 0;
+
+		// Emission coniguration
+		emissionRateOverTime = 1;
+		emissionRateOverDistance = 0;
+
+		// Over lifetime configuration
+		overLifeTimeSpeed = false;
+		endSpeed = speed;
+
+		overLifeTimeColor = false;
+		endColor = color;
+
+		overLifeTimeSize = false;
+		endSize = size;
+
+		overLifeTimeRotation = false;
+		endRotation = rotation;
+
+		overLifeTimeAlpha = false;
+		endAlpha = alpha;
+
+		overLifeTimeAngle = false;
+		endAngle = angle;
+
+
+		// Custom values
+
+		playOnStart = true;
+		loop = true;
+		duration = 20.0f;
+
+		fileName = "images/pluma.png";
+
+		changeTexture(fileName);
+
+		emissionRateOverTime = 0.0f;
+		emissionRateOverDistance = 0.0f;
+
+		randomLifeTimeBetweenTwoValues = true;
+		lifeTimeFirstValue = 1.0f;
+		lifeTimeSecondValue = 3.0f;
+
+		randomAngleBetweenTwoValues = true;
+		angleFirstValue = 0.0f;
+		angleSecondValue = 360;
+
+		randomSpeedBetweenTwoValues = true;
+		speedFirstValue = 50.0f;
+		speedSecondValue = 400.0f;
+
+		randomSizeBetweenTwoValues = true;
+		sizeFirstValue = { 20.0f, 20.0f };
+		sizeSecondValue = { 60.0f, 60.0f };
+
+		randomRotationBetweenTwoValues = true;
+		rotationFirstValue = 0.0f;
+		rotationSecondValue = 360.0f;
+
+		randomColorBetweenTwoColors = false;
+		colorFirstValue = { 0, 0, 0 };
+		colorSecondValue = { 255, 255, 255 };
+
+		color = { 255, 0, 0 };
+
+		randomAlphaBetweenTwoValues = false;
+		alphaFirstValue = 0;
+		alphaSecondValue = 255;
+
+		overLifeTimeSpeed = true;
+		endSpeed = 0.0f;
+
+		overLifeTimeColor = false;
+		endColor = { 0, 255, 255 };
+
+		overLifeTimeSize = true;
+		endSize = { 0.0f, 0.0f };
+
+		overLifeTimeAlpha = true;
+		endAlpha = 0;
+
+		overLifeTimeRotation = true;
+		endRotation = 720.0f;
+
+		overLifeTimeAngle = false;
+		endAngle = 360;
+
+		addBurst(0, 100, 5, 4, 1);
+
 	}
 
 	ParticleSystem::~ParticleSystem() {
@@ -51,59 +223,16 @@ namespace ECS {
 		tr = this->getEntity()->getComponent<Transform>();
 		assert(tr != nullptr, "La entidad debe contener un componente Transform");
 
-		// General system configuration
-		maxParticles = 50;
-		duration = 10.0f;
-		loop = true;
-		delay = 0.0f;
-		playOnStart = true;
-
-		// Particles START configuration
-		startLifeTime = 5.0f;
-		startSpeed = 50.0f;
-		startSize = { 30.0f, 30.0f };
-		startRotation = 0.0f;
-		startPosition = tr->GetLocalPosition();
-		startDirection = { 0, 1 };
-		startColor = { 255, 255, 255 };
-
-		// Physics particles configuration
-		useGravity = false;
-		gravityScale = 1;
-
-		// Render configuration
-		useImage = false;
-		alpha = 255;
-		flipmode = 0;
-		renderOrder = 0;
-		shape = 0;
-		srcX = 0;
-		srcY = 0;
-
-		// Emission coniguration
-		inheritPosition = false;
-		inheritRotation = false;
-		inheritVelocity = false;
-		emissionRateOverTime = 1;
-		emissionRateOverDistance = 0;
-
-		// Over lifetime configuration
-		speedOverLifeTime = startSpeed; 
-		colorOverLifeTime = startColor;
-		sizeOverLifeTime = startSize; 
-		rotationOverLifeTime = startRotation;
-
-	}
-
-	void ParticleSystem::start() {
-
-		changeTexture(fileName);
-
 		for (int i = 0; i < maxParticles; i++)
 			particles.push_back(new Particle(this, i));
 
 		for (int i = maxParticles - 1; i >= 0; i--)
 			particlesPool.push(i);
+	}
+
+	void ParticleSystem::start() {
+
+		prevPosition = tr->GetLocalPosition();
 
 		if (playOnStart)
 			emitting = true;
@@ -124,26 +253,51 @@ namespace ECS {
 		currentTime += deltaTime;
 
 		// If the time since the system started is greater than the system duration
-		if (!loop && (currentTime >= duration)) emitting = false;
+		if (currentTime >= duration) {
+			reset();
+			return;
+		}
 
 		// Particle emission
-		timer += deltaTime;
-		if (timer > 1.0f / emissionRateOverTime) {
-			timer = 0;
 
-			takeParticleFromPool();
-		}
+			// Emission rate over distance
+			if ((tr->GetLocalPosition() - prevPosition).magnitude() > physicsManager->getScreenToWorldFactor() / emissionRateOverDistance) {
+				prevPosition = tr->GetLocalPosition();
+
+				takeParticleFromPool();
+
+			}
+
+			// Emission rate over time
+			timer += deltaTime;
+			if (timer > 1.0f / emissionRateOverTime) {
+				timer = 0;
+
+				takeParticleFromPool();
+			}
+
+			// Bursts
+			handleBursts(deltaTime);
+
 
 		// Particles update
 		for (auto p : particles)
 			p->udpate(deltaTime);
 
+		// Particles remove
 		handleUnusedParticles();
 
 	}
 
-	void ParticleSystem::fixedUpdate(float deltaTime) {
-		
+	void ParticleSystem::fixedUpdate(float fixedDeltaTime) {
+
+		// Particles fixedupdate
+		for (auto p : particles)
+			p->fixedUpdate(fixedDeltaTime);
+
+		// Particles remove
+		handleUnusedParticles();
+
 	}
 
 	void ParticleSystem::render() {
@@ -155,6 +309,8 @@ namespace ECS {
 	}
 
 	void ParticleSystem::takeParticleFromPool() {
+
+		if (particlesPool.empty()) return;
 
 		int particleIdx = particlesPool.top();
 		particlesPool.pop();
@@ -198,11 +354,67 @@ namespace ECS {
 
 	}
 
+	void ParticleSystem::handleBursts(float deltaTime) {
+
+		for (auto b : bursts) {
+			// If has already burst n cycles
+			if (b->getCycles() <= 0) continue;
+
+			// If it is time to burst
+			if (b->getCurrentTime() > b->getRate() && b->getIntervalTime() <= 0) {
+
+				// Calculate probability to burst
+				float rnd = Utilities::Utils::RandomBetween(0.0f, 1.0f);
+				if (b->getProbabilityToBurst() < rnd) continue;
+
+				b->decreaseCycles();
+				b->setIntervalTimer(b->getTimeBetweenBursts());
+
+				// Burst
+				for (int i = 0; i < b->getNumberOfParticles(); i++)
+					takeParticleFromPool();
+			}
+
+			// Timers
+			b->setBurstTimer(b->getCurrentTime() + deltaTime);
+			b->setIntervalTimer(b->getIntervalTime() - deltaTime);
+
+		}
+
+	}
+
 	void ParticleSystem::debugSystemInfo() {
 		system("cls");
 		print("Numero de particulas: " + std::to_string(nParticles));
 		print("Tiempo actual: " + std::to_string(currentTime));
 		print("Tiempo desde comienzo: " + std::to_string(timeSinceStart));
+	}
+
+	void ParticleSystem::reset() {
+
+		for (auto p : particles) {
+			if (p->isBeingUsed())
+				p->setAsUnused();
+		}
+
+		handleUnusedParticles();
+
+		emitting = loop;
+		currentTime = 0;
+		timer = 0;
+
+		// Reset bursts
+		for (auto b : bursts)
+			b->reset();
+
+	}
+
+	void ParticleSystem::startEmitting() {
+		emitting = true;
+	}
+
+	bool ParticleSystem::isEmitting() {
+		return emitting;
 	}
 
 	void ParticleSystem::changeTexture(cstring texturePath) {
@@ -212,17 +424,9 @@ namespace ECS {
 	}
 
 	void ParticleSystem::addBurst(float time, int particles, int cycles, float rate, float probability) {
-		Burst* newBurst = new Burst(time, particles, cycles, rate, probability);
+		Burst* newBurst = new Burst(this, time, particles, cycles, rate, probability);
 
 		bursts.push_back(newBurst);
-	}
-
-	void ParticleSystem::setEmissionRateOverTime(float rate) {
-		this->emissionRateOverTime = rate;
-	}
-
-	void ParticleSystem::startEmitting() {
-		emitting = true;
 	}
 
 }

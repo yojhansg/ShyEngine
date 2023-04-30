@@ -177,7 +177,7 @@ namespace Utilities {
 		}
 
 		// scalar multiplication
-		inline float operator *(const Vector2D& d) const {
+		inline float operator*(const Vector2D& d) const {
 			return d.x_ * x_ + d.y_ * y_;
 		}
 
