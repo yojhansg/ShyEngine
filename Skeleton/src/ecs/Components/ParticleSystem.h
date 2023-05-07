@@ -15,6 +15,8 @@ namespace Physics {
     class PhysicsManager;
 }
 
+class b2World;
+
 namespace ECS {
 
     class Transform;
@@ -43,12 +45,9 @@ namespace ECS {
         void decreaseCycles();
 
         float getProbabilityToBurst();
-
         float getTimeBetweenBursts();
 
     private:
-
-        ParticleSystem* system;
 
         // Delay time to generate the burst
         float timeToBurst;
@@ -64,6 +63,8 @@ namespace ECS {
 
         // Probability to burst
         float probability;
+
+        ParticleSystem* system;
 
         float burstTimer;
         float intervalTimer;
@@ -152,12 +153,36 @@ namespace ECS {
 
 
         // Physics particles configuration
-        reflect bool useGravity;
+        reflect std::string layerName;
+        reflect bool sensor;
         reflect float gravityScale;
+
+            // Force
+            reflect float force;
+            reflect bool randomForceBetweenTwoValues;
+            reflect float forceFirstValue;
+            reflect float forceSecondValue;
+
+            // Impulse
+            reflect float impulse;
+            reflect bool randomImpulseBetweenTwoValues;
+            reflect float impulseFirstValue;
+            reflect float impulseSecondValue;
+
+            // Angular velocity
+            reflect float angularVelocity;
+            reflect bool randomAngularVelocityBetweenTwoValues;
+            reflect float angularVelocityFirstValue;
+            reflect float angularVelocitySecondValue;
+
+            // Bounciness
+            reflect float bounciness;
+            reflect bool randomBouncinessBetweenTwoValues;
+            reflect float bouncinessFirstValue;
+            reflect float bouncinessSecondValue;
 
 
         // Render configuration
-
         reflect std::string fileName;
         reflect int flipmode;
         reflect int srcX;
@@ -185,15 +210,8 @@ namespace ECS {
         reflect bool overLifeTimeSize;
         reflect Utilities::Vector2D endSize;
 
-        reflect bool overLifeTimeRotation;
-        reflect float endRotation;
-
         reflect bool overLifeTimeAlpha;
         reflect int endAlpha;
-
-        reflect bool overLifeTimeAngle;
-        reflect bool endAngle;
-
 
         // Private methods
         void takeParticleFromPool();
@@ -201,7 +219,6 @@ namespace ECS {
         void handleUnusedParticles();
         void handleBursts(float deltaTime);
         void closeSystem();
-        void debugSystemInfo();
         void reset();
 
         // Private attributes
@@ -213,6 +230,8 @@ namespace ECS {
 
         Transform* tr;
         Physics::PhysicsManager* physicsManager;
+        float screenToWorldFactor;
+
         Utilities::Vector2D prevPosition;
         Renderer::Texture* texture;
 
@@ -223,6 +242,9 @@ namespace ECS {
         std::stack<int> particlesPool;
         std::vector<Particle*> particles;
         std::list<Particle*> unusedParticles;
+
+        // Box2D
+        b2World* world;
 
 
         //TODO ANIMATOR

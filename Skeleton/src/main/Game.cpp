@@ -39,6 +39,13 @@ void Game::initScenes() {
 
 void Game::firstScene() {
 
+	auto physics = Physics::PhysicsManager::instance();
+
+	physics->addCollisionLayer("Particles");
+	physics->addCollisionLayer("Ground");
+	physics->setCollisionBetweenLayers("Default", "Particles", false);
+	physics->setCollisionBetweenLayers("Particles", "Particles", false);
+
 	auto renderer = Renderer::RendererManager::instance();
 	auto sound = Sound::SoundManager::instance();
 
@@ -90,6 +97,7 @@ void Game::firstScene() {
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
 		grTr->SetScale({ 0.5f, 0.5f });
 		grBody->addOffSet(0, grBody->getSize().getY() / 2);
+		grBody->setCollisionLayer("Ground");
 		
 		// Ball
 		/*trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});

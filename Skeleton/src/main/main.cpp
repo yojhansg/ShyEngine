@@ -9,10 +9,9 @@
 
 #include "Scripting/ScriptFunctionality.h"
 
+void saveTimesPlayed() {
 
-int main(int argc, char* args[]) {
-
-	/*ECS::SaveManager* save = ECS::SaveManager::instance();
+	ECS::SaveManager* save = ECS::SaveManager::instance();
 
 	int slot = 1;
 
@@ -29,9 +28,15 @@ int main(int argc, char* args[]) {
 
 	Console::Output::PrintNoFormat(std::format("Has abierto el juego {} veces", save->GetSlot("contador").value.Float));
 
-	save->Save(1);*/
+	save->Save(1);
+}
+
+
+int main(int argc, char* args[]) {
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	//saveTimesPlayed();
 
 	Engine engine;
 

@@ -1,5 +1,7 @@
 #include "Particle.h"
 #include "RendererManager.h"
+#include "PhysicsManager.h"
+#include "box2d/box2d.h"
 #include "Components/ParticleSystem.h"
 #include "Components/Transform.h"
 #include "Texture.h"
@@ -22,26 +24,35 @@ namespace ECS {
 		size = { 0, 0 }; rotation = 0; color = { 255, 255, 255 };
 		lifeTime = 0; alpha = 255; startLifeTime = 0;
 
+		createPhysicsAttributes();
+
 	}
 
-	void Particle::udpate(float deltaTime) {
+	Particle::~Particle() {
+		delete bodyDef;
+		delete fixtureDef;
+	}
+
+	void Particle::fixedUpdate(float fixedDeltaTime) {
 
 		if (!beingUsed) return;
 
-		position += direction * speed * deltaTime;
-
-		timer += deltaTime;
-		lifeTime -= deltaTime;
+		timer += fixedDeltaTime;
+		lifeTime -= fixedDeltaTime;
 
 		// Over Life Time Settings
 		calculateOverLifeTimeSettings();
 
-		if (lifeTime <= 0) 
+		if (lifeTime <= 0)
 			system->unusedParticles.push_back(this);
 
-	}
+		//body->SetLinearVelocity({ direction.getX() * speed * fixedDeltaTime, direction.getY() * speed * fixedDeltaTime });
 
-	void Particle::fixedUpdate(float fixedDeltaTime) {
+		// Position
+		position = { body->GetPosition().x * system->screenToWorldFactor, body->GetPosition().y * system->screenToWorldFactor };
+
+		// Rotation
+		rotation = body->GetAngle() * (180 / b2_pi);
 
 	}
 
@@ -63,9 +74,11 @@ namespace ECS {
 		rotationPoint.x = w / 2;
 		rotationPoint.y = h / 2;
 
-		SDL_SetTextureColorMod(system->texture->getSDLTexture(), color.r, color.g, color.b);
-		SDL_SetTextureAlphaMod(system->texture->getSDLTexture(), alpha);
-		SDL_RenderCopyEx(renderer, system->texture->getSDLTexture(), &srcRect, &dstRect, rotation, &rotationPoint, (SDL_RendererFlip)system->flipmode);
+		auto texture = system->texture->getSDLTexture();
+
+		SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+		SDL_SetTextureAlphaMod(texture, alpha);
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, rotation, &rotationPoint, (SDL_RendererFlip) system->flipmode);
 	}
 
 	int Particle::getIdx() {
@@ -74,6 +87,10 @@ namespace ECS {
 
 	void Particle::setAsUnused() {
 		beingUsed = false;
+
+		body->SetLinearVelocity({ 0,0 });
+		body->SetAngularVelocity(0);
+		body->SetEnabled(false);
 	}
 
 	void Particle::setAsUsed() {
@@ -87,6 +104,8 @@ namespace ECS {
 	}
 
 	void Particle::init() {
+
+		float factor = system->screenToWorldFactor;
 
 		// Timer
 		timer = 0.0f;
@@ -124,6 +143,18 @@ namespace ECS {
 		startSize = size;
 
 
+		// Force
+		force = system->force;
+		if (system->randomForceBetweenTwoValues)
+			force = Utils::RandomBetween(system->forceFirstValue, system->forceSecondValue);
+
+
+		// Impulse
+		impulse = system->impulse;
+		if (system->randomImpulseBetweenTwoValues)
+			impulse = Utils::RandomBetween(system->impulseFirstValue, system->impulseSecondValue);
+
+
 		// Direction
 		float angle = system->angle;
 		if (system->randomAngleBetweenTwoValues)
@@ -132,20 +163,15 @@ namespace ECS {
 		float radians = Utilities::Utils::DegreesToRadians(angle);
 		direction = { cos(radians), sin(radians) };
 
-		startDirection = direction;
-
-			// End Direction
-			radians = Utilities::Utils::DegreesToRadians(system->endAngle);
-			endDirection = { cos(radians), sin(radians) };
-
-
 		// Rotation
 		rotation = system->rotation;
 		if (system->randomRotationBetweenTwoValues)
 			rotation = Utils::RandomBetween(system->rotationFirstValue, system->rotationSecondValue);
 
-		startRotation = rotation;
-
+		// Angular Velocity
+		angularVelocity = system->angularVelocity;
+		if (system->randomAngularVelocityBetweenTwoValues)
+			angularVelocity = Utils::RandomBetween(system->angularVelocityFirstValue, system->angularVelocitySecondValue);
 
 		// Color
 		color = system->color;
@@ -162,6 +188,30 @@ namespace ECS {
 
 		startAlpha = alpha;
 
+		// Bounciness
+		bounciness = system->bounciness;
+		if (system->randomBouncinessBetweenTwoValues)
+			bounciness = Utils::RandomBetween(system->bouncinessFirstValue, system->bouncinessSecondValue);
+
+		
+		// Physics
+		body->SetEnabled(true);
+
+		shape->SetAsBox(size.getX() / factor / 2.0f, size.getY() / factor / 2.0f);
+
+		body->SetGravityScale(system->gravityScale);
+
+		body->SetTransform({ position.getX() / factor, position.getY() / factor }, rotation * (b2_pi / 180));
+
+		fixture->SetSensor(system->sensor);
+
+		fixture->SetRestitution(bounciness);
+
+		body->SetAngularVelocity(angularVelocity);
+
+		//body->ApplyLinearImpulseToCenter({ impulse * direction.getX(), impulse * direction.getY()}, true);
+
+		body->ApplyForceToCenter({ force * direction.getX(), force * direction.getY() }, true);
 	}
 
 	void Particle::calculateOverLifeTimeSettings() {
@@ -177,22 +227,48 @@ namespace ECS {
 			color = Color::Lerp(startColor, system->endColor, lifePercentage);
 
 		// Size 
-		if (system->overLifeTimeSize)
+		if (system->overLifeTimeSize) {
 			size = (system->endSize - startSize) * lifePercentage + startSize;
+			shape->SetAsBox(size.getX() / system->screenToWorldFactor / 2.0f, size.getY() / system->screenToWorldFactor / 2.0f);
+		}
 
 		// Alpha
 		if (system->overLifeTimeAlpha)
 			alpha = lifePercentage * (system->endAlpha - startAlpha) + startAlpha;
 
-		// Rotation
-		if (system->overLifeTimeRotation)
-			rotation = lifePercentage * (system->endRotation - startRotation) + startRotation;
+	}
 
-		// Direction
-		if (system->overLifeTimeAngle)
-			direction = (endDirection - startDirection) * lifePercentage + startDirection;
-			
+	void Particle::createPhysicsAttributes() {
 
+		// Physics Attributes creation
+		bodyDef = new b2BodyDef();
+		fixtureDef = new b2FixtureDef();
+		shape = new b2PolygonShape();
+
+		shape->SetAsBox(1, 1);
+		bodyDef->type = b2_dynamicBody;
+		bodyDef->position.Set(0, 0);
+		bodyDef->userData.pointer = uintptr_t(static_cast<void*>(nullptr));
+
+		fixtureDef->shape = shape;
+		fixtureDef->density = 1.0f;
+		fixtureDef->isSensor = false;
+
+		body = system->world->CreateBody(bodyDef);
+		fixture = body->CreateFixture(fixtureDef);
+
+		delete shape;
+		shape = static_cast<b2PolygonShape*>(fixture->GetShape());
+
+		// Collision Filtering
+		b2Filter filter = fixture->GetFilterData();
+
+		filter.categoryBits = system->physicsManager->getLayerBits(system->layerName);
+		filter.maskBits = system->physicsManager->getMaskBits(system->layerName);
+
+		fixture->SetFilterData(filter);
+
+		body->SetEnabled(false);
 	}
 
 }

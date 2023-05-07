@@ -19,6 +19,8 @@ namespace ECS {
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
 
+		if (phyA == nullptr || phyB == nullptr) return;
+
 		auto entA = phyA->getEntity();
 		auto entB = phyB->getEntity();
 
@@ -48,6 +50,8 @@ namespace ECS {
 
 		PhysicBody* phyA = static_cast<PhysicBody*>(static_cast<void*>(punteroA));
 		PhysicBody* phyB = static_cast<PhysicBody*>(static_cast<void*>(punteroB));
+
+		if (phyA == nullptr || phyB == nullptr) return;
 
 		auto entA = phyA->getEntity();
 		auto entB = phyB->getEntity();

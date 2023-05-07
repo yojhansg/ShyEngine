@@ -84,6 +84,10 @@ namespace ECS {
 
 		physicsManager = Physics::PhysicsManager::instance();
 
+		world = physicsManager->getWorld();
+
+		screenToWorldFactor = physicsManager->getScreenToWorldFactor();
+
 		tr = nullptr;
 
 		// General system configuration
@@ -115,9 +119,23 @@ namespace ECS {
 		alpha = 255;
 		randomAlphaBetweenTwoValues = false;
 
+		force = 0;
+		randomForceBetweenTwoValues = false;
+
+		angularVelocity = 0;
+		randomAngularVelocityBetweenTwoValues = false;
+
+		bounciness = 1;
+		randomBouncinessBetweenTwoValues = false;
+
+		impulse = 0;
+		randomImpulseBetweenTwoValues = false;
+
 		// Physics particles configuration
-		useGravity = false;
-		gravityScale = 1;
+		sensor = false;
+		layerName = "Particles";
+		gravityScale = 0;
+		angularVelocity = 0;
 
 		// Render configuration
 		alpha = 255;
@@ -139,28 +157,28 @@ namespace ECS {
 		overLifeTimeSize = false;
 		endSize = size;
 
-		overLifeTimeRotation = false;
-		endRotation = rotation;
-
 		overLifeTimeAlpha = false;
 		endAlpha = alpha;
 
-		overLifeTimeAngle = false;
-		endAngle = angle;
 
 
 		// Custom values
 
+		duration = 20.0f;
 		playOnStart = true;
 		loop = true;
-		duration = 20.0f;
+
+		layerName = "Particles";
+		gravityScale = 1;
+		sensor = false;
 
 		fileName = "images/pluma.png";
 
 		changeTexture(fileName);
 
 		emissionRateOverTime = 0.0f;
-		emissionRateOverDistance = 0.0f;
+
+		color = { 255, 0, 0 };
 
 		randomLifeTimeBetweenTwoValues = true;
 		lifeTimeFirstValue = 1.0f;
@@ -168,49 +186,46 @@ namespace ECS {
 
 		randomAngleBetweenTwoValues = true;
 		angleFirstValue = 0.0f;
-		angleSecondValue = 360;
+		angleSecondValue = 360.0f;
 
 		randomSpeedBetweenTwoValues = true;
-		speedFirstValue = 50.0f;
-		speedSecondValue = 400.0f;
+		speedFirstValue = 30.0f;
+		speedSecondValue = 100.0f;
 
 		randomSizeBetweenTwoValues = true;
-		sizeFirstValue = { 20.0f, 20.0f };
-		sizeSecondValue = { 60.0f, 60.0f };
+		sizeFirstValue = { 30.0f, 30.0f };
+		sizeSecondValue = { 50.0f, 50.0f };
 
 		randomRotationBetweenTwoValues = true;
 		rotationFirstValue = 0.0f;
 		rotationSecondValue = 360.0f;
 
-		randomColorBetweenTwoColors = false;
-		colorFirstValue = { 0, 0, 0 };
-		colorSecondValue = { 255, 255, 255 };
+		randomForceBetweenTwoValues = false;
+		forceFirstValue = 50.0f;
+		forceSecondValue = 100.0f;
 
-		color = { 255, 0, 0 };
+		randomAngularVelocityBetweenTwoValues = true;
+		angularVelocityFirstValue = 5.0f;
+		angularVelocitySecondValue = 10.0f;
 
-		randomAlphaBetweenTwoValues = false;
-		alphaFirstValue = 0;
-		alphaSecondValue = 255;
+		randomBouncinessBetweenTwoValues = true;
+		bouncinessFirstValue = 0.0f;
+		bouncinessSecondValue = 1.0f;
+
+		randomImpulseBetweenTwoValues = true;
+		impulseFirstValue = 5.0f;
+		impulseSecondValue = 10.0f;
 
 		overLifeTimeSpeed = true;
 		endSpeed = 0.0f;
 
-		overLifeTimeColor = false;
-		endColor = { 0, 255, 255 };
-
-		overLifeTimeSize = true;
+		overLifeTimeSize = false;
 		endSize = { 0.0f, 0.0f };
 
 		overLifeTimeAlpha = true;
 		endAlpha = 0;
 
-		overLifeTimeRotation = true;
-		endRotation = 720.0f;
-
-		overLifeTimeAngle = false;
-		endAngle = 360;
-
-		addBurst(0, 100, 5, 4, 1);
+		addBurst(2, 50, 5, 4, 1); 
 
 	}
 
@@ -240,8 +255,6 @@ namespace ECS {
 	}
 
 	void ParticleSystem::update(float deltaTime) {
-
-		//debugSystemInfo();
 
 		if (!emitting) return;
 
@@ -278,14 +291,6 @@ namespace ECS {
 
 			// Bursts
 			handleBursts(deltaTime);
-
-
-		// Particles update
-		for (auto p : particles)
-			p->udpate(deltaTime);
-
-		// Particles remove
-		handleUnusedParticles();
 
 	}
 
@@ -381,13 +386,6 @@ namespace ECS {
 
 		}
 
-	}
-
-	void ParticleSystem::debugSystemInfo() {
-		system("cls");
-		print("Numero de particulas: " + std::to_string(nParticles));
-		print("Tiempo actual: " + std::to_string(currentTime));
-		print("Tiempo desde comienzo: " + std::to_string(timeSinceStart));
 	}
 
 	void ParticleSystem::reset() {
