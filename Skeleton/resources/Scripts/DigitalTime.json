@@ -17,14 +17,14 @@
         },
         {
             "index": 2,
-            "function": "Time_TimeHHMMSS",
+            "function": "RealTime_HourTime",
             "input": [
                 3
             ]
         },
         {
             "index": 3,
-            "function": "Time_Now"
+            "function": "RealTime_Now"
         }
     ]
  }

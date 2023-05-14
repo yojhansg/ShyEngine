@@ -4,7 +4,7 @@
         {
             "name": "Background clock",
             "order": 10,
-            "localPosition": "400, 400",
+            "localPosition": "0, 0",
             "components": [
                 {
                     "component": "Image",
@@ -17,7 +17,7 @@
         {
             "name": "Seconds",
             "order": 15,
-            "localPosition": "400, 400",
+            "localPosition": "0, 0",
             "localScale": ".5, 1",
 
             "components": [
@@ -29,14 +29,14 @@
                 }
             ],
             
-            "scripts":[
-                "AnalogTimeSeconds"
-            ]
+            "scripts":{
+                "AnalogTimeSeconds": []
+            }
         },
         {
             "name": "Minutes",
             "order": 10,
-            "localPosition": "400, 400",
+            "localPosition": "0, 0",
             
             "components": [
                 {
@@ -47,14 +47,14 @@
                 }
             ],
             
-            "scripts":[
-                "AnalogTimeMinutes"
-            ]
+            "scripts":{
+                "AnalogTimeMinutes": []
+            }
         },
         {
             "name": "Hours",
             "order": 10,
-            "localPosition": "400, 400",
+            "localPosition": "0, 0",
             "localScale": "1, .7",
             "components": [
                 {
@@ -65,9 +65,9 @@
                 }
             ],
             
-            "scripts":[
-                "AnalogTimeHours"
-            ]
+            "scripts":{
+                "AnalogTimeHours": []
+            }
         }
 
     ],
@@ -92,9 +92,9 @@
                     }
                 }
             ],
-            "scripts":[
-                "DigitalTime"
-            ]
+            "scripts":{
+                "DigitalTime": []
+            }
         }
     ]
 }
