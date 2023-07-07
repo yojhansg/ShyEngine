@@ -8,14 +8,14 @@ PEditor::MenuBar::MenuBar() : Window("", None)
     originalFramePadding = ImGui::GetStyle().FramePadding.y;
     
     //Width is 0 cause menu bar always take the whole screen width
-    width = oriWidth = 0;
-    height = oriHeight = 4;  
+    windowWidth = windowOriWidth = 0;
+    windowHeight = windowOriHeight = 4;  
 }
 
 void PEditor::MenuBar::render()
 {
     // Change the menu bar height temporarily
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, height));  // Change the menu bar height to 10 pixels
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, windowHeight));  // Change the menu bar height to 10 pixels
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -68,5 +68,5 @@ void PEditor::MenuBar::update()
 
     float scaleFactorY = currentSize.y / originalSize.y;
 
-    height = oriHeight * scaleFactorY * scaleFactorY * 0.88f;
+    windowHeight = windowOriHeight * scaleFactorY * scaleFactorY * 0.88f;
 }

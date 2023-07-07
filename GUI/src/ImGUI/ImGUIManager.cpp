@@ -7,15 +7,20 @@
 #include <iostream>
 #include "Scene.h"
 #include "GameObject.h"
+#include "MenuBar.h"
+#include "Hierarchy.h"
+#include "FileExplorer.h"
+#include "Components.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
-    init();
+
 }
 
 void ImGUIManager::initImGUI()
 {
+    std::cout << "INITIALISING IMGUI\n";
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -35,8 +40,36 @@ void ImGUIManager::initImGUI()
 
 }
 
+void ImGUIManager::initWindows()
+{
+
+    std::cout << "INITIALISING WINDOWS\n";
+
+    //MENU BAR
+    menuBar = new PEditor::MenuBar();
+    addWindow(menuBar);
+
+    //SCENE
+    scene = new PEditor::Scene();
+    addWindow(scene);
+
+    //HIERARCHY
+    hierarchy = new PEditor::Hierarchy();
+    addWindow(hierarchy);
+
+    //FILE EXPLORER
+    fileExplorer = new PEditor::FileExplorer();
+    addWindow(fileExplorer);
+
+    //COMPONENTS
+    components = new PEditor::Components();
+    addWindow(components);
+}
+
 void ImGUIManager::initSDL()
 {
+    std::cout << "INITIALISING SDL\n";
+
     // Initialize SDL. If something fails it returns -1 and we throw an exception
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
@@ -90,16 +123,17 @@ void ImGUIManager::createSDLRenderer()
 void ImGUIManager::init()
 {
     initImGUI();
+    initWindows();
 }
 
 ImGUIManager* ImGUIManager::getInstance()
 {
     if (instance == nullptr) {
         instance = new ImGUIManager();
+        instance->init();
     }
     
     return instance;
-
 }
 
 void ImGUIManager::loop()
@@ -220,3 +254,25 @@ PEditor::Scene* ImGUIManager::getScene()
 {
     return scene;
 }
+
+
+PEditor::MenuBar* ImGUIManager::getMenuBar()
+{
+    return menuBar;
+}
+
+PEditor::Hierarchy* ImGUIManager::getHierarchy()
+{
+    return hierarchy;
+}
+
+PEditor::FileExplorer* ImGUIManager::getFileExplorer()
+{
+    return fileExplorer;
+}
+
+PEditor::Components* ImGUIManager::getComponents()
+{
+    return components;
+}
+

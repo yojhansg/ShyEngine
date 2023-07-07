@@ -34,7 +34,6 @@ enum WindowFlags_
 };
 
 union SDL_Event;
-class WindowComponent;
 struct ImVec2;
 
 namespace PEditor {
@@ -43,20 +42,17 @@ namespace PEditor {
     protected:
 
         WindowFlags flags;
-        std::vector<WindowComponent*> windowComponents;
         std::string windowName;
 
-        int width, height;
-        int posX, posY;
+        int windowWidth, windowHeight;
+        int windowPosX, windowPosY;
 
-        int oriWidth, oriHeight;
-        int oriPosX, oriPosY;
+        int windowOriWidth, windowOriHeight;
+        int windowOriPosX, windowOriPosY;
 
     public:
         
         Window(std::string windowName, WindowFlags flags);
-
-        void addComponent(WindowComponent* component);
 
         void setPosition(ImVec2 position);
         void setSize(ImVec2 size);
@@ -68,6 +64,6 @@ namespace PEditor {
         virtual void render();
         virtual void handleInput(SDL_Event* event);
 
-        ~Window();
+        virtual ~Window();
     };
 }

@@ -10,28 +10,11 @@
 
 int main(int, char**)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 
-	//MENU BAR
-	PEditor::MenuBar* menuBar = new PEditor::MenuBar();
-	imGUIManager->addWindow(menuBar);
-
-	//SCENE
-	PEditor::Scene* scene = new PEditor::Scene();
-	imGUIManager->addWindow(scene);
-
-	//HIERARCHY
-	PEditor::Hierarchy* hierarchy = new PEditor::Hierarchy();
-	imGUIManager->addWindow(hierarchy);
-
-	//FILE EXPLORER
-	PEditor::FileExplorer* fileExplorer = new PEditor::FileExplorer();
-	imGUIManager->addWindow(fileExplorer);
-
-	//COMPONENTS
-	PEditor::Components* components = new PEditor::Components();
-	imGUIManager->addWindow(components);
-
 	imGUIManager->loop();
+
+	delete imGUIManager;
 }

@@ -12,38 +12,33 @@ PEditor::Window::Window(std::string _windowName, WindowFlags f = None)
 	windowName = _windowName;
 
 
-	width = oriWidth = 50;
-	height = oriHeight = 50;
+	windowWidth = windowOriWidth = 50;
+	windowHeight = windowOriHeight = 50;
 
-	posX = 0;
-	posY = 0;
-}
-
-void PEditor::Window::addComponent(WindowComponent* component)
-{
-	windowComponents.push_back(component);
+	windowPosX = 0;
+	windowPosY = 0;
 }
 
 void PEditor::Window::setSize(ImVec2 size)
 {
-	width = size.x;
-	height = size.y;
+	windowWidth = size.x;
+	windowHeight = size.y;
 }
 void PEditor::Window::setPosition(ImVec2 position)
 {
-	posX = position.x;
-	posY = position.y;
+	windowPosX = position.x;
+	windowPosY = position.y;
 }
 
 
 ImVec2 PEditor::Window::getSize()
 {
-	return ImVec2(width, height);
+	return ImVec2(windowWidth, windowHeight);
 }
 
 ImVec2 PEditor::Window::getPosition()
 {
-	return ImVec2(posX, posY);
+	return ImVec2(windowPosX, windowPosY);
 }
 
 
@@ -56,11 +51,11 @@ void PEditor::Window::update()
 	float scaleFactorX = currentSize.x / originalSize.x;
 	float scaleFactorY = currentSize.y / originalSize.y;
 
-	width = oriWidth * scaleFactorX;
-	height = oriHeight * scaleFactorY;
+	windowWidth = windowOriWidth * scaleFactorX;
+	windowHeight = windowOriHeight * scaleFactorY;
 
-	posX = oriPosX * scaleFactorX;
-	posY = oriPosY * scaleFactorY;
+	windowPosX = windowOriPosX * scaleFactorX;
+	windowPosY = windowOriPosY * scaleFactorY;
 }
 
 void PEditor::Window::render()
@@ -68,9 +63,9 @@ void PEditor::Window::render()
 	ImGui::Begin(windowName.c_str(),(bool*)0, (ImGuiWindowFlags_) flags);
 
 
-	ImGui::SetWindowSize(ImVec2(width, height));
+	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
-	ImGui::SetWindowPos(ImVec2(posX, posY));
+	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
 
 
 	ImGui::End();
@@ -82,10 +77,5 @@ void PEditor::Window::handleInput(SDL_Event* event)
 
 PEditor::Window::~Window()
 {
-	for (auto component : windowComponents)
-	{
-		delete component;
-	}
 }
-
 

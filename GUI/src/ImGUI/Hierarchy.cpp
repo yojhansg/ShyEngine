@@ -3,6 +3,7 @@
 #include "ImGUIManager.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include <string>
 
 PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoResize | NoCollapse | NoMove)
 {
@@ -10,14 +11,14 @@ PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoResize | NoCollapse | No
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
 	ImVec2 windowSize = ImVec2(413 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
-	oriWidth = windowSize.x;
-	oriHeight = windowSize.y;
+	windowOriWidth = windowSize.x;
+	windowOriHeight = windowSize.y;
 
 	setSize(ImVec2(windowSize.x, windowSize.y));
 	setPosition(ImVec2(0, 20));
 
-	oriPosX = posX;
-	oriPosY = posY;
+	windowOriPosX = windowPosX;
+	windowOriPosY = windowPosY;
 }		
 
 void PEditor::Hierarchy::render()
@@ -32,15 +33,23 @@ void PEditor::Hierarchy::render()
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
 
-	ImGui::SetWindowSize(ImVec2(width, height));
+	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
-	ImGui::SetWindowPos(ImVec2(posX, posY));
+	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
 
-	if (ImGui::BeginListBox("##", ImVec2(width - 15, height - 35))) {
+	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {
 
+		int i = 0;
 		for (auto gameObject : gameObjects)
 		{
-			ImGui::Selectable("Gameobject: 1");
+			std::string name = gameObject->getName();
+
+			if (ImGui::Selectable(name.c_str(), gameObject == scene->getSelectedGameObject()))
+			{
+				scene->setSelectedGameObject(gameObject);
+			}
+
+			i++;
 		}
 
 		ImGui::EndListBox();

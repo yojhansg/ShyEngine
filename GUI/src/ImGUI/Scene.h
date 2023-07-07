@@ -29,13 +29,19 @@ namespace PEditor {
 		std::vector<PEditor::GameObject*> gameObjects;
 		GameObject* selectedGameObject;
 
+		bool mouseInsideWindow();
+		bool mouseInsideGameObject(GameObject* go);
+
 	public:
 
 		Scene();
+		virtual ~Scene();
 
 		void addGameObject(std::string path);
 		std::vector<PEditor::GameObject*> getGameObjects();
+
 		GameObject* getSelectedGameObject();
+		void setSelectedGameObject(GameObject* go);
 
 		bool entityOutsideCamera(ImVec2 pos, float width, float height);
 

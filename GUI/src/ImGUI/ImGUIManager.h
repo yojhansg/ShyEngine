@@ -9,7 +9,22 @@ struct ImVec2;
 namespace PEditor {
 	class Window;
 	class Scene;
+	class MenuBar;
+	class Hierarchy;
+	class FileExplorer;
+	class Components;
 };
+
+namespace PEditor {
+
+	class Window;
+	class Scene;
+	class MenuBar;
+	class Hierarchy;
+	class FileExplorer;
+	class Components;
+
+}
 
 class ImGUIManager
 {
@@ -22,23 +37,30 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
 
-	PEditor::Scene* scene;
-	
+
 	bool exit = false;
 
 	std::vector<PEditor::Window*> windows;
-	
+
 	ImVec2* originalWindowSize;
 
 	void initImGUI();
 	void initSDL();
+	void initWindows();
 	void createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY);
 	void createSDLRenderer();
+
+	PEditor::Scene* scene;
+	PEditor::MenuBar* menuBar = nullptr;
+	PEditor::Hierarchy* hierarchy = nullptr;
+	PEditor::FileExplorer* fileExplorer = nullptr;
+	PEditor::Components* components = nullptr;
+
 
 public:
 
 	static ImGUIManager* getInstance();
-	
+
 	ImGUIManager();
 
 	void init();
@@ -50,14 +72,17 @@ public:
 
 	void addWindow(PEditor::Window* window);
 	void setScene(PEditor::Scene* scene);
-		
+
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getOriginalWindowSize();
 	ImVec2 getMainWindowSize();
 
 	PEditor::Scene* getScene();
+	PEditor::MenuBar* getMenuBar();
+	PEditor::Hierarchy* getHierarchy();
+	PEditor::FileExplorer* getFileExplorer();
+	PEditor::Components* getComponents();
 
 	~ImGUIManager();
 };
-

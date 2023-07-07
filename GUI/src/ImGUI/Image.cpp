@@ -10,12 +10,27 @@ PEditor::GameObject::GameObject(std::string& path)
 	SDL_Surface* surface = IMG_Load(path.c_str());
 	text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
+	SDL_FreeSurface(surface);
+
+	//Temporal: hacemos que el nombre del gameObject sea el nombre de la imagen
+	std::size_t extensionPos = path.find_last_of('.');
+    name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+
 	tr = new Transform();
 	tr->setPosition(0, 0);
 	tr->setSize(100, 100);
 	tr->type = transform;
 
 	components.emplace(transform, tr);
+
+}
+
+PEditor::GameObject::~GameObject()
+{
+	for (auto it = components.begin(); it != components.end(); ++it) {
+		delete it->second;
+	}
+	components.clear();
 }
 
 void PEditor::GameObject::render()
@@ -26,6 +41,10 @@ void PEditor::GameObject::render()
 SDL_Texture* PEditor::GameObject::getTexture()
 {
 	return text;
+}
+std::string PEditor::GameObject::getName()
+{
+	return name;
 }
 int PEditor::GameObject::getWidth()
 {

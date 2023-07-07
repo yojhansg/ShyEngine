@@ -12,7 +12,7 @@ class Component;
 namespace PEditor {
 	class GameObject
 	{
-
+		std::string name;
 		SDL_Texture* text;
 		Transform* tr;
 		std::unordered_map<int ,Component*> components;
@@ -20,10 +20,12 @@ namespace PEditor {
 	public:
 
 		GameObject(std::string& path);
+		~GameObject();
 
 		virtual void render();
 
 		SDL_Texture* getTexture();
+		std::string getName();
 
 		int getWidth();
 		int getHeight();
