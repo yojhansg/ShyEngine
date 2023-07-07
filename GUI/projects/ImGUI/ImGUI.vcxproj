@@ -124,7 +124,7 @@
     <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
     <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Image.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\GameObject.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Scene.cpp" />

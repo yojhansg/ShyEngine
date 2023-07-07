@@ -78,7 +78,7 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    originalWindowSize = new ImVec2(1080, 720);
+    originalWindowSize = new ImVec2(1920, 1080);
     createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, originalWindowSize->x, originalWindowSize->y);
     createSDLRenderer();
 }
@@ -124,6 +124,8 @@ void ImGUIManager::init()
 {
     initImGUI();
     initWindows();
+
+    gameSize = new ImVec2{ 1080, 720 };
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -240,6 +242,7 @@ ImGUIManager::~ImGUIManager()
     }
 
     delete originalWindowSize;
+    delete gameSize;
 }
 
 ImVec2 ImGUIManager::getMainWindowSize()
@@ -248,6 +251,11 @@ ImVec2 ImGUIManager::getMainWindowSize()
     SDL_GetWindowSize(window, &w, &h);
 
     return ImVec2(w, h);
+}
+
+ImVec2 ImGUIManager::getGameSize()
+{
+    return *gameSize;
 }
 
 PEditor::Scene* ImGUIManager::getScene()

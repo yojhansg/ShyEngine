@@ -29,8 +29,8 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoColl
 
     char buffer[FILENAME_MAX];
     _getcwd(buffer, FILENAME_MAX);
-    std::string project_path(buffer);
-    current_path = project_path;
+    projectPath = buffer;
+    currentPath = projectPath;
 
 }
 
@@ -38,27 +38,28 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 {
 
     // Open the specified folder
-    fs::path folder(current_path);
+    fs::path folder(currentPath);
 
 
     if (!fs::is_directory(folder))
     {
-        ImGui::Text("Invalid folder path: %s", current_path);
+        ImGui::Text("Invalid folder path: %s", currentPath);
         ImGui::End();
         return;
     }
 
-    ImGui::Text("Folder: %s", current_path.c_str());
+    ImGui::Text("Folder: %s", currentPath.c_str());
 
-    // Display buttons to navigate up and down the folder hierarchy
-    ImGui::SameLine();
-    if (ImGui::Button("^"))
-    {
-        // Navigate to parent folder
-        current_path = folder.parent_path().string();
+    if (currentPath != projectPath) {
+
+        // Display buttons to navigate up and down the folder hierarchy
+        ImGui::SameLine();
+        if (ImGui::Button("^"))
+        {
+            // Navigate to parent folder
+            currentPath = folder.parent_path().string();
+        }
     }
-
-
 
     ImGui::Separator();
 
@@ -88,7 +89,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
             // Display directories in blue color
             if (ImGui::Selectable(filename.c_str(), false))
             {
-                current_path = file.path().string();
+                currentPath = file.path().string();
             }
 
             ImGui::PopStyleColor(1);

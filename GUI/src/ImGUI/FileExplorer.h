@@ -7,7 +7,8 @@ namespace PEditor {
 	class FileExplorer : public Window
 	{
 	private:
-		 std::string current_path;
+		std::string projectPath;
+		std::string currentPath;
 	public:
 
 		FileExplorer();

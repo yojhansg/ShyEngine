@@ -43,8 +43,6 @@ namespace PEditor {
 		GameObject* getSelectedGameObject();
 		void setSelectedGameObject(GameObject* go);
 
-		bool entityOutsideCamera(ImVec2 pos, float width, float height);
-
 		void renderGameObjects();
 		void renderFrame();
 

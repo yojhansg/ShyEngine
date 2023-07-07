@@ -92,7 +92,7 @@
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\Image.cpp">
+    <ClCompile Include="..\..\src\ImGUI\GameObject.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp">

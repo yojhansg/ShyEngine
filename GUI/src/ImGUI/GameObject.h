@@ -8,6 +8,7 @@ struct SDL_Renderer;
 class ImGUIManager;
 class Transform;
 class Component;
+class Camera;
 
 namespace PEditor {
 	class GameObject
@@ -16,6 +17,8 @@ namespace PEditor {
 		SDL_Texture* text;
 		Transform* tr;
 		std::unordered_map<int ,Component*> components;
+
+		ImGUIManager* imGuiManager;
 
 	public:
 
@@ -29,6 +32,9 @@ namespace PEditor {
 
 		int getWidth();
 		int getHeight();
+
+		bool isOutsideGameView( ImVec2 pos, float width, float height);
+		void render(SDL_Renderer* renderer, Camera* camera);
 
 		std::unordered_map<int, Component*>* getComponents();
 

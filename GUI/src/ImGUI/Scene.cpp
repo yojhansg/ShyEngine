@@ -52,7 +52,6 @@ PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScro
 
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-
 	ImVec2 windowSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
 
 	windowOriWidth = windowSize.x;
@@ -104,56 +103,12 @@ void PEditor::Scene::setSelectedGameObject(GameObject* go)
 	selectedGameObject = go;
 }
 
-bool PEditor::Scene::entityOutsideCamera(ImVec2 pos, float width, float height)
-{
-	//TODO: SET SCREENWIDTH AND HEIGHT CONSTANT
-	float screenWidth = 1080;
-	float screenHeight = 720;
-
-	if (pos.x > screenWidth || pos.y > screenHeight || pos.x + width <= 0 || pos.y + height <= 0) {
-		return true;
-	}
-
-	return false;
-}
 
 void PEditor::Scene::renderGameObjects()
 {
 	for (auto gameObject : gameObjects) {
 
-		ImVec2 position = gameObject->getPosition();
-		float width = gameObject->getWidth();
-		float height = gameObject->getHeight();
-
-		if (entityOutsideCamera(position, width, height)) continue;
-
-		//Posicion y tamaños relativos al frame de la escena
-		ImVec2 relativePosition = ImVec2((position.x + camera->getPosition().x) * camera->getScrollFactor(),
-								(position.y + camera->getPosition().y) * camera->getScrollFactor());
-
-		float relativeWidth = width * camera->getScrollFactor();
-		float relativeHeight = height * camera->getScrollFactor();
-
-		SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
-		SDL_RenderCopy(renderer, gameObject->getTexture(), NULL, &dst);
-	
-		if (gameObject == selectedGameObject) {
-
-			//SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
-			Uint8 r, g, b, a;
-			SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
-
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-
-			SDL_Rect outlineRect = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
-			int thickness = 3; // Desired thickness of the outline
-
-			// Draw multiple rectangles with increasing sizes to achieve the desired thickness
-			for (int i = 0; i < thickness; i++) {
-				SDL_Rect currentRect = { outlineRect.x - i, outlineRect.y - i, outlineRect.w + i * 2, outlineRect.h + i * 2 };
-				SDL_RenderDrawRect(renderer, &currentRect);
-			}
-		}
+		gameObject->render(renderer, camera);
 	}
 }
 
@@ -166,9 +121,10 @@ void PEditor::Scene::renderFrame()
 
 	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(),camera->getPosition().y * camera->getScrollFactor());
 
-	//TODO: SET SCREENWIDTH AND HEIGHT CONSTANT
-	float width = 1080 * camera->getScrollFactor();
-	float height = 720 * camera->getScrollFactor();
+	ImVec2 gameSize = ImGUIManager::getInstance()->getGameSize();
+
+	float width = gameSize.x * camera->getScrollFactor();
+	float height = gameSize.y * camera->getScrollFactor();
 
 	SDL_Rect frameRect = { position.x, position.y, width, height };
 	SDL_RenderDrawRect(renderer, &frameRect);

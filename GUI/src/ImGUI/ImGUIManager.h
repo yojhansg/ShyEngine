@@ -43,6 +43,7 @@ private:
 	std::vector<PEditor::Window*> windows;
 
 	ImVec2* originalWindowSize;
+	ImVec2* gameSize;
 
 	void initImGUI();
 	void initSDL();
@@ -77,6 +78,8 @@ public:
 	SDL_Renderer* getRenderer();
 	ImVec2 getOriginalWindowSize();
 	ImVec2 getMainWindowSize();
+
+	ImVec2 getGameSize();
 
 	PEditor::Scene* getScene();
 	PEditor::MenuBar* getMenuBar();
