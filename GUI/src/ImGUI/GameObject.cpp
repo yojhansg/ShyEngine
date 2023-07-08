@@ -60,24 +60,12 @@ int PEditor::GameObject::getHeight()
 	return tr->getSize()->y;
 }
 
-bool PEditor::GameObject::isOutsideGameView(ImVec2 pos, float width, float height)
-{
-	ImVec2 gameSize = ImGUIManager::getInstance()->getGameSize();
-
-	if (pos.x > gameSize.x || pos.y > gameSize.y || pos.x + width <= 0 || pos.y + height <= 0) {
-		return true;
-	}
-
-	return false;
-}
-
 void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 {
 	ImVec2 position = getPosition();
 	float width = getWidth();
 	float height = getHeight();
 
-	if (isOutsideGameView(position, width, height)) return;
 
 	//Posicion y tamaños relativos al frame de la escena
 	ImVec2 relativePosition = ImVec2((position.x + camera->getPosition().x) * camera->getScrollFactor(),
@@ -119,6 +107,11 @@ std::unordered_map<int, Component*>* PEditor::GameObject::getComponents()
 void PEditor::GameObject::setPosition(ImVec2 newPos)
 {
 	tr->setPosition(newPos.x, newPos.y);
+}
+
+void PEditor::GameObject::setName(const std::string newName)
+{
+	name = newName;
 }
 
 ImVec2 PEditor::GameObject::getPosition()

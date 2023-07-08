@@ -42,9 +42,9 @@ void PEditor::Hierarchy::render()
 		int i = 0;
 		for (auto gameObject : gameObjects)
 		{
-			std::string name = gameObject->getName();
+			std::string selectableId = gameObject->getName() + "##" + std::to_string(i);
 
-			if (ImGui::Selectable(name.c_str(), gameObject == scene->getSelectedGameObject()))
+			if (ImGui::Selectable(selectableId.c_str(), gameObject == scene->getSelectedGameObject()))
 			{
 				scene->setSelectedGameObject(gameObject);
 			}

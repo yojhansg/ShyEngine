@@ -27,7 +27,7 @@ public:
 		{
 
 			ImGui::Text("Position");
-			ImGui::DragFloat2("##position_drag", (float*)getPosition(), 0.1f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat2("##position_drag", (float*)getPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
 
 			ImGui::Text("Scale");
 			ImGui::DragFloat2("##scale_drag", (float*)getSize(), 0.1f, 0.0f, 0.0f, "%.2f");

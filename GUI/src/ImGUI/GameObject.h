@@ -33,12 +33,12 @@ namespace PEditor {
 		int getWidth();
 		int getHeight();
 
-		bool isOutsideGameView( ImVec2 pos, float width, float height);
 		void render(SDL_Renderer* renderer, Camera* camera);
 
 		std::unordered_map<int, Component*>* getComponents();
 
 		void setPosition(ImVec2 newPos);
+		void setName(const std::string newName);
 		ImVec2 getPosition();
 	};
 }

@@ -97,10 +97,18 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
         else
         {
             // Display files in default color
-            if (ImGui::Selectable(filename.c_str(), false))
+            ImGui::Text(filename.c_str());
+            std::string extension = file.path().extension().string();
+
+            if (extension == ".png" || extension == ".jpg")
             {
-                // TODO: Handle file selection
+                ImGui::SameLine();
+                std::string buttonId = "Create GameObject##" + filename;
+                if (ImGui::Button(buttonId.c_str())) {
+                    ImGUIManager::getInstance()->getScene()->addGameObject(filename);
+                }
             }
+           
         }
 
         ImGui::SetWindowFontScale(1);

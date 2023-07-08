@@ -14,35 +14,36 @@ bool PEditor::Scene::mouseInsideWindow()
 	float mouseX = mousePos.x;
 	float mouseY = mousePos.y;
 
-	if ((mouseX > windowPosX && mouseX < windowPosX + windowWidth && mouseY > windowPosY + 15 && mouseY < windowPosY + windowHeight))
-		return true;
-
-	return false;
+	return (mouseX > windowPosX && mouseX < windowPosX + windowWidth && mouseY > windowPosY + 15 && mouseY < windowPosY + windowHeight);
 }
 
 bool PEditor::Scene::mouseInsideGameObject(GameObject* go)
 {
 	ImVec2 mousePos = ImGui::GetMousePos();
+	ImVec2 gameSize = ImGUIManager::getInstance()->getGameSize();
 
-	float cameraOffsetX = camera->getPosition().x * camera->getScrollFactor() * windowWidth / windowOriWidth;
-	float cameraOffsetY = camera->getPosition().y * camera->getScrollFactor() * windowWidth / windowOriWidth;
 
-	float mouseX = mousePos.x - windowPosX - 8 - cameraOffsetX;
-	float mouseY = mousePos.y - windowPosY - 27 - cameraOffsetY;
+	//In case the editor is rescaled we need this
+	float windowScaleFactor = (float)windowWidth / windowOriWidth;
 
+	//The gameFrame size and position inside the ImGUI window
+	float frameWidth = gameSize.x * camera->getScrollFactor() * windowScaleFactor;
+	float frameHeight = gameSize.y * camera->getScrollFactor() * windowScaleFactor;
+	ImVec2 framePosition = ImVec2(camera->getPosition().x * camera->getScrollFactor() * windowScaleFactor, camera->getPosition().y * camera->getScrollFactor() * windowScaleFactor);
+
+	//GameObject position and size in the ImGUIWindow
 	ImVec2 gameObjectPosition = go->getPosition();
+	float goPosX = gameObjectPosition.x * frameWidth / gameSize.x;
+	float goPosY = gameObjectPosition.y * frameHeight / gameSize.y;
 
-	float goPosX = gameObjectPosition.x;
-	float goPosY = gameObjectPosition.y;
+	float goWidth = go->getWidth() * camera->getScrollFactor() * windowScaleFactor;
+	float goHeight = go->getHeight() * camera->getScrollFactor() * windowScaleFactor;
 
-	float width = go->getWidth() * camera->getScrollFactor();
-	float height = go->getHeight() * camera->getScrollFactor();
+	//Mouse position inside the IMGUIWindow
+	float mouseX = mousePos.x - windowPosX - 8 - framePosition.x;
+	float mouseY = mousePos.y - windowPosY - 27 - framePosition.y;
 
-	if ((mouseX > goPosX && mouseX < goPosX + width && mouseY > goPosY && mouseY < goPosY + height)) {
-		return true;
-	}
-
-	return false;
+	return (mouseX > goPosX && mouseX < goPosX + goWidth && mouseY > goPosY && mouseY < goPosY + goHeight);
 }
 
 PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
@@ -62,8 +63,6 @@ PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScro
 
 	windowOriPosX = windowPosX;
 	windowOriPosY = windowPosY;
-
-	addGameObject("test1.jpg");
 
 	camera = new Camera(ImVec2(50, 50), 0.5);
 
