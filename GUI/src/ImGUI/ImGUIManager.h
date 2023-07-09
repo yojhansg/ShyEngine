@@ -38,7 +38,7 @@ private:
 	SDL_Renderer* renderer = nullptr;
 
 
-	bool exit = false;
+	bool exitGame = false;
 
 	std::vector<PEditor::Window*> windows;
 
@@ -66,6 +66,7 @@ public:
 
 	void init();
 	void loop();
+	void exit();
 
 	void update();
 	void render();

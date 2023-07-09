@@ -141,13 +141,18 @@ ImGUIManager* ImGUIManager::getInstance()
 void ImGUIManager::loop()
 {
 
-    while (!exit)
+    while (!exitGame)
     {
         update();
         handleInput();
         render();
     }
  
+}
+
+void ImGUIManager::exit()
+{
+    exitGame = true;
 }
 
 void ImGUIManager::update()
@@ -189,11 +194,11 @@ void ImGUIManager::handleInput()
         ImGui_ImplSDL2_ProcessEvent(&event);
 
         if (event.type == SDL_QUIT)
-            exit = true;
+            exitGame = true;
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-            exit = true;
+            exitGame = true;
         if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-            exit = true;
+            exitGame = true;
 
         for (auto window : windows)
         {

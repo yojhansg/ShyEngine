@@ -39,6 +39,8 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	showGizmo = false;
 	visible = true;
+
+	waitingToDelete = false;
 }
 
 PEditor::GameObject::~GameObject()
@@ -195,6 +197,16 @@ void PEditor::GameObject::setName(const std::string newName)
 ImVec2 PEditor::GameObject::getPosition()
 {
 	return *tr->getPosition();
+}
+
+bool PEditor::GameObject::isWaitingToDelete()
+{
+	return waitingToDelete;
+}
+
+void PEditor::GameObject::toDelete()
+{
+	waitingToDelete = true;
 }
 
 

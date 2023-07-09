@@ -51,6 +51,7 @@ namespace PEditor {
 		void renderGameObjects();
 		void renderFrame();
 
+		virtual void update();
 		virtual void handleInput(SDL_Event* event);
 		virtual void render();
 	};

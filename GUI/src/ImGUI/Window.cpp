@@ -56,6 +56,8 @@ void PEditor::Window::update()
 
 	windowPosX = windowOriPosX * scaleFactorX;
 	windowPosY = windowOriPosY * scaleFactorY;
+
+
 }
 
 void PEditor::Window::render()

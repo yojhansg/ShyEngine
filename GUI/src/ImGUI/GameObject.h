@@ -29,6 +29,8 @@ namespace PEditor {
 
 		bool showGizmo;
 
+		bool waitingToDelete;
+
 	public:
 
 		GameObject(std::string& path);
@@ -53,5 +55,8 @@ namespace PEditor {
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);
 		ImVec2 getPosition();
+
+		bool isWaitingToDelete();
+		void toDelete();
 	};
 }

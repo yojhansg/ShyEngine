@@ -57,7 +57,6 @@ void PEditor::Hierarchy::render()
 
 			if (ImGui::Checkbox(checkboxId.c_str(), &isVisible))
 			{
-				// Checkbox value changed, do something here
 				gameObject->setVisible(isVisible);
 			}
 

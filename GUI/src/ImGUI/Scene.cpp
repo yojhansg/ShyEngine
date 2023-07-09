@@ -128,6 +128,24 @@ void PEditor::Scene::renderFrame()
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
+void PEditor::Scene::update()
+{
+	Window::update();
+
+	for (auto it = gameObjects.begin(); it != gameObjects.end();)
+	{
+		if ((*it)->isWaitingToDelete()) {
+			selectedGameObject = nullptr;
+
+			delete* it;
+			it = gameObjects.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
 void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	ImVec2 mousePos = ImGui::GetMousePos();
