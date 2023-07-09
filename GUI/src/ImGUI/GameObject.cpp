@@ -38,6 +38,7 @@ PEditor::GameObject::GameObject(std::string& path)
 	SDL_FreeSurface(surface);
 
 	showGizmo = false;
+	visible = true;
 }
 
 PEditor::GameObject::~GameObject()
@@ -60,6 +61,14 @@ SDL_Texture* PEditor::GameObject::getTexture()
 std::string PEditor::GameObject::getName()
 {
 	return name;
+}
+bool PEditor::GameObject::isVisible()
+{
+	return visible;
+}
+void PEditor::GameObject::setVisible(bool visible)
+{
+	this->visible = visible;
 }
 int PEditor::GameObject::getWidth()
 {
@@ -86,8 +95,10 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 	float relativeHeight = height * camera->getScrollFactor();
 
 	SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
-	SDL_RenderCopy(renderer, getTexture(), NULL, &dst);
 
+	if (visible) {
+		SDL_RenderCopy(renderer, getTexture(), NULL, &dst);
+	}
 
 	//Render outline
 	if (this == imGuiManager->getScene()->getSelectedGameObject())
@@ -120,7 +131,7 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	showGizmo = false;
 	
 	if (isMouseInsideGameObject) {
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT && visible) {
 
 			if (!leftMouseButtonDown) {
 				leftMouseButtonDown = true;

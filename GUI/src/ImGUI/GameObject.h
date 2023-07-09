@@ -23,6 +23,8 @@ namespace PEditor {
 
 		ImGUIManager* imGuiManager;
 
+		bool visible;
+
 		bool leftMouseButtonDown;
 
 		bool showGizmo;
@@ -36,6 +38,9 @@ namespace PEditor {
 
 		SDL_Texture* getTexture();
 		std::string getName();
+
+		bool isVisible();
+		void setVisible(bool visible);
 
 		int getWidth();
 		int getHeight();

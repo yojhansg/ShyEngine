@@ -39,12 +39,35 @@ void PEditor::Hierarchy::render()
 
 	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {
 
+		ImGui::Text("Visible");
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(50, 0));
+		ImGui::SameLine();
+		ImGui::Text("GameObject");
+		ImGui::Separator();
+
 		int i = 0;
 		for (auto gameObject : gameObjects)
 		{
-			std::string selectableId = gameObject->getName() + "##" + std::to_string(i);
+			ImGui::Dummy(ImVec2(7, 0));
+			ImGui::SameLine();
 
-			if (ImGui::Selectable(selectableId.c_str(), gameObject == scene->getSelectedGameObject()))
+			bool isVisible = gameObject->isVisible();
+			std::string checkboxId = "##" + std::to_string(i);
+
+			if (ImGui::Checkbox(checkboxId.c_str(), &isVisible))
+			{
+				// Checkbox value changed, do something here
+				gameObject->setVisible(isVisible);
+			}
+
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(67, 0)); 
+			ImGui::SameLine();
+
+			std::string nameId = gameObject->getName() + "##" + std::to_string(i);
+
+			if (ImGui::Selectable(nameId.c_str(), gameObject == scene->getSelectedGameObject()))
 			{
 				scene->setSelectedGameObject(gameObject);
 			}
