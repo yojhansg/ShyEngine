@@ -18,7 +18,7 @@ private:
 public:
 	Camera(ImVec2 position, float scrollFactor);
 
-	void handleInput(SDL_Event* event);
+	void handleInput(SDL_Event* event, bool isMouseInsideWindow);
 
 	ImVec2 getPosition();
 	float getScrollFactor();

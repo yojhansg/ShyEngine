@@ -133,15 +133,10 @@ void PEditor::Scene::renderFrame()
 void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	for (auto gameObject : gameObjects) {
-		if (mouseInsideGameObject(gameObject) && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			selectedGameObject = gameObject;
-		}
+		gameObject->handleInput(event, mouseInsideGameObject(gameObject));
 	}
 
-	if ((mouseInsideWindow() || (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_RIGHT))) {
-		camera->handleInput(event);
-	}
-
+	camera->handleInput(event, mouseInsideWindow());
 }
 
 void PEditor::Scene::render()

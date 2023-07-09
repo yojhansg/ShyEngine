@@ -2,6 +2,8 @@
 #include <iostream>
 #include <unordered_map>
 
+union SDL_Event;
+
 struct ImVec2;
 struct SDL_Texture;
 struct SDL_Renderer;
@@ -20,6 +22,10 @@ namespace PEditor {
 
 		ImGUIManager* imGuiManager;
 
+		bool rightMouseButtonDown;
+		float mousePosX, mousePosY;
+		float clickOffsetX, clickOffsetY;
+
 	public:
 
 		GameObject(std::string& path);
@@ -34,6 +40,7 @@ namespace PEditor {
 		int getHeight();
 
 		void render(SDL_Renderer* renderer, Camera* camera);
+		void handleInput(SDL_Event* event, bool isMouseInsideGameObject);
 
 		std::unordered_map<int, Component*>* getComponents();
 

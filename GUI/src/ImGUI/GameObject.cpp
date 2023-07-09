@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "SDL.h"
 
+
 PEditor::GameObject::GameObject(std::string& path)
 {
 	SDL_Surface* surface = IMG_Load(path.c_str());
@@ -97,6 +98,59 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 	}
 
 	//TODO: render gizmos
+}
+
+void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject)
+{
+	if (isMouseInsideGameObject) {
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			imGuiManager->getScene()->setSelectedGameObject(this);
+		}
+
+
+		if (event->type == SDL_MOUSEBUTTONDOWN)
+		{
+			if (!rightMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+			{
+				rightMouseButtonDown = true;
+
+				clickOffsetX = mousePosX - getPosition().x;
+				clickOffsetY = mousePosY - getPosition().y;
+			}
+		}
+	}
+
+	if (event->type == SDL_MOUSEBUTTONUP)
+	{
+		if (rightMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+		{
+			rightMouseButtonDown = false;
+		}
+	}
+
+	if (event->type == SDL_MOUSEMOTION && (SDL_GetModState() & KMOD_SHIFT))
+	{
+		mousePosX = event->motion.x;
+		mousePosY = event->motion.y;
+
+		if (rightMouseButtonDown)
+		{
+			tr->setPosition(mousePosX - clickOffsetX, mousePosY - clickOffsetY);
+		}
+	}
+
+	if (event->type == SDL_MOUSEWHEEL && (SDL_GetModState() & KMOD_SHIFT)) {
+		if (event->wheel.y > 0) // scroll up
+		{
+			ImVec2 size = *tr->getSize();
+			tr->setSize(size.x + 5, size.y + 5);
+		}
+		else if (event->wheel.y < 0) // scroll down
+		{
+			ImVec2 size = *tr->getSize();
+			tr->setSize(size.x - 5, size.y - 5);
+		}
+	}
 }
 
 std::unordered_map<int, Component*>* PEditor::GameObject::getComponents()
