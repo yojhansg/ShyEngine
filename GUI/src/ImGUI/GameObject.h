@@ -17,14 +17,15 @@ namespace PEditor {
 	{
 		std::string name;
 		SDL_Texture* text;
+		SDL_Texture* gizmoText;
 		Transform* tr;
 		std::unordered_map<int ,Component*> components;
 
 		ImGUIManager* imGuiManager;
 
-		bool rightMouseButtonDown;
-		float mousePosX, mousePosY;
-		float clickOffsetX, clickOffsetY;
+		bool leftMouseButtonDown;
+
+		bool showGizmo;
 
 	public:
 
@@ -40,7 +41,7 @@ namespace PEditor {
 		int getHeight();
 
 		void render(SDL_Renderer* renderer, Camera* camera);
-		void handleInput(SDL_Event* event, bool isMouseInsideGameObject);
+		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
 		std::unordered_map<int, Component*>* getComponents();
 

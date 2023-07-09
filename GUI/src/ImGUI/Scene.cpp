@@ -7,49 +7,49 @@
 #include "ImGUIManager.h"
 #include <string>
 
-bool PEditor::Scene::mouseInsideWindow()
+bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
 {
-	ImVec2 mousePos = ImGui::GetMousePos();
-
 	float mouseX = mousePos.x;
 	float mouseY = mousePos.y;
 
 	return (mouseX > windowPosX && mouseX < windowPosX + windowWidth && mouseY > windowPosY + 15 && mouseY < windowPosY + windowHeight);
 }
 
-bool PEditor::Scene::mouseInsideGameObject(GameObject* go)
+bool PEditor::Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
 {
-	ImVec2 mousePos = ImGui::GetMousePos();
-	ImVec2 gameSize = ImGUIManager::getInstance()->getGameSize();
 
+	mousePos = getMousePosInsideScene(mousePos);
 
+	//GameObject position and size in the ImGUIWindow
+	ImVec2 gOPos = go->getPosition();
+
+	return (mousePos.x > gOPos.x && mousePos.x < gOPos.x + go->getWidth() && mousePos.y > gOPos.y && mousePos.y < gOPos.y + go->getHeight());
+}
+
+ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
+{
 	//In case the editor is rescaled we need this
 	float windowScaleFactor = (float)windowWidth / windowOriWidth;
 
 	//The gameFrame size and position inside the ImGUI window
-	float frameWidth = gameSize.x * camera->getScrollFactor() * windowScaleFactor;
-	float frameHeight = gameSize.y * camera->getScrollFactor() * windowScaleFactor;
 	ImVec2 framePosition = ImVec2(camera->getPosition().x * camera->getScrollFactor() * windowScaleFactor, camera->getPosition().y * camera->getScrollFactor() * windowScaleFactor);
-
-	//GameObject position and size in the ImGUIWindow
-	ImVec2 gameObjectPosition = go->getPosition();
-	float goPosX = gameObjectPosition.x * frameWidth / gameSize.x;
-	float goPosY = gameObjectPosition.y * frameHeight / gameSize.y;
-
-	float goWidth = go->getWidth() * camera->getScrollFactor() * windowScaleFactor;
-	float goHeight = go->getHeight() * camera->getScrollFactor() * windowScaleFactor;
+	float frameWidth = gameSizeX * camera->getScrollFactor() * windowScaleFactor;
+	float frameHeight = gameSizeY * camera->getScrollFactor() * windowScaleFactor;
 
 	//Mouse position inside the IMGUIWindow
-	float mouseX = mousePos.x - windowPosX - 8 - framePosition.x;
-	float mouseY = mousePos.y - windowPosY - 27 - framePosition.y;
+	float mouseX = (mousePos.x - windowPosX - 8 - framePosition.x) / frameWidth * gameSizeX;
+	float mouseY = (mousePos.y - windowPosY - 27 - framePosition.y) / frameHeight * gameSizeY;
 
-	return (mouseX > goPosX && mouseX < goPosX + goWidth && mouseY > goPosY && mouseY < goPosY + goHeight);
+	return ImVec2(mouseX, mouseY);
 }
 
 PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	imGUIManager->setScene(this);
+
+	gameSizeX = imGUIManager->getGameSize().x;
+	gameSizeY = imGUIManager->getGameSize().y;
 
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
@@ -120,10 +120,8 @@ void PEditor::Scene::renderFrame()
 
 	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(),camera->getPosition().y * camera->getScrollFactor());
 
-	ImVec2 gameSize = ImGUIManager::getInstance()->getGameSize();
-
-	float width = gameSize.x * camera->getScrollFactor();
-	float height = gameSize.y * camera->getScrollFactor();
+	float width = gameSizeX * camera->getScrollFactor();
+	float height = gameSizeY * camera->getScrollFactor();
 
 	SDL_Rect frameRect = { position.x, position.y, width, height };
 	SDL_RenderDrawRect(renderer, &frameRect);
@@ -132,11 +130,13 @@ void PEditor::Scene::renderFrame()
 
 void PEditor::Scene::handleInput(SDL_Event* event)
 {
+	ImVec2 mousePos = ImGui::GetMousePos();
+
 	for (auto gameObject : gameObjects) {
-		gameObject->handleInput(event, mouseInsideGameObject(gameObject));
+		gameObject->handleInput(event, mouseInsideGameObject(gameObject, mousePos), getMousePosInsideScene(mousePos));
 	}
 
-	camera->handleInput(event, mouseInsideWindow());
+	camera->handleInput(event, mouseInsideWindow(mousePos));
 }
 
 void PEditor::Scene::render()

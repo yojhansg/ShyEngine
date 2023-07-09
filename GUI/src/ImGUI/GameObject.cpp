@@ -28,6 +28,16 @@ PEditor::GameObject::GameObject(std::string& path)
 	components.emplace(transform, tr);
 
 	imGuiManager = ImGUIManager::getInstance();
+
+
+
+	//Gizmo texture
+	surface = IMG_Load("gizmo.png");
+	gizmoText = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+	SDL_FreeSurface(surface);
+
+	showGizmo = false;
 }
 
 PEditor::GameObject::~GameObject()
@@ -95,60 +105,63 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 			SDL_Rect currentRect = { outlineRect.x - i, outlineRect.y - i, outlineRect.w + i * 2, outlineRect.h + i * 2 };
 			SDL_RenderDrawRect(renderer, &currentRect);
 		}
-	}
 
-	//TODO: render gizmos
+		if (showGizmo) {
+			dst.x += dst.w / 2;
+			dst.y -= dst.h / 2;
+
+			SDL_RenderCopy(renderer, gizmoText, NULL, &dst);
+		}
+	}
 }
 
-void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject)
+void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
+	showGizmo = false;
+	
 	if (isMouseInsideGameObject) {
 		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+
+			if (!leftMouseButtonDown) {
+				leftMouseButtonDown = true;
+			}
+
 			imGuiManager->getScene()->setSelectedGameObject(this);
 		}
+	}
 
-
-		if (event->type == SDL_MOUSEBUTTONDOWN)
+	if(imGuiManager->getScene()->getSelectedGameObject() == this) {
+		if (event->type == SDL_MOUSEBUTTONUP)
 		{
-			if (!rightMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
 			{
-				rightMouseButtonDown = true;
-
-				clickOffsetX = mousePosX - getPosition().x;
-				clickOffsetY = mousePosY - getPosition().y;
+				leftMouseButtonDown = false;
 			}
 		}
-	}
 
-	if (event->type == SDL_MOUSEBUTTONUP)
-	{
-		if (rightMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-		{
-			rightMouseButtonDown = false;
-		}
-	}
+		if (SDL_GetModState() & KMOD_SHIFT) {
+			showGizmo = true;
 
-	if (event->type == SDL_MOUSEMOTION && (SDL_GetModState() & KMOD_SHIFT))
-	{
-		mousePosX = event->motion.x;
-		mousePosY = event->motion.y;
+			if (event->type == SDL_MOUSEMOTION)
+			{
+				if (leftMouseButtonDown)
+				{
+					tr->setPosition(mousePos.x - tr->getSize()->x / 2, mousePos.y - tr->getSize()->y / 2);
+				}
+			}
 
-		if (rightMouseButtonDown)
-		{
-			tr->setPosition(mousePosX - clickOffsetX, mousePosY - clickOffsetY);
-		}
-	}
-
-	if (event->type == SDL_MOUSEWHEEL && (SDL_GetModState() & KMOD_SHIFT)) {
-		if (event->wheel.y > 0) // scroll up
-		{
-			ImVec2 size = *tr->getSize();
-			tr->setSize(size.x + 5, size.y + 5);
-		}
-		else if (event->wheel.y < 0) // scroll down
-		{
-			ImVec2 size = *tr->getSize();
-			tr->setSize(size.x - 5, size.y - 5);
+			if (event->type == SDL_MOUSEWHEEL) {
+				if (event->wheel.y > 0) // scroll up
+				{
+					ImVec2 size = *tr->getSize();
+					tr->setSize(size.x + 5, size.y + 5);
+				}
+				else if (event->wheel.y < 0) // scroll down
+				{
+					ImVec2 size = *tr->getSize();
+					tr->setSize(size.x - 5, size.y - 5);
+				}
+			}
 		}
 	}
 }

@@ -24,13 +24,18 @@ namespace PEditor {
 		SDL_Renderer* renderer = nullptr;
 		SDL_Texture* targetTexture = nullptr;
 
+		float gameSizeX;
+		float gameSizeY;
+
 		Camera* camera;
 
 		std::vector<PEditor::GameObject*> gameObjects;
 		GameObject* selectedGameObject;
 
-		bool mouseInsideWindow();
-		bool mouseInsideGameObject(GameObject* go);
+		bool mouseInsideWindow(ImVec2 mousePos);
+		bool mouseInsideGameObject(GameObject* go, ImVec2 mousePos);
+
+		ImVec2 getMousePosInsideScene(ImVec2 mousePos);
 
 	public:
 

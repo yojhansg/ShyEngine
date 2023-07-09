@@ -122,10 +122,10 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
+    gameSize = new ImVec2{ 1080, 720 };
+
     initImGUI();
     initWindows();
-
-    gameSize = new ImVec2{ 1080, 720 };
 }
 
 ImGUIManager* ImGUIManager::getInstance()
