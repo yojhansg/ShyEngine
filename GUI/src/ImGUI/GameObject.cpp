@@ -133,13 +133,15 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	showGizmo = false;
 	
 	if (isMouseInsideGameObject) {
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT && visible) {
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
 			if (!leftMouseButtonDown) {
 				leftMouseButtonDown = true;
 			}
 
-			imGuiManager->getScene()->setSelectedGameObject(this);
+			if (visible) {
+				imGuiManager->getScene()->setSelectedGameObject(this);
+			}
 		}
 	}
 
