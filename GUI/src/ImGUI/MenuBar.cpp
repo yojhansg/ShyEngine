@@ -41,7 +41,10 @@ void PEditor::MenuBar::render()
             ImGui::MenuItem("New Scene", NULL, false);
             ImGui::MenuItem("Open Scene", NULL, false);
             ImGui::Separator();
-            ImGui::MenuItem("Save Scene", NULL, false);
+            if (ImGui::MenuItem("Save Scene", NULL, false)) {
+                ImGUIManager::getInstance()->getScene()->saveScene();
+            }
+
             ImGui::Separator();
             
             if (ImGui::MenuItem("Exit", NULL, false))

@@ -1,11 +1,14 @@
 #pragma once
 #include "Component.h"
 #include "imgui.h"
+#include <nlohmann/json.hpp>
 
 class Transform : public Component
 {
 public:
-	Transform() {};
+	Transform() {
+	};
+
 	ImVec2 size;
 	ImVec2 pos;
 
@@ -33,5 +36,20 @@ public:
 			ImGui::DragFloat2("##scale_drag", (float*)getSize(), 0.1f, 0.0f, 0.0f, "%.2f");
 		}
 	}
+
+	virtual std::string toJson() {
+		nlohmann::ordered_json j;
+
+		nlohmann::ordered_json transformJSON;
+
+		transformJSON["PosX"] = pos.x;
+		transformJSON["PosY"] = pos.y;
+		transformJSON["SizeX"] = size.x;
+		transformJSON["SizeY"] = size.y;
+
+		j["Transform"] = transformJSON;
+
+		return j.dump(2);
+	};
 };
 

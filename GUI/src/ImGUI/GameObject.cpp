@@ -7,7 +7,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "SDL.h"
-
+#include "Component.h"
 
 PEditor::GameObject::GameObject(std::string& path)
 {
@@ -209,6 +209,23 @@ bool PEditor::GameObject::isWaitingToDelete()
 void PEditor::GameObject::toDelete()
 {
 	waitingToDelete = true;
+}
+
+std::string PEditor::GameObject::toJson()
+{
+	nlohmann::ordered_json j;
+
+	j["Name"] = name;
+
+	nlohmann::ordered_json componentsJson;
+	for (auto pair : components) {
+		Component* component = pair.second;
+		componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
+	}
+
+	j["Components"] = componentsJson;
+
+	return j.dump(2);
 }
 
 

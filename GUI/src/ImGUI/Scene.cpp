@@ -6,6 +6,9 @@
 #include "Camera.h"
 #include "ImGUIManager.h"
 #include <string>
+#include <nlohmann/json.hpp>
+#include "Component.h"
+#include <fstream>
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
 {
@@ -126,6 +129,28 @@ void PEditor::Scene::renderFrame()
 	SDL_Rect frameRect = { position.x, position.y, width, height };
 	SDL_RenderDrawRect(renderer, &frameRect);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+}
+
+void PEditor::Scene::saveScene()
+{
+
+	nlohmann::ordered_json j;
+
+	for (auto gameObject : gameObjects) {
+		j["GameObjects"].push_back(nlohmann::ordered_json::parse(gameObject->toJson()));
+	}
+
+	std::string path = "scene.json";
+
+	std::ofstream outputFile(path);
+	if (outputFile.is_open()) {
+		outputFile << j.dump(4);
+		outputFile.close();
+	}
+	else {
+		//ERROR HANDLING
+	}
+
 }
 
 void PEditor::Scene::update()

@@ -58,5 +58,7 @@ namespace PEditor {
 
 		bool isWaitingToDelete();
 		void toDelete();
+	
+		std::string toJson();
 	};
 }
