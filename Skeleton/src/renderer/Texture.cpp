@@ -4,6 +4,8 @@
 #include <cassert>
 
 Renderer::Texture::Texture(const std::string& filepath) {
+
+	//TODO control de errores al crear textura (esta con asserts)
 	
 	// Surface and texture
 	SDL_Surface* surface = IMG_Load(filepath.c_str());

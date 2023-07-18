@@ -28,8 +28,6 @@ namespace ECS {
 
 		Input::InputManager* im;
 
-		SoundEmitter* sound;
-
 		Transform* transform;
 
 		CircleBody* body;

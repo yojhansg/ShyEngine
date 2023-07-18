@@ -16,8 +16,6 @@ namespace ECS {
 
 		body = this->getEntity()->getComponent<BoxBody>();
 
-		pSystem = this->getEntity()->getComponent<ParticleSystem>();
-
 		onGround = false;
 	}
 

@@ -1,6 +1,7 @@
 #include "Overlay.h"
 #include "RendererManager.h"
-
+#include "SDL_rect.h"
+#include "SDL_render.h"
 #include "OverlayManager.h"
 #include "Texture.h"
 

@@ -1,7 +1,8 @@
 #include "RendererManager.h"
+#include "ConsoleManager.h"
+#include "Texture.h"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include "ConsoleManager.h"
 
 namespace Renderer {
 
@@ -12,6 +13,7 @@ namespace Renderer {
 	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync) {
 		windowTitle = title;
 		width = w;  height = h;
+		targetTexture = nullptr;
 		icon = nullptr;
 		initSDL(vsync);
 	}
@@ -23,6 +25,12 @@ namespace Renderer {
 			SDL_FreeSurface(icon);
 			icon = nullptr;
 		}
+
+		if (targetTexture != nullptr) {
+			SDL_DestroyTexture(targetTexture);
+			targetTexture = nullptr;
+		}
+
 		closeSDL();
 	}
 
@@ -38,7 +46,6 @@ namespace Renderer {
 		assert(window != nullptr);
 
 		// Create the renderer
-
 		int vsyncEnable = vsync ? SDL_RENDERER_PRESENTVSYNC : 0;
 		renderer = SDL_CreateRenderer(window, -1,
 			SDL_RENDERER_ACCELERATED | vsyncEnable);
@@ -48,9 +55,10 @@ namespace Renderer {
 		int imgInit_ret = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
 		assert(imgInit_ret != 0);
 
-
 		int ttfInit_ret = TTF_Init();
 		assert(ttfInit_ret == 0);
+
+		CreateTargetTexture();
 	}
 
 	void RendererManager::closeSDL() {
@@ -109,6 +117,9 @@ namespace Renderer {
 		SDL_RenderPresent(renderer);
 	}
 
+	void RendererManager::CopyTargetTextureContent() {
+		SDL_RenderCopy(renderer, targetTexture, nullptr, nullptr);
+	}
 
 	void RendererManager::AdjustRectToCamera(int* x, int* y, int* w, int* h) {
 
@@ -185,4 +196,19 @@ namespace Renderer {
 		}
 		SDL_SetWindowIcon(window, icon);
 	}
+
+	void RendererManager::SetRenderTarget(bool renderOnTarget) {
+
+		if (renderOnTarget)
+			SDL_SetRenderTarget(renderer, targetTexture);
+		else
+			SDL_SetRenderTarget(renderer, nullptr);
+
+	}
+
+	void RendererManager::CreateTargetTexture() {
+		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+			SDL_TEXTUREACCESS_TARGET, width, height);
+	}
+
 }
