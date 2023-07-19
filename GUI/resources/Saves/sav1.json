@@ -1,0 +1,12 @@
+[
+    {
+        "name": "contador",
+        "type": "float",
+        "value": 31.0
+    },
+    {
+        "name": "currentEngineDay",
+        "type": "float",
+        "value": 1477.0
+    }
+]

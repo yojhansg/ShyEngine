@@ -59,7 +59,12 @@ void PEditor::MenuBar::render()
 
         if (ImGui::BeginMenu("Edit"))
         {
-            ImGui::MenuItem("Play", NULL, false);
+            if (ImGui::MenuItem("Play", NULL, false))
+            {
+                ImGUIManager::getInstance()->getScene()->saveScene();
+                system("C:/Users/Ivanof18/Desktop/TFG/Skeleton/exes/Main_Debug.exe");
+            };
+
             ImGui::MenuItem("Pause", NULL, false);
             ImGui::MenuItem("Stop", NULL, false);
 

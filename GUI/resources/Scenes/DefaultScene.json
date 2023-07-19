@@ -1,0 +1,315 @@
+{
+    "name": "Mi escena inicial",
+    "objects": [
+        {
+            "name": "background",
+            "order": -10,
+            "localPosition": "0, 0",
+            "localScale": "1.6f, 1.6f",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "fondo.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Parallax": []
+            }
+        },
+        {
+            "name": "player",
+            "order": 10,
+            "localPosition": "-350, 0)",
+            "localScale": "(0.35f, 0.35f)",
+            "localRotation": "0",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "pollo.png"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "bodyType": "2",
+                        "bounciness": "0.5f",
+                        "freezeRotation": "true"
+                    }
+                }
+            ],
+            "scripts": {
+                "FlappyBirdJump": [],
+                "BirdRotation": [],
+                "BirdCollision": []
+            },
+            "childs": [
+                {
+                    "name": "player animado",
+                    "order": 11,
+                    "localPosition": "(300, 0)",
+                    "localScale": "1, 1",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "animation.png"
+                            }
+                        },
+                        {
+                            "component": "Animation",
+                            "attributes": {
+                                "speed": "10",
+                                "animationColumns": "8",
+                                "animationRows": "9",
+                                "animationSheetStyle": "0",
+                                "animationLenght": "9",
+                                "currentFrame": "0",
+                                "currentAnimation": "8"
+                            }
+                        }
+                    ],
+                    "scripts": []
+                }
+            ]
+        },
+        {
+            "name": "tuberia1",
+            "order": 10,
+            "localPosition": "(600, 0)",
+            "localScale": "2, 4",
+            "localRotation": "0",
+            "components": [
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "bodyType": "1",
+                        "bounciness": "0.5f",
+                        "trigger": "true"
+                    }
+                }
+            ],
+            "scripts": {
+                "Tuberia": []
+            },
+            "childs": [
+                {
+                    "name": "arriba",
+                    "order": 10,
+                    "localPosition": "(0, 350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "180",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": {}
+                },
+                {
+                    "name": "abajo",
+                    "order": 10,
+                    "localPosition": "(0, -350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "0",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": []
+                }
+            ]
+        },
+        {
+            "name": "tuberia2",
+            "order": 10,
+            "localPosition": "(1200, 0)",
+            "localScale": "2, 4",
+            "localRotation": "0",
+            "components": [
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "bodyType": "1",
+                        "bounciness": "0.5f",
+                        "trigger": "true"
+                    }
+                }
+            ],
+            "scripts": {
+                "Tuberia": []
+            },
+            "childs": [
+                {
+                    "name": "arriba",
+                    "order": 10,
+                    "localPosition": "(0, 350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "180",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": {}
+                },
+                {
+                    "name": "abajo",
+                    "order": 10,
+                    "localPosition": "(0, -350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "0",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": {}
+                }
+            ]
+        },
+        {
+            "name": "tuberia",
+            "order": 10,
+            "localPosition": "(1800, 0)",
+            "localScale": "2, 4",
+            "localRotation": "0",
+            "components": [
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "bodyType": "1",
+                        "bounciness": "0.5f",
+                        "trigger": "true"
+                    }
+                }
+            ],
+            "scripts": {
+                "Tuberia": []
+            },
+            "childs": [
+                {
+                    "name": "arriba",
+                    "order": 10,
+                    "localPosition": "(0, 350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "180",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": {}
+                },
+                {
+                    "name": "abajo",
+                    "order": 10,
+                    "localPosition": "(0, -350)",
+                    "localScale": ".5, .25",
+                    "localRotation": "0",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "tuberiaFlappyBird.png"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "bodyType": "1",
+                                "bounciness": "0.5f",
+                                "trigger": "false"
+                            }
+                        }
+                    ],
+                    "scripts": {}
+                }
+            ]
+        }
+    ],
+    "overlays": [
+        {
+            "name": "Score",
+            "placement": "1",
+            "anchor": "0.5f, 0.5f",
+            "top": "0",
+            "left": "0",
+            "right": "0",
+            "bottom": "0",
+            "components": [
+                {
+                    "component": "OverlayText",
+                    "attributes": {
+                        "path": "1up.ttf",
+                        "text": "hola nene",
+                        "pointSize": "100",
+                        "horizontalAlignment": "1"
+                    }
+                }
+            ],
+            "scripts": {
+                "Score": []
+            }
+            
+        }
+    ]
+}
