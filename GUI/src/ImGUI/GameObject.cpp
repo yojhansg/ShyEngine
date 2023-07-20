@@ -132,6 +132,10 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 {
 	showGizmo = false;
 	
+	if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && imGuiManager->getScene()->getSelectedGameObject() == this) {
+		toDelete();
+	}
+
 	if (isMouseInsideGameObject) {
 		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
