@@ -14,6 +14,16 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.aux
+Tesis.bbl
+Tesis.idx
+Tesis.bin
+Tesis.lof
+Tesis.blg
+Tesis.lot
+Tesis.out
+Tesis.toc
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

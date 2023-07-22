@@ -44,7 +44,7 @@
 % que queremos  que se incluyan.  Esto  es útil por  ejemplo para sólo
 % compilar un capítulo.
 %
-% El problema es que todos aquellos  ficheros que NO estén en la lista
+% El problema es que todos aquellos  ficheros que NO están en la lista
 % NO   se  incluirán...  y   eso  también   afecta  a   ficheros  de
 % la plantilla...
 %
@@ -115,11 +115,15 @@ constantes,guionado,Cascaras/bibliografia,config%
 
 \include{Cascaras/cover}
 
-\include{Cascaras/dedicatoria}
+% \include{Cascaras/dedicatoria}
 
 \include{Cascaras/agradecimientos}
 
 \include{Cascaras/resumen}
+
+\include{Cascaras/abstract}
+
+\include{Cascaras/indice}
 
 \ifx\generatoc\undefined
 \else
@@ -131,7 +135,7 @@ constantes,guionado,Cascaras/bibliografia,config%
 \mainmatter
 \restauraCabecera
 
-\include{Capitulos/Parte1}
+% \include{Capitulos/Parte1}
 \include{Capitulos/01Capitulo1}
 %\include{...}
 %\include{...}
