@@ -1,6 +1,6 @@
 %---------------------------------------------------------------------
 %
-%                          Introduccion ES
+%                          Introduccion
 %
 %---------------------------------------------------------------------
 
@@ -25,24 +25,28 @@ desarrollaor.
 En cuarto y con la reciente experiencia de desarrollo de un motor decidimos que la propuesta del trabajo de fin de 
 grado sería un motor con la siguientes características:
 
-    1.- Autosuficiente: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas y objetos desde
-    el editor y cuenta con la creación de ejecutables finales del juego para su distribución. Además, el motor podrá
-    mostrar la ejecución del juego directamente en el editor durante su desarrollo. Obviamente no tiene toda la
-    funcionalidad necesaria como para no depender de ninguna herrmienta externa durante el desarrollo pero si aporta
-    lo básico para el ciclo de desarrollo de un videojuego 2D.
+\begin{itemize}
 
-    2.- Editor integrado: La principal herramienta de un motor autosuficiente es el editor, encargado de comunicar 
-    al motor las accciones del desarrollador. No teníamos experiencia en desarrollo de aplicaciones de escritorio, 
-    ya que para el motor de tercero no hicimos editor, por lo que sabíamos que podía ser un reto.
+\item \texttt{Autosuficiente}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
+y objetos desde el editor y cuenta con la creación de ejecutables finales del juego para su distribución. 
+Además, el motor podrá mostrar la ejecución del juego directamente en el editor durante su desarrollo. 
+Obviamente no tiene toda la funcionalidad necesaria como para no depender de ninguna herrmienta externa 
+durante el desarrollo pero si aporta lo básico para el ciclo de desarrollo de un videojuego 2D.
 
-    3.- Programación visual basada en nodos: Esta es la parte a destacar de nuestro motor. Debido a la complejidad que
-    presentan algunos motores de la actualidad para desarrolladores principiantes o inexpertos, la programación visual
-    es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el videojuego. Sabíamos que podía ser
-    un reto a nivel técnico pero aportaría mucha comodidad, fluidez y por supuesto abriría las puertas de nuestro motor
-    a muchos desarrolladores con poca experiencia en programación.
+\item \texttt{Editor integrado}: La principal herramienta de un motor autosuficiente es el editor, encargado 
+de comunicar al motor las accciones del desarrollador. No teníamos experiencia en desarrollo de aplicaciones 
+de escritorio, ya que para el motor de tercero no hicimos editor, por lo que sabíamos que podía ser un reto.
 
-Por último, optamos por el 2D debido a la experiencia obtenida durante la carrera. Además, supone menor complejidad a 
-nivel técnico durante el desarrollo del motor.
+\item \texttt{Programación visual basada en nodos}: Esta es la parte a destacar de nuestro motor. Debido a la 
+complejidad que presentan algunos motores de la actualidad para desarrolladores principiantes o inexpertos, 
+la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
+videojuego. Sabíamos que podía ser un reto a nivel técnico pero aportaría mucha comodidad, fluidez y por 
+supuesto abriría las puertas de nuestro motor a muchos desarrolladores con poca experiencia en programación.
+
+\end{itemize}
+
+Por último, optamos por el 2D debido a la experiencia obtenida durante la carrera. Además, supone menor 
+complejidad a nivel técnico durante el desarrollo del motor.
 
 %-------------------------------------------------------------------
 \section{Objetivos}
@@ -53,6 +57,8 @@ El objetivo principal del trabajo de fin de grado es desarrollar el motor de vid
 integrado y programación visual basada en nodos. Con esto, los usuarios dispondrán de una herramienta para desarrollar
 cualquier tipo de videojuego 2D.
 
+\medskip
+
 Con la autosuficiencia del motor queremos conseguir que los usuarios puedan desarrollar sus videojuegos con la mínima
 dependencia posible de herramientas externas de tal forma que todo el trabajo pase por el editor.
 
@@ -61,20 +67,81 @@ tenga que comnunicar con el motor vía programación.
 
 Con el sistema de programación visual basada en nodos queremos conseguir abrir las puertas de nuestro motor a
 desarrolladores inexpertos o con bajos cononcimientos en programación para que así puedan desarrollar sus videojuegos.
+Además, supone un reto a nivel técnico que nos aportará experiencia y conocimiento.
 
 %-------------------------------------------------------------------
 \section{Herramientas}
 %-------------------------------------------------------------------
 \label{cap1:sec:herramientas}
 
-Herramientas.
+Para comenzar, se ha utilizado Git como sistema de control de versiones a través de la aplicación de escritorio
+GitHub Desktop. Todo el código implementado se ha subido a un repositorio dividiendo el trabajo en ramas. En concreto,
+tal y como se cuenta en el plan de trabajo, el proyecto se ha dividido en motor, editor y programación visual.
+
+\medskip
+
+Para el desarrollo del motor se ha hecho uso de la librería de SDL (Simple DirectMedia Layer). En concreto, se ha 
+utilizado SDL Image como sistema de gráficos, SDL Mixer como sistema de audio y SDL TTF como sistema de fuentes 
+TrueType para renderizar texto. También se ha utilizado la librería Box2D para la simulación física y manejo de 
+colisiones 2D.
+
+Para el desarrollo del editor se ha hecho uso de la librería de interfaz gráfica ImGUI.
+
+\medskip
+
+El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visual Studio 2022 y escrito en C++. Por 
+último, para la organización de tareas hemos usado la herramienta de gestión de proyectos Trello.
 
 %-------------------------------------------------------------------
 \section{Plan de trabajo}
 %-------------------------------------------------------------------
 \label{cap1:sec:plandetrabajo}
 
-Plan de trabajo.
+El trabajo se divide en tres partes: el desarrollo del motor, el desarrollo del editor y el desarrollo del sistema
+de scripting visual basado en nodos.
+
+- El motor consta de varios proyectos de Visual Studio donde se dividen las partes fundamentales del mismo:
+
+\begin{itemize}
+
+\item \texttt{Proyecto principal}: Este proyecto implementa el bucle principal del motor y de general el ejecutable
+de juego.
+
+\item \texttt{Proyecto de físicas}: Implementa un manager con el que acceder a la configuración del mundo físico.
+
+\item \texttt{Proyecto de gráficos}: Implementa un manager con el que acceder a la configuración de renderizado 
+de SDL, como la ventana de juego o la cámara.
+
+\item \texttt{Proyecto de recursos}: Implementa un manager para el guardado de recursos como imágenes o fuentes
+de texto.
+
+\item \texttt{Proyecto de sonido}: Implementa un manager para cargar, reproducir o detener efectos de sonido
+o música.
+
+\item \texttt{Proyecto de utilidades}: Implementa varias clases genéricas útiles para el resto de proyectos.
+
+\item \texttt{Proyecto de input}: Implementa un manager para manejar el input del usuario, tanto de teclado y ratón
+como de mando, con soporte para Dualshock 4.
+
+\item \texttt{Proyecto de Entity-Component-System}: Implementa el ECS y contiene todos los componentes proporcionados
+por el motor.
+
+\item \texttt{Proyecto de Consola}: Implementa funcionalidad para imprimir información por consola. Útil para 
+el desarrollo y la consola de debug del editor.
+
+\item \texttt{Proyecto de Scripting}: Implementa funcionalidad leer y crear clases en C++. Explicada en detalle
+posteriormente.
+
+\end{itemize}
+
+
+Editor....
+
+Scripting...
+
+Unión de editor-motor-scripting...
+
+Fase de prueba con usuarios...
 
 
 %---------------------------------------------------------------------
@@ -103,23 +170,27 @@ comfortable and intuitive since it's the task that will take up the most time fo
 In the fourth year, with the recent experience of developing a game engine, we decided that the proposal for our
 final degree project would be an engine with the following characteristics:
 
-    1.- Self-sufficient: This means it provides functionality to manage resources, create scenes and objects from
-    the editor, and can generate final game executables for distribution. Obviously, it doesn't have all the 
-    necessary functionality to be completely independent of any external tools during development, but it does
-    provide the basics for the development cycle of a 2D game.
+\begin{itemize}
 
-    2.- Integrated Editor: The main tool of a self-sufficient engine is its editor, responsible for communicating
-    the developer's actions to the engine. We had no experience in developing desktop applications, as we didn't
-    create an editor for the third-year engine, so we knew it could be a challenge..
+\item \texttt{Self-sufficient}: This means it provides functionality to manage resources, create scenes 
+and objects from the editor, and can generate final game executables for distribution. Obviously, it doesn't 
+have all the necessary functionality to be completely independent of any external tools during development, 
+but it does provide the basics for the development cycle of a 2D game.
 
-    3.- Visual Node-Based Programming: This is the highlight of our engine. Due to the complexity that some modern
-    engines present for beginner or inexperienced developers, visual programming is a very useful and intuitive
-    tool for creating logic and behavior in the game. We knew it could be a technical challenge, but it would 
-    provide great convenience, fluidity, and, of course, open the doors of our engine to many developers with 
-    little programming experience.
+\item \texttt{Integrated Editor}: The main tool of a self-sufficient engine is its editor, responsible for 
+communicating the developer's actions to the engine. We had no experience in developing desktop 
+applications, as we didn't create an editor for the third-year engine, so we knew it could be a challenge..
 
-Finally, we chose to focus on 2D due to the experience gained during our studies. Additionally, it involves
-less technical complexity during the development of the engine.
+\item \texttt{Visual Node-Based Programming}: This is the highlight of our engine. Due to the complexity 
+that some modern engines present for beginner or inexperienced developers, visual programming is a very 
+useful and intuitive tool for creating logic and behavior in the game. We knew it could be a technical 
+challenge, but it would provide great convenience, fluidity, and, of course, open the doors of our engine 
+to many developers with little programming experience.
+
+\end{itemize}
+
+Finally, we chose to focus on 2D due to the experience gained during our studies. Additionally, it 
+involves less technical complexity during the development of the engine.
 
 %-------------------------------------------------------------------
 \section{Goals}
@@ -129,6 +200,8 @@ less technical complexity during the development of the engine.
 The main objective of the final degree project is to develop a self-sufficient 2D game engine with an integrated 
 editor and node-based visual programming. With this, users will have a tool to develop any type of 2D video game.
 
+\medskip
+
 By achieving self-sufficiency in the engine, we aim to enable users to develop their video games with minimal 
 reliance on external tools, ensuring that all the work can be done within the editor.
 
@@ -136,21 +209,77 @@ With the editor, our goal is to make the development process comfortable, smooth
 the need for developers to communicate with the engine through programming.
 
 With the node-based visual programming system, we aim to open the doors of our engine to inexperienced developers
-or those with limited programming knowledge, allowing them to develop their videogames.
+or those with limited programming knowledge, allowing them to develop their videogames. In addition, it represents 
+a technical challenge that will provide us with experience and knowledge.
 
 %-------------------------------------------------------------------
 \section{Project Management}
 %-------------------------------------------------------------------
 \label{cap1:sec:projectmanagement}
 
-Project management.
+To start with, Git has been used as the version control system through the GitHub Desktop application. All the 
+implemented code has been uploaded to a repository, dividing the work into branches. Specifically, as outlined 
+in the work plan, the project has been divided into engine, editor, and visual programming.
+
+\medskip
+
+For the development of the engine, the SDL (Simple DirectMedia Layer) library has been used. In particular, 
+SDL Image has been used for graphics, SDL Mixer for audio, and SDL TTF for TrueType font rendering. The Box2D 
+library has also been used for 2D physics simulation and collision handling.
+
+For the development of the editor, the ImGUI (Immediate Mode Graphical User Interface) library has been used.
+
+\medskip
+
+The code has been developed in the Visual Studio 2022 Integrated Development Environment (IDE) and written in C++. 
+Finally, for task organization, we have used the Trello project management tool.
 
 %-------------------------------------------------------------------
 \section{Work Plan}
 %-------------------------------------------------------------------
 \label{cap1:sec:workplan}
 
-Work plan.
+The work is divided into three parts: the engine development, the editor development, and the development of 
+the node-base visual scripting system.
+
+- The engine consists of several Visual Studio projects where its fundamental parts are divided:
+
+\begin{itemize}
+
+\item \texttt{Main Project}: This project implements the main loop of the engine and generates the game executable.
+
+\item \texttt{Physics Project}: Implements a manager to access the physical world's configuration.
+
+\item \texttt{Graphics Project}: Implements a manager to access SDL rendering configuration, such as the game 
+window or the camera.
+
+\item \texttt{Resources Project}: Implements a manager to handle resources such as images or text fonts.
+
+\item \texttt{Sound Project}: Implements a manager to load, play, or stop sound effects or music.
+
+\item \texttt{Utilities Project}: Implements various generic classes useful for the rest of the projects.
+
+\item \texttt{Input Project}: Implements a manager to handle user input, including keyboard, mouse, and controller
+input, with support for Dualshock 4.
+
+\item \texttt{Entity-Component-System Project}: Implements the ECS and contains all the components provided by the engine.
+
+\item \texttt{Console Project}: Implements functionality to print information through the console, useful for 
+development and debugging within the editor.
+
+\item \texttt{Scripting Project}: Implements functionality to read and create C++ classes. Detailed explanation
+follows later.
+
+\end{itemize}
+
+
+Editor....
+
+Scripting...
+
+Unión de editor-motor-scripting...
+
+Fase de prueba con usuarios...
 
 
 
