@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;$(SolutionDir)src\renderer;$(SolutionDir)dependencies\SDL2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;$(SolutionDir)src\renderer;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)src\sound;$(SolutionDir)dependencies\SDL2_mixer\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,7 +129,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;$(SolutionDir)src\renderer;$(SolutionDir)dependencies\SDL2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\utilities;$(SolutionDir)src\renderer;$(SolutionDir)dependencies\SDL2\include;$(SolutionDir)src\sound;$(SolutionDir)dependencies\SDL2_mixer\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +147,9 @@
   <ItemGroup>
     <ProjectReference Include="..\renderer\Renderer.vcxproj">
       <Project>{dbb8cf48-5ace-435b-85b7-a3606a772488}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sound\sound.vcxproj">
+      <Project>{53446c51-c540-4001-ac09-bbd92cc74904}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{713f8aae-1815-4c40-a648-a7a5a664ad9c}</Project>

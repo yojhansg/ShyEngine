@@ -47,6 +47,7 @@ namespace Utilities {
 	SDL_Rect createRect(int x, int y, int w, int h) {
 		return { x, y, w, h };
 	}
+
 }
 
 

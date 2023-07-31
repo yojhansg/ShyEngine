@@ -6,22 +6,22 @@
 #include <PhysicsManager.h>
 #include <ConsoleManager.h>
 #include <SceneManager.h>
+#include <SoundManager.h>
 
-#include <Components/Overlay.h>
-#include <Components/TestComponent.h>
+#include <Components/ParticleSystem.h>
+#include <Components/LinkComponent.h>
+#include <Components/BallComponent.h>
 #include <Components/OverlayImage.h>
+#include <Components/SoundEmitter.h>
+#include <Components/MusicEmitter.h>
 #include <Components/OverlayText.h>
 #include <Components/CircleBody.h>
 #include <Components/Transform.h>
 #include <Components/ChainBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/BoxBody.h>
+#include <Components/Overlay.h>
 #include <Components/Image.h>
-
-#include <ECSUtilities/FunctionManager.h>
-#include <ECSUtilities/ClassReflection.h>
-#include <Scripting/Script.h>
-
 
 Game::Game(ECS::SceneManager* sm) {
 	sceneManager = sm;
@@ -39,7 +39,17 @@ void Game::initScenes() {
 
 void Game::firstScene() {
 
-	Renderer::RendererManager* renderer = Renderer::RendererManager::instance();
+	auto physics = Physics::PhysicsManager::instance();
+
+	physics->addCollisionLayer("Particles");
+	physics->addCollisionLayer("Ground");
+	physics->setCollisionBetweenLayers("Default", "Particles", false);
+	physics->setCollisionBetweenLayers("Particles", "Particles", false);
+
+	auto renderer = Renderer::RendererManager::instance();
+	auto sound = Sound::SoundManager::instance();
+
+	sound->setMasterVolume(0.1f);
 
 	// 1.- Scene
 	scene = sceneManager->createScene("Default scene");
@@ -50,23 +60,26 @@ void Game::firstScene() {
 		ECS::Entity* player = scene->createEntity("Player");
 
 		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("link.png");
+		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
-		auto tComp = player->addComponent<ECS::TestComponent>();
+		auto lComp = player->addComponent<ECS::LinkComponent>();
+		auto pSys = player->addComponent<ECS::ParticleSystem>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
 	
 		auto grTr = ground->addComponent<ECS::Transform>();
-		auto grIm = ground->addComponent<ECS::Image>("ground.png");
+		auto grIm = ground->addComponent<ECS::Image>("images/ground.png");
 		auto grBody = ground->addComponent<ECS::EdgeBody>();
 
 		// Ball
 		/*ECS::Entity* ball = scene->createEntity("Ball");
 
 		auto trBall = ball->addComponent<ECS::Transform>();
-		auto imBall = ball->addComponent<ECS::Image>("ball.png");
-		auto ballBody = ball->addComponent<ECS::CircleBody>();*/
+		auto imBall = ball->addComponent<ECS::Image>("images/ball.png");
+		auto ballBody = ball->addComponent<ECS::CircleBody>();
+		auto ballEmitter = ball->addComponent<ECS::SoundEmitter>("sounds/retro.wav");
+		auto bComp = ball->addComponent<ECS::BallComponent>();*/
 
 	
 	// 3.- Init
@@ -75,21 +88,21 @@ void Game::firstScene() {
 	// 4.- Components settings
 
 		// Player
-		tr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 2));
-		tr->SetScale(Utilities::Vector2D(0.35f, 0.35f));
-		body->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		body->setBounciness(0.8f);
-		//body->setTrigger(true);
+		tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
+		tr->SetScale({0.25f, 0.25f});
+		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+		body->setFriction(0.5f);
 
 		// Ground
-		grTr->SetScale(Utilities::Vector2D(1, 1));
-		grTr->SetLocalPosition(Utilities::Vector2D(renderer->getWidth() / 2, renderer->getHeight() / 1.2f));
-		grBody->addOffSet(0, -1);
-
+		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
+		grTr->SetScale({ 0.5f, 0.5f });
+		grBody->addOffSet(0, grBody->getSize().getY() / 2);
+		grBody->setCollisionLayer("Ground");
+		
 		// Ball
-		/*trBall->setPosition(renderer->getWidth() / 2, renderer->getHeight() / 4);
-		trBall->setScale(0.25f, 0.25f);
-		ballBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballBody->setBounciness(0.5f); */
+		/*trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f});
+		trBall->SetScale({ 0.25f, 0.25f });
+		ballBody->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+		ballEmitter->shouldPlayOnStart(false);*/
 
 }

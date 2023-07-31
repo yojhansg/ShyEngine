@@ -11,6 +11,7 @@ namespace Utilities {
 
 		static Color CreateColor(int r, int g, int b);
 		static Color CreateColor(std::string const& str);
+		static Color Lerp(const Color& startColor, const Color& endColor, float t);
 
 		int r, g, b;
 

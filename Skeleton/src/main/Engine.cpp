@@ -24,8 +24,6 @@
 #include <Scene.h>
 #include <chrono>
 
-#include <iostream>
-
 using namespace std::chrono;
 
 Engine::Engine() {
@@ -38,6 +36,8 @@ Engine::Engine() {
 bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("clock");
+
+	data.windowSize.set(1080, 720);
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -60,7 +60,7 @@ bool Engine::init() {
 	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
 	ECS::ContactListener::init(); 
-	SoundManager::SoundManager::init();
+	Sound::SoundManager::init();
 	Scripting::ScriptManager::init();
 	Scripting::ScriptFunctionality::init();
 	ComponentFactory::init();
@@ -72,10 +72,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	//Game(sceneManager).initScenes();
+	Game(sceneManager).initScenes();
 
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
+	/*sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();*/
 
 	if (data.useSplashScreen) {
 		sceneManager->SplashScreen();

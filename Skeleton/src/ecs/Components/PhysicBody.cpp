@@ -39,7 +39,7 @@ namespace ECS {
 		onCollisonStay = false;
 		onTriggerStay = false;
 
-		b = nullptr;
+		collisionEntity = nullptr;
 
 		trigger = false;
 		freezeRotation = false;
@@ -109,9 +109,9 @@ namespace ECS {
 		auto scale = transform->GetWorldScale();
 
 		if (onCollisonStay)
-			getEntity()->onCollisionStay(b);
+			getEntity()->onCollisionStay(collisionEntity);
 		else if (onTriggerStay)
-			getEntity()->onTriggerStay(b);
+			getEntity()->onTriggerStay(collisionEntity);
 
 		if (bodyType != (int) BODY_TYPE::STATIC) {
 
@@ -275,13 +275,13 @@ namespace ECS {
 	void PhysicBody::setCollisionStay(bool stay, Entity* b) {
 		onCollisonStay = stay;
 
-		this->b = b;
+		this->collisionEntity = b;
 	}
 
 	void PhysicBody::setTriggerStay(bool stay, Entity* b) {
 		onTriggerStay = stay;
 
-		this->b = b;
+		this->collisionEntity = b;
 	}
 
 	void PhysicBody::setLinearVelocity(float x, float y) {

@@ -148,9 +148,13 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\sound\Music.h" />
+    <ClInclude Include="..\..\src\sound\SoundEffect.h" />
     <ClInclude Include="..\..\src\sound\SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\sound\Music.cpp" />
+    <ClCompile Include="..\..\src\sound\SoundEffect.cpp" />
     <ClCompile Include="..\..\src\sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
