@@ -2,6 +2,7 @@
 #include "RendererManager.h"
 #include "PhysicsManager.h"
 #include "box2d/box2d.h"
+#include "SDL_render.h"
 #include "Components/ParticleSystem.h"
 #include "Components/Transform.h"
 #include "Texture.h"

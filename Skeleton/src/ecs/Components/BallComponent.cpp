@@ -15,8 +15,6 @@ namespace ECS {
 
 		body = this->getEntity()->getComponent<CircleBody>();
 
-		sound = this->getEntity()->getComponent<SoundEmitter>();
-
 		onGround = false;
 
 	}
@@ -27,9 +25,6 @@ namespace ECS {
 
 			if (im->isKeyDown(SDL_SCANCODE_SPACE) && onGround) {
 				body->applyLinearImpulseToCenter({ 0, -50 });
-
-				sound->play();
-
 			}
 
 		}

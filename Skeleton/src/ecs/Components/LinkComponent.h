@@ -30,8 +30,6 @@ namespace ECS {
 
 		Transform* transform;
 
-		ParticleSystem* pSystem;
-
 		BoxBody* body;
 
 		bool onGround;

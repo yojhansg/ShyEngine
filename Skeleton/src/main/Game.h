@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-* A class to test if ECS works
+* A class to test the Engine
 */
 
 namespace ECS {

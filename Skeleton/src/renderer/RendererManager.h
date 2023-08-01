@@ -2,18 +2,19 @@
 
 #include <Singleton.h>
 #include <string>
-#include <SDL.h>
 #include <Vector2D.h>
 #include <Color.h>
 
-//TODO: no incluir aqui SDL
+class SDL_Window;
+struct SDL_Renderer;
+class SDL_Surface;
+struct SDL_Texture;
 
 namespace Scripting {
 	class ScriptFunctionality;
 }
 
 namespace Renderer {
-
 
 	class RendererManager : public Utilities::Singleton<RendererManager> {
 
@@ -29,6 +30,7 @@ namespace Renderer {
 
 		void clearRenderer(cColor color = Utilities::Color(255, 255, 255));
 		void presentRenderer();
+		void CopyTargetTextureContent();
 
 		int getWidth();
 		int getHeight();
@@ -49,6 +51,8 @@ namespace Renderer {
 
 		void SetWindowIcon(const std::string& path);
 
+		void SetRenderTarget(bool renderOnTarget);
+
 	private:
 
 		RendererManager();
@@ -56,6 +60,8 @@ namespace Renderer {
 
 		void initSDL(bool vsync);
 		void closeSDL();
+
+		void CreateTargetTexture();
 
 		std::string windowTitle;
 		int width; 
@@ -65,6 +71,8 @@ namespace Renderer {
 		SDL_Renderer* renderer; // the renderer
 
 		SDL_Surface* icon;
+
+		SDL_Texture* targetTexture;
 
 		float cameraScale;
 		Utilities::Vector2D cameraPosition;

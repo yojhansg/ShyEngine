@@ -1,0 +1,91 @@
+{
+    "nodeCount": 20,
+    "update": 1,
+
+
+    "functions" : [
+
+        {
+            "index" : 1,
+            "function": "PhysicBody_setLinearVelocity",
+            "input" : [
+                2, 3, 5
+            ],
+            "next": 0
+        },
+        {
+            "index" : 2,
+            "function": "Entity"
+        },
+        
+        {
+            "index" : 4,
+            "function": "Logic_Lesser",
+            "input":[
+                12, 10 
+            ]
+        },
+
+        {
+            "index": 8,
+            "function": "Transform_SetLocalPosition",
+            "input":[
+                2, 9
+            ]
+        },
+        {
+            "index": 11,
+            "function": "Transform_GetLocalPosition",
+            "input":[
+                2
+            ]
+        },
+        {
+            "index": 12,
+            "function": "Vector2D_X",
+            "input":[
+                11
+            ]
+        }
+    ],
+
+    "forks" : [
+
+        {
+            "index" : 0,
+            "type" : 0,
+            "A": 8,
+            "B": -1,
+            "condition": 4
+        }
+    ],
+    "consts" : [
+
+        {
+            "index": 3,
+            "type": "float",
+            "value": -1
+        },
+        {
+            "index": 5,
+            "type": "float",
+            "value": 0
+        },
+        {
+            "index": 7,
+            "type": "float",
+            "value": 1
+        },
+        {
+            "index": 9,
+            "type": "Vector2D",
+            "value": "(1200, 0)"
+        },
+        {
+            "index": 10,
+            "type": "float",
+            "value": -600
+        }
+
+    ]
+ }

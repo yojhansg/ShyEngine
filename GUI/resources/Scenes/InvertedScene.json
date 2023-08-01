@@ -1,0 +1,25 @@
+{
+    "name": "Mi escena inicial",
+    "objects": [
+        {
+            "name": "player",
+            "order": 10,
+            "localPosition": "(0, 0)",
+            "localScale": "(0.35f, 0.35f)",
+            "localRotation": "0",
+            "components": [
+                
+            ],
+
+            "scripts": {
+
+                "TestScript": {
+
+
+                }
+
+            }
+        }
+    ]
+   
+}

@@ -37,7 +37,7 @@ bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("clock");
 
-	data.windowSize.set(1080, 720);
+	data.windowSize.set(1920, 1080);
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -56,7 +56,7 @@ bool Engine::init() {
 	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
 	physicsManager = Physics::PhysicsManager::init(data.gravity);
 	renderManager = ECS::RenderManager::init();
-	inputManager = Input::InputManager::init(data.closeWithEscape); 
+	inputManager = Input::InputManager::init(data.closeWithEscape);  
 	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
 	ECS::ContactListener::init(); 
@@ -67,7 +67,7 @@ bool Engine::init() {
 
 	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate 
 
-	//Maximun size = 64x64 pixels
+	// Maximun size = 64x64 pixels
 	rendererManager->SetWindowIcon(data.windowIcon);
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
@@ -122,6 +122,7 @@ void Engine::update() {
 		overlayManager->Update();
 
 		// Render
+		rendererManager->SetRenderTarget(false);
 		rendererManager->clearRenderer(Utilities::Color(131, 92, 243));
 		renderManager->Render();
 		physicsManager->debugDraw();
