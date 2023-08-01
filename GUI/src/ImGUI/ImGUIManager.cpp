@@ -11,6 +11,7 @@
 #include "Hierarchy.h"
 #include "FileExplorer.h"
 #include "Components.h"
+#include <fstream>
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -155,16 +156,25 @@ void ImGUIManager::exit()
     exitGame = true;
 }
 
+void ImGUIManager::creatingScript(bool isCreating)
+{
+    isCreatingScript = isCreating;
+}
+
 void ImGUIManager::update()
 {
+    if (isCreatingScript) return;
+
     for (auto window : windows)
     {
-        window->update();
+        if (!isCreatingScript || window == menuBar)
+            window->update();
     }
 }
 
 void ImGUIManager::render()
 {
+
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Start the Dear ImGui frame
@@ -174,9 +184,55 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        window->render();
+        if(!isCreatingScript || window == menuBar)
+            window->render();
     }
 
+    if(isCreatingScript) {
+
+        ImGui::OpenPopup("Create script");
+        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+        {
+            static char nameBuffer[256];  // Buffer to hold the new name
+            if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
+            {
+            }
+
+            if (ImGui::BeginChild("ChildWindow", ImVec2(300, 200), true, ImGuiWindowFlags_None))
+            {
+
+                ImGui::Text("Child Window Content Here");
+            }
+            ImGui::EndChild();
+
+            if (ImGui::Button("Save script"))
+            {
+                std::string filename = std::string(nameBuffer) + ".script";
+                std::string filePath = "scripts/" + filename;
+
+                std::ofstream outputFile(filePath);
+                if (outputFile.is_open())
+                {
+                    outputFile.close();
+                }
+
+                ImGUIManager::getInstance()->creatingScript(false);
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Close"))
+            {
+                ImGUIManager::getInstance()->creatingScript(false);
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
 
     // Rendering
     ImGui::Render();

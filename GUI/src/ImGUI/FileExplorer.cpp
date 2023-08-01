@@ -70,6 +70,9 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
         std::string path = file.is_directory() ? "folder.png" : "file.png";
 
+        if (file.path().extension().string() == ".script") path = "script.png";
+
+
         SDL_Surface* surface = IMG_Load(path.c_str());
         ImTextureID imageTextId = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
@@ -106,6 +109,16 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                 std::string buttonId = "Create GameObject##" + filename;
                 if (ImGui::Button(buttonId.c_str())) {
                     ImGUIManager::getInstance()->getScene()->addGameObject(filename);
+                }
+            }
+
+            if (extension == ".script")
+            {
+                ImGui::SameLine();
+                std::string buttonId = "Open script##" + filename;
+                if (ImGui::Button(buttonId.c_str())) {
+                    ImGui::OpenPopup("Create script");
+                    ImGUIManager::getInstance()->creatingScript(true);
                 }
             }
            

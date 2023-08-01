@@ -4,6 +4,7 @@
 #include "ImGUIManager.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include <fstream>
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
@@ -97,6 +98,10 @@ void PEditor::MenuBar::render()
                     gameObject->toDelete();
                 }
  
+                if (ImGui::MenuItem("Add script", NULL, false)) {
+                    ImGUIManager::getInstance()->creatingScript(true);
+                }
+
                 ImGui::EndMenu();
             }
         }
@@ -134,6 +139,7 @@ void PEditor::MenuBar::render()
         }
 
         ImGui::EndPopup();
+
     }
 }
 

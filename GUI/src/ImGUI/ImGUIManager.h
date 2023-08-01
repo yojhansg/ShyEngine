@@ -39,6 +39,7 @@ private:
 
 
 	bool exitGame = false;
+	bool isCreatingScript = false;
 
 	std::vector<PEditor::Window*> windows;
 
@@ -67,6 +68,8 @@ public:
 	void init();
 	void loop();
 	void exit();
+
+	void creatingScript(bool isCreating);
 
 	void update();
 	void render();
