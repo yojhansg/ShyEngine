@@ -40,7 +40,7 @@ PEditor::GameObject::GameObject(std::string& path)
 PEditor::GameObject::~GameObject()
 {
 	for (auto it = components.begin(); it != components.end(); ++it) {
-		delete it->second;
+		delete *it;
 	}
 	components.clear();
 
@@ -196,7 +196,7 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	}
 }
 
-std::unordered_map<int, Component*>* PEditor::GameObject::getComponents()
+std::list<Component*>* PEditor::GameObject::getComponents()
 {
 	return &components;
 }
@@ -234,8 +234,7 @@ std::string PEditor::GameObject::toJson()
 	j["Name"] = name;
 
 	nlohmann::ordered_json componentsJson;
-	for (auto pair : components) {
-		Component* component = pair.second;
+	for (auto component : components) {
 		componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
 	}
 

@@ -119,5 +119,8 @@
     <ClCompile Include="..\..\src\ImGUI\ScriptCreation.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Component.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

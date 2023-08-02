@@ -42,12 +42,12 @@ void PEditor::Components::render()
 
 	if (gameObject != nullptr) {
 
-		std::unordered_map<int, Component*>* components = gameObject->getComponents();
+		std::list<Component*>* components = gameObject->getComponents();
 
 		gameObject->drawTransformInEditor();
 
 		for (auto it = components->begin(); it != components->end(); it++) {
-			it->second->drawEditor();
+			(*it)->drawEditor();
 		}
 	}
 
