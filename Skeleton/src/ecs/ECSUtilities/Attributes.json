@@ -499,7 +499,7 @@
         },
         {
             "name": "localRotation",
-            "type": "double"
+            "type": "float"
         }
     ]
 }
