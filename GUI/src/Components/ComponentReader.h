@@ -1,25 +1,20 @@
 #pragma once
 
-
 #include <string>
 #include <map>
+#include <vector>
 
 
-using cstring = std::string const&;
+namespace Components {
 
-class ComponentReader {
+	using cstring = std::string const&;
 
+	class ComponentReader {
 
-private:
+	public:
 
-
-
-
-public:
-
-	ComponentReader(cstring path);
-
-
-
-
-};
+		static std::vector<std::string> ReadComponents(cstring path);
+		static void ReadFunctions(cstring path);
+		static void ReadAttributes(cstring path);
+	};
+}

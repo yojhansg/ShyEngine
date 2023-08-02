@@ -582,7 +582,7 @@
         },
         {
             "name": "localRotation",
-            "type": "float"
+            "type": "double"
         }
     ]
 }

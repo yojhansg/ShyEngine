@@ -196,7 +196,7 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			if (forceAddClassName) {
 
-				methods[currentClassName];
+				allComponents.emplace(currentClassName);
 			}
 
 
@@ -215,7 +215,10 @@ void ECSReader::ProcessFile(std::string const& path)
 					}
 				}
 
-				components.push_back(std::make_pair(currentClassName, path));
+				componentsWithPaths.push_back(std::make_pair(currentClassName, path));
+
+				if (!allComponents.contains(currentClassName))
+					allComponents.emplace(currentClassName);
 			}
 
 			continue;
@@ -232,6 +235,9 @@ void ECSReader::ProcessFile(std::string const& path)
 			std::string attName = attNameWithComa.substr(0, attNameWithComa.find(";"));
 
 			attributes[currentClassName].push_back({ attReturnType, attName });
+
+			if (!allComponents.contains(currentClassName))
+				allComponents.emplace(currentClassName);
 
 			if (!fileIncluded) {
 
@@ -261,8 +267,13 @@ void ECSReader::ProcessFile(std::string const& path)
 				continue;
 			}
 
-			if (!currentClassIsManager)
+			if (!currentClassIsManager) {
+
 				methods[currentClassName].push_back(method);
+
+				if (!allComponents.contains(currentClassName))
+					allComponents.emplace(currentClassName);
+			}
 
 			else
 				managerMethods[currentClassName].push_back(method);
@@ -278,7 +289,6 @@ void ECSReader::ProcessFile(std::string const& path)
 			}
 		}
 	}
-
 
 
 	stream.close();
@@ -898,7 +908,7 @@ ECSReader& ECSReader::ComponentFactory()
 
 	constructor << "\n";
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		constructor << "\tcomponents[\"" << component.first << "\"] = &ComponentFactory::Create" << component.first << ";\n";
 	}
@@ -920,7 +930,7 @@ ECSReader& ECSReader::ComponentFactory()
 		.Empty(1);
 
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		std::stringstream method;
 
@@ -940,7 +950,7 @@ ECSReader& ECSReader::ComponentFactory()
 	creator.EndClass();
 
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		auto FileName = std::filesystem::path(component.second);
 
@@ -1057,6 +1067,27 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 	}
 
 	std::ofstream fmJSON(output + "/Attributes.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+
+
+ECSReader& ECSReader::GenerateComponentsJSON()
+{
+	json root;
+
+	for (auto& component : allComponents) {
+
+		root.push_back(component);
+	}
+
+	std::ofstream fmJSON(output + "/Components.json");
 
 	fmJSON << root.dump(4) << std::endl;
 

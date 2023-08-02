@@ -18,6 +18,7 @@ int main() {
 	reader.ComponentFactory();
 	reader.GenerateFunctionJSON();
 	reader.GenerateAttributeJSON();
+	reader.GenerateComponentsJSON();
 
 	return 0;
 }
