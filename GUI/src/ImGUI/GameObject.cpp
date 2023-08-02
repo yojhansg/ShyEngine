@@ -3,11 +3,11 @@
 #include "SDL_image.h"
 #include "imgui.h"
 #include "ImGUIManager.h"
-#include "Transform.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "SDL.h"
 #include "Component.h"
+#include "nlohmann/json.hpp"
 
 PEditor::GameObject::GameObject(std::string& path)
 {
@@ -20,16 +20,10 @@ PEditor::GameObject::GameObject(std::string& path)
 	std::size_t extensionPos = path.find_last_of('.');
     name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
 
-	tr = new Transform();
-	tr->setPosition(0, 0);
-	tr->setSize(100, 100);
-	tr->type = transform;
-
-	components.emplace(transform, tr);
+	pos = new ImVec2(0, 0);
+	size = new ImVec2(100, 100);
 
 	imGuiManager = ImGUIManager::getInstance();
-
-
 
 	//Gizmo texture
 	surface = IMG_Load("gizmo.png");
@@ -49,11 +43,14 @@ PEditor::GameObject::~GameObject()
 		delete it->second;
 	}
 	components.clear();
+
+	delete pos;
+	delete size;
 }
 
 void PEditor::GameObject::render()
 {
-	ImGui::Image(text, *tr->getSize());
+	ImGui::Image(text, *size);
 }
 
 SDL_Texture* PEditor::GameObject::getTexture()
@@ -74,12 +71,25 @@ void PEditor::GameObject::setVisible(bool visible)
 }
 int PEditor::GameObject::getWidth()
 {
-	return tr->getSize()->x;
+	return size->x;
 }
 
 int PEditor::GameObject::getHeight()
 {
-	return tr->getSize()->y;
+	return size->y;
+}
+
+void PEditor::GameObject::drawTransformInEditor()
+{
+	if (ImGui::CollapsingHeader("Transform"))
+	{
+
+		ImGui::Text("Position");
+		ImGui::DragFloat2("##position_drag", (float*)pos, 0.3f, 0.0f, 0.0f, "%.2f");
+
+		ImGui::Text("Scale");
+		ImGui::DragFloat2("##scale_drag", (float*)size, 0.1f, 0.0f, 0.0f, "%.2f");
+	}
 }
 
 void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
@@ -165,20 +175,21 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 			{
 				if (leftMouseButtonDown)
 				{
-					tr->setPosition(mousePos.x - tr->getSize()->x / 2, mousePos.y - tr->getSize()->y / 2);
+					pos->x = mousePos.x - size->x / 2;
+					pos->y = mousePos.y - size->y / 2;
 				}
 			}
 
 			if (event->type == SDL_MOUSEWHEEL) {
 				if (event->wheel.y > 0) // scroll up
 				{
-					ImVec2 size = *tr->getSize();
-					tr->setSize(size.x + 5, size.y + 5);
+					size->x += 5;
+					size->y += 5;
 				}
 				else if (event->wheel.y < 0) // scroll down
 				{
-					ImVec2 size = *tr->getSize();
-					tr->setSize(size.x - 5, size.y - 5);
+					size->x -= 5;
+					size->y -= 5;
 				}
 			}
 		}
@@ -192,7 +203,8 @@ std::unordered_map<int, Component*>* PEditor::GameObject::getComponents()
 
 void PEditor::GameObject::setPosition(ImVec2 newPos)
 {
-	tr->setPosition(newPos.x, newPos.y);
+	pos->x = newPos.x;
+	pos->y = newPos.y;
 }
 
 void PEditor::GameObject::setName(const std::string newName)
@@ -202,7 +214,7 @@ void PEditor::GameObject::setName(const std::string newName)
 
 ImVec2 PEditor::GameObject::getPosition()
 {
-	return *tr->getPosition();
+	return *pos;
 }
 
 bool PEditor::GameObject::isWaitingToDelete()

@@ -4,7 +4,6 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Scene.h"
-#include "Transform.h"
 
 PEditor::Components::Components() : Window("Components", NoResize | NoCollapse | NoMove)
 {
@@ -44,6 +43,8 @@ void PEditor::Components::render()
 	if (gameObject != nullptr) {
 
 		std::unordered_map<int, Component*>* components = gameObject->getComponents();
+
+		gameObject->drawTransformInEditor();
 
 		for (auto it = components->begin(); it != components->end(); it++) {
 			it->second->drawEditor();
