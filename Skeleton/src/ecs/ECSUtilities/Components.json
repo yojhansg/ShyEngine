@@ -1,20 +1,755 @@
-[
-    "Animation",
-    "Overlay",
-    "BallComponent",
-    "BoxBody",
-    "Image",
-    "Script",
-    "ChainBody",
-    "CircleBody",
-    "OverlayImage",
-    "EdgeBody",
-    "OverlayText",
-    "LinkComponent",
-    "MusicEmitter",
-    "OverlayButton",
-    "ParticleSystem",
-    "PhysicBody",
-    "SoundEmitter",
-    "Transform"
-]
+{
+    "Animation": {
+        "attributes": [
+            {
+                "name": "speed",
+                "type": "float"
+            },
+            {
+                "name": "currentFrame",
+                "type": "int"
+            },
+            {
+                "name": "currentAnimation",
+                "type": "int"
+            },
+            {
+                "name": "animationColumns",
+                "type": "int"
+            },
+            {
+                "name": "animationRows",
+                "type": "int"
+            },
+            {
+                "name": "animationSheetStyle",
+                "type": "int"
+            },
+            {
+                "name": "animationLenght",
+                "type": "int"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "getAnimationLenght",
+            "return": "int"
+        }
+    },
+    "BallComponent": null,
+    "BoxBody": {
+        "attributes": [
+            {
+                "name": "bodyType",
+                "type": "int"
+            },
+            {
+                "name": "mass",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "trigger",
+                "type": "bool"
+            },
+            {
+                "name": "freezeRotation",
+                "type": "bool"
+            }
+        ]
+    },
+    "ChainBody": {
+        "attributes": [
+            {
+                "name": "bodyType",
+                "type": "int"
+            },
+            {
+                "name": "mass",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "trigger",
+                "type": "bool"
+            },
+            {
+                "name": "freezeRotation",
+                "type": "bool"
+            }
+        ]
+    },
+    "CircleBody": {
+        "attributes": [
+            {
+                "name": "radius",
+                "type": "float"
+            },
+            {
+                "name": "bodyType",
+                "type": "int"
+            },
+            {
+                "name": "mass",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "trigger",
+                "type": "bool"
+            },
+            {
+                "name": "freezeRotation",
+                "type": "bool"
+            }
+        ]
+    },
+    "EdgeBody": {
+        "attributes": [
+            {
+                "name": "bodyType",
+                "type": "int"
+            },
+            {
+                "name": "mass",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "trigger",
+                "type": "bool"
+            },
+            {
+                "name": "freezeRotation",
+                "type": "bool"
+            }
+        ]
+    },
+    "Image": {
+        "attributes": [
+            {
+                "name": "fileName",
+                "type": "std::string"
+            }
+        ],
+        "functions": {
+            "input": [
+                {
+                    "name": "flipmode",
+                    "type": "int"
+                }
+            ],
+            "name": "setFlipMode",
+            "return": "void",
+            "setFlipMode": {
+                "input": [
+                    {
+                        "name": "flipmode",
+                        "type": "int"
+                    }
+                ]
+            }
+        }
+    },
+    "LinkComponent": null,
+    "MusicEmitter": {
+        "attributes": [
+            {
+                "name": "fileName",
+                "type": "std::string"
+            },
+            {
+                "name": "loop",
+                "type": "bool"
+            },
+            {
+                "name": "playOnStart",
+                "type": "bool"
+            },
+            {
+                "name": "volume",
+                "type": "float"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "isOnLoop",
+            "return": "bool"
+        }
+    },
+    "Overlay": {
+        "attributes": [
+            {
+                "name": "placement",
+                "type": "int"
+            },
+            {
+                "name": "position",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "size",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "anchor",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "left",
+                "type": "int"
+            },
+            {
+                "name": "top",
+                "type": "int"
+            },
+            {
+                "name": "right",
+                "type": "int"
+            },
+            {
+                "name": "bottom",
+                "type": "int"
+            },
+            {
+                "name": "color",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "renderScale",
+                "type": "float"
+            },
+            {
+                "name": "interactable",
+                "type": "bool"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "IsInteractable",
+            "return": "bool"
+        }
+    },
+    "OverlayButton": {
+        "attributes": [
+            {
+                "name": "defaultColor",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "hoverColor",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "downColor",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "scale",
+                "type": "float"
+            }
+        ]
+    },
+    "OverlayImage": {
+        "attributes": [
+            {
+                "name": "path",
+                "type": "std::string"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "GetTexture",
+            "return": "std::string"
+        }
+    },
+    "OverlayText": {
+        "attributes": [
+            {
+                "name": "pointSize",
+                "type": "int"
+            },
+            {
+                "name": "path",
+                "type": "std::string"
+            },
+            {
+                "name": "text",
+                "type": "std::string"
+            },
+            {
+                "name": "horizontalAlignment",
+                "type": "int"
+            },
+            {
+                "name": "verticalAlignment",
+                "type": "int"
+            },
+            {
+                "name": "fit",
+                "type": "int"
+            },
+            {
+                "name": "lineSpacing",
+                "type": "int"
+            }
+        ],
+        "functions": {
+            "SetPointSize": {
+                "input": [
+                    {
+                        "name": "size",
+                        "type": "int"
+                    }
+                ]
+            },
+            "input": [
+                {
+                    "name": "size",
+                    "type": "int"
+                }
+            ],
+            "name": "SetPointSize",
+            "return": "void"
+        }
+    },
+    "ParticleSystem": {
+        "attributes": [
+            {
+                "name": "duration",
+                "type": "float"
+            },
+            {
+                "name": "maxParticles",
+                "type": "int"
+            },
+            {
+                "name": "loop",
+                "type": "bool"
+            },
+            {
+                "name": "delay",
+                "type": "float"
+            },
+            {
+                "name": "playOnStart",
+                "type": "bool"
+            },
+            {
+                "name": "lifeTime",
+                "type": "float"
+            },
+            {
+                "name": "randomLifeTimeBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "lifeTimeFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "lifeTimeSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "speed",
+                "type": "float"
+            },
+            {
+                "name": "randomSpeedBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "speedFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "speedSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "size",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "randomSizeBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "sizeFirstValue",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "sizeSecondValue",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "angle",
+                "type": "float"
+            },
+            {
+                "name": "randomAngleBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "angleFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "angleSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "rotation",
+                "type": "float"
+            },
+            {
+                "name": "randomRotationBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "rotationFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "rotationSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "color",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "randomColorBetweenTwoColors",
+                "type": "bool"
+            },
+            {
+                "name": "colorFirstValue",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "colorSecondValue",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "layerName",
+                "type": "std::string"
+            },
+            {
+                "name": "sensor",
+                "type": "bool"
+            },
+            {
+                "name": "gravityScale",
+                "type": "float"
+            },
+            {
+                "name": "force",
+                "type": "float"
+            },
+            {
+                "name": "randomForceBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "forceFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "forceSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "impulse",
+                "type": "float"
+            },
+            {
+                "name": "randomImpulseBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "impulseFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "impulseSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "angularVelocity",
+                "type": "float"
+            },
+            {
+                "name": "randomAngularVelocityBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "angularVelocityFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "angularVelocitySecondValue",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "randomBouncinessBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "bouncinessFirstValue",
+                "type": "float"
+            },
+            {
+                "name": "bouncinessSecondValue",
+                "type": "float"
+            },
+            {
+                "name": "fileName",
+                "type": "std::string"
+            },
+            {
+                "name": "flipmode",
+                "type": "int"
+            },
+            {
+                "name": "srcX",
+                "type": "int"
+            },
+            {
+                "name": "srcY",
+                "type": "int"
+            },
+            {
+                "name": "srcWidth",
+                "type": "int"
+            },
+            {
+                "name": "srcHeight",
+                "type": "int"
+            },
+            {
+                "name": "alpha",
+                "type": "int"
+            },
+            {
+                "name": "randomAlphaBetweenTwoValues",
+                "type": "bool"
+            },
+            {
+                "name": "alphaFirstValue",
+                "type": "int"
+            },
+            {
+                "name": "alphaSecondValue",
+                "type": "int"
+            },
+            {
+                "name": "emissionRateOverTime",
+                "type": "float"
+            },
+            {
+                "name": "emissionRateOverDistance",
+                "type": "float"
+            },
+            {
+                "name": "overLifeTimeSpeed",
+                "type": "bool"
+            },
+            {
+                "name": "endSpeed",
+                "type": "float"
+            },
+            {
+                "name": "overLifeTimeColor",
+                "type": "bool"
+            },
+            {
+                "name": "endColor",
+                "type": "Utilities::Color"
+            },
+            {
+                "name": "overLifeTimeSize",
+                "type": "bool"
+            },
+            {
+                "name": "endSize",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "overLifeTimeAlpha",
+                "type": "bool"
+            },
+            {
+                "name": "endAlpha",
+                "type": "int"
+            }
+        ],
+        "functions": {
+            "addBurst": {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "float"
+                    },
+                    {
+                        "name": "particles",
+                        "type": "int"
+                    },
+                    {
+                        "name": "cycles",
+                        "type": "int"
+                    },
+                    {
+                        "name": "rate",
+                        "type": "float"
+                    },
+                    {
+                        "name": "probability",
+                        "type": "float"
+                    }
+                ]
+            },
+            "input": [
+                {
+                    "name": "time",
+                    "type": "float"
+                },
+                {
+                    "name": "particles",
+                    "type": "int"
+                },
+                {
+                    "name": "cycles",
+                    "type": "int"
+                },
+                {
+                    "name": "rate",
+                    "type": "float"
+                },
+                {
+                    "name": "probability",
+                    "type": "float"
+                }
+            ],
+            "name": "addBurst",
+            "return": "void"
+        }
+    },
+    "PhysicBody": {
+        "attributes": [
+            {
+                "name": "bodyType",
+                "type": "int"
+            },
+            {
+                "name": "mass",
+                "type": "float"
+            },
+            {
+                "name": "bounciness",
+                "type": "float"
+            },
+            {
+                "name": "trigger",
+                "type": "bool"
+            },
+            {
+                "name": "freezeRotation",
+                "type": "bool"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "getLinearVelocity",
+            "return": "Vector2D"
+        }
+    },
+    "Script": null,
+    "SoundEmitter": {
+        "attributes": [
+            {
+                "name": "fileName",
+                "type": "std::string"
+            },
+            {
+                "name": "loop",
+                "type": "bool"
+            },
+            {
+                "name": "playOnStart",
+                "type": "bool"
+            },
+            {
+                "name": "volume",
+                "type": "float"
+            },
+            {
+                "name": "spatialSound",
+                "type": "bool"
+            },
+            {
+                "name": "panning",
+                "type": "float"
+            },
+            {
+                "name": "audibleDistance",
+                "type": "float"
+            }
+        ],
+        "functions": {
+            "input": null,
+            "name": "getAudibleDistance",
+            "return": "float"
+        }
+    },
+    "Transform": {
+        "attributes": [
+            {
+                "name": "localPosition",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "localScale",
+                "type": "Utilities::Vector2D"
+            },
+            {
+                "name": "localRotation",
+                "type": "double"
+            }
+        ],
+        "functions": {
+            "Scale": {
+                "input": [
+                    {
+                        "name": "scale",
+                        "type": "float"
+                    }
+                ]
+            },
+            "input": [
+                {
+                    "name": "scale",
+                    "type": "float"
+                }
+            ],
+            "name": "Scale",
+            "return": "void"
+        }
+    }
+}

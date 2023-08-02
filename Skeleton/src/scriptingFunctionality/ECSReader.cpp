@@ -1084,7 +1084,50 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 	for (auto& component : allComponents) {
 
-		root.push_back(component);
+		json cmp = json::basic_json();
+
+		if (attributes.contains(component)) {
+
+			for (auto& attr : attributes[component]) {
+
+				cmp["attributes"] += {
+
+					{"type", attr.type},
+					{ "name" , attr.name }
+				};
+			}
+		}
+
+
+		if (methods.contains(component)) {
+
+			for (auto& method : methods[component]) {
+
+				json methodData = json::basic_json();
+
+				methodData["return"] = method.returnType;
+				methodData["name"] = method.methodName;
+
+				json inputJson;
+
+				for (auto& input : method.input) {
+					inputJson +=
+					{
+						{"type", input.type},
+						{ "name", input.name }
+					};
+				}
+
+				methodData["input"] = inputJson;
+				if (!inputJson.is_null())
+					methodData[method.methodName]["input"] = inputJson;
+
+				cmp["functions"] = methodData;
+			}
+
+		}
+
+		root[component] = cmp;
 	}
 
 	std::ofstream fmJSON(output + "/Components.json");
