@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Tue Aug  1 20:25:37 2023
+//Creation time : Wed Aug  2 20:22:22 2023
 
 #define ECSreflection_Version 1.0
 

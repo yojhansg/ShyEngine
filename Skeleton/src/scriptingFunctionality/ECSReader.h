@@ -131,6 +131,9 @@ public:
 		con el modificador de acceso <publish>
 	*/
 	void ProcessFile(std::string const& path);
+	
+
+	void ManageInheritance();
 
 	/*
 		Llama a <AskForPath> preguntando por la ruta de los ficheros
