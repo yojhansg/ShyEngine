@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Tue Apr 11 19:48:46 2023
+//Creation time : Tue Aug  1 20:25:37 2023
 
 #define ECSreflection_Version 1.0
 
@@ -22,16 +22,20 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	std::unordered_map<std::string, ComponentCreation> components;
 
 	ECS::Component* CreateAnimation();
+	ECS::Component* CreateBallComponent();
 	ECS::Component* CreateBoxBody();
 	ECS::Component* CreateChainBody();
 	ECS::Component* CreateCircleBody();
 	ECS::Component* CreateEdgeBody();
 	ECS::Component* CreateImage();
+	ECS::Component* CreateLinkComponent();
+	ECS::Component* CreateMusicEmitter();
 	ECS::Component* CreateOverlay();
 	ECS::Component* CreateOverlayButton();
 	ECS::Component* CreateOverlayImage();
 	ECS::Component* CreateOverlayText();
-	ECS::Component* CreateTestComponent();
+	ECS::Component* CreateParticleSystem();
+	ECS::Component* CreateSoundEmitter();
 	ECS::Component* CreateTransform();
 	ECS::Component* CreateScript();
 public: 

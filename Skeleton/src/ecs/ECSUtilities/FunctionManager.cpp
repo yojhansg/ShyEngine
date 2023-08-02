@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Tue Apr 11 19:48:46 2023
+//Creation time: Tue Aug  1 20:25:37 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -24,11 +24,14 @@
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
+#include <Components/MusicEmitter.h>
 #include <Components/Overlay.h>
 #include <Components/OverlayButton.h>
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
+#include <Components/ParticleSystem.h>
 #include <Components/PhysicBody.h>
+#include <Components/SoundEmitter.h>
 #include <Components/Transform.h>
 #include <Save.h>
 #include <SceneManager.h>
@@ -59,11 +62,25 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Image_getTextureWidth",Image_getTextureWidth);
 	map.emplace("Image_getTextureHeight",Image_getTextureHeight);
 	map.emplace("Image_setSrcRect",Image_setSrcRect);
-	/*map.emplace("Image_setFlipX",Image_setFlipX);
-	map.emplace("Image_setFlipY",Image_setFlipY);*/
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
 	map.emplace("Image_scaledSize",Image_scaledSize);
 	map.emplace("Image_ChangeTexture",Image_ChangeTexture);
+	map.emplace("Image_setFlipMode",Image_setFlipMode);
+	map.emplace("MusicEmitter_changeMusic",MusicEmitter_changeMusic);
+	map.emplace("MusicEmitter_play",MusicEmitter_play);
+	map.emplace("MusicEmitter_pause",MusicEmitter_pause);
+	map.emplace("MusicEmitter_stop",MusicEmitter_stop);
+	map.emplace("MusicEmitter_resume",MusicEmitter_resume);
+	map.emplace("MusicEmitter_playWithFadeIn",MusicEmitter_playWithFadeIn);
+	map.emplace("MusicEmitter_fadeOut",MusicEmitter_fadeOut);
+	map.emplace("MusicEmitter_isPlaying",MusicEmitter_isPlaying);
+	map.emplace("MusicEmitter_isPaused",MusicEmitter_isPaused);
+	map.emplace("MusicEmitter_rewind",MusicEmitter_rewind);
+	map.emplace("MusicEmitter_setVolume",MusicEmitter_setVolume);
+	map.emplace("MusicEmitter_getVolume",MusicEmitter_getVolume);
+	map.emplace("MusicEmitter_shouldPlayOnStart",MusicEmitter_shouldPlayOnStart);
+	map.emplace("MusicEmitter_setLoop",MusicEmitter_setLoop);
+	map.emplace("MusicEmitter_isOnLoop",MusicEmitter_isOnLoop);
 	map.emplace("Overlay_GetPlacement",Overlay_GetPlacement);
 	map.emplace("Overlay_SetPositioned",Overlay_SetPositioned);
 	map.emplace("Overlay_SetStreched",Overlay_SetStreched);
@@ -108,6 +125,10 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("OverlayText_SetText",OverlayText_SetText);
 	map.emplace("OverlayText_GetPointSize",OverlayText_GetPointSize);
 	map.emplace("OverlayText_SetPointSize",OverlayText_SetPointSize);
+	map.emplace("ParticleSystem_startEmitting",ParticleSystem_startEmitting);
+	map.emplace("ParticleSystem_isEmitting",ParticleSystem_isEmitting);
+	map.emplace("ParticleSystem_changeTexture",ParticleSystem_changeTexture);
+	map.emplace("ParticleSystem_addBurst",ParticleSystem_addBurst);
 	map.emplace("PhysicBody_setTrigger",PhysicBody_setTrigger);
 	map.emplace("PhysicBody_isTrigger",PhysicBody_isTrigger);
 	map.emplace("PhysicBody_setFriction",PhysicBody_setFriction);
@@ -116,6 +137,26 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getBounciness",PhysicBody_getBounciness);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
+	map.emplace("SoundEmitter_changeSound",SoundEmitter_changeSound);
+	map.emplace("SoundEmitter_play",SoundEmitter_play);
+	map.emplace("SoundEmitter_pause",SoundEmitter_pause);
+	map.emplace("SoundEmitter_stop",SoundEmitter_stop);
+	map.emplace("SoundEmitter_resume",SoundEmitter_resume);
+	map.emplace("SoundEmitter_playWithfadeIn",SoundEmitter_playWithfadeIn);
+	map.emplace("SoundEmitter_fadeOut",SoundEmitter_fadeOut);
+	map.emplace("SoundEmitter_isPlaying",SoundEmitter_isPlaying);
+	map.emplace("SoundEmitter_isPaused",SoundEmitter_isPaused);
+	map.emplace("SoundEmitter_setVolume",SoundEmitter_setVolume);
+	map.emplace("SoundEmitter_getVolume",SoundEmitter_getVolume);
+	map.emplace("SoundEmitter_shouldPlayOnStart",SoundEmitter_shouldPlayOnStart);
+	map.emplace("SoundEmitter_setLoop",SoundEmitter_setLoop);
+	map.emplace("SoundEmitter_isOnLoop",SoundEmitter_isOnLoop);
+	map.emplace("SoundEmitter_enableSpatialSound",SoundEmitter_enableSpatialSound);
+	map.emplace("SoundEmitter_isSpatialSoundEnabled",SoundEmitter_isSpatialSoundEnabled);
+	map.emplace("SoundEmitter_setPanning",SoundEmitter_setPanning);
+	map.emplace("SoundEmitter_getPanning",SoundEmitter_getPanning);
+	map.emplace("SoundEmitter_setAudibleDistance",SoundEmitter_setAudibleDistance);
+	map.emplace("SoundEmitter_getAudibleDistance",SoundEmitter_getAudibleDistance);
 	map.emplace("Transform_GetLocalPosition",Transform_GetLocalPosition);
 	map.emplace("Transform_GetWorldPosition",Transform_GetWorldPosition);
 	map.emplace("Transform_SetLocalPosition",Transform_SetLocalPosition);
@@ -241,11 +282,14 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Camera_SetPosition",ScriptFunctionality_Camera_SetPosition);
 	map.emplace("Camera_GetScale",ScriptFunctionality_Camera_GetScale);
 	map.emplace("Camera_SetScale",ScriptFunctionality_Camera_SetScale);
-	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
+	map.emplace("Collection_Create",ScriptFunctionality_Collection_Create);
+	map.emplace("Collection_Modify",ScriptFunctionality_Collection_Modify);
+	map.emplace("Collection_Peek",ScriptFunctionality_Collection_Peek);
 	map.emplace("Random_UnitValue",ScriptFunctionality_Random_UnitValue);
 	map.emplace("Random_Between",ScriptFunctionality_Random_Between);
 	map.emplace("Random_UnitVector",ScriptFunctionality_Random_UnitVector);
 	map.emplace("Random_ScaledVector",ScriptFunctionality_Random_ScaledVector);
+	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
 	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
@@ -495,46 +539,6 @@ Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec)
 	self->setSrcRect(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float);
 	return Scripting::Variable::Null();
 }
-//Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec){
-//
-//	if(vec[0].type != Scripting::Variable::Type::Entity){
-//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(0), std::string(""),  ""); 
-//		return Scripting::Variable::Null();
-//	}
-//
-//	if(vec[1].type != Scripting::Variable::Type::Bool){
-//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", std::to_string(1), std::string(""),  ""); 
-//		return Scripting::Variable::Null();
-//	}
-//
-//	Image* self = vec[0].value.entity->getComponent<Image>();
-//	if(self == nullptr){
-//		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipX", vec[0].value.entity->getEntityName(), Image);
-//		return Scripting::Variable::Null();
-//	}
-//	self->setFlipX(vec[1].value.Bool);
-//	return Scripting::Variable::Null();
-//}
-//Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec){
-//
-//	if(vec[0].type != Scripting::Variable::Type::Entity){
-//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(0), std::string(""),  ""); 
-//		return Scripting::Variable::Null();
-//	}
-//
-//	if(vec[1].type != Scripting::Variable::Type::Bool){
-//		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", std::to_string(1), std::string(""),  ""); 
-//		return Scripting::Variable::Null();
-//	}
-//
-//	Image* self = vec[0].value.entity->getComponent<Image>();
-//	if(self == nullptr){
-//		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipY", vec[0].value.entity->getEntityName(), Image);
-//		return Scripting::Variable::Null();
-//	}
-//	self->setFlipY(vec[1].value.Bool);
-//	return Scripting::Variable::Null();
-//}
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -594,6 +598,286 @@ Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& v
 	}
 	self->ChangeTexture(vec[1].str);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipMode", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipMode", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Image* self = vec[0].value.entity->getComponent<Image>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_setFlipMode", vec[0].value.entity->getEntityName(), Image);
+		return Scripting::Variable::Null();
+	}
+	self->setFlipMode(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::String){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->changeMusic(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_play(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_play", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_play", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->play();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_pause(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_pause", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_pause", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->pause();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_stop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_stop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_stop", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->stop();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_resume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_resume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_resume", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->resume();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_playWithFadeIn(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_playWithFadeIn", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_playWithFadeIn", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_playWithFadeIn", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_playWithFadeIn", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->playWithFadeIn(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_fadeOut(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_fadeOut", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_fadeOut", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_fadeOut", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->fadeOut(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_isPlaying(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isPlaying", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isPlaying", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isPlaying();
+	return ret;
+}
+Scripting::Variable MusicEmitter_isPaused(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isPaused", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isPaused", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isPaused();
+	return ret;
+}
+Scripting::Variable MusicEmitter_rewind(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_rewind", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_rewind", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->rewind();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_setVolume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setVolume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setVolume", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setVolume", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setVolume(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_getVolume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_getVolume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_getVolume", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getVolume();
+	return ret;
+}
+Scripting::Variable MusicEmitter_shouldPlayOnStart(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_shouldPlayOnStart", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_shouldPlayOnStart", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_shouldPlayOnStart", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->shouldPlayOnStart(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_setLoop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setLoop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setLoop", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_setLoop", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setLoop(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable MusicEmitter_isOnLoop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isOnLoop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_isOnLoop", vec[0].value.entity->getEntityName(), MusicEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isOnLoop();
+	return ret;
 }
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec){
 
@@ -1375,6 +1659,96 @@ Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>con
 	self->SetPointSize(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable ParticleSystem_startEmitting(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_startEmitting", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_startEmitting", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	self->startEmitting();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_isEmitting", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_isEmitting", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isEmitting();
+	return ret;
+}
+Scripting::Variable ParticleSystem_changeTexture(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::String){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	self->changeTexture(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[3].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(3), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[4].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(4), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[5].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", std::to_string(5), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_addBurst", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	self->addBurst(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float, vec[5].value.Float);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -1518,6 +1892,356 @@ Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable
 		return Scripting::Variable::Null();
 	}
 	Vector2D ret = self->getLinearVelocity();
+	return ret;
+}
+Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::String){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->changeSound(vec[1].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_play", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_play", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->play();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_pause(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_pause", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_pause", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->pause();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_stop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_stop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_stop", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->stop();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_resume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_resume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_resume", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->resume();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_playWithfadeIn(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_playWithfadeIn", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_playWithfadeIn", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_playWithfadeIn", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_playWithfadeIn", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->playWithfadeIn(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_fadeOut(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_fadeOut", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_fadeOut", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_fadeOut", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->fadeOut(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_isPlaying(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isPlaying", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isPlaying", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isPlaying();
+	return ret;
+}
+Scripting::Variable SoundEmitter_isPaused(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isPaused", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isPaused", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isPaused();
+	return ret;
+}
+Scripting::Variable SoundEmitter_setVolume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setVolume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setVolume", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setVolume", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setVolume(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_getVolume(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getVolume", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getVolume", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	int ret = self->getVolume();
+	return ret;
+}
+Scripting::Variable SoundEmitter_shouldPlayOnStart(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_shouldPlayOnStart", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_shouldPlayOnStart", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_shouldPlayOnStart", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->shouldPlayOnStart(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_setLoop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setLoop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setLoop", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setLoop", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setLoop(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_isOnLoop(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isOnLoop", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isOnLoop", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isOnLoop();
+	return ret;
+}
+Scripting::Variable SoundEmitter_enableSpatialSound(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_enableSpatialSound", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_enableSpatialSound", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_enableSpatialSound", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->enableSpatialSound(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_isSpatialSoundEnabled(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isSpatialSoundEnabled", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_isSpatialSoundEnabled", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isSpatialSoundEnabled();
+	return ret;
+}
+Scripting::Variable SoundEmitter_setPanning(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setPanning", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setPanning", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setPanning", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setPanning(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_getPanning(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getPanning", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getPanning", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getPanning();
+	return ret;
+}
+Scripting::Variable SoundEmitter_setAudibleDistance(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setAudibleDistance", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setAudibleDistance", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_setAudibleDistance", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	self->setAudibleDistance(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundEmitter_getAudibleDistance(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getAudibleDistance", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_getAudibleDistance", vec[0].value.entity->getEntityName(), SoundEmitter);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getAudibleDistance();
 	return ret;
 }
 Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec){
@@ -2430,10 +3154,20 @@ Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::V
 	manager->Camera_SetScale(vec[0].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Collection_Create(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->OpenURL(vec[0].str);
+	manager->Collection_Create(vec[0].value.Float);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Collection_Modify(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Collection_Modify(vec[0].value.Float, vec[1]);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Collection_Peek(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	cVariable ret = manager->Collection_Peek(vec[0].value.Float);
+	return ret;
 }
 Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
@@ -2454,6 +3188,11 @@ Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scriptin
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	Utilities::Vector2D ret = manager->Random_ScaledVector(vec[0].value.Float);
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->OpenURL(vec[0].str);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec){
 	Time* manager = Time::instance();

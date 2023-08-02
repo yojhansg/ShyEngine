@@ -102,9 +102,14 @@ public:
 	ECSReader& ClassReflection();
 
 	/*
-		Genera un fichero JSON con la informacion relevante del ECS
+		Genera un fichero JSON con la informacion de las funciones del ECS
 	*/
-	ECSReader& Convert2JSON();
+	ECSReader& GenerateFunctionJSON();
+
+	/*
+		Genera un fichero JSON con la informacion de los atributos del ECS
+	*/
+	ECSReader& GenerateAttributeJSON();
 
 	/*
 		TODO: Comentario descriptivo

@@ -959,7 +959,7 @@ using namespace nlohmann;
 
 
 
-ECSReader& ECSReader::Convert2JSON()
+ECSReader& ECSReader::GenerateFunctionJSON()
 {
 	/*
 		Ejemplo del JSON
@@ -1006,7 +1006,50 @@ ECSReader& ECSReader::Convert2JSON()
 		}
 	}
 
-	std::ofstream fmJSON(output + "/FunctionManager.json");
+	std::ofstream fmJSON(output + "/Functions.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+
+ECSReader& ECSReader::GenerateAttributeJSON()
+{
+	/*
+		Ejemplo del JSON
+
+			{
+			"Transform" : {
+				
+				{"type", "int"},
+				{"name", "mass"},
+				}
+			}
+		}
+	*/
+
+
+	json root;
+
+	for (auto& currentClass : attributes) {
+
+		root[currentClass.first] = nullptr;
+
+		for (auto& attr : currentClass.second) {
+
+			root[currentClass.first] += {
+			
+				{"type" , attr.type},
+				{"name" , attr.name},
+			};
+		}
+	}
+
+	std::ofstream fmJSON(output + "/Attributes.json");
 
 	fmJSON << root.dump(4) << std::endl;
 

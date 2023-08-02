@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Apr 11 19:48:46 2023
+//Creation time : Tue Aug  1 20:25:37 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -32,11 +32,25 @@ Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Image_setFlipX(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Image_setFlipY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_play(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_pause(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_stop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_resume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_playWithFadeIn(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_fadeOut(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_isPlaying(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_isPaused(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_rewind(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_setVolume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_getVolume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_shouldPlayOnStart(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_setLoop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_isOnLoop(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_GetPlacement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetPositioned(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Overlay_SetStreched(std::vector<Scripting::Variable>const& vec);
@@ -81,6 +95,10 @@ Scripting::Variable OverlayText_GetText(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_startEmitting(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_changeTexture(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const& vec);
@@ -89,6 +107,26 @@ Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_pause(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_stop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_resume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_playWithfadeIn(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_fadeOut(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_isPlaying(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_isPaused(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_setVolume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_getVolume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_shouldPlayOnStart(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_setLoop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_isOnLoop(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_enableSpatialSound(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_isSpatialSoundEnabled(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_setPanning(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_getPanning(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_setAudibleDistance(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_getAudibleDistance(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetLocalPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_GetWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalPosition(std::vector<Scripting::Variable>const& vec);
@@ -214,11 +252,14 @@ Scripting::Variable ScriptFunctionality_Camera_GetPosition(std::vector<Scripting
 Scripting::Variable ScriptFunctionality_Camera_SetPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Camera_GetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Collection_Create(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Collection_Modify(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Collection_Peek(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_Between(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetDeltaTime(std::vector<Scripting::Variable>const& vec);

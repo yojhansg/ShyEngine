@@ -54,7 +54,6 @@ DataLoader DataLoader::Load(std::string const& path) {
 	data.timeToHoldClick = LoadValue("timeToHoldClick", float, 0.1f); 
 	data.timeToDoubleClick = LoadValue("timeToDoubleClick", float, 0.5f);
 
-
 	data.valid = true;
 	return data;
 }

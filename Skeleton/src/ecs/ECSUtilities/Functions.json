@@ -87,20 +87,11 @@
         "scaledSize": {
             "return": "Utilities::Vector2D"
         },
-        "setFlipX": {
+        "setFlipMode": {
             "input": [
                 {
-                    "name": "flip",
-                    "type": "bool"
-                }
-            ],
-            "return": "void"
-        },
-        "setFlipY": {
-            "input": [
-                {
-                    "name": "flip",
-                    "type": "bool"
+                    "name": "flipmode",
+                    "type": "int"
                 }
             ],
             "return": "void"
@@ -137,6 +128,93 @@
                     "type": "int"
                 }
             ],
+            "return": "void"
+        }
+    },
+    "MusicEmitter": {
+        "changeMusic": {
+            "input": [
+                {
+                    "name": "musicPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
+        },
+        "fadeOut": {
+            "input": [
+                {
+                    "name": "seconds",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "getVolume": {
+            "return": "float"
+        },
+        "isOnLoop": {
+            "return": "bool"
+        },
+        "isPaused": {
+            "return": "bool"
+        },
+        "isPlaying": {
+            "return": "bool"
+        },
+        "pause": {
+            "return": "void"
+        },
+        "play": {
+            "return": "void"
+        },
+        "playWithFadeIn": {
+            "input": [
+                {
+                    "name": "seconds",
+                    "type": "float"
+                },
+                {
+                    "name": "loops=-1",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "resume": {
+            "return": "void"
+        },
+        "rewind": {
+            "return": "void"
+        },
+        "setLoop": {
+            "input": [
+                {
+                    "name": "loop",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "setVolume": {
+            "input": [
+                {
+                    "name": "volume",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "shouldPlayOnStart": {
+            "input": [
+                {
+                    "name": "play",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "stop": {
             "return": "void"
         }
     },
@@ -414,6 +492,48 @@
             "return": "void"
         }
     },
+    "ParticleSystem": {
+        "addBurst": {
+            "input": [
+                {
+                    "name": "time",
+                    "type": "float"
+                },
+                {
+                    "name": "particles",
+                    "type": "int"
+                },
+                {
+                    "name": "cycles",
+                    "type": "int"
+                },
+                {
+                    "name": "rate",
+                    "type": "float"
+                },
+                {
+                    "name": "probability",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "changeTexture": {
+            "input": [
+                {
+                    "name": "texturePath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
+        },
+        "isEmitting": {
+            "return": "bool"
+        },
+        "startEmitting": {
+            "return": "void"
+        }
+    },
     "PhysicBody": {
         "getBounciness": {
             "return": "float"
@@ -465,6 +585,126 @@
                     "type": "bool"
                 }
             ],
+            "return": "void"
+        }
+    },
+    "SoundEmitter": {
+        "changeSound": {
+            "input": [
+                {
+                    "name": "soundPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
+        },
+        "enableSpatialSound": {
+            "input": [
+                {
+                    "name": "enable",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "fadeOut": {
+            "input": [
+                {
+                    "name": "seconds",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "getAudibleDistance": {
+            "return": "float"
+        },
+        "getPanning": {
+            "return": "float"
+        },
+        "getVolume": {
+            "return": "int"
+        },
+        "isOnLoop": {
+            "return": "bool"
+        },
+        "isPaused": {
+            "return": "bool"
+        },
+        "isPlaying": {
+            "return": "bool"
+        },
+        "isSpatialSoundEnabled": {
+            "return": "bool"
+        },
+        "pause": {
+            "return": "void"
+        },
+        "play": {
+            "return": "void"
+        },
+        "playWithfadeIn": {
+            "input": [
+                {
+                    "name": "seconds",
+                    "type": "int"
+                },
+                {
+                    "name": "loops=-1",
+                    "type": "int"
+                }
+            ],
+            "return": "void"
+        },
+        "resume": {
+            "return": "void"
+        },
+        "setAudibleDistance": {
+            "input": [
+                {
+                    "name": "distance",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setLoop": {
+            "input": [
+                {
+                    "name": "loop",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "setPanning": {
+            "input": [
+                {
+                    "name": "panning",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "setVolume": {
+            "input": [
+                {
+                    "name": "volume",
+                    "type": "float"
+                }
+            ],
+            "return": "void"
+        },
+        "shouldPlayOnStart": {
+            "input": [
+                {
+                    "name": "play",
+                    "type": "bool"
+                }
+            ],
+            "return": "void"
+        },
+        "stop": {
             "return": "void"
         }
     },
