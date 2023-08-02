@@ -4,6 +4,7 @@
 #include "ImGUIManager.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include <fstream>
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
@@ -14,14 +15,6 @@ PEditor::MenuBar::MenuBar() : Window("", None)
     windowHeight = windowOriHeight = 4;
 
     imGuiManager = ImGUIManager::getInstance();
-
-
-    if (ImGui::BeginPopup("Rename Object")) {
-        if (ImGui::Button("OK")) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
 
     shouldOpenRenamePopup = false;
 }
@@ -97,6 +90,10 @@ void PEditor::MenuBar::render()
                     gameObject->toDelete();
                 }
  
+                if (ImGui::MenuItem("Add script", NULL, false)) {
+                    ImGUIManager::getInstance()->creatingScript(true);
+                }
+
                 ImGui::EndMenu();
             }
         }
@@ -134,6 +131,7 @@ void PEditor::MenuBar::render()
         }
 
         ImGui::EndPopup();
+
     }
 }
 

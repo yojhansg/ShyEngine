@@ -23,6 +23,7 @@ namespace PEditor {
 	class Hierarchy;
 	class FileExplorer;
 	class Components;
+	class ScriptCreation;
 
 }
 
@@ -39,6 +40,7 @@ private:
 
 
 	bool exitGame = false;
+	bool isCreatingScript = false;
 
 	std::vector<PEditor::Window*> windows;
 
@@ -56,6 +58,7 @@ private:
 	PEditor::Hierarchy* hierarchy = nullptr;
 	PEditor::FileExplorer* fileExplorer = nullptr;
 	PEditor::Components* components = nullptr;
+	PEditor::ScriptCreation* scriptCreation = nullptr;
 
 
 public:
@@ -67,6 +70,8 @@ public:
 	void init();
 	void loop();
 	void exit();
+
+	void creatingScript(bool isCreating);
 
 	void update();
 	void render();
@@ -87,6 +92,7 @@ public:
 	PEditor::Hierarchy* getHierarchy();
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::Components* getComponents();
+	PEditor::ScriptCreation* getScriptCreation();
 
 	~ImGUIManager();
 };

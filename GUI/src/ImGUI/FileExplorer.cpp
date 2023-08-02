@@ -7,6 +7,7 @@
 #include <direct.h>
 #include "SDL.h"
 #include "SDL_image.h"
+#include "ScriptCreation.h"
 
 namespace fs = std::filesystem;
 
@@ -70,6 +71,9 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
         std::string path = file.is_directory() ? "folder.png" : "file.png";
 
+        if (file.path().extension().string() == ".script") path = "script.png";
+
+
         SDL_Surface* surface = IMG_Load(path.c_str());
         ImTextureID imageTextId = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
@@ -106,6 +110,21 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                 std::string buttonId = "Create GameObject##" + filename;
                 if (ImGui::Button(buttonId.c_str())) {
                     ImGUIManager::getInstance()->getScene()->addGameObject(filename);
+                }
+            }
+
+            if (extension == ".script")
+            {
+                ImGui::SameLine();
+                std::string buttonId = "Open script##" + filename;
+                if (ImGui::Button(buttonId.c_str())) {
+                    ImGui::OpenPopup("Create script");
+
+                    size_t dotPos = filename.find_last_of(".");
+                    std::string filenameWithoutExtension = filename.substr(0, dotPos);
+
+                    ImGUIManager::getInstance()->getScriptCreation()->setName(filenameWithoutExtension);
+                    ImGUIManager::getInstance()->creatingScript(true);
                 }
             }
            

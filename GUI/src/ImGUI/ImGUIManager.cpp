@@ -11,6 +11,8 @@
 #include "Hierarchy.h"
 #include "FileExplorer.h"
 #include "Components.h"
+#include <fstream>
+#include "ScriptCreation.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -64,6 +66,9 @@ void ImGUIManager::initWindows()
     //COMPONENTS
     components = new PEditor::Components();
     addWindow(components);
+
+    scriptCreation = new PEditor::ScriptCreation();
+    addWindow(scriptCreation);
 }
 
 void ImGUIManager::initSDL()
@@ -155,16 +160,26 @@ void ImGUIManager::exit()
     exitGame = true;
 }
 
+void ImGUIManager::creatingScript(bool isCreating)
+{
+    isCreatingScript = isCreating;
+}
+
 void ImGUIManager::update()
 {
     for (auto window : windows)
     {
-        window->update();
+        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+            window->update();
     }
+
+    if (isCreatingScript) return;
+
 }
 
 void ImGUIManager::render()
 {
+
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Start the Dear ImGui frame
@@ -174,9 +189,9 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        window->render();
+        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+            window->render();
     }
-
 
     // Rendering
     ImGui::Render();
@@ -287,5 +302,10 @@ PEditor::FileExplorer* ImGUIManager::getFileExplorer()
 PEditor::Components* ImGUIManager::getComponents()
 {
     return components;
+}
+
+PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
+{
+    return scriptCreation;
 }
 

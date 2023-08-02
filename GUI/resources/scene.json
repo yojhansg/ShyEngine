@@ -1,40 +1,14 @@
 {
     "GameObjects": [
         {
-            "Name": "folder",
+            "Name": "Aguja",
             "Components": [
                 {
                     "Transform": {
-                        "PosX": 334.0,
-                        "PosY": 256.0,
-                        "SizeX": 100.0,
-                        "SizeY": 100.0
-                    }
-                }
-            ]
-        },
-        {
-            "Name": "test2",
-            "Components": [
-                {
-                    "Transform": {
-                        "PosX": 788.0,
-                        "PosY": 92.0,
-                        "SizeX": 100.0,
-                        "SizeY": 100.0
-                    }
-                }
-            ]
-        },
-        {
-            "Name": "test3",
-            "Components": [
-                {
-                    "Transform": {
-                        "PosX": 190.0,
-                        "PosY": 476.0,
-                        "SizeX": 100.0,
-                        "SizeY": 100.0
+                        "PosX": 385.391357421875,
+                        "PosY": 241.6087646484375,
+                        "SizeX": 70.0,
+                        "SizeY": 70.0
                     }
                 }
             ]
