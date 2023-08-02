@@ -52,6 +52,7 @@ void ECSReader::AskForPath(std::string const& name, std::string& path)
 ECSReader& ECSReader::Read()
 {
 	ProcessFolder(root);
+	ManageInheritance();
 	return *this;
 }
 
@@ -108,8 +109,6 @@ void ECSReader::ProcessFile(std::string const& path)
 
 
 	bool currentClassIsManager = false;
-
-
 
 	while (stream) {
 		std::string line;
@@ -280,7 +279,36 @@ void ECSReader::ProcessFile(std::string const& path)
 		}
 	}
 
+
+
 	stream.close();
+}
+
+
+//Cuando un componente hereda de otro, incluimos los atributos de la clase padre en la clase hijo
+
+void ECSReader::ManageInheritance()
+{
+	for (auto& inheritance : classInheritance) {
+
+		std::string const& childClass = inheritance.first;
+		std::string const& parentClass = inheritance.second;
+
+		if (attributes.contains(parentClass)) {
+
+
+			if (!attributes.contains(childClass)) {
+
+				attributes[childClass];
+			}
+
+			for (auto& attr : attributes[parentClass])
+			{
+				attributes[childClass].push_back(attr);
+			}
+		}
+
+	}
 }
 
 
@@ -416,7 +444,7 @@ std::string ECSReader::Method::FunctionDefinition()
 			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() <<
 				"\", std::to_string(" << i + 1 << ")" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
 			definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
-			
+
 			definition << TAB"}" NEWLINE NEWLINE;
 		}
 	}
@@ -673,7 +701,7 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 
 	//TODO: por muy epico que sea el codigo realmente quedaria mejor sin los defines estos
 
-cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
+	cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
 #define _DebugError(entity, script, function, title, error) _Console(_ErrorInfo(entity, script, function, title), error)
 
@@ -791,15 +819,6 @@ ECSReader& ECSReader::ClassReflection()
 		.AddAtribute("std::unordered_map<std::string, ReflectionMethod>", "reflectionMethods")
 		.Empty(1);
 
-
-
-	for (auto& inh : classInheritance) {
-
-		attributes[inh.first];
-	}
-
-
-
 	std::stringstream constructor;
 
 	constructor << "\n";
@@ -836,18 +855,6 @@ ECSReader& ECSReader::ClassReflection()
 			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
 
 			method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
-		}
-
-		if (classInheritance.contains(className.first)) {
-
-			std::string inheritance = classInheritance[className.first];
-			if (attributes.contains(inheritance))
-				for (auto& attribute : attributes[inheritance]){
-
-					method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
-
-					method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
-				}
 		}
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
@@ -1024,7 +1031,7 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 
 			{
 			"Transform" : {
-				
+
 				{"type", "int"},
 				{"name", "mass"},
 				}
@@ -1042,9 +1049,9 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 		for (auto& attr : currentClass.second) {
 
 			root[currentClass.first] += {
-			
-				{"type" , attr.type},
-				{"name" , attr.name},
+
+				{"type", attr.type},
+				{ "name" , attr.name },
 			};
 		}
 	}

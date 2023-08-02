@@ -29,15 +29,98 @@
             "type": "int"
         }
     ],
-    "BoxBody": null,
-    "ChainBody": null,
+    "BoxBody": [
+        {
+            "name": "bodyType",
+            "type": "int"
+        },
+        {
+            "name": "mass",
+            "type": "float"
+        },
+        {
+            "name": "bounciness",
+            "type": "float"
+        },
+        {
+            "name": "trigger",
+            "type": "bool"
+        },
+        {
+            "name": "freezeRotation",
+            "type": "bool"
+        }
+    ],
+    "ChainBody": [
+        {
+            "name": "bodyType",
+            "type": "int"
+        },
+        {
+            "name": "mass",
+            "type": "float"
+        },
+        {
+            "name": "bounciness",
+            "type": "float"
+        },
+        {
+            "name": "trigger",
+            "type": "bool"
+        },
+        {
+            "name": "freezeRotation",
+            "type": "bool"
+        }
+    ],
     "CircleBody": [
         {
             "name": "radius",
             "type": "float"
+        },
+        {
+            "name": "bodyType",
+            "type": "int"
+        },
+        {
+            "name": "mass",
+            "type": "float"
+        },
+        {
+            "name": "bounciness",
+            "type": "float"
+        },
+        {
+            "name": "trigger",
+            "type": "bool"
+        },
+        {
+            "name": "freezeRotation",
+            "type": "bool"
         }
     ],
-    "EdgeBody": null,
+    "EdgeBody": [
+        {
+            "name": "bodyType",
+            "type": "int"
+        },
+        {
+            "name": "mass",
+            "type": "float"
+        },
+        {
+            "name": "bounciness",
+            "type": "float"
+        },
+        {
+            "name": "trigger",
+            "type": "bool"
+        },
+        {
+            "name": "freezeRotation",
+            "type": "bool"
+        }
+    ],
     "Image": [
         {
             "name": "fileName",
