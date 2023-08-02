@@ -12,6 +12,7 @@
 #include "FileExplorer.h"
 #include "Components.h"
 #include <fstream>
+#include "ScriptCreation.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -65,6 +66,9 @@ void ImGUIManager::initWindows()
     //COMPONENTS
     components = new PEditor::Components();
     addWindow(components);
+
+    scriptCreation = new PEditor::ScriptCreation();
+    addWindow(scriptCreation);
 }
 
 void ImGUIManager::initSDL()
@@ -163,13 +167,14 @@ void ImGUIManager::creatingScript(bool isCreating)
 
 void ImGUIManager::update()
 {
-    if (isCreatingScript) return;
-
     for (auto window : windows)
     {
-        if (!isCreatingScript || window == menuBar)
+        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
             window->update();
     }
+
+    if (isCreatingScript) return;
+
 }
 
 void ImGUIManager::render()
@@ -184,54 +189,8 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        if(!isCreatingScript || window == menuBar)
+        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
             window->render();
-    }
-
-    if(isCreatingScript) {
-
-        ImGui::OpenPopup("Create script");
-        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-        ImGui::SetNextWindowPos(ImVec2(0, 0));
-        if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-        {
-            static char nameBuffer[256];  // Buffer to hold the new name
-            if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
-            {
-            }
-
-            if (ImGui::BeginChild("ChildWindow", ImVec2(300, 200), true, ImGuiWindowFlags_None))
-            {
-
-                ImGui::Text("Child Window Content Here");
-            }
-            ImGui::EndChild();
-
-            if (ImGui::Button("Save script"))
-            {
-                std::string filename = std::string(nameBuffer) + ".script";
-                std::string filePath = "scripts/" + filename;
-
-                std::ofstream outputFile(filePath);
-                if (outputFile.is_open())
-                {
-                    outputFile.close();
-                }
-
-                ImGUIManager::getInstance()->creatingScript(false);
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::SameLine();
-
-            if (ImGui::Button("Close"))
-            {
-                ImGUIManager::getInstance()->creatingScript(false);
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
     }
 
     // Rendering
@@ -343,5 +302,10 @@ PEditor::FileExplorer* ImGUIManager::getFileExplorer()
 PEditor::Components* ImGUIManager::getComponents()
 {
     return components;
+}
+
+PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
+{
+    return scriptCreation;
 }
 

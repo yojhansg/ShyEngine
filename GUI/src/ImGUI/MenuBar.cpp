@@ -16,14 +16,6 @@ PEditor::MenuBar::MenuBar() : Window("", None)
 
     imGuiManager = ImGUIManager::getInstance();
 
-
-    if (ImGui::BeginPopup("Rename Object")) {
-        if (ImGui::Button("OK")) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-
     shouldOpenRenamePopup = false;
 }
 

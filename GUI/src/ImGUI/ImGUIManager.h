@@ -23,6 +23,7 @@ namespace PEditor {
 	class Hierarchy;
 	class FileExplorer;
 	class Components;
+	class ScriptCreation;
 
 }
 
@@ -57,6 +58,7 @@ private:
 	PEditor::Hierarchy* hierarchy = nullptr;
 	PEditor::FileExplorer* fileExplorer = nullptr;
 	PEditor::Components* components = nullptr;
+	PEditor::ScriptCreation* scriptCreation = nullptr;
 
 
 public:
@@ -90,6 +92,7 @@ public:
 	PEditor::Hierarchy* getHierarchy();
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::Components* getComponents();
+	PEditor::ScriptCreation* getScriptCreation();
 
 	~ImGUIManager();
 };

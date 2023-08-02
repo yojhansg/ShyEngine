@@ -7,6 +7,7 @@
 #include <direct.h>
 #include "SDL.h"
 #include "SDL_image.h"
+#include "ScriptCreation.h"
 
 namespace fs = std::filesystem;
 
@@ -118,6 +119,11 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                 std::string buttonId = "Open script##" + filename;
                 if (ImGui::Button(buttonId.c_str())) {
                     ImGui::OpenPopup("Create script");
+
+                    size_t dotPos = filename.find_last_of(".");
+                    std::string filenameWithoutExtension = filename.substr(0, dotPos);
+
+                    ImGUIManager::getInstance()->getScriptCreation()->setName(filenameWithoutExtension);
                     ImGUIManager::getInstance()->creatingScript(true);
                 }
             }
