@@ -18,7 +18,6 @@ namespace PEditor {
 		std::string name;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
-		Transform* tr;
 		std::unordered_map<int ,Component*> components;
 
 		ImGUIManager* imGuiManager;
@@ -30,6 +29,9 @@ namespace PEditor {
 		bool showGizmo;
 
 		bool waitingToDelete;
+
+		ImVec2* size;
+		ImVec2* pos;
 
 	public:
 
@@ -46,6 +48,8 @@ namespace PEditor {
 
 		int getWidth();
 		int getHeight();
+
+		void drawTransformInEditor();
 
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
