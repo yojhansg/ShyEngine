@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
-#include "imgui.h"
+#include <unordered_map>
+
+struct ImVec2;
 
 enum AttributesType {
 	INT,
@@ -12,19 +14,27 @@ enum AttributesType {
 };
 
 class Attribute {
+
+private:
 	AttributesType type;
 	std::string name;
 
+public:
+	Attribute(std::string name, AttributesType type);
+
+	AttributesType getType();
+	std::string getName();
+
 	union value
 	{
-		int valueInt;
+		int valueInt = 0;
 		float valueFloat;
-		ImVec2 valueVector2;
-		char* valueString;
+		ImVec2* valueVector2;
 		bool valueBool;
 		//color
-	};
+	} value;
 
+	std::string valueString;
 };
 
 class Component
@@ -36,5 +46,15 @@ public:
 
 	virtual void drawEditor();
 	virtual std::string toJson();
+
+
+private:
+
+	void drawInt(std::string attrName, Attribute* attr);
+	void drawFloat(std::string attrName, Attribute* attr);
+	void drawVector2(std::string attrName, Attribute* attr);
+	void drawString(std::string attrName, Attribute* attr);
+	void drawBool(std::string attrName, Attribute* attr);
+	//void drawColor(std::string attrName, Attribute* attr);
 };
 

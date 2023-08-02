@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Component.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
     <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
