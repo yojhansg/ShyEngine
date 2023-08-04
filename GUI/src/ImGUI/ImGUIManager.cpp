@@ -145,7 +145,6 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-
     while (!exitGame)
     {
         update();
