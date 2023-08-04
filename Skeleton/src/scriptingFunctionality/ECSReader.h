@@ -41,6 +41,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <unordered_set>
 
 
 class ECSReader {
@@ -110,6 +111,12 @@ public:
 		Genera un fichero JSON con la informacion de los atributos del ECS
 	*/
 	ECSReader& GenerateAttributeJSON();
+
+	/*
+		Genera un fichero JSON con una lista con todos los componentes del ECS
+	*/
+	ECSReader& GenerateComponentsJSON();
+
 
 	/*
 		TODO: Comentario descriptivo
@@ -237,6 +244,8 @@ private:
 	/*
 		Vector con la informacion de los metodos encontrados
 	*/
+	std::unordered_set<std::string> allComponents;
+
 	std::vector<std::string> filesToInclude;
 	std::vector<std::string> managerFiles;
 	std::map<std::string, std::vector<Method>> methods;
@@ -245,7 +254,7 @@ private:
 
 	std::map<std::string, std::string> classInheritance;
 
-	std::vector<std::pair<std::string, std::string>> components;
+	std::vector<std::pair<std::string, std::string>> componentsWithPaths;
 	/*
 		Crea la carpeta de salida en caso de que no exista
 	*/
