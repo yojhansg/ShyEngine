@@ -3,7 +3,6 @@
 #include "ImGUIManager.h"
 #include "Scene.h"
 #include <filesystem>
-#include "imgui.h"
 #include <direct.h>
 #include "SDL.h"
 #include "SDL_image.h"
@@ -33,6 +32,19 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoColl
     projectPath = buffer;
     currentPath = projectPath;
 
+    std::string imgPath = "folder.png";
+    SDL_Surface* surface = IMG_Load(imgPath.c_str());
+    folderTexture = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+    imgPath = "file.png";
+    surface = IMG_Load(imgPath.c_str());
+    fileTexture = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+    imgPath = "script.png";
+    surface = IMG_Load(imgPath.c_str());
+    scriptTexture = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+    SDL_FreeSurface(surface);
 }
 
 void PEditor::FileExplorer::drawFileExplorerWindow()
@@ -69,18 +81,14 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
     {
         std::string filename = file.path().filename().string();
 
-        std::string path = file.is_directory() ? "folder.png" : "file.png";
+        ImTextureID texture = file.is_directory() ? folderTexture : fileTexture;
 
-        if (file.path().extension().string() == ".script") path = "script.png";
+        if (file.path().extension().string() == ".script") texture = scriptTexture;
 
 
-        SDL_Surface* surface = IMG_Load(path.c_str());
-        ImTextureID imageTextId = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
-
-        SDL_FreeSurface(surface);
 
         const float iconSize = ImGui::GetTextLineHeight() + 8;
-        ImGui::Image(imageTextId, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
+        ImGui::Image(texture, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
 
         ImGui::SameLine();
 
