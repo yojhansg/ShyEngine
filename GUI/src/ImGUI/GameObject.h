@@ -25,6 +25,7 @@ namespace PEditor {
 		bool visible;
 
 		bool leftMouseButtonDown;
+		bool rightMouseButtonDown;
 
 		bool showGizmo;
 
@@ -32,6 +33,10 @@ namespace PEditor {
 
 		ImVec2* size;
 		ImVec2* pos;
+
+		float previousMousePosX;
+		float previousMousePosY;
+		float rotation;
 
 	public:
 
@@ -59,6 +64,7 @@ namespace PEditor {
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);
 		ImVec2 getPosition();
+		float getRotation();
 
 		bool isWaitingToDelete();
 		void toDelete();

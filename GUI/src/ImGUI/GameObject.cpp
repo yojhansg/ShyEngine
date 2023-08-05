@@ -35,6 +35,9 @@ PEditor::GameObject::GameObject(std::string& path)
 	visible = true;
 
 	waitingToDelete = false;
+
+	previousMousePosX = 0;
+	previousMousePosY = 0;
 }
 
 PEditor::GameObject::~GameObject()
@@ -89,6 +92,10 @@ void PEditor::GameObject::drawTransformInEditor()
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)size, 0.1f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Text("Rotation");
+		ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
 	}
 }
 
@@ -109,7 +116,7 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 	SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
 
 	if (visible) {
-		SDL_RenderCopy(renderer, getTexture(), NULL, &dst);
+		SDL_RenderCopyEx(renderer, getTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
 	}
 
 	//Render outline
@@ -141,7 +148,7 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
-	
+
 	if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && imGuiManager->getScene()->getSelectedGameObject() == this) {
 		toDelete();
 	}
@@ -159,41 +166,63 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 		}
 	}
 
-	if(imGuiManager->getScene()->getSelectedGameObject() == this) {
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
-			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-			{
-				leftMouseButtonDown = false;
+
+	if (imGuiManager->getScene()->getSelectedGameObject() == this) {
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
+
+			if (!rightMouseButtonDown) {
+				rightMouseButtonDown = true;
 			}
 		}
 
-		if (SDL_GetModState() & KMOD_SHIFT) {
-			showGizmo = true;
-
-			if (event->type == SDL_MOUSEMOTION)
+			if (event->type == SDL_MOUSEBUTTONUP)
 			{
-				if (leftMouseButtonDown)
+				if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
 				{
-					pos->x = mousePos.x - size->x / 2;
-					pos->y = mousePos.y - size->y / 2;
+					leftMouseButtonDown = false;
+				}
+
+				if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+				{
+					rightMouseButtonDown = false;
 				}
 			}
 
-			if (event->type == SDL_MOUSEWHEEL) {
-				if (event->wheel.y > 0) // scroll up
+			if (SDL_GetModState() & KMOD_SHIFT) {
+				showGizmo = true;
+
+				if (event->type == SDL_MOUSEMOTION)
 				{
-					size->x += 5;
-					size->y += 5;
+					if (leftMouseButtonDown)
+					{
+						pos->x = mousePos.x - size->x / 2;
+						pos->y = mousePos.y - size->y / 2;
+					}
+
+					if (rightMouseButtonDown)
+					{
+						rotation += (previousMousePosX - mousePos.x) * 0.5f;
+						rotation += (previousMousePosY - mousePos.y) * 0.5f;
+					}
 				}
-				else if (event->wheel.y < 0) // scroll down
-				{
-					size->x -= 5;
-					size->y -= 5;
+
+				if (event->type == SDL_MOUSEWHEEL) {
+					if (event->wheel.y > 0) // scroll up
+					{
+						size->x += 5;
+						size->y += 5;
+					}
+					else if (event->wheel.y < 0) // scroll down
+					{
+						size->x -= 5;
+						size->y -= 5;
+					}
 				}
 			}
-		}
 	}
+
+	previousMousePosX = mousePos.x;
+	previousMousePosY = mousePos.y;
 }
 
 std::list<Component*>* PEditor::GameObject::getComponents()
@@ -215,6 +244,11 @@ void PEditor::GameObject::setName(const std::string newName)
 ImVec2 PEditor::GameObject::getPosition()
 {
 	return *pos;
+}
+
+float PEditor::GameObject::getRotation()
+{
+	return rotation;
 }
 
 bool PEditor::GameObject::isWaitingToDelete()

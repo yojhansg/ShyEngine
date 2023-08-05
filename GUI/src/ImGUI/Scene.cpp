@@ -179,7 +179,10 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 		gameObject->handleInput(event, mouseInsideGameObject(gameObject, mousePos), getMousePosInsideScene(mousePos));
 	}
 
-	camera->handleInput(event, mouseInsideWindow(mousePos));
+	if (!(SDL_GetModState() & KMOD_SHIFT)) {
+		camera->handleInput(event, mouseInsideWindow(mousePos));
+	}
+	
 }
 
 void PEditor::Scene::render()
