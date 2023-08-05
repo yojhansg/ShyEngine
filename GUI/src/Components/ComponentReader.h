@@ -1,20 +1,27 @@
 #pragma once
 
 #include <string>
-#include <map>
-#include <vector>
+#include "ComponentInfo.h"
+#include <nlohmann/json_fwd.hpp>
+
 
 
 namespace Components {
+
+	using nlohmann::json;
 
 	using cstring = std::string const&;
 
 	class ComponentReader {
 
+
+		static Component ReadComponent(cstring name, json data);
+
 	public:
 
-		static std::vector<std::string> ReadComponents(cstring path);
-		static void ReadFunctions(cstring path);
-		static void ReadAttributes(cstring path);
+
+		static std::vector<Component> ReadComponents(cstring filePath);
 	};
+	
+
 }

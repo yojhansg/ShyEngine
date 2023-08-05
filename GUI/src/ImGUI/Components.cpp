@@ -5,6 +5,9 @@
 #include "Component.h"
 #include "Scene.h"
 
+#include "ComponentManager.h"
+
+
 PEditor::Components::Components() : Window("Components", NoResize | NoCollapse | NoMove)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
@@ -62,9 +65,19 @@ void PEditor::Components::render()
 	if (gameObject != nullptr) {
 		if (ImGui::CollapsingHeader("Add component"))
 		{
-			ImGui::Button("Transform");
-			ImGui::Button("RigidBody");
-			ImGui::Button("PlayerMovement");
+
+
+
+			for (auto& comp : ::Components::ComponentManager::GetAllComponents()) {
+
+				ImGui::Button(comp.first.c_str());
+			}
+
+
+
+			//ImGui::Button("Transform");
+			//ImGui::Button("RigidBody");
+			//ImGui::Button("PlayerMovement");
 		}
 	}
 
