@@ -1,7 +1,9 @@
 #include "ComponentManager.h"
 #include "ComponentReader.h"
 
-static Components::ComponentManager* instance = nullptr;
+#include <iostream>
+
+Components::ComponentManager* Components::ComponentManager::instance = nullptr;
 
 void Components::ComponentManager::EnsureInitialised()
 {
@@ -17,11 +19,22 @@ void Components::ComponentManager::Initialise()
 void Components::ComponentManager::Release()
 {
 	delete instance;
+	instance = nullptr;
 }
 
-void Components::ComponentManager::ReadComponentInfo(cstring components, cstring functions, cstring attributes)
+void Components::ComponentManager::ReadComponentInfo(cstring path)
 {
+	EnsureInitialised();
+
+	auto result = ComponentReader::ReadComponents(path);
 
 
+	for (auto& cmp : result) {
+
+
+
+
+		instance->components.emplace(cmp.getName(), cmp);
+	}
 
 }

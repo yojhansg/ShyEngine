@@ -1,14 +1,58 @@
 #include "ComponentReader.h"
 #include "nlohmann/json.hpp"
 
-void Components::ComponentReader::ReadComponents(cstring path)
-{
-}
+#include <fstream>
+#include <iostream>
 
-void Components::ComponentReader::ReadFunctions(cstring path)
-{
-}
+using nlohmann::json;
 
-void Components::ComponentReader::ReadAttributes(cstring path)
-{
+namespace Components {
+
+	Component ComponentReader::ReadComponent(cstring name, json data)
+	{
+		Component cmp(name);
+
+
+		if (data.contains("attributes"))
+		{
+			auto attributes = data["attributes"].get<std::vector<json>>();
+
+			for (auto& attr : attributes) {
+
+				Attribute attributeInfo;
+				attributeInfo.name = attr["name"].get<std::string>();
+				attributeInfo.type = attr["type"].get<std::string>();
+
+				cmp.addAttribute(attributeInfo);
+			}
+		}
+
+		//TODO: Methods
+
+		return cmp;
+	}
+
+	std::vector<Component> Components::ComponentReader::ReadComponents(cstring filePath)
+	{
+		std::ifstream fileStream(filePath);
+
+		if (!fileStream.good() || !json::accept(fileStream))
+		{
+			return std::vector<Component>();
+		}
+
+		fileStream.clear();
+		fileStream.seekg(0);
+
+		json file = json::parse(fileStream);
+
+		std::vector<Component> components;
+		for (auto& item : file.items()) {
+			
+			components.push_back(ReadComponent(item.key(), item.value()));
+		}
+
+		return components;
+	}
+
 }

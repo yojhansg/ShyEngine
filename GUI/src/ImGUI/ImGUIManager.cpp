@@ -13,6 +13,7 @@
 #include "Components.h"
 #include <fstream>
 #include "ScriptCreation.h"
+#include "ComponentManager.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -131,6 +132,10 @@ void ImGUIManager::init()
 
     initImGUI();
     initWindows();
+
+    Components::ComponentManager::Initialise();
+    Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
+
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -246,6 +251,7 @@ ImVec2 ImGUIManager::getOriginalWindowSize()
 
 ImGUIManager::~ImGUIManager()
 {
+    Components::ComponentManager::Release();
     // Cleanup
     ImGui_ImplSDLRenderer_Shutdown();
     ImGui_ImplSDL2_Shutdown();

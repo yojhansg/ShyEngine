@@ -2,7 +2,9 @@
 
 
 #include <string>
-#include <map>
+#include <unordered_map>
+
+#include "Component.h"
 
 
 namespace Components {
@@ -17,12 +19,13 @@ namespace Components {
 		static ComponentManager* instance;
 		static void EnsureInitialised();
 
-		ComponentManager();
+		std::unordered_map<std::string, Component> components;
+
 	public:
 
 		static void Initialise();
 		static void Release();
 
-		static void ReadComponentInfo(cstring components, cstring functions, cstring attributes);
+		static void ReadComponentInfo(cstring path);
 	};
 }
