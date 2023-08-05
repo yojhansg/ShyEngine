@@ -1,4 +1,4 @@
-#include "Component.h"
+#include "ComponentInfo.h"
 
 namespace Components {
 	Component::Component()

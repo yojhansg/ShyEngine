@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "Component.h"
+#include "ComponentInfo.h"
 
 
 namespace Components {
@@ -27,5 +27,7 @@ namespace Components {
 		static void Release();
 
 		static void ReadComponentInfo(cstring path);
+
+		static std::unordered_map<std::string, Component> const& GetAllComponents();
 	};
 }

@@ -21,7 +21,7 @@
     <ClCompile Include="..\..\src\Components\ComponentReader.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Components\Component.cpp">
+    <ClCompile Include="..\..\src\Components\ComponentInfo.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="..\..\src\Components\ComponentReader.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Components\Component.h">
+    <ClInclude Include="..\..\src\Components\ComponentInfo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

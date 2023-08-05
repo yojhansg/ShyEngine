@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
-#include "Component.h"
+#include "ComponentInfo.h"
 #include <nlohmann/json_fwd.hpp>
+
+
 
 namespace Components {
 
