@@ -33,9 +33,12 @@ namespace Components {
 
 		union value
 		{
-			int valueInt = 0;
+			int valueInt;
 			float valueFloat;
-			std::pair<float,float>* valueVector2;
+			struct {
+				float x;
+				float y;
+			} valueVector2;
 			bool valueBool;
 			//color
 		} value;
@@ -60,6 +63,7 @@ namespace Components {
 
 		std::unordered_map<std::string, Attribute> attributes;
 		std::unordered_map<std::string, Method> methods;
+
 
 	public:
 

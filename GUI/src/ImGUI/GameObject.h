@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <list>
+#include <unordered_map>
 
 union SDL_Event;
 
@@ -22,7 +23,7 @@ namespace PEditor {
 		std::string name;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
-		std::list<::Components::Component*> components;
+		std::unordered_map<std::string, ::Components::Component&> components;
 
 		ImGUIManager* imGuiManager;
 
@@ -69,8 +70,8 @@ namespace PEditor {
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
-		void addComponent(::Components::Component* comp);
-		std::list<::Components::Component*>* getComponents();
+		void addComponent(::Components::Component& comp);
+		std::unordered_map<std::string, ::Components::Component&>* getComponents();
 
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);

@@ -11,10 +11,10 @@
 
 void PEditor::GameObject::drawComponentsInEditor()
 {
-	for (auto& component : components) {
-		if (ImGui::CollapsingHeader(component->getName().c_str()))
+	for (auto it = components.begin(); it != components.end();) {
+		if (ImGui::CollapsingHeader((*it).second.getName().c_str()))
 		{
-			for (auto& attribute : component->getAllAttributes()) {
+			for (auto& attribute : (*it).second.getAllAttributes()) {
 				std::string attributeName = attribute.first;
 				::Components::Attribute* attr = &attribute.second;
 
@@ -43,6 +43,22 @@ void PEditor::GameObject::drawComponentsInEditor()
 					break;
 				}
 			}
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+			if (ImGui::Button("Delete component")) {
+				it = components.erase(it);
+			}
+			else {
+				it++;
+			}
+
+			ImGui::PopStyleColor(2);
+
+		}
+		else {
+			it++;
 		}
 	}
 }
@@ -60,7 +76,8 @@ void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribut
 
 void PEditor::GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
 {
-	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) attr->value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+
+	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) &attr->value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 }
 
 void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
@@ -291,12 +308,14 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	previousMousePosY = mousePos.y;
 }
 
-void PEditor::GameObject::addComponent(::Components::Component* comp)
+void PEditor::GameObject::addComponent(::Components::Component& comp)
 {
-	components.push_back(comp);
+	if (components.find(comp.getName()) == components.end()) {
+		components.emplace(comp.getName(), comp);
+	}
 }
 
-std::list<::Components::Component*>* PEditor::GameObject::getComponents()
+std::unordered_map<std::string, ::Components::Component&>* PEditor::GameObject::getComponents()
 {
 	return &components;
 }
@@ -339,9 +358,9 @@ std::string PEditor::GameObject::toJson()
 	j["Name"] = name;
 
 	nlohmann::ordered_json componentsJson;
-	for (auto component : components) {
-		//componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
-	}
+	//for (auto component : components) {
+	//	//componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
+	//}
 
 	j["Components"] = componentsJson;
 

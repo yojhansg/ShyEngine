@@ -3,7 +3,7 @@
 #include "ImGUIManager.h"
 #include "GameObject.h"
 #include "Scene.h"
-
+#include "ComponentInfo.h"
 #include "ComponentManager.h"
 
 
@@ -44,8 +44,6 @@ void PEditor::Components::render()
 
 	if (gameObject != nullptr) {
 
-		std::list<::Components::Component*>* components = gameObject->getComponents();
-
 		gameObject->drawTransformInEditor();
 		gameObject->drawComponentsInEditor();
 	}
@@ -64,7 +62,7 @@ void PEditor::Components::render()
 			for (auto& comp : ::Components::ComponentManager::GetAllComponents()) {
 
 				if (ImGui::Button(comp.first.c_str())) {
-					gameObject->addComponent(&comp.second);
+					gameObject->addComponent(comp.second);
 				};
 			}
 		}
