@@ -28,6 +28,6 @@ namespace Components {
 
 		static void ReadComponentInfo(cstring path);
 
-		static std::unordered_map<std::string, Component> const& GetAllComponents();
+		static std::unordered_map<std::string, Component>& GetAllComponents();
 	};
 }

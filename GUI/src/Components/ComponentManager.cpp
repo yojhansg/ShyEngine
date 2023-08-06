@@ -32,12 +32,11 @@ void Components::ComponentManager::ReadComponentInfo(cstring path)
 
 	for (auto& cmp : result) {
 
-
 		instance->components.emplace(cmp.getName(), cmp);
 	}
 }
 
 
-std::unordered_map<std::string, Components::Component> const& Components::ComponentManager::GetAllComponents() {
+std::unordered_map<std::string, Components::Component>& Components::ComponentManager::GetAllComponents() {
 	return instance->components;
 }

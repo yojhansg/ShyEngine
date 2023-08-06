@@ -6,8 +6,77 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "SDL.h"
-#include "Component.h"
 #include "nlohmann/json.hpp"
+#include "ComponentInfo.h"
+
+void PEditor::GameObject::drawComponentsInEditor()
+{
+	for (auto& component : components) {
+		if (ImGui::CollapsingHeader(component->getName().c_str()))
+		{
+			for (auto& attribute : component->getAllAttributes()) {
+				std::string attributeName = attribute.first;
+				::Components::Attribute* attr = &attribute.second;
+
+				ImGui::Text(attributeName.c_str());
+
+				switch (attr->getType())
+				{
+				case ::Components::INT:
+					drawInt(attributeName, attr);
+					break;
+				case ::Components::FLOAT:
+					drawFloat(attributeName, attr);
+					break;
+				case ::Components::VECTOR2:
+					drawVector2(attributeName, attr);
+					break;
+				case ::Components::STRING:
+					drawString(attributeName, attr);
+					break;
+				case ::Components::BOOL:
+					drawBool(attributeName, attr);
+					break;
+					/*	case COLOR:
+							break;*/
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+void PEditor::GameObject::drawInt(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::DragInt(("##" + attrName).c_str(), &attr->value.valueInt, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) attr->value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
+{
+	char inputBuffer[256];
+	strncpy_s(inputBuffer, attr->valueString.c_str(), sizeof(inputBuffer));
+
+	if (ImGui::InputText(("##" + attr->getName()).c_str(), inputBuffer, sizeof(inputBuffer))) {
+		attr->valueString = inputBuffer;
+	}
+}
+
+void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.valueBool);
+}
 
 PEditor::GameObject::GameObject(std::string& path)
 {
@@ -42,9 +111,6 @@ PEditor::GameObject::GameObject(std::string& path)
 
 PEditor::GameObject::~GameObject()
 {
-	for (auto it = components.begin(); it != components.end(); ++it) {
-		delete *it;
-	}
 	components.clear();
 
 	delete pos;
@@ -225,7 +291,12 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	previousMousePosY = mousePos.y;
 }
 
-std::list<Component*>* PEditor::GameObject::getComponents()
+void PEditor::GameObject::addComponent(::Components::Component* comp)
+{
+	components.push_back(comp);
+}
+
+std::list<::Components::Component*>* PEditor::GameObject::getComponents()
 {
 	return &components;
 }
@@ -269,7 +340,7 @@ std::string PEditor::GameObject::toJson()
 
 	nlohmann::ordered_json componentsJson;
 	for (auto component : components) {
-		componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
+		//componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
 	}
 
 	j["Components"] = componentsJson;

@@ -2,7 +2,6 @@
 #include <imgui.h>
 #include "ImGUIManager.h"
 #include "GameObject.h"
-#include "Component.h"
 #include "Scene.h"
 
 #include "ComponentManager.h"
@@ -45,13 +44,10 @@ void PEditor::Components::render()
 
 	if (gameObject != nullptr) {
 
-		std::list<Component*>* components = gameObject->getComponents();
+		std::list<::Components::Component*>* components = gameObject->getComponents();
 
 		gameObject->drawTransformInEditor();
-
-		for (auto it = components->begin(); it != components->end(); it++) {
-			(*it)->drawEditor();
-		}
+		gameObject->drawComponentsInEditor();
 	}
 
 	ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
@@ -65,19 +61,12 @@ void PEditor::Components::render()
 	if (gameObject != nullptr) {
 		if (ImGui::CollapsingHeader("Add component"))
 		{
-
-
-
 			for (auto& comp : ::Components::ComponentManager::GetAllComponents()) {
 
-				ImGui::Button(comp.first.c_str());
+				if (ImGui::Button(comp.first.c_str())) {
+					gameObject->addComponent(&comp.second);
+				};
 			}
-
-
-
-			//ImGui::Button("Transform");
-			//ImGui::Button("RigidBody");
-			//ImGui::Button("PlayerMovement");
 		}
 	}
 

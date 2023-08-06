@@ -7,7 +7,6 @@
 #include "ImGUIManager.h"
 #include <string>
 #include <nlohmann/json.hpp>
-#include "Component.h"
 #include <fstream>
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
