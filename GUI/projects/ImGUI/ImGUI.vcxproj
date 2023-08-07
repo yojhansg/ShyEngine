@@ -101,7 +101,6 @@
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\src\ImGUI\Camera.h" />
-    <ClInclude Include="..\..\src\ImGUI\Component.h" />
     <ClInclude Include="..\..\src\ImGUI\Components.h" />
     <ClInclude Include="..\..\src\ImGUI\FileExplorer.h" />
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
@@ -121,7 +120,6 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Component.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
     <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />

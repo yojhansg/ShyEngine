@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <list>
+#include <unordered_map>
 
 union SDL_Event;
 
@@ -9,8 +10,12 @@ struct SDL_Texture;
 struct SDL_Renderer;
 class ImGUIManager;
 class Transform;
-class Component;
 class Camera;
+
+namespace Components {
+	class Component;
+	class Attribute;
+}
 
 namespace PEditor {
 	class GameObject
@@ -18,13 +23,14 @@ namespace PEditor {
 		std::string name;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
-		std::list<Component*> components;
+		std::unordered_map<std::string, ::Components::Component&> components;
 
 		ImGUIManager* imGuiManager;
 
 		bool visible;
 
 		bool leftMouseButtonDown;
+		bool rightMouseButtonDown;
 
 		bool showGizmo;
 
@@ -32,6 +38,16 @@ namespace PEditor {
 
 		ImVec2* size;
 		ImVec2* pos;
+
+		float previousMousePosX;
+		float previousMousePosY;
+		float rotation;
+
+		void drawInt(std::string attrName, ::Components::Attribute* attr);
+		void drawFloat(std::string attrName, ::Components::Attribute* attr);
+		void drawVector2(std::string attrName, ::Components::Attribute* attr);
+		void drawString(std::string attrName, ::Components::Attribute* attr);
+		void drawBool(std::string attrName, ::Components::Attribute* attr);
 
 	public:
 
@@ -54,15 +70,18 @@ namespace PEditor {
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
-		std::list<Component*>* getComponents();
+		void addComponent(::Components::Component& comp);
+		std::unordered_map<std::string, ::Components::Component&>* getComponents();
 
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);
 		ImVec2 getPosition();
+		float getRotation();
 
 		bool isWaitingToDelete();
 		void toDelete();
 	
+		void drawComponentsInEditor();
 		std::string toJson();
 	};
 }

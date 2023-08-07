@@ -19,9 +19,7 @@ namespace Components {
 
 			for (auto& attr : attributes) {
 
-				Attribute attributeInfo;
-				attributeInfo.name = attr["name"].get<std::string>();
-				attributeInfo.type = attr["type"].get<std::string>();
+				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>()) ;
 
 				cmp.addAttribute(attributeInfo);
 			}

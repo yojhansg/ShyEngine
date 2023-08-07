@@ -9,20 +9,49 @@ namespace Components {
 
 	using cstring = std::string const&;
 
-	struct Variable {
-
-		std::string name;
-		std::string type;
+	enum AttributesType {
+		NONE,
+		INT,
+		FLOAT,
+		VECTOR2,
+		STRING,
+		BOOL,
+		//COLOR,
 	};
 
-	using Attribute = Variable;
+	class Attribute {
+	private:
+		AttributesType type;
+		std::string name;
+
+	public:
+		Attribute();
+		Attribute(std::string name, std::string typeString);
+
+		AttributesType getType() const;
+		std::string getName() const;
+
+		union value
+		{
+			int valueInt;
+			float valueFloat;
+			struct {
+				float x;
+				float y;
+			} valueVector2;
+			bool valueBool;
+			//color
+		} value;
+
+		std::string valueString;
+	};
 
 	struct Method {
 
 		std::string name;
 
-		Variable returnType;
-		std::vector<Variable> input;
+		Attribute returnType;
+		std::vector<Attribute> input;
 	};
 
 
@@ -34,6 +63,7 @@ namespace Components {
 
 		std::unordered_map<std::string, Attribute> attributes;
 		std::unordered_map<std::string, Method> methods;
+
 
 	public:
 

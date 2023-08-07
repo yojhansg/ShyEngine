@@ -6,8 +6,94 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "SDL.h"
-#include "Component.h"
 #include "nlohmann/json.hpp"
+#include "ComponentInfo.h"
+
+void PEditor::GameObject::drawComponentsInEditor()
+{
+	for (auto it = components.begin(); it != components.end();) {
+		if (ImGui::CollapsingHeader((*it).second.getName().c_str()))
+		{
+			for (auto& attribute : (*it).second.getAllAttributes()) {
+				std::string attributeName = attribute.first;
+				::Components::Attribute* attr = &attribute.second;
+
+				ImGui::Text(attributeName.c_str());
+
+				switch (attr->getType())
+				{
+				case ::Components::INT:
+					drawInt(attributeName, attr);
+					break;
+				case ::Components::FLOAT:
+					drawFloat(attributeName, attr);
+					break;
+				case ::Components::VECTOR2:
+					drawVector2(attributeName, attr);
+					break;
+				case ::Components::STRING:
+					drawString(attributeName, attr);
+					break;
+				case ::Components::BOOL:
+					drawBool(attributeName, attr);
+					break;
+					/*	case COLOR:
+							break;*/
+				default:
+					break;
+				}
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+			if (ImGui::Button("Delete component")) {
+				it = components.erase(it);
+			}
+			else {
+				it++;
+			}
+
+			ImGui::PopStyleColor(2);
+
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+
+void PEditor::GameObject::drawInt(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::DragInt(("##" + attrName).c_str(), &attr->value.valueInt, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
+{
+
+	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) &attr->value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+}
+
+void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
+{
+	char inputBuffer[256];
+	strncpy_s(inputBuffer, attr->valueString.c_str(), sizeof(inputBuffer));
+
+	if (ImGui::InputText(("##" + attr->getName()).c_str(), inputBuffer, sizeof(inputBuffer))) {
+		attr->valueString = inputBuffer;
+	}
+}
+
+void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.valueBool);
+}
 
 PEditor::GameObject::GameObject(std::string& path)
 {
@@ -35,13 +121,13 @@ PEditor::GameObject::GameObject(std::string& path)
 	visible = true;
 
 	waitingToDelete = false;
+
+	previousMousePosX = 0;
+	previousMousePosY = 0;
 }
 
 PEditor::GameObject::~GameObject()
 {
-	for (auto it = components.begin(); it != components.end(); ++it) {
-		delete *it;
-	}
 	components.clear();
 
 	delete pos;
@@ -89,6 +175,10 @@ void PEditor::GameObject::drawTransformInEditor()
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)size, 0.1f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Text("Rotation");
+		ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
 	}
 }
 
@@ -109,7 +199,7 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 	SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
 
 	if (visible) {
-		SDL_RenderCopy(renderer, getTexture(), NULL, &dst);
+		SDL_RenderCopyEx(renderer, getTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
 	}
 
 	//Render outline
@@ -141,7 +231,7 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
-	
+
 	if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && imGuiManager->getScene()->getSelectedGameObject() == this) {
 		toDelete();
 	}
@@ -159,44 +249,73 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 		}
 	}
 
-	if(imGuiManager->getScene()->getSelectedGameObject() == this) {
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
-			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-			{
-				leftMouseButtonDown = false;
+
+	if (imGuiManager->getScene()->getSelectedGameObject() == this) {
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
+
+			if (!rightMouseButtonDown) {
+				rightMouseButtonDown = true;
 			}
 		}
 
-		if (SDL_GetModState() & KMOD_SHIFT) {
-			showGizmo = true;
-
-			if (event->type == SDL_MOUSEMOTION)
+			if (event->type == SDL_MOUSEBUTTONUP)
 			{
-				if (leftMouseButtonDown)
+				if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
 				{
-					pos->x = mousePos.x - size->x / 2;
-					pos->y = mousePos.y - size->y / 2;
+					leftMouseButtonDown = false;
+				}
+
+				if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+				{
+					rightMouseButtonDown = false;
 				}
 			}
 
-			if (event->type == SDL_MOUSEWHEEL) {
-				if (event->wheel.y > 0) // scroll up
+			if (SDL_GetModState() & KMOD_SHIFT) {
+				showGizmo = true;
+
+				if (event->type == SDL_MOUSEMOTION)
 				{
-					size->x += 5;
-					size->y += 5;
+					if (leftMouseButtonDown)
+					{
+						pos->x = mousePos.x - size->x / 2;
+						pos->y = mousePos.y - size->y / 2;
+					}
+
+					if (rightMouseButtonDown)
+					{
+						rotation += (previousMousePosX - mousePos.x) * 0.5f;
+						rotation += (previousMousePosY - mousePos.y) * 0.5f;
+					}
 				}
-				else if (event->wheel.y < 0) // scroll down
-				{
-					size->x -= 5;
-					size->y -= 5;
+
+				if (event->type == SDL_MOUSEWHEEL) {
+					if (event->wheel.y > 0) // scroll up
+					{
+						size->x += 5;
+						size->y += 5;
+					}
+					else if (event->wheel.y < 0) // scroll down
+					{
+						size->x -= 5;
+						size->y -= 5;
+					}
 				}
 			}
-		}
+	}
+
+	previousMousePosX = mousePos.x;
+	previousMousePosY = mousePos.y;
+}
+
+void PEditor::GameObject::addComponent(::Components::Component& comp)
+{
+	if (components.find(comp.getName()) == components.end()) {
+		components.emplace(comp.getName(), comp);
 	}
 }
 
-std::list<Component*>* PEditor::GameObject::getComponents()
+std::unordered_map<std::string, ::Components::Component&>* PEditor::GameObject::getComponents()
 {
 	return &components;
 }
@@ -217,6 +336,11 @@ ImVec2 PEditor::GameObject::getPosition()
 	return *pos;
 }
 
+float PEditor::GameObject::getRotation()
+{
+	return rotation;
+}
+
 bool PEditor::GameObject::isWaitingToDelete()
 {
 	return waitingToDelete;
@@ -234,9 +358,9 @@ std::string PEditor::GameObject::toJson()
 	j["Name"] = name;
 
 	nlohmann::ordered_json componentsJson;
-	for (auto component : components) {
-		componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
-	}
+	//for (auto component : components) {
+	//	//componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
+	//}
 
 	j["Components"] = componentsJson;
 

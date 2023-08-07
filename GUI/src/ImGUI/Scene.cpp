@@ -7,7 +7,6 @@
 #include "ImGUIManager.h"
 #include <string>
 #include <nlohmann/json.hpp>
-#include "Component.h"
 #include <fstream>
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
@@ -179,7 +178,10 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 		gameObject->handleInput(event, mouseInsideGameObject(gameObject, mousePos), getMousePosInsideScene(mousePos));
 	}
 
-	camera->handleInput(event, mouseInsideWindow(mousePos));
+	if (!(SDL_GetModState() & KMOD_SHIFT)) {
+		camera->handleInput(event, mouseInsideWindow(mousePos));
+	}
+	
 }
 
 void PEditor::Scene::render()
