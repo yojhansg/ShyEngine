@@ -1,17 +1,1 @@
-{
-    "GameObjects": [
-        {
-            "Name": "Aguja",
-            "Components": [
-                {
-                    "Transform": {
-                        "PosX": 385.391357421875,
-                        "PosY": 241.6087646484375,
-                        "SizeX": 70.0,
-                        "SizeY": 70.0
-                    }
-                }
-            ]
-        }
-    ]
-}
+null
