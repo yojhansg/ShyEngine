@@ -115,9 +115,10 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
             if (extension == ".png" || extension == ".jpg")
             {
                 ImGui::SameLine();
-                std::string buttonId = "Create GameObject##" + filename;
+                std::string relativePath = file.path().lexically_relative(projectPath).string();
+                std::string buttonId = "Create GameObject##" + relativePath;
                 if (ImGui::Button(buttonId.c_str())) {
-                    ImGUIManager::getInstance()->getScene()->addGameObject(filename);
+                    ImGUIManager::getInstance()->getScene()->addGameObject(relativePath);
                 }
             }
 

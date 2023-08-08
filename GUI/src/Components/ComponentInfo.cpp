@@ -108,22 +108,22 @@ namespace Components {
 		switch (type)
 		{
 		case INT:
-			j[name] = value.valueInt;
+			j[name] = value.value.valueInt;
 			break;
 		case FLOAT:
-			j[name] = value.valueFloat;
+			j[name] = value.value.valueFloat;
 			break;
 		case VECTOR2:
-			vectorJson.push_back(value.valueVector2.x);
-			vectorJson.push_back(value.valueVector2.y);
+			vectorJson.push_back(value.value.valueVector2.x);
+			vectorJson.push_back(value.value.valueVector2.y);
 
 			j[name] = vectorJson;
 			break;
 		case STRING:
-			j[name] = valueString;
+			j[name] = value.valueString;
 			break;
 		case BOOL:
-			j[name] = value.valueBool;
+			j[name] = value.value.valueBool;
 			break;
 		/*case COLOR:
 		* j[name] = value.valueColor;

@@ -51,6 +51,7 @@ namespace Components {
 
 		AttributesType getType() const;
 		std::string getName() const;
+		std::string toJson();
 
 		AttributeValue value;
 	};

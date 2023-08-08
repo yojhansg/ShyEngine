@@ -87,7 +87,7 @@ void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribu
 	strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
 
 	if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
-		attr->valueString = inputBuffer;
+		attr->value.valueString = inputBuffer;
 	}
 }
 
