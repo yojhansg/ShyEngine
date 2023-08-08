@@ -2,7 +2,6 @@
 #include "nlohmann/json.hpp"
 
 #include <fstream>
-#include <iostream>
 
 using nlohmann::json;
 
@@ -19,13 +18,34 @@ namespace Components {
 
 			for (auto& attr : attributes) {
 
-				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>()) ;
+				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>());
 
 				cmp.addAttribute(attributeInfo);
 			}
 		}
 
-		//TODO: Methods
+		if (data.contains("methods") && !data["methods"].is_null())
+		{
+			auto& methods = data["methods"];
+
+			for (auto& method : methods) {
+
+				Method methodInfo(method["name"].get<std::string>());
+
+				if (method.contains("input") && method["input"].is_array()) {
+
+
+					for (const auto& in : method["input"]) {
+
+						if (!in.is_null())
+							methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+					}
+
+				}
+
+				cmp.addMethod(methodInfo);
+			}
+		}
 
 		return cmp;
 	}
@@ -46,7 +66,7 @@ namespace Components {
 
 		std::vector<Component> components;
 		for (auto& item : file.items()) {
-			
+
 			components.push_back(ReadComponent(item.key(), item.value()));
 		}
 

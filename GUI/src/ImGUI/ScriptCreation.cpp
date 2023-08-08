@@ -7,6 +7,11 @@
 PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 {
     imGuiManager = ImGUIManager::getInstance();
+
+
+
+    selection = (new ScriptCreationUtilities::ScriptDropdownSelection())->SetID(0)->SetPosition(600, 100);
+
 }
 
 void PEditor::ScriptCreation::render()
@@ -19,7 +24,6 @@ void PEditor::ScriptCreation::render()
         if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
         {
         }
-
 
         ImVec2 a = ImVec2(100, 100);
         ImVec2 b = ImVec2(200, 100);;
@@ -61,8 +65,11 @@ void PEditor::ScriptCreation::render()
             ImGui::CloseCurrentPopup();
         }
 
+        selection->Render();
         ImGui::EndPopup();
     }
+
+
 }
 
 
@@ -79,6 +86,7 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
     ImGui::EndChild();
 
 }
+
 
 
 void PEditor::ScriptCreation::setName(std::string name)

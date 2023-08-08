@@ -3,6 +3,8 @@
 #include <string>
 
 #include <vector>
+#include "ComponentInfo.h"
+#include "ScriptCreationUtilities.h"
 
 class ImGUIManager;
 
@@ -10,38 +12,34 @@ namespace PEditor {
 
 
 
+    /*
+    
+        TODO: Cosas que hacer
+
+
+        -Desplegable con todos los metodos
+        -Dividir los metodos por categorías
+        -Buscador de metodos
+        -Desplegables con el tipo de input
+        -Mostrar cuadro de input personalizado para cada tipo
+        -Mostar cuadros metodos con el nombre, input con nombre y output
+        -Mostar lineas de union entre input y output
+        -Dibujar lineas de continuacion de nodos
+    */
+
+
     class ScriptCreation : public Window
     {
     private:
 
-        class ScriptNode {
 
-        public:
-            int nodeId;
-            //ImVec2 position;
-
-            virtual void Render();
-        };
-
-        class ScriptInput: public ScriptNode {
-
-            //Definir el tipo de input, representar y guardar el valor
-        };
-
-        class ScriptMethod: public ScriptNode {
-
-            //ImVec2 position;
-            std::string methodName;
-        };
-
-
-        std::vector<ScriptNode*> nodes;
+        std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
 
         char nameBuffer[256];
         ImGUIManager* imGuiManager;
 
-
+        ScriptCreationUtilities::ScriptNode* selection;
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
 

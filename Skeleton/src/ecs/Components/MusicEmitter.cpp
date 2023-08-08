@@ -10,7 +10,7 @@ namespace ECS {
 	
 	MusicEmitter* MusicEmitter::emitterOnChannel = nullptr;
 
-	MusicEmitter::MusicEmitter(cstring fileName) {
+	MusicEmitter::MusicEmitter() {
 
 		sManager = Sound::SoundManager::instance();
 
@@ -23,7 +23,7 @@ namespace ECS {
 
 		volume = .5f;
 
-		this->fileName = fileName;
+		this->fileName = "";
 
 	}
 

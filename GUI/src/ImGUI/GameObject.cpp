@@ -66,33 +66,33 @@ void PEditor::GameObject::drawComponentsInEditor()
 
 void PEditor::GameObject::drawInt(std::string attrName, ::Components::Attribute* attr)
 {
-	ImGui::DragInt(("##" + attrName).c_str(), &attr->value.valueInt, 0.3f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragInt(("##" + attrName).c_str(), &attr->value.value.valueInt, 0.3f, 0.0f, 0.0f, "%.2f");
 }
 
 void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr)
 {
-	ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
 }
 
 void PEditor::GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
 {
 
-	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) &attr->value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) &attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 }
 
 void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
 {
 	char inputBuffer[256];
-	strncpy_s(inputBuffer, attr->valueString.c_str(), sizeof(inputBuffer));
+	strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
 
 	if (ImGui::InputText(("##" + attr->getName()).c_str(), inputBuffer, sizeof(inputBuffer))) {
-		attr->valueString = inputBuffer;
+		attr->value.valueString = inputBuffer;
 	}
 }
 
 void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
 {
-	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.valueBool);
+	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
 }
 
 PEditor::GameObject::GameObject(std::string& path)

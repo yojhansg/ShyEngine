@@ -1122,7 +1122,7 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 				if (!inputJson.is_null())
 					methodData[method.methodName]["input"] = inputJson;
 
-				cmp["methods"] = methodData;
+				cmp["methods"] += methodData;
 			}
 
 		}

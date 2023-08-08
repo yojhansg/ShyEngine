@@ -146,9 +146,9 @@ publish:
 
 
 	//TODO: Collections
-	void Collection_Create(int size);
-	void Collection_Modify(int idx, cVariable value);
-	cVariable Collection_Peek(int idx);
+	//void Collection_Create(int size);
+	//void Collection_Modify(int idx, cVariable value);
+	//cVariable Collection_Peek(int idx);
 
 
 	float Random_UnitValue();

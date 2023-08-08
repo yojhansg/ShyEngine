@@ -16,7 +16,7 @@ namespace ECS {
 
     public:
 
-        MusicEmitter(cstring fileName);
+        MusicEmitter();
 
         ~MusicEmitter();
 

@@ -19,7 +19,7 @@ namespace ECS {
 
 	public:
 
-		SoundEmitter(cstring fileName);
+		SoundEmitter();
 
 		~SoundEmitter();
 

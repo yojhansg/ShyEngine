@@ -19,17 +19,8 @@ namespace Components {
 		//COLOR,
 	};
 
-	class Attribute {
-	private:
-		AttributesType type;
-		std::string name;
 
-	public:
-		Attribute();
-		Attribute(std::string name, std::string typeString);
-
-		AttributesType getType() const;
-		std::string getName() const;
+	struct AttributeValue {
 
 		union value
 		{
@@ -46,12 +37,41 @@ namespace Components {
 		std::string valueString;
 	};
 
-	struct Method {
 
+	class Attribute {
+	private:
+		AttributesType type;
 		std::string name;
 
-		Attribute returnType;
-		std::vector<Attribute> input;
+	public:
+		Attribute();
+		Attribute(const std::string& name, const std::string& typeString);
+
+		AttributesType getType() const;
+		std::string getName() const;
+
+		AttributeValue value;
+	};
+
+	using Variable = Attribute;
+
+	class Method {
+	private:
+		std::string name;
+
+		Variable returnType;
+		std::vector<Variable> input;
+	public:
+		Method();
+		Method(const std::string& name);
+
+		void SetReturn(const Variable& ret);
+		void AddInput(const Variable& input);
+
+		std::string getName() const;
+		Variable getReturn() const;
+
+		const std::vector<Variable>& getInput() const;
 	};
 
 
@@ -73,8 +93,8 @@ namespace Components {
 
 		cstring getName();
 
-		Attribute& getAttribute(cstring name);
-		Method& getMethod(cstring name);
+		const Attribute& getAttribute(cstring name);
+		const Method& getMethod(cstring name);
 
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
 		std::unordered_map<std::string, Method>& getAllMethods();
