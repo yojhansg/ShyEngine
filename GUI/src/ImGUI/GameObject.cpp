@@ -9,6 +9,8 @@
 #include "nlohmann/json.hpp"
 #include "ComponentInfo.h"
 
+int PEditor::GameObject::lastId = 0;
+
 void PEditor::GameObject::drawComponentsInEditor()
 {
 	for (auto it = components.begin(); it != components.end();) {
@@ -98,6 +100,10 @@ void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute
 
 PEditor::GameObject::GameObject(std::string& path)
 {
+	id = GameObject::lastId;
+
+	GameObject::lastId++;
+
 	SDL_Surface* surface = IMG_Load(path.c_str());
 	text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
@@ -153,6 +159,10 @@ std::string PEditor::GameObject::getName()
 bool PEditor::GameObject::isVisible()
 {
 	return visible;
+}
+int PEditor::GameObject::getId()
+{
+	return id;
 }
 void PEditor::GameObject::setVisible(bool visible)
 {

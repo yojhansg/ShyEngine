@@ -20,7 +20,10 @@ namespace Components {
 namespace PEditor {
 	class GameObject
 	{
+		static int lastId;
+
 		std::string name;
+		int id;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
 		std::unordered_map<std::string, ::Components::Component&> components;
@@ -60,6 +63,7 @@ namespace PEditor {
 
 		SDL_Texture* getTexture();
 		std::string getName();
+		int getId();
 
 		bool isVisible();
 		void setVisible(bool visible);
