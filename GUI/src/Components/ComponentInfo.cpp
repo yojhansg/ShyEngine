@@ -23,12 +23,12 @@ namespace Components {
 		return name;
 	}
 
-	Attribute& Components::Component::getAttribute(cstring name)
+	const Attribute& Components::Component::getAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	Method& Components::Component::getMethod(cstring name)
+	const Method& Components::Component::getMethod(cstring name)
 	{
 		return methods[name];
 	}
@@ -50,7 +50,7 @@ namespace Components {
 
 	void Components::Component::addMethod(const Method& method)
 	{
-		methods.emplace(method.name, method);
+		methods.emplace(method.getName(), method);
 	}
 
 	Attribute::Attribute()
@@ -59,28 +59,28 @@ namespace Components {
 		type = NONE;
 	}
 
-	Attribute::Attribute(std::string name, std::string typeString)
+	Attribute::Attribute(const std::string& name, const std::string& typeString)
 	{
 		this->name = name;
 
 		if (typeString == "int") {
-			value.valueInt = 0;
+			value.value.valueInt = 0;
 			type = INT;
 		}
 		else if (typeString == "float") {
-			value.valueFloat = 0.0f;
+			value.value.valueFloat = 0.0f;
 			type = FLOAT;
 		}
 		else if (typeString == "Utilities::Vector2D") {
-			value.valueVector2 = { 0.0f, 0.0f };
+			value.value.valueVector2 = { 0.0f, 0.0f };
 			type = VECTOR2;
 		}
 		else if (typeString == "std::string") {
-			valueString = "";
+			value.valueString = "";
 			type = STRING;
 		}
 		else if (typeString == "bool") {
-			value.valueBool = false;
+			value.value.valueBool = false;
 			type = BOOL;
 		}
 		/*else if (typeString == "int") {
@@ -148,4 +148,39 @@ namespace Components {
 
 		return j.dump(2);
 	}
+	Method::Method()
+	{
+	}
+
+	Method::Method(const std::string& name, const std::string& className)
+	{
+		this->name = name;
+		this->component = className;
+	}
+
+	void Method::SetReturn(const Variable& ret)
+	{
+		returnType = ret;
+	}
+
+	void Method::AddInput(const Variable& input)
+	{
+		this->input.push_back(input);
+	}
+
+	std::string Method::getName() const
+	{
+		return name;
+	}
+
+	std::string Method::getComponent() const
+	{
+		return component;
+	}
+
+	Variable Method::getReturn() const
+	{
+		return returnType;
+	}
+
 }

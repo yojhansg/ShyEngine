@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Thu Aug  3 03:02:24 2023
+//Creation time: Tue Aug  8 01:47:20 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -282,9 +282,6 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Camera_SetPosition",ScriptFunctionality_Camera_SetPosition);
 	map.emplace("Camera_GetScale",ScriptFunctionality_Camera_GetScale);
 	map.emplace("Camera_SetScale",ScriptFunctionality_Camera_SetScale);
-	map.emplace("Collection_Create",ScriptFunctionality_Collection_Create);
-	map.emplace("Collection_Modify",ScriptFunctionality_Collection_Modify);
-	map.emplace("Collection_Peek",ScriptFunctionality_Collection_Peek);
 	map.emplace("Random_UnitValue",ScriptFunctionality_Random_UnitValue);
 	map.emplace("Random_Between",ScriptFunctionality_Random_Between);
 	map.emplace("Random_UnitVector",ScriptFunctionality_Random_UnitVector);
@@ -3153,21 +3150,6 @@ Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::V
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->Camera_SetScale(vec[0].value.Float);
 	return Scripting::Variable::Null();
-}
-Scripting::Variable ScriptFunctionality_Collection_Create(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Collection_Create(vec[0].value.Float);
-	return Scripting::Variable::Null();
-}
-Scripting::Variable ScriptFunctionality_Collection_Modify(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Collection_Modify(vec[0].value.Float, vec[1]);
-	return Scripting::Variable::Null();
-}
-Scripting::Variable ScriptFunctionality_Collection_Peek(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	cVariable ret = manager->Collection_Peek(vec[0].value.Float);
-	return ret;
 }
 Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();

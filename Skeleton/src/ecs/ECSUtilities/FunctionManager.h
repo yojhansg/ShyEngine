@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Thu Aug  3 03:02:24 2023
+//Creation time : Tue Aug  8 01:47:20 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -252,9 +252,6 @@ Scripting::Variable ScriptFunctionality_Camera_GetPosition(std::vector<Scripting
 Scripting::Variable ScriptFunctionality_Camera_SetPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Camera_GetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Collection_Create(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Collection_Modify(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Collection_Peek(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_Between(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec);

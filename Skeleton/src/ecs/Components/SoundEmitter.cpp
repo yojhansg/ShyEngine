@@ -16,7 +16,7 @@ namespace ECS {
 
 	std::vector<SoundEmitter*> SoundEmitter::soundEmitters = std::vector<SoundEmitter*>();
 
-	SoundEmitter::SoundEmitter(cstring fileName) {
+	SoundEmitter::SoundEmitter() {
 
 		sManager = Sound::SoundManager::instance();
 
@@ -35,7 +35,7 @@ namespace ECS {
 
 		volume = .5f;	
 
-		this->fileName = fileName; 
+		this->fileName = "";
 
 		soundEmitters.push_back(this);
 	}

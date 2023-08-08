@@ -2,10 +2,27 @@
 #include "imgui.h"
 #include <fstream>
 #include "ImGUIManager.h"
+#include <iostream>
 
 PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 {
     imGuiManager = ImGUIManager::getInstance();
+
+
+
+    dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
+
+}
+
+PEditor::ScriptCreation::~ScriptCreation()
+{
+    delete dropDownSelection;
+}
+
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
+{
+    node->SetID(nodes.size());
+    nodes.push_back(node);
 }
 
 void PEditor::ScriptCreation::render()
@@ -19,12 +36,28 @@ void PEditor::ScriptCreation::render()
         {
         }
 
-        if (ImGui::BeginChild("ChildWindow", ImVec2(300, 200), true, ImGuiWindowFlags_None))
-        {
+        ImVec2 a = ImVec2(100, 100);
+        ImVec2 b = ImVec2(200, 100);;
+        ImVec2 c = ImGui::GetMousePos();
+        ImVec2 d = ImGui::GetMousePos();
 
-            ImGui::Text("Child Window Content Here");
+        c.x -= 100;
+
+        auto drawList = ImGui::GetWindowDrawList();
+        drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), 1, 30);
+
+
+        for (auto node : nodes) {
+
+            node->Render();
         }
-        ImGui::EndChild();
+
+        //RenderBox("Primera", ImVec2(200, 300), ImVec2(200, 300));
+        //RenderBox("Segunda", ImVec2(460, 300), ImVec2(200, 300));
+        //RenderBox("Tercera", ImVec2(100, 700), ImVec2(200, 300));
+        //RenderBox("Cuarta", ImVec2(120, 30), ImVec2(200, 300));
+
+        ImGui::SetCursorPos(ImVec2(0, 700));
 
         if (ImGui::Button("Save script"))
         {
@@ -49,8 +82,26 @@ void PEditor::ScriptCreation::render()
             ImGui::CloseCurrentPopup();
         }
 
+        dropDownSelection->Render();
         ImGui::EndPopup();
     }
+
+
+}
+
+
+void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position, ImVec2 size)
+{
+
+    ImGui::SetCursorPos(position);
+
+    if (ImGui::BeginChild(name.c_str(), size, true, ImGuiWindowFlags_None))
+    {
+
+        ImGui::Text("Child Window Content Here");
+    }
+    ImGui::EndChild();
+
 }
 
 void PEditor::ScriptCreation::setName(std::string name)
