@@ -135,9 +135,7 @@ void PEditor::Scene::saveScene()
 
 	nlohmann::ordered_json j;
 
-	for (auto gameObject : gameObjects) {
-		j["GameObjects"].push_back(nlohmann::ordered_json::parse(gameObject->toJson()));
-	}
+	j = j.parse(toJson());
 
 	std::string path = "scene.json";
 
@@ -206,3 +204,20 @@ void PEditor::Scene::render()
 
 }
 
+std::string PEditor::Scene::toJson()
+{
+	nlohmann::ordered_json j;
+
+	//TODO cambiar nombre al que queramos
+	j["name"] = "scene";
+
+	nlohmann::ordered_json gameObjectsJson;
+	for (auto gameObject : gameObjects) {
+		gameObjectsJson.push_back(j.parse(gameObject->toJson()));
+	}
+
+	j["objects"] = gameObjectsJson;
+
+	return j.dump(2);
+
+}

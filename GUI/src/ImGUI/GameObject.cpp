@@ -12,7 +12,8 @@
 void PEditor::GameObject::drawComponentsInEditor()
 {
 	for (auto it = components.begin(); it != components.end();) {
-		if (ImGui::CollapsingHeader((*it).second.getName().c_str()))
+		std::string componentName = (*it).second.getName();
+		if (ImGui::CollapsingHeader(componentName.c_str()))
 		{
 			for (auto& attribute : (*it).second.getAllAttributes()) {
 				std::string attributeName = attribute.first;
@@ -23,19 +24,19 @@ void PEditor::GameObject::drawComponentsInEditor()
 				switch (attr->getType())
 				{
 				case ::Components::INT:
-					drawInt(attributeName, attr);
+					drawInt(attributeName + it->first, attr);
 					break;
 				case ::Components::FLOAT:
-					drawFloat(attributeName, attr);
+					drawFloat(attributeName + it->first, attr);
 					break;
 				case ::Components::VECTOR2:
-					drawVector2(attributeName, attr);
+					drawVector2(attributeName + it->first, attr);
 					break;
 				case ::Components::STRING:
-					drawString(attributeName, attr);
+					drawString(attributeName + it->first, attr);
 					break;
 				case ::Components::BOOL:
-					drawBool(attributeName, attr);
+					drawBool(attributeName+ it->first, attr);
 					break;
 					/*	case COLOR:
 							break;*/
@@ -47,18 +48,18 @@ void PEditor::GameObject::drawComponentsInEditor()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-			if (ImGui::Button("Delete component")) {
+			if (ImGui::Button(("Delete component##" + componentName).c_str())) {
 				it = components.erase(it);
 			}
 			else {
-				it++;
+				++it;
 			}
 
 			ImGui::PopStyleColor(2);
 
 		}
 		else {
-			it++;
+			++it;
 		}
 	}
 }
@@ -85,7 +86,7 @@ void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribu
 	char inputBuffer[256];
 	strncpy_s(inputBuffer, attr->valueString.c_str(), sizeof(inputBuffer));
 
-	if (ImGui::InputText(("##" + attr->getName()).c_str(), inputBuffer, sizeof(inputBuffer))) {
+	if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
 		attr->valueString = inputBuffer;
 	}
 }
@@ -124,6 +125,8 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	previousMousePosX = 0;
 	previousMousePosY = 0;
+
+	renderOrder = 0;
 }
 
 PEditor::GameObject::~GameObject()
@@ -179,6 +182,10 @@ void PEditor::GameObject::drawTransformInEditor()
 
 		ImGui::Text("Rotation");
 		ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Text("Render order");
+		ImGui::InputInt("##render_order", &renderOrder);
 	}
 }
 
@@ -354,15 +361,27 @@ void PEditor::GameObject::toDelete()
 std::string PEditor::GameObject::toJson()
 {
 	nlohmann::ordered_json j;
+	j["name"] = name;
+	j["order"] = renderOrder;
 
-	j["Name"] = name;
+	nlohmann::ordered_json posJson;
+	posJson.push_back(pos->x);
+	posJson.push_back(pos->y);
+	j["localPosition"] = posJson;
+
+	nlohmann::ordered_json sizeJson;
+	sizeJson.push_back(size->x);
+	sizeJson.push_back(size->y);
+	j["localScale"] = sizeJson;
+
+	j["localRotation"] = rotation;
 
 	nlohmann::ordered_json componentsJson;
-	//for (auto component : components) {
-	//	//componentsJson.push_back(nlohmann::ordered_json::parse(component->toJson()));
-	//}
+	for (auto it = components.begin(); it != components.end(); it++) {
+		componentsJson.push_back(j.parse(it->second.toJson()));
+	}
 
-	j["Components"] = componentsJson;
+	j["components"] = componentsJson;
 
 	return j.dump(2);
 }

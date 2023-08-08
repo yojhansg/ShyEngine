@@ -1,15 +1,97 @@
 {
-    "GameObjects": [
+    "name": "scene",
+    "objects": [
         {
-            "Name": "Aguja",
-            "Components": [
+            "name": "Aguja",
+            "order": 4,
+            "localPosition": [
+                0.0,
+                0.0
+            ],
+            "localScale": [
+                100.0,
+                100.0
+            ],
+            "localRotation": 0.0,
+            "components": [
                 {
-                    "Transform": {
-                        "PosX": 385.391357421875,
-                        "PosY": 241.6087646484375,
-                        "SizeX": 70.0,
-                        "SizeY": 70.0
-                    }
+                    "component": "Overlay",
+                    "attributes": [
+                        {
+                            "left": 0
+                        },
+                        {
+                            "placement": 0
+                        },
+                        {
+                            "bottom": 0
+                        },
+                        {
+                            "position": [
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "top": 0
+                        },
+                        {
+                            "size": [
+                                68.69999694824219,
+                                45.599998474121094
+                            ]
+                        },
+                        {
+                            "anchor": [
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "right": 0
+                        },
+                        null,
+                        {
+                            "renderScale": 0.0
+                        },
+                        {
+                            "interactable": false
+                        }
+                    ]
+                },
+                {
+                    "component": "OverlayButton",
+                    "attributes": [
+                        null,
+                        {
+                            "scale": 77.4000015258789
+                        },
+                        null,
+                        null
+                    ]
+                },
+                {
+                    "component": "CircleBody",
+                    "attributes": [
+                        {
+                            "radius": 45.29999923706055
+                        },
+                        {
+                            "trigger": true
+                        },
+                        {
+                            "bodyType": 0
+                        },
+                        {
+                            "mass": 0.0
+                        },
+                        {
+                            "bounciness": 0.0
+                        },
+                        {
+                            "freezeRotation": false
+                        }
+                    ]
                 }
             ]
         }

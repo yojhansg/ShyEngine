@@ -31,6 +31,8 @@ namespace Components {
 		AttributesType getType() const;
 		std::string getName() const;
 
+		std::string toJson();
+
 		union value
 		{
 			int valueInt;
@@ -82,6 +84,7 @@ namespace Components {
 		void addAttribute(const Attribute& attribute);
 		void addMethod(const Method& method);
 
+		std::string  toJson();
 	};
 
 }

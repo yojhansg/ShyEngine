@@ -57,6 +57,8 @@ namespace PEditor {
 		virtual void update();
 		virtual void handleInput(SDL_Event* event);
 		virtual void render();
+
+		std::string toJson();
 	};
 
 }

@@ -1,4 +1,5 @@
 #include "ComponentInfo.h"
+#include "nlohmann/json.hpp"
 
 namespace Components {
 	Component::Component()
@@ -99,4 +100,52 @@ namespace Components {
 		return name;
 	}
 
+	std::string Attribute::toJson()
+	{
+		nlohmann::ordered_json j;
+		nlohmann::ordered_json vectorJson;
+
+		switch (type)
+		{
+		case INT:
+			j[name] = value.valueInt;
+			break;
+		case FLOAT:
+			j[name] = value.valueFloat;
+			break;
+		case VECTOR2:
+			vectorJson.push_back(value.valueVector2.x);
+			vectorJson.push_back(value.valueVector2.y);
+
+			j[name] = vectorJson;
+			break;
+		case STRING:
+			j[name] = valueString;
+			break;
+		case BOOL:
+			j[name] = value.valueBool;
+			break;
+		/*case COLOR:
+		* j[name] = value.valueColor;
+			break;*/
+		default:
+			break;
+		}
+		return j.dump(2);
+	}
+
+	std::string Component::toJson() {
+		nlohmann::ordered_json j;
+
+		j["component"] = name;
+
+		nlohmann::ordered_json attributesJson;
+		for (auto it = attributes.begin(); it != attributes.end(); it++) {
+			attributesJson.push_back(j.parse(it->second.toJson()));
+		}
+
+		j["attributes"] = attributesJson;
+
+		return j.dump(2);
+	}
 }
