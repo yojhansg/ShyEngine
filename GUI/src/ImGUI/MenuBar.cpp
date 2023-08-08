@@ -78,6 +78,15 @@ void PEditor::MenuBar::render()
             ImGui::Separator();
             if (ImGui::BeginMenu("GameObject"))
             {
+                if (ImGui::MenuItem("Create prefab", NULL, false)) {
+
+                }
+
+                if (ImGui::MenuItem("Add script", NULL, false)) {
+                    ImGUIManager::getInstance()->creatingScript(true);
+                }
+
+                ImGui::Separator();
 
                 if (ImGui::MenuItem("Rename", NULL, false))
                 {
@@ -88,10 +97,6 @@ void PEditor::MenuBar::render()
  
                 if (ImGui::MenuItem("Delete", NULL, false)) {
                     gameObject->toDelete();
-                }
- 
-                if (ImGui::MenuItem("Add script", NULL, false)) {
-                    ImGUIManager::getInstance()->creatingScript(true);
                 }
 
                 ImGui::EndMenu();

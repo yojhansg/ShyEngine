@@ -40,8 +40,9 @@ void PEditor::GameObject::drawComponentsInEditor()
 				case ::Components::BOOL:
 					drawBool(attributeName+ it->first, attr);
 					break;
-					/*	case COLOR:
-							break;*/
+				case ::Components::COLOR:
+					drawColor(attributeName + it->first, attr);
+					break;
 				default:
 					break;
 				}
@@ -96,6 +97,11 @@ void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribu
 void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
 {
 	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
+}
+
+void PEditor::GameObject::drawColor(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
 }
 
 PEditor::GameObject::GameObject(std::string& path)

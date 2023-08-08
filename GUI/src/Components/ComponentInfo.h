@@ -16,13 +16,11 @@ namespace Components {
 		VECTOR2,
 		STRING,
 		BOOL,
-		//COLOR,
+		COLOR,
 	};
 
 
 	struct AttributeValue {
-
-		std::string toJson();
 
 		union value
 		{
@@ -33,7 +31,11 @@ namespace Components {
 				float y;
 			} valueVector2;
 			bool valueBool;
-			//color
+			struct {
+				float r;
+				float g;
+				float b;
+			} valueColor;
 		} value;
 
 		std::string valueString;

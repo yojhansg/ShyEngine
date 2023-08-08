@@ -83,9 +83,10 @@ namespace Components {
 			value.value.valueBool = false;
 			type = BOOL;
 		}
-		/*else if (typeString == "int") {
+		else if (typeString == "Utilities::Color") {
+			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 			type = COLOR;
-		}*/
+		}
 		else {
 			type = NONE;
 		}
@@ -104,6 +105,7 @@ namespace Components {
 	{
 		nlohmann::ordered_json j;
 		nlohmann::ordered_json vectorJson;
+		nlohmann::ordered_json colorJson;
 
 		switch (type)
 		{
@@ -125,9 +127,13 @@ namespace Components {
 		case BOOL:
 			j[name] = value.value.valueBool;
 			break;
-		/*case COLOR:
-		* j[name] = value.valueColor;
-			break;*/
+		case COLOR:
+			colorJson.push_back(value.value.valueColor.r);
+			colorJson.push_back(value.value.valueColor.g);
+			colorJson.push_back(value.value.valueColor.b);
+
+			j[name] = colorJson;
+			break;
 		default:
 			break;
 		}
