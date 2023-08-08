@@ -57,18 +57,20 @@ namespace Components {
 
 	class Method {
 	private:
+		std::string component;
 		std::string name;
 
 		Variable returnType;
 		std::vector<Variable> input;
 	public:
 		Method();
-		Method(const std::string& name);
+		Method(const std::string& name, const std::string& className);
 
 		void SetReturn(const Variable& ret);
 		void AddInput(const Variable& input);
 
 		std::string getName() const;
+		std::string getComponent() const;
 		Variable getReturn() const;
 
 		const std::vector<Variable>& getInput() const;

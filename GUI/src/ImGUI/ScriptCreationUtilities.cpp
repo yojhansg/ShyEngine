@@ -1,19 +1,32 @@
 #include "ScriptCreationUtilities.h"
 
 #include "imgui.h"
-
+#include "ScriptCreation.h"
 #include "ComponentManager.h"
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetID(int id)
 {
 	this->id = id;
+	w = 200;
+	h = 300;
+
 	return this;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 {
 	if (hidden) return;
-	render();
+
+	auto position = ImVec2(x, y);
+	auto size = ImVec2(w, h);
+
+	ImGui::SetCursorPos(position);
+
+	if (ImGui::BeginChild(std::to_string(id).c_str(), size, true, ImGuiWindowFlags_None))
+	{
+		render();
+	}
+	ImGui::EndChild();
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Hide()
@@ -31,10 +44,26 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::IsHidden()
 	return hidden;
 }
 
+int PEditor::ScriptCreationUtilities::ScriptNode::GetId()
+{
+	return id;
+}
+
+int PEditor::ScriptCreationUtilities::ScriptNode::GetY()
+{
+	return y;
+}
+
+int PEditor::ScriptCreationUtilities::ScriptNode::GetX()
+{
+	return x;
+}
+
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetPosition(int x1, int y1)
 {
 	this->x = x1;
 	this->y = y1;
+
 	return this;
 }
 
@@ -42,21 +71,22 @@ void PEditor::ScriptCreationUtilities::ScriptNode::render()
 {
 }
 
-void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::render()
+PEditor::ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator): creator(creator)
 {
-	ImGui::SetCursorPos(ImVec2(x, y));
+	mousex = mousey = 0;
+}
 
-	//TODO: gaurdar el string para no calcularlo en cada frame
-	/*if (ImGui::BeginChild(("node " + std::to_string(id)).c_str(), ImVec2(x, y), true, ImGuiWindowFlags_None))
-	{
+void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
+{
 
+	if (ImGui::IsMouseReleased(1)) {
+		auto mousePos = ImGui::GetMousePos();
 
+		mousex = mousePos.x;
+		mousey = mousePos.y;
+	}
 
-		ImGui::Text("Child Window Content Here");
-	}*/
-
-
-	if (ImGui::BeginPopupContextWindow("El menu este", ImGuiPopupFlags_MouseButtonRight)) {
+	if (ImGui::BeginPopupContextWindow("PopupScript", ImGuiPopupFlags_MouseButtonRight)) {
 
 		bool endMenu = false;
 
@@ -74,8 +104,14 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::render()
 
 					for (auto& method : methods) {
 
-						if (ImGui::MenuItem(method.second.getName().c_str())) {
+						std::string name = method.first;
+						if (ImGui::MenuItem(name.c_str())) {
 
+							ScriptNode* node = new ScriptMethod(method.second);
+
+							node->SetPosition(mousex, mousey);
+
+							creator->AddNode(node);
 						}
 					}
 				}
@@ -83,9 +119,17 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::render()
 
 		ImGui::EndPopup();
 	}
+}
+
+PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method): method(method)
+{
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMethod::render()
+{
+	ImGui::Text((method.getName() + " - " + method.getComponent()).c_str());
 
 
-
-	// ImGui::EndChild();
+	
 
 }

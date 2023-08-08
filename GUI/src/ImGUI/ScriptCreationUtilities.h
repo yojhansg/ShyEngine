@@ -5,9 +5,9 @@
 #include <vector>
 #include "ComponentInfo.h"
 
-class ImGUIManager;
-
 namespace PEditor {
+
+    class ScriptCreation;
 
     namespace ScriptCreationUtilities {
 
@@ -40,11 +40,16 @@ namespace PEditor {
             void Show();
             bool IsHidden();
 
+            int GetId();
+            int GetY();
+            int GetX();
 
         protected:
             int id;
 
             float x, y;
+            float w, h;
+
             bool hidden;
 
 
@@ -67,10 +72,13 @@ namespace PEditor {
 
         class ScriptMethod : public ScriptNode {
 
-            std::string methodName;
+            ::Components::Method& method;
             std::vector<std::pair<int, int>> connections;
 
-            ScriptMethod(const std::string& methodName);
+        public:
+            ScriptMethod(::Components::Method&);
+
+            void render() override;
         };
 
         class ScriptInputHandle {
@@ -79,10 +87,18 @@ namespace PEditor {
         };
 
 
-        class ScriptDropdownSelection : public ScriptNode {
 
-        protected:
-            void render() override;
+        class ScriptDropdownSelection{
+
+        private:
+            ScriptCreation* creator;
+
+            int mousex, mousey;
+
+        public:
+
+            ScriptDropdownSelection(ScriptCreation* creator);
+            void Render();
         };
 
     }

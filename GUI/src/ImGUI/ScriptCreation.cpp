@@ -10,8 +10,19 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 
 
 
-    selection = (new ScriptCreationUtilities::ScriptDropdownSelection())->SetID(0)->SetPosition(600, 100);
+    dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
 
+}
+
+PEditor::ScriptCreation::~ScriptCreation()
+{
+    delete dropDownSelection;
+}
+
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
+{
+    node->SetID(nodes.size());
+    nodes.push_back(node);
 }
 
 void PEditor::ScriptCreation::render()
@@ -35,10 +46,16 @@ void PEditor::ScriptCreation::render()
         auto drawList = ImGui::GetWindowDrawList();
         drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), 1, 30);
 
-        RenderBox("Primera", ImVec2(200, 300), ImVec2(200, 300));
-        RenderBox("Segunda", ImVec2(460, 300), ImVec2(200, 300));
-        RenderBox("Tercera", ImVec2(100, 700), ImVec2(200, 300));
-        RenderBox("Cuarta", ImVec2(120, 30), ImVec2(200, 300));
+
+        for (auto node : nodes) {
+
+            node->Render();
+        }
+
+        //RenderBox("Primera", ImVec2(200, 300), ImVec2(200, 300));
+        //RenderBox("Segunda", ImVec2(460, 300), ImVec2(200, 300));
+        //RenderBox("Tercera", ImVec2(100, 700), ImVec2(200, 300));
+        //RenderBox("Cuarta", ImVec2(120, 30), ImVec2(200, 300));
 
         ImGui::SetCursorPos(ImVec2(0, 700));
 
@@ -65,7 +82,7 @@ void PEditor::ScriptCreation::render()
             ImGui::CloseCurrentPopup();
         }
 
-        selection->Render();
+        dropDownSelection->Render();
         ImGui::EndPopup();
     }
 
@@ -86,8 +103,6 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
     ImGui::EndChild();
 
 }
-
-
 
 void PEditor::ScriptCreation::setName(std::string name)
 {

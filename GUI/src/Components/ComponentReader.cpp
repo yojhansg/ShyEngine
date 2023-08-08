@@ -30,7 +30,7 @@ namespace Components {
 
 			for (auto& method : methods) {
 
-				Method methodInfo(method["name"].get<std::string>());
+				Method methodInfo(method["name"].get<std::string>(), name);
 
 				if (method.contains("input") && method["input"].is_array()) {
 

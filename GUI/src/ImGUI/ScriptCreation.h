@@ -39,13 +39,15 @@ namespace PEditor {
         char nameBuffer[256];
         ImGUIManager* imGuiManager;
 
-        ScriptCreationUtilities::ScriptNode* selection;
+        ScriptCreationUtilities::ScriptDropdownSelection* dropDownSelection;
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
 
-
     public:
         ScriptCreation();
+        ~ScriptCreation();
+
+        void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
         virtual void render();
         void setName(std::string name);

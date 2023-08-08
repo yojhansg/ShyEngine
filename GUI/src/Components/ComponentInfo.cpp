@@ -103,9 +103,10 @@ namespace Components {
 	{
 	}
 
-	Method::Method(const std::string& name)
+	Method::Method(const std::string& name, const std::string& className)
 	{
 		this->name = name;
+		this->component = className;
 	}
 
 	void Method::SetReturn(const Variable& ret)
@@ -121,6 +122,11 @@ namespace Components {
 	std::string Method::getName() const
 	{
 		return name;
+	}
+
+	std::string Method::getComponent() const
+	{
+		return component;
 	}
 
 	Variable Method::getReturn() const
