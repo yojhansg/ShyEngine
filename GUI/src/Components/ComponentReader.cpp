@@ -24,6 +24,9 @@ namespace Components {
 			}
 		}
 
+
+		//TODO: hacer un fichero para leer los metodos de los managers
+
 		if (data.contains("methods") && !data["methods"].is_null())
 		{
 			auto& methods = data["methods"];

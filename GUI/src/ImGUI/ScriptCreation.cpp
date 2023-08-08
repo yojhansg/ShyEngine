@@ -30,32 +30,35 @@ void PEditor::ScriptCreation::render()
     ImGui::OpenPopup("Create script");
     ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetNextWindowPos(ImVec2(0, 0));
-    if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
+        //ImGui::SetWindowFocus();
+
         if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
         {
         }
 
         ImVec2 a = ImVec2(100, 100);
-        ImVec2 b = ImVec2(200, 100);;
+        ImVec2 b = ImVec2(100, 100);
         ImVec2 c = ImGui::GetMousePos();
         ImVec2 d = ImGui::GetMousePos();
 
-        c.x -= 100;
+       
+        float x_distance = d.x - a.x;
+        const float bezierMagnitude = 0.5f;
+
+        float x_increment = x_distance * bezierMagnitude;
+
+        b.x += x_increment;
+        c.x -= x_increment;
 
         auto drawList = ImGui::GetWindowDrawList();
-        drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), 1, 30);
-
+        drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), 1, 50);
 
         for (auto node : nodes) {
 
             node->Render();
         }
-
-        //RenderBox("Primera", ImVec2(200, 300), ImVec2(200, 300));
-        //RenderBox("Segunda", ImVec2(460, 300), ImVec2(200, 300));
-        //RenderBox("Tercera", ImVec2(100, 700), ImVec2(200, 300));
-        //RenderBox("Cuarta", ImVec2(120, 30), ImVec2(200, 300));
 
         ImGui::SetCursorPos(ImVec2(0, 700));
 

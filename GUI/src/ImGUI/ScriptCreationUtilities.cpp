@@ -20,13 +20,19 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 	auto position = ImVec2(x, y);
 	auto size = ImVec2(w, h);
 
-	ImGui::SetCursorPos(position);
+	ImGui::SetNextWindowPos(position);
 
-	if (ImGui::BeginChild(std::to_string(id).c_str(), size, true, ImGuiWindowFlags_None))
-	{
+	if (ImGui::Begin(std::to_string(id).c_str(), NULL, ImGuiWindowFlags_None)) {
 		render();
+
 	}
-	ImGui::EndChild();
+	ImGui::End();
+
+	//if (ImGui::BeginChild(std::to_string(id).c_str(), size, true, ImGuiWindowFlags_None))
+	//{
+	//	render();
+	//	ImGui::EndChild();
+	//}
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Hide()
@@ -71,14 +77,13 @@ void PEditor::ScriptCreationUtilities::ScriptNode::render()
 {
 }
 
-PEditor::ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator): creator(creator)
+PEditor::ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator) : creator(creator)
 {
 	mousex = mousey = 0;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 {
-
 	if (ImGui::IsMouseReleased(1)) {
 		auto mousePos = ImGui::GetMousePos();
 
@@ -121,7 +126,7 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 	}
 }
 
-PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method): method(method)
+PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
 {
 }
 
@@ -130,6 +135,6 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 	ImGui::Text((method.getName() + " - " + method.getComponent()).c_str());
 
 
-	
+
 
 }
