@@ -17,25 +17,36 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 {
 	if (hidden) return;
 
-	auto position = ImVec2(x, y);
+	int scrollx, scrolly;
+	ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
+
+	auto position = ImVec2(x + scrollx, y + scrolly);
 	auto size = ImVec2(w, h);
 
 	ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_None);
 
-	ImGui::SetWindowPos(position, ImGuiCond_Once);
+	if (ScriptCreation::ScrolledThisFrame())
+		ImGui::SetWindowPos(position, ImGuiCond_None);
+	else
+		ImGui::SetWindowPos(position, ImGuiCond_Once);
 	ImGui::SetWindowSize(size, ImGuiCond_Once);
+
+
+
 	render();
 	ManagerOutputNode();
-	UpdatePosition();
+
+
+	UpdatePosition(scrollx, scrolly);
 
 	ImGui::End();
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition()
+void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition(int scrollx, int scrolly)
 {
 	auto windowPos = ImGui::GetWindowPos();
-	x = windowPos.x;
-	y = windowPos.y;
+	x = windowPos.x - scrollx;
+	y = windowPos.y - scrolly;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()

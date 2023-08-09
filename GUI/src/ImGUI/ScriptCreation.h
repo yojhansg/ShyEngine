@@ -34,6 +34,13 @@ namespace PEditor {
     {
     private:
 
+        static ScriptCreation* instance;
+
+        int xpos, ypos;
+        int scrollx, scrolly;
+
+        bool scrolled;
+
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
         char nameBuffer[256];
@@ -51,6 +58,9 @@ namespace PEditor {
 
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
+
+        static void GetScrollPosition(int* x, int* y);
+        static bool ScrolledThisFrame();
 
         virtual void render();
         void setName(std::string name);

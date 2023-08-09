@@ -64,7 +64,7 @@ namespace PEditor {
             virtual std::string GetStringId();
             virtual void render();
 
-            void UpdatePosition();
+            void UpdatePosition(int scrollx, int scrolly);
             void ManagerOutputNode();
         };
 

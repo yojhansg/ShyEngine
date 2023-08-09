@@ -4,88 +4,129 @@
 #include "ImGUIManager.h"
 #include <iostream>
 
+PEditor::ScriptCreation* PEditor::ScriptCreation::instance = nullptr;
 
 PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 {
-    imGuiManager = ImGUIManager::getInstance();
+	imGuiManager = ImGUIManager::getInstance();
 
-    dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
+	dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
 
+	xpos = ypos = 0;
+	scrollx = scrolly = 0;
 
+	instance = this;
 }
 
 PEditor::ScriptCreation::~ScriptCreation()
 {
-    delete dropDownSelection;
+	instance = nullptr;
+	delete dropDownSelection;
 }
 
 void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
-    node->SetID(nodes.size());
-    nodes.push_back(node);
+	node->SetID(nodes.size());
+	nodes.push_back(node);
+}
+
+void PEditor::ScriptCreation::GetScrollPosition(int* x, int* y)
+{
+	if (x != nullptr)
+		*x = instance->xpos + instance->scrollx;
+
+	if (y != nullptr)
+		*y = instance->ypos + instance->scrolly;
+}
+
+bool PEditor::ScriptCreation::ScrolledThisFrame()
+{
+	return instance->scrolled;
 }
 
 float offset = 0;
 
 void PEditor::ScriptCreation::render()
 {
-    ImGui::OpenPopup("Create script");
-    ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
-    {
-        //ImGui::SetWindowFocus();
-
-
-        if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
-        {
-        }
-
-        ScriptCreationUtilities::Grid::SetOffset(offset += 0.2f, 0);
-        ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
-        ScriptCreationUtilities::Grid::Draw();
-
-        for (auto node : nodes) {
-
-            node->Render();
-        }
-
-        if (!ImGui::IsMouseDown(0))
-            ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;
+	ImGui::OpenPopup("Create script");
+	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
+	{
+		//ImGui::SetWindowFocus();
 
 
 
-        ImGui::SetCursorPos(ImVec2(0, 700));
+		if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
+		{
+		}
 
-        if (ImGui::Button("Save script"))
-        {
-            std::string filename = std::string(nameBuffer) + ".script";
-            std::string filePath = "scripts/" + filename;
+		auto mouseScroll = ImGui::GetMouseDragDelta(2);
 
-            std::ofstream outputFile(filePath);
-            if (outputFile.is_open())
-            {
-                outputFile.close();
-            }
+		scrollx = mouseScroll.x;
+		scrolly = mouseScroll.y;
 
-            ClearScript();
+		if (scrollx != 0 || scrolly != 0)
+			scrolled = true;
 
-            ImGUIManager::getInstance()->creatingScript(false);
-            ImGui::CloseCurrentPopup();
-        }
+		if (ImGui::IsMouseReleased(2)) {
 
-        ImGui::SameLine();
+			xpos += scrollx;
+			ypos += scrolly;
 
-        if (ImGui::Button("Close"))
-        {
-            ClearScript();
-            ImGUIManager::getInstance()->creatingScript(false);
-            ImGui::CloseCurrentPopup();
-        }
+			scrollx = scrolly = 0;
+			scrolled = true;
+		}
+		
+		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
+		ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
+		ScriptCreationUtilities::Grid::Draw();
 
-        dropDownSelection->Render();
-        ImGui::EndPopup();
-    }
+		for (auto node : nodes) {
+
+			node->Render();
+		}
+
+		if (!ImGui::IsMouseDown(0))
+			ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;
+
+
+
+		ImGui::SetCursorPos(ImVec2(0, 700));
+
+		if (ImGui::Button("Save script"))
+		{
+			std::string filename = std::string(nameBuffer) + ".script";
+			std::string filePath = "scripts/" + filename;
+
+			std::ofstream outputFile(filePath);
+			if (outputFile.is_open())
+			{
+				outputFile.close();
+			}
+
+			ClearScript();
+
+			ImGUIManager::getInstance()->creatingScript(false);
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Close"))
+		{
+			ClearScript();
+			ImGUIManager::getInstance()->creatingScript(false);
+			ImGui::CloseCurrentPopup();
+		}
+
+		dropDownSelection->Render();
+
+
+		scrolled = false;
+
+		ImGui::EndPopup();
+	}
 
 
 }
@@ -94,28 +135,28 @@ void PEditor::ScriptCreation::render()
 void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position, ImVec2 size)
 {
 
-    ImGui::SetCursorPos(position);
+	ImGui::SetCursorPos(position);
 
-    if (ImGui::BeginChild(name.c_str(), size, true, ImGuiWindowFlags_None))
-    {
+	if (ImGui::BeginChild(name.c_str(), size, true, ImGuiWindowFlags_None))
+	{
 
-        ImGui::Text("Child Window Content Here");
-    }
-    ImGui::EndChild();
+		ImGui::Text("Child Window Content Here");
+	}
+	ImGui::EndChild();
 
 }
 
 void PEditor::ScriptCreation::ClearScript()
 {
-    nameBuffer[0] = '\0';
+	nameBuffer[0] = '\0';
 
-    for (auto node : nodes) {
-        delete node;
-    }
-    nodes.clear();
+	for (auto node : nodes) {
+		delete node;
+	}
+	nodes.clear();
 }
 
 void PEditor::ScriptCreation::setName(std::string name)
 {
-    strcpy_s(nameBuffer, name.c_str());
+	strcpy_s(nameBuffer, name.c_str());
 }
