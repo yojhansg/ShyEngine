@@ -173,7 +173,7 @@ void ImGUIManager::update()
 {
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
             window->update();
     }
 
@@ -193,7 +193,7 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
             window->render();
     }
 

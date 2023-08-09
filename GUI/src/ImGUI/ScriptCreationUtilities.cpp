@@ -20,19 +20,13 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 	auto position = ImVec2(x, y);
 	auto size = ImVec2(w, h);
 
-	ImGui::SetNextWindowPos(position);
+	ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_None);
 
-	if (ImGui::Begin(std::to_string(id).c_str(), NULL, ImGuiWindowFlags_None)) {
-		render();
-
-	}
+	ImGui::SetWindowPos(position, ImGuiCond_Once);
+	ImGui::SetWindowSize(size, ImGuiCond_Once);
+	render();
+	
 	ImGui::End();
-
-	//if (ImGui::BeginChild(std::to_string(id).c_str(), size, true, ImGuiWindowFlags_None))
-	//{
-	//	render();
-	//	ImGui::EndChild();
-	//}
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Hide()
@@ -71,6 +65,11 @@ PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::
 	this->y = y1;
 
 	return this;
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptNode::GetStringId()
+{
+	return std::string();
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::render()
@@ -132,9 +131,87 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 {
-	ImGui::Text((method.getName() + " - " + method.getComponent()).c_str());
+	auto drawList = ImGui::GetForegroundDrawList();
+
+	auto windowSize = ImGui::GetWindowSize();
+	auto windowPosition = ImGui::GetWindowPos();
+
+	float nodeSize = 15;
+	auto nodeConnectionPosition = ImVec2(windowPosition.x + windowSize.x, windowPosition.y + windowSize.y * 0.5f);
+
+
+	for (auto& in : method.getInput()) {
+
+		ImGui::Text(in.getName().c_str());
+
+	}
+
+	/*ImGui::SetCursorPos(nodeConnectionPosition);
+	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize, nodeSize), true, ImGuiWindowFlags_None);
+
+	ImGui::Text("Output");
+
+
+	ImGui::EndChild();*/
+
+	if (ImGui::IsWindowCollapsed()) {
+
+		Bezier::Draw(windowPosition.x, windowPosition.y, 400, 700);
+	}
+	else {
+
+		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
+	}
+
+	drawList->AddCircleFilled(nodeConnectionPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptMethod::GetStringId()
+{
+	return method.getName() + " - " + method.getComponent();
+}
 
 
 
 
+int PEditor::ScriptCreationUtilities::Bezier::pointCount = 50;
+float PEditor::ScriptCreationUtilities::Bezier::thickness = 1;
+
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetThickness()
+{
+	thickness = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::SetThickness(float t)
+{
+	thickness = 3;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::SetPointCount(int c)
+{
+	pointCount = c;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetPointCount()
+{
+	pointCount = 50;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1)
+{
+	ImVec2 a = ImVec2(x, y);
+	ImVec2 d = ImVec2(x1, y1);
+
+	float x_distance = d.x - a.x;
+	const float bezierMagnitude = 0.5f;
+
+	float x_increment = x_distance * bezierMagnitude;
+
+	ImVec2 b = ImVec2(x + x_increment, y);
+	ImVec2 c = ImVec2(x1 - x_increment, y1);
+
+
+	auto drawList = ImGui::GetForegroundDrawList();
+	drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), thickness, pointCount);
 }

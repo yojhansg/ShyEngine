@@ -5,6 +5,7 @@
 #include <vector>
 #include "ComponentInfo.h"
 
+
 namespace PEditor {
 
     class ScriptCreation;
@@ -53,8 +54,7 @@ namespace PEditor {
             bool hidden;
 
 
-
-
+            virtual std::string GetStringId();
             virtual void render();
         };
 
@@ -79,6 +79,7 @@ namespace PEditor {
             ScriptMethod(::Components::Method&);
 
             void render() override;
+            std::string GetStringId() override;
         };
 
         class ScriptInputHandle {
@@ -99,6 +100,28 @@ namespace PEditor {
 
             ScriptDropdownSelection(ScriptCreation* creator);
             void Render();
+        };
+
+
+
+        class Bezier {
+
+
+        private:
+
+            static float thickness;
+            static int pointCount;
+
+        public:
+
+            static void ResetThickness();
+            static void SetThickness(float t);
+            static void SetPointCount(int c);
+            static void ResetPointCount();
+
+
+            static void Draw(int x, int y, int x1, int y1);
+
         };
 
     }

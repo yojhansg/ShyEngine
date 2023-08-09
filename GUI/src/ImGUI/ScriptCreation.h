@@ -43,13 +43,17 @@ namespace PEditor {
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
 
+        void ClearScript();
+
     public:
         ScriptCreation();
         ~ScriptCreation();
 
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
+
         virtual void render();
         void setName(std::string name);
+
     };
 };

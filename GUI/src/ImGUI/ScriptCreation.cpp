@@ -4,13 +4,13 @@
 #include "ImGUIManager.h"
 #include <iostream>
 
+
 PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 {
     imGuiManager = ImGUIManager::getInstance();
 
-
-
     dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
+
 
 }
 
@@ -38,22 +38,8 @@ void PEditor::ScriptCreation::render()
         {
         }
 
-        ImVec2 a = ImVec2(100, 100);
-        ImVec2 b = ImVec2(100, 100);
-        ImVec2 c = ImGui::GetMousePos();
-        ImVec2 d = ImGui::GetMousePos();
-
-       
-        float x_distance = d.x - a.x;
-        const float bezierMagnitude = 0.5f;
-
-        float x_increment = x_distance * bezierMagnitude;
-
-        b.x += x_increment;
-        c.x -= x_increment;
-
-        auto drawList = ImGui::GetWindowDrawList();
-        drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), 1, 50);
+        ImVec2 mouse = ImGui::GetMousePos();
+        ScriptCreationUtilities::Bezier::Draw(100, 100, mouse.x, mouse.y);
 
         for (auto node : nodes) {
 
@@ -73,6 +59,8 @@ void PEditor::ScriptCreation::render()
                 outputFile.close();
             }
 
+            ClearScript();
+
             ImGUIManager::getInstance()->creatingScript(false);
             ImGui::CloseCurrentPopup();
         }
@@ -81,6 +69,7 @@ void PEditor::ScriptCreation::render()
 
         if (ImGui::Button("Close"))
         {
+            ClearScript();
             ImGUIManager::getInstance()->creatingScript(false);
             ImGui::CloseCurrentPopup();
         }
@@ -105,6 +94,16 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
     }
     ImGui::EndChild();
 
+}
+
+void PEditor::ScriptCreation::ClearScript()
+{
+    nameBuffer[0] = '\0';
+
+    for (auto node : nodes) {
+        delete node;
+    }
+    nodes.clear();
 }
 
 void PEditor::ScriptCreation::setName(std::string name)

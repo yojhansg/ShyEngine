@@ -189,4 +189,9 @@ namespace Components {
 		return returnType;
 	}
 
+	const std::vector<Variable>& Method::getInput() const {
+
+		return input;
+	}
+
 }
