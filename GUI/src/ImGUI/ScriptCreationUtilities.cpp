@@ -23,23 +23,42 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 	auto position = ImVec2(x + scrollx, y + scrolly);
 	auto size = ImVec2(w, h);
 
-	ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_None);
+	auto windowSize = ImGui::GetWindowSize();
 
-	if (ScriptCreation::ScrolledThisFrame())
-		ImGui::SetWindowPos(position, ImGuiCond_None);
-	else
-		ImGui::SetWindowPos(position, ImGuiCond_Once);
-	ImGui::SetWindowSize(size, ImGuiCond_Once);
+	//Sombra
+
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+	//ImGui::Begin((GetStringId() + "_shadow").c_str(), NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+	//ImGui::SetWindowPos(ImVec2(position.x + 10, position.y + 10), ImGuiCond_None);
+	//ImGui::SetWindowSize(size, ImGuiCond_Once);
+
+	//ImGui::End();
+	//ImGui::PopStyleVar();
 
 
+	if (
+		position.x <= windowSize.x && position.y <= windowSize.y &&
+		position.x + size.x >= 0 && position.y + size.y >= 0
+		)
+	{
+		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
 
-	render();
-	ManagerOutputNode();
+		if (ScriptCreation::ScrolledThisFrame())
+			ImGui::SetWindowPos(position, ImGuiCond_None);
+		else
+			ImGui::SetWindowPos(position, ImGuiCond_Once);
+
+		ImGui::SetWindowSize(size, ImGuiCond_None);
+
+		render();
+		ManagerOutputNode();
 
 
-	UpdatePosition(scrollx, scrolly);
+		UpdatePosition(scrollx, scrolly);
 
-	ImGui::End();
+		ImGui::End();
+	}
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition(int scrollx, int scrolly)
@@ -115,7 +134,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 
 	if (ImGui::IsWindowCollapsed()) {
 
-		Bezier::Draw(windowPosition.x, windowPosition.y, 400, 700);
+		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
 	}
 	else {
 

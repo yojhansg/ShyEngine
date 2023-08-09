@@ -13,7 +13,6 @@ namespace PEditor {
     namespace ScriptCreationUtilities {
 
         /*
-
             TODO: Cosas que hacer
 
 
@@ -26,6 +25,8 @@ namespace PEditor {
             -Mostar lineas de union entre input y output
             -Dibujar lineas de continuacion de nodos
             -Hacer que se puedan tener varios nodos con el mismo nombre
+
+            -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
         */
 
         class ScriptMethod;
