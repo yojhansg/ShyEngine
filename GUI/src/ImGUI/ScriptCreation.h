@@ -19,12 +19,14 @@ namespace PEditor {
 
         -Desplegable con todos los metodos
         -Dividir los metodos por categorías
-        -Buscador de metodos
-        -Desplegables con el tipo de input
-        -Mostrar cuadro de input personalizado para cada tipo
-        -Mostar cuadros metodos con el nombre, input con nombre y output
-        -Mostar lineas de union entre input y output
-        -Dibujar lineas de continuacion de nodos
+        Buscador de metodos
+        Desplegables con el tipo de input
+        Mostrar cuadro de input personalizado para cada tipo
+        Mostar cuadros metodos con el nombre, input con nombre y output
+        Mostar lineas de union entre input y output
+        Dibujar lineas de continuacion de nodos
+        Scroll por la escena
+        Cambiar el foreground drawList por el drawlist de la ventana
     */
 
 
@@ -32,9 +34,7 @@ namespace PEditor {
     {
     private:
 
-
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
-
 
         char nameBuffer[256];
         ImGUIManager* imGuiManager;

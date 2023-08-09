@@ -46,6 +46,7 @@ namespace Components {
 	private:
 		AttributesType type;
 		std::string name;
+		std::string typeStr;
 
 	public:
 		Attribute();
@@ -53,6 +54,7 @@ namespace Components {
 
 		AttributesType getType() const;
 		std::string getName() const;
+		std::string getTypeStr() const;
 		std::string toJson();
 
 		AttributeValue value;

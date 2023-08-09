@@ -25,8 +25,94 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 	ImGui::SetWindowPos(position, ImGuiCond_Once);
 	ImGui::SetWindowSize(size, ImGuiCond_Once);
 	render();
-	
+	ManagerOutputNode();
+	UpdatePosition();
+
 	ImGui::End();
+}
+
+void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition()
+{
+	auto windowPos = ImGui::GetWindowPos();
+	x = windowPos.x;
+	y = windowPos.y;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
+{
+	auto drawList = ImGui::GetWindowDrawList();
+
+	auto windowSize = ImGui::GetWindowSize();
+	auto windowPosition = ImGui::GetWindowPos();
+
+	float nodeSize = ImGui::IsWindowCollapsed() ? 4 : 15;
+
+	auto outputOffset = ImGui::IsWindowCollapsed() ? 4 : 30;
+
+	auto outputNodeTLRelativePosition = ImVec2(windowSize.x - nodeSize - outputOffset, windowSize.y * 0.5f - nodeSize);
+
+	auto outputNodeTLPosition = ImVec2(outputNodeTLRelativePosition.x + windowPosition.x, outputNodeTLRelativePosition.y + windowPosition.y);
+	auto outputNodeCenterPosition = ImVec2(outputNodeTLPosition.x + nodeSize, outputNodeTLPosition.y + nodeSize);
+	auto outputNodeBRPosition = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y + nodeSize);
+
+	ImGui::SetCursorPos(outputNodeTLRelativePosition);
+	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+
+	auto a = ImVec2(outputNodeCenterPosition.x - nodeSize, outputNodeCenterPosition.y - nodeSize);
+	auto b = ImVec2(outputNodeCenterPosition.x - nodeSize, outputNodeCenterPosition.y + nodeSize);
+	auto c = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y);
+
+
+	bool isCurrentlySelected = currentlySelected == this;
+
+	if (ImGui::IsMouseHoveringRect(outputNodeTLPosition, outputNodeBRPosition, true))
+	{
+		if (ImGui::IsMouseClicked(0) || isCurrentlySelected)
+		{
+			currentlySelected = this;
+			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 0, 255), 30);
+			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+		}
+
+		else
+			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 255, 255), 30);
+			drawList->AddTriangle(a, b, c, IM_COL32(150, 100, 100, 255), 1);
+	}
+	else {
+
+
+		if (isCurrentlySelected)
+			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+		else
+			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
+			drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+
+	}
+
+	ImGui::EndChild();
+
+
+
+	if (isCurrentlySelected) {
+
+		auto mousePos = ImGui::GetMousePos();
+		Bezier::Draw(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y, mousePos.x, mousePos.y);
+	}
+
+
+
+	if (ImGui::IsWindowCollapsed()) {
+
+		Bezier::Draw(windowPosition.x, windowPosition.y, 400, 700);
+	}
+	else {
+
+		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
+	}
+
+
+
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Hide()
@@ -57,6 +143,18 @@ int PEditor::ScriptCreationUtilities::ScriptNode::GetY()
 int PEditor::ScriptCreationUtilities::ScriptNode::GetX()
 {
 	return x;
+}
+
+PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::currentlySelected = nullptr;
+
+void PEditor::ScriptCreationUtilities::ScriptNode::SetOutput(ScriptMethod* node)
+{
+	output = node;
+}
+
+PEditor::ScriptCreationUtilities::ScriptMethod* PEditor::ScriptCreationUtilities::ScriptNode::GetOutput()
+{
+	return output;
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetPosition(int x1, int y1)
@@ -125,62 +223,61 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 	}
 }
 
+
+
 PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
 {
 }
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 {
-	auto drawList = ImGui::GetForegroundDrawList();
 
-	auto windowSize = ImGui::GetWindowSize();
-	auto windowPosition = ImGui::GetWindowPos();
+	//Mover la logica del output a scriptNode
 
-	float nodeSize = ImGui::IsWindowCollapsed() ? 4 :15;
+	auto drawList = ImGui::GetWindowDrawList();
 
 
+	ImGui::Indent();
 	for (auto& in : method.getInput()) {
 
+		auto relpos = ImGui::GetCursorPos();
 		ImGui::Text(in.getName().c_str());
 
-	}
-
-	auto outputOffset = ImGui::IsWindowCollapsed() ? 4 : 30;
-
-	auto outputNodeTLRelativePosition = ImVec2(windowSize.x - nodeSize - outputOffset, windowSize.y * 0.5f - nodeSize);
-
-	auto outputNodeTLPosition = ImVec2(outputNodeTLRelativePosition.x + windowPosition.x, outputNodeTLRelativePosition.y + windowPosition.y);
-	auto outputNodeCenterPosition = ImVec2(outputNodeTLPosition.x + nodeSize, outputNodeTLPosition.y + nodeSize);
-	auto outputNodeBRPosition = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y + nodeSize);
-
-	ImGui::SetCursorPos(outputNodeTLRelativePosition);
-	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		auto min = ImGui::GetItemRectMin();
+		auto max = ImGui::GetItemRectMax();
 
 
-	if (ImGui::IsMouseHoveringRect(outputNodeTLPosition, outputNodeBRPosition, true))
-	{
+		if (ImGui::IsMouseHoveringRect(min, max)) {
 
-		if(ImGui::IsMouseDown(0))
-			drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 0, 255), 30);
+			ImGui::SetTooltip(in.getTypeStr().c_str());
+		}
 
+
+		ImGui::SetCursorPos(ImVec2(relpos.x - 5, relpos.y + 3));
+		ImGui::BeginChild((GetStringId() + in.getName()).c_str(), ImVec2(5, 10), true, ImGuiWindowFlags_None);
+
+
+
+
+		ImGui::EndChild();
+
+
+
+		auto a = ImVec2(min.x - 10, min.y + 3);
+		auto b = ImVec2(min.x - 10, min.y + 13);
+		auto c = ImVec2(min.x - 15, min.y + 8);
+
+
+
+		if (ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)) {
+
+			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+		}
 		else
-		drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 255, 255), 30);
-	}
-	else {
-		drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
 
-	}
+			drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
 
-
-	ImGui::EndChild();
-
-	if (ImGui::IsWindowCollapsed()) {
-
-		Bezier::Draw(windowPosition.x, windowPosition.y, 400, 700);
-	}
-	else {
-
-		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
+		ImGui::Spacing();
 	}
 
 }

@@ -61,6 +61,7 @@ namespace Components {
 
 	Attribute::Attribute(const std::string& name, const std::string& typeString)
 	{
+		typeStr = typeString;
 		this->name = name;
 
 		if (typeString == "int") {
@@ -99,6 +100,11 @@ namespace Components {
 
 	std::string Attribute::getName() const {
 		return name;
+	}
+
+	std::string Attribute::getTypeStr() const
+	{
+		return typeStr;
 	}
 
 	std::string Attribute::toJson()

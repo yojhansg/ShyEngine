@@ -36,6 +36,7 @@ void PEditor::ScriptCreation::render()
     {
         //ImGui::SetWindowFocus();
 
+
         if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
         {
         }
@@ -44,13 +45,15 @@ void PEditor::ScriptCreation::render()
         ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
         ScriptCreationUtilities::Grid::Draw();
 
-        ImVec2 mouse = ImGui::GetMousePos();
-        ScriptCreationUtilities::Bezier::Draw(100, 100, mouse.x, mouse.y);
-
         for (auto node : nodes) {
 
             node->Render();
         }
+
+        if (!ImGui::IsMouseDown(0))
+            ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;
+
+
 
         ImGui::SetCursorPos(ImVec2(0, 700));
 

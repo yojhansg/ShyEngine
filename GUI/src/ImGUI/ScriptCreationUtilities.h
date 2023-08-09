@@ -28,6 +28,8 @@ namespace PEditor {
             -Hacer que se puedan tener varios nodos con el mismo nombre
         */
 
+        class ScriptMethod;
+
         class ScriptNode {
 
         public:
@@ -37,7 +39,6 @@ namespace PEditor {
 
             void Render();
 
-
             void Hide();
             void Show();
             bool IsHidden();
@@ -46,6 +47,11 @@ namespace PEditor {
             int GetY();
             int GetX();
 
+            void SetOutput(ScriptMethod* node);
+            ScriptMethod* GetOutput();
+
+            static ScriptNode* currentlySelected;
+
         protected:
             int id;
 
@@ -53,10 +59,13 @@ namespace PEditor {
             float w, h;
 
             bool hidden;
-
+            ScriptMethod* output;
 
             virtual std::string GetStringId();
             virtual void render();
+
+            void UpdatePosition();
+            void ManagerOutputNode();
         };
 
         class ScriptInput : public ScriptNode {
@@ -74,20 +83,16 @@ namespace PEditor {
         class ScriptMethod : public ScriptNode {
 
             ::Components::Method& method;
-            std::vector<std::pair<int, int>> connections;
+            std::vector<ScriptNode*> input;
 
         public:
+
+
             ScriptMethod(::Components::Method&);
 
             void render() override;
             std::string GetStringId() override;
         };
-
-        class ScriptInputHandle {
-
-
-        };
-
 
 
         class ScriptDropdownSelection{
@@ -102,6 +107,8 @@ namespace PEditor {
             ScriptDropdownSelection(ScriptCreation* creator);
             void Render();
         };
+
+
 
 
 
