@@ -25,6 +25,7 @@ namespace PEditor {
             -Mostar cuadros metodos con el nombre, input con nombre y output
             -Mostar lineas de union entre input y output
             -Dibujar lineas de continuacion de nodos
+            -Hacer que se puedan tener varios nodos con el mismo nombre
         */
 
         class ScriptNode {
@@ -122,6 +123,35 @@ namespace PEditor {
 
             static void Draw(int x, int y, int x1, int y1);
 
+        };
+
+
+        class Grid {
+
+        private:
+            static int spacing;
+            static float thickness;
+            static int interval;
+            static float intervalScale;
+
+            static int x_offset;
+            static int y_offset;
+
+            static int r, g, b, a;
+
+        public:
+
+            static void SetSpacing(int spacing);
+            static void ResetSpacing();
+            static void SetOffset(int x, int y);
+            static void ResetOffset();
+            static void SetInterval(int interval);
+            static void ResetInterval();
+
+            static void SetColor(int r, int g, int b, int a);
+            static void ResetColor();
+
+            static void Draw();
         };
 
     }

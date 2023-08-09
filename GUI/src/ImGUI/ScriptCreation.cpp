@@ -25,6 +25,8 @@ void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
     nodes.push_back(node);
 }
 
+float offset = 0;
+
 void PEditor::ScriptCreation::render()
 {
     ImGui::OpenPopup("Create script");
@@ -37,6 +39,10 @@ void PEditor::ScriptCreation::render()
         if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
         {
         }
+
+        ScriptCreationUtilities::Grid::SetOffset(offset += 0.2f, 0);
+        ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
+        ScriptCreationUtilities::Grid::Draw();
 
         ImVec2 mouse = ImGui::GetMousePos();
         ScriptCreationUtilities::Bezier::Draw(100, 100, mouse.x, mouse.y);

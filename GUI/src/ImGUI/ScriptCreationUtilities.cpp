@@ -136,8 +136,7 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 	auto windowSize = ImGui::GetWindowSize();
 	auto windowPosition = ImGui::GetWindowPos();
 
-	float nodeSize = 15;
-	auto nodeConnectionPosition = ImVec2(windowPosition.x + windowSize.x, windowPosition.y + windowSize.y * 0.5f);
+	float nodeSize = ImGui::IsWindowCollapsed() ? 4 :15;
 
 
 	for (auto& in : method.getInput()) {
@@ -146,13 +145,34 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 
 	}
 
-	/*ImGui::SetCursorPos(nodeConnectionPosition);
-	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize, nodeSize), true, ImGuiWindowFlags_None);
+	auto outputOffset = ImGui::IsWindowCollapsed() ? 4 : 30;
 
-	ImGui::Text("Output");
+	auto outputNodeTLRelativePosition = ImVec2(windowSize.x - nodeSize - outputOffset, windowSize.y * 0.5f - nodeSize);
+
+	auto outputNodeTLPosition = ImVec2(outputNodeTLRelativePosition.x + windowPosition.x, outputNodeTLRelativePosition.y + windowPosition.y);
+	auto outputNodeCenterPosition = ImVec2(outputNodeTLPosition.x + nodeSize, outputNodeTLPosition.y + nodeSize);
+	auto outputNodeBRPosition = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y + nodeSize);
+
+	ImGui::SetCursorPos(outputNodeTLRelativePosition);
+	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 
-	ImGui::EndChild();*/
+	if (ImGui::IsMouseHoveringRect(outputNodeTLPosition, outputNodeBRPosition, true))
+	{
+
+		if(ImGui::IsMouseDown(0))
+			drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 0, 255), 30);
+
+		else
+		drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 255, 255), 30);
+	}
+	else {
+		drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
+
+	}
+
+
+	ImGui::EndChild();
 
 	if (ImGui::IsWindowCollapsed()) {
 
@@ -163,12 +183,11 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
 	}
 
-	drawList->AddCircleFilled(nodeConnectionPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptMethod::GetStringId()
 {
-	return method.getName() + " - " + method.getComponent();
+	return method.getName() + " - " + method.getComponent() + " (" + std::to_string(id) + ")";
 }
 
 
@@ -214,4 +233,97 @@ void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1
 
 	auto drawList = ImGui::GetForegroundDrawList();
 	drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), thickness, pointCount);
+}
+
+
+int PEditor::ScriptCreationUtilities::Grid::interval = 5;
+float PEditor::ScriptCreationUtilities::Grid::thickness = 1;
+float PEditor::ScriptCreationUtilities::Grid::intervalScale = 4;
+int PEditor::ScriptCreationUtilities::Grid::spacing = 50;
+int PEditor::ScriptCreationUtilities::Grid::x_offset = 0;
+int PEditor::ScriptCreationUtilities::Grid::y_offset = 0;
+
+int PEditor::ScriptCreationUtilities::Grid::r = 255;
+int PEditor::ScriptCreationUtilities::Grid::g = 255;
+int PEditor::ScriptCreationUtilities::Grid::b = 255;
+int PEditor::ScriptCreationUtilities::Grid::a = 255;
+
+
+
+void PEditor::ScriptCreationUtilities::Grid::SetSpacing(int spacing)
+{
+	Grid::spacing = spacing;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetSpacing()
+{
+	Grid::spacing = 50;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetOffset(int x, int y)
+{
+	x_offset = x;
+	y_offset = y;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetOffset()
+{
+	x_offset = y_offset = 0;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetInterval(int interval)
+{
+	Grid::interval = interval;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetInterval()
+{
+	Grid::interval = 5;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetColor(int r, int g, int b, int a)
+{
+	Grid::r = r;
+	Grid::g = g;
+	Grid::b = b;
+	Grid::a = a;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetColor()
+{
+	r = g = b = a = 255;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::Draw()
+{
+	auto drawList = ImGui::GetWindowDrawList();
+	auto windowSize = ImGui::GetWindowSize();
+
+	int interval_x = (-x_offset / spacing) % interval;
+	int interval_y = (-y_offset / spacing) % interval;
+
+	float x_off = x_offset % spacing;
+	float y_off = y_offset % spacing;
+
+	for (int row = y_off; row < windowSize.y; row += spacing) {
+
+		float t = interval_y == 0 ? thickness * intervalScale : thickness;
+
+		drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), IM_COL32(r, g, b, a), t);
+
+		interval_y = (interval_y + 1) % interval;
+	}
+
+	for (int col = x_off; col < windowSize.x; col += spacing) {
+
+		float t = interval_x == 0 ? thickness * intervalScale : thickness;
+
+		drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), IM_COL32(r, g, b, a), t);
+
+		interval_x = (interval_x + 1) % interval;
+	}
+
+
+
+
 }
