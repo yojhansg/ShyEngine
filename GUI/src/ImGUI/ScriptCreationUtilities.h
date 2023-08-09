@@ -13,18 +13,17 @@ namespace PEditor {
     namespace ScriptCreationUtilities {
 
         /*
-            TODO: Cosas que hacer
+            TODO:
 
-
-            -Desplegable con todos los metodos
-            -Dividir los metodos por categorías
+            Desplegable con todos los metodos
+            Dividir los metodos por categorías
             -Buscador de metodos
             -Desplegables con el tipo de input
             -Mostrar cuadro de input personalizado para cada tipo
-            -Mostar cuadros metodos con el nombre, input con nombre y output
-            -Mostar lineas de union entre input y output
-            -Dibujar lineas de continuacion de nodos
-            -Hacer que se puedan tener varios nodos con el mismo nombre
+            Mostar cuadros metodos con el nombre, input con nombre y output
+            Mostar lineas de union entre input y output
+            Dibujar lineas de continuacion de nodos
+            Hacer que se puedan tener varios nodos con el mismo nombre
 
             -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
         */
@@ -35,23 +34,19 @@ namespace PEditor {
 
         public:
 
+            ScriptNode();
+
             ScriptNode* SetID(int id);
             ScriptNode* SetPosition(int x, int y);
 
             void Render();
 
-            void Hide();
-            void Show();
-            bool IsHidden();
-
             int GetId();
             int GetY();
             int GetX();
 
-            void SetOutput(ScriptMethod* node);
-            ScriptMethod* GetOutput();
-
             static ScriptNode* currentlySelected;
+            void GetOutputNodePosition(float* x, float* y);
 
         protected:
             int id;
@@ -59,8 +54,7 @@ namespace PEditor {
             float x, y;
             float w, h;
 
-            bool hidden;
-            ScriptMethod* output;
+            float nodeSize;
 
             virtual std::string GetStringId();
             virtual void render();
@@ -73,11 +67,15 @@ namespace PEditor {
 
             //Definir el tipo de input, representar y guardar el valor
         public:
+            ScriptInput();
 
             ::Components::AttributesType type;
-            //TODO: pillar el enum definido por Ivan en este caso
+            ::Components::AttributeValue value;
 
         protected:
+
+            bool reflect;
+
             void render() override;
         };
 
@@ -96,6 +94,18 @@ namespace PEditor {
         };
 
 
+        class ScriptMenuBar {
+
+        private:
+
+            //Cambiar el nombre del script
+            //Boton para guardar
+            //Boton para cerrar
+            //Desplegable con los distintos tipos de valores constantes
+            //Barra de busqueda de componentes
+
+        };
+
         class ScriptDropdownSelection{
 
         private:
@@ -108,8 +118,6 @@ namespace PEditor {
             ScriptDropdownSelection(ScriptCreation* creator);
             void Render();
         };
-
-
 
 
 

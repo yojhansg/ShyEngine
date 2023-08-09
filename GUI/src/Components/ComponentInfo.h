@@ -9,7 +9,7 @@ namespace Components {
 
 	using cstring = std::string const&;
 
-	enum AttributesType {
+	enum class AttributesType {
 		NONE,
 		INT,
 		FLOAT,

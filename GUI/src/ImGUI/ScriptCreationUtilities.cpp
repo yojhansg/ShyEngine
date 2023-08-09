@@ -4,6 +4,13 @@
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
 
+PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
+{
+	id = x = y = w = h = 0;
+
+	nodeSize = 15;
+}
+
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetID(int id)
 {
 	this->id = id;
@@ -15,8 +22,6 @@ PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::
 
 void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 {
-	if (hidden) return;
-
 	int scrollx, scrolly;
 	ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
 
@@ -75,48 +80,37 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 	auto windowSize = ImGui::GetWindowSize();
 	auto windowPosition = ImGui::GetWindowPos();
 
-	float nodeSize = ImGui::IsWindowCollapsed() ? 4 : 15;
+	auto outputNodePosition = ImVec2(0, 0);
+	GetOutputNodePosition(&outputNodePosition.x, &outputNodePosition.y);
 
-	auto outputOffset = ImGui::IsWindowCollapsed() ? 4 : 30;
-
-	auto outputNodeTLRelativePosition = ImVec2(windowSize.x - nodeSize - outputOffset, windowSize.y * 0.5f - nodeSize);
-
-	auto outputNodeTLPosition = ImVec2(outputNodeTLRelativePosition.x + windowPosition.x, outputNodeTLRelativePosition.y + windowPosition.y);
-	auto outputNodeCenterPosition = ImVec2(outputNodeTLPosition.x + nodeSize, outputNodeTLPosition.y + nodeSize);
-	auto outputNodeBRPosition = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y + nodeSize);
-
-	ImGui::SetCursorPos(outputNodeTLRelativePosition);
-	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	auto outputNodePositionTop = ImVec2(outputNodePosition.x - nodeSize, outputNodePosition.y - nodeSize);
+	auto outputNodePositionBottom = ImVec2(outputNodePosition.x - nodeSize, outputNodePosition.y + nodeSize);
 
 
-	auto a = ImVec2(outputNodeCenterPosition.x - nodeSize, outputNodeCenterPosition.y - nodeSize);
-	auto b = ImVec2(outputNodeCenterPosition.x - nodeSize, outputNodeCenterPosition.y + nodeSize);
-	auto c = ImVec2(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y);
+	ImGui::SetCursorPos(ImVec2(outputNodePositionTop.x - windowPosition.x, outputNodePositionTop.y - windowPosition.y));
+	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(nodeSize, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 
 	bool isCurrentlySelected = currentlySelected == this;
 
-	if (ImGui::IsMouseHoveringRect(outputNodeTLPosition, outputNodeBRPosition, true))
+	if (ImGui::IsMouseHoveringRect(outputNodePositionTop, ImVec2(outputNodePosition.x, outputNodePositionBottom.y), true))
 	{
 		if (ImGui::IsMouseClicked(0) || isCurrentlySelected)
 		{
 			currentlySelected = this;
-			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 0, 255), 30);
-			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255));
 		}
 
 		else
-			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 0, 255, 255), 30);
-			drawList->AddTriangle(a, b, c, IM_COL32(150, 100, 100, 255), 1);
+			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(150, 100, 100, 255), 1);
 	}
 	else {
 
 
 		if (isCurrentlySelected)
-			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255));
 		else
-			//drawList->AddCircleFilled(outputNodeCenterPosition, nodeSize, IM_COL32(255, 255, 255, 255), 30);
-			drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255), 1);
 
 	}
 
@@ -127,37 +121,36 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 	if (isCurrentlySelected) {
 
 		auto mousePos = ImGui::GetMousePos();
-		Bezier::Draw(outputNodeCenterPosition.x + nodeSize, outputNodeCenterPosition.y, mousePos.x, mousePos.y);
+		Bezier::Draw(outputNodePosition.x, outputNodePosition.y, mousePos.x, mousePos.y);
 	}
 
 
 
-	if (ImGui::IsWindowCollapsed()) {
+	//if (ImGui::IsWindowCollapsed()) {
 
-		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
-	}
-	else {
+	//	Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
+	//}
+	//else {
 
-		Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
-	}
+	//	Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
+	//}
 
 
 
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::Hide()
+void PEditor::ScriptCreationUtilities::ScriptNode::GetOutputNodePosition(float* x, float* y)
 {
-	hidden = true;
-}
+	const auto outputOffset = 15;
 
-void PEditor::ScriptCreationUtilities::ScriptNode::Show()
-{
-	hidden = false;
-}
+	int scroll_x, scroll_y;
+	ScriptCreation::GetScrollPosition(&scroll_x, &scroll_y);
 
-bool PEditor::ScriptCreationUtilities::ScriptNode::IsHidden()
-{
-	return hidden;
+	if (x != nullptr)
+		*x = scroll_x + w - outputOffset + this->x;
+	if (y != nullptr)
+		*y = scroll_y + h * 0.5f + this->y;
+
 }
 
 int PEditor::ScriptCreationUtilities::ScriptNode::GetId()
@@ -176,16 +169,6 @@ int PEditor::ScriptCreationUtilities::ScriptNode::GetX()
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::currentlySelected = nullptr;
-
-void PEditor::ScriptCreationUtilities::ScriptNode::SetOutput(ScriptMethod* node)
-{
-	output = node;
-}
-
-PEditor::ScriptCreationUtilities::ScriptMethod* PEditor::ScriptCreationUtilities::ScriptNode::GetOutput()
-{
-	return output;
-}
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetPosition(int x1, int y1)
 {
@@ -257,6 +240,7 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 
 PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
 {
+	input = std::vector<ScriptNode*>(method.getInput().size());
 }
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::render()
@@ -268,6 +252,8 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 
 
 	ImGui::Indent();
+
+	int idx = 0;
 	for (auto& in : method.getInput()) {
 
 		auto relpos = ImGui::GetCursorPos();
@@ -283,14 +269,11 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 		}
 
 
-		ImGui::SetCursorPos(ImVec2(relpos.x - 5, relpos.y + 3));
+		ImGui::SetCursorPos(ImVec2(relpos.x - 15, relpos.y + 3));
 		ImGui::BeginChild((GetStringId() + in.getName()).c_str(), ImVec2(5, 10), true, ImGuiWindowFlags_None);
 
 
-
-
 		ImGui::EndChild();
-
 
 
 		auto a = ImVec2(min.x - 10, min.y + 3);
@@ -298,8 +281,20 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 		auto c = ImVec2(min.x - 15, min.y + 8);
 
 
+		if (ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) && ImGui::IsMouseDoubleClicked(0)) {
 
-		if (ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)) {
+			input[idx] = nullptr;
+		}
+
+		if (ScriptNode::currentlySelected != nullptr && ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)) {
+
+
+			if (ImGui::IsMouseReleased(0)) {
+
+				input[idx] = ScriptNode::currentlySelected;
+				ScriptNode::currentlySelected = nullptr;
+			}
+
 
 			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
 		}
@@ -307,7 +302,17 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 
 			drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
 
+
+
+		if (input[idx] != nullptr) {
+
+			float output_x, output_y;
+			input[idx]->GetOutputNodePosition(&output_x, &output_y);
+			Bezier::Draw(c.x, c.y, output_x, output_y);
+		}
+
 		ImGui::Spacing();
+		idx++;
 	}
 
 }
@@ -451,6 +456,67 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 	}
 
 
+}
 
+PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput()
+{
+	reflect = false;
+
+	type = ::Components::AttributesType::NONE;
+	value = ::Components::AttributeValue();
+
+	value.value.valueInt = 0;
+}
+
+
+void PEditor::ScriptCreationUtilities::ScriptInput::render()
+{
+
+	switch (type) {
+
+	case ::Components::AttributesType::NONE:
+		break;
+	case ::Components::AttributesType::INT:
+	case ::Components::AttributesType::FLOAT:
+		ImGui::InputFloat("Value", &value.value.valueFloat);
+		break;
+	case ::Components::AttributesType::VECTOR2:
+	{
+
+		float values[2]{};
+		values[0] = value.value.valueVector2.x;
+		values[1] = value.value.valueVector2.y;
+		ImGui::InputFloat2("Value", values);
+
+		value.value.valueVector2.x = values[0];
+		value.value.valueVector2.y = values[1];
+		break;
+	}
+	case ::Components::AttributesType::BOOL:
+
+		ImGui::Checkbox("Value", &value.value.valueBool);
+		break;
+	case ::Components::AttributesType::COLOR:
+
+	{
+		float values[3]{};
+		values[0] = value.value.valueColor.r;
+		values[1] = value.value.valueColor.g;
+		values[2] = value.value.valueColor.b;
+		ImGui::ColorEdit3("Value", values);
+		break;
+	}
+	case ::Components::AttributesType::STRING:
+
+	{
+		char values[64]{};
+		std::memcpy(values, value.valueString.c_str(), 64);
+
+		ImGui::InputText("Value", values, 64);
+
+		value.valueString = values;
+		break;
+	}
+	}
 
 }
