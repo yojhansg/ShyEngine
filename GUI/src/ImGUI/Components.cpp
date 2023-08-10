@@ -7,7 +7,7 @@
 #include "ComponentManager.h"
 
 
-PEditor::Components::Components() : Window("Components", NoResize | NoCollapse | NoMove)
+PEditor::ComponentWindow::ComponentWindow() : Window("Components", NoResize | NoCollapse | NoMove)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
@@ -25,7 +25,7 @@ PEditor::Components::Components() : Window("Components", NoResize | NoCollapse |
 
 }
 
-void PEditor::Components::render()
+void PEditor::ComponentWindow::render()
 {
 
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();

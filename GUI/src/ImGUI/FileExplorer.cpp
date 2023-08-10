@@ -132,7 +132,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                     size_t dotPos = filename.find_last_of(".");
                     std::string filenameWithoutExtension = filename.substr(0, dotPos);
 
-                    ImGUIManager::getInstance()->getScriptCreation()->setName(filenameWithoutExtension);
+                    ImGUIManager::getInstance()->getScriptCreation()->SetName(filenameWithoutExtension);
                     ImGUIManager::getInstance()->creatingScript(true);
                 }
             }

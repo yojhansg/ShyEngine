@@ -65,7 +65,7 @@ void ImGUIManager::initWindows()
     addWindow(fileExplorer);
 
     //COMPONENTS
-    components = new PEditor::Components();
+    components = new PEditor::ComponentWindow();
     addWindow(components);
 
     scriptCreation = new PEditor::ScriptCreation();
@@ -173,7 +173,7 @@ void ImGUIManager::update()
 {
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
             window->update();
     }
 
@@ -193,7 +193,7 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || window == menuBar || (isCreatingScript && window == scriptCreation))
+        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
             window->render();
     }
 
@@ -304,7 +304,7 @@ PEditor::FileExplorer* ImGUIManager::getFileExplorer()
     return fileExplorer;
 }
 
-PEditor::Components* ImGUIManager::getComponents()
+PEditor::ComponentWindow* ImGUIManager::getComponents()
 {
     return components;
 }

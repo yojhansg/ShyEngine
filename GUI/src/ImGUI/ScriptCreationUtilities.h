@@ -5,6 +5,7 @@
 #include <vector>
 #include "ComponentInfo.h"
 
+
 namespace PEditor {
 
     class ScriptCreation;
@@ -12,37 +13,47 @@ namespace PEditor {
     namespace ScriptCreationUtilities {
 
         /*
+            TODO:
 
-            TODO: Cosas que hacer
-
-
-            -Desplegable con todos los metodos
-            -Dividir los metodos por categorías
+            Desplegable con todos los metodos
+            Dividir los metodos por categorías
             -Buscador de metodos
             -Desplegables con el tipo de input
             -Mostrar cuadro de input personalizado para cada tipo
-            -Mostar cuadros metodos con el nombre, input con nombre y output
-            -Mostar lineas de union entre input y output
-            -Dibujar lineas de continuacion de nodos
+            Mostar cuadros metodos con el nombre, input con nombre y output
+            Mostar lineas de union entre input y output
+            Dibujar lineas de continuacion de nodos
+            Hacer que se puedan tener varios nodos con el mismo nombre
+            -Colorar el triangulo de salida cuando tenga al menos un input
+            -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
+
+
+            -Condicionales
+            -Bucles
         */
+
+        class ScriptMethod;
 
         class ScriptNode {
 
         public:
+
+            ScriptNode();
 
             ScriptNode* SetID(int id);
             ScriptNode* SetPosition(int x, int y);
 
             void Render();
 
-
-            void Hide();
-            void Show();
-            bool IsHidden();
-
             int GetId();
             int GetY();
             int GetX();
+
+            int GetW();
+            int GetH();
+
+            static ScriptNode* currentlySelected;
+            void GetOutputNodePosition(float* x, float* y);
 
         protected:
             int id;
@@ -50,43 +61,72 @@ namespace PEditor {
             float x, y;
             float w, h;
 
-            bool hidden;
+            float nodeSize;
 
-
-
-
+            virtual std::string GetStringId();
             virtual void render();
+
+            void UpdatePosition(int scrollx, int scrolly);
+            void ManagerOutputNode();
         };
 
         class ScriptInput : public ScriptNode {
 
             //Definir el tipo de input, representar y guardar el valor
         public:
+            ScriptInput(::Components::AttributesType type);
 
             ::Components::AttributesType type;
-            //TODO: pillar el enum definido por Ivan en este caso
+            ::Components::AttributeValue value;
 
         protected:
+
+            bool reflect;
+
             void render() override;
         };
 
         class ScriptMethod : public ScriptNode {
 
             ::Components::Method& method;
-            std::vector<std::pair<int, int>> connections;
+            std::vector<ScriptNode*> input;
 
         public:
+
+
             ScriptMethod(::Components::Method&);
 
             void render() override;
-        };
-
-        class ScriptInputHandle {
-
-
+            std::string GetStringId() override;
         };
 
 
+        class ScriptMenuBar {
+
+        private:
+
+            //Cambiar el nombre del script
+            //Boton para guardar
+            //Boton para cerrar
+            //Desplegable con los distintos tipos de valores constantes
+            //Barra de busqueda de componentes
+            char nameBuffer[256];
+
+            bool showPopup;
+
+            ScriptCreation* creator;
+
+            void Close();
+            void Save();
+
+        public:
+
+            ScriptMenuBar(ScriptCreation* creator);
+
+            void SetName(const std::string& name);
+            void Render();
+
+        };
 
         class ScriptDropdownSelection{
 
@@ -99,6 +139,57 @@ namespace PEditor {
 
             ScriptDropdownSelection(ScriptCreation* creator);
             void Render();
+        };
+
+
+
+        class Bezier {
+
+
+        private:
+
+            static float thickness;
+            static int pointCount;
+
+        public:
+
+            static void ResetThickness();
+            static void SetThickness(float t);
+            static void SetPointCount(int c);
+            static void ResetPointCount();
+
+
+            static void Draw(int x, int y, int x1, int y1);
+
+        };
+
+
+        class Grid {
+
+        private:
+            static int spacing;
+            static float thickness;
+            static int interval;
+            static float intervalScale;
+
+            static int x_offset;
+            static int y_offset;
+
+            static int r, g, b, a;
+
+        public:
+
+            static void SetSpacing(int spacing);
+            static void ResetSpacing();
+            static void SetOffset(int x, int y);
+            static void ResetOffset();
+            static void SetInterval(int interval);
+            static void ResetInterval();
+
+            static void SetColor(int r, int g, int b, int a);
+            static void ResetColor();
+
+            static void Draw();
         };
 
     }

@@ -56,38 +56,40 @@ namespace Components {
 	Attribute::Attribute()
 	{
 		name = "";
-		type = NONE;
+		type = AttributesType::NONE;
 	}
 
 	Attribute::Attribute(const std::string& name, const std::string& typeString)
 	{
+		typeStr = typeString;
 		this->name = name;
 
 		if (typeString == "int") {
 			value.value.valueInt = 0;
-			type = INT;
+			type = AttributesType::INT;
 		}
 		else if (typeString == "float") {
 			value.value.valueFloat = 0.0f;
-			type = FLOAT;
+			type = AttributesType::FLOAT;
 		}
 		else if (typeString == "Utilities::Vector2D") {
 			value.value.valueVector2 = { 0.0f, 0.0f };
-			type = VECTOR2;
+			type = AttributesType::VECTOR2;
 		}
 		else if (typeString == "std::string") {
 			value.valueString = "";
-			type = STRING;
+			type = AttributesType::STRING;
 		}
 		else if (typeString == "bool") {
 			value.value.valueBool = false;
-			type = BOOL;
+			type = AttributesType::BOOL;
 		}
-		/*else if (typeString == "int") {
-			type = COLOR;
-		}*/
+		else if (typeString == "Utilities::Color") {
+			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+			type = AttributesType::COLOR;
+		}
 		else {
-			type = NONE;
+			type = AttributesType::NONE;
 		}
 	}
 
@@ -100,34 +102,44 @@ namespace Components {
 		return name;
 	}
 
+	std::string Attribute::getTypeStr() const
+	{
+		return typeStr;
+	}
+
 	std::string Attribute::toJson()
 	{
 		nlohmann::ordered_json j;
 		nlohmann::ordered_json vectorJson;
+		nlohmann::ordered_json colorJson;
 
 		switch (type)
 		{
-		case INT:
+		case AttributesType::INT:
 			j[name] = value.value.valueInt;
 			break;
-		case FLOAT:
+		case AttributesType::FLOAT:
 			j[name] = value.value.valueFloat;
 			break;
-		case VECTOR2:
+		case AttributesType::VECTOR2:
 			vectorJson.push_back(value.value.valueVector2.x);
 			vectorJson.push_back(value.value.valueVector2.y);
 
 			j[name] = vectorJson;
 			break;
-		case STRING:
+		case AttributesType::STRING:
 			j[name] = value.valueString;
 			break;
-		case BOOL:
+		case AttributesType::BOOL:
 			j[name] = value.value.valueBool;
 			break;
-		/*case COLOR:
-		* j[name] = value.valueColor;
-			break;*/
+		case AttributesType::COLOR:
+			colorJson.push_back(value.value.valueColor.r);
+			colorJson.push_back(value.value.valueColor.g);
+			colorJson.push_back(value.value.valueColor.b);
+
+			j[name] = colorJson;
+			break;
 		default:
 			break;
 		}
@@ -181,6 +193,11 @@ namespace Components {
 	Variable Method::getReturn() const
 	{
 		return returnType;
+	}
+
+	const std::vector<Variable>& Method::getInput() const {
+
+		return input;
 	}
 
 }

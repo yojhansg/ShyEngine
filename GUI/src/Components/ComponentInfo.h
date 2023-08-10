@@ -9,20 +9,19 @@ namespace Components {
 
 	using cstring = std::string const&;
 
-	enum AttributesType {
+	//TODO: implementar las cosas para leer chars
+	enum class AttributesType {
 		NONE,
 		INT,
 		FLOAT,
 		VECTOR2,
 		STRING,
 		BOOL,
-		//COLOR,
+		COLOR,
 	};
 
 
 	struct AttributeValue {
-
-		std::string toJson();
 
 		union value
 		{
@@ -33,7 +32,11 @@ namespace Components {
 				float y;
 			} valueVector2;
 			bool valueBool;
-			//color
+			struct {
+				float r;
+				float g;
+				float b;
+			} valueColor;
 		} value;
 
 		std::string valueString;
@@ -44,6 +47,7 @@ namespace Components {
 	private:
 		AttributesType type;
 		std::string name;
+		std::string typeStr;
 
 	public:
 		Attribute();
@@ -51,6 +55,7 @@ namespace Components {
 
 		AttributesType getType() const;
 		std::string getName() const;
+		std::string getTypeStr() const;
 		std::string toJson();
 
 		AttributeValue value;

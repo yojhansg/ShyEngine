@@ -25,23 +25,24 @@ void PEditor::GameObject::drawComponentsInEditor()
 
 				switch (attr->getType())
 				{
-				case ::Components::INT:
+				case ::Components::AttributesType::INT:
 					drawInt(attributeName + it->first, attr);
 					break;
-				case ::Components::FLOAT:
+				case ::Components::AttributesType::FLOAT:
 					drawFloat(attributeName + it->first, attr);
 					break;
-				case ::Components::VECTOR2:
+				case ::Components::AttributesType::VECTOR2:
 					drawVector2(attributeName + it->first, attr);
 					break;
-				case ::Components::STRING:
+				case ::Components::AttributesType::STRING:
 					drawString(attributeName + it->first, attr);
 					break;
-				case ::Components::BOOL:
+				case ::Components::AttributesType::BOOL:
 					drawBool(attributeName+ it->first, attr);
 					break;
-					/*	case COLOR:
-							break;*/
+				case ::Components::AttributesType::COLOR:
+					drawColor(attributeName + it->first, attr);
+					break;
 				default:
 					break;
 				}
@@ -96,6 +97,11 @@ void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribu
 void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
 {
 	ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
+}
+
+void PEditor::GameObject::drawColor(std::string attrName, ::Components::Attribute* attr)
+{
+	ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
 }
 
 PEditor::GameObject::GameObject(std::string& path)

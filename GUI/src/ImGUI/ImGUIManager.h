@@ -12,7 +12,7 @@ namespace PEditor {
 	class MenuBar;
 	class Hierarchy;
 	class FileExplorer;
-	class Components;
+	class ComponentWindow;
 };
 
 namespace PEditor {
@@ -22,7 +22,7 @@ namespace PEditor {
 	class MenuBar;
 	class Hierarchy;
 	class FileExplorer;
-	class Components;
+	class ComponentWindow;
 	class ScriptCreation;
 
 }
@@ -57,7 +57,7 @@ private:
 	PEditor::MenuBar* menuBar = nullptr;
 	PEditor::Hierarchy* hierarchy = nullptr;
 	PEditor::FileExplorer* fileExplorer = nullptr;
-	PEditor::Components* components = nullptr;
+	PEditor::ComponentWindow* components = nullptr;
 	PEditor::ScriptCreation* scriptCreation = nullptr;
 
 
@@ -91,7 +91,7 @@ public:
 	PEditor::MenuBar* getMenuBar();
 	PEditor::Hierarchy* getHierarchy();
 	PEditor::FileExplorer* getFileExplorer();
-	PEditor::Components* getComponents();
+	PEditor::ComponentWindow* getComponents();
 	PEditor::ScriptCreation* getScriptCreation();
 
 	~ImGUIManager();
