@@ -16,6 +16,7 @@ namespace ECS {
 	class ContactListener;
 	class RenderManager;
 	class OverlayManager;
+	class PrefabManager;
 	class PhysicBody;
 	class Script;
 
@@ -29,6 +30,7 @@ namespace ECS {
 		friend Component;
 		friend ContactListener;
 		friend RenderManager;
+		friend PrefabManager;
 		friend OverlayManager;
 		friend PhysicBody;
 
@@ -117,11 +119,9 @@ namespace ECS {
 		}
 
 		// Returns a vector with all the entity components
-		template <typename T>
-		requires isComponent<T>
-		std::list<T*> getComponents() {
+		std::list<Component*> getComponents() {
 
-			std::list<T*> vec = components;
+			std::list<Component*> vec = components;
 
 			return vec;
 		}

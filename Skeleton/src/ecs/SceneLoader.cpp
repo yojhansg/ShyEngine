@@ -1,27 +1,28 @@
 #include "SceneLoader.h"
 
-#include <fstream>
-
 #include "ConsoleManager.h"
 #include "SceneManager.h"
-
 #include "Component.h"
 #include "Entity.h"
 #include "Scene.h"
 #include "Script.h"
-#include <unordered_map>
-
-#include "ECSUtilities/ClassReflection.h"
 
 #include "Components/Overlay.h"
 #include "Components/Transform.h"
 
+#include "ECSUtilities/ClassReflection.h"
 #include "ConsoleManager.h"
 
+#include <fstream>
+#include <unordered_map>
 
 using namespace nlohmann;
 
 const std::string ECS::SceneLoader::extension = ".json";
+
+
+
+// ------------------------- LOAD SCENE ----------------------------
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
@@ -45,24 +46,26 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 	json file = json::parse(fileStream);
 
-
 	Scene* scene = SceneManager::instance()->createScene(file["name"].get<std::string>());
 
-	jsonarray objects = file["objects"].get<jsonarray>();
+	// Entities with transform processing
+	if (file.contains("objects")) {
 
-	for (auto& obj : objects) {
+		jsonarray objects = file["objects"].get<jsonarray>();
 
-		ProcessTransform(scene, obj, nullptr);
+		for (auto& obj : objects) {
+			ProcessEntityWithTransform(scene, obj, nullptr);
+		}
 
 	}
 
+	// Entities with overlay processing
 	if (file.contains("overlays")) {
 
 		jsonarray overlays = file["overlays"].get<jsonarray>();
 
 		for (auto& overlay : overlays) {
-
-			ProcessOverlay(scene, overlay, nullptr);
+			ProcessEntityWithOverlay(scene, overlay, nullptr);
 		}
 	}
 
@@ -72,8 +75,13 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 }
 
 
-void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, ECS::Transform* parent)
-{
+
+
+
+
+// ------------------------- PROCESS TRANSFORM ----------------------------
+
+void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::json& obj, ECS::Transform* parent) {
 
 	int renderOrder = 0;
 	std::string objectName = "New Entity";
@@ -81,12 +89,12 @@ void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, 
 	if (obj.contains("name"))
 		objectName = obj["name"].get<std::string>();
 
-	if (obj.contains("order")) { //TODO: mover el orden al transform ya que es la posicion z
+	if (obj.contains("order")) // TODO: mover el orden al transform ya que es la posicion z
 		renderOrder = obj["order"].get<int>();
-	}
 
 	ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
 
+	// Transform component
 	ECS::Transform* transform = entity->addComponent<ECS::Transform>();
 
 	std::unordered_map<std::string, std::string> map;
@@ -105,88 +113,48 @@ void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, 
 	transform->SetParent(parent);
 
 
+	// All compomnents
 	if (obj.contains("components")) {
 
 		jsonarray components = obj["components"].get<jsonarray>();
 		for (auto& compInfo : components) {
-
 			ProcessComponent(entity, compInfo);
 		}
 	}
 
+	// Scritps
 	if (obj.contains("scripts")) {
-
-		//TODO: separar esto en un metodo 
-		json& scripts = obj["scripts"];
-
-		for (auto& script : scripts.items())
-		{
-			json& scriptAttributes = script.value();
-			ECS::Script* scriptCmp = entity->AddScript(script.key());
-
-			for (auto& attribute : scriptAttributes.items()) {
-
-				json& attr = attribute.value();
-
-				Scripting::Variable value;
-
-				std::string type = attr["type"].get<std::string>();
-
-				if (type == "float") {
-
-					float v = attr["value"].get<float>();
-					value = v;
-				}
-				else if (type == "bool") {
-
-					bool b = attr["value"].get<bool>();
-					value = b;
-				}
-				else if (type == "char") {
-
-					char c = attr["value"].get<char>();
-					value = c;
-				}
-				else if (type == "Vector2D") {
-					std::string vec = attr["value"].get<std::string>();
-					value = (Utilities::Vector2D)vec;
-				}
-				else if (type == "string") {
-					std::string vec = attr["value"].get<std::string>();
-					value = vec;
-				}
-				else if (type == "color") {
-					Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
-					value = col;
-				}
-
-				scriptCmp->SeterialisedValue(attribute.key(), value);
-			}
-		}
+		ProcessScripts(obj, entity);
 	}
 
+
+	// Entity childs
 	if (obj.contains("childs")) {
 
 		jsonarray childs = obj["childs"].get<jsonarray>();
 
 		for (auto& child : childs) {
-
-			ProcessTransform(scene, child, transform);
+			ProcessEntityWithTransform(scene, child, transform);
 		}
 	}
 }
 
-void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent)
+
+
+
+// ------------------------- PROCESS OVERLAY ----------------------------
+
+void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent)
 {
 	std::string name = "New Overlay";
 
-	if (overlay.contains("name")) {
-
+	if (overlay.contains("name"))
 		name = overlay["name"].get<std::string>();
-	}
 
 	ECS::Entity* entity = scene->createEntity(name);
 
+
+	// Overlay Component
 	ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();
 
 	std::unordered_map<std::string, std::string> map;
@@ -203,95 +171,38 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 	ClassReflection::instance()->ReflectOverlay(overlayElement, map);
 	overlayElement->SetParent(parent);
 
+
+	// All components
 	if (overlay.contains("components")) {
 		jsonarray components = overlay["components"].get<jsonarray>();
 
 		for (auto& compInfo : components) {
-
-			std::string componentStr = compInfo["component"].get<std::string>();
-
-			ECS::Component* component = entity->addComponent(componentStr);
-
-			std::unordered_map<std::string, std::string> attributeMap;
-
-
-			if (compInfo.contains("attributes")) {
-
-				for (auto& attribute : compInfo["attributes"].items()) {
-
-					attributeMap[attribute.key()] = attribute.value();
-				}
-			}
-
-			ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
+			ProcessComponent(entity, compInfo);
 		}
 
 	}
 
+	// Scripts
 	if (overlay.contains("scripts")) {
-
-		//TODO: separar esto en un metodo 
-
-		json& scripts = overlay["scripts"];
-
-		for (auto& script : scripts.items())
-		{
-			json& scriptAttributes = script.value();
-			ECS::Script* scriptCmp = entity->AddScript(script.key());
-
-			for (auto& attribute : scriptAttributes.items()) {
-
-				json& attr = attribute.value();
-
-				Scripting::Variable value;
-
-				std::string type = attr["type"].get<std::string>();
-
-				if (type == "float") {
-
-					float v = attr["value"].get<float>();
-					value = v;
-				}
-				else if (type == "bool") {
-
-					bool b = attr["value"].get<bool>();
-					value = b;
-				}
-				else if (type == "char") {
-
-					char c = attr["value"].get<char>();
-					value = c;
-				}
-				else if (type == "Vector2D") {
-					std::string vec = attr["value"].get<std::string>();
-					value = (Utilities::Vector2D)vec;
-				}
-				else if (type == "string") {
-					std::string vec = attr["value"].get<std::string>();
-					value = vec;
-				}
-				else if (type == "color") {
-					Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
-					value = col;
-				}
-
-				scriptCmp->SeterialisedValue(attribute.key(), value);
-			}
-		}
+		ProcessScripts(overlay, entity);
 	}
 
 
+	// Entity childs
 	if (overlay.contains("childs")) {
 
 		jsonarray childs = overlay["childs"].get<jsonarray>();
 
-		for (auto& child : childs) {
+		for (auto& child : childs)
+			ProcessEntityWithOverlay(scene, child, overlayElement);
 
-			ProcessOverlay(scene, child, overlayElement);
-		}
 	}
 
 }
+
+
+
+// ------------------------- PROCESS COMPONENT ----------------------------
 
 void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& compInfo)
 {
@@ -299,20 +210,72 @@ void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& com
 
 	ECS::Component* component = entity->addComponent(componentStr);
 
-
 	std::unordered_map<std::string, std::string> attributeMap;
-
 
 	if (compInfo.contains("attributes")) {
 
-
-		for (auto& attribute : compInfo["attributes"].items()) {
-
+		for (auto& attribute : compInfo["attributes"].items())
 			attributeMap[attribute.key()] = attribute.value();
-		}
-	}
 
+	}
 
 	ClassReflection::instance()->ReflectComponent(componentStr, component, attributeMap);
 
 }
+
+
+
+
+// -------------------------- PROCESS SCRITPS ---------------------------
+
+void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* entity) {
+
+	json& scripts = jsonData["scripts"];
+
+	for (auto& script : scripts.items())
+	{
+		json& scriptAttributes = script.value();
+		ECS::Script* scriptCmp = entity->AddScript(script.key());
+
+		for (auto& attribute : scriptAttributes.items()) {
+
+			json& attr = attribute.value();
+
+			Scripting::Variable value;
+
+			std::string type = attr["type"].get<std::string>();
+
+			if (type == "float") {
+
+				float v = attr["value"].get<float>();
+				value = v;
+			}
+			else if (type == "bool") {
+
+				bool b = attr["value"].get<bool>();
+				value = b;
+			}
+			else if (type == "char") {
+
+				char c = attr["value"].get<char>();
+				value = c;
+			}
+			else if (type == "Vector2D") {
+				std::string vec = attr["value"].get<std::string>();
+				value = (Utilities::Vector2D)vec;
+			}
+			else if (type == "string") {
+				std::string vec = attr["value"].get<std::string>();
+				value = vec;
+			}
+			else if (type == "color") {
+				Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
+				value = col;
+			}
+
+			scriptCmp->SetConstValue(attribute.key(), value);
+		}
+	}
+
+}
+

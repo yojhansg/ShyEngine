@@ -32,25 +32,39 @@ void saveTimesPlayed() {
 }
 
 
-int main(int argc, char* args[]) {
+/*
+* This is a way to avoid opening the debug console in release mode.
+*/
 
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#ifdef _DEBUG
 
-	//saveTimesPlayed();
+	int main(int argc, char* args[]) {
 
-	Engine engine;
+#else
 
-	bool ret = engine.init();
+	#include <Windows.h>
 
-	if (!ret) {
-		return -1;
+	INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, int nCmdShow) {
+
+#endif
+
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+		//saveTimesPlayed();
+
+		Engine engine;
+
+		bool ret = engine.init();
+
+		if (!ret) {
+			return -1;
+		}
+
+		engine.update();
+
+		engine.close();
+
+		std::cout << "This was My Engine!\n";
+
+		return 0;
 	}
-
-	engine.update();
-
-	engine.close();
-
-	std::cout << "This was My Engine!\n";
-
-	return 0;
-}
