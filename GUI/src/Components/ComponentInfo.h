@@ -70,6 +70,7 @@ namespace Components {
 		std::vector<Variable> input;
 	public:
 		Method();
+		Method(Method const& other);
 		Method(const std::string& name, const std::string& className);
 
 		void SetReturn(const Variable& ret);

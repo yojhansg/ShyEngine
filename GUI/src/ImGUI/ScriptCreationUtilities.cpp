@@ -5,7 +5,7 @@
 #include "ComponentManager.h"
 #include "ImGUIManager.h"
 #include <fstream>
-
+#include <algorithm>
 
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 {
@@ -220,55 +220,34 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 
 		ImGui::SetWindowFontScale(2);
 
-		auto& allComponents = Components::ComponentManager::GetAllComponents();
-
-		for (auto& comp : allComponents) {
-
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0)
-				if (ImGui::CollapsingHeader(comp.first.c_str())) {
-
-					for (auto& method : methods) {
-
-						std::string name = method.first;
-						if (ImGui::MenuItem(name.c_str())) {
-
-							ScriptNode* node = new ScriptMethod(method.second);
-
-							node->SetPosition(mousex, mousey);
-
-							creator->AddNode(node);
-						}
-					}
-				}
-		}
-
-
-		auto& allManagers = Components::ComponentManager::GetAllManagers();
-
-		for (auto& comp : allManagers) {
-
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0)
-				if (ImGui::CollapsingHeader(comp.first.c_str())) {
-
-					for (auto& method : methods) {
-
-						std::string name = method.first;
-						if (ImGui::MenuItem(name.c_str())) {
-
-							ScriptNode* node = new ScriptMethod(method.second);
-
-							node->SetPosition(mousex, mousey);
-
-							creator->AddNode(node);
-						}
-					}
-				}
-		}
-
+		AddValuesFromVector(Components::ComponentManager::GetAllComponents());
+		AddValuesFromVector(Components::ComponentManager::GetAllManagers());
 
 		ImGui::EndPopup();
+	}
+}
+
+void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVector(std::unordered_map<std::string, Components::Component>& v)
+{
+	for (auto& comp : v) {
+
+		auto& methods = comp.second.getAllMethods();
+		if (methods.size() > 0)
+			if (ImGui::CollapsingHeader(comp.first.c_str())) {
+
+				for (auto& method : methods) {
+
+					std::string name = method.first;
+					if (ImGui::MenuItem(name.c_str())) {
+
+						ScriptNode* node = new ScriptMethod(method.second);
+
+						node->SetPosition(mousex, mousey);
+
+						creator->AddNode(node);
+					}
+				}
+			}
 	}
 }
 
@@ -604,7 +583,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 		ImGui::Text("Name the script");
 
 
-		ImGui::InputText("", nameBuffer, sizeof(nameBuffer));
+		ImGui::InputText("", nameBuffer, CharBufferSize);
 
 
 		if (ImGui::BeginMenu("Values")) {
@@ -671,6 +650,24 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		}
 
+
+		if (ImGui::InputText("Node search", nameSearch, CharBufferSize)) {
+
+			showNodeSearch = std::string(nameSearch).length() > 0;
+		}
+
+		if (showNodeSearch) {
+
+			if (ImGui::BeginMenu("Node search result")) {
+
+				AddMatchingMethods(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
+				AddMatchingMethods(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
+
+				ImGui::EndMenu();
+			}
+		}
+
+
 		ImGui::EndMenuBar();
 	}
 	ImGui::PopStyleVar(3);
@@ -720,36 +717,65 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		ImGui::EndPopup();
 	}
+}
 
-	//ImGui::SetCursorPos(ImVec2(0, 700));
 
-	//if (ImGui::Button("Save script"))
-	//{
-	//	std::string filename = std::string(nameBuffer) + ".script";
-	//	std::string filePath = "scripts/" + filename;
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::AddMatchingMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
+{
 
-	//	std::ofstream outputFile(filePath);
-	//	if (outputFile.is_open())
-	//	{
-	//		outputFile.close();
-	//	}
+	for (auto& comp : v) {
 
-	//	creator->ClearScript();
+		auto& methods = comp.second.getAllMethods();
+		if (methods.size() > 0) {
 
-	//	ImGUIManager::getInstance()->creatingScript(false);
-	//	ImGui::CloseCurrentPopup();
-	//}
+			std::vector<std::string> methodsToAdd;
 
-	//ImGui::SameLine();
+			for (auto& method : methods) {
 
-	//if (ImGui::Button("Close"))
-	//{
-	//	creator->ClearScript();
-	//	ImGUIManager::getInstance()->creatingScript(false);
-	//	ImGui::CloseCurrentPopup();
-	//}
+				std::string name = method.first;
+				std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+				std::string search = nameSearch;
+				std::transform(search.begin(), search.end(), search.begin(), ::tolower);
+
+				if (name.find(search) != name.npos) {
+
+					methodsToAdd.push_back(method.first);
+				}
+
+			}
+
+			if (methodsToAdd.size() > 0)
+				if (ImGui::CollapsingHeader(comp.first.c_str())) {
+
+					for (auto& method : methodsToAdd) {
+
+						if (ImGui::MenuItem(method.c_str())) {
+
+
+							int scrollx, scrolly;
+							ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
+
+							ScriptNode* node = new ScriptMethod(comp.second.getAllMethods()[method]);
+							
+
+
+							node->SetPosition((windowW - node->GetW()) * 0.5f - scrollx, (windowH - node->GetH()) * 0.5f - scrolly);
+
+							creator->AddNode(node);
+
+							showNodeSearch = false;
+							nameSearch[0] = '\0';
+						}
+					}
+				}
+		}
+	}
+
 
 }
+
+
 
 
 #include "nlohmann/json.hpp"
@@ -803,7 +829,6 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 
 	ScriptCreation::ResetModified();
 }
-
 
 
 

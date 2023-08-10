@@ -147,8 +147,13 @@ namespace PEditor {
 			//Boton para cerrar
 			//Desplegable con los distintos tipos de valores constantes
 			//Barra de busqueda de componentes
-			char nameBuffer[256]; //TODO: cambiar esto a string
 
+			static const int CharBufferSize = 256;
+
+			char nameBuffer[CharBufferSize]; //TODO: cambiar esto a string
+			char nameSearch[CharBufferSize]; //TODO: cambiar esto a string
+
+			bool showNodeSearch;
 			bool showPopup;
 
 			ScriptCreation* creator;
@@ -156,6 +161,8 @@ namespace PEditor {
 			void Close();
 			void Load();
 			void Save();
+
+			void AddMatchingMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
 
 		public:
 
@@ -177,6 +184,8 @@ namespace PEditor {
 
 			ScriptDropdownSelection(ScriptCreation* creator);
 			void Render();
+
+			void AddValuesFromVector(std::unordered_map<std::string, Components::Component>& v);
 		};
 
 

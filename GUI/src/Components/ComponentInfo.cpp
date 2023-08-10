@@ -157,6 +157,14 @@ namespace Components {
 	{
 	}
 
+	Method::Method(Method const& other)
+	{
+		name = other.name;
+		component = other.component;
+		returnType = other.returnType;
+		input = other.input;
+	}
+
 	Method::Method(const std::string& name, const std::string& className)
 	{
 		this->name = name;
