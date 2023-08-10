@@ -16,8 +16,11 @@ namespace ECS {
 	class Entity;
 	class Overlay;
 	class Transform;
+	class PrefabManager;
 
 	class SceneLoader {
+
+		friend PrefabManager;
 
 	public:
 
@@ -26,7 +29,6 @@ namespace ECS {
 		SceneLoader() = delete;
 
 		static ECS::Scene* LoadScene(std::string const& scenePath);
-
 
 	private:
 

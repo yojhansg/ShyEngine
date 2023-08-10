@@ -153,6 +153,9 @@
     <ClInclude Include="..\..\src\ecs\Components\ParticleSystem.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ecs\PrefabManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ecs\Entity.cpp">
@@ -274,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\ParticleSystem.cpp">
       <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\PrefabManager.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
