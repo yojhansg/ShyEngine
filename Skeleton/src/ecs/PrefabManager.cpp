@@ -6,6 +6,7 @@
 
 #include "ECSUtilities/ClassReflection.h"
 #include "Components/Transform.h"
+#include "Components/Overlay.h"
 #include "SceneLoader.h"
 #include "ConsoleManager.h"
 
@@ -47,17 +48,25 @@ namespace ECS {
 			// Si el JSON no contiene atributo "name"
 			if (!pref.contains("name")) continue;
 
-			prefabsData.insert(std::make_pair(pref["name"].get<std::string>(), pref));
+			// Si el JSON no contiene atributo "withOverlay"
+			if (!pref.contains("withOverlay")) continue;
+
+			bool wOverlay = pref["withOverlay"].get<bool>();
+
+			if (wOverlay)
+				prefabsWithOverlay.insert(std::make_pair(pref["name"].get<std::string>(), pref));
+			else
+				prefabsWithTransform.insert(std::make_pair(pref["name"].get<std::string>(), pref));
 
 		}
 	}
 
-	void PrefabManager::Instantiate(const std::string& prefabName, Scene* scene) {
+	void PrefabManager::InstantiatePrefabWithTransform(const std::string& prefabName, Scene* scene) {
 
-		if (!prefabsData.contains(prefabName)) return; // TODO Manejar el error
+		if (!prefabsWithTransform.contains(prefabName)) return; // TODO Manejar el error
 
 		// Se accede al map para obtener el json correspondiente al nombre del prefab proporcionado
-		json prefabData = prefabsData[prefabName].get<json>();
+		json prefabData = prefabsWithTransform[prefabName].get<json>();
 
 		// Si el JSON no contiene atributo "name"
 		if (!prefabData.contains("name")) return; // TODO Manejar el error
@@ -69,7 +78,7 @@ namespace ECS {
 		// Se crea la entidad en la escena proporcionada
 		ECS::Entity* entity = scene->createEntity(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
 
-		// Se añaden los componentes a la entidad
+
 
 			// Transform
 			ECS::Transform* transform = entity->addComponent<Transform>();
@@ -86,23 +95,80 @@ namespace ECS {
 			ClassReflection::instance()->ReflectTransform(transform, map);
 			transform->SetParent(nullptr);
 
+			// Components & Scripts
+			AddComponentsAndScriptsToEntity(prefabData, entity);
 
-			// Components
-			if (prefabData.contains("components")) {
 
-				jsonarray components = prefabData["components"].get<jsonarray>();
+		
+		// Se inicializa la entidad en la escena
+		entity->init();
+		entity->start();
 
-				for (auto& compInfo : components)
-					SceneLoader::ProcessComponent(entity, compInfo);
+	}
+
+	void PrefabManager::InstantiatePrefabWithOverlay(const std::string& prefabName, Scene* scene) {
+
+		if (!prefabsWithOverlay.contains(prefabName)) return; // TODO Manejar el error
+
+		// Se accede al map para obtener el json correspondiente al nombre del prefab proporcionado
+		json prefabData = prefabsWithOverlay[prefabName].get<json>();
+
+		// Si el JSON no contiene atributo "name"
+		if (!prefabData.contains("name")) return; // TODO Manejar el error
+
+		// Si el JSON no contiene atributo "renderOrder"
+		if (!prefabData.contains("order")) return; // TODO Manejar el error y mover el orden al transform ya que es la posicion z
+
+
+		// Se crea la entidad en la escena proporcionada
+		ECS::Entity* entity = scene->createEntity(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
+
+
+
+			// Overlay Component
+			ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();
+
+			std::unordered_map<std::string, std::string> map;
+
+			const std::vector<std::string> overlayAttributes = { "placement", "anchor", "top", "left", "right", "bottom", "position", "size" , "color" , "interactable" };
+
+			for (auto& attr : overlayAttributes) {
+
+				if (prefabData.contains(attr)) {
+					map[attr] = prefabData[attr].get<std::string>();
+				}
 			}
 
+			ClassReflection::instance()->ReflectOverlay(overlayElement, map);
+			overlayElement->SetParent(nullptr);
 
-			// Scripts (TODO)
-		
+			// Components & Scripts
+			AddComponentsAndScriptsToEntity(prefabData, entity);
+
+
 
 		// Se inicializa la entidad en la escena
 		entity->init();
 		entity->start();
+
+	}
+
+	void PrefabManager::AddComponentsAndScriptsToEntity(nlohmann::json& prefabData, Entity* entity) {
+
+		// Components
+		if (prefabData.contains("components")) {
+
+			jsonarray components = prefabData["components"].get<jsonarray>();
+
+			for (auto& compInfo : components)
+				SceneLoader::ProcessComponent(entity, compInfo);
+		}
+
+
+		// Scripts 
+		if (prefabData.contains("scritps")) {
+			SceneLoader::ProcessScripts(prefabData, entity);
+		}
 
 	}
 
