@@ -110,6 +110,11 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 
 		else
 			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(150, 100, 100, 255), 1);
+
+
+
+		ImGui::SetTooltip(outputStr.c_str());
+
 	}
 	else {
 
@@ -130,18 +135,6 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 		auto mousePos = ImGui::GetMousePos();
 		Bezier::Draw(outputNodePosition.x, outputNodePosition.y, mousePos.x, mousePos.y);
 	}
-
-
-
-	//if (ImGui::IsWindowCollapsed()) {
-
-	//	Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
-	//}
-	//else {
-
-	//	Bezier::Draw(windowPosition.x, windowPosition.y, 1, 700);
-	//}
-
 
 
 }
@@ -183,6 +176,11 @@ int PEditor::ScriptCreationUtilities::ScriptNode::GetW()
 int PEditor::ScriptCreationUtilities::ScriptNode::GetH()
 {
 	return h;
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptNode::GetOutputString()
+{
+	return outputStr;
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::currentlySelected = nullptr;
@@ -262,7 +260,9 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 	input = std::vector<ScriptNode*>(method.getInput().size());
 	type = Node::Method;
 
-	if (method.getReturn().getType() == Components::AttributesType::NONE) {
+	outputStr = method.getReturn().getTypeStr();
+
+	if (outputStr == "void") {
 		ignoreOutput = true;
 	}
 
@@ -271,8 +271,6 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 {
-
-	//Mover la logica del output a scriptNode
 
 	auto drawList = ImGui::GetWindowDrawList();
 
@@ -312,10 +310,13 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 			input[idx] = nullptr;
 		}
 
-		if (ScriptNode::currentlySelected != nullptr && ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)) {
-
+		if (ScriptNode::currentlySelected != nullptr && ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)
+			&& in.getTypeStr().c_str() == ScriptNode::currentlySelected->GetOutputString()) {
 
 			if (ImGui::IsMouseReleased(0)) {
+
+
+				
 
 				input[idx] = ScriptNode::currentlySelected;
 				ScriptNode::currentlySelected = nullptr;
@@ -496,6 +497,30 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 	attrValue.value.valueFloat = 0;
 
 	this->type = Node::Input;
+
+	switch (attrType) {
+
+		    case ::Components::AttributesType::NONE:
+				outputStr = "";
+				break;
+			case ::Components::AttributesType::FLOAT:
+				outputStr = "float";
+				break;
+			case ::Components::AttributesType::VECTOR2:
+				outputStr = "Utilities::Vector2D";
+				break;
+			case ::Components::AttributesType::STRING:
+				outputStr = "std::string";
+				break;
+			case ::Components::AttributesType::BOOL:
+				outputStr = "bool";
+				break;
+			case ::Components::AttributesType::COLOR:
+				outputStr = "Utilities::Color";
+				break;
+
+	}
+
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode::Node PEditor::ScriptCreationUtilities::ScriptNode::GetType()
@@ -766,7 +791,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::AddMatchingMethods(std::un
 							ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
 
 							ScriptNode* node = new ScriptMethod(comp.second.getAllMethods()[method]);
-							
+
 
 							node->SetPosition((windowW - node->GetW()) * 0.5f - scrollx, (windowH - node->GetH()) * 0.5f - scrolly);
 

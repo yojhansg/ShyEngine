@@ -72,6 +72,8 @@ namespace PEditor {
 			int GetW();
 			int GetH();
 
+			std::string GetOutputString();
+
 			static ScriptNode* currentlySelected;
 			void GetOutputNodePosition(float* x, float* y);
 
@@ -91,6 +93,8 @@ namespace PEditor {
 
 			float nodeSize;
 			bool ignoreOutput;
+
+			std::string outputStr;
 
 			virtual std::string GetStringId();
 			virtual void render();
