@@ -65,7 +65,7 @@ void ImGUIManager::initWindows()
     addWindow(fileExplorer);
 
     //COMPONENTS
-    components = new PEditor::Components();
+    components = new PEditor::ComponentWindow();
     addWindow(components);
 
     scriptCreation = new PEditor::ScriptCreation();
@@ -304,7 +304,7 @@ PEditor::FileExplorer* ImGUIManager::getFileExplorer()
     return fileExplorer;
 }
 
-PEditor::Components* ImGUIManager::getComponents()
+PEditor::ComponentWindow* ImGUIManager::getComponents()
 {
     return components;
 }

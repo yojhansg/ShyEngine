@@ -43,14 +43,14 @@ namespace PEditor {
 
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
-        char nameBuffer[256];
+        ScriptCreationUtilities::ScriptMenuBar* menuBar;
+
         ImGUIManager* imGuiManager;
 
         ScriptCreationUtilities::ScriptDropdownSelection* dropDownSelection;
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
 
-        void ClearScript();
 
     public:
         ScriptCreation();
@@ -62,8 +62,9 @@ namespace PEditor {
         static void GetScrollPosition(int* x, int* y);
         static bool ScrolledThisFrame();
 
+        void ClearScript();
         virtual void render();
-        void setName(std::string name);
 
+        void SetName(const std::string& name);
     };
 };

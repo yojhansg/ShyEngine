@@ -1,6 +1,5 @@
 #include "ScriptCreation.h"
 #include "imgui.h"
-#include <fstream>
 #include "ImGUIManager.h"
 #include <iostream>
 
@@ -12,6 +11,8 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 
 	dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
 
+	menuBar = new ScriptCreationUtilities::ScriptMenuBar(this);
+
 	xpos = ypos = 0;
 	scrollx = scrolly = 0;
 
@@ -20,8 +21,12 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 
 PEditor::ScriptCreation::~ScriptCreation()
 {
+	ClearScript();
+	
 	instance = nullptr;
 	delete dropDownSelection;
+	delete menuBar;
+
 }
 
 void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
@@ -51,15 +56,9 @@ void PEditor::ScriptCreation::render()
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
+	if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
 	{
 		//ImGui::SetWindowFocus();
-
-
-
-		if (ImGui::InputText("Name the script", nameBuffer, sizeof(nameBuffer)))
-		{
-		}
 
 		auto mouseScroll = ImGui::GetMouseDragDelta(2);
 
@@ -92,33 +91,7 @@ void PEditor::ScriptCreation::render()
 
 
 
-		ImGui::SetCursorPos(ImVec2(0, 700));
-
-		if (ImGui::Button("Save script"))
-		{
-			std::string filename = std::string(nameBuffer) + ".script";
-			std::string filePath = "scripts/" + filename;
-
-			std::ofstream outputFile(filePath);
-			if (outputFile.is_open())
-			{
-				outputFile.close();
-			}
-
-			ClearScript();
-
-			ImGUIManager::getInstance()->creatingScript(false);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Close"))
-		{
-			ClearScript();
-			ImGUIManager::getInstance()->creatingScript(false);
-			ImGui::CloseCurrentPopup();
-		}
+		menuBar->Render();
 
 		dropDownSelection->Render();
 
@@ -129,6 +102,11 @@ void PEditor::ScriptCreation::render()
 	}
 
 
+}
+
+void PEditor::ScriptCreation::SetName(const std::string& name)
+{
+	menuBar->SetName(name);
 }
 
 
@@ -148,15 +126,8 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
 
 void PEditor::ScriptCreation::ClearScript()
 {
-	nameBuffer[0] = '\0';
-
 	for (auto node : nodes) {
 		delete node;
 	}
 	nodes.clear();
-}
-
-void PEditor::ScriptCreation::setName(std::string name)
-{
-	strcpy_s(nameBuffer, name.c_str());
 }

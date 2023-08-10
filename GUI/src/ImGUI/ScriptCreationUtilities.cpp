@@ -3,19 +3,22 @@
 #include "imgui.h"
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
+#include "ImGUIManager.h"
+#include <fstream>
+
 
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 {
-	id = x = y = w = h = 0;
-
+	id = x = y = 0;
+	w = 200;
+	h = 300;
 	nodeSize = 15;
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetID(int id)
 {
 	this->id = id;
-	w = 200;
-	h = 300;
+
 
 	return this;
 }
@@ -180,7 +183,7 @@ PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::
 
 std::string PEditor::ScriptCreationUtilities::ScriptNode::GetStringId()
 {
-	return std::string();
+	return std::to_string(id);
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::render()
@@ -458,7 +461,7 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 }
 
-PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput()
+PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : type(type)
 {
 	reflect = false;
 
@@ -497,13 +500,16 @@ void PEditor::ScriptCreationUtilities::ScriptInput::render()
 		ImGui::Checkbox("Value", &value.value.valueBool);
 		break;
 	case ::Components::AttributesType::COLOR:
-
 	{
 		float values[3]{};
 		values[0] = value.value.valueColor.r;
 		values[1] = value.value.valueColor.g;
 		values[2] = value.value.valueColor.b;
-		ImGui::ColorEdit3("Value", values);
+		ImGui::ColorEdit3("Value", values, ImGuiColorEditFlags_DisplayRGB);
+
+		value.value.valueColor.r = values[0];
+		value.value.valueColor.g = values[1];
+		value.value.valueColor.b = values[2];
 		break;
 	}
 	case ::Components::AttributesType::STRING:
@@ -518,5 +524,175 @@ void PEditor::ScriptCreationUtilities::ScriptInput::render()
 		break;
 	}
 	}
+
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::Close()
+{
+	nameBuffer[0] = '\0';
+	creator->ClearScript();
+	ImGUIManager::getInstance()->creatingScript(false);
+}
+
+PEditor::ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
+{
+	showPopup = false;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string& name)
+{
+	std::memcpy(nameBuffer, name.c_str(), 256);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
+{
+	auto windowSize = ImGui::GetWindowSize();
+
+
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(20, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(1, 0));
+	if (ImGui::BeginMenuBar()) {
+
+
+		ImGui::Text("Name the script");
+
+
+		ImGui::InputText("", nameBuffer, sizeof(nameBuffer));
+
+
+		if (ImGui::BeginMenu("Values")) {
+
+			::Components::AttributesType type = ::Components::AttributesType::NONE;
+
+			if (ImGui::MenuItem("Number")) {
+
+				type = ::Components::AttributesType::FLOAT;
+			}
+			if (ImGui::MenuItem("Vector")) {
+
+				type = ::Components::AttributesType::VECTOR2;
+			}
+			if (ImGui::MenuItem("Letter")) {
+
+				//TODO: hacer chars
+				//type = ::Components::AttributesType::CHAR;
+			}
+			if (ImGui::MenuItem("Word")) {
+
+				type = ::Components::AttributesType::STRING;
+			}
+			if (ImGui::MenuItem("Color")) {
+
+				type = ::Components::AttributesType::COLOR;
+			}
+
+
+			if (type != ::Components::AttributesType::NONE)
+			{
+
+				ScriptNode* node = new ScriptInput(type);
+
+				node->SetPosition(windowSize.x * 0.5f, windowSize.y * 0.5f);
+
+				creator->AddNode(node);
+			}
+
+			ImGui::EndMenu();
+
+		}
+
+		if (ImGui::BeginMenu("Logic")) {
+
+			ImGui::MenuItem("If");
+			ImGui::MenuItem("While");
+			ImGui::MenuItem("Loop");
+			ImGui::EndMenu();
+		}
+
+
+		if (ImGui::Button("Save script")) {
+
+
+		}
+
+		if (ImGui::Button("Close")) {
+
+			showPopup = true;
+
+		}
+
+		ImGui::EndMenuBar();
+	}
+	ImGui::PopStyleVar(3);
+
+
+
+	if (showPopup) {
+
+		ImGui::OpenPopup("Close without saving");
+		auto size = ImGui::GetWindowSize();
+		ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
+	}
+	if (ImGui::BeginPopup("Close without saving")) {
+
+		ImGui::Text("Esto es un mensaje emergente");
+		bool closePopup = false;
+		if (ImGui::Button("Cancel")) {
+			closePopup = true;
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Save without exit")) {
+			closePopup = true;
+
+			Close();
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Save and exit")) {
+			closePopup = true;
+
+			Close();
+		}
+
+		if (closePopup) {
+
+			showPopup = false;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	//ImGui::SetCursorPos(ImVec2(0, 700));
+
+	//if (ImGui::Button("Save script"))
+	//{
+	//	std::string filename = std::string(nameBuffer) + ".script";
+	//	std::string filePath = "scripts/" + filename;
+
+	//	std::ofstream outputFile(filePath);
+	//	if (outputFile.is_open())
+	//	{
+	//		outputFile.close();
+	//	}
+
+	//	creator->ClearScript();
+
+	//	ImGUIManager::getInstance()->creatingScript(false);
+	//	ImGui::CloseCurrentPopup();
+	//}
+
+	//ImGui::SameLine();
+
+	//if (ImGui::Button("Close"))
+	//{
+	//	creator->ClearScript();
+	//	ImGUIManager::getInstance()->creatingScript(false);
+	//	ImGui::CloseCurrentPopup();
+	//}
+
+
 
 }

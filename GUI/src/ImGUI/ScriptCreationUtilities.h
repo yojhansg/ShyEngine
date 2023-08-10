@@ -26,6 +26,10 @@ namespace PEditor {
             Hacer que se puedan tener varios nodos con el mismo nombre
 
             -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
+
+
+            -Condicionales
+            -Bucles
         */
 
         class ScriptMethod;
@@ -67,7 +71,7 @@ namespace PEditor {
 
             //Definir el tipo de input, representar y guardar el valor
         public:
-            ScriptInput();
+            ScriptInput(::Components::AttributesType type);
 
             ::Components::AttributesType type;
             ::Components::AttributeValue value;
@@ -103,6 +107,20 @@ namespace PEditor {
             //Boton para cerrar
             //Desplegable con los distintos tipos de valores constantes
             //Barra de busqueda de componentes
+            char nameBuffer[256];
+
+            bool showPopup;
+
+            ScriptCreation* creator;
+
+            void Close();
+
+        public:
+
+            ScriptMenuBar(ScriptCreation* creator);
+
+            void SetName(const std::string& name);
+            void Render();
 
         };
 

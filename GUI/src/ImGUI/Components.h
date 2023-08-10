@@ -3,13 +3,13 @@
 #include "Window.h"
 
 namespace PEditor {
-	class Components : public Window
+	class ComponentWindow : public Window
 	{
 	private:
 
 	public:
 
-		Components();
+		ComponentWindow();
 
 		virtual void render();
 	};

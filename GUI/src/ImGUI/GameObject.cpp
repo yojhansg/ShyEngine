@@ -25,22 +25,22 @@ void PEditor::GameObject::drawComponentsInEditor()
 
 				switch (attr->getType())
 				{
-				case ::Components::INT:
+				case ::Components::AttributesType::INT:
 					drawInt(attributeName + it->first, attr);
 					break;
-				case ::Components::FLOAT:
+				case ::Components::AttributesType::FLOAT:
 					drawFloat(attributeName + it->first, attr);
 					break;
-				case ::Components::VECTOR2:
+				case ::Components::AttributesType::VECTOR2:
 					drawVector2(attributeName + it->first, attr);
 					break;
-				case ::Components::STRING:
+				case ::Components::AttributesType::STRING:
 					drawString(attributeName + it->first, attr);
 					break;
-				case ::Components::BOOL:
+				case ::Components::AttributesType::BOOL:
 					drawBool(attributeName+ it->first, attr);
 					break;
-				case ::Components::COLOR:
+				case ::Components::AttributesType::COLOR:
 					drawColor(attributeName + it->first, attr);
 					break;
 				default:
