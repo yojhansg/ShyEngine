@@ -36,7 +36,26 @@ void Components::ComponentManager::ReadComponentInfo(cstring path)
 	}
 }
 
+void Components::ComponentManager::ReadManagerInfo(cstring path)
+{
+	EnsureInitialised();
+
+	auto result = ComponentReader::ReadManagers(path);
+
+
+	for (auto& cmp : result) {
+
+		instance->managers.emplace(cmp.getName(), cmp);
+	}
+
+}
+
 
 std::unordered_map<std::string, Components::Component>& Components::ComponentManager::GetAllComponents() {
 	return instance->components;
+}
+
+std::unordered_map<std::string, Components::Component>& Components::ComponentManager::GetAllManagers()
+{
+	return instance->managers;
 }

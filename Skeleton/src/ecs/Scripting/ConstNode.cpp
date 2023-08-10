@@ -15,7 +15,7 @@ void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 
 	ECS::Script* script = ScriptManager::instance()->GetCurrentScript();
 
-	output = script->GetConstValue(name);
+	output = script->GetSerialisedValue(name);
 
 	if (output.type == Scripting::Variable::Type::Null)
 		output = originalValue;

@@ -64,11 +64,7 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "int") {
-			value.value.valueInt = 0;
-			type = AttributesType::INT;
-		}
-		else if (typeString == "float") {
+		if (typeString == "int" || typeString == "float") {
 			value.value.valueFloat = 0.0f;
 			type = AttributesType::FLOAT;
 		}
@@ -115,9 +111,6 @@ namespace Components {
 
 		switch (type)
 		{
-		case AttributesType::INT:
-			j[name] = value.value.valueInt;
-			break;
 		case AttributesType::FLOAT:
 			j[name] = value.value.valueFloat;
 			break;

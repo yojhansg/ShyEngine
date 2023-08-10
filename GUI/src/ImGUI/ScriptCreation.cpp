@@ -49,12 +49,12 @@ bool PEditor::ScriptCreation::ScrolledThisFrame()
 	return instance->scrolled;
 }
 
-bool PEditor::ScriptCreation::isFileModified()
+bool PEditor::ScriptCreation::IsFileModified()
 {
 	return instance->modified;
 }
 
-void PEditor::ScriptCreation::FileHasBeenModified()
+void PEditor::ScriptCreation::SetFileModified()
 {
 	instance->modified = true;
 }
@@ -62,6 +62,11 @@ void PEditor::ScriptCreation::FileHasBeenModified()
 void PEditor::ScriptCreation::ResetModified()
 {
 	instance->modified = false;
+}
+
+std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreation::GetNodes()
+{
+	return nodes;
 }
 
 void PEditor::ScriptCreation::render()

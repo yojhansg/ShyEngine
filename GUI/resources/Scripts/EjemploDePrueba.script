@@ -1,0 +1,29 @@
+{
+    "consts": [],
+    "functions": [
+        {
+            "function": "pause",
+            "index": 0,
+            "input": [],
+            "x": 250.0,
+            "y": 335.0
+        },
+        {
+            "function": "rewind",
+            "index": 1,
+            "input": [],
+            "x": 796.0,
+            "y": 156.0
+        },
+        {
+            "function": "setLoop",
+            "index": 2,
+            "input": [
+                0
+            ],
+            "x": 671.0,
+            "y": 575.0
+        }
+    ],
+    "nodeCount": 3
+}

@@ -119,6 +119,11 @@ public:
 
 
 	/*
+		Genera un fichero JSON con una lista con todos los componentes del ECS
+	*/
+	ECSReader& GenerateManagersJSON();
+
+	/*
 		TODO: Comentario descriptivo
 	*/
 	ECSReader& ComponentFactory();

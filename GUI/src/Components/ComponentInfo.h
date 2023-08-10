@@ -12,7 +12,6 @@ namespace Components {
 	//TODO: implementar las cosas para leer chars
 	enum class AttributesType {
 		NONE,
-		INT,
 		FLOAT,
 		VECTOR2,
 		STRING,
@@ -25,7 +24,6 @@ namespace Components {
 
 		union value
 		{
-			int valueInt;
 			float valueFloat;
 			struct {
 				float x;

@@ -160,7 +160,7 @@ void ECS::SceneLoader::ProcessTransform(ECS::Scene* scene, nlohmann::json& obj, 
 					value = col;
 				}
 
-				scriptCmp->SetConstValue(attribute.key(), value);
+				scriptCmp->SeterialisedValue(attribute.key(), value);
 			}
 		}
 	}
@@ -275,7 +275,7 @@ void ECS::SceneLoader::ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay
 					value = col;
 				}
 
-				scriptCmp->SetConstValue(attribute.key(), value);
+				scriptCmp->SeterialisedValue(attribute.key(), value);
 			}
 		}
 	}

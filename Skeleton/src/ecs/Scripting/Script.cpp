@@ -97,22 +97,24 @@ void ECS::Script::Set(cstring name, cVariable variable)
 	attributes[name] = variable;
 }
 
-Scripting::Variable ECS::Script::GetConstValue(cstring name)
+Scripting::Variable ECS::Script::GetSerialisedValue(cstring name)
 {
-	if (constValues.contains(name))
-		return constValues[name];
+	if (serializedValues.contains(name))
+		return serializedValues[name];
 
 	return Scripting::Variable::Null();
 }
 
-void ECS::Script::SetConstValue(cstring name, cVariable val)
+void ECS::Script::SeterialisedValue(cstring name, cVariable val)
 {
-	constValues[name] = val;
+	serializedValues[name] = val;
 }
 
 void ECS::Script::Initialise(cstring path)
 {
 	name = path;
+
+	//TODO: Guardar un script en lugar de leerlo cada vez
 	nodes = Scripting::ScriptManager::LoadScript(path);
 }
 

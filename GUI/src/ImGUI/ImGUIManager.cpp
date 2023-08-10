@@ -135,7 +135,7 @@ void ImGUIManager::init()
 
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
-
+    Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
 }
 
 ImGUIManager* ImGUIManager::getInstance()

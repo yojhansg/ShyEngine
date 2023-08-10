@@ -4,193 +4,231 @@
 
 #include <vector>
 #include "ComponentInfo.h"
-
+#include "nlohmann/json_fwd.hpp"
 
 namespace PEditor {
 
-    class ScriptCreation;
+	class ScriptCreation;
 
-    namespace ScriptCreationUtilities {
+	namespace ScriptCreationUtilities {
 
-        /*
-            TODO:
+		/*
+			TODO:
 
-            Desplegable con todos los metodos
-            Dividir los metodos por categorías
-            -Buscador de metodos
-            -Desplegables con el tipo de input
-            -Mostrar cuadro de input personalizado para cada tipo
-            Mostar cuadros metodos con el nombre, input con nombre y output
-            Mostar lineas de union entre input y output
-            Dibujar lineas de continuacion de nodos
-            Hacer que se puedan tener varios nodos con el mismo nombre
-            -Colorar el triangulo de salida cuando tenga al menos un input
-            -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
+			Desplegable con todos los metodos
+			Dividir los metodos por categorías
+			Desplegables con el tipo de input
+			Mostrar cuadro de input personalizado para cada tipo
+			Mostar cuadros metodos con el nombre, input con nombre y output
+			Mostar lineas de union entre input y output
+			Dibujar lineas de continuacion de nodos
+			Hacer que se puedan tener varios nodos con el mismo nombre
+			Scroll por la escena
+			Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
+			Leer los managers
 
+			-Cambiar el foreground drawList por el drawlist de la ventana
+			-Buscador de metodos
+			-Colorear el triangulo de salida cuando tenga al menos un input
 
-            -Condicionales
-            -Bucles
-        */
+			-Serializacion
+			-Condicionales
+			-Bucles
+			-Implementar eventos (start, update)
+			-Eliminar un nodo
+			-Lista desplegable de elementos que al hacer click te lleve al elemento seleccionado
 
-        class ScriptMethod;
+			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
-        class ScriptNode {
+			-Control z manager
 
-        public:
+		*/
 
-            ScriptNode();
+		class ScriptMethod;
 
-            ScriptNode* SetID(int id);
-            ScriptNode* SetPosition(int x, int y);
+		class ScriptNode {
 
-            void Render();
+		public:
+			
+			enum class Node {
+				Method, Input, Fork
+			};
 
-            int GetId();
-            int GetY();
-            int GetX();
 
-            int GetW();
-            int GetH();
+			ScriptNode();
 
-            static ScriptNode* currentlySelected;
-            void GetOutputNodePosition(float* x, float* y);
+			ScriptNode* SetID(int id);
+			ScriptNode* SetPosition(int x, int y);
 
-        protected:
-            int id;
+			void Render();
 
-            float x, y;
-            float w, h;
+			int GetId();
+			int GetY();
+			int GetX();
 
-            float nodeSize;
+			int GetW();
+			int GetH();
 
-            virtual std::string GetStringId();
-            virtual void render();
+			static ScriptNode* currentlySelected;
+			void GetOutputNodePosition(float* x, float* y);
 
-            void UpdatePosition(int scrollx, int scrolly);
-            void ManagerOutputNode();
-        };
+			virtual nlohmann::json ToJson();
+			virtual void FromJson(nlohmann::json&);
 
-        class ScriptInput : public ScriptNode {
 
-            //Definir el tipo de input, representar y guardar el valor
-        public:
-            ScriptInput(::Components::AttributesType type);
+			Node GetType();
 
-            ::Components::AttributesType type;
-            ::Components::AttributeValue value;
+		protected:
 
-        protected:
+			int id;
+			Node type;
 
-            bool reflect;
+			float x, y;
+			float w, h;
 
-            void render() override;
-        };
+			float nodeSize;
 
-        class ScriptMethod : public ScriptNode {
+			virtual std::string GetStringId();
+			virtual void render();
 
-            ::Components::Method& method;
-            std::vector<ScriptNode*> input;
+			void UpdatePosition(int scrollx, int scrolly);
+			void ManagerOutputNode();
+		};
 
-        public:
+		class ScriptInput : public ScriptNode {
 
+			//Definir el tipo de input, representar y guardar el valor
+		public:
+			ScriptInput(::Components::AttributesType type);
 
-            ScriptMethod(::Components::Method&);
+			nlohmann::json ToJson() override;
 
-            void render() override;
-            std::string GetStringId() override;
-        };
+		protected:
 
+			bool reflect; //TODO
+			::Components::AttributesType attrType;
+			::Components::AttributeValue attrValue;
 
-        class ScriptMenuBar {
+			void render() override;
 
-        private:
+		};
 
-            //Cambiar el nombre del script
-            //Boton para guardar
-            //Boton para cerrar
-            //Desplegable con los distintos tipos de valores constantes
-            //Barra de busqueda de componentes
-            char nameBuffer[256];
+		class ScriptFlow  {
 
-            bool showPopup;
+		protected:
 
-            ScriptCreation* creator;
+			ScriptFlow* next;
+		};
 
-            void Close();
-            void Save();
+		class ScriptMethod : public ScriptNode, public ScriptFlow {
 
-        public:
+			::Components::Method& method;
+			std::vector<ScriptNode*> input;
 
-            ScriptMenuBar(ScriptCreation* creator);
+		public:
 
-            void SetName(const std::string& name);
-            void Render();
+			ScriptMethod(::Components::Method&);
 
-        };
+			nlohmann::json ToJson() override;
 
-        class ScriptDropdownSelection{
+		protected:
 
-        private:
-            ScriptCreation* creator;
+			void render() override;
+			std::string GetStringId() override;
+		};
 
-            int mousex, mousey;
 
-        public:
+		class ScriptMenuBar {
 
-            ScriptDropdownSelection(ScriptCreation* creator);
-            void Render();
-        };
+		private:
 
+			//Cambiar el nombre del script
+			//Boton para guardar
+			//Boton para cerrar
+			//Desplegable con los distintos tipos de valores constantes
+			//Barra de busqueda de componentes
+			char nameBuffer[256]; //TODO: cambiar esto a string
 
+			bool showPopup;
 
-        class Bezier {
+			ScriptCreation* creator;
 
+			void Close();
+			void Load();
+			void Save();
 
-        private:
+		public:
 
-            static float thickness;
-            static int pointCount;
+			ScriptMenuBar(ScriptCreation* creator);
 
-        public:
+			void SetName(const std::string& name);
+			void Render();
 
-            static void ResetThickness();
-            static void SetThickness(float t);
-            static void SetPointCount(int c);
-            static void ResetPointCount();
+		};
 
+		class ScriptDropdownSelection {
 
-            static void Draw(int x, int y, int x1, int y1);
+		private:
+			ScriptCreation* creator;
 
-        };
+			int mousex, mousey;
 
+		public:
 
-        class Grid {
+			ScriptDropdownSelection(ScriptCreation* creator);
+			void Render();
+		};
 
-        private:
-            static int spacing;
-            static float thickness;
-            static int interval;
-            static float intervalScale;
 
-            static int x_offset;
-            static int y_offset;
 
-            static int r, g, b, a;
+		class Bezier {
 
-        public:
 
-            static void SetSpacing(int spacing);
-            static void ResetSpacing();
-            static void SetOffset(int x, int y);
-            static void ResetOffset();
-            static void SetInterval(int interval);
-            static void ResetInterval();
+		private:
 
-            static void SetColor(int r, int g, int b, int a);
-            static void ResetColor();
+			static float thickness;
+			static int pointCount;
 
-            static void Draw();
-        };
+		public:
 
-    }
+			static void ResetThickness();
+			static void SetThickness(float t);
+			static void SetPointCount(int c);
+			static void ResetPointCount();
+
+
+			static void Draw(int x, int y, int x1, int y1);
+
+		};
+
+
+		class Grid {
+
+		private:
+			static int spacing;
+			static float thickness;
+			static int interval;
+			static float intervalScale;
+
+			static int x_offset;
+			static int y_offset;
+
+			static int r, g, b, a;
+
+		public:
+
+			static void SetSpacing(int spacing);
+			static void ResetSpacing();
+			static void SetOffset(int x, int y);
+			static void ResetOffset();
+			static void SetInterval(int interval);
+			static void ResetInterval();
+
+			static void SetColor(int r, int g, int b, int a);
+			static void ResetColor();
+
+			static void Draw();
+		};
+
+	}
 };

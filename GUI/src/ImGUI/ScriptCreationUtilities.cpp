@@ -224,9 +224,7 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 
 		for (auto& comp : allComponents) {
 
-
 			auto& methods = comp.second.getAllMethods();
-
 			if (methods.size() > 0)
 				if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
@@ -245,6 +243,31 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 				}
 		}
 
+
+		auto& allManagers = Components::ComponentManager::GetAllManagers();
+
+		for (auto& comp : allManagers) {
+
+			auto& methods = comp.second.getAllMethods();
+			if (methods.size() > 0)
+				if (ImGui::CollapsingHeader(comp.first.c_str())) {
+
+					for (auto& method : methods) {
+
+						std::string name = method.first;
+						if (ImGui::MenuItem(name.c_str())) {
+
+							ScriptNode* node = new ScriptMethod(method.second);
+
+							node->SetPosition(mousex, mousey);
+
+							creator->AddNode(node);
+						}
+					}
+				}
+		}
+
+
 		ImGui::EndPopup();
 	}
 }
@@ -254,7 +277,9 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
 PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
 {
 	input = std::vector<ScriptNode*>(method.getInput().size());
+	type = Node::Method;
 }
+
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 {
@@ -474,82 +499,83 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 }
 
-PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : type(type)
+PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 {
 	reflect = false;
 
-	type = ::Components::AttributesType::NONE;
-	value = ::Components::AttributeValue();
+	attrValue = ::Components::AttributeValue();
 
-	value.value.valueInt = 0;
+	attrValue.value.valueFloat = 0;
+
+	this->type = Node::Input;
+}
+
+PEditor::ScriptCreationUtilities::ScriptNode::Node PEditor::ScriptCreationUtilities::ScriptNode::GetType()
+{
+	return type;
 }
 
 
 void PEditor::ScriptCreationUtilities::ScriptInput::render()
 {
 
-	switch (type) {
+	switch (attrType) {
 
 	case ::Components::AttributesType::NONE:
 		break;
-	case ::Components::AttributesType::INT:
 	case ::Components::AttributesType::FLOAT:
-		ImGui::InputFloat("Value", &value.value.valueFloat);
+		ImGui::InputFloat("Value", &attrValue.value.valueFloat);
 		break;
 	case ::Components::AttributesType::VECTOR2:
 	{
 
 		float values[2]{};
-		values[0] = value.value.valueVector2.x;
-		values[1] = value.value.valueVector2.y;
+		values[0] = attrValue.value.valueVector2.x;
+		values[1] = attrValue.value.valueVector2.y;
 		ImGui::InputFloat2("Value", values);
 
-		value.value.valueVector2.x = values[0];
-		value.value.valueVector2.y = values[1];
+		attrValue.value.valueVector2.x = values[0];
+		attrValue.value.valueVector2.y = values[1];
 		break;
 	}
 	case ::Components::AttributesType::BOOL:
 
-		ImGui::Checkbox("Value", &value.value.valueBool);
+		ImGui::Checkbox("Value", &attrValue.value.valueBool);
 		break;
 	case ::Components::AttributesType::COLOR:
 	{
 		float values[3]{};
-		values[0] = value.value.valueColor.r;
-		values[1] = value.value.valueColor.g;
-		values[2] = value.value.valueColor.b;
+		values[0] = attrValue.value.valueColor.r;
+		values[1] = attrValue.value.valueColor.g;
+		values[2] = attrValue.value.valueColor.b;
 		ImGui::ColorEdit3("Value", values, ImGuiColorEditFlags_DisplayRGB);
 
-		value.value.valueColor.r = values[0];
-		value.value.valueColor.g = values[1];
-		value.value.valueColor.b = values[2];
+		attrValue.value.valueColor.r = values[0];
+		attrValue.value.valueColor.g = values[1];
+		attrValue.value.valueColor.b = values[2];
 		break;
 	}
 	case ::Components::AttributesType::STRING:
 
 	{
 		char values[64]{};
-		std::memcpy(values, value.valueString.c_str(), 64);
+		std::memcpy(values, attrValue.valueString.c_str(), 64);
 
 		ImGui::InputText("Value", values, 64);
 
-		value.valueString = values;
+		attrValue.valueString = values;
 		break;
 	}
 	}
 
 }
 
+
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::Close()
 {
 	nameBuffer[0] = '\0';
 	creator->ClearScript();
 	ImGUIManager::getInstance()->creatingScript(false);
-}
-
-void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
-{
-	ScriptCreation::ResetModified();
 }
 
 PEditor::ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
@@ -618,7 +644,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 				creator->AddNode(node);
 
-				ScriptCreation::FileHasBeenModified();
+				ScriptCreation::SetFileModified();
 			}
 
 			ImGui::EndMenu();
@@ -723,6 +749,142 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 	//	ImGui::CloseCurrentPopup();
 	//}
 
+}
 
 
+#include "nlohmann/json.hpp"
+
+using nlohmann::json;
+
+
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::Load()
+{
+
+
+}
+
+
+
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
+{
+	auto& allNodes = creator->GetNodes();
+
+	json root;
+	json functions = json::array(), consts = json::array();
+
+	root["nodeCount"] = allNodes.size();
+
+	std::vector<ScriptNode*> serializedValues;
+
+	for (auto node : allNodes) {
+
+		if (node->GetType() == ScriptNode::Node::Method) {
+
+			functions.push_back(node->ToJson());
+		}
+
+
+		else if (node->GetType() == ScriptNode::Node::Input) {
+
+
+			functions.push_back(node->ToJson());
+		}
+	}
+
+
+	root["functions"] = functions;
+	root["consts"] = consts;
+
+	std::ofstream file("scripts/" + std::string(nameBuffer) + ".script");
+
+	file << root.dump(4);
+
+	file.close();
+
+	ScriptCreation::ResetModified();
+}
+
+
+
+
+json PEditor::ScriptCreationUtilities::ScriptNode::ToJson()
+{
+	json root;
+
+	root["index"] = id;
+	root["x"] = x;
+	root["y"] = y;
+
+	return root;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptNode::FromJson(nlohmann::json& root)
+{
+	id = root["index"].get<int>();
+
+	x = root["x"].get<float>();
+	y = root["y"].get<float>();
+}
+
+
+
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
+{
+	json root = ScriptNode::ToJson();
+
+	root["function"] = method.getName();
+
+	root["input"] = json::array();
+
+	for (auto& in : input) {
+
+		root["input"].push_back(in->GetId());
+	}
+
+	return root;
+}
+
+
+
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
+{
+	json root = ScriptNode::ToJson();
+
+	//TODO: serialised values
+
+	switch (attrType) {
+
+		switch (attrType)
+		{
+		case Components::AttributesType::NONE:
+			root["type"] = "null";
+			root["value"] = nullptr;
+			break;
+		case Components::AttributesType::FLOAT:
+			root["type"] = "float";
+			root["value"] = attrValue.value.valueFloat;
+			break;
+		case Components::AttributesType::VECTOR2:
+			root["type"] = "vector2D";
+			root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
+			break;
+		case Components::AttributesType::STRING:
+			root["type"] = "string";
+			root["value"] = attrValue.valueString;
+			break;
+		case Components::AttributesType::BOOL:
+			root["type"] = "number";
+			root["value"] = attrValue.value.valueBool;
+			break;
+		case Components::AttributesType::COLOR:
+			root["type"] = "color";
+			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	return root;
 }
