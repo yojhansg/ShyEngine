@@ -24,7 +24,7 @@ namespace PEditor {
             Mostar lineas de union entre input y output
             Dibujar lineas de continuacion de nodos
             Hacer que se puedan tener varios nodos con el mismo nombre
-
+            -Colorar el triangulo de salida cuando tenga al menos un input
             -Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
 
 
@@ -48,6 +48,9 @@ namespace PEditor {
             int GetId();
             int GetY();
             int GetX();
+
+            int GetW();
+            int GetH();
 
             static ScriptNode* currentlySelected;
             void GetOutputNodePosition(float* x, float* y);
@@ -114,6 +117,7 @@ namespace PEditor {
             ScriptCreation* creator;
 
             void Close();
+            void Save();
 
         public:
 

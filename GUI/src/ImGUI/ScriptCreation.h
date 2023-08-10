@@ -40,6 +40,7 @@ namespace PEditor {
         int scrollx, scrolly;
 
         bool scrolled;
+        bool modified;
 
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
@@ -61,6 +62,10 @@ namespace PEditor {
 
         static void GetScrollPosition(int* x, int* y);
         static bool ScrolledThisFrame();
+
+        static bool isFileModified();
+        static void FileHasBeenModified();
+        static void ResetModified();
 
         void ClearScript();
         virtual void render();

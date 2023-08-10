@@ -49,7 +49,20 @@ bool PEditor::ScriptCreation::ScrolledThisFrame()
 	return instance->scrolled;
 }
 
-float offset = 0;
+bool PEditor::ScriptCreation::isFileModified()
+{
+	return instance->modified;
+}
+
+void PEditor::ScriptCreation::FileHasBeenModified()
+{
+	instance->modified = true;
+}
+
+void PEditor::ScriptCreation::ResetModified()
+{
+	instance->modified = false;
+}
 
 void PEditor::ScriptCreation::render()
 {
@@ -91,17 +104,15 @@ void PEditor::ScriptCreation::render()
 
 
 
-		menuBar->Render();
 
 		dropDownSelection->Render();
 
+		menuBar->Render();
 
 		scrolled = false;
 
 		ImGui::EndPopup();
 	}
-
-
 }
 
 void PEditor::ScriptCreation::SetName(const std::string& name)
@@ -126,6 +137,7 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
 
 void PEditor::ScriptCreation::ClearScript()
 {
+	instance->modified = false;
 	for (auto node : nodes) {
 		delete node;
 	}

@@ -171,6 +171,16 @@ int PEditor::ScriptCreationUtilities::ScriptNode::GetX()
 	return x;
 }
 
+int PEditor::ScriptCreationUtilities::ScriptNode::GetW()
+{
+	return w;
+}
+
+int PEditor::ScriptCreationUtilities::ScriptNode::GetH()
+{
+	return h;
+}
+
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::currentlySelected = nullptr;
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetPosition(int x1, int y1)
@@ -303,7 +313,10 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 		}
 		else
 
-			drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+			if (input[idx] != nullptr)
+				drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+			else
+				drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
 
 
 
@@ -534,6 +547,11 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Close()
 	ImGUIManager::getInstance()->creatingScript(false);
 }
 
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
+{
+	ScriptCreation::ResetModified();
+}
+
 PEditor::ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
 {
 	showPopup = false;
@@ -546,6 +564,8 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string&
 
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 {
+	int scrollx, scrolly;
+	ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
 	auto windowSize = ImGui::GetWindowSize();
 
 
@@ -591,11 +611,14 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 			if (type != ::Components::AttributesType::NONE)
 			{
 
+
 				ScriptNode* node = new ScriptInput(type);
 
-				node->SetPosition(windowSize.x * 0.5f, windowSize.y * 0.5f);
+				node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
 
 				creator->AddNode(node);
+
+				ScriptCreation::FileHasBeenModified();
 			}
 
 			ImGui::EndMenu();
@@ -613,7 +636,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		if (ImGui::Button("Save script")) {
 
-
+			Save();
 		}
 
 		if (ImGui::Button("Close")) {
@@ -632,7 +655,14 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		ImGui::OpenPopup("Close without saving");
 		auto size = ImGui::GetWindowSize();
+
+		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always, ImVec2(0, 0)); // Centrar el pop-up
+		ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Always);
+		ImGui::Begin("Background", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBringToFrontOnFocus);
+		ImGui::End();
+
 		ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
+
 	}
 	if (ImGui::BeginPopup("Close without saving")) {
 
@@ -652,7 +682,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 		ImGui::SameLine();
 		if (ImGui::Button("Save and exit")) {
 			closePopup = true;
-
+			Save();
 			Close();
 		}
 
