@@ -43,7 +43,7 @@ namespace Components {
 
 				}
 
-				//TODO: mirar el tipo de retorno
+				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
 
 				cmp.addMethod(methodInfo);
 			}

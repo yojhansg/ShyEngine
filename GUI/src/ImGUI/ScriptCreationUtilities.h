@@ -28,7 +28,7 @@ namespace PEditor {
 			Leer los managers
 
 			-Cambiar el foreground drawList por el drawlist de la ventana
-			-Buscador de metodos
+			Buscador de metodos
 			-Colorear el triangulo de salida cuando tenga al menos un input
 
 			-Serializacion
@@ -36,12 +36,15 @@ namespace PEditor {
 			-Bucles
 			-Implementar eventos (start, update)
 			-Eliminar un nodo
-			-Lista desplegable de elementos que al hacer click te lleve al elemento seleccionado
+			-Lista desplegable de nodos que al hacer click te lleve al elemento seleccionado
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
 			-Control z manager
 
+			-Names: Es la forma de tener metodos en el scripting
+			-Hacer que si un nodo retorna null no se pueda añadir a otro
+			-Hacer que solo se pueda añadir una flecha si ambas salidas coinciden
 		*/
 
 		class ScriptMethod;
@@ -87,6 +90,7 @@ namespace PEditor {
 			float w, h;
 
 			float nodeSize;
+			bool ignoreOutput;
 
 			virtual std::string GetStringId();
 			virtual void render();

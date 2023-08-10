@@ -13,6 +13,8 @@ PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 	w = 200;
 	h = 300;
 	nodeSize = 15;
+
+	ignoreOutput = false;
 }
 
 PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptNode::SetID(int id)
@@ -78,6 +80,8 @@ void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition(int scrollx, i
 
 void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 {
+	if (ignoreOutput) return;
+
 	auto drawList = ImGui::GetWindowDrawList();
 
 	auto windowSize = ImGui::GetWindowSize();
@@ -257,6 +261,11 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 {
 	input = std::vector<ScriptNode*>(method.getInput().size());
 	type = Node::Method;
+
+	if (method.getReturn().getType() == Components::AttributesType::NONE) {
+		ignoreOutput = true;
+	}
+
 }
 
 
@@ -758,7 +767,6 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::AddMatchingMethods(std::un
 
 							ScriptNode* node = new ScriptMethod(comp.second.getAllMethods()[method]);
 							
-
 
 							node->SetPosition((windowW - node->GetW()) * 0.5f - scrollx, (windowH - node->GetH()) * 0.5f - scrolly);
 
