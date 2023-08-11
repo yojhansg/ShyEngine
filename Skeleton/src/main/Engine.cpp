@@ -14,6 +14,7 @@
 #include <OverlayManager.h>
 #include <PhysicsManager.h>
 #include <ConsoleManager.h>
+#include <PrefabManager.h>
 #include <RenderManager.h>
 #include <SoundManager.h>
 #include <InputManager.h>
@@ -60,6 +61,7 @@ bool Engine::init() {
 	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
 	ECS::ContactListener::init(); 
+	ECS::PrefabManager::init("prefabs");
 	Sound::SoundManager::init();
 	Scripting::ScriptManager::init();
 	Scripting::ScriptFunctionality::init();
@@ -119,9 +121,9 @@ void Engine::update() {
 		// LateUpdate
 		scene->lateUpdate(engineTime->deltaTime);
 
-		overlayManager->Update();
 
 		// Render
+		overlayManager->Update();
 		rendererManager->SetRenderTarget(false);
 		rendererManager->clearRenderer(Utilities::Color(131, 92, 243));
 		renderManager->Render();

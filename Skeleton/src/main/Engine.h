@@ -16,6 +16,7 @@ namespace ECS {
 	class OverlayManager;
 	class RenderManager;
 	class SceneManager;
+	class PrefabManager;
 }
 
 namespace Utilities {

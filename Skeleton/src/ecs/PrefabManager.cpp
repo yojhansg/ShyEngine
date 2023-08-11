@@ -18,6 +18,8 @@ using namespace nlohmann;
 
 namespace ECS {
 
+	PrefabManager::PrefabManager() {}
+
 	PrefabManager::PrefabManager(std::string const& prefabsPath) {
 
 		LoadPrefabs(prefabsPath);
@@ -30,16 +32,20 @@ namespace ECS {
 
 		if (!fileStream.good()) {
 			Console::Output::PrintError("Prefabs loading", "Cannot open prefabs file <" + prefabsPath + ">");
+			return;
 		}
 
 		if (!json::accept(fileStream)) {
 			Console::Output::PrintError("Prefab Manager", "Trying to read an invalid prefabs file <" + prefabsPath + ">");
+			return;
 		}
 
 		fileStream.clear();
 		fileStream.seekg(0);
 
 		json json = json::parse(fileStream);
+
+		if (!json.contains("prefabs")) return; // TODO Manejar el error
 
 		jsonarray prefabsArray = json["prefabs"].get<jsonarray>();
 
