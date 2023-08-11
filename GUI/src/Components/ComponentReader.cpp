@@ -24,9 +24,6 @@ namespace Components {
 			}
 		}
 
-
-		//TODO: hacer un fichero para leer los metodos de los managers
-
 		if (data.contains("methods") && !data["methods"].is_null())
 		{
 			auto& methods = data["methods"];
@@ -45,6 +42,8 @@ namespace Components {
 					}
 
 				}
+
+				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
 
 				cmp.addMethod(methodInfo);
 			}
@@ -67,10 +66,57 @@ namespace Components {
 
 		json file = json::parse(fileStream);
 
+		fileStream.close();
 		std::vector<Component> components;
 		for (auto& item : file.items()) {
 
 			components.push_back(ReadComponent(item.key(), item.value()));
+		}
+
+
+		return components;
+	}
+
+
+
+
+
+	std::vector<Component> ComponentReader::ReadManagers(cstring filePath)
+	{
+		std::ifstream fileStream(filePath);
+
+		if (!fileStream.good() || !json::accept(fileStream))
+		{
+			return std::vector<Component>();
+		}
+
+		fileStream.clear();
+		fileStream.seekg(0);
+
+		json file = json::parse(fileStream);
+		fileStream.close();
+
+		std::vector<Component> components;
+		for (auto& manager : file) {
+
+			std::string name = manager["name"].get<std::string>();
+			Component comp(name);
+
+			for (auto& method : manager["methods"]) {
+
+				Method methodInfo(method["name"].get<std::string>(), name);
+
+				for (const auto& in : method["input"]) {
+
+					if (!in.is_null())
+						methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+				}
+
+				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
+				comp.addMethod(methodInfo);
+			}
+
+			components.push_back(comp);
 		}
 
 		return components;

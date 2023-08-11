@@ -16,13 +16,21 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 	xpos = ypos = 0;
 	scrollx = scrolly = 0;
 
+	lerping = false;
+	lerpDuration = 1;
+	lerp_t = 0;
+	initialx = initialy = finalx = finaly = 0;
+
+	modified = false;
+	scrolled = false;
+
 	instance = this;
 }
 
 PEditor::ScriptCreation::~ScriptCreation()
 {
 	ClearScript();
-	
+
 	instance = nullptr;
 	delete dropDownSelection;
 	delete menuBar;
@@ -33,6 +41,21 @@ void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
 	node->SetID(nodes.size());
 	nodes.push_back(node);
+}
+
+void PEditor::ScriptCreation::SetNodeCount(int count)
+{
+	nodes = std::vector<ScriptCreationUtilities::ScriptNode*>(count);
+}
+
+void PEditor::ScriptCreation::SetNode(int n, ScriptCreationUtilities::ScriptNode* node)
+{
+	nodes[n] = node;
+}
+
+void PEditor::ScriptCreation::Load()
+{
+	menuBar->Load();
 }
 
 void PEditor::ScriptCreation::GetScrollPosition(int* x, int* y)
@@ -49,12 +72,12 @@ bool PEditor::ScriptCreation::ScrolledThisFrame()
 	return instance->scrolled;
 }
 
-bool PEditor::ScriptCreation::isFileModified()
+bool PEditor::ScriptCreation::IsFileModified()
 {
 	return instance->modified;
 }
 
-void PEditor::ScriptCreation::FileHasBeenModified()
+void PEditor::ScriptCreation::SetFileModified()
 {
 	instance->modified = true;
 }
@@ -64,8 +87,15 @@ void PEditor::ScriptCreation::ResetModified()
 	instance->modified = false;
 }
 
+std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreation::GetNodes()
+{
+	return nodes;
+}
+
 void PEditor::ScriptCreation::render()
 {
+
+
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -73,31 +103,56 @@ void PEditor::ScriptCreation::render()
 	{
 		//ImGui::SetWindowFocus();
 
-		auto mouseScroll = ImGui::GetMouseDragDelta(2);
+		if (lerping) {
 
-		scrollx = mouseScroll.x;
-		scrolly = mouseScroll.y;
-
-		if (scrollx != 0 || scrolly != 0)
-			scrolled = true;
-
-		if (ImGui::IsMouseReleased(2)) {
-
-			xpos += scrollx;
-			ypos += scrolly;
-
-			scrollx = scrolly = 0;
-			scrolled = true;
+			ManageLerp();
 		}
-		
+		else {
+
+			auto mouseScroll = ImGui::GetMouseDragDelta(2);
+
+			scrollx = mouseScroll.x;
+			scrolly = mouseScroll.y;
+
+			if (scrollx != 0 || scrolly != 0)
+				scrolled = true;
+
+			if (ImGui::IsMouseReleased(2)) {
+
+				xpos += scrollx;
+				ypos += scrolly;
+
+				scrollx = scrolly = 0;
+				scrolled = true;
+			}
+		}
+
 		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
 		ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
 		ScriptCreationUtilities::Grid::Draw();
 
+		int nodeIdx = 0;
+		bool eraseNode = false;
 		for (auto node : nodes) {
 
-			node->Render();
+			if (node != nullptr) {
+
+				if (node->Render()) {
+
+					eraseNode = true;
+				}
+			}
+
+			if (!eraseNode)
+				nodeIdx++;
 		}
+
+		if (eraseNode)
+		{
+			nodes[nodeIdx]->OnRemoved();
+			nodes.erase(nodes.begin() + nodeIdx);
+		}
+
 
 		if (!ImGui::IsMouseDown(0))
 			ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;
@@ -135,8 +190,67 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
 
 }
 
+
+void PEditor::ScriptCreation::Lerp(int x, int y, float lerpDuration)
+{
+	instance->initialx = instance->xpos;
+	instance->initialy = instance->ypos;
+
+	instance->finalx = x;
+	instance->finaly = y;
+
+	instance->lerping = true;
+	instance->lerpDuration = lerpDuration;
+
+	instance->lerp_t = 0;
+
+	instance->scrollx = instance->scrolly = 0;
+}
+
+void PEditor::ScriptCreation::ManageLerp()
+{
+	float dt = ImGui::GetIO().DeltaTime;
+
+	lerp_t += dt;
+	instance->scrolled = true;
+
+	auto size = ImGui::GetWindowSize();
+
+	float x = -finalx + size.x * 0.5f;
+	float y = -finaly + size.y * 0.5f;
+
+
+
+	if (lerp_t > lerpDuration) {
+
+		lerping = false;
+		xpos = x;
+		ypos = y;
+
+		return;
+	}
+
+	float t = lerp_t / lerpDuration;
+
+	auto lerp = [](float a, float b, float t) {
+		return a + t * (b - a);
+	};
+
+	auto cubicEaseOut = [](float x) {
+
+		float inv = 1 - x;
+		return 1 - (inv * inv * inv);
+	};
+
+
+
+	xpos = lerp(initialx, x, cubicEaseOut(t));
+	ypos = lerp(initialy, y, cubicEaseOut(t));
+}
+
 void PEditor::ScriptCreation::ClearScript()
 {
+	scrollx = scrolly = 0;
 	instance->modified = false;
 	for (auto node : nodes) {
 		delete node;

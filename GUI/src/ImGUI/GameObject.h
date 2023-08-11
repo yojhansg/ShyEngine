@@ -48,7 +48,6 @@ namespace PEditor {
 
 		int renderOrder;
 
-		void drawInt(std::string attrName, ::Components::Attribute* attr);
 		void drawFloat(std::string attrName, ::Components::Attribute* attr);
 		void drawVector2(std::string attrName, ::Components::Attribute* attr);
 		void drawString(std::string attrName, ::Components::Attribute* attr);

@@ -11,25 +11,6 @@ class ImGUIManager;
 namespace PEditor {
 
 
-
-    /*
-    
-        TODO: Cosas que hacer
-
-
-        -Desplegable con todos los metodos
-        -Dividir los metodos por categorías
-        Buscador de metodos
-        Desplegables con el tipo de input
-        Mostrar cuadro de input personalizado para cada tipo
-        Mostar cuadros metodos con el nombre, input con nombre y output
-        Mostar lineas de union entre input y output
-        Dibujar lineas de continuacion de nodos
-        Scroll por la escena
-        Cambiar el foreground drawList por el drawlist de la ventana
-    */
-
-
     class ScriptCreation : public Window
     {
     private:
@@ -42,6 +23,14 @@ namespace PEditor {
         bool scrolled;
         bool modified;
 
+
+        bool lerping;
+        float lerp_t;
+        float lerpDuration;
+        int initialx, initialy;
+        int finalx, finaly;
+
+
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
         ScriptCreationUtilities::ScriptMenuBar* menuBar;
@@ -52,6 +41,8 @@ namespace PEditor {
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
 
+        void ManageLerp();
+
 
     public:
         ScriptCreation();
@@ -59,14 +50,22 @@ namespace PEditor {
 
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
+        void SetNodeCount(int count);
+        void SetNode(int n, ScriptCreationUtilities::ScriptNode* node);
+
+        void Load();
 
         static void GetScrollPosition(int* x, int* y);
         static bool ScrolledThisFrame();
 
-        static bool isFileModified();
-        static void FileHasBeenModified();
+        static bool IsFileModified();
+        static void SetFileModified();
         static void ResetModified();
+        static void Lerp(int x, int y, float lerpDuration);
 
+
+        std::vector<ScriptCreationUtilities::ScriptNode*>& GetNodes();
+        
         void ClearScript();
         virtual void render();
 

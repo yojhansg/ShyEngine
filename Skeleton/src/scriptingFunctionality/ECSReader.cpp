@@ -1138,3 +1138,75 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 	return *this;
 }
+
+
+
+
+ECSReader& ECSReader::GenerateManagersJSON()
+{
+	json root = json::array();
+
+
+	std::map<std::string, std::vector<Method>> correctedManagerMethods = managerMethods;
+
+
+	correctedManagerMethods.erase("ScriptFunctionality");
+
+	for (auto& method : managerMethods["ScriptFunctionality"])
+	{
+		size_t separator = method.methodName.find("_");
+
+		std::string newClassName = method.methodName.substr(0, separator);
+		std::string newMethodName = method.methodName.substr(separator + 1);
+
+
+		Method newMethod;
+
+		newMethod.className = newClassName;
+		newMethod.methodName = newMethodName;
+		newMethod.returnType = method.returnType;
+		newMethod.input = method.input;
+
+		correctedManagerMethods[newClassName].push_back(newMethod);
+
+	}
+
+
+	for (auto& manager : correctedManagerMethods)
+	{
+		json managerJson;
+
+		managerJson["name"] = manager.first;
+		managerJson["methods"] = json::array();
+
+		for (auto& method : manager.second) {
+
+
+			json methodJson;
+
+			json inputJson = json::array();
+			for (auto& input : method.input) {
+
+				inputJson.push_back(
+					{ {"name", input.name}, {"type", input.type} });
+			}
+
+			methodJson["input"] = inputJson;
+			methodJson["return"] = method.returnType;
+			methodJson["name"] = method.methodName;
+
+			managerJson["methods"].push_back(methodJson);
+		}
+
+		root.push_back(managerJson);
+	}
+
+
+	std::ofstream fmJSON(output + "/Managers.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}

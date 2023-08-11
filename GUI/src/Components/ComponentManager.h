@@ -20,6 +20,7 @@ namespace Components {
 		static void EnsureInitialised();
 
 		std::unordered_map<std::string, Component> components;
+		std::unordered_map<std::string, Component> managers;
 
 	public:
 
@@ -27,7 +28,9 @@ namespace Components {
 		static void Release();
 
 		static void ReadComponentInfo(cstring path);
+		static void ReadManagerInfo(cstring path);
 
 		static std::unordered_map<std::string, Component>& GetAllComponents();
+		static std::unordered_map<std::string, Component>& GetAllManagers();
 	};
 }

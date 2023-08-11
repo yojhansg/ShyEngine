@@ -1,0 +1,1279 @@
+[
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "val",
+                        "type": "cVariable"
+                    }
+                ],
+                "name": "Set",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "Get",
+                "return": "Scripting::Variable"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "val",
+                        "type": "cVariable"
+                    }
+                ],
+                "name": "SetLocal",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "GetLocal",
+                "return": "Scripting::Variable"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "val",
+                        "type": "cVariable"
+                    }
+                ],
+                "name": "SetGlobal",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "GetGlobal",
+                "return": "Scripting::Variable"
+            }
+        ],
+        "name": "Attribute"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "GetPosition",
+                "return": "Utilities::Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "newPosition",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "SetPosition",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "GetScale",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "newScale",
+                        "type": "float"
+                    }
+                ],
+                "name": "SetScale",
+                "return": "void"
+            }
+        ],
+        "name": "Camera"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Entity",
+                "return": "ECS::Entity*"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ent",
+                        "type": "ECS::Entity*"
+                    }
+                ],
+                "name": "Name",
+                "return": "std::string"
+            },
+            {
+                "input": [],
+                "name": "CurrentName",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ent",
+                        "type": "ECS::Entity*"
+                    },
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "Event",
+                "return": "void"
+            }
+        ],
+        "name": "Entity"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "GlobalEvent",
+                "return": "void"
+            }
+        ],
+        "name": "GlobalEvent"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Graph",
+                "return": "std::string"
+            }
+        ],
+        "name": "Graph"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "keyDownEvent",
+                "return": "bool"
+            },
+            {
+                "input": [],
+                "name": "keyUpEvent",
+                "return": "bool"
+            }
+        ],
+        "name": "InputManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Equals",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "NotEquals",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Lesser",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Greater",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "LesserOrEqual",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "GreaterOrEqual",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "b",
+                        "type": "bool"
+                    }
+                ],
+                "name": "And",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "b",
+                        "type": "bool"
+                    }
+                ],
+                "name": "Or",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "bool"
+                    }
+                ],
+                "name": "Negate",
+                "return": "bool"
+            }
+        ],
+        "name": "Logic"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Add",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Subtract",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Multiply",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Divide",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Power",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Root",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Max",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Min",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    }
+                ],
+                "name": "PlusOne",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    }
+                ],
+                "name": "MinusOne",
+                "return": "float"
+            }
+        ],
+        "name": "Math"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "url",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "OpenURL",
+                "return": "void"
+            }
+        ],
+        "name": "OpenURL"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "debugDraw",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "enable",
+                        "type": "bool"
+                    }
+                ],
+                "name": "enableDebugDraw",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "handleBodies",
+                "return": "void"
+            }
+        ],
+        "name": "PhysicsManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "cVariable"
+                    }
+                ],
+                "name": "Print",
+                "return": "void"
+            }
+        ],
+        "name": "Print"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "UnitValue",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "float"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Between",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "UnitVector",
+                "return": "Utilities::Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "float"
+                    }
+                ],
+                "name": "ScaledVector",
+                "return": "Utilities::Vector2D"
+            }
+        ],
+        "name": "Random"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Now",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "WeekDay",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "ShortWeekDay",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Month",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "ShortMonth",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "DayOfWeekIndex",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "MonthIndex",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "MonthDay",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Year",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Hours",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Minutes",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Seconds",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    },
+                    {
+                        "name": "now",
+                        "type": "int"
+                    }
+                ],
+                "name": "Since",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "HourTime",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "PreciseHourTime",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "TimeStamp",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "int"
+                    }
+                ],
+                "name": "Date",
+                "return": "std::string"
+            }
+        ],
+        "name": "RealTime"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "SaveAll",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "int"
+                    }
+                ],
+                "name": "Save",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "int"
+                    }
+                ],
+                "name": "Load",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "std::string"
+                    },
+                    {
+                        "name": "value",
+                        "type": "Scripting::Variable"
+                    }
+                ],
+                "name": "SetSlot",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "std::string"
+                    }
+                ],
+                "name": "GetSlot",
+                "return": "Scripting::Variable"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "std::string"
+                    },
+                    {
+                        "name": "value",
+                        "type": "Scripting::Variable"
+                    }
+                ],
+                "name": "Set",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "std::string"
+                    }
+                ],
+                "name": "Get",
+                "return": "Scripting::Variable"
+            },
+            {
+                "input": [],
+                "name": "ClearSlot",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "int"
+                    }
+                ],
+                "name": "Exists",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "int"
+                    }
+                ],
+                "name": "DeleteSave",
+                "return": "void"
+            }
+        ],
+        "name": "SaveManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "scenePath",
+                        "type": "std::string"
+                    },
+                    {
+                        "name": "pushMode",
+                        "type": "int"
+                    }
+                ],
+                "name": "ChangeScene",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "ResetScene",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "EndGame",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "getNumberOfScenes",
+                "return": "int"
+            },
+            {
+                "input": [],
+                "name": "GetCurrentScenePath",
+                "return": "std::string"
+            }
+        ],
+        "name": "SceneManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "Equals",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "Concatenate",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "begin",
+                        "type": "int"
+                    },
+                    {
+                        "name": "end",
+                        "type": "int"
+                    }
+                ],
+                "name": "Substring",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "b",
+                        "type": "int"
+                    }
+                ],
+                "name": "Begining",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "b",
+                        "type": "int"
+                    }
+                ],
+                "name": "End",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "values",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "Trim",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    }
+                ],
+                "name": "TrimBlanks",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "b",
+                        "type": "int"
+                    }
+                ],
+                "name": "GetLetter",
+                "return": "char"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cstring"
+                    },
+                    {
+                        "name": "c",
+                        "type": "char"
+                    }
+                ],
+                "name": "Find",
+                "return": "int"
+            },
+            {
+                "input": [
+                    {
+                        "name": "variable",
+                        "type": "cVariable"
+                    }
+                ],
+                "name": "ToString",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "number",
+                        "type": "int"
+                    },
+                    {
+                        "name": "zeroCount",
+                        "type": "int"
+                    }
+                ],
+                "name": "LeadingZeros",
+                "return": "std::string"
+            },
+            {
+                "input": [
+                    {
+                        "name": "number",
+                        "type": "float"
+                    }
+                ],
+                "name": "RemoveDecimals",
+                "return": "std::string"
+            }
+        ],
+        "name": "String"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "GetTimeSinceBegining",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "GetTimeSinceBeginingMilliseconds",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "GetDeltaTime",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "GetFrameRate",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "GetPhysicsDeltaTime",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "float"
+                    }
+                ],
+                "name": "ScaleWithDeltaTime",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "float"
+                    }
+                ],
+                "name": "ScaleWithPhysicsDeltaTime",
+                "return": "float"
+            }
+        ],
+        "name": "Time"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "x",
+                        "type": "float"
+                    },
+                    {
+                        "name": "y",
+                        "type": "float"
+                    }
+                ],
+                "name": "Create",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Magnitude",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "X",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Y",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Normalize",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Angle",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "other",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "AngleWithVector",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "angle",
+                        "type": "float"
+                    }
+                ],
+                "name": "Rotate",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Add",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Subtract",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Dot",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "b",
+                        "type": "cVector2D"
+                    }
+                ],
+                "name": "Cross",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "cVector2D"
+                    },
+                    {
+                        "name": "b",
+                        "type": "float"
+                    }
+                ],
+                "name": "Multiply",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Up",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Left",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Right",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Down",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "One",
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Zero",
+                "return": "Vector2D"
+            }
+        ],
+        "name": "Vector2D"
+    }
+]

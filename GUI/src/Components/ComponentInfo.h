@@ -12,7 +12,6 @@ namespace Components {
 	//TODO: implementar las cosas para leer chars
 	enum class AttributesType {
 		NONE,
-		INT,
 		FLOAT,
 		VECTOR2,
 		STRING,
@@ -25,7 +24,6 @@ namespace Components {
 
 		union value
 		{
-			int valueInt;
 			float valueFloat;
 			struct {
 				float x;
@@ -72,6 +70,7 @@ namespace Components {
 		std::vector<Variable> input;
 	public:
 		Method();
+		Method(Method const& other);
 		Method(const std::string& name, const std::string& className);
 
 		void SetReturn(const Variable& ret);
@@ -103,8 +102,8 @@ namespace Components {
 
 		cstring getName();
 
-		const Attribute& getAttribute(cstring name);
-		const Method& getMethod(cstring name);
+		Attribute& getAttribute(cstring name);
+		Method& getMethod(cstring name);
 
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
 		std::unordered_map<std::string, Method>& getAllMethods();

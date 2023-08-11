@@ -25,9 +25,6 @@ void PEditor::GameObject::drawComponentsInEditor()
 
 				switch (attr->getType())
 				{
-				case ::Components::AttributesType::INT:
-					drawInt(attributeName + it->first, attr);
-					break;
 				case ::Components::AttributesType::FLOAT:
 					drawFloat(attributeName + it->first, attr);
 					break;
@@ -68,10 +65,6 @@ void PEditor::GameObject::drawComponentsInEditor()
 }
 
 
-void PEditor::GameObject::drawInt(std::string attrName, ::Components::Attribute* attr)
-{
-	ImGui::DragInt(("##" + attrName).c_str(), &attr->value.value.valueInt, 0.3f, 0.0f, 0.0f, "%.2f");
-}
 
 void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr)
 {

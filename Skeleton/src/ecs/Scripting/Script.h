@@ -41,8 +41,8 @@ namespace ECS {
 		Scripting::Variable Get(cstring name);
 		void Set(cstring name, cVariable variable);
 
-		Scripting::Variable GetConstValue(cstring name);
-		void SetConstValue(cstring name, cVariable val);
+		Scripting::Variable GetSerialisedValue(cstring name);
+		void SeterialisedValue(cstring name, cVariable val);
 
 	private:
 
@@ -50,7 +50,7 @@ namespace ECS {
 
 		Scripting::ScriptManager::ScriptNodes nodes;
 
-		std::map<std::string, Scripting::Variable> constValues;
+		std::map<std::string, Scripting::Variable> serializedValues;
 		std::map<std::string, Scripting::Variable> attributes;
 
 		void Iteration(Scripting::Node* beginNode);

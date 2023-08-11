@@ -23,12 +23,12 @@ namespace Components {
 		return name;
 	}
 
-	const Attribute& Components::Component::getAttribute(cstring name)
+	Attribute& Components::Component::getAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	const Method& Components::Component::getMethod(cstring name)
+	Method& Components::Component::getMethod(cstring name)
 	{
 		return methods[name];
 	}
@@ -64,11 +64,7 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "int") {
-			value.value.valueInt = 0;
-			type = AttributesType::INT;
-		}
-		else if (typeString == "float") {
+		if (typeString == "int" || typeString == "float") {
 			value.value.valueFloat = 0.0f;
 			type = AttributesType::FLOAT;
 		}
@@ -115,9 +111,6 @@ namespace Components {
 
 		switch (type)
 		{
-		case AttributesType::INT:
-			j[name] = value.value.valueInt;
-			break;
 		case AttributesType::FLOAT:
 			j[name] = value.value.valueFloat;
 			break;
@@ -162,6 +155,14 @@ namespace Components {
 	}
 	Method::Method()
 	{
+	}
+
+	Method::Method(Method const& other)
+	{
+		name = other.name;
+		component = other.component;
+		returnType = other.returnType;
+		input = other.input;
 	}
 
 	Method::Method(const std::string& name, const std::string& className)
