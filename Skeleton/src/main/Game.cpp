@@ -43,13 +43,11 @@ void Game::firstScene() {
 
 	physics->addCollisionLayer("Ground");
 	physics->addCollisionLayer("Player");
-	physics->addCollisionLayer("Ball");
 
 	auto renderer = Renderer::RendererManager::instance();
 	auto sound = Sound::SoundManager::instance();
 
 	physics->setCollisionBetweenLayers("Ground", "Player", true);
-	physics->setCollisionBetweenLayers("Ground", "Ball", true);
 
 	sound->setMasterVolume(0.1f);
 
@@ -65,14 +63,6 @@ void Game::firstScene() {
 		auto im = player->addComponent<ECS::Image>("images/link.png");
 		auto body = player->addComponent<ECS::BoxBody>();
 		auto lComp = player->addComponent<ECS::LinkComponent>();
-
-		// Ball
-		ECS::Entity* ball = scene->createEntity("Ball");
-
-		auto trBall = ball->addComponent<ECS::Transform>();
-		auto imBall = ball->addComponent<ECS::Image>("images/ball.png");
-		auto ballBody = ball->addComponent<ECS::CircleBody>();
-		auto bComp = ball->addComponent<ECS::BallComponent>();
 
 		// Ground
 		ECS::Entity* ground = scene->createEntity("Ground");
@@ -93,12 +83,6 @@ void Game::firstScene() {
 		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
 		body->setFriction(0.5f);
 		body->setCollisionLayer("Player");
-
-		// Ball
-		trBall->SetLocalPosition({ renderer->getWidth() / 4.0f, renderer->getHeight() / 3.0f });
-		trBall->SetScale({ 0.5f, 0.5f });
-		ballBody->setBodyType((int)ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		ballBody->setCollisionLayer("Ball");
 
 		// Ground
 		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });

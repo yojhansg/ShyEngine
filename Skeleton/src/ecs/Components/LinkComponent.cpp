@@ -6,6 +6,9 @@
 #include "BoxBody.h"
 #include "Entity.h"
 
+#include <ConsoleManager.h>
+#include "PrefabManager.h"
+
 namespace ECS {
 
 	void LinkComponent::init() {
@@ -24,16 +27,9 @@ namespace ECS {
 
 		if (im->keyDownEvent()) {
 
-			if (onGround) {
-				if (im->isKeyDown(SDL_SCANCODE_SPACE)) {
-					body->applyLinearImpulseToCenter({ 0, -300 });
-				}
-				else if (im->isKeyDown(SDL_SCANCODE_A)) {
-					body->applyLinearImpulseToCenter({ -7, 0 });
-				}
-				else if (im->isKeyDown(SDL_SCANCODE_D)) {
-					body->applyLinearImpulseToCenter({ 7, 0 });
-				}
+			if (im->isKeyDown(SDL_SCANCODE_A)) {
+				Console::Output::Print("Prefab Manager", "Entidad instanciada");
+				PrefabManager::instance()->InstantiatePrefabWithTransform("Link", this->getScene());
 			}
 
 		}
