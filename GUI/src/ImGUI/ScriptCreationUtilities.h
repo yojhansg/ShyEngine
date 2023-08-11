@@ -31,6 +31,7 @@ namespace PEditor {
 			Hacer que si un nodo retorna null no se pueda añadir a otro
 			Tener en cuenta que hay veces en las que hay metodos que reciben como entrada una cVariable
 			Serializacion
+			Lista desplegable de nodos que al hacer click te lleve al elemento seleccionado
 
 			-Guardar el output de las casillas
 			-Colorear el triangulo de salida cuando tenga al menos un input
@@ -39,7 +40,6 @@ namespace PEditor {
 			-Bucles
 			-Implementar eventos (start, update)
 			-Eliminar un nodo
-			-Lista desplegable de nodos que al hacer click te lleve al elemento seleccionado
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
@@ -52,7 +52,8 @@ namespace PEditor {
 			-Mover la serializacion y carga a script creation en vez de estar en utilities
 
 			-Cambiar la serializacion de vector2 y color a array en vez de string
-			-Los nodos se pintan por encima
+			-Los nodos se pintan por encima de la barra superior
+			-Cuando el input esta fuera no se dibuja la linea
 		*/
 
 		class ScriptMethod;
@@ -71,7 +72,7 @@ namespace PEditor {
 			ScriptNode* SetID(int id);
 			ScriptNode* SetPosition(int x, int y);
 
-			void Render();
+			bool Render();
 
 			int GetId();
 			virtual std::string GetStringId();
@@ -93,6 +94,12 @@ namespace PEditor {
 
 			Node GetType();
 
+
+			void AddOutput(ScriptMethod* output);
+			bool RemoveOutput(ScriptMethod* output);
+
+			virtual void OnRemoved();
+
 		protected:
 
 			int id;
@@ -106,10 +113,13 @@ namespace PEditor {
 
 			std::string outputStr;
 
+			std::vector<ScriptMethod*> outputConexions;
+
 			virtual void render();
 
 			void UpdatePosition(int scrollx, int scrolly);
-			void ManagerOutputNode();
+			void ManageOutputNode();
+			bool ManageCloseNode();
 		};
 
 		class ScriptInput : public ScriptNode {
@@ -138,6 +148,8 @@ namespace PEditor {
 			ScriptFlow* next;
 		};
 
+
+
 		class ScriptMethod : public ScriptNode, public ScriptFlow {
 
 			::Components::Method& method;
@@ -151,7 +163,13 @@ namespace PEditor {
 
 			void SetInput(int idx, ScriptNode* node);
 
+			void OnRemoved() override;
+
+			void OnInputRemoved(ScriptNode* node);
+
 		protected:
+
+
 
 			void render() override;
 			std::string GetStringId() override;

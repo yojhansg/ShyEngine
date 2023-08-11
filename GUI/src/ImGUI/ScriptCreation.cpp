@@ -131,11 +131,28 @@ void PEditor::ScriptCreation::render()
 		ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
 		ScriptCreationUtilities::Grid::Draw();
 
+		int nodeIdx = 0;
+		bool eraseNode = false;
 		for (auto node : nodes) {
 
-			if (node != nullptr)
-				node->Render();
+			if (node != nullptr) {
+
+				if (node->Render()) {
+
+					eraseNode = true;
+				}
+			}
+
+			if (!eraseNode)
+				nodeIdx++;
 		}
+
+		if (eraseNode)
+		{
+			nodes[nodeIdx]->OnRemoved();
+			nodes.erase(nodes.begin() + nodeIdx);
+		}
+
 
 		if (!ImGui::IsMouseDown(0))
 			ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;

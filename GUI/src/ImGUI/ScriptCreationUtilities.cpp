@@ -24,7 +24,7 @@ PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::
 	return this;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::Render()
+bool PEditor::ScriptCreationUtilities::ScriptNode::Render()
 {
 	int scrollx, scrolly;
 	ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
@@ -33,18 +33,6 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 	auto size = ImVec2(w, h);
 
 	auto windowSize = ImGui::GetWindowSize();
-
-	//Sombra
-
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-	//ImGui::Begin((GetStringId() + "_shadow").c_str(), NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-
-	//ImGui::SetWindowPos(ImVec2(position.x + 10, position.y + 10), ImGuiCond_None);
-	//ImGui::SetWindowSize(size, ImGuiCond_Once);
-
-	//ImGui::End();
-	//ImGui::PopStyleVar();
-
 
 	if (
 		position.x <= windowSize.x && position.y <= windowSize.y &&
@@ -61,13 +49,19 @@ void PEditor::ScriptCreationUtilities::ScriptNode::Render()
 		ImGui::SetWindowSize(size, ImGuiCond_None);
 
 		render();
-		ManagerOutputNode();
+		ManageOutputNode();
 
+		bool close = ManageCloseNode();
 
 		UpdatePosition(scrollx, scrolly);
 
 		ImGui::End();
+
+		return close;
+
 	}
+
+	return false;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition(int scrollx, int scrolly)
@@ -77,7 +71,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::UpdatePosition(int scrollx, i
 	y = windowPos.y - scrolly;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
+void PEditor::ScriptCreationUtilities::ScriptNode::ManageOutputNode()
 {
 	if (ignoreOutput) return;
 
@@ -118,7 +112,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 	else {
 
 
-		if (isCurrentlySelected)
+		if (isCurrentlySelected || outputConexions.size() > 0)
 			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255));
 		else
 			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255), 1);
@@ -134,8 +128,41 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManagerOutputNode()
 		auto mousePos = ImGui::GetMousePos();
 		Bezier::Draw(outputNodePosition.x, outputNodePosition.y, mousePos.x, mousePos.y);
 	}
+}
 
+bool PEditor::ScriptCreationUtilities::ScriptNode::ManageCloseNode()
+{
 
+	if (ImGui::Button("Close"))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptNode::AddOutput(ScriptMethod* output)
+{
+	outputConexions.push_back(output);
+}
+
+bool PEditor::ScriptCreationUtilities::ScriptNode::RemoveOutput(ScriptMethod* output)
+{
+	auto pos = std::remove(outputConexions.begin(), outputConexions.end(), output);
+
+	if (pos == outputConexions.end())
+		return false;
+
+	outputConexions.erase(pos, outputConexions.end());
+	return true;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptNode::OnRemoved()
+{
+	for (auto output : outputConexions) {
+
+		output->OnInputRemoved(this);
+	}
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::GetOutputNodePosition(float* x, float* y)
@@ -315,9 +342,8 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 			if (ImGui::IsMouseReleased(0)) {
 
 
-
-
 				input[idx] = ScriptNode::currentlySelected;
+				ScriptNode::currentlySelected->AddOutput(this);
 				ScriptNode::currentlySelected = nullptr;
 			}
 
@@ -1035,6 +1061,30 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 void PEditor::ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNode* node)
 {
 	input[idx] = node;
+	node->AddOutput(this);
+}
+
+
+void PEditor::ScriptCreationUtilities::ScriptMethod::OnRemoved()
+{
+	ScriptNode::OnRemoved();
+	for (auto in : input) {
+
+		if (in != nullptr) {
+
+			in->RemoveOutput(this);
+		}
+	}
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMethod::OnInputRemoved(ScriptNode* node)
+{
+	for (int i = 0; i < input.size(); i++) {
+
+		if (input[i] == node)
+			input[i] = nullptr;
+	}
+
 }
 
 
