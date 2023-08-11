@@ -4,7 +4,6 @@
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
 #include "ImGUIManager.h"
-#include <fstream>
 #include <algorithm>
 
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
@@ -316,7 +315,7 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 			if (ImGui::IsMouseReleased(0)) {
 
 
-				
+
 
 				input[idx] = ScriptNode::currentlySelected;
 				ScriptNode::currentlySelected = nullptr;
@@ -500,24 +499,24 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 
 	switch (attrType) {
 
-		    case ::Components::AttributesType::NONE:
-				outputStr = "";
-				break;
-			case ::Components::AttributesType::FLOAT:
-				outputStr = "float";
-				break;
-			case ::Components::AttributesType::VECTOR2:
-				outputStr = "Utilities::Vector2D";
-				break;
-			case ::Components::AttributesType::STRING:
-				outputStr = "std::string";
-				break;
-			case ::Components::AttributesType::BOOL:
-				outputStr = "bool";
-				break;
-			case ::Components::AttributesType::COLOR:
-				outputStr = "Utilities::Color";
-				break;
+	case ::Components::AttributesType::NONE:
+		outputStr = "";
+		break;
+	case ::Components::AttributesType::FLOAT:
+		outputStr = "float";
+		break;
+	case ::Components::AttributesType::VECTOR2:
+		outputStr = "Utilities::Vector2D";
+		break;
+	case ::Components::AttributesType::STRING:
+		outputStr = "std::string";
+		break;
+	case ::Components::AttributesType::BOOL:
+		outputStr = "bool";
+		break;
+	case ::Components::AttributesType::COLOR:
+		outputStr = "Utilities::Color";
+		break;
 
 	}
 
@@ -730,7 +729,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 		}
 
 		ImGui::SameLine();
-		if (ImGui::Button("Save without exit")) {
+		if (ImGui::Button("Close without saving")) {
 			closePopup = true;
 
 			Close();
@@ -808,17 +807,132 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::AddMatchingMethods(std::un
 
 }
 
+Components::Method& PEditor::ScriptCreationUtilities::ScriptMenuBar::GetMethodReference(const std::string& name)
+{
+
+	return Components::ComponentManager::GetAllComponents()["a"].getMethod("a");
+
+}
 
 
-
+#include <fstream>
 #include "nlohmann/json.hpp"
 
 using nlohmann::json;
 
-
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::Load()
 {
+	std::string fileName = std::string(nameBuffer);
+	if (fileName.size() == 0) return;
 
+	std::ifstream fileStream("scripts/" + fileName + ".script");
+
+	if (!fileStream.good() || !json::accept(fileStream))
+	{
+		return;
+	}
+
+	fileStream.clear();
+	fileStream.seekg(0);
+
+	json file = json::parse(fileStream);
+	fileStream.close();
+
+	json& functions = file["functions"];
+	json& consts = file["consts"];
+
+	creator->SetNodeCount(file["nodeCount"].get<int>());
+
+
+	struct MethodInput{
+		class ScriptMethod* node;
+		int pos;
+		int inputNode;
+	};
+
+	std::vector<MethodInput> methodInfo;
+
+
+	for (auto& funcNode : functions) {
+
+		std::string completeName = funcNode["function"];
+		size_t separator = completeName.find("_");
+		std::string className = completeName.substr(0, separator);
+		std::string functionName = completeName.substr(separator + 1);
+
+		ScriptMethod* method;
+
+		if (Components::ComponentManager::GetAllComponents().contains(className)) {
+
+			method = new ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
+		}
+		else {
+			method = new ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
+		}
+
+
+		int idx = 0;
+		for (auto& in : funcNode["input"]) {
+
+			int inputNode = in.get<int>();
+			if(inputNode >= 0)
+			methodInfo.push_back({method, idx, inputNode });
+
+			idx++;
+		}
+
+
+
+		method->FromJson(funcNode);
+
+		creator->SetNode(method->GetId(), method);
+	}
+
+	for (auto& constNode : consts) {
+
+		::Components::AttributesType type = ::Components::AttributesType::NONE;
+		::Components::AttributeValue value;
+
+		std::string typeStr = constNode["type"].get<std::string>();
+
+		if (typeStr == "null") {
+			type = ::Components::AttributesType::NONE;
+			value.value.valueFloat = 0;
+		}
+		else if (typeStr == "float") {
+			type = ::Components::AttributesType::FLOAT;
+			value.value.valueFloat = constNode["value"].get<float>();
+		}
+		else if (typeStr == "vector2D") {
+			//TODO: despues de la serializacion
+		}
+		else if (typeStr == "string") {
+			type = ::Components::AttributesType::STRING;
+			value.valueString = constNode["value"].get<float>();
+		}
+		else if (typeStr == "bool") {
+			type = ::Components::AttributesType::BOOL;
+			value.value.valueBool = constNode["value"].get<bool>();
+		}
+		else if (typeStr == "color") {
+
+			//TODO: despues de la serializacion
+		}
+
+		ScriptInput* input = new ScriptInput(type);
+		input->attrValue = value;
+
+		input->FromJson(constNode);
+
+
+		creator->SetNode(input->GetId(), input);
+	}
+
+
+	for (auto& mi : methodInfo) {
+
+		mi.node->SetInput(mi.pos, creator->GetNodes()[mi.inputNode]);
+	}
 
 }
 
@@ -846,7 +960,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 		else if (node->GetType() == ScriptNode::Node::Input) {
 
 
-			functions.push_back(node->ToJson());
+			consts.push_back(node->ToJson());
 		}
 	}
 
@@ -890,18 +1004,24 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 {
 	json root = ScriptNode::ToJson();
 
-	root["function"] = method.getName();
+	root["function"] = method.getComponent() + "_" + method.getName();
 
 	root["input"] = json::array();
 
 	for (auto& in : input) {
 
-		root["input"].push_back(in->GetId());
+		if (in != nullptr)
+			root["input"].push_back(in->GetId());
+		else root["input"].push_back(-1);
 	}
 
 	return root;
 }
 
+void PEditor::ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNode* node)
+{
+	input[idx] = node;
+}
 
 
 nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
@@ -910,39 +1030,31 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 
 	//TODO: serialised values
 
-	switch (attrType) {
-
-		switch (attrType)
-		{
-		case Components::AttributesType::NONE:
-			root["type"] = "null";
-			root["value"] = nullptr;
-			break;
-		case Components::AttributesType::FLOAT:
-			root["type"] = "float";
-			root["value"] = attrValue.value.valueFloat;
-			break;
-		case Components::AttributesType::VECTOR2:
-			root["type"] = "vector2D";
-			root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
-			break;
-		case Components::AttributesType::STRING:
-			root["type"] = "string";
-			root["value"] = attrValue.valueString;
-			break;
-		case Components::AttributesType::BOOL:
-			root["type"] = "number";
-			root["value"] = attrValue.value.valueBool;
-			break;
-		case Components::AttributesType::COLOR:
-			root["type"] = "color";
-			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
-			break;
-		default:
-			break;
-		}
+	if (attrType == Components::AttributesType::NONE) {
+		root["type"] = "null";
+		root["value"] = nullptr;
 	}
+	else if (attrType == Components::AttributesType::FLOAT) {
+		root["type"] = "float";
+		root["value"] = attrValue.value.valueFloat;
+	}
+	else if (attrType == Components::AttributesType::VECTOR2) {
+		root["type"] = "vector2D";
+		root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
+	}
+	else if (attrType == Components::AttributesType::STRING) {
+		root["type"] = "string";
+		root["value"] = attrValue.valueString;
+	}
+	else if (attrType == Components::AttributesType::BOOL) {
+		root["type"] = "bool";
+		root["value"] = attrValue.value.valueBool;
+	}
+	else if (attrType == Components::AttributesType::COLOR) {
+		root["type"] = "color";
+		root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
 
+	}
 
 	return root;
 }

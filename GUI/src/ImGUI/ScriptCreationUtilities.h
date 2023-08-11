@@ -45,6 +45,12 @@ namespace PEditor {
 			-Names: Es la forma de tener metodos en el scripting
 			-Hacer que si un nodo retorna null no se pueda añadir a otro
 			-Hacer que solo se pueda añadir una flecha si ambas salidas coinciden
+
+			-Tener en cuenta que hay veces en las que hay metodos que reciben como entrada una cVariable
+
+			-Mover la serializacion y carga a script creation en vez de estar en utilities
+
+			-Cambiar la serializacion de vector2 y color a array en vez de string
 		*/
 
 		class ScriptMethod;
@@ -111,11 +117,12 @@ namespace PEditor {
 
 			nlohmann::json ToJson() override;
 
+			::Components::AttributeValue attrValue;
+
 		protected:
 
 			bool reflect; //TODO
 			::Components::AttributesType attrType;
-			::Components::AttributeValue attrValue;
 
 			void render() override;
 
@@ -138,6 +145,8 @@ namespace PEditor {
 			ScriptMethod(::Components::Method&);
 
 			nlohmann::json ToJson() override;
+
+			void SetInput(int idx, ScriptNode* node);
 
 		protected:
 
@@ -167,12 +176,12 @@ namespace PEditor {
 			ScriptCreation* creator;
 
 			void Close();
-			void Load();
 			void Save();
 
 			void AddMatchingMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
-
+			Components::Method& GetMethodReference(const std::string& name);
 		public:
+			void Load();
 
 			ScriptMenuBar(ScriptCreation* creator);
 

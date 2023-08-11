@@ -22,7 +22,7 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 PEditor::ScriptCreation::~ScriptCreation()
 {
 	ClearScript();
-	
+
 	instance = nullptr;
 	delete dropDownSelection;
 	delete menuBar;
@@ -33,6 +33,21 @@ void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
 	node->SetID(nodes.size());
 	nodes.push_back(node);
+}
+
+void PEditor::ScriptCreation::SetNodeCount(int count)
+{
+	nodes = std::vector<ScriptCreationUtilities::ScriptNode*>(count);
+}
+
+void PEditor::ScriptCreation::SetNode(int n, ScriptCreationUtilities::ScriptNode* node)
+{
+	nodes[n] = node;
+}
+
+void PEditor::ScriptCreation::Load()
+{
+	menuBar->Load();
 }
 
 void PEditor::ScriptCreation::GetScrollPosition(int* x, int* y)
@@ -94,14 +109,15 @@ void PEditor::ScriptCreation::render()
 			scrollx = scrolly = 0;
 			scrolled = true;
 		}
-		
+
 		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
 		ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
 		ScriptCreationUtilities::Grid::Draw();
 
 		for (auto node : nodes) {
 
-			node->Render();
+			if (node != nullptr)
+				node->Render();
 		}
 
 		if (!ImGui::IsMouseDown(0))
@@ -142,6 +158,7 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
 
 void PEditor::ScriptCreation::ClearScript()
 {
+	scrollx = scrolly = 0;
 	instance->modified = false;
 	for (auto node : nodes) {
 		delete node;

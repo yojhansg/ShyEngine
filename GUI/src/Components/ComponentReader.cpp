@@ -66,6 +66,7 @@ namespace Components {
 
 		json file = json::parse(fileStream);
 
+		fileStream.close();
 		std::vector<Component> components;
 		for (auto& item : file.items()) {
 
@@ -93,6 +94,7 @@ namespace Components {
 		fileStream.seekg(0);
 
 		json file = json::parse(fileStream);
+		fileStream.close();
 
 		std::vector<Component> components;
 		for (auto& manager : file) {

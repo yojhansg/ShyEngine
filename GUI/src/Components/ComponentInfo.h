@@ -102,8 +102,8 @@ namespace Components {
 
 		cstring getName();
 
-		const Attribute& getAttribute(cstring name);
-		const Method& getMethod(cstring name);
+		Attribute& getAttribute(cstring name);
+		Method& getMethod(cstring name);
 
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
 		std::unordered_map<std::string, Method>& getAllMethods();

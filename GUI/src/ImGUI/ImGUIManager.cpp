@@ -167,6 +167,9 @@ void ImGUIManager::exit()
 void ImGUIManager::creatingScript(bool isCreating)
 {
     isCreatingScript = isCreating;
+
+    if (isCreating)
+        getScriptCreation()->Load();
 }
 
 void ImGUIManager::update()

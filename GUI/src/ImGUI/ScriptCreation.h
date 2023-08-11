@@ -40,6 +40,10 @@ namespace PEditor {
 
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
+        void SetNodeCount(int count);
+        void SetNode(int n, ScriptCreationUtilities::ScriptNode* node);
+
+        void Load();
 
         static void GetScrollPosition(int* x, int* y);
         static bool ScrolledThisFrame();

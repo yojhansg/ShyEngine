@@ -23,12 +23,12 @@ namespace Components {
 		return name;
 	}
 
-	const Attribute& Components::Component::getAttribute(cstring name)
+	Attribute& Components::Component::getAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	const Method& Components::Component::getMethod(cstring name)
+	Method& Components::Component::getMethod(cstring name)
 	{
 		return methods[name];
 	}
