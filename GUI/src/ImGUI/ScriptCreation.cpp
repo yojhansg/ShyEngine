@@ -16,6 +16,14 @@ PEditor::ScriptCreation::ScriptCreation() : Window("", None)
 	xpos = ypos = 0;
 	scrollx = scrolly = 0;
 
+	lerping = false;
+	lerpDuration = 1;
+	lerp_t = 0;
+	initialx = initialy = finalx = finaly = 0;
+
+	modified = false;
+	scrolled = false;
+
 	instance = this;
 }
 
@@ -86,6 +94,8 @@ std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreat
 
 void PEditor::ScriptCreation::render()
 {
+
+
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -93,21 +103,28 @@ void PEditor::ScriptCreation::render()
 	{
 		//ImGui::SetWindowFocus();
 
-		auto mouseScroll = ImGui::GetMouseDragDelta(2);
+		if (lerping) {
 
-		scrollx = mouseScroll.x;
-		scrolly = mouseScroll.y;
+			ManageLerp();
+		}
+		else {
 
-		if (scrollx != 0 || scrolly != 0)
-			scrolled = true;
+			auto mouseScroll = ImGui::GetMouseDragDelta(2);
 
-		if (ImGui::IsMouseReleased(2)) {
+			scrollx = mouseScroll.x;
+			scrolly = mouseScroll.y;
 
-			xpos += scrollx;
-			ypos += scrolly;
+			if (scrollx != 0 || scrolly != 0)
+				scrolled = true;
 
-			scrollx = scrolly = 0;
-			scrolled = true;
+			if (ImGui::IsMouseReleased(2)) {
+
+				xpos += scrollx;
+				ypos += scrolly;
+
+				scrollx = scrolly = 0;
+				scrolled = true;
+			}
 		}
 
 		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
@@ -154,6 +171,64 @@ void PEditor::ScriptCreation::RenderBox(const std::string& name, ImVec2 position
 	}
 	ImGui::EndChild();
 
+}
+
+
+void PEditor::ScriptCreation::Lerp(int x, int y, float lerpDuration)
+{
+	instance->initialx = instance->xpos;
+	instance->initialy = instance->ypos;
+
+	instance->finalx = x;
+	instance->finaly = y;
+
+	instance->lerping = true;
+	instance->lerpDuration = lerpDuration;
+
+	instance->lerp_t = 0;
+
+	instance->scrollx = instance->scrolly = 0;
+}
+
+void PEditor::ScriptCreation::ManageLerp()
+{
+	float dt = ImGui::GetIO().DeltaTime;
+
+	lerp_t += dt;
+	instance->scrolled = true;
+
+	auto size = ImGui::GetWindowSize();
+
+	float x = -finalx + size.x * 0.5f;
+	float y = -finaly + size.y * 0.5f;
+
+
+
+	if (lerp_t > lerpDuration) {
+
+		lerping = false;
+		xpos = x;
+		ypos = y;
+
+		return;
+	}
+
+	float t = lerp_t / lerpDuration;
+
+	auto lerp = [](float a, float b, float t) {
+		return a + t * (b - a);
+	};
+
+	auto cubicEaseOut = [](float x) {
+
+		float inv = 1 - x;
+		return 1 - (inv * inv * inv);
+	};
+
+
+
+	xpos = lerp(initialx, x, cubicEaseOut(t));
+	ypos = lerp(initialy, y, cubicEaseOut(t));
 }
 
 void PEditor::ScriptCreation::ClearScript()

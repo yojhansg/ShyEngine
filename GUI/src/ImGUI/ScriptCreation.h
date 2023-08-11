@@ -23,6 +23,14 @@ namespace PEditor {
         bool scrolled;
         bool modified;
 
+
+        bool lerping;
+        float lerp_t;
+        float lerpDuration;
+        int initialx, initialy;
+        int finalx, finaly;
+
+
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
 
         ScriptCreationUtilities::ScriptMenuBar* menuBar;
@@ -32,6 +40,8 @@ namespace PEditor {
         ScriptCreationUtilities::ScriptDropdownSelection* dropDownSelection;
 
         void RenderBox(const std::string& name, ImVec2 position, ImVec2 size);
+
+        void ManageLerp();
 
 
     public:
@@ -51,6 +61,8 @@ namespace PEditor {
         static bool IsFileModified();
         static void SetFileModified();
         static void ResetModified();
+        static void Lerp(int x, int y, float lerpDuration);
+
 
         std::vector<ScriptCreationUtilities::ScriptNode*>& GetNodes();
         

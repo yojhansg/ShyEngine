@@ -310,7 +310,7 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::render()
 		}
 
 		if (ScriptNode::currentlySelected != nullptr && ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b)
-			&& in.getTypeStr().c_str() == ScriptNode::currentlySelected->GetOutputString()) {
+			&& (in.getTypeStr() == ScriptNode::currentlySelected->GetOutputString() || in.getTypeStr() == "cVector")) {
 
 			if (ImGui::IsMouseReleased(0)) {
 
@@ -698,6 +698,20 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 				ImGui::EndMenu();
 			}
+		}
+
+
+		if (ImGui::BeginMenu("Find existing node")) {
+
+
+			for (auto& node : creator->GetNodes()) {
+
+				if (ImGui::MenuItem(node->GetStringId().c_str())) {
+
+					creator->Lerp(node->GetX() + node->GetW() * 0.5f, node->GetY() + node->GetH() * 0.5f, 1);
+				}
+			}
+			ImGui::EndMenu();
 		}
 
 

@@ -26,12 +26,15 @@ namespace PEditor {
 			Scroll por la escena
 			Crear una barra de navegacion arriba para que se vea bien e incluir mas cosas
 			Leer los managers
-
-			-Cambiar el foreground drawList por el drawlist de la ventana
 			Buscador de metodos
+			Hacer que solo se pueda añadir una flecha si ambas salidas coinciden
+			Hacer que si un nodo retorna null no se pueda añadir a otro
+			Tener en cuenta que hay veces en las que hay metodos que reciben como entrada una cVariable
+			Serializacion
+
+			-Guardar el output de las casillas
 			-Colorear el triangulo de salida cuando tenga al menos un input
 
-			-Serializacion
 			-Condicionales
 			-Bucles
 			-Implementar eventos (start, update)
@@ -40,17 +43,16 @@ namespace PEditor {
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
+			-Cambiar el foreground drawList por el drawlist de la ventana
 			-Control z manager
 
 			-Names: Es la forma de tener metodos en el scripting
-			-Hacer que si un nodo retorna null no se pueda añadir a otro
-			-Hacer que solo se pueda añadir una flecha si ambas salidas coinciden
-
-			-Tener en cuenta que hay veces en las que hay metodos que reciben como entrada una cVariable
+			-Comentar todo el codigo y ver que cosas se pueden mejorar
 
 			-Mover la serializacion y carga a script creation en vez de estar en utilities
 
 			-Cambiar la serializacion de vector2 y color a array en vez de string
+			-Los nodos se pintan por encima
 		*/
 
 		class ScriptMethod;
@@ -72,6 +74,8 @@ namespace PEditor {
 			void Render();
 
 			int GetId();
+			virtual std::string GetStringId();
+
 			int GetY();
 			int GetX();
 
@@ -102,7 +106,6 @@ namespace PEditor {
 
 			std::string outputStr;
 
-			virtual std::string GetStringId();
 			virtual void render();
 
 			void UpdatePosition(int scrollx, int scrolly);
