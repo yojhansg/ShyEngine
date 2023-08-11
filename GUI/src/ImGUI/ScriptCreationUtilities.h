@@ -6,6 +6,24 @@
 #include "ComponentInfo.h"
 #include "nlohmann/json_fwd.hpp"
 
+
+/*
+	En este fichero se encuentran todas las clases auxiliares de ScriptCreation
+
+	Lista de clases:
+		ScriptNode
+		ScriptMethod
+		ScriptInput
+		ScriptFlow
+		ScriptFork
+		ScriptDropdownSelection
+		ScriptMenuBar
+		Grid
+		Bezier
+*/
+
+
+
 namespace PEditor {
 
 	class ScriptCreation;
@@ -32,14 +50,14 @@ namespace PEditor {
 			Tener en cuenta que hay veces en las que hay metodos que reciben como entrada una cVariable
 			Serializacion
 			Lista desplegable de nodos que al hacer click te lleve al elemento seleccionado
+			Guardar el output de las casillas
+			Colorear el triangulo de salida cuando tenga al menos un input
+			Eliminar un nodo
 
-			-Guardar el output de las casillas
-			-Colorear el triangulo de salida cuando tenga al menos un input
-
+			-Next node
 			-Condicionales
 			-Bucles
 			-Implementar eventos (start, update)
-			-Eliminar un nodo
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
@@ -54,103 +72,301 @@ namespace PEditor {
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
+			-Un nodo no se puede unir a si mismo
+			-Cambiar el nombre de la ventana para los inputs
+			-Eliminar nodo con la tecla delete
+			-Serializar next
+			-Separar grid y bezier a otro fichero
 		*/
 
 		class ScriptMethod;
 
+
+		/*
+			Clase que representa un nodo generico
+		*/
+
 		class ScriptNode {
 
 		public:
-			
+
+			/*
+				Establecer el ID para el nodo
+			*/
+			ScriptNode* SetID(int id);
+
+			/*
+				Devuelve el valor numerico del ID (este id es unico entre los nodos)
+			*/
+			int GetId();
+
+			/*
+				Devuelve un string con un ID unico para usar como nombre de la ventana
+			*/
+			virtual std::string GetStringId();
+
+
+			/*
+				Enumerado para distinguir entre los distintos tipos de nodos que puede haber
+			*/
 			enum class Node {
 				Method, Input, Fork
 			};
 
 
-			ScriptNode();
-
-			ScriptNode* SetID(int id);
-			ScriptNode* SetPosition(int x, int y);
-
-			bool Render();
-
-			int GetId();
-			virtual std::string GetStringId();
-
-			int GetY();
-			int GetX();
-
-			int GetW();
-			int GetH();
-
-			std::string GetOutputString();
-
-			static ScriptNode* currentlySelected;
-			void GetOutputNodePosition(float* x, float* y);
-
-			virtual nlohmann::json ToJson();
-			virtual void FromJson(nlohmann::json&);
-
-
+			/*
+				Devuelve el tipo de nodo
+			*/
 			Node GetType();
 
 
+			/*
+				Cambiar la posicion del nodo
+			*/
+			ScriptNode* SetPosition(int x, int y);
+
+			/*
+				Actualiza y renderiza la ventana que representa al nodo
+				Devuelve si el nodo va a ser eliminado durante este frame
+				Solo se puede eliminar un nodo por frame
+			*/
+			bool UpdateAndRenderWindow();
+
+			/*
+				Devuelve la posicion x de la ventana (esquina superior izquierda)
+			*/
+			int GetY();
+
+			/*
+				Devuelve la posicion x de la ventana (esquina superior izquierda)
+			*/
+			int GetX();
+
+			/*
+				Devuelve el ancho de la ventana
+			*/
+			int GetW();
+
+			/*
+				Devuelve el alto de la ventana
+			*/
+			int GetH();
+
+			/*
+				Devuelve un string representando el tipo de valor que devuelve el nodo
+			*/
+			std::string GetOutputTypeString();
+
+			/*
+				Puntero al nodo que ha sido seleccionado para arrastrar su salida a otro
+			*/
+			static ScriptNode* currentlySelectedOutput;
+
+			/*
+				Posicion en la que colocar el boton de salida
+			*/
+			void GetOutputNodePosition(float* x, float* y);
+
+
+			/*
+				Metodo virtual para serializar el nodo a json
+			*/
+			virtual nlohmann::json ToJson();
+
+			/*
+				Carga los valores basicos de un nodo desde un json
+			*/
+			void FromJson(nlohmann::json&);
+
+			/*
+				Introduce un nuevo nodo a la lista de salidas
+			*/
 			void AddOutput(ScriptMethod* output);
+
+			/*
+				Elimina un nodo de la lista de salidas
+			*/
 			bool RemoveOutput(ScriptMethod* output);
 
+			/*
+				Callback para cuando un nodo es eliminado
+			*/
 			virtual void OnRemoved();
 
 		protected:
 
-			int id;
-			Node type;
+			ScriptNode();
 
-			float x, y;
-			float w, h;
+			int id;	//Id de la ventana
+			Node type; //Tipo de nodo
 
-			float nodeSize;
-			bool ignoreOutput;
+			float x, y; //Posicion de la venta (Esquina superior izquierda)
+			float w, h; //Dimensiones de la ventana
 
-			std::string outputStr;
+			bool ignoreOutput; //Marca si el 
+			float outputButtonSize; //Ancho del boton de salida
 
+			std::string outputStr; //Cadena con el nombre del tipo de salida
+
+			/*
+				Vector con las conexiones de salida del nodo. Es util para notificar a los nodos que reciben la salida
+				cuando este nodo va a ser eliminado
+			*/
 			std::vector<ScriptMethod*> outputConexions;
 
-			virtual void render();
+			/*
+				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
+			*/
+			virtual void updateAndRender();
 
-			void UpdatePosition(int scrollx, int scrolly);
+			/*
+				Metodo interno para actualizar la posicion de la ventana cuando esta ha sido arrastrada por el usuario
+			*/
+			void UpdatePositionAfterDrag(int scrollx, int scrolly);
+
+			/*
+				Logica para el boton de salida, asi como el dibujado de la flecha que une el boton de salida con el raton 
+			*/
 			void ManageOutputNode();
+
+			/*
+				Logica para el boton de cerrar la ventana
+			*/
 			bool ManageCloseNode();
 		};
 
+
+
+
+
+
+		/*
+			Clase para representar un nodo que almacena un valor
+		*/
+
+
 		class ScriptInput : public ScriptNode {
 
-			//Definir el tipo de input, representar y guardar el valor
 		public:
+			
+			/*
+				Para la construccion se necesita saber el tipo de entrada que se quiere almacenar en el nodo
+			*/
 			ScriptInput(::Components::AttributesType type);
 
+
+			/*
+				Serializacion del valor del nodo junto con el tipo
+			*/
 			nlohmann::json ToJson() override;
 
-			::Components::AttributeValue attrValue;
+			/*
+				Cambia el valor del nodo
+			*/
+			void SetValue(::Components::AttributeValue const& value);
 
 		protected:
 
 			bool reflect; //TODO
-			::Components::AttributesType attrType;
 
-			void render() override;
+			/*
+				Tipo de valor que se quiere guardar
+			*/
+
+			::Components::AttributesType attrType;
+			/*
+				Valor que se quiere guardar
+			*/
+			::Components::AttributeValue attrValue;
+
+
+			/*
+				Implementar la logica junto con el dibujado de la ventana
+			*/
+			void updateAndRender() override;
 
 		};
 
-		class ScriptFlow  {
+		/*
+			Clase intermedia implementar la funcionalidad relacionada con el flujo entre nodos
+		*/
+
+		class ScriptFlow: public ScriptNode  {
+
+		public:
+
+			/*
+				Nodo actualmente seleccionado para continuar el flujo
+			*/
+			static ScriptFlow* currentSelectedFlow;
 
 		protected:
+			
+			ScriptFlow();
+			
+			
+			int flowNodeSize;	//Ancho del boton de salida
+			ScriptFlow* next;   //Puntero al siguiente nodo en el flujo
 
-			ScriptFlow* next;
+			/*
+				Lista de nodos anteriores a este. Util para notificar a dichos nodos
+				cuando este sea eliminado
+			*/
+			std::vector<ScriptFlow*> previous; 
+
+
+			/*
+				Agrega un nodo a la lista de anteriores
+			*/
+			void AddPrevious(ScriptFlow*);
+
+			/*
+				Elimina un nodo de la lista de anteriores
+			*/
+			bool RemovePrevious(ScriptFlow*);
+
+			/*
+				Logica del boton de siguiente nodo
+			*/
+			void ManageNextNode();
+
+			/*
+				Obtener la posicion del boton de salida de flujo 
+			*/
+			void GetNextNodePosition(float* x, float* y);
+
+			/*
+				Obtener la posicion del boton de entrada de flujo
+			*/
+			void GetPreviousNodePosition(float* x, float* y);
+
+			/*
+				Callback cuando un nodo es eliminado
+			*/
+			void OnRemoved() override;
+
+			/*
+				Elimina la conexion con el nodo siguiente
+			*/
+			void RemoveNext();
+
+			
+			
+			/*
+				Metodo para establecer la conexion de flujo entre dos nodos
+			*/
+			static void AddFlowConnection(ScriptFlow* previous, ScriptFlow* next);
+
+			/*
+				Metodo para establecer la conexion de flujo entre dos nodos
+			*/
+			static void RemoveFlowConnection(ScriptFlow* previous, ScriptFlow* next);
+
 		};
 
 
 
-		class ScriptMethod : public ScriptNode, public ScriptFlow {
+		class ScriptMethod : public ScriptFlow {
 
 			::Components::Method& method;
 			std::vector<ScriptNode*> input;
@@ -171,7 +387,7 @@ namespace PEditor {
 
 
 
-			void render() override;
+			void updateAndRender() override;
 			std::string GetStringId() override;
 		};
 

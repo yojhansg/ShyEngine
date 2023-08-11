@@ -137,7 +137,7 @@ void PEditor::ScriptCreation::render()
 
 			if (node != nullptr) {
 
-				if (node->Render()) {
+				if (node->UpdateAndRenderWindow()) {
 
 					eraseNode = true;
 				}
@@ -150,12 +150,16 @@ void PEditor::ScriptCreation::render()
 		if (eraseNode)
 		{
 			nodes[nodeIdx]->OnRemoved();
+			delete nodes[nodeIdx];
 			nodes.erase(nodes.begin() + nodeIdx);
 		}
 
 
-		if (!ImGui::IsMouseDown(0))
-			ScriptCreationUtilities::ScriptMethod::currentlySelected = nullptr;
+		if (!ImGui::IsMouseDown(0)) {
+
+			ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
+			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
+		}
 
 
 
