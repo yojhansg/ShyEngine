@@ -2,28 +2,18 @@
     "name": "scene",
     "objects": [
         {
-            "name": "Aguja",
+            "name": "button",
             "order": 0,
-            "type":  "transform",
             "localPosition": [
-                0.0,
-                0.0
+                424.0,
+                626.0
             ],
             "localScale": [
-                100.0,
+                1000.0,
                 100.0
             ],
-            "localRotation": 0.0,
-            "components": [
-                {
-                    "component": "Image",
-                    "attributes": [
-                        {
-                            "fileName": ""
-                        }
-                    ]
-                }
-            ]
+            "localRotation": 56.400001525878906,
+            "components": null
         }
     ]
 }

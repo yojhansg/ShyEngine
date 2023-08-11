@@ -167,7 +167,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::OnRemoved()
 {
 	for (auto output : outputConexions) {
 
-		output->OnInputRemoved(this);
+		output->RemoveInput(this);
 	}
 }
 
@@ -233,6 +233,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::RemoveNext()
 }
 
 
+
 int PEditor::ScriptCreationUtilities::ScriptNode::GetId()
 {
 	return id;
@@ -287,7 +288,7 @@ PEditor::ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelecti
 	mousex = mousey = 0;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::Render()
+void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::UpdateAndRender()
 {
 	if (ImGui::IsMouseReleased(1)) {
 		auto mousePos = ImGui::GetMousePos();
@@ -781,7 +782,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Close()
 
 PEditor::ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
 {
-	showPopup = false;
+	showClosePopup = false;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string& name)
@@ -789,7 +790,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string&
 	std::memcpy(nameBuffer, name.c_str(), 256);
 }
 
-void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 {
 	int scrollx, scrolly;
 	ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
@@ -868,7 +869,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		if (ImGui::Button("Close")) {
 
-			showPopup = true;
+			showClosePopup = true;
 
 		}
 
@@ -882,8 +883,8 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 			if (ImGui::BeginMenu("Node search result")) {
 
-				AddMatchingMethods(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
-				AddMatchingMethods(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
+				ShowFoundMethods(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
+				ShowFoundMethods(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
 
 				ImGui::EndMenu();
 			}
@@ -910,7 +911,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 
 
-	if (showPopup) {
+	if (showClosePopup) {
 
 		ImGui::OpenPopup("Close without saving");
 		auto size = ImGui::GetWindowSize();
@@ -947,7 +948,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 
 		if (closePopup) {
 
-			showPopup = false;
+			showClosePopup = false;
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -956,7 +957,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Render()
 }
 
 
-void PEditor::ScriptCreationUtilities::ScriptMenuBar::AddMatchingMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
+void PEditor::ScriptCreationUtilities::ScriptMenuBar::ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
 {
 
 	for (auto& comp : v) {
@@ -1242,7 +1243,7 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::OnRemoved()
 	}
 }
 
-void PEditor::ScriptCreationUtilities::ScriptMethod::OnInputRemoved(ScriptNode* node)
+void PEditor::ScriptCreationUtilities::ScriptMethod::RemoveInput(ScriptNode* node)
 {
 	for (int i = 0; i < input.size(); i++) {
 

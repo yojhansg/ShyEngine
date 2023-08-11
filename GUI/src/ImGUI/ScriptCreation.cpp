@@ -164,9 +164,9 @@ void PEditor::ScriptCreation::render()
 
 
 
-		dropDownSelection->Render();
+		dropDownSelection->UpdateAndRender();
 
-		menuBar->Render();
+		menuBar->UpdateAndRender();
 
 		scrolled = false;
 

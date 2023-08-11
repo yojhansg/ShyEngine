@@ -351,9 +351,10 @@ namespace PEditor {
 			void RemoveNext();
 
 			
-			
+			//TODO: ver si esto merece la pena hacerlo asi o dejarlo como estaba antes
 			/*
 				Metodo para establecer la conexion de flujo entre dos nodos
+				No elimina las conexiones existentes
 			*/
 			static void AddFlowConnection(ScriptFlow* previous, ScriptFlow* next);
 
@@ -365,110 +366,221 @@ namespace PEditor {
 		};
 
 
-
+		/*
+			Nodo para representar una funcion
+		*/
 		class ScriptMethod : public ScriptFlow {
-
-			::Components::Method& method;
-			std::vector<ScriptNode*> input;
 
 		public:
 
+			/*
+				Para construir el nodo se debe conocer el metodo a usar
+				El metodo se puede conseguir usando Components::ComponentManager
+			*/
 			ScriptMethod(::Components::Method&);
 
+			/*
+				Serializar el nodo con la informacion del metodo y las entradas
+			*/
 			nlohmann::json ToJson() override;
 
+			/*
+				Establece a una posicion del array de entradas un nodo
+			*/
 			void SetInput(int idx, ScriptNode* node);
 
+			/*
+				Callback para cuando un nodo es eliminado
+			*/
 			void OnRemoved() override;
 
-			void OnInputRemoved(ScriptNode* node);
+
+			/*
+				Busca el nodo dentro del array de entradas y lo elimina
+			*/
+			void RemoveInput(ScriptNode* node);
 
 		protected:
 
+			/*
+				Se guarda una referencia al contenido del metodo para evitar copias innecesarias
+			*/
+			::Components::Method& method;
 
+			/*
+				Vector de nodos de input
+			*/
+			std::vector<ScriptNode*> input;
 
+			/*
+				Actualiza la logica y renderiza la ventana
+			*/
 			void updateAndRender() override;
+
+
+			/*
+				Sobrescribimos el id en formato string para que sea algo mas legible para el usuario (con el nombre del metodo como nombre de 
+				la ventana)
+			*/
 			std::string GetStringId() override;
 		};
 
+
+		/*
+			Clase para representar la barra de herramientas en la parte superior de la ventana
+
+			Desde la barra se puede cambiar el nombre del script, guardar, cerrar, buscar un nodo, 
+			y crear nodos de input y de fork... ect
+		*/
 
 		class ScriptMenuBar {
 
 		private:
 
-			//Cambiar el nombre del script
-			//Boton para guardar
-			//Boton para cerrar
-			//Desplegable con los distintos tipos de valores constantes
-			//Barra de busqueda de componentes
-
+			//Dimension constante del array
 			static const int CharBufferSize = 256;
 
-			char nameBuffer[CharBufferSize]; //TODO: cambiar esto a string
-			char nameSearch[CharBufferSize]; //TODO: cambiar esto a string
+			char nameBuffer[CharBufferSize]; //Buffer para introducir el nombre del script
+			char nameSearch[CharBufferSize]; //Buffer para introducir la busqueda de un nodo
 
-			bool showNodeSearch;
-			bool showPopup;
+			bool showNodeSearch;	//Mostrar el desplegable con los resultados de la busqueda de nodos
+			bool showClosePopup;	//Mostrar un popup cuando se intente cerrar la ventana con cambios pendientes
 
-			ScriptCreation* creator;
+			ScriptCreation* creator; //Puntero al script creator para poder acceder a la lista de nodos existentes
 
-			void Close();
-			void Save();
+			void Close();	//Cierra el pop up y cambia la ventana a la ventana principal del motor
+			void Save();	//Serializa los nodos y los guarda en un fichero formato .script
 
-			void AddMatchingMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
+
+			/*
+				Muestra el desplegable con el resultado de la busqueda de nodos. Ademas procesa la creacion en caso 
+				de que el usuaruo seleccione algun elemento del desplegable
+			*/
+			void ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
+
+			/*
+				Busca un metodo dado su nombre en la lista de componentes y en la lista de managers
+			*/
 			Components::Method& GetMethodReference(const std::string& name);
 		public:
-			void Load();
 
 			ScriptMenuBar(ScriptCreation* creator);
+			
+			/*
+				Carga el fichero actual
+			*/
+			void Load();
 
+			/*
+				Cambia el valor del nombre del fichero
+			*/
 			void SetName(const std::string& name);
-			void Render();
 
+			/*
+				Actualiza y renderiza la ventana
+			*/
+			void UpdateAndRender();
 		};
 
+
+
+
+		/*
+			Desplegable con la informacion de los metodos disponibles
+		*/
 		class ScriptDropdownSelection {
 
 		private:
+
+			/*
+				Puntero a creator para poder modificar la lista de nodos existentes
+			*/
 			ScriptCreation* creator;
 
+
+			/*
+				Posicion del mouse cuando se creo el desplegable. El nodo que se cree aparecera en esa posicion
+			*/
 			int mousex, mousey;
 
 		public:
 
 			ScriptDropdownSelection(ScriptCreation* creator);
-			void Render();
 
+			/*
+				Actualiza y renderiza la ventana
+			*/
+			void UpdateAndRender();
+
+			/*
+				Agrega al desplegable los metodos incluidos en el mapa dado
+			*/
 			void AddValuesFromVector(std::unordered_map<std::string, Components::Component>& v);
 		};
 
 
-
+		/*
+			Clase estatica para pintar en pantalla lineas cubicas bezier
+			Representada mediante una maquina de estados para tener una funcionalidad
+			parecida a la de IMGui
+		*/
 		class Bezier {
 
 
 		private:
 
+			//Grosor de la linea
 			static float thickness;
+
+			//Numero de puntos de la linea
 			static int pointCount;
 
 		public:
 
+			/*
+				Restablece el grosor de la linea a su valor por defecto
+			*/
 			static void ResetThickness();
+			
+			/*
+				Establece el grosor de la linea a un valor en concreto
+			*/
 			static void SetThickness(float t);
+
+			/*
+				Establece el numero de puntos de la linea
+			*/
 			static void SetPointCount(int c);
+
+			/*
+				Restablece el numero de puntos a su valor determinado
+			*/
 			static void ResetPointCount();
 
 
+			/*
+				Dibuja una curva bezier cubica entre los dos puntos dados
+				Los dos nodos intermedios de la curva se encuentran horizontales a los
+				puntos extremos con una separacion equivalente a la distancia horizontal entre
+				los dos puntos extremos
+			*/
 			static void Draw(int x, int y, int x1, int y1);
 
 		};
 
-
+		/*
+			Clase estatica para pintar una cuadricula en el fondo de la ventana
+			Representada mediante una maquina de estados para tener una funcionalidad
+			parecida a la de IMGui
+		*/
 		class Grid {
 
 		private:
+
+			//Distancia entre cada una de las lineas de la cuadriculas
 			static int spacing;
+
+			//Grosor de las lineas por defecto de la cuadricula
 			static float thickness;
 			static int interval;
 			static float intervalScale;
