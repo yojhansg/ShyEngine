@@ -141,14 +141,26 @@ void PEditor::ScriptCreation::render()
 
 					eraseNode = true;
 				}
+
+				if (eraseNode)
+					node->SetID(node->GetId() - 1);
 			}
 
 			if (!eraseNode)
 				nodeIdx++;
 		}
 
+
+		dropDownSelection->UpdateAndRender();
+
+		menuBar->UpdateAndRender();
+
+
+		scrolled = false;
+
 		if (eraseNode)
 		{
+			scrolled = true;
 			nodes[nodeIdx]->OnRemoved();
 			delete nodes[nodeIdx];
 			nodes.erase(nodes.begin() + nodeIdx);
@@ -162,13 +174,6 @@ void PEditor::ScriptCreation::render()
 		}
 
 
-
-
-		dropDownSelection->UpdateAndRender();
-
-		menuBar->UpdateAndRender();
-
-		scrolled = false;
 
 		ImGui::EndPopup();
 	}
@@ -255,6 +260,9 @@ void PEditor::ScriptCreation::ManageLerp()
 void PEditor::ScriptCreation::ClearScript()
 {
 	scrollx = scrolly = 0;
+	xpos = ypos = 0;
+
+	ScriptCreationUtilities::Grid::ResetOffset();
 	instance->modified = false;
 	for (auto node : nodes) {
 		delete node;

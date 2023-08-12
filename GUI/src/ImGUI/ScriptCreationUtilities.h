@@ -31,7 +31,7 @@ namespace PEditor {
 	namespace ScriptCreationUtilities {
 
 		/*
-			TODO:
+			Cosas hechas: 
 
 			Desplegable con todos los metodos
 			Dividir los metodos por categorías
@@ -53,8 +53,16 @@ namespace PEditor {
 			Guardar el output de las casillas
 			Colorear el triangulo de salida cuando tenga al menos un input
 			Eliminar un nodo
+			Un nodo no se puede unir a si mismo
+			Cambiar el nombre de la ventana para los inputs
+			Eliminar nodo con la tecla delete
+			Cambiar ids de los nodos al eliminar uno
+			Al eliminar un nodo y volver a crearlo se pone en la posicion del nodo anterior
+			Corregir parpadeo al crear varios nodos y eliminar uno de los anteriores
+			Next node
 
-			-Next node
+			TODO:
+
 			-Condicionales
 			-Bucles
 			-Implementar eventos (start, update)
@@ -72,11 +80,12 @@ namespace PEditor {
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
-			-Un nodo no se puede unir a si mismo
-			-Cambiar el nombre de la ventana para los inputs
-			-Eliminar nodo con la tecla delete
+			
+			-Duplicar un nodo con control d
 			-Serializar next
 			-Separar grid y bezier a otro fichero
+			Hacer que la curva bezier salga en la direccion del fichero
+			
 		*/
 
 		class ScriptMethod;
@@ -203,7 +212,8 @@ namespace PEditor {
 			float x, y; //Posicion de la venta (Esquina superior izquierda)
 			float w, h; //Dimensiones de la ventana
 
-			bool ignoreOutput; //Marca si el 
+			bool initialised; //Saber si el nodo ya ha aparecido o si es su primera vez
+			bool ignoreOutput; //Marca si se quiere ignorar el boton de salida
 			float outputButtonSize; //Ancho del boton de salida
 
 			std::string outputStr; //Cadena con el nombre del tipo de salida
@@ -284,6 +294,13 @@ namespace PEditor {
 				Implementar la logica junto con el dibujado de la ventana
 			*/
 			void updateAndRender() override;
+
+
+
+			/*
+				Se sobrescribe el id en formato string para que sea algo mas legible para el usuario
+			*/
+			std::string GetStringId() override;
 
 		};
 
@@ -563,6 +580,8 @@ namespace PEditor {
 				Los dos nodos intermedios de la curva se encuentran horizontales a los
 				puntos extremos con una separacion equivalente a la distancia horizontal entre
 				los dos puntos extremos
+
+				Las lineas se dibujar por encima de todos los elementos de la pantalla
 			*/
 			static void Draw(int x, int y, int x1, int y1);
 
@@ -582,26 +601,64 @@ namespace PEditor {
 
 			//Grosor de las lineas por defecto de la cuadricula
 			static float thickness;
+
+			//A cada cuantas repeticiones hay una linea gruesa
 			static int interval;
+
+			//Escala de las lineas gruesas con respecto al grosor normal
 			static float intervalScale;
 
-			static int x_offset;
-			static int y_offset;
+			//Desplazamiento de la cuadricula
+			static int x_offset, y_offset;
 
+			//Color de las lineas
 			static int r, g, b, a;
 
 		public:
 
+			/*
+				Cambiar la distancia entre lineas	
+			*/
 			static void SetSpacing(int spacing);
+
+			/*
+				Restablecer la distancia entre lineas al valor por defecto
+			*/
 			static void ResetSpacing();
+
+			/*
+				Establecer el desplazamiento de la cuadricula
+			*/
 			static void SetOffset(int x, int y);
+
+			/*
+				Restablecer el desplazamiento de la cuadricula
+			*/
 			static void ResetOffset();
+
+			/*
+				Establecer el intervalo entre lineas gruesas
+			*/
 			static void SetInterval(int interval);
+
+			/*
+				Restablecer el intervalo entre lineas gruesas
+			*/
 			static void ResetInterval();
 
+			/*
+				Cambiar el color de las lineas
+			*/
 			static void SetColor(int r, int g, int b, int a);
+
+			/*
+				Cambiar el color de las lineas a su valor predeterminado
+			*/
 			static void ResetColor();
 
+			/*
+				Dibuja la cuadricula sobre la ventana actual
+			*/
 			static void Draw();
 		};
 
