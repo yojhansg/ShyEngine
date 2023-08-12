@@ -85,6 +85,7 @@ namespace PEditor {
 			-Serializar next
 			-Separar grid y bezier a otro fichero
 			Hacer que la curva bezier salga en la direccion del fichero
+			Cambiar el nombre de fork a branch
 			
 		*/
 
@@ -275,7 +276,7 @@ namespace PEditor {
 			*/
 			void SetValue(::Components::AttributeValue const& value);
 
-		protected:
+		private:
 
 			bool reflect; //TODO
 
@@ -305,23 +306,16 @@ namespace PEditor {
 		};
 
 		/*
-			Clase intermedia implementar la funcionalidad relacionada con el flujo entre nodos
+			Clase que maneja el flujo entre nodos
 		*/
 
-		class ScriptFlow: public ScriptNode  {
+		class ScriptFlow  {
 
-		public:
-
-			/*
-				Nodo actualmente seleccionado para continuar el flujo
-			*/
-			static ScriptFlow* currentSelectedFlow;
-
-		protected:
-			
-			ScriptFlow();
+		private:
 			
 			
+			int xoffset, yoffset; //Desplazamiento del punto inicial
+
 			int flowNodeSize;	//Ancho del boton de salida
 			ScriptFlow* next;   //Puntero al siguiente nodo en el flujo
 
@@ -331,6 +325,17 @@ namespace PEditor {
 			*/
 			std::vector<ScriptFlow*> previous; 
 
+			ScriptNode* node; //Nodo asociado
+
+		public:
+
+			/*
+				Nodo actualmente seleccionado para continuar el flujo
+			*/
+			static ScriptFlow* currentSelectedFlow;
+
+
+			ScriptFlow(ScriptNode* node);
 
 			/*
 				Agrega un nodo a la lista de anteriores
@@ -345,7 +350,7 @@ namespace PEditor {
 			/*
 				Logica del boton de siguiente nodo
 			*/
-			void ManageNextNode();
+			void ManageNextNode(float x, float y, const std::string& tooltip = "");
 
 			/*
 				Obtener la posicion del boton de salida de flujo 
@@ -358,16 +363,25 @@ namespace PEditor {
 			void GetPreviousNodePosition(float* x, float* y);
 
 			/*
-				Callback cuando un nodo es eliminado
+				Funcionalidad para eliminar un nodo
 			*/
-			void OnRemoved() override;
+			void OnRemoved();
 
 			/*
 				Elimina la conexion con el nodo siguiente
 			*/
 			void RemoveNext();
 
-			
+			/*
+				Devuelve las dimensiones del nodo
+			*/
+			float GetButtonSize();
+
+			/*
+				Desplaza el punto de salida
+			*/
+			void SetOffset(int x, int y);
+
 			//TODO: ver si esto merece la pena hacerlo asi o dejarlo como estaba antes
 			/*
 				Metodo para establecer la conexion de flujo entre dos nodos
@@ -386,7 +400,7 @@ namespace PEditor {
 		/*
 			Nodo para representar una funcion
 		*/
-		class ScriptMethod : public ScriptFlow {
+		class ScriptMethod : public ScriptNode {
 
 		public:
 
@@ -417,7 +431,7 @@ namespace PEditor {
 			*/
 			void RemoveInput(ScriptNode* node);
 
-		protected:
+		private:
 
 			/*
 				Se guarda una referencia al contenido del metodo para evitar copias innecesarias
@@ -428,6 +442,9 @@ namespace PEditor {
 				Vector de nodos de input
 			*/
 			std::vector<ScriptNode*> input;
+
+
+			ScriptFlow* flow;
 
 			/*
 				Actualiza la logica y renderiza la ventana
@@ -441,6 +458,59 @@ namespace PEditor {
 			*/
 			std::string GetStringId() override;
 		};
+
+
+
+
+
+		class ScriptFork: public ScriptNode {
+
+		public: 
+
+			enum class Fork {
+				If, While, For
+			};
+
+			/*
+				Para construir el nodo se debe conocer el metodo a usar
+				El metodo se puede conseguir usando Components::ComponentManager
+			*/
+			ScriptFork(Fork type);
+
+			/*
+				Serializar el nodo con la informacion del metodo y las entradas
+			*/
+			nlohmann::json ToJson() override;
+
+
+			/*
+				Callback para cuando un nodo es eliminado
+			*/
+			void OnRemoved() override;
+
+
+		private:
+
+			Fork type; //El tipo de flujo del nodo
+			ScriptFlow* A, * B; //Cada nodo de continuacion de flujo
+			std::string a_tooltip, b_tooltip; //Informacion a mostrar al pasar el raton por cada nodo
+
+			/*
+				Actualiza la logica y renderiza la ventana
+			*/
+			void updateAndRender() override;
+
+
+			/*
+				Sobrescribimos el id en formato string para que sea algo mas legible para el usuario (con el nombre del metodo como nombre de
+				la ventana)
+			*/
+			std::string GetStringId() override;
+		};
+
+
+
+
 
 
 		/*

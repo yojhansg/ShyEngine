@@ -205,9 +205,9 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::GetNextNodePosition(float* x,
 	ScriptCreation::GetScrollPosition(&scroll_x, &scroll_y);
 
 	if (x != nullptr)
-		*x = scroll_x + w - outputOffset + this->x;
+		*x = scroll_x + node->GetW() - outputOffset + node->GetX() + xoffset;
 	if (y != nullptr)
-		*y = scroll_y + h - 40 - outputOffset - flowNodeSize + this->y;
+		*y = scroll_y + node->GetH() - 40 - outputOffset - flowNodeSize + node->GetY() + yoffset;
 
 }
 
@@ -219,9 +219,9 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::GetPreviousNodePosition(float
 	ScriptCreation::GetScrollPosition(&scroll_x, &scroll_y);
 
 	if (x != nullptr)
-		*x = scroll_x + outputOffset + this->x;
+		*x = scroll_x + outputOffset + node->GetX();
 	if (y != nullptr)
-		*y = scroll_y + h - outputOffset - flowNodeSize + this->y;
+		*y = scroll_y + node->GetH() - outputOffset - flowNodeSize + node->GetY();
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFlow::OnRemoved()
@@ -243,6 +243,16 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::RemoveNext()
 	}
 }
 
+float PEditor::ScriptCreationUtilities::ScriptFlow::GetButtonSize()
+{
+	return flowNodeSize;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFlow::SetOffset(int x, int y)
+{
+	xoffset = x;
+	yoffset = y;
+}
 
 
 int PEditor::ScriptCreationUtilities::ScriptNode::GetId()
@@ -346,10 +356,12 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVec
 }
 PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 
-PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow()
+PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow(ScriptNode* node) : node(node)
 {
 	next = nullptr;
 	flowNodeSize = 10;
+
+	xoffset = yoffset = 0;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFlow::AddPrevious(ScriptFlow* pre)
@@ -369,15 +381,14 @@ bool PEditor::ScriptCreationUtilities::ScriptFlow::RemovePrevious(ScriptFlow* pr
 
 }
 
-void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode()
+void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float y, const std::string& tooltip)
 {
 	auto drawList = ImGui::GetWindowDrawList();
 
 	auto windowSize = ImGui::GetWindowSize();
 	auto windowPosition = ImGui::GetWindowPos();
 
-	auto nextNodePosition = ImVec2(0, 0);
-	GetNextNodePosition(&nextNodePosition.x, &nextNodePosition.y);
+	auto nextNodePosition = ImVec2(x, y);
 
 	float nodeSize = flowNodeSize;
 
@@ -387,7 +398,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode()
 
 
 	ImGui::SetCursorPos(ImVec2(nextNodePositionLeft.x - windowPosition.x, nextNodePositionTop.y - windowPosition.y));
-	ImGui::BeginChild((GetStringId() + "next node").c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::BeginChild((node->GetStringId() + "next node" + std::to_string(y)).c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	Bezier::SetThickness(5);
 
@@ -402,6 +413,11 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode()
 		}
 		else
 			drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, IM_COL32(150, 100, 100, 255), 1);
+
+
+		if (tooltip != "") {
+			ImGui::SetTooltip(tooltip.c_str());
+		}
 	}
 	else {
 
@@ -436,6 +452,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode()
 				currentSelectedFlow->RemoveNext();
 				currentSelectedFlow->next = this;
 				this->AddPrevious(currentSelectedFlow);
+				currentSelectedFlow = nullptr;
 			}
 		}
 	}
@@ -465,6 +482,7 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 		ignoreOutput = true;
 	}
 
+	flow = new ScriptFlow(this);
 }
 
 
@@ -513,10 +531,10 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 			ScriptNode::currentlySelectedOutput != this &&
 			ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 			(
-				in.getTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() || 
+				in.getTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
 				in.getTypeStr() == "cVariable"
-			)
-			
+				)
+
 			) {
 
 			if (ImGui::IsMouseReleased(0)) {
@@ -551,7 +569,9 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 	}
 
 
-	ScriptFlow::ManageNextNode();
+	float x, y;
+	flow->GetNextNodePosition(&x, &y);
+	flow->ManageNextNode(x, y);
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptMethod::GetStringId()
@@ -878,9 +898,37 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		if (ImGui::BeginMenu("Logic")) {
 
-			ImGui::MenuItem("If");
-			ImGui::MenuItem("While");
-			ImGui::MenuItem("Loop");
+			bool change = false;
+			ScriptFork::Fork type;
+
+			if (ImGui::MenuItem("If")) {
+
+				type = ScriptFork::Fork::If;
+				change = true;
+			}
+
+			if (ImGui::MenuItem("While")) {
+
+				type = ScriptFork::Fork::While;
+				change = true;
+			}
+
+			if (ImGui::MenuItem("Loop")) {
+
+				type = ScriptFork::Fork::For;
+				change = true;
+			}
+
+			if (change) {
+				ScriptNode* node = new ScriptFork(type);
+
+				node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+
+				creator->AddNode(node);
+				ScriptCreation::SetFileModified();
+			}
+
+
 			ImGui::EndMenu();
 		}
 
@@ -1255,7 +1303,9 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNod
 void PEditor::ScriptCreationUtilities::ScriptMethod::OnRemoved()
 {
 	ScriptNode::OnRemoved();
-	ScriptFlow::OnRemoved();
+	flow->OnRemoved();
+	delete flow;
+	flow = nullptr;
 
 	for (auto in : input) {
 
@@ -1312,7 +1362,76 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 	return root;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::AttributeValue const& val )
+void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::AttributeValue const& val)
 {
 	attrValue = val;
+}
+
+PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : type(type)
+{
+	ignoreOutput = true;
+
+	A = new ScriptFlow(this);
+	B = new ScriptFlow(this);
+
+	A->SetOffset(0, -50);
+
+	w = 100;
+	h = 150;
+
+
+	switch (type)
+	{
+	case PEditor::ScriptCreationUtilities::ScriptFork::Fork::If:
+		outputStr = "If";
+		a_tooltip = "On true";
+		b_tooltip = "On false";
+		break;
+	case PEditor::ScriptCreationUtilities::ScriptFork::Fork::While:
+		outputStr = "While";
+		a_tooltip = "Node to loop";
+		b_tooltip = "On Completed";
+		break;
+	case PEditor::ScriptCreationUtilities::ScriptFork::Fork::For:
+		outputStr = "Loop";
+		a_tooltip = "Node to loop";
+		b_tooltip = "On Completed";
+		break;
+	default:
+		break;
+	}
+
+}
+
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptFork::ToJson()
+{
+	return nlohmann::json();
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::OnRemoved()
+{
+	ScriptNode::OnRemoved();
+
+	A->OnRemoved();
+	B->OnRemoved();
+
+	delete A;
+	delete B;
+
+	A = B = nullptr;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
+{
+	float x, y;
+	A->GetNextNodePosition(&x, &y);
+	A->ManageNextNode(x, y, a_tooltip);
+
+	B->GetNextNodePosition(&x, &y);
+	B->ManageNextNode(x, y, b_tooltip);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptFork::GetStringId()
+{
+	return outputStr + " (" + std::to_string(id) + ")";
 }
