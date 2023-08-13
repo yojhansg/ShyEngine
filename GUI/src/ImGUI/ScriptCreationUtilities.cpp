@@ -58,7 +58,6 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 
 		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
 
-
 		updateAndRender();
 		ManageOutputNode();
 
@@ -997,8 +996,10 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		if (ImGui::Button("Close")) {
 
-			showClosePopup = true;
 
+			if (creator->IsFileModified())
+				showClosePopup = true;
+			else Close();
 		}
 
 
@@ -1044,10 +1045,9 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		ImGui::OpenPopup("Close without saving");
 		auto size = ImGui::GetWindowSize();
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always, ImVec2(0, 0)); // Centrar el pop-up
-		ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Always);
-		ImGui::Begin("Background", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBringToFrontOnFocus);
-		ImGui::End();
+		auto drawList = ImGui::GetWindowDrawList();
+		drawList->AddRectFilled(ImVec2(0, 0), windowSize, IM_COL32(10, 10, 10, 255), 0, 0);
+
 
 		ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
 

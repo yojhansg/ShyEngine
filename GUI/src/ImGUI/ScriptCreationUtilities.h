@@ -95,8 +95,11 @@ namespace PEditor {
 
 			-No mostrar el pop up cuando no haya cambios pendientes
 			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
-			-Hacer que el flow funcione con un unico metodo y que los parametros sean propiedades
-			-Hacer que no se pueda crear dos eventos iguales
+			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
+			Hacer que no se pueda crear dos eventos iguales
+
+			Oscurecer la pantalla cuando aparezca el popup de cerrar
+
 		*/
 
 		class ScriptMethod;

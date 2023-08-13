@@ -143,7 +143,7 @@ void PEditor::ScriptCreation::Load()
 		AddEvent("start", start);
 		AddEvent("update", update);
 
-
+		modified = true;
 		return;
 	}
 
