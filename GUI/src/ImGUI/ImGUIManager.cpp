@@ -15,6 +15,8 @@
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
 
+#include "ProjectSelectionDialog.h"
+
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
@@ -85,7 +87,7 @@ void ImGUIManager::initSDL()
     }
 
     originalWindowSize = new ImVec2(1920, 1080);
-    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, originalWindowSize->x, originalWindowSize->y);
+    createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 400);
     createSDLRenderer();
 }
 
@@ -131,7 +133,6 @@ void ImGUIManager::init()
     gameSize = new ImVec2{ 1080, 720 };
 
     initImGUI();
-    initWindows();
 
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
@@ -150,6 +151,20 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
+    SDL_SetWindowSize(window, 700, 500);
+
+    PEditor::ProjectSelectionDialog dialog;
+    auto result = dialog.ManageProjectSelectionDialog(renderer);
+
+    if (result == PEditor::ProjectSelectionDialog::Result::Closed)
+        return;
+
+    SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
+    SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+    initWindows();
+;
+
     while (!exitGame)
     {
         update();

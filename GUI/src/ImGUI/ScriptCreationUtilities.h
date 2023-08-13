@@ -63,8 +63,11 @@ namespace PEditor {
 
 			TODO:
 
-			-Condicionales
-			-Bucles
+			Condicionales
+			Bucles
+			
+			-Recibir condicion flujo
+			-Cambiar la posicion de entrada del flujo
 			-Implementar eventos (start, update)
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
