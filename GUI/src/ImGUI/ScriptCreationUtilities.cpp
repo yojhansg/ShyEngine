@@ -157,6 +157,7 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::ManageCloseNode()
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 40.0f);
 	if (ImGui::Button("Close", buttonSize))
 	{
+		ImGui::PopStyleVar();
 		return true;
 	}
 	ImGui::PopStyleVar();

@@ -65,20 +65,22 @@ namespace PEditor {
 			Recibir condicion flujo
 			Cambiar la posicion de entrada del flujo
 			Hacer que la curva bezier salga en la direccion del fichero
+			Implementar eventos (start, update)
+			Mover la serializacion y carga a script creation en vez de estar en utilities
+
+			No mostrar el pop up cuando no haya cambios pendientes
+			Hacer que no se pueda crear dos eventos iguales
+			Oscurecer la pantalla cuando aparezca el popup de cerrar
 
 			TODO:
-			-Implementar eventos (start, update)
 
+			-Separar Utilities en varios ficheros
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 
-			-Cambiar el foreground drawList por el drawlist de la ventana
 			-Control z manager
 
 			-Names: Es la forma de tener metodos en el scripting
 			-Comentar todo el codigo y ver que cosas se pueden mejorar
-
-			-Mover la serializacion y carga a script creation en vez de estar en utilities
-
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
@@ -87,19 +89,15 @@ namespace PEditor {
 			-Duplicar un nodo con control d
 			-Serializar next
 			-Serializar condicionales
-			-Separar grid y bezier a otro fichero
-
-			-Verificar el tipo de la condicion para los condicionales
+			-Unificar todos los tipos de string en uno solo
+			-Verificar el tipo de la condicion para los condicionales (if, while)
 			-Añadir soporte para comentarios
-			-Ordenar la aparicion de los metodos y esas cosas
+			-Ordenar la lista de metodos y esas cosas
 
-			-No mostrar el pop up cuando no haya cambios pendientes
 			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
 			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
-			Hacer que no se pueda crear dos eventos iguales
-
-			Oscurecer la pantalla cuando aparezca el popup de cerrar
-
+			
+			-Al retraer una ventana hacer que las flechas apunten a la posicion correcta
 		*/
 
 		class ScriptMethod;
