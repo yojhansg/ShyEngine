@@ -847,6 +847,11 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string&
 	std::memcpy(nameBuffer, name.c_str(), 256);
 }
 
+char* PEditor::ScriptCreationUtilities::ScriptMenuBar::GetName()
+{
+	return nameBuffer;
+}
+
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 {
 	int scrollx, scrolly;
@@ -1141,174 +1146,15 @@ Components::Method& PEditor::ScriptCreationUtilities::ScriptMenuBar::GetMethodRe
 }
 
 
-#include <fstream>
-#include "nlohmann/json.hpp"
-
-using nlohmann::json;
-
-void PEditor::ScriptCreationUtilities::ScriptMenuBar::Load()
-{
-	std::string fileName = std::string(nameBuffer);
-	if (fileName.size() == 0) return;
-
-	std::ifstream fileStream("scripts/" + fileName + ".script");
-
-	if (!fileStream.good() || !json::accept(fileStream))
-	{
-		return;
-	}
-
-	fileStream.clear();
-	fileStream.seekg(0);
-
-	json file = json::parse(fileStream);
-	fileStream.close();
-
-	json& functions = file["functions"];
-	json& consts = file["consts"];
-
-	creator->SetNodeCount(file["nodeCount"].get<int>());
-
-
-	struct MethodInput {
-		class ScriptMethod* node;
-		int pos;
-		int inputNode;
-	};
-
-	std::vector<MethodInput> methodInfo;
-
-
-	for (auto& funcNode : functions) {
-
-		std::string completeName = funcNode["function"];
-		size_t separator = completeName.find("_");
-		std::string className = completeName.substr(0, separator);
-		std::string functionName = completeName.substr(separator + 1);
-
-		ScriptMethod* method;
-
-		if (Components::ComponentManager::GetAllComponents().contains(className)) {
-
-			method = new ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
-		}
-		else {
-			method = new ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
-		}
-
-
-		int idx = 0;
-		for (auto& in : funcNode["input"]) {
-
-			int inputNode = in.get<int>();
-			if (inputNode >= 0)
-				methodInfo.push_back({ method, idx, inputNode });
-
-			idx++;
-		}
-
-
-
-		method->FromJson(funcNode);
-
-		creator->SetNode(method->GetId(), method);
-	}
-
-	for (auto& constNode : consts) {
-
-		::Components::AttributesType type = ::Components::AttributesType::NONE;
-		::Components::AttributeValue value;
-
-		std::string typeStr = constNode["type"].get<std::string>();
-
-		if (typeStr == "null") {
-			type = ::Components::AttributesType::NONE;
-			value.value.valueFloat = 0;
-		}
-		else if (typeStr == "float") {
-			type = ::Components::AttributesType::FLOAT;
-			value.value.valueFloat = constNode["value"].get<float>();
-		}
-		else if (typeStr == "vector2D") {
-			//TODO: despues de la serializacion
-		}
-		else if (typeStr == "string") {
-			type = ::Components::AttributesType::STRING;
-			value.valueString = constNode["value"].get<float>();
-		}
-		else if (typeStr == "bool") {
-			type = ::Components::AttributesType::BOOL;
-			value.value.valueBool = constNode["value"].get<bool>();
-		}
-		else if (typeStr == "color") {
-
-			//TODO: despues de la serializacion
-		}
-
-		ScriptInput* input = new ScriptInput(type);
-		input->SetValue(value);
-
-		input->FromJson(constNode);
-
-
-		creator->SetNode(input->GetId(), input);
-	}
-
-
-	for (auto& mi : methodInfo) {
-
-		mi.node->SetInput(mi.pos, creator->GetNodes()[mi.inputNode]);
-	}
-
-}
-
-
-
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 {
-	auto& allNodes = creator->GetNodes();
+	creator->Save();
 
-	json root;
-	json functions = json::array(), consts = json::array();
-
-	root["nodeCount"] = allNodes.size();
-
-	std::vector<ScriptNode*> serializedValues;
-
-	for (auto node : allNodes) {
-
-		if (node->GetId() < 0) {
-			//es un evento
-			continue;
-		}
-
-		if (node->GetType() == ScriptNode::Node::Method) {
-
-			functions.push_back(node->ToJson());
-		}
-
-
-		else if (node->GetType() == ScriptNode::Node::Input) {
-
-
-			consts.push_back(node->ToJson());
-		}
-	}
-
-
-
-	root["functions"] = functions;
-	root["consts"] = consts;
-
-	std::ofstream file("scripts/" + std::string(nameBuffer) + ".script");
-
-	file << root.dump(4);
-
-	file.close();
-
-	ScriptCreation::ResetModified();
 }
 
+
+#include "nlohmann/json.hpp"
+using nlohmann::json;
 
 
 json PEditor::ScriptCreationUtilities::ScriptNode::ToJson()

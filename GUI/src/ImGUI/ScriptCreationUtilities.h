@@ -600,10 +600,12 @@ namespace PEditor {
 
 		class ScriptMenuBar {
 
-		private:
+		public:
 
 			//Dimension constante del array
 			static const int CharBufferSize = 256;
+
+		private:
 
 			char nameBuffer[CharBufferSize]; //Buffer para introducir el nombre del script
 			char nameSearch[CharBufferSize]; //Buffer para introducir la busqueda de un nodo
@@ -614,7 +616,7 @@ namespace PEditor {
 			ScriptCreation* creator; //Puntero al script creator para poder acceder a la lista de nodos existentes
 
 			void Close();	//Cierra el pop up y cambia la ventana a la ventana principal del motor
-			void Save();	//Serializa los nodos y los guarda en un fichero formato .script
+			void Save();	//Llama a Save de script creation
 
 
 			/*
@@ -631,15 +633,16 @@ namespace PEditor {
 
 			ScriptMenuBar(ScriptCreation* creator);
 
-			/*
-				Carga el fichero actual
-			*/
-			void Load();
 
 			/*
 				Cambia el valor del nombre del fichero
 			*/
 			void SetName(const std::string& name);
+
+			/*
+				Devuelve el puntero al buffer del nombre
+			*/
+			char* GetName();
 
 			/*
 				Actualiza y renderiza la ventana

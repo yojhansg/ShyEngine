@@ -3,6 +3,14 @@
 #include "ImGUIManager.h"
 #include <iostream>
 
+#include <fstream>
+#include "ScriptCreationUtilities.h"
+
+#include "ComponentManager.h"
+
+#include "nlohmann/json.hpp"
+using nlohmann::json;
+
 PEditor::ScriptCreation* PEditor::ScriptCreation::instance = nullptr;
 
 PEditor::ScriptCreation::ScriptCreation() : Window("", None)
@@ -69,9 +77,165 @@ void PEditor::ScriptCreation::SetNode(int n, ScriptCreationUtilities::ScriptNode
 	nodes[n] = node;
 }
 
+void PEditor::ScriptCreation::Save()
+{
+	auto& allNodes = GetNodes();
+
+	json root;
+	json functions = json::array(), consts = json::array();
+
+	root["nodeCount"] = allNodes.size();
+
+	std::vector<ScriptCreationUtilities::ScriptNode*> serializedValues;
+
+	for (auto node : allNodes) {
+
+		if (node->GetId() < 0) {
+			//es un evento
+			continue;
+		}
+
+		if (node->GetType() == ScriptCreationUtilities::ScriptNode::Node::Method) {
+
+			functions.push_back(node->ToJson());
+		}
+
+
+		else if (node->GetType() == ScriptCreationUtilities::ScriptNode::Node::Input) {
+
+
+			consts.push_back(node->ToJson());
+		}
+	}
+
+
+
+	root["functions"] = functions;
+	root["consts"] = consts;
+
+	std::ofstream file("scripts/" + std::string(menuBar->GetName()) + ".script");
+
+	file << root.dump(4);
+
+	file.close();
+
+	ScriptCreation::ResetModified();
+}
+
 void PEditor::ScriptCreation::Load()
 {
-	menuBar->Load();
+	std::string fileName = std::string(menuBar->GetName());
+	if (fileName.size() == 0) return;
+
+	std::ifstream fileStream("scripts/" + fileName + ".script");
+
+	if (!fileStream.good() || !json::accept(fileStream))
+	{
+		return;
+	}
+
+	fileStream.clear();
+	fileStream.seekg(0);
+
+	json file = json::parse(fileStream);
+	fileStream.close();
+
+	json& functions = file["functions"];
+	json& consts = file["consts"];
+
+	SetNodeCount(file["nodeCount"].get<int>());
+
+
+	struct MethodInput {
+		class ScriptCreationUtilities::ScriptMethod* node;
+		int pos;
+		int inputNode;
+	};
+
+	std::vector<MethodInput> methodInfo;
+
+
+	for (auto& funcNode : functions) {
+
+		std::string completeName = funcNode["function"];
+		size_t separator = completeName.find("_");
+		std::string className = completeName.substr(0, separator);
+		std::string functionName = completeName.substr(separator + 1);
+
+		ScriptCreationUtilities::ScriptMethod* method;
+
+		if (Components::ComponentManager::GetAllComponents().contains(className)) {
+
+			method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
+		}
+		else {
+			method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
+		}
+
+
+		int idx = 0;
+		for (auto& in : funcNode["input"]) {
+
+			int inputNode = in.get<int>();
+			if (inputNode >= 0)
+				methodInfo.push_back({ method, idx, inputNode });
+
+			idx++;
+		}
+
+
+
+		method->FromJson(funcNode);
+
+		SetNode(method->GetId(), method);
+	}
+
+	for (auto& constNode : consts) {
+
+		::Components::AttributesType type = ::Components::AttributesType::NONE;
+		::Components::AttributeValue value;
+
+		std::string typeStr = constNode["type"].get<std::string>();
+
+		if (typeStr == "null") {
+			type = ::Components::AttributesType::NONE;
+			value.value.valueFloat = 0;
+		}
+		else if (typeStr == "float") {
+			type = ::Components::AttributesType::FLOAT;
+			value.value.valueFloat = constNode["value"].get<float>();
+		}
+		else if (typeStr == "vector2D") {
+			//TODO: despues de la serializacion
+		}
+		else if (typeStr == "string") {
+			type = ::Components::AttributesType::STRING;
+			value.valueString = constNode["value"].get<float>();
+		}
+		else if (typeStr == "bool") {
+			type = ::Components::AttributesType::BOOL;
+			value.value.valueBool = constNode["value"].get<bool>();
+		}
+		else if (typeStr == "color") {
+
+			//TODO: despues de la serializacion
+		}
+
+		ScriptCreationUtilities::ScriptInput* input = new ScriptCreationUtilities::ScriptInput(type);
+		input->SetValue(value);
+
+		input->FromJson(constNode);
+
+
+		SetNode(input->GetId(), input);
+	}
+
+
+	for (auto& mi : methodInfo) {
+
+		mi.node->SetInput(mi.pos, GetNodes()[mi.inputNode]);
+	}
+
 }
 
 void PEditor::ScriptCreation::GetScrollPosition(int* x, int* y)
@@ -110,7 +274,6 @@ std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreat
 
 void PEditor::ScriptCreation::render()
 {
-
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -193,6 +356,8 @@ void PEditor::ScriptCreation::render()
 
 		ImGui::EndPopup();
 	}
+
+
 }
 
 void PEditor::ScriptCreation::SetName(const std::string& name)

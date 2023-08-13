@@ -6,11 +6,22 @@
 #include <unordered_map>
 
 #include "ComponentInfo.h"
-#include "ScriptCreationUtilities.h"
+
+
+
 
 class ImGUIManager;
 
 namespace PEditor {
+
+
+    namespace ScriptCreationUtilities {
+
+        class ScriptNode;
+        class ScriptEvent;
+        class ScriptDropdownSelection;
+        class ScriptMenuBar;
+    }
 
 
     class ScriptCreation : public Window
@@ -58,6 +69,7 @@ namespace PEditor {
         void SetNodeCount(int count);
         void SetNode(int n, ScriptCreationUtilities::ScriptNode* node);
 
+        void Save();
         void Load();
 
         static void GetScrollPosition(int* x, int* y);
