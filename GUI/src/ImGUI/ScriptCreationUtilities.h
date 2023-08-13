@@ -60,14 +60,13 @@ namespace PEditor {
 			Al eliminar un nodo y volver a crearlo se pone en la posicion del nodo anterior
 			Corregir parpadeo al crear varios nodos y eliminar uno de los anteriores
 			Next node
-
-			TODO:
-
 			Condicionales
 			Bucles
-			
-			-Recibir condicion flujo
-			-Cambiar la posicion de entrada del flujo
+			Recibir condicion flujo
+			Cambiar la posicion de entrada del flujo
+			Hacer que la curva bezier salga en la direccion del fichero
+
+			TODO:
 			-Implementar eventos (start, update)
 
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
@@ -83,12 +82,14 @@ namespace PEditor {
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
+			-Cuando el next esta fuera no se dibuja la linea
 			
 			-Duplicar un nodo con control d
 			-Serializar next
+			-Serializar condicionales
 			-Separar grid y bezier a otro fichero
-			Hacer que la curva bezier salga en la direccion del fichero
-			Cambiar el nombre de fork a branch
+
+			-Verificar el tipo de la condicion para los condicionales
 			
 		*/
 
@@ -194,17 +195,25 @@ namespace PEditor {
 			/*
 				Introduce un nuevo nodo a la lista de salidas
 			*/
-			void AddOutput(ScriptMethod* output);
+			void AddOutput(ScriptNode* output);
 
 			/*
 				Elimina un nodo de la lista de salidas
 			*/
-			bool RemoveOutput(ScriptMethod* output);
+			bool RemoveOutput(ScriptNode* output);
 
 			/*
 				Callback para cuando un nodo es eliminado
 			*/
 			virtual void OnRemoved();
+
+
+
+			/*
+				Cuando una de los nodos entradas ha sido eliminado
+			*/
+			virtual void RemoveInput(ScriptNode* node);
+
 
 		protected:
 
@@ -226,7 +235,7 @@ namespace PEditor {
 				Vector con las conexiones de salida del nodo. Es util para notificar a los nodos que reciben la salida
 				cuando este nodo va a ser eliminado
 			*/
-			std::vector<ScriptMethod*> outputConexions;
+			std::vector<ScriptNode*> outputConexions;
 
 			/*
 				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
@@ -432,7 +441,7 @@ namespace PEditor {
 			/*
 				Busca el nodo dentro del array de entradas y lo elimina
 			*/
-			void RemoveInput(ScriptNode* node);
+			void RemoveInput(ScriptNode* node) override;
 
 		private:
 
@@ -492,10 +501,20 @@ namespace PEditor {
 			void OnRemoved() override;
 
 
+			/*
+				Callback cuando se elimine el nodo de condicion
+			*/
+			void RemoveInput(ScriptNode* node) override;
+
+
+
 		private:
 
 			Fork type; //El tipo de flujo del nodo
 			ScriptFlow* A, * B; //Cada nodo de continuacion de flujo
+
+			ScriptNode* condition; //Condicion para el cambio del flujo
+
 			std::string a_tooltip, b_tooltip; //Informacion a mostrar al pasar el raton por cada nodo
 
 			/*

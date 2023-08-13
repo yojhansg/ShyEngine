@@ -6,6 +6,10 @@
 #include "ImGUIManager.h"
 #include <algorithm>
 
+void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
+{
+}
+
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 {
 	id = x = y = 0;
@@ -158,12 +162,12 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::ManageCloseNode()
 	return false;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::AddOutput(ScriptMethod* output)
+void PEditor::ScriptCreationUtilities::ScriptNode::AddOutput(ScriptNode* output)
 {
 	outputConexions.push_back(output);
 }
 
-bool PEditor::ScriptCreationUtilities::ScriptNode::RemoveOutput(ScriptMethod* output)
+bool PEditor::ScriptCreationUtilities::ScriptNode::RemoveOutput(ScriptNode* output)
 {
 	auto pos = std::remove(outputConexions.begin(), outputConexions.end(), output);
 
@@ -221,7 +225,8 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::GetPreviousNodePosition(float
 	if (x != nullptr)
 		*x = scroll_x + outputOffset + node->GetX();
 	if (y != nullptr)
-		*y = scroll_y + node->GetH() - outputOffset - flowNodeSize + node->GetY();
+		*y = scroll_y + node->GetH() - 40 - outputOffset - flowNodeSize + node->GetY() + yoffset;
+
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFlow::OnRemoved()
@@ -466,6 +471,22 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 	}
 
 
+
+	if (previous.size() > 0) {
+
+
+		ImVec2 previousPos = ImVec2();
+		GetPreviousNodePosition(&previousPos.x, &previousPos.y);
+
+		ImVec2 previousPosB = ImVec2(previousPos.x + nodeSize, previousPos.y - nodeSize);
+		ImVec2 previousPosC = ImVec2(previousPos.x + nodeSize + nodeSize, previousPos.y);
+		ImVec2 previousPosD = ImVec2(previousPos.x + nodeSize, previousPos.y + nodeSize);
+
+		drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, IM_COL32(255, 255, 255, 255));
+	}
+
+
+
 	Bezier::ResetThickness();
 }
 
@@ -508,13 +529,6 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 
 			ImGui::SetTooltip(in.getTypeStr().c_str());
 		}
-
-
-		ImGui::SetCursorPos(ImVec2(relpos.x - 15, relpos.y + 3));
-		ImGui::BeginChild((GetStringId() + in.getName()).c_str(), ImVec2(5, 10), true, ImGuiWindowFlags_None);
-
-
-		ImGui::EndChild();
 
 
 		auto a = ImVec2(min.x - 10, min.y + 3);
@@ -1419,16 +1433,75 @@ void PEditor::ScriptCreationUtilities::ScriptFork::OnRemoved()
 	delete B;
 
 	A = B = nullptr;
+
+	if (condition != nullptr)
+		condition->RemoveOutput(this);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::RemoveInput(ScriptNode* node)
+{
+	if (condition == node)
+		condition = nullptr;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 {
 	float x, y;
+	B->GetNextNodePosition(&x, &y);
+	B->ManageNextNode(x, y, b_tooltip);
+
 	A->GetNextNodePosition(&x, &y);
 	A->ManageNextNode(x, y, a_tooltip);
 
-	B->GetNextNodePosition(&x, &y);
-	B->ManageNextNode(x, y, b_tooltip);
+
+
+	ImVec2 a = ImVec2(x, y);
+	A->GetPreviousNodePosition(&a.x, NULL);
+
+
+	//Size: 5x10
+	int size = 5;
+
+	auto b = ImVec2(a.x + size, a.y - size);
+	auto c = ImVec2(a.x + size, a.y + size);
+
+	bool drawInputFilled = condition != nullptr;
+
+	if (ImGui::IsMouseHoveringRect(ImVec2(a.x, b.y), c)) {
+
+		if (ImGui::IsMouseDoubleClicked(0)) {
+
+			condition->RemoveOutput(this);
+			condition = nullptr;
+		}
+
+		if (ScriptNode::currentlySelectedOutput != nullptr)
+		{
+			if (ImGui::IsMouseReleased(0))
+			{
+				condition = currentlySelectedOutput;
+				ScriptNode::currentlySelectedOutput->AddOutput(this);
+				currentlySelectedOutput = nullptr;
+			}
+			drawInputFilled = true;
+		}
+	}
+
+
+	auto drawList = ImGui::GetWindowDrawList();
+
+	if (drawInputFilled)
+		drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+	else
+		drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+
+	if (condition != nullptr) {
+
+		float outx, outy;
+		condition->GetOutputNodePosition(&outx, &outy);
+		Bezier::Draw(outx, outy, a.x, a.y);
+	}
+
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptFork::GetStringId()

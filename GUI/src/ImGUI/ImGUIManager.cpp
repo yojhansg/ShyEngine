@@ -27,7 +27,7 @@ ImGUIManager::ImGUIManager() {
     scene = nullptr;
     window = nullptr;
 
-    state = PROJECTS_WINDOW;
+    state = EDITOR_WINDOW;
 
 }
 
@@ -99,7 +99,7 @@ void ImGUIManager::initSDL()
     }
 
     originalWindowSize = new ImVec2(1920, 1080);
-    createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 400);
+    createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080);
     createSDLRenderer();
 }
 
@@ -145,6 +145,7 @@ void ImGUIManager::init()
     gameSize = new ImVec2{ 1080, 720 };
 
     initImGUI();
+    initWindows();
 
     changeEditorState(state);
 
@@ -165,7 +166,7 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-    SDL_SetWindowSize(window, 700, 500);
+   /* SDL_SetWindowSize(window, 700, 500);
 
     PEditor::ProjectSelectionDialog dialog;
     auto result = dialog.ManageProjectSelectionDialog(renderer);
@@ -177,7 +178,7 @@ void ImGUIManager::loop()
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     initWindows();
-;
+;*/
 
     while (!exitGame)
     {
@@ -197,13 +198,13 @@ void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
     switch (state)
     {
     case ImGUIManager::PROJECTS_WINDOW:
-        SDL_SetWindowSize(window, 1280, 720);
+        //SDL_SetWindowSize(window, 1280, 720);
         break;
     case ImGUIManager::EDITOR_WINDOW:
-        SDL_SetWindowSize(window, 1920, 1080);
+        //SDL_SetWindowSize(window, 1920, 1080);
         break;
     case ImGUIManager::SCRIPTING_WINDOW:
-        SDL_SetWindowSize(window, 1920, 1080);
+        //SDL_SetWindowSize(window, 1920, 1080);
         scriptCreation->Load();
         break;
     default:
