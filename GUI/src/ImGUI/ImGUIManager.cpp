@@ -108,6 +108,7 @@ void ImGUIManager::initImGUI()
 	style.Colors[ImGuiCol_PopupBg] = ImVec4(color_for_pops.x, color_for_pops.y, color_for_pops.z, 0.92f);
 	//style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 0.73f);
 
+	style.WindowRounding = 10;
 
 
 	// Setup Platform/Renderer backends

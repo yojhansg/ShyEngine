@@ -54,9 +54,10 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		else
 			ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
+		ImGui::SetNextWindowSize(size, ImGuiCond_None);
+
 		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
 
-		ImGui::SetWindowSize(size, ImGuiCond_None);
 
 		updateAndRender();
 		ManageOutputNode();
@@ -154,11 +155,12 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::ManageCloseNode()
 	ImGui::SetCursorPos(ImVec2((w - buttonSize.x) * 0.5f, h - buttonSize.y - 10));
 
 
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 40.0f);
 	if (ImGui::Button("Close", buttonSize))
 	{
 		return true;
 	}
-
+	ImGui::PopStyleVar();
 	return false;
 }
 
@@ -558,7 +560,6 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 				ScriptNode::currentlySelectedOutput->AddOutput(this);
 				ScriptNode::currentlySelectedOutput = nullptr;
 			}
-
 
 			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
 		}
@@ -1446,6 +1447,8 @@ std::string PEditor::ScriptCreationUtilities::ScriptEvent::StyleName(const std::
 
 void PEditor::ScriptCreationUtilities::ScriptEvent::OnRemoved()
 {
+	ScriptCreation::RemoveEvent(eventname);
+
 	flow->RemoveNext();
 	delete flow;
 	flow = nullptr;

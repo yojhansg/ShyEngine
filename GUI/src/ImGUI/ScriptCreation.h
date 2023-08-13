@@ -66,6 +66,8 @@ namespace PEditor {
         void AddEvent(const std::string& name, ScriptCreationUtilities::ScriptEvent* event);
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
+        static void RemoveEvent(const std::string& name);
+
         void SetNodeCount(int count);
         void SetNode(int n, ScriptCreationUtilities::ScriptNode* node);
 

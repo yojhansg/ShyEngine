@@ -67,6 +67,11 @@ void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 	nodes.push_back(node);
 }
 
+void PEditor::ScriptCreation::RemoveEvent(const std::string& name)
+{
+	instance->events.erase(name);
+}
+
 void PEditor::ScriptCreation::SetNodeCount(int count)
 {
 	nodes = std::vector<ScriptCreationUtilities::ScriptNode*>(count);
@@ -125,7 +130,22 @@ void PEditor::ScriptCreation::Save()
 void PEditor::ScriptCreation::Load()
 {
 	std::string fileName = std::string(menuBar->GetName());
-	if (fileName.size() == 0) return;
+	if (fileName.size() == 0) {
+
+
+		ScriptCreationUtilities::ScriptEvent* start = new ScriptCreationUtilities::ScriptEvent("start");
+		ScriptCreationUtilities::ScriptEvent* update = new ScriptCreationUtilities::ScriptEvent("update");
+
+		start->SetPosition(250, 250);
+		update->SetPosition(250, 750);
+
+
+		AddEvent("start", start);
+		AddEvent("update", update);
+
+
+		return;
+	}
 
 	std::ifstream fileStream("scripts/" + fileName + ".script");
 
@@ -277,9 +297,18 @@ void PEditor::ScriptCreation::render()
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
+
+
 	if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
 	{
 		//ImGui::SetWindowFocus();
+
+
+		auto background = ImGui::GetWindowDrawList();
+
+		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ImColor(30, 30, 30, 255));
+
+
 
 		if (lerping) {
 
