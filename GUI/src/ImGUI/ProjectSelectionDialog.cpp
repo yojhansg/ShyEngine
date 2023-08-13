@@ -9,6 +9,10 @@
 #include "ComponentManager.h"
 #include "ProjectSelectionDialog.h"
 
+
+#include <Windows.h>
+#include <string>
+
 void PEditor::ProjectSelectionDialog::HandleInput()
 {
     SDL_Event event;
@@ -48,8 +52,23 @@ PEditor::ProjectSelectionDialog:: Result PEditor::ProjectSelectionDialog::Manage
 
         ImGui::Begin("Ventana principal", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
 
+        if (ImGui::Button("Seleccionar Archivo")) {
+            OPENFILENAMEA ofn;       // Estructura de diálogo de archivo
+            char fileName[MAX_PATH] = "";
+            ZeroMemory(&ofn, sizeof(ofn));
+            ofn.lStructSize = sizeof(ofn);
+            ofn.hwndOwner = GetForegroundWindow();
+            ofn.lpstrFilter = "Todos los archivos\0*.*\0";
+            ofn.lpstrFile = fileName;
+            ofn.nMaxFile = MAX_PATH;
+            ofn.lpstrTitle = "Seleccionar Archivo";
+            ofn.Flags = OFN_FILEMUSTEXIST;
 
-        ImGui::Text("Welcome");
+            if (GetOpenFileNameA(&ofn)) {
+
+            }
+        }
+
 
         ImGui::End();
 

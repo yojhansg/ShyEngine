@@ -12,16 +12,14 @@ namespace PEditor {
 
 	class ProjectSelectionDialog {
 
-
-
 	private:
 
 		bool windowClosed;
 		std::string path;
 
 
-
 		void HandleInput();
+
 
 	public:
 
