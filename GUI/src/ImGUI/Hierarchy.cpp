@@ -34,7 +34,6 @@ void PEditor::Hierarchy::render()
 
 
 	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-
 	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
 
 	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {

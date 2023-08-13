@@ -31,7 +31,7 @@ namespace PEditor {
 	namespace ScriptCreationUtilities {
 
 		/*
-			Cosas hechas: 
+			Cosas hechas:
 
 			Desplegable con todos los metodos
 			Dividir los metodos por categorías
@@ -83,14 +83,19 @@ namespace PEditor {
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
 			-Cuando el next esta fuera no se dibuja la linea
-			
+
 			-Duplicar un nodo con control d
 			-Serializar next
 			-Serializar condicionales
 			-Separar grid y bezier a otro fichero
 
 			-Verificar el tipo de la condicion para los condicionales
-			
+			-Añadir soporte para comentarios
+			-Ordenar la aparicion de los metodos y esas cosas
+
+			-No mostrar el pop up cuando no haya cambios pendientes
+			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
+			-Hacer que el flow funcione con un unico metodo y que los parametros sean propiedades
 		*/
 
 		class ScriptMethod;
@@ -113,11 +118,6 @@ namespace PEditor {
 				Devuelve el valor numerico del ID (este id es unico entre los nodos)
 			*/
 			int GetId();
-
-			/*
-				Devuelve un string con un ID unico para usar como nombre de la ventana
-			*/
-			virtual std::string GetStringId();
 
 
 			/*
@@ -181,17 +181,6 @@ namespace PEditor {
 			*/
 			void GetOutputNodePosition(float* x, float* y);
 
-
-			/*
-				Metodo virtual para serializar el nodo a json
-			*/
-			virtual nlohmann::json ToJson();
-
-			/*
-				Carga los valores basicos de un nodo desde un json
-			*/
-			void FromJson(nlohmann::json&);
-
 			/*
 				Introduce un nuevo nodo a la lista de salidas
 			*/
@@ -202,17 +191,11 @@ namespace PEditor {
 			*/
 			bool RemoveOutput(ScriptNode* output);
 
-			/*
-				Callback para cuando un nodo es eliminado
-			*/
-			virtual void OnRemoved();
-
-
 
 			/*
-				Cuando una de los nodos entradas ha sido eliminado
+				Carga los valores basicos de un nodo desde un json
 			*/
-			virtual void RemoveInput(ScriptNode* node);
+			void FromJson(nlohmann::json&);
 
 
 		protected:
@@ -238,17 +221,12 @@ namespace PEditor {
 			std::vector<ScriptNode*> outputConexions;
 
 			/*
-				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
-			*/
-			virtual void updateAndRender();
-
-			/*
 				Metodo interno para actualizar la posicion de la ventana cuando esta ha sido arrastrada por el usuario
 			*/
 			void UpdatePositionAfterDrag(int scrollx, int scrolly);
 
 			/*
-				Logica para el boton de salida, asi como el dibujado de la flecha que une el boton de salida con el raton 
+				Logica para el boton de salida, asi como el dibujado de la flecha que une el boton de salida con el raton
 			*/
 			void ManageOutputNode();
 
@@ -256,6 +234,39 @@ namespace PEditor {
 				Logica para el boton de cerrar la ventana
 			*/
 			bool ManageCloseNode();
+
+
+
+
+			//==================== Virtual functionality =================================
+			/*
+				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
+			*/
+			virtual void updateAndRender();
+
+		public:
+
+			/*
+				Callback para cuando un nodo es eliminado
+			*/
+			virtual void OnRemoved();
+
+			/*
+				Cuando una de los nodos entradas ha sido eliminado
+			*/
+			virtual void RemoveInput(ScriptNode* node);
+
+			/*
+				Metodo virtual para serializar el nodo a json
+			*/
+			virtual nlohmann::json ToJson();
+
+			/*
+				Devuelve un string con un ID unico para usar como nombre de la ventana
+			*/
+			virtual std::string GetStringId();
+
+
 		};
 
 
@@ -271,7 +282,7 @@ namespace PEditor {
 		class ScriptInput : public ScriptNode {
 
 		public:
-			
+
 			/*
 				Para la construccion se necesita saber el tipo de entrada que se quiere almacenar en el nodo
 			*/
@@ -321,23 +332,27 @@ namespace PEditor {
 			Clase que maneja el flujo entre nodos
 		*/
 
-		class ScriptFlow  {
+		class ScriptFlow {
 
 		private:
-			
-			
-			int xoffset, yoffset; //Desplazamiento del punto inicial
 
-			int flowNodeSize;	//Ancho del boton de salida
+
 			ScriptFlow* next;   //Puntero al siguiente nodo en el flujo
 
 			/*
 				Lista de nodos anteriores a este. Util para notificar a dichos nodos
 				cuando este sea eliminado
 			*/
-			std::vector<ScriptFlow*> previous; 
+			std::vector<ScriptFlow*> previous;
 
 			ScriptNode* node; //Nodo asociado
+
+			int flowNodeSize;	//Ancho del boton de salida
+
+			int xoffset, yoffset; //Desplazamiento del punto inicial
+
+			bool onlyOutput; //Devuelve si el nodo debe usarse solo como salida o tambien permitir entrada
+
 
 		public:
 
@@ -347,7 +362,7 @@ namespace PEditor {
 			static ScriptFlow* currentSelectedFlow;
 
 
-			ScriptFlow(ScriptNode* node);
+			ScriptFlow(ScriptNode* node, bool onlyOutput = false);
 
 			/*
 				Agrega un nodo a la lista de anteriores
@@ -365,7 +380,7 @@ namespace PEditor {
 			void ManageNextNode(float x, float y, const std::string& tooltip = "");
 
 			/*
-				Obtener la posicion del boton de salida de flujo 
+				Obtener la posicion del boton de salida de flujo
 			*/
 			void GetNextNodePosition(float* x, float* y);
 
@@ -465,7 +480,7 @@ namespace PEditor {
 
 
 			/*
-				Sobrescribimos el id en formato string para que sea algo mas legible para el usuario (con el nombre del metodo como nombre de 
+				Sobrescribimos el id en formato string para que sea algo mas legible para el usuario (con el nombre del metodo como nombre de
 				la ventana)
 			*/
 			std::string GetStringId() override;
@@ -475,9 +490,9 @@ namespace PEditor {
 
 
 
-		class ScriptFork: public ScriptNode {
+		class ScriptFork : public ScriptNode {
 
-		public: 
+		public:
 
 			enum class Fork {
 				If, While, For
@@ -534,11 +549,56 @@ namespace PEditor {
 
 
 
+		class ScriptEvent : public ScriptNode {
+
+
+		private:
+			std::string eventname;
+			std::string stylisedName;
+
+			ScriptFlow* flow;
+
+
+			void updateAndRender() override;
+
+		public:
+
+			ScriptEvent(const std::string& ev);
+
+			/*
+				Convierte un nombre dado de camelCase a uno 
+				mas legible separado por espacios
+			*/
+			static std::string StyleName(const std::string& str);
+
+			/*
+				Callback para cuando un nodo es eliminado
+			*/
+			virtual void OnRemoved() override;
+
+			/*
+				Metodo virtual para serializar el nodo a json
+			*/
+			virtual nlohmann::json ToJson() override;
+
+			/*
+				Devuelve un string con un ID unico (nombre del evento estilizado)
+			*/
+			virtual std::string GetStringId() override;
+
+		};
+
+
+
+
+
+
+
 
 		/*
 			Clase para representar la barra de herramientas en la parte superior de la ventana
 
-			Desde la barra se puede cambiar el nombre del script, guardar, cerrar, buscar un nodo, 
+			Desde la barra se puede cambiar el nombre del script, guardar, cerrar, buscar un nodo,
 			y crear nodos de input y de fork... ect
 		*/
 
@@ -562,7 +622,7 @@ namespace PEditor {
 
 
 			/*
-				Muestra el desplegable con el resultado de la busqueda de nodos. Ademas procesa la creacion en caso 
+				Muestra el desplegable con el resultado de la busqueda de nodos. Ademas procesa la creacion en caso
 				de que el usuaruo seleccione algun elemento del desplegable
 			*/
 			void ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
@@ -574,7 +634,7 @@ namespace PEditor {
 		public:
 
 			ScriptMenuBar(ScriptCreation* creator);
-			
+
 			/*
 				Carga el fichero actual
 			*/
@@ -650,7 +710,7 @@ namespace PEditor {
 				Restablece el grosor de la linea a su valor por defecto
 			*/
 			static void ResetThickness();
-			
+
 			/*
 				Establece el grosor de la linea a un valor en concreto
 			*/
@@ -709,7 +769,7 @@ namespace PEditor {
 		public:
 
 			/*
-				Cambiar la distancia entre lineas	
+				Cambiar la distancia entre lineas
 			*/
 			static void SetSpacing(int spacing);
 

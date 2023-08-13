@@ -361,7 +361,7 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVec
 }
 PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 
-PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow(ScriptNode* node) : node(node)
+PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow(ScriptNode* node, bool onlyOutput) : node(node), onlyOutput(onlyOutput)
 {
 	next = nullptr;
 	flowNodeSize = 10;
@@ -444,7 +444,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		Bezier::Draw(nextNodePosition.x, nextNodePosition.y, mousePos.x, mousePos.y);
 	}
 
-	else if (currentSelectedFlow != nullptr) {
+	else if (currentSelectedFlow != nullptr && !onlyOutput) {
 
 
 		ImVec2 bottomRightCorner = ImVec2(windowPosition.x + windowSize.x, windowPosition.y + windowSize.y);
@@ -949,45 +949,23 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		if (ImGui::BeginMenu("Events")) {
 
-			bool create = false;
-			std::string eventType;
-			ScriptFork::Fork type;
+			std::vector<std::string> events = {
 
-			if (ImGui::MenuItem("Start")) {
+				"start", "update", "init", "onCollisionEnter"
+			};
 
-				type = ScriptFork::Fork::If;
-				create = true;
+			for (auto& name : events) {
+
+				if (ImGui::MenuItem(ScriptEvent::StyleName(name).c_str())) {
+
+					ScriptNode* node = new ScriptEvent(name);
+
+					node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+
+					creator->AddNode(node);
+					ScriptCreation::SetFileModified();
+				}
 			}
-
-			if (ImGui::MenuItem("Update")) {
-
-				type = ScriptFork::Fork::While;
-				create = true;
-			}
-
-			if (ImGui::MenuItem("Awake")) {
-
-				type = ScriptFork::Fork::For;
-				create = true;
-			}
-
-			if (ImGui::MenuItem("OnCollisionEnter")) {
-
-				type = ScriptFork::Fork::For;
-				create = true;
-			}
-
-
-
-			if (create) {
-				/*ScriptNode* node = new ScriptFork(type);
-
-				node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
-
-				creator->AddNode(node);
-				ScriptCreation::SetFileModified();*/
-			}
-
 
 			ImGui::EndMenu();
 		}
@@ -1432,7 +1410,7 @@ PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : type(type)
 {
 	ignoreOutput = true;
 
-	A = new ScriptFlow(this);
+	A = new ScriptFlow(this, true);
 	B = new ScriptFlow(this);
 
 	A->SetOffset(0, -50);
@@ -1505,7 +1483,6 @@ void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 	ImVec2 a = ImVec2(x, y);
 	A->GetPreviousNodePosition(&a.x, NULL);
 
-
 	//Size: 5x10
 	int size = 5;
 
@@ -1554,4 +1531,63 @@ void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 std::string PEditor::ScriptCreationUtilities::ScriptFork::GetStringId()
 {
 	return outputStr + " (" + std::to_string(id) + ")";
+}
+
+
+
+PEditor::ScriptCreationUtilities::ScriptEvent::ScriptEvent(const std::string& ev)
+{
+	ignoreOutput = true;
+
+	eventname = ev;
+
+	if (eventname.size() > 0)
+	{
+		stylisedName = ScriptEvent::StyleName(eventname);
+	}
+
+
+	h = 100;
+
+	flow = new ScriptFlow(this, true);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptEvent::updateAndRender()
+{
+	float x, y;
+	flow->GetNextNodePosition(&x, &y);
+	flow->ManageNextNode(x, y);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::StyleName(const std::string& str)
+{
+	std::string styled = std::string(1, (char)std::toupper(str[0]));
+
+	for (int i = 1; i < str.size(); i++) {
+
+		if (std::isupper(str[i])) {
+			styled.push_back(' ');
+		}
+
+		styled.push_back(std::tolower(str[i]));
+	}
+
+	return styled;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptEvent::OnRemoved()
+{
+	flow->RemoveNext();
+	delete flow;
+	flow = nullptr;
+}
+
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptEvent::ToJson()
+{
+	return nlohmann::json();
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetStringId()
+{
+	return stylisedName;
 }

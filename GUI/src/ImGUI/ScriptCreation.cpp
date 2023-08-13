@@ -167,13 +167,11 @@ void PEditor::ScriptCreation::render()
 		}
 
 
-		if (!ImGui::IsMouseDown(0)) {
+		if (ImGui::IsMouseReleased(0)) {
 
 			ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
 			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 		}
-
-
 
 		ImGui::EndPopup();
 	}
