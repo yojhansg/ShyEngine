@@ -133,7 +133,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
                     std::string filenameWithoutExtension = filename.substr(0, dotPos);
 
                     ImGUIManager::getInstance()->getScriptCreation()->SetName(filenameWithoutExtension);
-                    ImGUIManager::getInstance()->creatingScript(true);
+                    ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::SCRIPTING_WINDOW);
                 }
             }
            

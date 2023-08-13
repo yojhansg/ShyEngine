@@ -107,6 +107,7 @@
     <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
+    <ClInclude Include="..\..\src\ImGUI\ProjectsManager.h" />
     <ClInclude Include="..\..\src\ImGUI\Scene.h" />
     <ClInclude Include="..\..\src\ImGUI\ScriptCreation.h" />
     <ClInclude Include="..\..\src\ImGUI\ScriptCreationUtilities.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="..\..\src\ImGUI\GameObject.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Scene.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ScriptCreation.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp" />

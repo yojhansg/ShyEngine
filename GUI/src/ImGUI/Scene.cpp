@@ -150,6 +150,12 @@ void PEditor::Scene::saveScene()
 
 }
 
+void PEditor::Scene::loadScene() {
+
+	// TODO Abrir explorador de archivos para seleccionar scene.json
+
+}
+
 void PEditor::Scene::update()
 {
 	Window::update();

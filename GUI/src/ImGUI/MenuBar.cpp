@@ -83,7 +83,7 @@ void PEditor::MenuBar::render()
                 }
 
                 if (ImGui::MenuItem("Add script", NULL, false)) {
-                    ImGUIManager::getInstance()->creatingScript(true);
+                    ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::SCRIPTING_WINDOW);
                 }
 
                 ImGui::Separator();
