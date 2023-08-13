@@ -373,17 +373,19 @@ std::string PEditor::GameObject::toJson()
 	j["name"] = name;
 	j["order"] = renderOrder;
 
-	nlohmann::ordered_json posJson;
+	std::string posJson = std::to_string(pos->x) + ", " + std::to_string(pos->y);
+	/*nlohmann::ordered_json posJson;
 	posJson.push_back(pos->x);
-	posJson.push_back(pos->y);
+	posJson.push_back(pos->y);*/
 	j["localPosition"] = posJson;
 
-	nlohmann::ordered_json sizeJson;
+	std::string sizeJson = std::to_string(size->x) + ", " + std::to_string(size->y);
+	/*nlohmann::ordered_json sizeJson;
 	sizeJson.push_back(size->x);
-	sizeJson.push_back(size->y);
+	sizeJson.push_back(size->y);*/
 	j["localScale"] = sizeJson;
 
-	j["localRotation"] = rotation;
+	j["localRotation"] = std::to_string(rotation);
 
 	nlohmann::ordered_json componentsJson;
 	for (auto it = components.begin(); it != components.end(); it++) {

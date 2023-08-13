@@ -61,7 +61,7 @@ bool Engine::init() {
 	engineTime = Utilities::Time::init(); 
 	Resources::ResourcesManager::init();
 	ECS::ContactListener::init(); 
-	ECS::PrefabManager::init("prefabs");
+	//ECS::PrefabManager::init("prefabs");
 	Sound::SoundManager::init();
 	Scripting::ScriptManager::init();
 	Scripting::ScriptFunctionality::init();
@@ -74,10 +74,10 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Game(sceneManager).initScenes();
+	/*Game(sceneManager).initScenes();*/
 
-	/*sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();*/
+	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->manageScenes();
 
 	if (data.useSplashScreen) {
 		sceneManager->SplashScreen();

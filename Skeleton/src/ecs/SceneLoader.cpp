@@ -273,7 +273,7 @@ void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* ent
 				value = col;
 			}
 
-			scriptCmp->SetConstValue(attribute.key(), value);
+			scriptCmp->Set(attribute.key(), value);
 		}
 	}
 

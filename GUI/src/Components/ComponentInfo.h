@@ -111,7 +111,7 @@ namespace Components {
 		void addAttribute(const Attribute& attribute);
 		void addMethod(const Method& method);
 
-		std::string  toJson();
+		std::string toJson();
 	};
 
 }
