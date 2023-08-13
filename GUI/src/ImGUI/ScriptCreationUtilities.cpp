@@ -820,7 +820,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Close()
 {
 	nameBuffer[0] = '\0';
 	creator->ClearScript();
-	ImGUIManager::getInstance()->creatingScript(false);
+	ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::EDITOR_WINDOW);;
 }
 
 PEditor::ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)

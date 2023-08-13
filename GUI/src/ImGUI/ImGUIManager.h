@@ -13,22 +13,18 @@ namespace PEditor {
 	class Hierarchy;
 	class FileExplorer;
 	class ComponentWindow;
+	class ScriptCreation;
+	class ProjectsManager;
 };
 
-namespace PEditor {
-
-	class Window;
-	class Scene;
-	class MenuBar;
-	class Hierarchy;
-	class FileExplorer;
-	class ComponentWindow;
-	class ScriptCreation;
-
-}
 
 class ImGUIManager
 {
+
+public:
+
+	enum EDITOR_STATE { PROJECTS_WINDOW, EDITOR_WINDOW, SCRIPTING_WINDOW };
+
 private:
 
 	static ImGUIManager* instance;
@@ -38,10 +34,10 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
 
-
 	bool exitGame = false;
-	bool isCreatingScript = false;
+	EDITOR_STATE state;
 
+	// All editor windows
 	std::vector<PEditor::Window*> windows;
 
 	ImVec2* originalWindowSize;
@@ -59,6 +55,7 @@ private:
 	PEditor::FileExplorer* fileExplorer = nullptr;
 	PEditor::ComponentWindow* components = nullptr;
 	PEditor::ScriptCreation* scriptCreation = nullptr;
+	PEditor::ProjectsManager* projectsManager = nullptr;
 
 
 public:
@@ -71,8 +68,6 @@ public:
 	void loop();
 	void exit();
 
-	void creatingScript(bool isCreating);
-
 	void update();
 	void render();
 	void handleInput();
@@ -80,6 +75,7 @@ public:
 	void addWindow(PEditor::Window* window);
 	void setScene(PEditor::Scene* scene);
 
+	void changeEditorState(const EDITOR_STATE& state);
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getOriginalWindowSize();
@@ -93,6 +89,7 @@ public:
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::ComponentWindow* getComponents();
 	PEditor::ScriptCreation* getScriptCreation();
+	PEditor::ProjectsManager* getProjectsManager();
 
 	~ImGUIManager();
 };

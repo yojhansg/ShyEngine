@@ -14,12 +14,20 @@
 #include <fstream>
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
+#include "ProjectsManager.h"
 
 #include "ProjectSelectionDialog.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
+    
+    gameSize = nullptr;
+    originalWindowSize = nullptr;
+    scene = nullptr;
+    window = nullptr;
+
+    state = PROJECTS_WINDOW;
 
 }
 
@@ -72,6 +80,10 @@ void ImGUIManager::initWindows()
 
     scriptCreation = new PEditor::ScriptCreation();
     addWindow(scriptCreation);
+
+    projectsManager = new PEditor::ProjectsManager();
+    addWindow(projectsManager);
+
 }
 
 void ImGUIManager::initSDL()
@@ -134,6 +146,8 @@ void ImGUIManager::init()
 
     initImGUI();
 
+    changeEditorState(state);
+
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
     Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
@@ -179,23 +193,47 @@ void ImGUIManager::exit()
     exitGame = true;
 }
 
-void ImGUIManager::creatingScript(bool isCreating)
-{
-    isCreatingScript = isCreating;
+void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
+    switch (state)
+    {
+    case ImGUIManager::PROJECTS_WINDOW:
+        SDL_SetWindowSize(window, 1280, 720);
+        break;
+    case ImGUIManager::EDITOR_WINDOW:
+        SDL_SetWindowSize(window, 1920, 1080);
+        break;
+    case ImGUIManager::SCRIPTING_WINDOW:
+        SDL_SetWindowSize(window, 1920, 1080);
+        scriptCreation->Load();
+        break;
+    default:
+        break;
+    }
 
-    if (isCreating)
-        getScriptCreation()->Load();
+    this->state = state;
 }
+
 
 void ImGUIManager::update()
 {
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
-            window->update();
+        switch (state)
+        {
+            case ImGUIManager::PROJECTS_WINDOW:
+                if (window == projectsManager) window->update();
+                break;
+            case ImGUIManager::SCRIPTING_WINDOW:
+                if (window == scriptCreation) window->update();
+                break;
+            case ImGUIManager::EDITOR_WINDOW:
+                if (window != projectsManager && window != scriptCreation)
+                    window->update();
+                break;
+            default:
+                break;
+        }
     }
-
-    if (isCreatingScript) return;
 
 }
 
@@ -211,8 +249,21 @@ void ImGUIManager::render()
 
     for (auto window : windows)
     {
-        if (!isCreatingScript && window != scriptCreation || (isCreatingScript && window == scriptCreation))
-            window->render();
+        switch (state)
+        {
+        case ImGUIManager::PROJECTS_WINDOW:
+            if (window == projectsManager) window->render();
+            break;
+        case ImGUIManager::SCRIPTING_WINDOW:
+            if (window == scriptCreation) window->render();
+            break;
+        case ImGUIManager::EDITOR_WINDOW:
+            if (window != projectsManager && window != scriptCreation)
+                window->render();
+            break;
+        default:
+            break;
+        }
     }
 
     // Rendering
@@ -330,5 +381,10 @@ PEditor::ComponentWindow* ImGUIManager::getComponents()
 PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
 {
     return scriptCreation;
+}
+
+PEditor::ProjectsManager* ImGUIManager::getProjectsManager()
+{
+    return projectsManager;
 }
 
