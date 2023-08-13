@@ -3,6 +3,8 @@
 #include <string>
 
 #include <vector>
+#include <unordered_map>
+
 #include "ComponentInfo.h"
 #include "ScriptCreationUtilities.h"
 
@@ -32,6 +34,7 @@ namespace PEditor {
 
 
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
+        std::unordered_map<std::string, ScriptCreationUtilities::ScriptEvent*> events;
 
         ScriptCreationUtilities::ScriptMenuBar* menuBar;
 
@@ -48,6 +51,8 @@ namespace PEditor {
         ScriptCreation();
         ~ScriptCreation();
 
+        ScriptCreationUtilities::ScriptEvent* ContainsEvent(const std::string& event);
+        void AddEvent(const std::string& name, ScriptCreationUtilities::ScriptEvent* event);
         void AddNode(ScriptCreationUtilities::ScriptNode* node);
 
         void SetNodeCount(int count);

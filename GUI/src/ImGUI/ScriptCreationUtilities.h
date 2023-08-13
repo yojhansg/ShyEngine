@@ -96,6 +96,7 @@ namespace PEditor {
 			-No mostrar el pop up cuando no haya cambios pendientes
 			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
 			-Hacer que el flow funcione con un unico metodo y que los parametros sean propiedades
+			-Hacer que no se pueda crear dos eventos iguales
 		*/
 
 		class ScriptMethod;
@@ -124,7 +125,7 @@ namespace PEditor {
 				Enumerado para distinguir entre los distintos tipos de nodos que puede haber
 			*/
 			enum class Node {
-				Method, Input, Fork
+				Method, Input, Fork, Event
 			};
 
 
@@ -525,7 +526,7 @@ namespace PEditor {
 
 		private:
 
-			Fork type; //El tipo de flujo del nodo
+			Fork forkType; //El tipo de flujo del nodo
 			ScriptFlow* A, * B; //Cada nodo de continuacion de flujo
 
 			ScriptNode* condition; //Condicion para el cambio del flujo
@@ -575,11 +576,6 @@ namespace PEditor {
 				Callback para cuando un nodo es eliminado
 			*/
 			virtual void OnRemoved() override;
-
-			/*
-				Metodo virtual para serializar el nodo a json
-			*/
-			virtual nlohmann::json ToJson() override;
 
 			/*
 				Devuelve un string con un ID unico (nombre del evento estilizado)

@@ -37,6 +37,22 @@ PEditor::ScriptCreation::~ScriptCreation()
 
 }
 
+PEditor::ScriptCreationUtilities::ScriptEvent* PEditor::ScriptCreation::ContainsEvent(const std::string& event)
+{
+	if (events.contains(event))
+		return events[event];
+
+	return nullptr;
+}
+
+void PEditor::ScriptCreation::AddEvent(const std::string& name, ScriptCreationUtilities::ScriptEvent* event)
+{
+	events.emplace(name, event);
+
+	event->SetID(-1);
+	nodes.push_back(event);
+}
+
 void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
 	node->SetID(nodes.size());
@@ -95,7 +111,6 @@ std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreat
 void PEditor::ScriptCreation::render()
 {
 
-
 	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -133,6 +148,9 @@ void PEditor::ScriptCreation::render()
 
 		int nodeIdx = 0;
 		bool eraseNode = false;
+
+
+
 		for (auto node : nodes) {
 
 			if (node != nullptr) {
@@ -150,14 +168,6 @@ void PEditor::ScriptCreation::render()
 				nodeIdx++;
 		}
 
-
-		dropDownSelection->UpdateAndRender();
-
-		menuBar->UpdateAndRender();
-
-
-		scrolled = false;
-
 		if (eraseNode)
 		{
 			scrolled = true;
@@ -165,6 +175,14 @@ void PEditor::ScriptCreation::render()
 			delete nodes[nodeIdx];
 			nodes.erase(nodes.begin() + nodeIdx);
 		}
+
+
+		dropDownSelection->UpdateAndRender();
+
+		menuBar->UpdateAndRender();
+
+
+		scrolled = false;
 
 
 		if (ImGui::IsMouseReleased(0)) {

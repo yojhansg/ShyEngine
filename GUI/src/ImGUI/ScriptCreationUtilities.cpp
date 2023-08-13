@@ -958,12 +958,24 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 				if (ImGui::MenuItem(ScriptEvent::StyleName(name).c_str())) {
 
-					ScriptNode* node = new ScriptEvent(name);
+					ScriptEvent* selectedEvent = creator->ContainsEvent(name);
 
-					node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+					if (selectedEvent == nullptr) {
+						ScriptEvent* node = new ScriptEvent(name);
 
-					creator->AddNode(node);
-					ScriptCreation::SetFileModified();
+						node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+
+						creator->AddEvent(name, node);
+						ScriptCreation::SetFileModified();
+					}
+					else
+					{
+						creator->Lerp(
+							selectedEvent->GetX() + selectedEvent->GetW() * 0.5f,
+							selectedEvent->GetY() + selectedEvent->GetH() * 0.5f,
+							1);
+
+					}
 				}
 			}
 
@@ -1265,6 +1277,11 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 
 	for (auto node : allNodes) {
 
+		if (node->GetId() < 0) {
+			//es un evento
+			continue;
+		}
+
 		if (node->GetType() == ScriptNode::Node::Method) {
 
 			functions.push_back(node->ToJson());
@@ -1277,6 +1294,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 			consts.push_back(node->ToJson());
 		}
 	}
+
 
 
 	root["functions"] = functions;
@@ -1406,8 +1424,12 @@ void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::Attri
 	attrValue = val;
 }
 
-PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : type(type)
+PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)
 {
+	condition = nullptr;
+
+	ScriptNode::type = Node::Fork;
+
 	ignoreOutput = true;
 
 	A = new ScriptFlow(this, true);
@@ -1537,6 +1559,7 @@ std::string PEditor::ScriptCreationUtilities::ScriptFork::GetStringId()
 
 PEditor::ScriptCreationUtilities::ScriptEvent::ScriptEvent(const std::string& ev)
 {
+	type = Node::Event;
 	ignoreOutput = true;
 
 	eventname = ev;
@@ -1580,11 +1603,6 @@ void PEditor::ScriptCreationUtilities::ScriptEvent::OnRemoved()
 	flow->RemoveNext();
 	delete flow;
 	flow = nullptr;
-}
-
-nlohmann::json PEditor::ScriptCreationUtilities::ScriptEvent::ToJson()
-{
-	return nlohmann::json();
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetStringId()
