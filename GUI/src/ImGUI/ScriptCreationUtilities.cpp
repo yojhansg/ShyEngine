@@ -947,6 +947,53 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		}
 
 
+		if (ImGui::BeginMenu("Events")) {
+
+			bool create = false;
+			std::string eventType;
+			ScriptFork::Fork type;
+
+			if (ImGui::MenuItem("Start")) {
+
+				type = ScriptFork::Fork::If;
+				create = true;
+			}
+
+			if (ImGui::MenuItem("Update")) {
+
+				type = ScriptFork::Fork::While;
+				create = true;
+			}
+
+			if (ImGui::MenuItem("Awake")) {
+
+				type = ScriptFork::Fork::For;
+				create = true;
+			}
+
+			if (ImGui::MenuItem("OnCollisionEnter")) {
+
+				type = ScriptFork::Fork::For;
+				create = true;
+			}
+
+
+
+			if (create) {
+				/*ScriptNode* node = new ScriptFork(type);
+
+				node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+
+				creator->AddNode(node);
+				ScriptCreation::SetFileModified();*/
+			}
+
+
+			ImGui::EndMenu();
+		}
+
+
+
 		if (ImGui::Button("Save script")) {
 
 			Save();
