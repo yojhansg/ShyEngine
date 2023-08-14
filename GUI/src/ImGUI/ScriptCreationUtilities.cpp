@@ -74,10 +74,11 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 
 		UpdatePositionAfterDrag(scrollx, scrolly);
 
-		auto winSize = ImGui::GetWindowSize();
-		w = winSize.x;
-		h = winSize.y;
-
+		if (resizable) {
+			auto winSize = ImGui::GetWindowSize();
+			w = winSize.x;
+			h = winSize.y;
+		}
 		ImGui::End();
 
 		return close;
