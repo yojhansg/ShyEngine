@@ -269,6 +269,19 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::SetOffset(int x, int y)
 	yoffset = y;
 }
 
+PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::ScriptFlow::GetNext()
+{
+	if (next == nullptr) return nullptr;
+
+	return next->node;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFlow::SetNext(ScriptFlow* next)
+{
+	this->next = next;
+	next->AddPrevious(this);
+}
+
 
 int PEditor::ScriptCreationUtilities::ScriptNode::GetId()
 {
@@ -313,6 +326,11 @@ PEditor::ScriptCreationUtilities::ScriptNode* PEditor::ScriptCreationUtilities::
 std::string PEditor::ScriptCreationUtilities::ScriptNode::GetStringId()
 {
 	return std::to_string(id);
+}
+
+PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptNode::GetScriptFlow()
+{
+	return nullptr;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptNode::updateAndRender()
@@ -1210,6 +1228,9 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 		else root["input"].push_back(-1);
 	}
 
+	if (flow->GetNext() != nullptr)
+		root["next"] = flow->GetNext()->GetId();
+
 	return root;
 }
 
@@ -1217,6 +1238,11 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNod
 {
 	input[idx] = node;
 	node->AddOutput(this);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptMethod::SetNext(ScriptFlow* flow)
+{
+	this->flow->SetNext(flow);
 }
 
 
@@ -1244,6 +1270,11 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::RemoveInput(ScriptNode* nod
 			input[i] = nullptr;
 	}
 
+}
+
+PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptMethod::GetScriptFlow()
+{
+	return flow;
 }
 
 
@@ -1329,7 +1360,14 @@ PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(t
 
 nlohmann::json PEditor::ScriptCreationUtilities::ScriptFork::ToJson()
 {
-	return nlohmann::json();
+	json root = ScriptNode::ToJson();
+
+	root["type"] = (int)forkType;
+	root["condition"] = condition != nullptr ? condition->GetId() : -1;
+	root["A"] = A->GetNext() != nullptr ? A->GetNext()->GetId() : -1;
+	root["B"] = B->GetNext() != nullptr ? B->GetNext()->GetId() : -1;
+
+	return root;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFork::OnRemoved()
@@ -1352,6 +1390,27 @@ void PEditor::ScriptCreationUtilities::ScriptFork::RemoveInput(ScriptNode* node)
 {
 	if (condition == node)
 		condition = nullptr;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::SetCondition(ScriptNode* condition)
+{
+	this->condition = condition;
+	condition->AddOutput(this);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::SetA(ScriptFlow* flow)
+{
+	A->SetNext(flow);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::SetB(ScriptFlow* flow)
+{
+	B->SetNext(flow);
+}
+
+PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptFork::GetScriptFlow()
+{
+	return B;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
@@ -1475,8 +1534,18 @@ std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetStringId()
 	return stylisedName;
 }
 
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptEvent::ToJson()
+{
+	json root = ScriptNode::ToJson();
+
+	root["type"] = eventname;
+
+	return root;
+}
+
 PEditor::ScriptCreationUtilities::ScriptComment::ScriptComment(const std::string commentStr)
 {
+	type = Node::Comment;
 	resizable = true;
 	ignoreOutput = true;
 
@@ -1500,4 +1569,13 @@ void PEditor::ScriptCreationUtilities::ScriptComment::updateAndRender()
 		comment, 256, textSize,
 		ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_NoHorizontalScroll
 	);
+}
+
+nlohmann::json PEditor::ScriptCreationUtilities::ScriptComment::ToJson()
+{
+	json root = ScriptNode::ToJson();
+
+	root["comment"] = comment;
+
+	return root;
 }

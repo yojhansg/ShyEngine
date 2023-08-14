@@ -44,6 +44,8 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoColl
     surface = IMG_Load(imgPath.c_str());
     scriptTexture = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
+
+
     SDL_FreeSurface(surface);
 }
 

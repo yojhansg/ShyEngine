@@ -4,6 +4,7 @@
 #include "imgui_impl_sdlrenderer.h"
 #include "Window.h"
 #include "SDL.h"
+#include "SDL_image.h"
 #include <iostream>
 #include "Scene.h"
 #include "GameObject.h"
@@ -165,6 +166,13 @@ void ImGUIManager::initSDL()
 	originalWindowSize = new ImVec2(1920, 1080);
 	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080);
 	createSDLRenderer();
+
+
+
+	SDL_Surface* surf = IMG_Load("shyIcon2.png");
+
+	SDL_SetWindowIcon(window, surf);
+
 }
 
 void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {

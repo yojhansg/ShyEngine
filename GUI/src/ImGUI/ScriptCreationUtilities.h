@@ -71,39 +71,50 @@ namespace PEditor {
 			No mostrar el pop up cuando no haya cambios pendientes
 			Hacer que no se pueda crear dos eventos iguales
 			Oscurecer la pantalla cuando aparezca el popup de cerrar
+			Añadir soporte para comentarios
 
 			TODO:
 
+			===Funcionalidad nueva===
+
+			-Serializar next
+			-Serializar condicionales
+			-Serializar eventos
+			-Serializar comentarios
+			-Names: Es la forma de tener metodos en el scripting
+			-Duplicar un nodo con control d
+			-Control z manager
+			
+
+			===Mejoras de codigo e implementacion===
+
 			-Separar Utilities en varios ficheros
 			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
-
-			-Control z manager
-
-			-Names: Es la forma de tener metodos en el scripting
 			-Comentar todo el codigo y ver que cosas se pueden mejorar
 			-Cambiar la serializacion de vector2 y color a array en vez de string
+			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
+			-Cambiar las llamadas de windowpos y windowsize por 'x y w z'
+			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
+			-Hacer que el id no tenga en cuenta el tamaño del array ya que puede haber elementos sin id
+			
+			===Correccion de errores===
+
 			-Los nodos se pintan por encima de la barra superior
 			-Cuando el input esta fuera no se dibuja la linea
 			-Cuando el next esta fuera no se dibuja la linea
-
-			-Duplicar un nodo con control d
-			-Serializar next
-			-Serializar condicionales
-			-Unificar todos los tipos de string en uno solo
-			-Verificar el tipo de la condicion para los condicionales (if, while)
-			-Añadir soporte para comentarios
-			-Ordenar la lista de metodos y esas cosas
-
-			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
-			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
-			
 			-Al retraer una ventana hacer que las flechas apunten a la posicion correcta
-			-Cambiar las llamadas de windowpos y windowsize por 'x y w z'
+			-Ordenar la lista de metodos y esas cosas
+			-Unificar todos los tipos de entradas string
+			-Verificar el tipo de la condicion para los condicionales (if, while)
+
+
+
+
+			
 		*/
 
+		class ScriptFlow;
 		class ScriptMethod;
-
-
 		/*
 			Clase que representa un nodo generico
 		*/
@@ -127,7 +138,7 @@ namespace PEditor {
 				Enumerado para distinguir entre los distintos tipos de nodos que puede haber
 			*/
 			enum class Node {
-				Method, Input, Fork, Event
+				Method, Input, Fork, Event, Comment
 			};
 
 
@@ -201,6 +212,7 @@ namespace PEditor {
 			void FromJson(nlohmann::json&);
 
 
+
 		protected:
 
 			ScriptNode();
@@ -271,6 +283,10 @@ namespace PEditor {
 			*/
 			virtual std::string GetStringId();
 
+			/*
+				Devuelve un puntero a la entrada de flujo del nodo
+			*/
+			virtual ScriptFlow* GetScriptFlow();
 
 		};
 
@@ -414,6 +430,20 @@ namespace PEditor {
 			*/
 			void SetOffset(int x, int y);
 
+
+			/*
+				Devuelve el nodo al que apunta el siguiente
+			*/
+			ScriptNode* GetNext();
+
+
+			/*
+				Devuelve el nodo al que apunta el siguiente
+			*/
+			void SetNext(ScriptFlow* next);
+
+
+
 			//TODO: ver si esto merece la pena hacerlo asi o dejarlo como estaba antes
 			/*
 				Metodo para establecer la conexion de flujo entre dos nodos
@@ -453,6 +483,11 @@ namespace PEditor {
 			void SetInput(int idx, ScriptNode* node);
 
 			/*
+				Establece el nodo siguiente
+			*/
+			void SetNext(ScriptFlow* flow);
+
+			/*
 				Callback para cuando un nodo es eliminado
 			*/
 			void OnRemoved() override;
@@ -462,6 +497,13 @@ namespace PEditor {
 				Busca el nodo dentro del array de entradas y lo elimina
 			*/
 			void RemoveInput(ScriptNode* node) override;
+
+
+			/*
+				Devuelve un puntero a la entrada de flujo del nodo
+			*/
+			ScriptFlow* GetScriptFlow() override;
+
 
 		private:
 
@@ -527,6 +569,28 @@ namespace PEditor {
 			void RemoveInput(ScriptNode* node) override;
 
 
+			/*
+				Establece el valor de la condicion
+			*/
+			void SetCondition(ScriptNode* condition);
+
+			/*
+				Establece la salidas de flujo
+			*/
+			void SetA(ScriptFlow* flow);
+
+			/*
+				Establece la salidas de flujo
+			*/
+			void SetB(ScriptFlow* flow);
+
+
+
+			/*
+				Devuelve un puntero a la entrada de flujo del nodo
+			*/
+			ScriptFlow* GetScriptFlow() override;
+
 
 		private:
 
@@ -548,6 +612,8 @@ namespace PEditor {
 				la ventana)
 			*/
 			std::string GetStringId() override;
+
+
 		};
 
 
@@ -586,6 +652,13 @@ namespace PEditor {
 			*/
 			virtual std::string GetStringId() override;
 
+
+			/*
+				Serializacion del valor del nodo junto con el tipo
+			*/
+			nlohmann::json ToJson() override;
+
+
 		};
 
 
@@ -611,6 +684,12 @@ namespace PEditor {
 
 			void updateAndRender() override;
 
+
+
+			/*
+				Serializacion del nodo
+			*/
+			nlohmann::json ToJson() override;
 
 
 		};
