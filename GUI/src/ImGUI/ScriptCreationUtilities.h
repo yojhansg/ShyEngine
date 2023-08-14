@@ -80,7 +80,12 @@ namespace PEditor {
 			TODO:
 
 			===Funcionalidad nueva===
+			-SerializedValues: Es la forma de serializar variables en el scripting
 			-Names: Es la forma de tener metodos en el scripting
+
+			Para el motor: falta el setSerializedValue
+			Falta terminar las colecciones (arrays)
+
 			-Duplicar un nodo con control d
 			-Control z manager
 			-Poder quitar un nodo siguiente
@@ -323,9 +328,16 @@ namespace PEditor {
 			*/
 			void SetValue(::Components::AttributeValue const& value);
 
+
+
+			void Reflect();
+
+
+
 		private:
 
-			bool reflect; //TODO
+			bool reflect;
+			std::string reflectname;
 
 			/*
 				Tipo de valor que se quiere guardar
@@ -342,6 +354,7 @@ namespace PEditor {
 				Implementar la logica junto con el dibujado de la ventana
 			*/
 			void updateAndRender() override;
+
 
 
 

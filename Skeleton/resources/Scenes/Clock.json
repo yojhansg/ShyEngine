@@ -48,7 +48,8 @@
             ],
             
             "scripts":{
-                "AnalogTimeMinutes": []
+                "AnalogTimeMinutes": [],
+                "PruebaEditor": []
             }
         },
         {
