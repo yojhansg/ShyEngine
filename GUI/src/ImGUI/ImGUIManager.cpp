@@ -204,7 +204,6 @@ void ImGUIManager::init()
 	gameSize = new ImVec2{ 1080, 720 };
 
 	initImGUI();
-	initWindows();
 
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
@@ -231,10 +230,17 @@ void ImGUIManager::loop()
     if (result == PEditor::ProjectsManager::Result::CLOSED)
         return;
 
-	 SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
-	 SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-    initWindows();
+	initWindows();
+
+	while (!exitGame)
+	{
+		update();
+		handleInput();
+		render();
+	}
 
 }
 
@@ -356,7 +362,6 @@ ImVec2 ImGUIManager::getOriginalWindowSize()
 }
 
 
-
 ImGUIManager::~ImGUIManager()
 {
 	Components::ComponentManager::Release();
@@ -397,7 +402,6 @@ PEditor::Scene* ImGUIManager::getScene()
 {
 	return scene;
 }
-
 
 PEditor::MenuBar* ImGUIManager::getMenuBar()
 {

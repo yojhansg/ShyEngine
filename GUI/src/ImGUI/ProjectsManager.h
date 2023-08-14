@@ -1,7 +1,8 @@
 #pragma once
 
-class ImGUIManager;
+#include <string>
 
+class ImGUIManager;
 struct SDL_Renderer;
 
 namespace PEditor {
@@ -41,6 +42,7 @@ namespace PEditor {
 
 		void MakeFolderToStoreRecentProjects();
 		bool AskForPermission();
+		bool HasExtension(const std::wstring& filePath, const std::wstring& extension);
 
 	};
 

@@ -126,9 +126,9 @@ namespace PEditor {
         }
 
         if (invalidNewProjectPath)
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Can not be empty and must \nbe an existing folder!");
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Can not be empty and \nmust be an existing folder!");
 
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.3f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.0f));
 
         // Create project button logic
         if (ImGui::Button("Create Project", ImVec2(w / 2.0f, h / 20.0f)))
@@ -187,7 +187,7 @@ namespace PEditor {
         if (invalidOpenProjectPath)
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Can not be empty and must be an existing .shy project file!");
 
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 5.0f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 4.5f));
 
         if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 20.0f)))
         {
@@ -202,6 +202,17 @@ namespace PEditor {
 
                 return Result::OPENED;
             }
+
+        }
+
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.0f));
+        if (ImGui::Button("IR AL EDITOR", ImVec2(w / 2.0f, h / 20.0f)))
+        {
+            windowClosed = true;
+
+            ImGui::End();
+
+            return Result::OPENED;
 
         }
 
@@ -298,20 +309,38 @@ namespace PEditor {
 
         DWORD fileAttributes = GetFileAttributesA(open_project_path);
         if (strlen(open_project_path) <= 0 || fileAttributes == INVALID_FILE_ATTRIBUTES) {
+
             invalidOpenProjectPath = true;
             return false;
         }
-        else invalidOpenProjectPath = false;
+        else {
+            std::wstring desiredExtension = L".shyproject";
+
+            std::wstring filePathWide(open_project_path, open_project_path + strlen(open_project_path));
+
+            if (!HasExtension(filePathWide, desiredExtension)) {
+                invalidOpenProjectPath = true;
+                return false;
+            }
+            else invalidOpenProjectPath = false;
+
+        }
 
         return true;
+    }
+
+    bool ProjectsManager::HasExtension(const std::wstring& filePath, const std::wstring& extension) {
+
+        return filePath.size() >= extension.size() &&
+            filePath.compare(filePath.size() - extension.size(), extension.size(), extension) == 0;
     }
 
     bool ProjectsManager::AskForPermission() {
 
         int result = MessageBox(
             NULL,
-            L"La aplicación desea crear una carpeta y un archivo en la carpeta AppData. ¿Desea continuar?",
-            L"Confirmación de permiso",
+            L"The engine needs to create a folder in your AppData path. Do you want to continue?",
+            L"Permission confirmation",
             MB_YESNO | MB_ICONQUESTION
         );
 
