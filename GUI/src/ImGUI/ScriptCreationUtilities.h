@@ -98,6 +98,7 @@ namespace PEditor {
 			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
 			
 			-Al retraer una ventana hacer que las flechas apunten a la posicion correcta
+			-Cambiar las llamadas de windowpos y windowsize por 'x y w z'
 		*/
 
 		class ScriptMethod;
@@ -213,6 +214,8 @@ namespace PEditor {
 			bool initialised; //Saber si el nodo ya ha aparecido o si es su primera vez
 			bool ignoreOutput; //Marca si se quiere ignorar el boton de salida
 			float outputButtonSize; //Ancho del boton de salida
+
+			bool resizable; //Se pueden cambiar las dimensiones de la ventana
 
 			std::string outputStr; //Cadena con el nombre del tipo de salida
 
@@ -588,7 +591,29 @@ namespace PEditor {
 
 
 
+		class ScriptComment: public ScriptNode {
 
+
+		private:
+
+			char comment[256];
+
+		public:
+
+			ScriptComment(const std::string comment);
+
+
+			/*
+				Devuelve un string con un ID unico (nombre del evento estilizado)
+			*/
+			virtual std::string GetStringId() override;
+
+
+			void updateAndRender() override;
+
+
+
+		};
 
 
 

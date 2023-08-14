@@ -57,13 +57,13 @@ void PEditor::ScriptCreation::AddEvent(const std::string& name, ScriptCreationUt
 {
 	events.emplace(name, event);
 
-	event->SetID(-1);
-	nodes.push_back(event);
+	AddNode(event, false);
 }
 
-void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node, bool insertValidNode)
 {
-	node->SetID(nodes.size());
+	int nodeIdx = insertValidNode ? nodes.size() : -1;
+	node->SetID(nodeIdx);
 	nodes.push_back(node);
 }
 

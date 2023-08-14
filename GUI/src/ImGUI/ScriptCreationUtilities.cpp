@@ -12,6 +12,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
 
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 {
+	resizable = false;
 	id = x = y = 0;
 	w = 200;
 	h = 300;
@@ -54,7 +55,10 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		else
 			ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
-		ImGui::SetNextWindowSize(size, ImGuiCond_None);
+		if (!resizable)
+			ImGui::SetNextWindowSize(size, ImGuiCond_None);
+
+
 
 		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
 
@@ -69,6 +73,10 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		}
 
 		UpdatePositionAfterDrag(scrollx, scrolly);
+
+		auto winSize = ImGui::GetWindowSize();
+		w = winSize.x;
+		h = winSize.y;
 
 		ImGui::End();
 
@@ -1035,6 +1043,13 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		}
 
 
+		if (ImGui::Button("Add comment")) {
+
+
+			creator->AddNode(new ScriptComment("Write comment here"), false);
+		}
+
+
 		ImGui::EndMenuBar();
 	}
 	ImGui::PopStyleVar(3);
@@ -1458,4 +1473,31 @@ void PEditor::ScriptCreationUtilities::ScriptEvent::OnRemoved()
 std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetStringId()
 {
 	return stylisedName;
+}
+
+PEditor::ScriptCreationUtilities::ScriptComment::ScriptComment(const std::string commentStr)
+{
+	resizable = true;
+	ignoreOutput = true;
+
+	memcpy(comment, commentStr.c_str(), 256);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptComment::GetStringId()
+{
+	return "Comment";
+}
+
+void PEditor::ScriptCreationUtilities::ScriptComment::updateAndRender()
+{
+	const int margin = 10;
+
+	float encabezado = ImGui::GetFrameHeight();
+
+	ImVec2 textSize = ImVec2(w - 2 * margin, h - 50 - margin - encabezado);
+	ImGui::SetCursorPos(ImVec2(margin, margin + encabezado));
+	ImGui::InputTextMultiline("##",
+		comment, 256, textSize,
+		ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_NoHorizontalScroll
+	);
 }
