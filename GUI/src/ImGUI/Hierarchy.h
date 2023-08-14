@@ -2,6 +2,7 @@
 #include <vector>
 #include "Window.h"
 
+union SDL_Event;
 namespace PEditor {
 	class Hierarchy: public Window
 	{
