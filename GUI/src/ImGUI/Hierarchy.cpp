@@ -3,6 +3,7 @@
 #include "ImGUIManager.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "SDL.h"
 #include <string>
 
 PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoResize | NoCollapse | NoMove)
@@ -29,6 +30,7 @@ void PEditor::Hierarchy::render()
 	PEditor::Scene* scene = imGUIManager->getScene();
 	
 	std::vector<GameObject*> gameObjects = scene->getGameObjects();
+
 
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
@@ -70,13 +72,76 @@ void PEditor::Hierarchy::render()
 				scene->setSelectedGameObject(gameObject);
 			}
 
+
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
+				ImGui::OpenPopup("Gameobject Menu");
+			}
+
+			bool shouldOpenRenamePopup = false;
+
+			if (ImGui::BeginPopup("Gameobject Menu"))
+			{
+				if (ImGui::MenuItem("Create prefab", NULL, false)) {
+
+				}
+
+				if (ImGui::MenuItem("Add script", NULL, false)) {
+					ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::SCRIPTING_WINDOW);
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Rename", NULL, false))
+				{
+					shouldOpenRenamePopup = true;
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Delete", NULL, false)) {
+					gameObject->toDelete();
+				}
+
+				ImGui::EndMenu();
+
+			}
+
+			if (shouldOpenRenamePopup)
+			{
+				ImGui::OpenPopup("Rename Object");
+				shouldOpenRenamePopup = false;
+			}
+
+			if (ImGui::BeginPopup("Rename Object"))
+				{
+				ImGui::Text(("Insert new name for GameObject: " + gameObject->getName()).c_str());
+
+				ImGui::Separator();
+
+				static char nameBuffer[256];  // Buffer to hold the new name
+
+				// Display an input text field for renaming
+				if (ImGui::InputText("New Name", nameBuffer, sizeof(nameBuffer)))
+				{
+				}
+
+				if (ImGui::Button("Ok"))
+				{
+					if (strlen(nameBuffer) > 0) {
+						gameObject->setName(nameBuffer);
+					}
+
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+
 			i++;
 		}
 
 		ImGui::EndListBox();
 	}
 
-
 	ImGui::End();
-
 }
