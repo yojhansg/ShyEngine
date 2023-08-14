@@ -126,17 +126,18 @@ void PEditor::MenuBar::render()
         // Display an input text field for renaming
         if (ImGui::InputText("New Name", nameBuffer, sizeof(nameBuffer)))
         {
-            // The text has been edited, update the game object's name
-            gameObject->setName(nameBuffer);
         }
 
         if (ImGui::Button("Ok"))
         {
+            if (strlen(nameBuffer) > 0) {
+                gameObject->setName(nameBuffer);
+            }
+
             ImGui::CloseCurrentPopup();
         }
 
         ImGui::EndPopup();
-
     }
 }
 

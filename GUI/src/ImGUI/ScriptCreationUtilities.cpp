@@ -6,8 +6,13 @@
 #include "ImGUIManager.h"
 #include <algorithm>
 
+void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
+{
+}
+
 PEditor::ScriptCreationUtilities::ScriptNode::ScriptNode()
 {
+	resizable = false;
 	id = x = y = 0;
 	w = 200;
 	h = 300;
@@ -50,9 +55,12 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		else
 			ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
-		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
+		if (!resizable)
+			ImGui::SetNextWindowSize(size, ImGuiCond_None);
 
-		ImGui::SetWindowSize(size, ImGuiCond_None);
+
+
+		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
 
 		updateAndRender();
 		ManageOutputNode();
@@ -65,6 +73,10 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		}
 
 		UpdatePositionAfterDrag(scrollx, scrolly);
+
+		auto winSize = ImGui::GetWindowSize();
+		w = winSize.x;
+		h = winSize.y;
 
 		ImGui::End();
 
@@ -150,20 +162,22 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::ManageCloseNode()
 	ImGui::SetCursorPos(ImVec2((w - buttonSize.x) * 0.5f, h - buttonSize.y - 10));
 
 
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 40.0f);
 	if (ImGui::Button("Close", buttonSize))
 	{
+		ImGui::PopStyleVar();
 		return true;
 	}
-
+	ImGui::PopStyleVar();
 	return false;
 }
 
-void PEditor::ScriptCreationUtilities::ScriptNode::AddOutput(ScriptMethod* output)
+void PEditor::ScriptCreationUtilities::ScriptNode::AddOutput(ScriptNode* output)
 {
 	outputConexions.push_back(output);
 }
 
-bool PEditor::ScriptCreationUtilities::ScriptNode::RemoveOutput(ScriptMethod* output)
+bool PEditor::ScriptCreationUtilities::ScriptNode::RemoveOutput(ScriptNode* output)
 {
 	auto pos = std::remove(outputConexions.begin(), outputConexions.end(), output);
 
@@ -221,7 +235,8 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::GetPreviousNodePosition(float
 	if (x != nullptr)
 		*x = scroll_x + outputOffset + node->GetX();
 	if (y != nullptr)
-		*y = scroll_y + node->GetH() - outputOffset - flowNodeSize + node->GetY();
+		*y = scroll_y + node->GetH() - 40 - outputOffset - flowNodeSize + node->GetY() + yoffset;
+
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFlow::OnRemoved()
@@ -356,7 +371,7 @@ void PEditor::ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVec
 }
 PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 
-PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow(ScriptNode* node) : node(node)
+PEditor::ScriptCreationUtilities::ScriptFlow::ScriptFlow(ScriptNode* node, bool onlyOutput) : node(node), onlyOutput(onlyOutput)
 {
 	next = nullptr;
 	flowNodeSize = 10;
@@ -439,7 +454,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		Bezier::Draw(nextNodePosition.x, nextNodePosition.y, mousePos.x, mousePos.y);
 	}
 
-	else if (currentSelectedFlow != nullptr) {
+	else if (currentSelectedFlow != nullptr && !onlyOutput) {
 
 
 		ImVec2 bottomRightCorner = ImVec2(windowPosition.x + windowSize.x, windowPosition.y + windowSize.y);
@@ -464,6 +479,22 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		next->GetPreviousNodePosition(&otherpos.x, &otherpos.y);
 		Bezier::Draw(nextNodePosition.x, nextNodePosition.y, otherpos.x, otherpos.y);
 	}
+
+
+
+	if (previous.size() > 0) {
+
+
+		ImVec2 previousPos = ImVec2();
+		GetPreviousNodePosition(&previousPos.x, &previousPos.y);
+
+		ImVec2 previousPosB = ImVec2(previousPos.x + nodeSize, previousPos.y - nodeSize);
+		ImVec2 previousPosC = ImVec2(previousPos.x + nodeSize + nodeSize, previousPos.y);
+		ImVec2 previousPosD = ImVec2(previousPos.x + nodeSize, previousPos.y + nodeSize);
+
+		drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, IM_COL32(255, 255, 255, 255));
+	}
+
 
 
 	Bezier::ResetThickness();
@@ -510,13 +541,6 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 		}
 
 
-		ImGui::SetCursorPos(ImVec2(relpos.x - 15, relpos.y + 3));
-		ImGui::BeginChild((GetStringId() + in.getName()).c_str(), ImVec2(5, 10), true, ImGuiWindowFlags_None);
-
-
-		ImGui::EndChild();
-
-
 		auto a = ImVec2(min.x - 10, min.y + 3);
 		auto b = ImVec2(min.x - 10, min.y + 13);
 		auto c = ImVec2(min.x - 15, min.y + 8);
@@ -544,7 +568,6 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 				ScriptNode::currentlySelectedOutput->AddOutput(this);
 				ScriptNode::currentlySelectedOutput = nullptr;
 			}
-
 
 			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
 		}
@@ -833,6 +856,11 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string&
 	std::memcpy(nameBuffer, name.c_str(), 256);
 }
 
+char* PEditor::ScriptCreationUtilities::ScriptMenuBar::GetName()
+{
+	return nameBuffer;
+}
+
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 {
 	int scrollx, scrolly;
@@ -933,6 +961,43 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		}
 
 
+		if (ImGui::BeginMenu("Events")) {
+
+			std::vector<std::string> events = {
+
+				"start", "update", "init", "onCollisionEnter"
+			};
+
+			for (auto& name : events) {
+
+				if (ImGui::MenuItem(ScriptEvent::StyleName(name).c_str())) {
+
+					ScriptEvent* selectedEvent = creator->ContainsEvent(name);
+
+					if (selectedEvent == nullptr) {
+						ScriptEvent* node = new ScriptEvent(name);
+
+						node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+
+						creator->AddEvent(name, node);
+						ScriptCreation::SetFileModified();
+					}
+					else
+					{
+						creator->Lerp(
+							selectedEvent->GetX() + selectedEvent->GetW() * 0.5f,
+							selectedEvent->GetY() + selectedEvent->GetH() * 0.5f,
+							1);
+
+					}
+				}
+			}
+
+			ImGui::EndMenu();
+		}
+
+
+
 		if (ImGui::Button("Save script")) {
 
 			Save();
@@ -940,8 +1005,10 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		if (ImGui::Button("Close")) {
 
-			showClosePopup = true;
 
+			if (creator->IsFileModified())
+				showClosePopup = true;
+			else Close();
 		}
 
 
@@ -976,6 +1043,13 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		}
 
 
+		if (ImGui::Button("Add comment")) {
+
+
+			creator->AddNode(new ScriptComment("Write comment here"), false);
+		}
+
+
 		ImGui::EndMenuBar();
 	}
 	ImGui::PopStyleVar(3);
@@ -987,10 +1061,9 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		ImGui::OpenPopup("Close without saving");
 		auto size = ImGui::GetWindowSize();
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always, ImVec2(0, 0)); // Centrar el pop-up
-		ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Always);
-		ImGui::Begin("Background", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBringToFrontOnFocus);
-		ImGui::End();
+		auto drawList = ImGui::GetWindowDrawList();
+		drawList->AddRectFilled(ImVec2(0, 0), windowSize, IM_COL32(10, 10, 10, 255), 0, 0);
+
 
 		ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
 
@@ -1090,168 +1163,15 @@ Components::Method& PEditor::ScriptCreationUtilities::ScriptMenuBar::GetMethodRe
 }
 
 
-#include <fstream>
-#include "nlohmann/json.hpp"
-
-using nlohmann::json;
-
-void PEditor::ScriptCreationUtilities::ScriptMenuBar::Load()
-{
-	std::string fileName = std::string(nameBuffer);
-	if (fileName.size() == 0) return;
-
-	std::ifstream fileStream("scripts/" + fileName + ".script");
-
-	if (!fileStream.good() || !json::accept(fileStream))
-	{
-		return;
-	}
-
-	fileStream.clear();
-	fileStream.seekg(0);
-
-	json file = json::parse(fileStream);
-	fileStream.close();
-
-	json& functions = file["functions"];
-	json& consts = file["consts"];
-
-	creator->SetNodeCount(file["nodeCount"].get<int>());
-
-
-	struct MethodInput {
-		class ScriptMethod* node;
-		int pos;
-		int inputNode;
-	};
-
-	std::vector<MethodInput> methodInfo;
-
-
-	for (auto& funcNode : functions) {
-
-		std::string completeName = funcNode["function"];
-		size_t separator = completeName.find("_");
-		std::string className = completeName.substr(0, separator);
-		std::string functionName = completeName.substr(separator + 1);
-
-		ScriptMethod* method;
-
-		if (Components::ComponentManager::GetAllComponents().contains(className)) {
-
-			method = new ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
-		}
-		else {
-			method = new ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
-		}
-
-
-		int idx = 0;
-		for (auto& in : funcNode["input"]) {
-
-			int inputNode = in.get<int>();
-			if (inputNode >= 0)
-				methodInfo.push_back({ method, idx, inputNode });
-
-			idx++;
-		}
-
-
-
-		method->FromJson(funcNode);
-
-		creator->SetNode(method->GetId(), method);
-	}
-
-	for (auto& constNode : consts) {
-
-		::Components::AttributesType type = ::Components::AttributesType::NONE;
-		::Components::AttributeValue value;
-
-		std::string typeStr = constNode["type"].get<std::string>();
-
-		if (typeStr == "null") {
-			type = ::Components::AttributesType::NONE;
-			value.value.valueFloat = 0;
-		}
-		else if (typeStr == "float") {
-			type = ::Components::AttributesType::FLOAT;
-			value.value.valueFloat = constNode["value"].get<float>();
-		}
-		else if (typeStr == "vector2D") {
-			//TODO: despues de la serializacion
-		}
-		else if (typeStr == "string") {
-			type = ::Components::AttributesType::STRING;
-			value.valueString = constNode["value"].get<float>();
-		}
-		else if (typeStr == "bool") {
-			type = ::Components::AttributesType::BOOL;
-			value.value.valueBool = constNode["value"].get<bool>();
-		}
-		else if (typeStr == "color") {
-
-			//TODO: despues de la serializacion
-		}
-
-		ScriptInput* input = new ScriptInput(type);
-		input->SetValue(value);
-
-		input->FromJson(constNode);
-
-
-		creator->SetNode(input->GetId(), input);
-	}
-
-
-	for (auto& mi : methodInfo) {
-
-		mi.node->SetInput(mi.pos, creator->GetNodes()[mi.inputNode]);
-	}
-
-}
-
-
-
 void PEditor::ScriptCreationUtilities::ScriptMenuBar::Save()
 {
-	auto& allNodes = creator->GetNodes();
+	creator->Save();
 
-	json root;
-	json functions = json::array(), consts = json::array();
-
-	root["nodeCount"] = allNodes.size();
-
-	std::vector<ScriptNode*> serializedValues;
-
-	for (auto node : allNodes) {
-
-		if (node->GetType() == ScriptNode::Node::Method) {
-
-			functions.push_back(node->ToJson());
-		}
-
-
-		else if (node->GetType() == ScriptNode::Node::Input) {
-
-
-			consts.push_back(node->ToJson());
-		}
-	}
-
-
-	root["functions"] = functions;
-	root["consts"] = consts;
-
-	std::ofstream file("scripts/" + std::string(nameBuffer) + ".script");
-
-	file << root.dump(4);
-
-	file.close();
-
-	ScriptCreation::ResetModified();
 }
 
+
+#include "nlohmann/json.hpp"
+using nlohmann::json;
 
 
 json PEditor::ScriptCreationUtilities::ScriptNode::ToJson()
@@ -1367,11 +1287,15 @@ void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::Attri
 	attrValue = val;
 }
 
-PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : type(type)
+PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)
 {
+	condition = nullptr;
+
+	ScriptNode::type = Node::Fork;
+
 	ignoreOutput = true;
 
-	A = new ScriptFlow(this);
+	A = new ScriptFlow(this, true);
 	B = new ScriptFlow(this);
 
 	A->SetOffset(0, -50);
@@ -1419,19 +1343,161 @@ void PEditor::ScriptCreationUtilities::ScriptFork::OnRemoved()
 	delete B;
 
 	A = B = nullptr;
+
+	if (condition != nullptr)
+		condition->RemoveOutput(this);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptFork::RemoveInput(ScriptNode* node)
+{
+	if (condition == node)
+		condition = nullptr;
 }
 
 void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 {
 	float x, y;
+	B->GetNextNodePosition(&x, &y);
+	B->ManageNextNode(x, y, b_tooltip);
+
 	A->GetNextNodePosition(&x, &y);
 	A->ManageNextNode(x, y, a_tooltip);
 
-	B->GetNextNodePosition(&x, &y);
-	B->ManageNextNode(x, y, b_tooltip);
+
+
+	ImVec2 a = ImVec2(x, y);
+	A->GetPreviousNodePosition(&a.x, NULL);
+
+	//Size: 5x10
+	int size = 5;
+
+	auto b = ImVec2(a.x + size, a.y - size);
+	auto c = ImVec2(a.x + size, a.y + size);
+
+	bool drawInputFilled = condition != nullptr;
+
+	if (ImGui::IsMouseHoveringRect(ImVec2(a.x, b.y), c)) {
+
+		if (ImGui::IsMouseDoubleClicked(0)) {
+
+			condition->RemoveOutput(this);
+			condition = nullptr;
+		}
+
+		if (ScriptNode::currentlySelectedOutput != nullptr)
+		{
+			if (ImGui::IsMouseReleased(0))
+			{
+				condition = currentlySelectedOutput;
+				ScriptNode::currentlySelectedOutput->AddOutput(this);
+				currentlySelectedOutput = nullptr;
+			}
+			drawInputFilled = true;
+		}
+	}
+
+
+	auto drawList = ImGui::GetWindowDrawList();
+
+	if (drawInputFilled)
+		drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+	else
+		drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+
+	if (condition != nullptr) {
+
+		float outx, outy;
+		condition->GetOutputNodePosition(&outx, &outy);
+		Bezier::Draw(outx, outy, a.x, a.y);
+	}
+
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptFork::GetStringId()
 {
 	return outputStr + " (" + std::to_string(id) + ")";
+}
+
+
+
+PEditor::ScriptCreationUtilities::ScriptEvent::ScriptEvent(const std::string& ev)
+{
+	type = Node::Event;
+	ignoreOutput = true;
+
+	eventname = ev;
+
+	if (eventname.size() > 0)
+	{
+		stylisedName = ScriptEvent::StyleName(eventname);
+	}
+
+
+	h = 100;
+
+	flow = new ScriptFlow(this, true);
+}
+
+void PEditor::ScriptCreationUtilities::ScriptEvent::updateAndRender()
+{
+	float x, y;
+	flow->GetNextNodePosition(&x, &y);
+	flow->ManageNextNode(x, y);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::StyleName(const std::string& str)
+{
+	std::string styled = std::string(1, (char)std::toupper(str[0]));
+
+	for (int i = 1; i < str.size(); i++) {
+
+		if (std::isupper(str[i])) {
+			styled.push_back(' ');
+		}
+
+		styled.push_back(std::tolower(str[i]));
+	}
+
+	return styled;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptEvent::OnRemoved()
+{
+	ScriptCreation::RemoveEvent(eventname);
+
+	flow->RemoveNext();
+	delete flow;
+	flow = nullptr;
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetStringId()
+{
+	return stylisedName;
+}
+
+PEditor::ScriptCreationUtilities::ScriptComment::ScriptComment(const std::string commentStr)
+{
+	resizable = true;
+	ignoreOutput = true;
+
+	memcpy(comment, commentStr.c_str(), 256);
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptComment::GetStringId()
+{
+	return "Comment";
+}
+
+void PEditor::ScriptCreationUtilities::ScriptComment::updateAndRender()
+{
+	const int margin = 10;
+
+	float encabezado = ImGui::GetFrameHeight();
+
+	ImVec2 textSize = ImVec2(w - 2 * margin, h - 50 - margin - encabezado);
+	ImGui::SetCursorPos(ImVec2(margin, margin + encabezado));
+	ImGui::InputTextMultiline("##",
+		comment, 256, textSize,
+		ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_NoHorizontalScroll
+	);
 }

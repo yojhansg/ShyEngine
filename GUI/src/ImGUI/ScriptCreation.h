@@ -3,12 +3,25 @@
 #include <string>
 
 #include <vector>
+#include <unordered_map>
+
 #include "ComponentInfo.h"
-#include "ScriptCreationUtilities.h"
+
+
+
 
 class ImGUIManager;
 
 namespace PEditor {
+
+
+    namespace ScriptCreationUtilities {
+
+        class ScriptNode;
+        class ScriptEvent;
+        class ScriptDropdownSelection;
+        class ScriptMenuBar;
+    }
 
 
     class ScriptCreation : public Window
@@ -32,6 +45,7 @@ namespace PEditor {
 
 
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
+        std::unordered_map<std::string, ScriptCreationUtilities::ScriptEvent*> events;
 
         ScriptCreationUtilities::ScriptMenuBar* menuBar;
 
@@ -48,11 +62,16 @@ namespace PEditor {
         ScriptCreation();
         ~ScriptCreation();
 
-        void AddNode(ScriptCreationUtilities::ScriptNode* node);
+        ScriptCreationUtilities::ScriptEvent* ContainsEvent(const std::string& event);
+        void AddEvent(const std::string& name, ScriptCreationUtilities::ScriptEvent* event);
+        void AddNode(ScriptCreationUtilities::ScriptNode* node, bool insertValidIdx = true);
+
+        static void RemoveEvent(const std::string& name);
 
         void SetNodeCount(int count);
         void SetNode(int n, ScriptCreationUtilities::ScriptNode* node);
 
+        void Save();
         void Load();
 
         static void GetScrollPosition(int* x, int* y);
