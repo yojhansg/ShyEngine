@@ -57,13 +57,12 @@ void PEditor::ScriptCreation::AddEvent(const std::string& name, ScriptCreationUt
 {
 	events.emplace(name, event);
 
-	AddNode(event, false);
+	AddNode(event);
 }
 
-void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node, bool insertValidNode)
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
-	int nodeIdx = insertValidNode ? nodes.size() : -1;
-	node->SetID(nodeIdx);
+	node->SetID(nodes.size());
 	nodes.push_back(node);
 }
 
@@ -92,7 +91,6 @@ void PEditor::ScriptCreation::Save()
 
 	json eventData = json::array(), comments = json::array();
 
-	root["nodeCount"] = allNodes.size();
 
 	std::vector<ScriptCreationUtilities::ScriptNode*> serializedValues;
 
@@ -124,12 +122,21 @@ void PEditor::ScriptCreation::Save()
 
 	}
 
-
+	root["nodeCount"] = allNodes.size();
 	root["functions"] = functions;
 	root["consts"] = consts;
 	root["forks"] = forks;
 	root["events"] = eventData;
 	root["comments"] = comments;
+
+
+	for (auto& event : events) {
+
+		auto next = event.second->GetScriptFlow()->GetNext();
+		if (next != nullptr)
+			root[event.first] = next->GetId();
+	}
+
 
 	std::ofstream file("scripts/" + std::string(menuBar->GetName()) + ".script");
 
@@ -296,6 +303,37 @@ void PEditor::ScriptCreation::Load()
 			forkInfo["A"].get<int>(), forkInfo["B"].get<int>() });
 
 		SetNode(fork->GetId(), fork);
+	}
+
+
+	for (auto& commentData : comments) {
+
+		ScriptCreationUtilities::ScriptComment* comment = new ScriptCreationUtilities::ScriptComment(
+			commentData["comment"].get<std::string>()
+		);
+
+		comment->FromJson(commentData);
+
+		comment->SetSize(commentData["w"].get<float>(), commentData["h"].get<float>());
+
+		SetNode(comment->GetId(), comment);
+	}
+
+
+	for (auto& eventData : events) {
+
+		std::string type = eventData["type"].get<std::string>();
+		ScriptCreationUtilities::ScriptEvent* event = new ScriptCreationUtilities::ScriptEvent(
+			type
+		);
+
+		event->FromJson(eventData);
+
+		if (file.contains(type)) {
+			int idx = file[type].get<int>();
+			event->GetScriptFlow()->SetNext(GetNodes()[idx]->GetScriptFlow());
+		}
+		SetNode(event->GetId(), event);
 	}
 
 
@@ -546,4 +584,5 @@ void PEditor::ScriptCreation::ClearScript()
 		delete node;
 	}
 	nodes.clear();
+	events.clear();
 }

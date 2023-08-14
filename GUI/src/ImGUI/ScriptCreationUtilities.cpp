@@ -55,12 +55,15 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		else
 			ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
+		int flag = ImGuiWindowFlags_NoSavedSettings;
 		if (!resizable)
+		{
 			ImGui::SetNextWindowSize(size, ImGuiCond_None);
+			flag |= ImGuiWindowFlags_NoResize;
+		}
 
 
-
-		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
+		ImGui::Begin(GetStringId().c_str(), NULL, flag);
 
 		updateAndRender();
 		ManageOutputNode();
@@ -1065,7 +1068,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		if (ImGui::Button("Add comment")) {
 
 
-			creator->AddNode(new ScriptComment("Write comment here"), false);
+			creator->AddNode(new ScriptComment("Write comment here"));
 		}
 
 
@@ -1544,6 +1547,16 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptEvent::ToJson()
 	return root;
 }
 
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetEventName()
+{
+	return eventname;
+}
+
+PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptEvent::GetScriptFlow()
+{
+	return flow;
+}
+
 PEditor::ScriptCreationUtilities::ScriptComment::ScriptComment(const std::string commentStr)
 {
 	type = Node::Comment;
@@ -1572,11 +1585,19 @@ void PEditor::ScriptCreationUtilities::ScriptComment::updateAndRender()
 	);
 }
 
+void PEditor::ScriptCreationUtilities::ScriptComment::SetSize(float w, float h)
+{
+	this->w = w;
+	this->h = h;
+}
+
 nlohmann::json PEditor::ScriptCreationUtilities::ScriptComment::ToJson()
 {
 	json root = ScriptNode::ToJson();
 
 	root["comment"] = comment;
+	root["w"] = w;
+	root["h"] = h;
 
 	return root;
 }
