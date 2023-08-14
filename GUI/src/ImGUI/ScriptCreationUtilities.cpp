@@ -1211,8 +1211,8 @@ void PEditor::ScriptCreationUtilities::ScriptNode::FromJson(nlohmann::json& root
 {
 	id = root["index"].get<int>();
 
-	x = root["x"].get<float>();
-	y = root["y"].get<float>();
+	x = root.contains("x") ? root["x"].get<float>() : 0;
+	y = root.contains("y") ? root["y"].get<float>(): 0;
 }
 
 
@@ -1221,7 +1221,10 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 {
 	json root = ScriptNode::ToJson();
 
-	root["function"] = method.getComponent() + "_" + method.getName();
+	if (method.getComponent() != method.getName())
+		root["function"] = method.getComponent() + "_" + method.getName();
+	else 
+		root["function"] = method.getComponent();
 
 	root["input"] = json::array();
 

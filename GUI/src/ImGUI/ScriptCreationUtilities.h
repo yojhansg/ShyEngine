@@ -89,6 +89,7 @@ namespace PEditor {
 			-Duplicar un nodo con control d
 			-Control z manager
 			-Poder quitar un nodo siguiente
+			-Todos los metodos de componentes tienen como primer parametro un puntero a la entidad
 
 			===Mejoras de codigo e implementacion===
 

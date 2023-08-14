@@ -132,7 +132,12 @@
                 "input": [],
                 "name": "CurrentName",
                 "return": "std::string"
-            },
+            }
+        ],
+        "name": "Entity"
+    },
+    {
+        "methods": [
             {
                 "input": [
                     {
@@ -144,14 +149,9 @@
                         "type": "cstring"
                     }
                 ],
-                "name": "Event",
+                "name": "EntityEvent",
                 "return": "void"
-            }
-        ],
-        "name": "Entity"
-    },
-    {
-        "methods": [
+            },
             {
                 "input": [
                     {
@@ -163,7 +163,7 @@
                 "return": "void"
             }
         ],
-        "name": "GlobalEvent"
+        "name": "Event"
     },
     {
         "methods": [

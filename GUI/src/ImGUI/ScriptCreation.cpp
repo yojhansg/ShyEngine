@@ -260,7 +260,7 @@ void PEditor::ScriptCreation::Load()
 		}
 		else if (typeStr == "string") {
 			type = ::Components::AttributesType::STRING;
-			value.valueString = constNode["value"].get<float>();
+			value.valueString = constNode["value"].get<std::string>();
 		}
 		else if (typeStr == "bool") {
 			type = ::Components::AttributesType::BOOL;

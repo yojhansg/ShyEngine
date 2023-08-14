@@ -2,33 +2,33 @@
     "comments": [],
     "consts": [
         {
-            "index": 1,
+            "index": 2,
             "type": "string",
-            "value": "Vamos que esto funciona",
-            "x": 360.0,
-            "y": 127.0
+            "value": "Puto tonto",
+            "x": 230.0,
+            "y": 342.0
         }
     ],
     "events": [
         {
             "index": 0,
             "type": "start",
-            "x": 392.0,
-            "y": 547.0
+            "x": 434.0,
+            "y": 200.0
         }
     ],
     "forks": [],
     "functions": [
         {
-            "function": "Print_Print",
-            "index": 2,
+            "function": "Print",
+            "index": 1,
             "input": [
-                1
+                2
             ],
-            "x": 873.0,
-            "y": 250.0
+            "x": 879.0,
+            "y": 255.0
         }
     ],
     "nodeCount": 3,
-    "start": 2
+    "start": 1
 }
