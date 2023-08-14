@@ -1,4 +1,4 @@
-#include "ImGUIManager.h"
+﻿#include "ImGUIManager.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
@@ -159,7 +159,7 @@ void ImGUIManager::initSDL()
 	}
 
 	originalWindowSize = new ImVec2(1920, 1080);
-	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080);
+	createSDLWindow("Shy Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080);
 	createSDLRenderer();
 
 
@@ -216,6 +216,7 @@ void ImGUIManager::init()
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
     Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
+	Components::ComponentManager::ReadScripts("Scripts");
 }
 
 ImGUIManager* ImGUIManager::getInstance()

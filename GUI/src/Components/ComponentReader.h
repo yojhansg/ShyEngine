@@ -22,6 +22,10 @@ namespace Components {
 
 		static std::vector<Component> ReadComponents(cstring filePath);
 		static std::vector<Component> ReadManagers(cstring filePath);
+
+
+		static std::vector<Script> ReadScripts(cstring filePath);
+
 	};
 	
 

@@ -53,6 +53,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 {
 
 	// Open the specified folder
+
 	fs::path folder(currentPath);
 
 

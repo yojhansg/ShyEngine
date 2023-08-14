@@ -114,4 +114,20 @@ namespace Components {
 		std::string toJson();
 	};
 
+
+	class Script {
+
+
+	private:
+
+		std::string name;
+		std::unordered_map<std::string, Attribute> attributes;
+
+	public:
+
+		Script(cstring name);
+
+		std::string GetName();
+	};
+
 }

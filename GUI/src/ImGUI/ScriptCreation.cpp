@@ -144,7 +144,10 @@ void PEditor::ScriptCreation::Save()
 
 	file.close();
 
+
+
 	ScriptCreation::ResetModified();
+	Components::ComponentManager::ReloadScripts();
 }
 
 void PEditor::ScriptCreation::Load()

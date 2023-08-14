@@ -45,10 +45,10 @@ void PEditor::GameObject::drawComponentsInEditor()
 				}
 			}
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
 
-			if (ImGui::Button(("Delete component##" + componentName).c_str())) {
+			if (ImGui::Button(("Delete script##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
 				it = components.erase(it);
 			}
 			else {
@@ -62,6 +62,60 @@ void PEditor::GameObject::drawComponentsInEditor()
 			++it;
 		}
 	}
+}
+
+void PEditor::GameObject::drawScriptsInEditor()
+{
+	for (auto it = scripts.begin(); it != scripts.end();) {
+		std::string scriptName = (*it).first;
+		if (ImGui::CollapsingHeader(scriptName.c_str()))
+		{
+			/*for (auto& attribute : (*it).second.getAllAttributes()) {
+				std::string attributeName = attribute.first;
+				::Components::Attribute* attr = &attribute.second;
+
+				ImGui::Text(attributeName.c_str());
+
+				switch (attr->getType())
+				{
+				case ::Components::AttributesType::FLOAT:
+					drawFloat(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::VECTOR2:
+					drawVector2(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::STRING:
+					drawString(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::BOOL:
+					drawBool(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::COLOR:
+					drawColor(attributeName + it->first, attr);
+					break;
+				default:
+					break;
+				}
+			}*/
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
+
+			if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+				it = scripts.erase(it);
+			}
+			else {
+				++it;
+			}
+
+			ImGui::PopStyleColor(2);
+
+		}
+		else {
+			++it;
+		}
+	}
+
 }
 
 
@@ -331,9 +385,24 @@ void PEditor::GameObject::addComponent(::Components::Component& comp)
 	}
 }
 
+void PEditor::GameObject::addScript(::Components::Script script)
+{
+	if (scripts.contains(script.GetName()))
+	{
+		return;
+	}
+
+	scripts.emplace(script.GetName(), script);
+}
+
 std::unordered_map<std::string, ::Components::Component&>* PEditor::GameObject::getComponents()
 {
 	return &components;
+}
+
+std::unordered_map<std::string, ::Components::Script>* PEditor::GameObject::getScripts()
+{
+	return &scripts;
 }
 
 void PEditor::GameObject::setPosition(ImVec2 newPos)
