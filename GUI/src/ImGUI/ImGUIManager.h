@@ -23,7 +23,7 @@ class ImGUIManager
 
 public:
 
-	enum EDITOR_STATE { PROJECTS_WINDOW, EDITOR_WINDOW, SCRIPTING_WINDOW };
+	enum EDITOR_STATE { EDITOR_WINDOW, SCRIPTING_WINDOW };
 
 private:
 
@@ -55,7 +55,6 @@ private:
 	PEditor::FileExplorer* fileExplorer = nullptr;
 	PEditor::ComponentWindow* components = nullptr;
 	PEditor::ScriptCreation* scriptCreation = nullptr;
-	PEditor::ProjectsManager* projectsManager = nullptr;
 
 
 public:
@@ -89,7 +88,6 @@ public:
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::ComponentWindow* getComponents();
 	PEditor::ScriptCreation* getScriptCreation();
-	PEditor::ProjectsManager* getProjectsManager();
 
 	~ImGUIManager();
 };

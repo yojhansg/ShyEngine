@@ -16,8 +16,6 @@
 #include "ComponentManager.h"
 #include "ProjectsManager.h"
 
-#include "ProjectSelectionDialog.h"
-
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
@@ -27,7 +25,7 @@ ImGUIManager::ImGUIManager() {
     scene = nullptr;
     window = nullptr;
 
-    state = PROJECTS_WINDOW;
+    state = EDITOR_WINDOW;
 
 }
 
@@ -81,9 +79,6 @@ void ImGUIManager::initWindows()
     scriptCreation = new PEditor::ScriptCreation();
     addWindow(scriptCreation);
 
-    projectsManager = new PEditor::ProjectsManager();
-    addWindow(projectsManager);
-
 }
 
 void ImGUIManager::initSDL()
@@ -98,8 +93,9 @@ void ImGUIManager::initSDL()
         // ERROR HANDLING
     }
 
-    originalWindowSize = new ImVec2(1920, 1080);
-    createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 400);
+    // The first window is the project manager window
+    originalWindowSize = new ImVec2(1920, 1080); 
+    createSDLWindow("PEditor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, originalWindowSize->x, originalWindowSize->y);
     createSDLRenderer();
 }
 
@@ -146,8 +142,6 @@ void ImGUIManager::init()
 
     initImGUI();
 
-    changeEditorState(state);
-
     Components::ComponentManager::Initialise();
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
     Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
@@ -165,19 +159,18 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-    SDL_SetWindowSize(window, 700, 500);
+    SDL_SetWindowSize(window, 1080, 720);
 
-    PEditor::ProjectSelectionDialog dialog;
-    auto result = dialog.ManageProjectSelectionDialog(renderer);
+    PEditor::ProjectsManager dialog;
+    auto result = dialog.ManageProjectSelection(renderer);
 
-    if (result == PEditor::ProjectSelectionDialog::Result::Closed)
+    if (result == PEditor::ProjectsManager::Result::CLOSED)
         return;
 
     SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     initWindows();
-;
 
     while (!exitGame)
     {
@@ -194,20 +187,16 @@ void ImGUIManager::exit()
 }
 
 void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
+
     switch (state)
     {
-    case ImGUIManager::PROJECTS_WINDOW:
-        SDL_SetWindowSize(window, 1280, 720);
-        break;
-    case ImGUIManager::EDITOR_WINDOW:
-        SDL_SetWindowSize(window, 1920, 1080);
-        break;
-    case ImGUIManager::SCRIPTING_WINDOW:
-        SDL_SetWindowSize(window, 1920, 1080);
-        scriptCreation->Load();
-        break;
-    default:
-        break;
+        case ImGUIManager::EDITOR_WINDOW:
+            break;
+        case ImGUIManager::SCRIPTING_WINDOW:
+            scriptCreation->Load();
+            break;
+        default:
+            break;
     }
 
     this->state = state;
@@ -220,14 +209,12 @@ void ImGUIManager::update()
     {
         switch (state)
         {
-            case ImGUIManager::PROJECTS_WINDOW:
-                if (window == projectsManager) window->update();
-                break;
             case ImGUIManager::SCRIPTING_WINDOW:
-                if (window == scriptCreation) window->update();
+                if (window == scriptCreation) 
+                    window->update();
                 break;
             case ImGUIManager::EDITOR_WINDOW:
-                if (window != projectsManager && window != scriptCreation)
+                if (window != scriptCreation)
                     window->update();
                 break;
             default:
@@ -251,14 +238,12 @@ void ImGUIManager::render()
     {
         switch (state)
         {
-        case ImGUIManager::PROJECTS_WINDOW:
-            if (window == projectsManager) window->render();
-            break;
         case ImGUIManager::SCRIPTING_WINDOW:
-            if (window == scriptCreation) window->render();
+            if (window == scriptCreation) 
+                window->render();
             break;
         case ImGUIManager::EDITOR_WINDOW:
-            if (window != projectsManager && window != scriptCreation)
+            if (window != scriptCreation)
                 window->render();
             break;
         default:
@@ -289,9 +274,7 @@ void ImGUIManager::handleInput()
             exitGame = true;
 
         for (auto window : windows)
-        {
             window->handleInput(&event);
-        }
     }
 }
 
@@ -337,6 +320,7 @@ ImGUIManager::~ImGUIManager()
 
     delete originalWindowSize;
     delete gameSize;
+
 }
 
 ImVec2 ImGUIManager::getMainWindowSize()
@@ -382,9 +366,3 @@ PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
 {
     return scriptCreation;
 }
-
-PEditor::ProjectsManager* ImGUIManager::getProjectsManager()
-{
-    return projectsManager;
-}
-
