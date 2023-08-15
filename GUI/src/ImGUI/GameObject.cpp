@@ -529,7 +529,7 @@ std::string PEditor::GameObject::toJson()
 	j["components"] = componentsJson;
 
 
-	nlohmann::ordered_json scriptsJson;
+	nlohmann::ordered_json scriptsJson = nlohmann::json();
 	for (auto it = scripts.begin(); it != scripts.end(); it++) {
 		auto scriptJson = j.parse(it->second.ToJson());
 

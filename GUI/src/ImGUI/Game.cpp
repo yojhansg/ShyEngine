@@ -12,6 +12,7 @@ PEditor::Game::Game(const std::string& path) : path(path)
 	isRunning = false;
 	instance = this;
 	game = NULL;
+	gameEnded = false;
 }
 
 PEditor::Game::~Game()
@@ -46,6 +47,16 @@ void PEditor::Game::Stop()
 {
 	if (IsRunning())
 		instance->stop();
+}
+
+void PEditor::Game::CheckEnd()
+{
+	if (instance->gameEnded && instance->gameThread.joinable()) {
+
+		instance->gameThread.join();
+		instance->gameEnded = false;
+		instance->isRunning = false;
+	}
 }
 
 bool PEditor::Game::IsRunning()
@@ -100,6 +111,8 @@ void PEditor::Game::play()
 	game = pi.hProcess;
 
 	gameThread = std::thread(&Game::readOutput, this, hChildStdoutRead, hChildStdoutWrite);
+	
+	//gameThread.detach();
 
 	isRunning = true;
 }
@@ -126,11 +139,10 @@ void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite
 		}
 
 		std::string output(buffer, bytesRead);
-		std::cout << output;
+		this->output += output;
+
+		std::cout << output << std::endl;
 	}
-
-
-	std::cout << "fin del hilo" << std::endl;
 
 
 	CloseHandle(hChildStdoutRead);
@@ -144,5 +156,5 @@ void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite
 	CloseHandle(pi.hThread);
 
 	game = NULL;
-	isRunning = false;
+	gameEnded = true;
 }

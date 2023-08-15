@@ -178,7 +178,7 @@ namespace Components {
 							type = AttributesType::VECTOR2;
 							//value.value.valueFloat = sv["value"].get<float>();
 						}
-						else if (typeString == "std::string") {
+						else if (typeString == "std::string" || typeString == "string") {
 							type = AttributesType::STRING;
 							value.valueString = sv["defaultValue"].get<std::string>();
 						}

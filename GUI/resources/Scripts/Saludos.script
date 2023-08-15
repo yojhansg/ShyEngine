@@ -3,11 +3,12 @@
     "consts": [
         {
             "index": 2,
-            "serialized": false,
+            "name": "Hola",
+            "serialized": true,
             "type": "string",
-            "value": "Hey que pasa",
-            "x": 218.0,
-            "y": 417.0
+            "value": "Hola que tal",
+            "x": 182.0,
+            "y": 387.0
         }
     ],
     "events": [
@@ -32,11 +33,17 @@
             "input": [
                 2
             ],
-            "x": 972.0,
-            "y": 210.0
+            "x": 683.0,
+            "y": 246.0
         }
     ],
     "nodeCount": 4,
-    "serializedValues": [],
+    "serializedValues": [
+        {
+            "defaultValue": "Hola que tal",
+            "name": "Hola",
+            "type": "string"
+        }
+    ],
     "start": 3
 }

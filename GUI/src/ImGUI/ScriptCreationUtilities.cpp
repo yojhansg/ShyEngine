@@ -782,7 +782,7 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 		outputStr = "Utilities::Vector2D";
 		break;
 	case ::Components::AttributesType::STRING:
-		outputStr = "std::string";
+		outputStr = "string";
 		break;
 	case ::Components::AttributesType::BOOL:
 		outputStr = "bool";

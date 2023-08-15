@@ -72,7 +72,7 @@ namespace Components {
 			value.value.valueVector2 = { 0.0f, 0.0f };
 			type = AttributesType::VECTOR2;
 		}
-		else if (typeString == "std::string") {
+		else if (typeString == "std::string" || typeString == "string") {
 			value.valueString = "";
 			type = AttributesType::STRING;
 		}

@@ -7,6 +7,10 @@
 PEditor::Console::Console(): PEditor::Window("Console", 0)
 {
 	close = false;
+
+	windowWidth = 700;
+	windowHeight = 700;
+
 }
 
 void PEditor::Console::render()
@@ -14,7 +18,7 @@ void PEditor::Console::render()
 	if (!Game::IsRunning())
 		return;
 
-	ImGui::SetNextWindowFocus();
+	//ImGui::SetNextWindowFocus();
 	ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
 	ImGui::Begin(windowName.c_str(), &close, flags);
 

@@ -9,7 +9,12 @@
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
-                "Saludar": []
+                "Saludos": {
+                    "Hola": {
+                        "type": "string",
+                        "value": "Que tal"
+                    }
+                }
             }
         }
     ]

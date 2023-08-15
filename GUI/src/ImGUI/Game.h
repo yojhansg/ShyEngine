@@ -14,6 +14,8 @@ namespace PEditor
 		static Game* instance;
 
 		bool isRunning;
+		bool gameEnded;
+
 		HANDLE game;
 		PROCESS_INFORMATION pi;
 
@@ -37,6 +39,7 @@ namespace PEditor
 
 		static void Play();
 		static void Stop();
+		static void CheckEnd();
 		static bool IsRunning();
 
 		static std::string GetOutput();
