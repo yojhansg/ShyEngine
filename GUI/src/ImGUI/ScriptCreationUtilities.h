@@ -330,15 +330,26 @@ namespace PEditor {
 			void SetValue(::Components::AttributeValue const& value);
 
 
+			/*
+				Devuelve si el nodo va a ser serializado desde el editor
+			*/
+			bool IsSerialized();
 
-			void Reflect();
+			/*
+				Devuelve el nombre del atributo en caso de ser serializado
+			*/
+			std::string GetName();
 
 
+			/*
+				Establece el valor de serializacion del nodo
+			*/
+			void SetSerialized(bool value, const std::string& str);
 
 		private:
 
-			bool reflect;
-			std::string reflectname;
+			bool serialized;
+			char serializedName[256];
 
 			/*
 				Tipo de valor que se quiere guardar

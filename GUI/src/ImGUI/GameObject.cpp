@@ -70,7 +70,7 @@ void PEditor::GameObject::drawScriptsInEditor()
 		std::string scriptName = (*it).first;
 		if (ImGui::CollapsingHeader(scriptName.c_str()))
 		{
-			/*for (auto& attribute : (*it).second.getAllAttributes()) {
+			for (auto& attribute : (*it).second.getAllAttributes()) {
 				std::string attributeName = attribute.first;
 				::Components::Attribute* attr = &attribute.second;
 
@@ -96,7 +96,7 @@ void PEditor::GameObject::drawScriptsInEditor()
 				default:
 					break;
 				}
-			}*/
+			}
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));

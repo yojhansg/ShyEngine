@@ -145,9 +145,73 @@ namespace Components {
 
 			Script script = Script(entry.path().filename().stem().string());
 
-			//TODO: meter los valores que tengan reflexion
+
+			std::ifstream fileStream(entry.path());
+
+			if (fileStream.good() && json::accept(fileStream))
+			{
+				fileStream.clear();
+				fileStream.seekg(0);
+
+				json root = json::parse(fileStream);
+				fileStream.close();
+
+
+				if (root.contains("serializedValues"))
+				{
+
+					for (auto& sv : root["serializedValues"])
+					{
+						std::string name = sv["name"].get<std::string>();
+						std::string typeString = sv["type"].get<std::string>();
+
+
+						AttributesType type = AttributesType::FLOAT;
+						AttributeValue value;
+
+
+						if (typeString == "int" || typeString == "float") {
+							type = AttributesType::FLOAT;
+							value.value.valueFloat = sv["defaultValue"].get<float>();
+						}
+						else if (typeString == "Utilities::Vector2D") {
+							type = AttributesType::VECTOR2;
+							//value.value.valueFloat = sv["value"].get<float>();
+						}
+						else if (typeString == "std::string") {
+							type = AttributesType::STRING;
+							value.valueString = sv["defaultValue"].get<std::string>();
+						}
+						else if (typeString == "bool") {
+							type = AttributesType::BOOL;
+							value.value.valueBool = sv["defaultValue"].get<bool>();
+						}
+						else if (typeString == "Utilities::Color") {
+							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+							type = AttributesType::COLOR;
+						}
+						else {
+							type = AttributesType::NONE;
+						}
+
+
+
+						Attribute attribute(name);
+
+						attribute.SetType(typeString, type);
+						attribute.SetValue(value);
+
+						script.AddAttribute(name, attribute);
+					}
+
+
+				}
+
+			}
+
 
 			scripts.push_back(script);
+
 		}
 
 		return scripts;

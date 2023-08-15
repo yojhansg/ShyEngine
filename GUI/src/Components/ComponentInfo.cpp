@@ -89,6 +89,22 @@ namespace Components {
 		}
 	}
 
+	Attribute::Attribute(const std::string& name)
+	{
+		this->name = name;
+	}
+
+	void Attribute::SetType(const std::string& str, const AttributesType& type)
+	{
+		typeStr = str;
+		this->type = type;
+	}
+
+	void Attribute::SetValue(const AttributeValue& value)
+	{
+		this->value = value;
+	}
+
 	AttributesType Attribute::getType() const
 	{
 		return type;
@@ -211,4 +227,13 @@ namespace Components {
 	{
 		return name;
 	}
+	void Script::AddAttribute(const std::string& name, Attribute attr)
+	{
+		attributes.emplace(name, attr);
+	}
+
+	std::unordered_map<std::string, Attribute>& Script::getAllAttributes() {
+		return attributes;
+	}
+
 }

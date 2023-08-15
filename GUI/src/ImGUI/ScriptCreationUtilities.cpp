@@ -762,7 +762,7 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 {
-	reflect = false;
+	serialized = false;
 
 	attrValue = ::Components::AttributeValue();
 
@@ -853,6 +853,13 @@ void PEditor::ScriptCreationUtilities::ScriptInput::updateAndRender()
 	}
 	}
 
+
+
+	ImGui::Checkbox("Serialize", &serialized);
+	if (serialized) {
+
+		ImGui::InputText("Name", serializedName, 256);
+	}
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptInput::GetStringId()
@@ -1290,6 +1297,11 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 	json root = ScriptNode::ToJson();
 
 	//TODO: serialised values
+	root["serialized"] = serialized;
+
+	if (serialized)
+		root["name"] = serializedName;
+
 
 	if (attrType == Components::AttributesType::NONE) {
 		root["type"] = "null";
@@ -1323,6 +1335,22 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::AttributeValue const& val)
 {
 	attrValue = val;
+}
+
+bool PEditor::ScriptCreationUtilities::ScriptInput::IsSerialized()
+{
+	return serialized;
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptInput::GetName()
+{
+	return serializedName;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptInput::SetSerialized(bool value, const std::string& str)
+{
+	serialized = value;
+	std::memcpy(serializedName, str.c_str(), 256);
 }
 
 PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)

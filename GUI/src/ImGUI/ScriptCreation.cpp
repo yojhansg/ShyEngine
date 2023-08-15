@@ -92,7 +92,7 @@ void PEditor::ScriptCreation::Save()
 	json eventData = json::array(), comments = json::array();
 
 
-	std::vector<ScriptCreationUtilities::ScriptNode*> serializedValues;
+	json serializedValues = json::array();
 
 	for (auto node : allNodes) {
 
@@ -104,8 +104,24 @@ void PEditor::ScriptCreation::Save()
 			functions.push_back(node->ToJson());
 			break;
 		case ScriptCreationUtilities::ScriptNode::Node::Input:
-			consts.push_back(node->ToJson());
+		{
+			auto jsonNode = node->ToJson();
+
+			ScriptCreationUtilities::ScriptInput* input =
+				static_cast<ScriptCreationUtilities::ScriptInput*>(node);
+
+			if (input->IsSerialized())
+				serializedValues.push_back({
+
+					{"type", input->GetOutputTypeString()},
+					{"name", input->GetName()},
+					{"defaultValue", jsonNode["value"]}
+			});
+
+			consts.push_back(jsonNode);
+
 			break;
+		}
 		case ScriptCreationUtilities::ScriptNode::Node::Fork:
 			forks.push_back(node->ToJson());
 			break;
@@ -128,6 +144,7 @@ void PEditor::ScriptCreation::Save()
 	root["forks"] = forks;
 	root["events"] = eventData;
 	root["comments"] = comments;
+	root["serializedValues"] = serializedValues;
 
 
 	for (auto& event : events) {
@@ -271,10 +288,20 @@ void PEditor::ScriptCreation::Load()
 			//TODO: despues de la serializacion
 		}
 
+		
+
 		ScriptCreationUtilities::ScriptInput* input = new ScriptCreationUtilities::ScriptInput(type);
 		input->SetValue(value);
-
 		input->FromJson(constNode);
+
+		if (constNode.contains("serialized")) {
+
+			bool serialized = constNode["serialized"].get<bool>();
+			if (serialized) {
+
+				input->SetSerialized(serialized, constNode["name"].get<std::string>());
+			}
+		}
 
 
 		SetNode(input->GetId(), input);
