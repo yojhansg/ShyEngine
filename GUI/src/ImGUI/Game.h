@@ -40,7 +40,7 @@ namespace PEditor
 		static bool IsRunning();
 
 		static std::string GetOutput();
-
+		static std::string FlushOutput();
 	};
 
 

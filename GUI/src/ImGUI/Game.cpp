@@ -16,7 +16,8 @@ PEditor::Game::Game(const std::string& path) : path(path)
 
 PEditor::Game::~Game()
 {
-	Stop();
+	if(isRunning)
+		Stop();
 	instance = nullptr;
 }
 
@@ -57,41 +58,48 @@ std::string PEditor::Game::GetOutput()
 	return std::string();
 }
 
+std::string PEditor::Game::FlushOutput()
+{
+	std::string out = instance->output;
+	instance->output = "";
+	return out;
+}
+
 
 
 void PEditor::Game::play()
 {
-    HANDLE hChildStdoutRead, hChildStdoutWrite;
-    SECURITY_ATTRIBUTES saAttr;
+	HANDLE hChildStdoutRead, hChildStdoutWrite;
+	SECURITY_ATTRIBUTES saAttr;
 
-    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-    saAttr.bInheritHandle = TRUE;
-    saAttr.lpSecurityDescriptor = NULL;
+	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	saAttr.bInheritHandle = TRUE;
+	saAttr.lpSecurityDescriptor = NULL;
 
-    if (!CreatePipe(&hChildStdoutRead, &hChildStdoutWrite, &saAttr, 0)) {
-        std::cerr << "Error creating pipe." << std::endl;
-        return;
-    }
+	if (!CreatePipe(&hChildStdoutRead, &hChildStdoutWrite, &saAttr, 0)) {
+		std::cerr << "Error creating pipe." << std::endl;
+		return;
+	}
 
-    STARTUPINFOA si;
+	STARTUPINFOA si;
 
-    ZeroMemory(&si, sizeof(STARTUPINFOA));
-    si.cb = sizeof(STARTUPINFOA);
-    si.hStdError = hChildStdoutWrite;
-    si.hStdOutput = hChildStdoutWrite;
-    si.dwFlags |= STARTF_USESTDHANDLES;
+	ZeroMemory(&si, sizeof(STARTUPINFOA));
+	si.cb = sizeof(STARTUPINFOA);
+	si.hStdError = hChildStdoutWrite;
+	si.hStdOutput = hChildStdoutWrite;
+	si.dwFlags |= STARTF_USESTDHANDLES;
 
-    // Replace "your_command_here" with the actual command you want to execute
-    if (!CreateProcessA(NULL, (LPSTR) path.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
-        std::cerr << "Error creating process." << std::endl;
-        return;
-    }
+	// Replace "your_command_here" with the actual command you want to execute
+	if (!CreateProcessA(NULL, (LPSTR)path.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+		std::cerr << "Error creating process." << std::endl;
+		return;
+	}
 
-    CloseHandle(hChildStdoutWrite);
+	CloseHandle(hChildStdoutWrite);
 
-    game = pi.hProcess;
+	game = pi.hProcess;
 
-    gameThread = std::thread(&Game::readOutput, this, hChildStdoutRead, hChildStdoutWrite);
+	gameThread = std::thread(&Game::readOutput, this, hChildStdoutRead, hChildStdoutWrite);
 
 	isRunning = true;
 }
@@ -102,39 +110,39 @@ void PEditor::Game::stop()
 	auto ret = TerminateProcess(game, 1);
 	game = NULL;
 
-    gameThread.join();
+	gameThread.join();
 
 	isRunning = false;
 }
 
 void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite)
 {
-    char buffer[4096];
-    DWORD bytesRead;
+	char buffer[4096];
+	DWORD bytesRead;
 
-    while (true) {
-        if (!ReadFile(hChildStdoutRead, buffer, sizeof(buffer), &bytesRead, NULL) || bytesRead == 0) {
-            break;
-        }
+	while (true) {
+		if (!ReadFile(hChildStdoutRead, buffer, sizeof(buffer), &bytesRead, NULL) || bytesRead == 0) {
+			break;
+		}
 
-        std::string output(buffer, bytesRead);
-        std::cout << output;
-    }
-
-
-    std::cout << "fin del hilo" << std::endl;
+		std::string output(buffer, bytesRead);
+		std::cout << output;
+	}
 
 
-    CloseHandle(hChildStdoutRead);
+	std::cout << "fin del hilo" << std::endl;
 
-    WaitForSingleObject(pi.hProcess, INFINITE);
 
-    DWORD exitCode;
-    GetExitCodeProcess(pi.hProcess, &exitCode);
+	CloseHandle(hChildStdoutRead);
 
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
+	WaitForSingleObject(pi.hProcess, INFINITE);
 
-    game = NULL;
-    isRunning = false;
+	DWORD exitCode;
+	GetExitCodeProcess(pi.hProcess, &exitCode);
+
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+
+	game = NULL;
+	isRunning = false;
 }

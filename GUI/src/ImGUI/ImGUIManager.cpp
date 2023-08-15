@@ -17,6 +17,7 @@
 #include "ComponentManager.h"
 #include "ProjectsManager.h"
 #include "Game.h"
+#include "Console.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -147,6 +148,8 @@ void ImGUIManager::initWindows()
 	scriptCreation = new PEditor::ScriptCreation();
 	addWindow(scriptCreation);
 
+
+	addWindow(new PEditor::Console());
 }
 
 void ImGUIManager::initSDL()
