@@ -231,6 +231,7 @@ ImGUIManager* ImGUIManager::getInstance()
 void ImGUIManager::loop()
 {
     SDL_SetWindowSize(window, 1080, 720);
+	SDL_SetWindowResizable(window, SDL_FALSE);
 
     PEditor::ProjectsManager dialog;
     auto result = dialog.ManageProjectSelection(renderer);
@@ -238,6 +239,7 @@ void ImGUIManager::loop()
     if (result == PEditor::ProjectsManager::Result::CLOSED)
         return;
 
+	SDL_SetWindowResizable(window, SDL_TRUE);
 	SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
 	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 

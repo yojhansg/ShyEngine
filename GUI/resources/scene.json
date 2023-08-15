@@ -2,12 +2,39 @@
     "name": "scene",
     "objects": [
         {
-            "name": "Aguja",
-            "order": 1,
+            "name": "cosa",
+            "order": 0,
             "localPosition": "0.000000, 0.000000",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
-            "components": null
+            "components": [
+                {
+                    "component": "Animation",
+                    "attributes": [
+                        {
+                            "animationRows": 0.0
+                        },
+                        {
+                            "currentAnimation": 0.0
+                        },
+                        {
+                            "speed": 0.0
+                        },
+                        {
+                            "currentFrame": 0.0
+                        },
+                        {
+                            "animationColumns": 0.0
+                        },
+                        {
+                            "animationLenght": 0.0
+                        },
+                        {
+                            "animationSheetStyle": 0.0
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
