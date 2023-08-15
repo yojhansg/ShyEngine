@@ -84,6 +84,9 @@ namespace Components {
 			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 			type = AttributesType::COLOR;
 		}
+		else if (typeString == "char") {
+			value.value.valueChar = ' ';
+		}
 		else {
 			type = AttributesType::NONE;
 		}
@@ -142,6 +145,9 @@ namespace Components {
 			stringValue = std::to_string(value.value.valueColor.r) + "," + std::to_string(value.value.valueColor.g) + "," + std::to_string(value.value.valueColor.b);
 			return stringValue;
 			break;
+		case AttributesType::CHAR:
+			if (value.value.valueChar == '\0') return "";
+			return std::string(1, value.value.valueChar);
 		default:
 			return "";
 			break;

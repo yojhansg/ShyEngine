@@ -17,6 +17,7 @@ namespace Components {
 		STRING,
 		BOOL,
 		COLOR,
+		CHAR,
 	};
 
 
@@ -35,6 +36,7 @@ namespace Components {
 				float g;
 				float b;
 			} valueColor;
+			char valueChar;
 		} value;
 
 		std::string valueString;

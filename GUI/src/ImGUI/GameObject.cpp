@@ -40,6 +40,9 @@ void PEditor::GameObject::drawComponentsInEditor()
 				case ::Components::AttributesType::COLOR:
 					drawColor(attributeName + it->first, attr);
 					break;
+				case ::Components::AttributesType::CHAR:
+					drawChar(attributeName + it->first, attr);
+					break;
 				default:
 					break;
 				}
@@ -93,6 +96,8 @@ void PEditor::GameObject::drawScriptsInEditor()
 				case ::Components::AttributesType::COLOR:
 					drawColor(attributeName + it->first, attr);
 					break;
+				case ::Components::AttributesType::CHAR:
+					drawChar(attributeName + it->first, attr);
 				default:
 					break;
 				}
@@ -149,6 +154,12 @@ void PEditor::GameObject::drawBool(std::string attrName, ::Components::Attribute
 void PEditor::GameObject::drawColor(std::string attrName, ::Components::Attribute* attr)
 {
 	ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
+}
+
+void PEditor::GameObject::drawChar(std::string attrName, ::Components::Attribute* attr)
+{
+	if (ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank)) {
+	}
 }
 
 PEditor::GameObject::GameObject(std::string& path)

@@ -56,6 +56,7 @@ namespace PEditor {
 		void drawString(std::string attrName, ::Components::Attribute* attr);
 		void drawBool(std::string attrName, ::Components::Attribute* attr);
 		void drawColor(std::string attrName, ::Components::Attribute* attr);
+		void drawChar(std::string attrName, ::Components::Attribute* attr);
 
 	public:
 
