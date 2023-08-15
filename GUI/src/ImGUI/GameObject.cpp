@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "SDL.h"
 #include "nlohmann/json.hpp"
+#include "ComponentManager.h";
 #include "ComponentInfo.h"
 
 int PEditor::GameObject::lastId = 0;
@@ -169,10 +170,29 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	GameObject::lastId++;
 
+	imagePath = path;
+
+	text = nullptr;
+
 	SDL_Surface* surface = IMG_Load(path.c_str());
-	text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+	if (surface != nullptr) {
+		text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+	}
+	else {
+		imagePath = "";
+	}
 
 	SDL_FreeSurface(surface);
+
+	if (path != "") {
+		//Add component image
+		::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
+		::Components::AttributeValue attributeValue;
+		attributeValue.valueString = path;
+		imageComponent.getAttribute("fileName").SetValue(attributeValue);
+		addComponent(imageComponent);
+	}
 
 	//Temporal: hacemos que el nombre del gameObject sea el nombre de la imagen
 	std::size_t extensionPos = path.find_last_of('.');
@@ -206,11 +226,6 @@ PEditor::GameObject::~GameObject()
 
 	delete pos;
 	delete size;
-}
-
-void PEditor::GameObject::render()
-{
-	ImGui::Image(text, *size);
 }
 
 SDL_Texture* PEditor::GameObject::getTexture()
@@ -388,6 +403,32 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 	previousMousePosX = mousePos.x;
 	previousMousePosY = mousePos.y;
+}
+
+void PEditor::GameObject::update()
+{
+	if (components.find("Image") == components.end()) {
+		text = nullptr;
+		return;
+	}
+
+	Components::Component* imageComponent = &components.find("Image")->second;
+	std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
+
+	if (currentImagePath != imagePath) {
+		SDL_Surface* surface = IMG_Load(currentImagePath.c_str());
+
+		if (surface != nullptr) {
+			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+		}
+		else {
+			text = nullptr;
+			imagePath = "";
+		}
+
+		SDL_FreeSurface(surface);
+	}
+
 }
 
 void PEditor::GameObject::addComponent(::Components::Component comp)

@@ -25,6 +25,9 @@ namespace PEditor {
 
 		std::string name;
 		int id;
+
+		std::string imagePath;
+		Components::Component* imageComponent;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
 		std::unordered_map<std::string, ::Components::Component> components;
@@ -63,8 +66,6 @@ namespace PEditor {
 		GameObject(std::string& path);
 		~GameObject();
 
-		virtual void render();
-
 		SDL_Texture* getTexture();
 		std::string getName();
 		int getId();
@@ -79,6 +80,7 @@ namespace PEditor {
 
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
+		void update();
 
 		void addComponent(::Components::Component comp);
 		void addScript(::Components::Script script);

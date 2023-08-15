@@ -166,6 +166,8 @@ void PEditor::Scene::update()
 {
 	for (auto it = gameObjects.begin(); it != gameObjects.end();)
 	{
+		(*it)->update();
+
 		if ((*it)->isWaitingToDelete()) {
 			selectedGameObject = nullptr;
 
