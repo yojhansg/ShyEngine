@@ -7,6 +7,9 @@
 #include <fstream>
 #include <Windows.h>
 #include <tchar.h>
+
+#include "Game.h"
+
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
 
@@ -53,7 +56,7 @@ void PEditor::MenuBar::render()
                 //system("Main_Debug.exe");
 
 
-
+                Game::Play();
                 //STARTUPINFO si;
                 //PROCESS_INFORMATION pi;
 
@@ -94,32 +97,35 @@ void PEditor::MenuBar::render()
                 //    std::cerr << "Error al crear el proceso." << std::endl;
                 //}
 
+                
+                //FILE* pipe = _popen("Main_Debug.exe", "r");
+                //if (!pipe) {
+                //    std::cerr << "Error opening pipe." << std::endl;
+                //    return;
+                //}
 
-                FILE* pipe = _popen("Main_Debug.exe", "r");
-                if (!pipe) {
-                    std::cerr << "Error opening pipe." << std::endl;
-                    return;
-                }
+                //char buffer[128];
+                //std::string result = "";
 
-                char buffer[128];
-                std::string result = "";
+                //// Leer la salida de la tubería y almacenarla en 'result'
+                //while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+                //    result += buffer;
+                //}
 
-                // Leer la salida de la tubería y almacenarla en 'result'
-                while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-                    result += buffer;
-                }
+                //// Cerrar la tubería
+                //_pclose(pipe);
 
-                // Cerrar la tubería
-                _pclose(pipe);
-
-                // Mostrar la salida capturada
-                std::cout << "Output of the executed program:\n" << result << std::endl;
+                //// Mostrar la salida capturada
+                //std::cout << "Output of the executed program:\n" << result << std::endl;
 
 
             };
 
             ImGui::MenuItem("Pause", NULL, false);
-            ImGui::MenuItem("Stop", NULL, false);
+            if (ImGui::MenuItem("Stop", NULL, false)) {
+                
+                Game::Stop();
+            }
 
             ImGui::EndMenu();
         }

@@ -16,6 +16,7 @@
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
 #include "ProjectsManager.h"
+#include "Game.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -219,6 +220,8 @@ void ImGUIManager::init()
     Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
     Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
 	Components::ComponentManager::ReadScripts("Scripts");
+
+	PEditor::Game::Init("Main_Debug.exe");
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -377,6 +380,7 @@ ImVec2 ImGUIManager::getOriginalWindowSize()
 
 ImGUIManager::~ImGUIManager()
 {
+	PEditor::Game::Release();
 	Components::ComponentManager::Release();
 	// Cleanup
 	ImGui_ImplSDLRenderer_Shutdown();

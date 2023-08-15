@@ -103,7 +103,9 @@
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\src\ImGUI\Camera.h" />
     <ClInclude Include="..\..\src\ImGUI\Components.h" />
+    <ClInclude Include="..\..\src\ImGUI\Console.h" />
     <ClInclude Include="..\..\src\ImGUI\FileExplorer.h" />
+    <ClInclude Include="..\..\src\ImGUI\Game.h" />
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
     <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
     <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h" />
@@ -124,7 +126,9 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Console.cpp" />
     <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Game.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
     <ClCompile Include="..\..\src\ImGUI\GameObject.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp" />
