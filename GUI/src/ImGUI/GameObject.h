@@ -27,7 +27,7 @@ namespace PEditor {
 		int id;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
-		std::unordered_map<std::string, ::Components::Component&> components;
+		std::unordered_map<std::string, ::Components::Component> components;
 
 		std::unordered_map<std::string, Components::Script> scripts;
 
@@ -80,10 +80,10 @@ namespace PEditor {
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
-		void addComponent(::Components::Component& comp);
+		void addComponent(::Components::Component comp);
 		void addScript(::Components::Script script);
 
-		std::unordered_map<std::string, ::Components::Component&>* getComponents();
+		std::unordered_map<std::string, ::Components::Component>* getComponents();
 		std::unordered_map<std::string, ::Components::Script>* getScripts();
 
 		void setPosition(ImVec2 newPos);

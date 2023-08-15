@@ -91,7 +91,7 @@ void PEditor::ComponentWindow::render()
 		{
 			for (auto& comp : ::Components::ComponentManager::GetAllComponents()) {
 
-				if (!gameObject->getComponents()->contains(comp.first))
+				if (!gameObject->getComponents()->contains(comp.first) && comp.first != "Transform")
 					if (ImGui::Button(comp.first.c_str(), ImVec2(windowWidth, 40))) {
 						gameObject->addComponent(comp.second);
 					};

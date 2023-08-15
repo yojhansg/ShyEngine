@@ -15,6 +15,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 {
 	for (auto it = components.begin(); it != components.end();) {
 		std::string componentName = (*it).second.getName();
+
 		if (ImGui::CollapsingHeader(componentName.c_str()))
 		{
 			for (auto& attribute : (*it).second.getAllAttributes()) {
@@ -51,7 +52,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
 
-			if (ImGui::Button(("Delete script##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+			if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
 				it = components.erase(it);
 			}
 			else {
@@ -389,7 +390,7 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	previousMousePosY = mousePos.y;
 }
 
-void PEditor::GameObject::addComponent(::Components::Component& comp)
+void PEditor::GameObject::addComponent(::Components::Component comp)
 {
 	if (components.find(comp.getName()) == components.end()) {
 		components.emplace(comp.getName(), comp);
@@ -406,7 +407,7 @@ void PEditor::GameObject::addScript(::Components::Script script)
 	scripts.emplace(script.GetName(), script);
 }
 
-std::unordered_map<std::string, ::Components::Component&>* PEditor::GameObject::getComponents()
+std::unordered_map<std::string, ::Components::Component>* PEditor::GameObject::getComponents()
 {
 	return &components;
 }
