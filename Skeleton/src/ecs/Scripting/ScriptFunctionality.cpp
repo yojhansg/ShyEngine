@@ -46,11 +46,11 @@ std::string Scripting::ScriptFunctionality::Entity_CurrentName()
 	return Entity()->getEntityName();
 }
 
-void Scripting::ScriptFunctionality::Entity_Event(ECS::Entity* ent, cstring name) {
+void Scripting::ScriptFunctionality::Event_EntityEvent(ECS::Entity* ent, cstring name) {
 	ent->Event(name);
 }
 
-void Scripting::ScriptFunctionality::GlobalEvent(cstring name) {
+void Scripting::ScriptFunctionality::Event_GlobalEvent(cstring name) {
 
 	ECS::SceneManager::instance()->getCurrentScene()->Event(name);
 }

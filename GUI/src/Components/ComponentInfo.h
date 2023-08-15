@@ -17,6 +17,7 @@ namespace Components {
 		STRING,
 		BOOL,
 		COLOR,
+		CHAR,
 	};
 
 
@@ -35,6 +36,7 @@ namespace Components {
 				float g;
 				float b;
 			} valueColor;
+			char valueChar;
 		} value;
 
 		std::string valueString;
@@ -50,8 +52,12 @@ namespace Components {
 	public:
 		Attribute();
 		Attribute(const std::string& name, const std::string& typeString);
+		Attribute(const std::string& name);
 
+		void SetType(const std::string& str, const AttributesType& type);
+		void SetValue(const AttributeValue& value);
 		AttributesType getType() const;
+
 		std::string getName() const;
 		std::string getTypeStr() const;
 		std::string toJson();
@@ -112,6 +118,25 @@ namespace Components {
 		void addMethod(const Method& method);
 
 		std::string toJson();
+	};
+
+
+	class Script {
+
+
+	private:
+
+		std::string name;
+		std::unordered_map<std::string, Attribute> attributes;
+
+	public:
+
+		Script(cstring name);
+
+		std::string GetName();
+
+		void AddAttribute(const std::string& name, Attribute attr);
+		std::unordered_map<std::string, Attribute>& getAllAttributes();
 	};
 
 }

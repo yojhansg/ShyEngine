@@ -17,6 +17,8 @@ PEditor::Window::Window(std::string _windowName, WindowFlags f = None)
 
 	windowPosX = 0;
 	windowPosY = 0;
+
+	focused = false;
 }
 
 void PEditor::Window::setSize(ImVec2 size)
@@ -44,20 +46,6 @@ ImVec2 PEditor::Window::getPosition()
 
 void PEditor::Window::update()
 {
-	ImGUIManager* manager = ImGUIManager::getInstance();
-	ImVec2 originalSize = manager->getOriginalWindowSize();
-	ImVec2 currentSize = manager->getMainWindowSize();
-
-	float scaleFactorX = currentSize.x / originalSize.x;
-	float scaleFactorY = currentSize.y / originalSize.y;
-
-	windowWidth = windowOriWidth * scaleFactorX;
-	windowHeight = windowOriHeight * scaleFactorY;
-
-	windowPosX = windowOriPosX * scaleFactorX;
-	windowPosY = windowOriPosY * scaleFactorY;
-
-
 }
 
 void PEditor::Window::render()
@@ -75,6 +63,11 @@ void PEditor::Window::render()
 
 void PEditor::Window::handleInput(SDL_Event* event)
 {
+}
+
+bool PEditor::Window::isFocused()
+{
+	return focused;
 }
 
 PEditor::Window::~Window()

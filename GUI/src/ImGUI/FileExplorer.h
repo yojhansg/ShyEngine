@@ -6,6 +6,8 @@
 
 struct SDL_Texture;
 
+#define FILEEXPLORER_WIN_HEIGHT_RATIO 0.3f
+
 namespace PEditor {
 	class FileExplorer : public Window
 	{

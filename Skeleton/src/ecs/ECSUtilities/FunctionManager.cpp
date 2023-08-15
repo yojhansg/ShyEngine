@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Thu Aug 10 22:39:13 2023
+//Creation time: Mon Aug 14 20:55:31 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -202,8 +202,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Entity",ScriptFunctionality_Entity);
 	map.emplace("Entity_Name",ScriptFunctionality_Entity_Name);
 	map.emplace("Entity_CurrentName",ScriptFunctionality_Entity_CurrentName);
-	map.emplace("Entity_Event",ScriptFunctionality_Entity_Event);
-	map.emplace("GlobalEvent",ScriptFunctionality_GlobalEvent);
+	map.emplace("Event_EntityEvent",ScriptFunctionality_Event_EntityEvent);
+	map.emplace("Event_GlobalEvent",ScriptFunctionality_Event_GlobalEvent);
 	map.emplace("Graph",ScriptFunctionality_Graph);
 	map.emplace("Math_Add",ScriptFunctionality_Math_Add);
 	map.emplace("Math_Subtract",ScriptFunctionality_Math_Subtract);
@@ -2751,14 +2751,14 @@ Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting
 	std::string ret = manager->Entity_CurrentName();
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Entity_Event(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Event_EntityEvent(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->Entity_Event(vec[0].value.entity, vec[1].str);
+	manager->Event_EntityEvent(vec[0].value.entity, vec[1].str);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable ScriptFunctionality_GlobalEvent(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Event_GlobalEvent(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	manager->GlobalEvent(vec[0].str);
+	manager->Event_GlobalEvent(vec[0].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Graph(std::vector<Scripting::Variable>const& vec){

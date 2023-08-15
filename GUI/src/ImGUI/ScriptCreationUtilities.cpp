@@ -55,12 +55,15 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 		else
 			ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
+		int flag = ImGuiWindowFlags_NoSavedSettings;
 		if (!resizable)
+		{
 			ImGui::SetNextWindowSize(size, ImGuiCond_None);
+			flag |= ImGuiWindowFlags_NoResize;
+		}
 
 
-
-		ImGui::Begin(GetStringId().c_str(), NULL, ImGuiWindowFlags_NoSavedSettings);
+		ImGui::Begin(GetStringId().c_str(), NULL, flag);
 
 		updateAndRender();
 		ManageOutputNode();
@@ -74,10 +77,11 @@ bool PEditor::ScriptCreationUtilities::ScriptNode::UpdateAndRenderWindow()
 
 		UpdatePositionAfterDrag(scrollx, scrolly);
 
-		auto winSize = ImGui::GetWindowSize();
-		w = winSize.x;
-		h = winSize.y;
-
+		if (resizable) {
+			auto winSize = ImGui::GetWindowSize();
+			w = winSize.x;
+			h = winSize.y;
+		}
 		ImGui::End();
 
 		return close;
@@ -758,7 +762,7 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 {
-	reflect = false;
+	serialized = false;
 
 	attrValue = ::Components::AttributeValue();
 
@@ -849,6 +853,13 @@ void PEditor::ScriptCreationUtilities::ScriptInput::updateAndRender()
 	}
 	}
 
+
+
+	ImGui::Checkbox("Serialize", &serialized);
+	if (serialized) {
+
+		ImGui::InputText("Name", serializedName, 256);
+	}
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptInput::GetStringId()
@@ -1064,7 +1075,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		if (ImGui::Button("Add comment")) {
 
 
-			creator->AddNode(new ScriptComment("Write comment here"), false);
+			creator->AddNode(new ScriptComment("Write comment here"));
 		}
 
 
@@ -1207,8 +1218,8 @@ void PEditor::ScriptCreationUtilities::ScriptNode::FromJson(nlohmann::json& root
 {
 	id = root["index"].get<int>();
 
-	x = root["x"].get<float>();
-	y = root["y"].get<float>();
+	x = root.contains("x") ? root["x"].get<float>() : 0;
+	y = root.contains("y") ? root["y"].get<float>(): 0;
 }
 
 
@@ -1217,7 +1228,10 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 {
 	json root = ScriptNode::ToJson();
 
-	root["function"] = method.getComponent() + "_" + method.getName();
+	if (method.getComponent() != method.getName())
+		root["function"] = method.getComponent() + "_" + method.getName();
+	else 
+		root["function"] = method.getComponent();
 
 	root["input"] = json::array();
 
@@ -1283,6 +1297,11 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 	json root = ScriptNode::ToJson();
 
 	//TODO: serialised values
+	root["serialized"] = serialized;
+
+	if (serialized)
+		root["name"] = serializedName;
+
 
 	if (attrType == Components::AttributesType::NONE) {
 		root["type"] = "null";
@@ -1316,6 +1335,22 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::AttributeValue const& val)
 {
 	attrValue = val;
+}
+
+bool PEditor::ScriptCreationUtilities::ScriptInput::IsSerialized()
+{
+	return serialized;
+}
+
+std::string PEditor::ScriptCreationUtilities::ScriptInput::GetName()
+{
+	return serializedName;
+}
+
+void PEditor::ScriptCreationUtilities::ScriptInput::SetSerialized(bool value, const std::string& str)
+{
+	serialized = value;
+	std::memcpy(serializedName, str.c_str(), 256);
 }
 
 PEditor::ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)
@@ -1543,6 +1578,16 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptEvent::ToJson()
 	return root;
 }
 
+std::string PEditor::ScriptCreationUtilities::ScriptEvent::GetEventName()
+{
+	return eventname;
+}
+
+PEditor::ScriptCreationUtilities::ScriptFlow* PEditor::ScriptCreationUtilities::ScriptEvent::GetScriptFlow()
+{
+	return flow;
+}
+
 PEditor::ScriptCreationUtilities::ScriptComment::ScriptComment(const std::string commentStr)
 {
 	type = Node::Comment;
@@ -1571,11 +1616,19 @@ void PEditor::ScriptCreationUtilities::ScriptComment::updateAndRender()
 	);
 }
 
+void PEditor::ScriptCreationUtilities::ScriptComment::SetSize(float w, float h)
+{
+	this->w = w;
+	this->h = h;
+}
+
 nlohmann::json PEditor::ScriptCreationUtilities::ScriptComment::ToJson()
 {
 	json root = ScriptNode::ToJson();
 
 	root["comment"] = comment;
+	root["w"] = w;
+	root["h"] = h;
 
 	return root;
 }

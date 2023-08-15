@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Thu Aug 10 22:39:13 2023
+//Creation time : Mon Aug 14 20:55:31 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -172,8 +172,8 @@ Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>co
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Entity_Event(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_GlobalEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Event_EntityEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Event_GlobalEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Graph(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Subtract(std::vector<Scripting::Variable>const& vec);

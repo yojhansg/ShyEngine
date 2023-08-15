@@ -57,13 +57,12 @@ void PEditor::ScriptCreation::AddEvent(const std::string& name, ScriptCreationUt
 {
 	events.emplace(name, event);
 
-	AddNode(event, false);
+	AddNode(event);
 }
 
-void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node, bool insertValidNode)
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
-	int nodeIdx = insertValidNode ? nodes.size() : -1;
-	node->SetID(nodeIdx);
+	node->SetID(nodes.size());
 	nodes.push_back(node);
 }
 
@@ -92,9 +91,8 @@ void PEditor::ScriptCreation::Save()
 
 	json eventData = json::array(), comments = json::array();
 
-	root["nodeCount"] = allNodes.size();
 
-	std::vector<ScriptCreationUtilities::ScriptNode*> serializedValues;
+	json serializedValues = json::array();
 
 	for (auto node : allNodes) {
 
@@ -106,8 +104,24 @@ void PEditor::ScriptCreation::Save()
 			functions.push_back(node->ToJson());
 			break;
 		case ScriptCreationUtilities::ScriptNode::Node::Input:
-			consts.push_back(node->ToJson());
+		{
+			auto jsonNode = node->ToJson();
+
+			ScriptCreationUtilities::ScriptInput* input =
+				static_cast<ScriptCreationUtilities::ScriptInput*>(node);
+
+			if (input->IsSerialized())
+				serializedValues.push_back({
+
+					{"type", input->GetOutputTypeString()},
+					{"name", input->GetName()},
+					{"defaultValue", jsonNode["value"]}
+			});
+
+			consts.push_back(jsonNode);
+
 			break;
+		}
 		case ScriptCreationUtilities::ScriptNode::Node::Fork:
 			forks.push_back(node->ToJson());
 			break;
@@ -124,12 +138,22 @@ void PEditor::ScriptCreation::Save()
 
 	}
 
-
+	root["nodeCount"] = allNodes.size();
 	root["functions"] = functions;
 	root["consts"] = consts;
 	root["forks"] = forks;
 	root["events"] = eventData;
 	root["comments"] = comments;
+	root["serializedValues"] = serializedValues;
+
+
+	for (auto& event : events) {
+
+		auto next = event.second->GetScriptFlow()->GetNext();
+		if (next != nullptr)
+			root[event.first] = next->GetId();
+	}
+
 
 	std::ofstream file("scripts/" + std::string(menuBar->GetName()) + ".script");
 
@@ -137,7 +161,10 @@ void PEditor::ScriptCreation::Save()
 
 	file.close();
 
+
+
 	ScriptCreation::ResetModified();
+	Components::ComponentManager::ReloadScripts();
 }
 
 void PEditor::ScriptCreation::Load()
@@ -250,7 +277,7 @@ void PEditor::ScriptCreation::Load()
 		}
 		else if (typeStr == "string") {
 			type = ::Components::AttributesType::STRING;
-			value.valueString = constNode["value"].get<float>();
+			value.valueString = constNode["value"].get<std::string>();
 		}
 		else if (typeStr == "bool") {
 			type = ::Components::AttributesType::BOOL;
@@ -261,10 +288,20 @@ void PEditor::ScriptCreation::Load()
 			//TODO: despues de la serializacion
 		}
 
+		
+
 		ScriptCreationUtilities::ScriptInput* input = new ScriptCreationUtilities::ScriptInput(type);
 		input->SetValue(value);
-
 		input->FromJson(constNode);
+
+		if (constNode.contains("serialized")) {
+
+			bool serialized = constNode["serialized"].get<bool>();
+			if (serialized) {
+
+				input->SetSerialized(serialized, constNode["name"].get<std::string>());
+			}
+		}
 
 
 		SetNode(input->GetId(), input);
@@ -296,6 +333,37 @@ void PEditor::ScriptCreation::Load()
 			forkInfo["A"].get<int>(), forkInfo["B"].get<int>() });
 
 		SetNode(fork->GetId(), fork);
+	}
+
+
+	for (auto& commentData : comments) {
+
+		ScriptCreationUtilities::ScriptComment* comment = new ScriptCreationUtilities::ScriptComment(
+			commentData["comment"].get<std::string>()
+		);
+
+		comment->FromJson(commentData);
+
+		comment->SetSize(commentData["w"].get<float>(), commentData["h"].get<float>());
+
+		SetNode(comment->GetId(), comment);
+	}
+
+
+	for (auto& eventData : events) {
+
+		std::string type = eventData["type"].get<std::string>();
+		ScriptCreationUtilities::ScriptEvent* event = new ScriptCreationUtilities::ScriptEvent(
+			type
+		);
+
+		event->FromJson(eventData);
+
+		if (file.contains(type)) {
+			int idx = file[type].get<int>();
+			event->GetScriptFlow()->SetNext(GetNodes()[idx]->GetScriptFlow());
+		}
+		SetNode(event->GetId(), event);
 	}
 
 
@@ -546,4 +614,5 @@ void PEditor::ScriptCreation::ClearScript()
 		delete node;
 	}
 	nodes.clear();
+	events.clear();
 }

@@ -16,6 +16,9 @@ namespace PEditor {
 	class GameObject;
 };
 
+#define SCENE_WIN_WIDTH_RATIO 0.6f
+#define SCENE_WIN_HEIGHT_RATIO 0.7f
+
 namespace PEditor {
 	class Scene : public Window
 	{
@@ -36,6 +39,8 @@ namespace PEditor {
 		bool mouseInsideGameObject(GameObject* go, ImVec2 mousePos);
 
 		ImVec2 getMousePosInsideScene(ImVec2 mousePos);
+
+		static bool compareGameObjectsRenderOrder(GameObject* a, GameObject* b);
 
 	public:
 

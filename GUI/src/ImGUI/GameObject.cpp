@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "SDL.h"
 #include "nlohmann/json.hpp"
+#include "ComponentManager.h";
 #include "ComponentInfo.h"
 
 int PEditor::GameObject::lastId = 0;
@@ -15,6 +16,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 {
 	for (auto it = components.begin(); it != components.end();) {
 		std::string componentName = (*it).second.getName();
+
 		if (ImGui::CollapsingHeader(componentName.c_str()))
 		{
 			for (auto& attribute : (*it).second.getAllAttributes()) {
@@ -40,15 +42,18 @@ void PEditor::GameObject::drawComponentsInEditor()
 				case ::Components::AttributesType::COLOR:
 					drawColor(attributeName + it->first, attr);
 					break;
+				case ::Components::AttributesType::CHAR:
+					drawChar(attributeName + it->first, attr);
+					break;
 				default:
 					break;
 				}
 			}
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
 
-			if (ImGui::Button(("Delete component##" + componentName).c_str())) {
+			if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
 				it = components.erase(it);
 			}
 			else {
@@ -62,6 +67,62 @@ void PEditor::GameObject::drawComponentsInEditor()
 			++it;
 		}
 	}
+}
+
+void PEditor::GameObject::drawScriptsInEditor()
+{
+	for (auto it = scripts.begin(); it != scripts.end();) {
+		std::string scriptName = (*it).first;
+		if (ImGui::CollapsingHeader(scriptName.c_str()))
+		{
+			for (auto& attribute : (*it).second.getAllAttributes()) {
+				std::string attributeName = attribute.first;
+				::Components::Attribute* attr = &attribute.second;
+
+				ImGui::Text(attributeName.c_str());
+
+				switch (attr->getType())
+				{
+				case ::Components::AttributesType::FLOAT:
+					drawFloat(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::VECTOR2:
+					drawVector2(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::STRING:
+					drawString(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::BOOL:
+					drawBool(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::COLOR:
+					drawColor(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::CHAR:
+					drawChar(attributeName + it->first, attr);
+				default:
+					break;
+				}
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
+
+			if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+				it = scripts.erase(it);
+			}
+			else {
+				++it;
+			}
+
+			ImGui::PopStyleColor(2);
+
+		}
+		else {
+			++it;
+		}
+	}
+
 }
 
 
@@ -97,20 +158,50 @@ void PEditor::GameObject::drawColor(std::string attrName, ::Components::Attribut
 	ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
 }
 
+void PEditor::GameObject::drawChar(std::string attrName, ::Components::Attribute* attr)
+{
+	if (ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank)) {
+	}
+}
+
 PEditor::GameObject::GameObject(std::string& path)
 {
 	id = GameObject::lastId;
 
 	GameObject::lastId++;
 
+	imagePath = path;
+
+	text = nullptr;
+
 	SDL_Surface* surface = IMG_Load(path.c_str());
-	text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+	if (surface != nullptr) {
+		text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+	}
+	else {
+		imagePath = "";
+	}
 
 	SDL_FreeSurface(surface);
 
-	//Temporal: hacemos que el nombre del gameObject sea el nombre de la imagen
-	std::size_t extensionPos = path.find_last_of('.');
-    name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+	if (path != "") {
+		//Add component image
+		::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
+		::Components::AttributeValue attributeValue;
+		attributeValue.valueString = path;
+		imageComponent.getAttribute("fileName").SetValue(attributeValue);
+		addComponent(imageComponent);
+	}
+
+	if (path != "") {
+		//Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
+		std::size_t extensionPos = path.find_last_of('.');
+		name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+	}
+	else {
+		name = "Empty gameobject";
+	}
 
 	pos = new ImVec2(0, 0);
 	size = new ImVec2(100, 100);
@@ -142,11 +233,6 @@ PEditor::GameObject::~GameObject()
 	delete size;
 }
 
-void PEditor::GameObject::render()
-{
-	ImGui::Image(text, *size);
-}
-
 SDL_Texture* PEditor::GameObject::getTexture()
 {
 	return text;
@@ -162,6 +248,10 @@ bool PEditor::GameObject::isVisible()
 int PEditor::GameObject::getId()
 {
 	return id;
+}
+int PEditor::GameObject::getRenderOrder()
+{
+	return renderOrder;
 }
 void PEditor::GameObject::setVisible(bool visible)
 {
@@ -324,16 +414,57 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 	previousMousePosY = mousePos.y;
 }
 
-void PEditor::GameObject::addComponent(::Components::Component& comp)
+void PEditor::GameObject::update()
+{
+	if (components.find("Image") == components.end()) {
+		text = nullptr;
+		return;
+	}
+
+	Components::Component* imageComponent = &components.find("Image")->second;
+	std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
+
+	if (currentImagePath != imagePath) {
+		SDL_Surface* surface = IMG_Load(currentImagePath.c_str());
+
+		if (surface != nullptr) {
+			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+		}
+		else {
+			text = nullptr;
+			imagePath = "";
+		}
+
+		SDL_FreeSurface(surface);
+	}
+
+}
+
+void PEditor::GameObject::addComponent(::Components::Component comp)
 {
 	if (components.find(comp.getName()) == components.end()) {
 		components.emplace(comp.getName(), comp);
 	}
 }
 
-std::unordered_map<std::string, ::Components::Component&>* PEditor::GameObject::getComponents()
+void PEditor::GameObject::addScript(::Components::Script script)
+{
+	if (scripts.contains(script.GetName()))
+	{
+		return;
+	}
+
+	scripts.emplace(script.GetName(), script);
+}
+
+std::unordered_map<std::string, ::Components::Component>* PEditor::GameObject::getComponents()
 {
 	return &components;
+}
+
+std::unordered_map<std::string, ::Components::Script>* PEditor::GameObject::getScripts()
+{
+	return &scripts;
 }
 
 void PEditor::GameObject::setPosition(ImVec2 newPos)

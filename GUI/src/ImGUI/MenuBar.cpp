@@ -8,11 +8,6 @@
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
-    originalFramePadding = ImGui::GetStyle().FramePadding.y;
-    
-    //Width is 0 cause menu bar always take the whole screen width
-    windowWidth = windowOriWidth = 0;
-    windowHeight = windowOriHeight = 4;
 
     imGuiManager = ImGUIManager::getInstance();
 
@@ -21,8 +16,6 @@ PEditor::MenuBar::MenuBar() : Window("", None)
 
 void PEditor::MenuBar::render()
 {
-    // Change the menu bar height temporarily
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, windowHeight));  // Change the menu bar height to 10 pixels
 
     GameObject* gameObject = imGuiManager->getScene()->getSelectedGameObject();
 
@@ -106,9 +99,11 @@ void PEditor::MenuBar::render()
         ImGui::EndMainMenuBar();
     }
 
-    // Reset the menu bar height to the default value
-    ImGui::PopStyleVar();  // Restore the default menu bar height
+    showRenamePopup(gameObject);
+}
 
+void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
+{
     if (shouldOpenRenamePopup)
     {
         ImGui::OpenPopup("Rename Object");
@@ -139,15 +134,4 @@ void PEditor::MenuBar::render()
 
         ImGui::EndPopup();
     }
-}
-
-void PEditor::MenuBar::update()
-{
-    ImGUIManager* manager = ImGUIManager::getInstance();
-    ImVec2 originalSize = manager->getOriginalWindowSize();
-    ImVec2 currentSize = manager->getMainWindowSize();
-
-    float scaleFactorY = currentSize.y / originalSize.y;
-
-    windowHeight = windowOriHeight * scaleFactorY * scaleFactorY * 0.88f;
 }

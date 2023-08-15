@@ -72,19 +72,24 @@ namespace PEditor {
 			Hacer que no se pueda crear dos eventos iguales
 			Oscurecer la pantalla cuando aparezca el popup de cerrar
 			Añadir soporte para comentarios
+			Serializar next
+			Serializar condicionales
+			Serializar eventos
+			Serializar comentarios
 
 			TODO:
 
 			===Funcionalidad nueva===
-
-			-Serializar next
-			-Serializar condicionales
-			-Serializar eventos
-			-Serializar comentarios
+			-SerializedValues: Es la forma de serializar variables en el scripting
 			-Names: Es la forma de tener metodos en el scripting
+
+			Para el motor: falta el setSerializedValue
+			Falta terminar las colecciones (arrays)
+
 			-Duplicar un nodo con control d
 			-Control z manager
-			
+			-Poder quitar un nodo siguiente
+			-Todos los metodos de componentes tienen como primer parametro un puntero a la entidad
 
 			===Mejoras de codigo e implementacion===
 
@@ -96,7 +101,11 @@ namespace PEditor {
 			-Cambiar las llamadas de windowpos y windowsize por 'x y w z'
 			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
 			-Hacer que el id no tenga en cuenta el tamaño del array ya que puede haber elementos sin id
-			
+			-Establecer correctamente los tamaños de los nodos para que no queden feotes
+			-En algun momento cambiar la serializacion de los eventos en el motor
+			-Empezar sin cambios aunque esten los dos nodos creados
+			-Establecer los cambios cuando se añada input y todas esas cosas
+
 			===Correccion de errores===
 
 			-Los nodos se pintan por encima de la barra superior
@@ -106,8 +115,8 @@ namespace PEditor {
 			-Ordenar la lista de metodos y esas cosas
 			-Unificar todos los tipos de entradas string
 			-Verificar el tipo de la condicion para los condicionales (if, while)
-
-
+			-Cuando hay dos inputs iguales y uno se borra ocurre un error
+			-Spawnear comentarios en el centro de la pantalla
 
 
 			
@@ -320,9 +329,27 @@ namespace PEditor {
 			*/
 			void SetValue(::Components::AttributeValue const& value);
 
+
+			/*
+				Devuelve si el nodo va a ser serializado desde el editor
+			*/
+			bool IsSerialized();
+
+			/*
+				Devuelve el nombre del atributo en caso de ser serializado
+			*/
+			std::string GetName();
+
+
+			/*
+				Establece el valor de serializacion del nodo
+			*/
+			void SetSerialized(bool value, const std::string& str);
+
 		private:
 
-			bool reflect; //TODO
+			bool serialized;
+			char serializedName[256];
 
 			/*
 				Tipo de valor que se quiere guardar
@@ -339,6 +366,7 @@ namespace PEditor {
 				Implementar la logica junto con el dibujado de la ventana
 			*/
 			void updateAndRender() override;
+
 
 
 
@@ -659,6 +687,15 @@ namespace PEditor {
 			nlohmann::json ToJson() override;
 
 
+			/*
+				Devuelve el nombre del evento 
+			 */
+			std::string GetEventName();
+
+			/*
+				Devuelve un puntero a la entrada de flujo del nodo
+			*/
+			ScriptFlow* GetScriptFlow() override;
 		};
 
 
@@ -684,7 +721,7 @@ namespace PEditor {
 
 			void updateAndRender() override;
 
-
+			void SetSize(float w, float h);
 
 			/*
 				Serializacion del nodo

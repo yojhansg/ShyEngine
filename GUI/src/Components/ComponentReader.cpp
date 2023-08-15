@@ -2,6 +2,9 @@
 #include "nlohmann/json.hpp"
 
 #include <fstream>
+#include <filesystem>
+
+#include <iostream>
 
 using nlohmann::json;
 
@@ -120,6 +123,98 @@ namespace Components {
 		}
 
 		return components;
+	}
+
+	std::vector<Script> ComponentReader::ReadScripts(cstring filePath)
+	{
+
+		if (!std::filesystem::is_directory(filePath)) {
+
+			std::cout << "Ups" << std::endl;
+
+			return std::vector<Script>();
+		}
+
+
+		auto scripts = std::vector<Script>();
+		for (const auto& entry : std::filesystem::directory_iterator(filePath)) {
+
+			if (entry.is_directory()) continue; //TODO: leer en carpetas anidadas
+
+			if (entry.path().extension() != ".script") continue;
+
+			Script script = Script(entry.path().filename().stem().string());
+
+
+			std::ifstream fileStream(entry.path());
+
+			if (fileStream.good() && json::accept(fileStream))
+			{
+				fileStream.clear();
+				fileStream.seekg(0);
+
+				json root = json::parse(fileStream);
+				fileStream.close();
+
+
+				if (root.contains("serializedValues"))
+				{
+
+					for (auto& sv : root["serializedValues"])
+					{
+						std::string name = sv["name"].get<std::string>();
+						std::string typeString = sv["type"].get<std::string>();
+
+
+						AttributesType type = AttributesType::FLOAT;
+						AttributeValue value;
+
+
+						if (typeString == "int" || typeString == "float") {
+							type = AttributesType::FLOAT;
+							value.value.valueFloat = sv["defaultValue"].get<float>();
+						}
+						else if (typeString == "Utilities::Vector2D") {
+							type = AttributesType::VECTOR2;
+							//value.value.valueFloat = sv["value"].get<float>();
+						}
+						else if (typeString == "std::string") {
+							type = AttributesType::STRING;
+							value.valueString = sv["defaultValue"].get<std::string>();
+						}
+						else if (typeString == "bool") {
+							type = AttributesType::BOOL;
+							value.value.valueBool = sv["defaultValue"].get<bool>();
+						}
+						else if (typeString == "Utilities::Color") {
+							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+							type = AttributesType::COLOR;
+						}
+						else {
+							type = AttributesType::NONE;
+						}
+
+
+
+						Attribute attribute(name);
+
+						attribute.SetType(typeString, type);
+						attribute.SetValue(value);
+
+						script.AddAttribute(name, attribute);
+					}
+
+
+				}
+
+			}
+
+
+			scripts.push_back(script);
+
+		}
+
+		return scripts;
 	}
 
 }

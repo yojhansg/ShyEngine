@@ -19,8 +19,14 @@ namespace Components {
 		static ComponentManager* instance;
 		static void EnsureInitialised();
 
+
 		std::unordered_map<std::string, Component> components;
 		std::unordered_map<std::string, Component> managers;
+
+
+
+		static std::string scriptPath;
+		std::vector<Script> scripts;
 
 	public:
 
@@ -30,7 +36,12 @@ namespace Components {
 		static void ReadComponentInfo(cstring path);
 		static void ReadManagerInfo(cstring path);
 
+		static void ReadScripts(cstring path);
+		static void ReloadScripts();
+
 		static std::unordered_map<std::string, Component>& GetAllComponents();
 		static std::unordered_map<std::string, Component>& GetAllManagers();
+
+		static std::vector<Script>& GetAllScripts();
 	};
 }

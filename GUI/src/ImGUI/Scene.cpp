@@ -8,6 +8,9 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include "Hierarchy.h"
+#include "FileExplorer.h"
+#include "Components.h"
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
 {
@@ -22,7 +25,6 @@ bool PEditor::Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
 
 	mousePos = getMousePosInsideScene(mousePos);
 
-	//GameObject position and size in the ImGUIWindow
 	ImVec2 gOPos = go->getPosition();
 
 	return (mousePos.x > gOPos.x && mousePos.x < gOPos.x + go->getWidth() && mousePos.y > gOPos.y && mousePos.y < gOPos.y + go->getHeight());
@@ -45,6 +47,11 @@ ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
 	return ImVec2(mouseX, mouseY);
 }
 
+bool PEditor::Scene::compareGameObjectsRenderOrder(GameObject* a, GameObject* b)
+{
+	return a->getRenderOrder() < b->getRenderOrder();
+}
+
 PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
@@ -55,28 +62,32 @@ PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScro
 
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	ImVec2 windowSize = ImVec2(1095 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
+	windowOriWidth = mainWindowSize.x * SCENE_WIN_WIDTH_RATIO;
+	windowOriHeight = mainWindowSize.y * SCENE_WIN_HEIGHT_RATIO;
 
-	windowOriWidth = windowSize.x;
-	windowOriHeight = windowSize.y;
+	float menuBarHeight = ImGui::GetFrameHeight();
 
-	setSize(windowSize);
-	setPosition(ImVec2(mainWindowSize.x / 2 - windowSize.x / 2, 20));
+	windowOriPosX = SDL_WIN_WIDTH / 2 - windowOriWidth / 2;
+	windowOriPosY = menuBarHeight;
 
-	windowOriPosX = windowPosX;
-	windowOriPosY = windowPosY;
+	setSize(ImVec2(windowOriWidth, windowOriHeight));
+	setPosition(ImVec2(windowOriPosX, windowOriPosY));
+
 
 	camera = new Camera(ImVec2(50, 50), 0.5);
 
 	renderer = imGUIManager->getRenderer();
 
 	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowOriWidth , windowOriHeight);
-
+	
 	selectedGameObject = nullptr;
 }
 
 PEditor::Scene::~Scene()
 {
+
+	SDL_DestroyTexture(targetTexture); 
+
 	for (auto gameObject : gameObjects) {
 		delete gameObject;
 	}
@@ -107,8 +118,9 @@ void PEditor::Scene::setSelectedGameObject(GameObject* go)
 
 void PEditor::Scene::renderGameObjects()
 {
-	for (auto gameObject : gameObjects) {
+	std::sort(gameObjects.begin(), gameObjects.end(), compareGameObjectsRenderOrder);
 
+	for (auto gameObject : gameObjects) {
 		gameObject->render(renderer, camera);
 	}
 }
@@ -158,10 +170,10 @@ void PEditor::Scene::loadScene() {
 
 void PEditor::Scene::update()
 {
-	Window::update();
-
 	for (auto it = gameObjects.begin(); it != gameObjects.end();)
 	{
+		(*it)->update();
+
 		if ((*it)->isWaitingToDelete()) {
 			selectedGameObject = nullptr;
 
@@ -190,11 +202,27 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 
 void PEditor::Scene::render()
 {
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	PEditor::FileExplorer* fileExplorer = imGUIManager->getFileExplorer();
+
+	ImVec2 hierarchyWindowSize = imGUIManager->getHierarchy()->getSize();
+	ImVec2 componentsWindowPos = imGUIManager->getComponents()->getPosition();
+	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
+
+	ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 25), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 25));
+
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
+	ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
+	ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
+	windowWidth = imGUIWindowSize.x;
+	windowHeight = imGUIWindowSize.y;
+	windowPosX = imGUIWindowPos.x;
+	windowPosY = imGUIWindowPos.y;
 
-	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
+	float menuBarHeight = ImGui::GetFrameHeight();
+
+	ImGui::SetWindowPos(ImVec2(hierarchyWindowSize.x, menuBarHeight));
 
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_RenderClear(renderer);
@@ -203,6 +231,7 @@ void PEditor::Scene::render()
 	renderFrame();
 
 	SDL_SetRenderTarget(renderer, NULL);
+
 
 	ImGui::Image(targetTexture, ImVec2(windowWidth, windowOriHeight * windowWidth / windowOriWidth));
 

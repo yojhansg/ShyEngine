@@ -15,6 +15,7 @@ class Camera;
 namespace Components {
 	class Component;
 	class Attribute;
+	class Script;
 }
 
 namespace PEditor {
@@ -24,9 +25,14 @@ namespace PEditor {
 
 		std::string name;
 		int id;
+
+		std::string imagePath;
+		Components::Component* imageComponent;
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
-		std::unordered_map<std::string, ::Components::Component&> components;
+		std::unordered_map<std::string, ::Components::Component> components;
+
+		std::unordered_map<std::string, Components::Script> scripts;
 
 		ImGUIManager* imGuiManager;
 
@@ -53,17 +59,18 @@ namespace PEditor {
 		void drawString(std::string attrName, ::Components::Attribute* attr);
 		void drawBool(std::string attrName, ::Components::Attribute* attr);
 		void drawColor(std::string attrName, ::Components::Attribute* attr);
+		void drawChar(std::string attrName, ::Components::Attribute* attr);
 
 	public:
 
 		GameObject(std::string& path);
 		~GameObject();
 
-		virtual void render();
-
 		SDL_Texture* getTexture();
 		std::string getName();
 		int getId();
+
+		int getRenderOrder();
 
 		bool isVisible();
 		void setVisible(bool visible);
@@ -75,9 +82,13 @@ namespace PEditor {
 
 		void render(SDL_Renderer* renderer, Camera* camera);
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
+		void update();
 
-		void addComponent(::Components::Component& comp);
-		std::unordered_map<std::string, ::Components::Component&>* getComponents();
+		void addComponent(::Components::Component comp);
+		void addScript(::Components::Script script);
+
+		std::unordered_map<std::string, ::Components::Component>* getComponents();
+		std::unordered_map<std::string, ::Components::Script>* getScripts();
 
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);
@@ -88,6 +99,7 @@ namespace PEditor {
 		void toDelete();
 	
 		void drawComponentsInEditor();
+		void drawScriptsInEditor();
 		std::string toJson();
 	};
 }
