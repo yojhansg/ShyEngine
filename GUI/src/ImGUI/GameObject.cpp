@@ -249,6 +249,10 @@ int PEditor::GameObject::getId()
 {
 	return id;
 }
+int PEditor::GameObject::getRenderOrder()
+{
+	return renderOrder;
+}
 void PEditor::GameObject::setVisible(bool visible)
 {
 	this->visible = visible;

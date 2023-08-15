@@ -70,6 +70,8 @@ namespace PEditor {
 		std::string getName();
 		int getId();
 
+		int getRenderOrder();
+
 		bool isVisible();
 		void setVisible(bool visible);
 
