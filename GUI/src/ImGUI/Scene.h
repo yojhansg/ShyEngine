@@ -16,6 +16,9 @@ namespace PEditor {
 	class GameObject;
 };
 
+#define SCENE_WIN_WIDTH_RATIO 0.6f
+#define SCENE_WIN_HEIGHT_RATIO 0.7f
+
 namespace PEditor {
 	class Scene : public Window
 	{

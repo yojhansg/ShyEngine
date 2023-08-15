@@ -40,6 +40,8 @@ void ImGUIManager::initImGUI()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigDockingWithShift = true;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -134,7 +136,7 @@ void ImGUIManager::initWindows()
 	hierarchy = new PEditor::Hierarchy();
 	addWindow(hierarchy);
 
-	//FILE EXPLORER
+	////FILE EXPLORER
 	fileExplorer = new PEditor::FileExplorer();
 	addWindow(fileExplorer);
 
@@ -162,8 +164,8 @@ void ImGUIManager::initSDL()
 		// ERROR HANDLING
 	}
 
-	originalWindowSize = new ImVec2(1920, 1080);
-	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080);
+	originalWindowSize = new ImVec2(SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
+	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
 	createSDLRenderer();
 }
 
@@ -206,7 +208,7 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
-	gameSize = new ImVec2{ 1080, 720 };
+	gameSize = new ImVec2{ GAME_WIDTH, GAME_HEIGHT };
 
 	initImGUI();
 	initWindows();

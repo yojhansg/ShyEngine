@@ -7,25 +7,25 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "ScriptCreation.h"
+#include "Components.h"
+#include "Hierarchy.h"
 
 namespace fs = std::filesystem;
 
 
-PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoResize | NoCollapse | NoMove)
+PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	ImVec2 windowSize = ImVec2(mainWindowSize.x, 297 * mainWindowSize.y / 1080);
+    windowOriWidth = mainWindowSize.x;
+    windowOriHeight = mainWindowSize.y * FILEEXPLORER_WIN_HEIGHT_RATIO;
 
-    windowOriWidth = windowSize.x;
-    windowOriHeight = windowSize.y;
+    windowOriPosX = 0;
+    windowOriPosY = mainWindowSize.y - windowOriHeight;
 
-	setSize(ImVec2(windowSize.x, windowSize.y));
-	setPosition(ImVec2(0, 784 * mainWindowSize.y / 1080));
-
-    windowOriPosX = windowPosX;
-    windowOriPosY = windowPosY;
+    setSize(ImVec2(windowOriWidth, windowOriHeight));
+    setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
     char buffer[FILENAME_MAX];
     _getcwd(buffer, FILENAME_MAX);
@@ -146,16 +146,49 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
 void PEditor::FileExplorer::render()
 {
+    ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+    ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
+    PEditor::ComponentWindow* components = imGUIManager->getComponents();
+    PEditor::Hierarchy* hierarchy = imGUIManager->getHierarchy();
 
-    // Draw the file explorer
+    if (focused) {
+        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
+    }
+    else {
+        float sizeYToConstraint;
+
+        if (components->isFocused()) {
+            sizeYToConstraint = components->getSize().y;
+        }
+        else {
+            sizeYToConstraint = hierarchy->getSize().y;
+        }
+
+        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 25), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 25));
+    }
+
+    focused = false;
+
+    // Draw the file explorer 
     ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
-    ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
+    if (ImGui::IsWindowFocused()) {
+        focused = true;
+    }
 
-    ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
+    ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
+    ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
+    windowWidth = imGUIWindowSize.x;
+    windowHeight = imGUIWindowSize.y;
+    windowPosX = imGUIWindowPos.x;
+    windowPosY = imGUIWindowPos.y;
+
+    ImGui::SetWindowPos(ImVec2(0, mainWindowSize.y - windowHeight));
+    ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
     drawFileExplorerWindow();
 
     ImGui::End();
+   
 
 }
