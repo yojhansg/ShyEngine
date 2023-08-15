@@ -194,9 +194,14 @@ PEditor::GameObject::GameObject(std::string& path)
 		addComponent(imageComponent);
 	}
 
-	//Temporal: hacemos que el nombre del gameObject sea el nombre de la imagen
-	std::size_t extensionPos = path.find_last_of('.');
-    name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+	if (path != "") {
+		//Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
+		std::size_t extensionPos = path.find_last_of('.');
+		name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+	}
+	else {
+		name = "Empty gameobject";
+	}
 
 	pos = new ImVec2(0, 0);
 	size = new ImVec2(100, 100);

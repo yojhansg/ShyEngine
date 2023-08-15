@@ -64,6 +64,10 @@ void PEditor::Hierarchy::render()
 	ImGui::SetWindowPos(ImVec2(0, menuBarHeight));
 	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
+	if (ImGui::Button("Add empty gameobject")) {
+		scene->addGameObject("");
+	}
+
 	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {
 
 		ImGui::Text("Visible");
