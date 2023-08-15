@@ -121,38 +121,31 @@ namespace Components {
 
 	std::string Attribute::toJson()
 	{
-		nlohmann::ordered_json j;
-		nlohmann::ordered_json vectorJson;
-		nlohmann::ordered_json colorJson;
+		std::string stringValue;
 
 		switch (type)
 		{
 		case AttributesType::FLOAT:
-			j[name] = value.value.valueFloat;
+			return std::to_string(value.value.valueFloat);
 			break;
 		case AttributesType::VECTOR2:
-			vectorJson.push_back(value.value.valueVector2.x);
-			vectorJson.push_back(value.value.valueVector2.y);
-
-			j[name] = vectorJson;
+			stringValue = std::to_string(value.value.valueVector2.x) + "," + std::to_string(value.value.valueVector2.y);
+			return stringValue;
 			break;
 		case AttributesType::STRING:
-			j[name] = value.valueString;
+			return value.valueString;
 			break;
 		case AttributesType::BOOL:
-			j[name] = value.value.valueBool;
+			return std::to_string(value.value.valueBool);
 			break;
 		case AttributesType::COLOR:
-			colorJson.push_back(value.value.valueColor.r);
-			colorJson.push_back(value.value.valueColor.g);
-			colorJson.push_back(value.value.valueColor.b);
-
-			j[name] = colorJson;
+			stringValue = std::to_string(value.value.valueColor.r) + "," + std::to_string(value.value.valueColor.g) + "," + std::to_string(value.value.valueColor.b);
+			return stringValue;
 			break;
 		default:
+			return "";
 			break;
 		}
-		return j.dump(2);
 	}
 
 	std::string Component::toJson() {
@@ -162,13 +155,14 @@ namespace Components {
 
 		nlohmann::ordered_json attributesJson;
 		for (auto it = attributes.begin(); it != attributes.end(); it++) {
-			attributesJson.push_back(j.parse(it->second.toJson()));
+			attributesJson[it->first] = it->second.toJson();
 		}
 
 		j["attributes"] = attributesJson;
 
 		return j.dump(2);
 	}
+
 	Method::Method()
 	{
 	}
