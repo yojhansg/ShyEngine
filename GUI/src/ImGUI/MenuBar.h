@@ -4,18 +4,20 @@
 class ImGUIManager;
 
 namespace PEditor{
+    class GameObject;
+
     class MenuBar: public Window
     {
      private:
-         float originalFramePadding;
          ImGUIManager* imGuiManager;
 
          bool shouldOpenRenamePopup;
+
+         void showRenamePopup(GameObject* gameObject);
 
      public:
         MenuBar();
 
         virtual void render();
-        virtual void update();
     };
 };

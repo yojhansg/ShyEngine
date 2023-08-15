@@ -4,43 +4,74 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "ComponentInfo.h"
+#include "Window.h"
 #include "ComponentManager.h"
+#include "FileExplorer.h"
 
 
-PEditor::ComponentWindow::ComponentWindow() : Window("Components", NoResize | NoCollapse | NoMove)
+PEditor::ComponentWindow::ComponentWindow() : Window("Components", NoCollapse | NoMove)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	ImVec2 windowSize = ImVec2(417 * mainWindowSize.x / 1920, 755 * mainWindowSize.y / 1080);
+	windowOriWidth = mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
+	windowOriHeight = mainWindowSize.y * COMPONENTS_WIN_HEIGHT_RATIO;
 
-	windowOriWidth = windowSize.x;
-	windowOriHeight = windowSize.y;
+	float menuBarHeight = ImGui::GetFrameHeight();
 
-	setSize(ImVec2(windowSize.x, windowSize.y));
-	setPosition(ImVec2(846 * mainWindowSize.x / 1080, 20));
+	windowOriPosX = mainWindowSize.x - windowOriWidth;
+	windowOriPosY = menuBarHeight;
 
-	windowOriPosX = windowPosX;
-	windowOriPosY = windowPosY;
-
+	setSize(ImVec2(windowOriWidth, windowOriHeight));
+	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 }
 
 void PEditor::ComponentWindow::render()
 {
 
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
 	PEditor::Scene* scene = imGUIManager->getScene();
+	PEditor::FileExplorer* fileExplorer = imGUIManager->getFileExplorer();
 
 	GameObject* gameObject = scene->getSelectedGameObject();
 
 
+	if (focused) {
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 25), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 25));
+	}
+	else {
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 25), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 25));
+	}
+
+	focused = false;
+
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
+	if (ImGui::IsWindowFocused()) {
+		focused = true;
+	}
 
+	ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
+	ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
+
+	if (windowPosX < mainWindowSize.x - mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO) {
+		windowPosX = mainWindowSize.x - mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
+		windowWidth = mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
+	}
+	else {
+		windowPosX = imGUIWindowPos.x;
+		windowWidth = mainWindowSize.x - imGUIWindowPos.x;
+	}
+
+	windowPosY = imGUIWindowPos.y;
+	windowHeight = imGUIWindowSize.y;
+
+	float menuBarHeight = ImGui::GetFrameHeight();
+
+	ImGui::SetWindowPos(ImVec2(windowPosX, menuBarHeight));
 	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-
-	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
 
 	if (gameObject != nullptr) {
 

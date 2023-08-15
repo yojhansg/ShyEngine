@@ -17,6 +17,11 @@ namespace PEditor {
 	class ProjectsManager;
 };
 
+#define SDL_WIN_WIDTH 1920
+#define SDL_WIN_HEIGHT 1080
+
+#define GAME_WIDTH 1920
+#define GAME_HEIGHT 1080
 
 class ImGUIManager
 {

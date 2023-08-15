@@ -50,6 +50,7 @@ namespace PEditor {
         int windowOriWidth, windowOriHeight;
         int windowOriPosX, windowOriPosY;
 
+        bool focused;
     public:
         
         Window(std::string windowName, WindowFlags flags);
@@ -63,6 +64,8 @@ namespace PEditor {
         virtual void update();
         virtual void render();
         virtual void handleInput(SDL_Event* event);
+
+        bool isFocused();
 
         virtual ~Window();
     };
