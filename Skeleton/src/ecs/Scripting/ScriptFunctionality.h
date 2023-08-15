@@ -35,8 +35,8 @@ publish:
 	std::string Entity_CurrentName();
 
 	//TODO: no me convence el nombre
-	void Entity_Event(ECS::Entity* ent, cstring name);
-	void GlobalEvent(cstring name);
+	void Event_EntityEvent(ECS::Entity* ent, cstring name);
+	void Event_GlobalEvent(cstring name);
 
 	std::string Graph();
 

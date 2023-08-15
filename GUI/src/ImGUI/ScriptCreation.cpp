@@ -57,13 +57,12 @@ void PEditor::ScriptCreation::AddEvent(const std::string& name, ScriptCreationUt
 {
 	events.emplace(name, event);
 
-	AddNode(event, false);
+	AddNode(event);
 }
 
-void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node, bool insertValidNode)
+void PEditor::ScriptCreation::AddNode(ScriptCreationUtilities::ScriptNode* node)
 {
-	int nodeIdx = insertValidNode ? nodes.size() : -1;
-	node->SetID(nodeIdx);
+	node->SetID(nodes.size());
 	nodes.push_back(node);
 }
 
@@ -87,36 +86,57 @@ void PEditor::ScriptCreation::Save()
 	auto& allNodes = GetNodes();
 
 	json root;
-	json functions = json::array(), consts = json::array();
+	json functions = json::array(), consts = json::array(), forks = json::array();
 
-	root["nodeCount"] = allNodes.size();
+
+	json eventData = json::array(), comments = json::array();
+
 
 	std::vector<ScriptCreationUtilities::ScriptNode*> serializedValues;
 
 	for (auto node : allNodes) {
 
-		if (node->GetId() < 0) {
-			//es un evento
-			continue;
-		}
 
-		if (node->GetType() == ScriptCreationUtilities::ScriptNode::Node::Method) {
+		switch (node->GetType())
+		{
 
+		case ScriptCreationUtilities::ScriptNode::Node::Method:
 			functions.push_back(node->ToJson());
-		}
-
-
-		else if (node->GetType() == ScriptCreationUtilities::ScriptNode::Node::Input) {
-
-
+			break;
+		case ScriptCreationUtilities::ScriptNode::Node::Input:
 			consts.push_back(node->ToJson());
+			break;
+		case ScriptCreationUtilities::ScriptNode::Node::Fork:
+			forks.push_back(node->ToJson());
+			break;
+		case ScriptCreationUtilities::ScriptNode::Node::Event:
+			eventData.push_back(node->ToJson());
+			break;
+		case ScriptCreationUtilities::ScriptNode::Node::Comment:
+			comments.push_back(node->ToJson());
+			break;
+
+		default:
+			break;
 		}
+
 	}
 
-
-
+	root["nodeCount"] = allNodes.size();
 	root["functions"] = functions;
 	root["consts"] = consts;
+	root["forks"] = forks;
+	root["events"] = eventData;
+	root["comments"] = comments;
+
+
+	for (auto& event : events) {
+
+		auto next = event.second->GetScriptFlow()->GetNext();
+		if (next != nullptr)
+			root[event.first] = next->GetId();
+	}
+
 
 	std::ofstream file("scripts/" + std::string(menuBar->GetName()) + ".script");
 
@@ -124,7 +144,10 @@ void PEditor::ScriptCreation::Save()
 
 	file.close();
 
+
+
 	ScriptCreation::ResetModified();
+	Components::ComponentManager::ReloadScripts();
 }
 
 void PEditor::ScriptCreation::Load()
@@ -162,14 +185,18 @@ void PEditor::ScriptCreation::Load()
 
 	json& functions = file["functions"];
 	json& consts = file["consts"];
+	json& forks = file["forks"];
+	json& comments = file["comments"];
+	json& events = file["events"];
 
 	SetNodeCount(file["nodeCount"].get<int>());
 
 
 	struct MethodInput {
 		class ScriptCreationUtilities::ScriptMethod* node;
-		int pos;
-		int inputNode;
+		std::vector<int> input;
+
+		int next;
 	};
 
 	std::vector<MethodInput> methodInfo;
@@ -193,16 +220,19 @@ void PEditor::ScriptCreation::Load()
 		}
 
 
-		int idx = 0;
+		std::vector<int> input;
 		for (auto& in : funcNode["input"]) {
 
-			int inputNode = in.get<int>();
-			if (inputNode >= 0)
-				methodInfo.push_back({ method, idx, inputNode });
+			input.push_back(in.get<int>());
 
-			idx++;
 		}
 
+
+		int next = -1;
+		if (funcNode.contains("next"))
+			next = funcNode["next"].get<int>();
+
+		methodInfo.push_back({ method, input, next });
 
 
 		method->FromJson(funcNode);
@@ -230,7 +260,7 @@ void PEditor::ScriptCreation::Load()
 		}
 		else if (typeStr == "string") {
 			type = ::Components::AttributesType::STRING;
-			value.valueString = constNode["value"].get<float>();
+			value.valueString = constNode["value"].get<std::string>();
 		}
 		else if (typeStr == "bool") {
 			type = ::Components::AttributesType::BOOL;
@@ -251,11 +281,90 @@ void PEditor::ScriptCreation::Load()
 	}
 
 
-	for (auto& mi : methodInfo) {
 
-		mi.node->SetInput(mi.pos, GetNodes()[mi.inputNode]);
+	struct ForkData {
+		class ScriptCreationUtilities::ScriptFork* fork;
+		int condition;
+		int A;
+		int B;
+	};
+
+	std::vector<ForkData> forkData;
+
+
+	for (auto& forkInfo : forks) {
+
+
+		ScriptCreationUtilities::ScriptFork* fork = new ScriptCreationUtilities::ScriptFork(
+			(ScriptCreationUtilities::ScriptFork::Fork)forkInfo["type"].get<int>()
+		);
+
+		fork->FromJson(forkInfo);
+
+		forkData.push_back({
+			fork, forkInfo["condition"].get<int>(),
+			forkInfo["A"].get<int>(), forkInfo["B"].get<int>() });
+
+		SetNode(fork->GetId(), fork);
 	}
 
+
+	for (auto& commentData : comments) {
+
+		ScriptCreationUtilities::ScriptComment* comment = new ScriptCreationUtilities::ScriptComment(
+			commentData["comment"].get<std::string>()
+		);
+
+		comment->FromJson(commentData);
+
+		comment->SetSize(commentData["w"].get<float>(), commentData["h"].get<float>());
+
+		SetNode(comment->GetId(), comment);
+	}
+
+
+	for (auto& eventData : events) {
+
+		std::string type = eventData["type"].get<std::string>();
+		ScriptCreationUtilities::ScriptEvent* event = new ScriptCreationUtilities::ScriptEvent(
+			type
+		);
+
+		event->FromJson(eventData);
+
+		if (file.contains(type)) {
+			int idx = file[type].get<int>();
+			event->GetScriptFlow()->SetNext(GetNodes()[idx]->GetScriptFlow());
+		}
+		SetNode(event->GetId(), event);
+	}
+
+
+	for (auto& mi : methodInfo) {
+
+		int idx = 0;
+		for (int i : mi.input) {
+
+			if (i >= 0)
+				mi.node->SetInput(idx, GetNodes()[i]);
+
+			idx++;
+		}
+
+		if (mi.next >= 0)
+			mi.node->SetNext(GetNodes()[mi.next]->GetScriptFlow());
+	}
+
+
+	for (auto& fd : forkData) {
+
+		if (fd.condition >= 0)
+			fd.fork->SetCondition(GetNodes()[fd.condition]);
+		if (fd.A >= 0)
+			fd.fork->SetA(GetNodes()[fd.A]->GetScriptFlow());
+		if (fd.B >= 0)
+			fd.fork->SetB(GetNodes()[fd.B]->GetScriptFlow());
+	}
 }
 
 void PEditor::ScriptCreation::GetScrollPosition(int* x, int* y)
@@ -478,4 +587,5 @@ void PEditor::ScriptCreation::ClearScript()
 		delete node;
 	}
 	nodes.clear();
+	events.clear();
 }

@@ -42,7 +42,7 @@ namespace ECS {
 		void Set(cstring name, cVariable variable);
 
 		Scripting::Variable GetSerialisedValue(cstring name);
-		void SeterialisedValue(cstring name, cVariable val);
+		void SetSerialisedValue(cstring name, cVariable val);
 
 	private:
 

@@ -1,9 +1,10 @@
-#include "ImGUIManager.h"
+﻿#include "ImGUIManager.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 #include "Window.h"
 #include "SDL.h"
+#include "SDL_image.h"
 #include <iostream>
 #include "Scene.h"
 #include "GameObject.h"
@@ -15,8 +16,6 @@
 #include "ScriptCreation.h"
 #include "ComponentManager.h"
 #include "ProjectsManager.h"
-
-#include "ProjectSelectionDialog.h"
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
@@ -147,9 +146,6 @@ void ImGUIManager::initWindows()
 	scriptCreation = new PEditor::ScriptCreation();
 	addWindow(scriptCreation);
 
-	projectsManager = new PEditor::ProjectsManager();
-	addWindow(projectsManager);
-
 }
 
 void ImGUIManager::initSDL()
@@ -167,6 +163,13 @@ void ImGUIManager::initSDL()
 	originalWindowSize = new ImVec2(SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
 	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
 	createSDLRenderer();
+
+
+
+	SDL_Surface* surf = IMG_Load("shyIcon2.png");
+
+	SDL_SetWindowIcon(window, surf);
+
 }
 
 void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
@@ -211,13 +214,11 @@ void ImGUIManager::init()
 	gameSize = new ImVec2{ GAME_WIDTH, GAME_HEIGHT };
 
 	initImGUI();
-	initWindows();
 
-	changeEditorState(state);
-
-	Components::ComponentManager::Initialise();
-	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
-	Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
+    Components::ComponentManager::Initialise();
+    Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
+    Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
+	Components::ComponentManager::ReadScripts("Scripts");
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -232,19 +233,18 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-	/* SDL_SetWindowSize(window, 700, 500);
+    SDL_SetWindowSize(window, 1080, 720);
 
-	 PEditor::ProjectSelectionDialog dialog;
-	 auto result = dialog.ManageProjectSelectionDialog(renderer);
+    PEditor::ProjectsManager dialog;
+    auto result = dialog.ManageProjectSelection(renderer);
 
-	 if (result == PEditor::ProjectSelectionDialog::Result::Closed)
-		 return;
+    if (result == PEditor::ProjectsManager::Result::CLOSED)
+        return;
 
-	 SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
-	 SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-	 initWindows();
- ;*/
+	initWindows();
 
 	while (!exitGame)
 	{
@@ -261,21 +261,17 @@ void ImGUIManager::exit()
 }
 
 void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
-	switch (state)
-	{
-	case ImGUIManager::PROJECTS_WINDOW:
-		//SDL_SetWindowSize(window, 1280, 720);
-		break;
-	case ImGUIManager::EDITOR_WINDOW:
-		//SDL_SetWindowSize(window, 1920, 1080);
-		break;
-	case ImGUIManager::SCRIPTING_WINDOW:
-		//SDL_SetWindowSize(window, 1920, 1080);
-		scriptCreation->Load();
-		break;
-	default:
-		break;
-	}
+
+    switch (state)
+    {
+        case ImGUIManager::EDITOR_WINDOW:
+            break;
+        case ImGUIManager::SCRIPTING_WINDOW:
+            scriptCreation->Load();
+            break;
+        default:
+            break;
+    }
 
 	this->state = state;
 }
@@ -283,24 +279,22 @@ void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
 
 void ImGUIManager::update()
 {
-	for (auto window : windows)
-	{
-		switch (state)
-		{
-		case ImGUIManager::PROJECTS_WINDOW:
-			if (window == projectsManager) window->update();
-			break;
-		case ImGUIManager::SCRIPTING_WINDOW:
-			if (window == scriptCreation) window->update();
-			break;
-		case ImGUIManager::EDITOR_WINDOW:
-			if (window != projectsManager && window != scriptCreation)
-				window->update();
-			break;
-		default:
-			break;
-		}
-	}
+    for (auto window : windows)
+    {
+        switch (state)
+        {
+            case ImGUIManager::SCRIPTING_WINDOW:
+                if (window == scriptCreation) 
+                    window->update();
+                break;
+            case ImGUIManager::EDITOR_WINDOW:
+                if (window != scriptCreation)
+                    window->update();
+                break;
+            default:
+                break;
+        }
+    }
 
 }
 
@@ -314,24 +308,22 @@ void ImGUIManager::render()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	for (auto window : windows)
-	{
-		switch (state)
-		{
-		case ImGUIManager::PROJECTS_WINDOW:
-			if (window == projectsManager) window->render();
-			break;
-		case ImGUIManager::SCRIPTING_WINDOW:
-			if (window == scriptCreation) window->render();
-			break;
-		case ImGUIManager::EDITOR_WINDOW:
-			if (window != projectsManager && window != scriptCreation)
-				window->render();
-			break;
-		default:
-			break;
-		}
-	}
+    for (auto window : windows)
+    {
+        switch (state)
+        {
+        case ImGUIManager::SCRIPTING_WINDOW:
+            if (window == scriptCreation) 
+                window->render();
+            break;
+        case ImGUIManager::EDITOR_WINDOW:
+            if (window != scriptCreation)
+                window->render();
+            break;
+        default:
+            break;
+        }
+    }
 
 	// Rendering
 	ImGui::Render();
@@ -355,11 +347,9 @@ void ImGUIManager::handleInput()
 		if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 			exitGame = true;
 
-		for (auto window : windows)
-		{
-			window->handleInput(&event);
-		}
-	}
+        for (auto window : windows)
+            window->handleInput(&event);
+    }
 }
 
 void ImGUIManager::addWindow(PEditor::Window* window)
@@ -383,7 +373,6 @@ ImVec2 ImGUIManager::getOriginalWindowSize()
 }
 
 
-
 ImGUIManager::~ImGUIManager()
 {
 	Components::ComponentManager::Release();
@@ -402,8 +391,9 @@ ImGUIManager::~ImGUIManager()
 		delete window;
 	}
 
-	delete originalWindowSize;
-	delete gameSize;
+    delete originalWindowSize;
+    delete gameSize;
+
 }
 
 ImVec2 ImGUIManager::getMainWindowSize()
@@ -423,7 +413,6 @@ PEditor::Scene* ImGUIManager::getScene()
 {
 	return scene;
 }
-
 
 PEditor::MenuBar* ImGUIManager::getMenuBar()
 {
@@ -448,10 +437,5 @@ PEditor::ComponentWindow* ImGUIManager::getComponents()
 PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
 {
 	return scriptCreation;
-}
-
-PEditor::ProjectsManager* ImGUIManager::getProjectsManager()
-{
-	return projectsManager;
 }
 

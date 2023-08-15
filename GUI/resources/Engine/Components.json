@@ -32,30 +32,6 @@
         ],
         "methods": [
             {
-                "ChangeAnimationPath": {
-                    "input": [
-                        {
-                            "name": "str",
-                            "type": "cstring"
-                        },
-                        {
-                            "name": "frame",
-                            "type": "int"
-                        },
-                        {
-                            "name": "animation",
-                            "type": "int"
-                        },
-                        {
-                            "name": "column",
-                            "type": "int"
-                        },
-                        {
-                            "name": "row",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "str",
@@ -92,14 +68,6 @@
                 "return": "void"
             },
             {
-                "SetFrame": {
-                    "input": [
-                        {
-                            "name": "idx",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "idx",
@@ -110,14 +78,6 @@
                 "return": "void"
             },
             {
-                "SetAnimation": {
-                    "input": [
-                        {
-                            "name": "idx",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "idx",
@@ -138,14 +98,6 @@
                 "return": "int"
             },
             {
-                "SetAnimationLenght": {
-                    "input": [
-                        {
-                            "name": "lenght",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "lenght",
@@ -301,27 +253,7 @@
                     }
                 ],
                 "name": "setSrcRect",
-                "return": "void",
-                "setSrcRect": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "int"
-                        },
-                        {
-                            "name": "y",
-                            "type": "int"
-                        },
-                        {
-                            "name": "w",
-                            "type": "int"
-                        },
-                        {
-                            "name": "h",
-                            "type": "int"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": [
@@ -335,19 +267,7 @@
                     }
                 ],
                 "name": "setRotaionPoint",
-                "return": "void",
-                "setRotaionPoint": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "int"
-                        },
-                        {
-                            "name": "y",
-                            "type": "int"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -355,14 +275,6 @@
                 "return": "Utilities::Vector2D"
             },
             {
-                "ChangeTexture": {
-                    "input": [
-                        {
-                            "name": "texturePath",
-                            "type": "cstring"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "texturePath",
@@ -380,15 +292,7 @@
                     }
                 ],
                 "name": "setFlipMode",
-                "return": "void",
-                "setFlipMode": {
-                    "input": [
-                        {
-                            "name": "flipmode",
-                            "type": "int"
-                        }
-                    ]
-                }
+                "return": "void"
             }
         ]
     },
@@ -414,14 +318,6 @@
         ],
         "methods": [
             {
-                "changeMusic": {
-                    "input": [
-                        {
-                            "name": "musicPath",
-                            "type": "cstring"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "musicPath",
@@ -463,29 +359,9 @@
                     }
                 ],
                 "name": "playWithFadeIn",
-                "playWithFadeIn": {
-                    "input": [
-                        {
-                            "name": "seconds",
-                            "type": "float"
-                        },
-                        {
-                            "name": "loops=-1",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "return": "void"
             },
             {
-                "fadeOut": {
-                    "input": [
-                        {
-                            "name": "seconds",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "seconds",
@@ -518,15 +394,7 @@
                     }
                 ],
                 "name": "setVolume",
-                "return": "void",
-                "setVolume": {
-                    "input": [
-                        {
-                            "name": "volume",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -541,15 +409,7 @@
                     }
                 ],
                 "name": "shouldPlayOnStart",
-                "return": "void",
-                "shouldPlayOnStart": {
-                    "input": [
-                        {
-                            "name": "play",
-                            "type": "bool"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": [
@@ -559,15 +419,7 @@
                     }
                 ],
                 "name": "setLoop",
-                "return": "void",
-                "setLoop": {
-                    "input": [
-                        {
-                            "name": "loop",
-                            "type": "bool"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -630,18 +482,6 @@
                 "return": "int"
             },
             {
-                "SetPositioned": {
-                    "input": [
-                        {
-                            "name": "position",
-                            "type": "Utilities::Vector2D"
-                        },
-                        {
-                            "name": "size",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "position",
@@ -656,26 +496,6 @@
                 "return": "void"
             },
             {
-                "SetStreched": {
-                    "input": [
-                        {
-                            "name": "left",
-                            "type": "int"
-                        },
-                        {
-                            "name": "top",
-                            "type": "int"
-                        },
-                        {
-                            "name": "right",
-                            "type": "int"
-                        },
-                        {
-                            "name": "bottom",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "left",
@@ -698,14 +518,6 @@
                 "return": "void"
             },
             {
-                "Move": {
-                    "input": [
-                        {
-                            "name": "position",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "position",
@@ -716,14 +528,6 @@
                 "return": "void"
             },
             {
-                "MoveTo": {
-                    "input": [
-                        {
-                            "name": "position",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "position",
@@ -734,14 +538,6 @@
                 "return": "void"
             },
             {
-                "SetSize": {
-                    "input": [
-                        {
-                            "name": "size",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "size",
@@ -782,14 +578,6 @@
                 "return": "int"
             },
             {
-                "SetTop": {
-                    "input": [
-                        {
-                            "name": "pos",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "pos",
@@ -800,14 +588,6 @@
                 "return": "void"
             },
             {
-                "SetLeft": {
-                    "input": [
-                        {
-                            "name": "pos",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "pos",
@@ -818,14 +598,6 @@
                 "return": "void"
             },
             {
-                "SetRight": {
-                    "input": [
-                        {
-                            "name": "pos",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "pos",
@@ -836,14 +608,6 @@
                 "return": "void"
             },
             {
-                "SetBottom": {
-                    "input": [
-                        {
-                            "name": "pos",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "pos",
@@ -859,14 +623,6 @@
                 "return": "Utilities::Vector2D"
             },
             {
-                "SetAnchor": {
-                    "input": [
-                        {
-                            "name": "anchor",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "anchor",
@@ -907,14 +663,6 @@
                 "return": "Utilities::Color"
             },
             {
-                "SetColor": {
-                    "input": [
-                        {
-                            "name": "color",
-                            "type": "Utilities::Color"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "color",
@@ -930,14 +678,6 @@
                 "return": "float"
             },
             {
-                "SetRenderScale": {
-                    "input": [
-                        {
-                            "name": "newRenderScale",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "newRenderScale",
@@ -953,14 +693,6 @@
                 "return": "void"
             },
             {
-                "SetInteractable": {
-                    "input": [
-                        {
-                            "name": "value",
-                            "type": "bool"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "value",
@@ -1006,14 +738,6 @@
         ],
         "methods": [
             {
-                "SetTexture": {
-                    "input": [
-                        {
-                            "name": "texture",
-                            "type": "std::string"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "texture",
@@ -1068,14 +792,6 @@
                 "return": "int"
             },
             {
-                "SetFit": {
-                    "input": [
-                        {
-                            "name": "fit",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "fit",
@@ -1096,14 +812,6 @@
                 "return": "int"
             },
             {
-                "SetVerticalAlignment": {
-                    "input": [
-                        {
-                            "name": "align",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "align",
@@ -1114,14 +822,6 @@
                 "return": "void"
             },
             {
-                "SetHorizontalAlignment": {
-                    "input": [
-                        {
-                            "name": "align",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "align",
@@ -1137,14 +837,6 @@
                 "return": "std::string"
             },
             {
-                "SetFont": {
-                    "input": [
-                        {
-                            "name": "font",
-                            "type": "std::string"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "font",
@@ -1160,14 +852,6 @@
                 "return": "std::string"
             },
             {
-                "SetText": {
-                    "input": [
-                        {
-                            "name": "text",
-                            "type": "std::string"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "text",
@@ -1183,14 +867,6 @@
                 "return": "int"
             },
             {
-                "SetPointSize": {
-                    "input": [
-                        {
-                            "name": "size",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "size",
@@ -1489,14 +1165,6 @@
                 "return": "bool"
             },
             {
-                "changeTexture": {
-                    "input": [
-                        {
-                            "name": "texturePath",
-                            "type": "cstring"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "texturePath",
@@ -1507,30 +1175,6 @@
                 "return": "void"
             },
             {
-                "addBurst": {
-                    "input": [
-                        {
-                            "name": "time",
-                            "type": "float"
-                        },
-                        {
-                            "name": "particles",
-                            "type": "int"
-                        },
-                        {
-                            "name": "cycles",
-                            "type": "int"
-                        },
-                        {
-                            "name": "rate",
-                            "type": "float"
-                        },
-                        {
-                            "name": "probability",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "time",
@@ -1590,15 +1234,7 @@
                     }
                 ],
                 "name": "setTrigger",
-                "return": "void",
-                "setTrigger": {
-                    "input": [
-                        {
-                            "name": "trigger",
-                            "type": "bool"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1613,15 +1249,7 @@
                     }
                 ],
                 "name": "setFriction",
-                "return": "void",
-                "setFriction": {
-                    "input": [
-                        {
-                            "name": "friction",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1636,15 +1264,7 @@
                     }
                 ],
                 "name": "setBounciness",
-                "return": "void",
-                "setBounciness": {
-                    "input": [
-                        {
-                            "name": "bounciness",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1663,19 +1283,7 @@
                     }
                 ],
                 "name": "setLinearVelocity",
-                "return": "void",
-                "setLinearVelocity": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "float"
-                        },
-                        {
-                            "name": "y",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1718,14 +1326,6 @@
         ],
         "methods": [
             {
-                "changeSound": {
-                    "input": [
-                        {
-                            "name": "soundPath",
-                            "type": "cstring"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "soundPath",
@@ -1767,29 +1367,9 @@
                     }
                 ],
                 "name": "playWithfadeIn",
-                "playWithfadeIn": {
-                    "input": [
-                        {
-                            "name": "seconds",
-                            "type": "int"
-                        },
-                        {
-                            "name": "loops=-1",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "return": "void"
             },
             {
-                "fadeOut": {
-                    "input": [
-                        {
-                            "name": "seconds",
-                            "type": "int"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "seconds",
@@ -1817,15 +1397,7 @@
                     }
                 ],
                 "name": "setVolume",
-                "return": "void",
-                "setVolume": {
-                    "input": [
-                        {
-                            "name": "volume",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1840,15 +1412,7 @@
                     }
                 ],
                 "name": "shouldPlayOnStart",
-                "return": "void",
-                "shouldPlayOnStart": {
-                    "input": [
-                        {
-                            "name": "play",
-                            "type": "bool"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": [
@@ -1858,15 +1422,7 @@
                     }
                 ],
                 "name": "setLoop",
-                "return": "void",
-                "setLoop": {
-                    "input": [
-                        {
-                            "name": "loop",
-                            "type": "bool"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1874,14 +1430,6 @@
                 "return": "bool"
             },
             {
-                "enableSpatialSound": {
-                    "input": [
-                        {
-                            "name": "enable",
-                            "type": "bool"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "enable",
@@ -1904,15 +1452,7 @@
                     }
                 ],
                 "name": "setPanning",
-                "return": "void",
-                "setPanning": {
-                    "input": [
-                        {
-                            "name": "panning",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1927,15 +1467,7 @@
                     }
                 ],
                 "name": "setAudibleDistance",
-                "return": "void",
-                "setAudibleDistance": {
-                    "input": [
-                        {
-                            "name": "distance",
-                            "type": "float"
-                        }
-                    ]
-                }
+                "return": "void"
             },
             {
                 "input": null,
@@ -1971,14 +1503,6 @@
                 "return": "Utilities::Vector2D"
             },
             {
-                "SetLocalPosition": {
-                    "input": [
-                        {
-                            "name": "position",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "position",
@@ -1989,14 +1513,6 @@
                 "return": "void"
             },
             {
-                "SetLocalPositionX": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "x",
@@ -2007,14 +1523,6 @@
                 "return": "void"
             },
             {
-                "SetLocalPositionY": {
-                    "input": [
-                        {
-                            "name": "y",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "y",
@@ -2025,14 +1533,6 @@
                 "return": "void"
             },
             {
-                "SetWorldPosition": {
-                    "input": [
-                        {
-                            "name": "position",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "position",
@@ -2053,14 +1553,6 @@
                 "return": "Utilities::Vector2D"
             },
             {
-                "SetScale": {
-                    "input": [
-                        {
-                            "name": "scale",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "scale",
@@ -2071,14 +1563,6 @@
                 "return": "void"
             },
             {
-                "SetScaleX": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "x",
@@ -2089,14 +1573,6 @@
                 "return": "void"
             },
             {
-                "SetScaleY": {
-                    "input": [
-                        {
-                            "name": "y",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "y",
@@ -2107,14 +1583,6 @@
                 "return": "void"
             },
             {
-                "SetWorldScale": {
-                    "input": [
-                        {
-                            "name": "scale",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "scale",
@@ -2135,14 +1603,6 @@
                 "return": "float"
             },
             {
-                "SetLocalRotation": {
-                    "input": [
-                        {
-                            "name": "rotation",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "rotation",
@@ -2153,14 +1613,6 @@
                 "return": "void"
             },
             {
-                "SetWorldRotation": {
-                    "input": [
-                        {
-                            "name": "rotation",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "rotation",
@@ -2171,14 +1623,6 @@
                 "return": "void"
             },
             {
-                "Translate": {
-                    "input": [
-                        {
-                            "name": "direction",
-                            "type": "Utilities::Vector2D"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "direction",
@@ -2189,14 +1633,6 @@
                 "return": "void"
             },
             {
-                "TranslateX": {
-                    "input": [
-                        {
-                            "name": "x",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "x",
@@ -2207,14 +1643,6 @@
                 "return": "void"
             },
             {
-                "TranslateY": {
-                    "input": [
-                        {
-                            "name": "y",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "y",
@@ -2225,14 +1653,6 @@
                 "return": "void"
             },
             {
-                "Rotate": {
-                    "input": [
-                        {
-                            "name": "rotation",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "rotation",
@@ -2243,14 +1663,6 @@
                 "return": "void"
             },
             {
-                "Scale": {
-                    "input": [
-                        {
-                            "name": "scale",
-                            "type": "float"
-                        }
-                    ]
-                },
                 "input": [
                     {
                         "name": "scale",

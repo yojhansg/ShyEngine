@@ -66,9 +66,6 @@
     <ClInclude Include="..\..\src\ImGUI\ScriptCreationUtilities.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\ProjectSelectionDialog.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\ProjectsManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -126,9 +123,6 @@
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp">
-      <Filter>Archivos de encabezado</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\ProjectSelectionDialog.cpp">
       <Filter>Archivos de encabezado</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp">

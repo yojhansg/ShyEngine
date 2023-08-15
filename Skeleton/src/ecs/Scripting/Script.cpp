@@ -105,7 +105,7 @@ Scripting::Variable ECS::Script::GetSerialisedValue(cstring name)
 	return Scripting::Variable::Null();
 }
 
-void ECS::Script::SeterialisedValue(cstring name, cVariable val)
+void ECS::Script::SetSerialisedValue(cstring name, cVariable val)
 {
 	serializedValues[name] = val;
 }

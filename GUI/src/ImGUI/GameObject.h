@@ -15,6 +15,7 @@ class Camera;
 namespace Components {
 	class Component;
 	class Attribute;
+	class Script;
 }
 
 namespace PEditor {
@@ -27,6 +28,8 @@ namespace PEditor {
 		SDL_Texture* text;
 		SDL_Texture* gizmoText;
 		std::unordered_map<std::string, ::Components::Component&> components;
+
+		std::unordered_map<std::string, Components::Script> scripts;
 
 		ImGUIManager* imGuiManager;
 
@@ -77,7 +80,10 @@ namespace PEditor {
 		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
 		void addComponent(::Components::Component& comp);
+		void addScript(::Components::Script script);
+
 		std::unordered_map<std::string, ::Components::Component&>* getComponents();
+		std::unordered_map<std::string, ::Components::Script>* getScripts();
 
 		void setPosition(ImVec2 newPos);
 		void setName(const std::string newName);
@@ -88,6 +94,7 @@ namespace PEditor {
 		void toDelete();
 	
 		void drawComponentsInEditor();
+		void drawScriptsInEditor();
 		std::string toJson();
 	};
 }

@@ -201,4 +201,14 @@ namespace Components {
 		return input;
 	}
 
+
+	Script::Script(cstring name): name(name)
+	{
+		
+	}
+
+	std::string Script::GetName()
+	{
+		return name;
+	}
 }

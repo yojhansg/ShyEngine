@@ -2,6 +2,9 @@
 #include "nlohmann/json.hpp"
 
 #include <fstream>
+#include <filesystem>
+
+#include <iostream>
 
 using nlohmann::json;
 
@@ -120,6 +123,34 @@ namespace Components {
 		}
 
 		return components;
+	}
+
+	std::vector<Script> ComponentReader::ReadScripts(cstring filePath)
+	{
+
+		if (!std::filesystem::is_directory(filePath)) {
+
+			std::cout << "Ups" << std::endl;
+
+			return std::vector<Script>();
+		}
+
+
+		auto scripts = std::vector<Script>();
+		for (const auto& entry : std::filesystem::directory_iterator(filePath)) {
+
+			if (entry.is_directory()) continue; //TODO: leer en carpetas anidadas
+
+			if (entry.path().extension() != ".script") continue;
+
+			Script script = Script(entry.path().filename().stem().string());
+
+			//TODO: meter los valores que tengan reflexion
+
+			scripts.push_back(script);
+		}
+
+		return scripts;
 	}
 
 }
