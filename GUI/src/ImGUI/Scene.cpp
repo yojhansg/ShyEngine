@@ -47,6 +47,11 @@ ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
 	return ImVec2(mouseX, mouseY);
 }
 
+bool PEditor::Scene::compareGameObjectsRenderOrder(GameObject* a, GameObject* b)
+{
+	return a->getRenderOrder() < b->getRenderOrder();
+}
+
 PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
@@ -113,8 +118,9 @@ void PEditor::Scene::setSelectedGameObject(GameObject* go)
 
 void PEditor::Scene::renderGameObjects()
 {
-	for (auto gameObject : gameObjects) {
+	std::sort(gameObjects.begin(), gameObjects.end(), compareGameObjectsRenderOrder);
 
+	for (auto gameObject : gameObjects) {
 		gameObject->render(renderer, camera);
 	}
 }

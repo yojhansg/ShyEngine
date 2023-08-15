@@ -40,6 +40,8 @@ namespace PEditor {
 
 		ImVec2 getMousePosInsideScene(ImVec2 mousePos);
 
+		static bool compareGameObjectsRenderOrder(GameObject* a, GameObject* b);
+
 	public:
 
 		Scene();
