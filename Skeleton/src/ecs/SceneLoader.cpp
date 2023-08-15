@@ -225,7 +225,6 @@ void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& com
 
 
 
-
 // -------------------------- PROCESS SCRITPS ---------------------------
 
 void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* entity) {

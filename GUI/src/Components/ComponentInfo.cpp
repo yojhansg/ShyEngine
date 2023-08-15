@@ -218,9 +218,9 @@ namespace Components {
 	}
 
 
-	Script::Script(cstring name): name(name)
+	Script::Script(cstring name) : name(name)
 	{
-		
+
 	}
 
 	std::string Script::GetName()
@@ -236,4 +236,49 @@ namespace Components {
 		return attributes;
 	}
 
+
+
+	std::string Script::ToJson() {
+
+		nlohmann::json root;
+
+		for (auto& attr : attributes) {
+
+			nlohmann::json value;
+
+
+			value["type"] = attr.second.getTypeStr();
+
+			switch (attr.second.getType())
+			{
+				case Components::AttributesType::BOOL:
+					value["value"] = attr.second.value.value.valueBool;
+				break;
+				case Components::AttributesType::FLOAT:
+					value["value"] = attr.second.value.value.valueFloat;
+					break;
+				case Components::AttributesType::CHAR:
+					value["value"] = attr.second.value.value.valueChar;
+					break;
+				case Components::AttributesType::STRING:
+					value["value"] = attr.second.value.valueString;
+					break;
+				case Components::AttributesType::VECTOR2:
+					//value["value"] = attr.second.value.value.valueBool;
+					break;
+				case Components::AttributesType::COLOR:
+					//value["value"] = attr.second.value.value.valueBool;
+					break;
+
+			default:
+				break;
+			}
+
+
+			root[attr.first] = value;
+		}
+
+
+		return root.dump(2);
+	}
 }

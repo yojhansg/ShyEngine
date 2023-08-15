@@ -143,7 +143,7 @@ void PEditor::Scene::saveScene()
 
 	j = j.parse(toJson());
 
-	std::string path = "scene.json";
+	std::string path = "Scenes/scene.json";
 
 	std::ofstream outputFile(path);
 	if (outputFile.is_open()) {

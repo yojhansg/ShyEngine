@@ -5,7 +5,8 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include <fstream>
-
+#include <Windows.h>
+#include <tchar.h>
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
 
@@ -48,7 +49,73 @@ void PEditor::MenuBar::render()
             if (ImGui::MenuItem("Play", NULL, false))
             {
                 ImGUIManager::getInstance()->getScene()->saveScene();
-                system("C:/Users/Ivanof18/Desktop/TFG/Skeleton/exes/Main_Debug.exe");
+                
+                //system("Main_Debug.exe");
+
+
+
+                //STARTUPINFO si;
+                //PROCESS_INFORMATION pi;
+
+                //ZeroMemory(&si, sizeof(si));
+                //si.cb = sizeof(si);
+                //ZeroMemory(&pi, sizeof(pi));
+
+                //// Modifica la ruta al programa que deseas ejecutar
+                //const char* programPath = "Main_Debug.exe";
+                //LPTSTR szCmdline = _tcsdup(TEXT("Main_Debug.exe"));
+
+                //// Redirección de salida
+                //si.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+                //si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+                //si.dwFlags |= STARTF_USESTDHANDLES;
+
+                //// Crea el proceso separado
+                //if (CreateProcess(NULL,   // Nombre del módulo
+                //    szCmdline, // Comando a ejecutar
+                //    NULL,   // Atributos de seguridad del proceso
+                //    NULL,   // Atributos de seguridad del proceso
+                //    TRUE,   // Heredar manipuladores
+                //    0,      // Flags de creación
+                //    NULL,   // Variables de entorno
+                //    NULL,   // Directorio de inicio
+                //    &si,    // Información de inicio
+                //    &pi)) { // Información del proceso
+
+                //    // Espera a que el proceso hijo termine
+                //    //WaitForSingleObject(pi.hProcess, INFINITE);
+
+                //    // Cierra los manipuladores
+                //    //CloseHandle(pi.hProcess);
+                //    //CloseHandle(pi.hThread);
+
+                //}
+                //else {
+                //    std::cerr << "Error al crear el proceso." << std::endl;
+                //}
+
+
+                FILE* pipe = _popen("Main_Debug.exe", "r");
+                if (!pipe) {
+                    std::cerr << "Error opening pipe." << std::endl;
+                    return;
+                }
+
+                char buffer[128];
+                std::string result = "";
+
+                // Leer la salida de la tubería y almacenarla en 'result'
+                while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+                    result += buffer;
+                }
+
+                // Cerrar la tubería
+                _pclose(pipe);
+
+                // Mostrar la salida capturada
+                std::cout << "Output of the executed program:\n" << result << std::endl;
+
+
             };
 
             ImGui::MenuItem("Pause", NULL, false);

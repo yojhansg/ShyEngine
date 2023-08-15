@@ -137,6 +137,8 @@ namespace Components {
 
 		void AddAttribute(const std::string& name, Attribute attr);
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
+
+		std::string ToJson();
 	};
 
 }

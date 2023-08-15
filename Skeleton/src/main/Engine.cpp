@@ -36,7 +36,7 @@ Engine::Engine() {
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("clock");
+	DataLoader data = DataLoader::Load("config");
 
 	data.windowSize.set(1920, 1080);
 

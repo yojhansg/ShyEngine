@@ -514,12 +514,29 @@ std::string PEditor::GameObject::toJson()
 
 	j["localRotation"] = std::to_string(rotation);
 
-	nlohmann::ordered_json componentsJson;
+	nlohmann::ordered_json componentsJson = nlohmann::json::array();
 	for (auto it = components.begin(); it != components.end(); it++) {
-		componentsJson.push_back(j.parse(it->second.toJson()));
+
+		auto comp = j.parse(it->second.toJson());
+
+		componentsJson.push_back(comp);
 	}
 
 	j["components"] = componentsJson;
+
+
+	nlohmann::ordered_json scriptsJson;
+	for (auto it = scripts.begin(); it != scripts.end(); it++) {
+		auto scriptJson = j.parse(it->second.ToJson());
+
+		if (scriptJson.is_null())
+			scriptJson = nlohmann::json::array();
+
+		scriptsJson[it->second.GetName()] = scriptJson;
+	}
+
+	j["scripts"] = scriptsJson;
+
 
 	return j.dump(2);
 }

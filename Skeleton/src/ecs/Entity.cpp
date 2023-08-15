@@ -7,7 +7,6 @@
 #include "ConsoleManager.h"
 
 #include "Scripting/Script.h"
-
 namespace ECS {
 
 	Entity::Entity(const std::string& ent_name, int renderOrder) {

@@ -8,7 +8,7 @@ Renderer::Texture::Texture(const std::string& filepath) {
 	//TODO control de errores al crear textura (esta con asserts)
 	
 	// Surface and texture
-	SDL_Surface* surface = IMG_Load(filepath.c_str());
+	SDL_Surface* surface = IMG_Load(("Images/" + filepath).c_str());
 	assert(surface != nullptr, "Couldn't load image: " + filepath);
 
 	texture = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);

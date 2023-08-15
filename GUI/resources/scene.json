@@ -1,13 +1,4 @@
 {
     "name": "scene",
-    "objects": [
-        {
-            "name": "Aguja",
-            "order": 1,
-            "localPosition": "0.000000, 0.000000",
-            "localScale": "100.000000, 100.000000",
-            "localRotation": "0.000000",
-            "components": null
-        }
-    ]
+    "objects": null
 }

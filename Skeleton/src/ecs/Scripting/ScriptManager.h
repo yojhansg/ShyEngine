@@ -27,7 +27,7 @@ namespace Scripting {
 
 		friend class Engine;
 
-		const std::string extension = ".json";
+		const std::string extension = ".script";
 
 
 	public:
