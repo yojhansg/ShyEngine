@@ -2,19 +2,14 @@
     "name": "scene",
     "objects": [
         {
-            "name": "Empty gameobject",
+            "name": "Manager",
             "order": 0,
             "localPosition": "0.000000, 0.000000",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
-                "Saludos": {
-                    "Hola": {
-                        "type": "string",
-                        "value": "Que tal"
-                    }
-                }
+                "Suma": []
             }
         }
     ]
