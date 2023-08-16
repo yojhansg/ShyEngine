@@ -182,18 +182,34 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 {
 	std::unordered_map<int, PEditor::GameObject*> gameObjects = imGuiManager->getScene()->getGameObjects();
 
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), gameObjects.find((int)attr->value.value.valueFloat)->second->getName().c_str())) {
+	GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
+
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), go == nullptr ? nullptr : go->getName().c_str())) {
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
 				attr->value.value.valueFloat  = gameObjects[i]->getId();
 		}
 		ImGui::EndCombo();
 	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button(("X##" + attrName).c_str())) {
+		attr->value.value.valueFloat = -1;
+	}
 }
 
 
 PEditor::GameObject::GameObject(std::string& path)
 {
+	Scene* scene = ImGUIManager::getInstance()->getScene();
+	std::unordered_map<int, PEditor::GameObject*> gameObjects = scene->getGameObjects();
+
+	//Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
+	while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+		GameObject::lastId++;
+	}
+
 	id = GameObject::lastId;
 
 	GameObject::lastId++;
@@ -664,6 +680,8 @@ std::string PEditor::GameObject::toJson()
 		childsJson.push_back(child);
 	}
 
+	j["id"] = id;
+
 	j["childs"] = childsJson;
 
 	j["order"] = renderOrder;
@@ -715,6 +733,7 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
 	PEditor::GameObject* gameObject = new PEditor::GameObject(goName);
 	gameObject->name = goName;
 
+	gameObject->id = jsonData["id"];
 
 	for (const auto& childJson : jsonData["childs"]) {
 		PEditor::GameObject* child = PEditor::GameObject::fromJson(childJson.dump());

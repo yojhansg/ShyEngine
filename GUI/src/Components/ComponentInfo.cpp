@@ -91,7 +91,7 @@ namespace Components {
 			type = AttributesType::CHAR;
 		}
 		else if (typeString == "gameObject") {
-			value.value.valueFloat = 0.0f;
+			value.value.valueFloat = -1.0f;
 			type = AttributesType::GAMEOBJECT;
 		}
 		else {

@@ -2,37 +2,49 @@
     "name": "scene",
     "objects": [
         {
-            "name": "folder",
+            "name": "icon",
+            "id": 0,
             "childs": [],
             "order": 0,
-            "localPosition": "1334.826294, 576.023926",
-            "localScale": "270.000000, 270.000000",
-            "localRotation": "-325.595398",
+            "localPosition": "985.355347, 514.762695",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
             "components": [
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "folder.png"
+                        "fileName": "icon.png"
                     }
                 },
                 {
                     "component": "OverlayButton",
                     "attributes": {
-                        "defaultColor": "0.000000, 0.000000, 0.000000",
-                        "scale": "156.000000",
-                        "downColor": "0.000000, 0.000000, 0.000000",
-                        "hoverColor": "0.000000, 0.000000, 0.000000"
+                        "defaultColor": "-1.000000, 1.000000, 1.000000",
+                        "scale": "0.000000",
+                        "downColor": "-1.000000, 0.631373, 0.701961",
+                        "hoverColor": "-1.000000, 0.000000, 0.000000"
                     }
                 }
             ],
-            "scripts": {
-                "Saludos": {
-                    "Hola": {
-                        "type": "string",
-                        "value": "Hbobo"
+            "scripts": null
+        },
+        {
+            "name": "gizmo",
+            "id": 1,
+            "childs": [],
+            "order": 0,
+            "localPosition": "0.000000, 0.000000",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "gizmo.png"
                     }
                 }
-            }
+            ],
+            "scripts": null
         }
     ]
 }
