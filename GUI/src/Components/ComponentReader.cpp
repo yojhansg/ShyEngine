@@ -203,10 +203,7 @@ namespace Components {
 
 						script.AddAttribute(name, attribute);
 					}
-
-
 				}
-
 			}
 
 

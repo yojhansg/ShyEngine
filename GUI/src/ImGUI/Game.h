@@ -3,6 +3,7 @@
 #include <string>
 #include <Windows.h>
 #include <thread>
+#include <concurrent_queue.h>
 
 namespace PEditor
 {
@@ -20,7 +21,7 @@ namespace PEditor
 		PROCESS_INFORMATION pi;
 
 		std::string path;
-		std::string output;
+		Concurrency::concurrent_queue<std::string> output;
 
 		std::thread gameThread;
 
@@ -42,8 +43,9 @@ namespace PEditor
 		static void CheckEnd();
 		static bool IsRunning();
 
-		static std::string GetOutput();
+		static bool PendingOutput();
 		static std::string FlushOutput();
+
 	};
 
 

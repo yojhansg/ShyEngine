@@ -5,6 +5,7 @@
 #include "ComponentManager.h"
 #include "ImGUIManager.h"
 #include <algorithm>
+#include "Console.h"
 
 void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
 {
@@ -1076,6 +1077,12 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 
 			creator->AddNode(new ScriptComment("Write comment here"));
+		}
+
+
+		if (ImGui::Button("Open console")) {
+
+			Console::ForceOpen();
 		}
 
 

@@ -17,7 +17,7 @@ PEditor::Game::Game(const std::string& path) : path(path)
 
 PEditor::Game::~Game()
 {
-	if(isRunning)
+	if (isRunning)
 		Stop();
 	instance = nullptr;
 }
@@ -64,22 +64,29 @@ bool PEditor::Game::IsRunning()
 	return instance->isRunning;
 }
 
-std::string PEditor::Game::GetOutput()
+bool PEditor::Game::PendingOutput()
 {
-	return std::string();
+	return !instance->output.empty();
 }
 
 std::string PEditor::Game::FlushOutput()
 {
-	std::string out = instance->output;
-	instance->output = "";
-	return out;
+	std::string str;
+
+	if (instance->output.try_pop(str))
+	{
+		return str;
+	}
+
+	return "";
 }
 
 
 
 void PEditor::Game::play()
 {
+	output.clear();
+
 	HANDLE hChildStdoutRead, hChildStdoutWrite;
 	SECURITY_ATTRIBUTES saAttr;
 
@@ -111,7 +118,7 @@ void PEditor::Game::play()
 	game = pi.hProcess;
 
 	gameThread = std::thread(&Game::readOutput, this, hChildStdoutRead, hChildStdoutWrite);
-	
+
 	//gameThread.detach();
 
 	isRunning = true;
@@ -139,9 +146,9 @@ void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite
 		}
 
 		std::string output(buffer, bytesRead);
-		this->output += output;
+		this->output.push(output);
 
-		std::cout << output << std::endl;
+		//std::cout << output << "jeje" << std::endl;
 	}
 
 
