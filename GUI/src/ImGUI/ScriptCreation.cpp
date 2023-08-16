@@ -172,13 +172,11 @@ void PEditor::ScriptCreation::Load()
 	std::string fileName = std::string(menuBar->GetName());
 	if (fileName.size() == 0) {
 
-
 		ScriptCreationUtilities::ScriptEvent* start = new ScriptCreationUtilities::ScriptEvent("start");
 		ScriptCreationUtilities::ScriptEvent* update = new ScriptCreationUtilities::ScriptEvent("update");
 
 		start->SetPosition(250, 250);
 		update->SetPosition(250, 750);
-
 
 		AddEvent("start", start);
 		AddEvent("update", update);
@@ -364,6 +362,7 @@ void PEditor::ScriptCreation::Load()
 			event->GetScriptFlow()->SetNext(GetNodes()[idx]->GetScriptFlow());
 		}
 		SetNode(event->GetId(), event);
+		this->events.emplace(type, event);
 	}
 
 

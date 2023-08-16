@@ -240,6 +240,7 @@ ImGUIManager* ImGUIManager::getInstance()
 void ImGUIManager::loop()
 {
     SDL_SetWindowSize(window, 1080, 720);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 
     PEditor::ProjectsManager dialog;
@@ -287,6 +288,8 @@ void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
 
 void ImGUIManager::update()
 {
+	PEditor::Game::CheckEnd();
+
     for (auto window : windows)
     {
         switch (state)
@@ -303,7 +306,6 @@ void ImGUIManager::update()
                 break;
         }
     }
-
 }
 
 void ImGUIManager::render()

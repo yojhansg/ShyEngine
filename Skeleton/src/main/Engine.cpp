@@ -38,7 +38,7 @@ bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("config");
 
-	data.windowSize.set(1920, 1080);
+	//data.windowSize.set(1920, 1080);
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);

@@ -246,7 +246,7 @@ std::string PEditor::Scene::toJson()
 	//TODO cambiar nombre al que queramos
 	j["name"] = "scene";
 
-	nlohmann::ordered_json gameObjectsJson;
+	nlohmann::ordered_json gameObjectsJson = nlohmann::json::array();
 	for (auto gameObject : gameObjects) {
 		gameObjectsJson.push_back(j.parse(gameObject->toJson()));
 	}

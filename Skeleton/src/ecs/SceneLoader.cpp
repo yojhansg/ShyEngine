@@ -263,7 +263,7 @@ void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* ent
 				std::string vec = attr["value"].get<std::string>();
 				value = (Utilities::Vector2D)vec;
 			}
-			else if (type == "string") {
+			else if (type == "string" ) {
 				std::string vec = attr["value"].get<std::string>();
 				value = vec;
 			}
