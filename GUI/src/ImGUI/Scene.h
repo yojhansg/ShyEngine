@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "Window.h"
+#include <unordered_map>
 
 union SDL_Event;
 
@@ -32,7 +33,7 @@ namespace PEditor {
 
 		Camera* camera;
 
-		std::vector<PEditor::GameObject*> gameObjects;
+		std::unordered_map<int, GameObject*> gameObjects;
 		GameObject* selectedGameObject;
 
 		bool mouseInsideWindow(ImVec2 mousePos);
@@ -48,7 +49,7 @@ namespace PEditor {
 		virtual ~Scene();
 
 		void addGameObject(std::string path);
-		std::vector<PEditor::GameObject*> getGameObjects();
+		std::unordered_map<int, PEditor::GameObject*> getGameObjects();
 
 		GameObject* getSelectedGameObject();
 		void setSelectedGameObject(GameObject* go);
