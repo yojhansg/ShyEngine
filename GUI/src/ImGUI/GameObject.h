@@ -65,6 +65,9 @@ namespace PEditor {
 		void drawGameobject(std::string attrName, ::Components::Attribute* attr);
 
 		void translateChildren(GameObject* go, ImVec2* previousPos);
+		void scaleChildren(GameObject* go, int scaleFactor);
+		void setChildrenVisible(GameObject* go, bool visible);
+		void rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
 
 		GameObject* parent;
 		std::unordered_map<int, GameObject*> children;

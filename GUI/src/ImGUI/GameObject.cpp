@@ -287,7 +287,10 @@ int PEditor::GameObject::getRenderOrder()
 }
 void PEditor::GameObject::setVisible(bool visible)
 {
-	this->visible = visible;
+	if (this->parent == nullptr) {
+		this->visible = visible;
+		setChildrenVisible(this, visible);
+	}
 }
 int PEditor::GameObject::getWidth()
 {
@@ -386,6 +389,44 @@ void PEditor::GameObject::translateChildren(GameObject* go, ImVec2* previousPos)
 
 }
 
+void PEditor::GameObject::scaleChildren(GameObject* go, int scaleFactor)
+{
+	for (auto childPair : go->getChildren()) {
+
+		childPair.second->size->x += scaleFactor;
+		childPair.second->size->y += scaleFactor;
+
+		scaleChildren(childPair.second, scaleFactor);
+	}
+}
+
+void PEditor::GameObject::setChildrenVisible(GameObject* go, bool visible)
+{
+	for (auto childPair : go->getChildren()) {
+
+		childPair.second->visible = visible;
+
+		setChildrenVisible(childPair.second, visible);
+	}
+}
+
+void PEditor::GameObject::rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle)
+{
+	float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
+
+	for (auto child : go->getChildren())
+	{
+		float newX = cos(angleRadians) * (child.second->pos->x - goCenter->pos->x) - sin(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->x;
+		float newY = sin(angleRadians) * (child.second->pos->x - goCenter->pos->x) + cos(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->y;
+
+		child.second->pos->x = newX;
+		child.second->pos->y = newY;
+		child.second->rotation += rotationAngle;
+
+		rotateChildren(child.second, goCenter, rotationAngle);
+	}
+}
+
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
@@ -405,6 +446,18 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 		}
 	}
 
+	if (event->type == SDL_MOUSEBUTTONUP)
+	{
+		if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+		{
+			leftMouseButtonDown = false;
+		}
+
+		if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+		{
+			rightMouseButtonDown = false;
+		}
+	}
 
 
 	if (imGuiManager->getScene()->getSelectedGameObject() == this) {
@@ -412,19 +465,6 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 			if (!rightMouseButtonDown) {
 				rightMouseButtonDown = true;
-			}
-		}
-
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
-			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-			{
-				leftMouseButtonDown = false;
-			}
-
-			if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
-			{
-				rightMouseButtonDown = false;
 			}
 		}
 
@@ -448,22 +488,35 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 				if (rightMouseButtonDown)
 				{
-					rotation += (previousMousePosX - mousePos.x) * 0.5f;
-					rotation += (previousMousePosY - mousePos.y) * 0.5f;
+					float rotationAngle = (previousMousePosX - mousePos.x) * 0.5f + (previousMousePosY - mousePos.y) * 0.5f;
+					rotation += rotationAngle;
+
+					rotateChildren(this, this, rotationAngle);
+
 				}
 			}
 
 			if (event->type == SDL_MOUSEWHEEL) {
+
+				int scaleFactor = 0;
+
 				if (event->wheel.y > 0) // scroll up
 				{
 					size->x += 5;
 					size->y += 5;
+
+					scaleFactor = 5;
+
 				}
 				else if (event->wheel.y < 0) // scroll down
 				{
 					size->x -= 5;
 					size->y -= 5;
+
+					scaleFactor = -5;
 				}
+
+				scaleChildren(this, scaleFactor);
 			}
 		}
 	}
