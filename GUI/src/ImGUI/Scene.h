@@ -54,6 +54,7 @@ namespace PEditor {
 		GameObject* getSelectedGameObject();
 		void setSelectedGameObject(GameObject* go);
 
+		void renderChildGameObjects(GameObject* go);
 		void renderGameObjects();
 		void renderFrame();
 

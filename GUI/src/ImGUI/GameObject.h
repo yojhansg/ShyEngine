@@ -64,6 +64,11 @@ namespace PEditor {
 		void drawChar(std::string attrName, ::Components::Attribute* attr);
 		void drawGameobject(std::string attrName, ::Components::Attribute* attr);
 
+		void translateChildren(GameObject* go, ImVec2* previousPos);
+
+		GameObject* parent;
+		std::unordered_map<int, GameObject*> children;
+
 	public:
 
 		GameObject(std::string& path);
@@ -102,6 +107,14 @@ namespace PEditor {
 		void toDelete();
 	
 		bool isPrefab();
+
+		void setParent(GameObject* go);
+		GameObject* getParent();
+		void removeChild(GameObject* go);
+		void addChild(GameObject* go);
+		std::unordered_map<int, GameObject*> getChildren();
+		bool isAscendant(GameObject* go);
+
 
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();

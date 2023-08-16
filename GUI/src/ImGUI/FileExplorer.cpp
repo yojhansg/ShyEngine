@@ -190,7 +190,7 @@ void PEditor::FileExplorer::render()
             sizeYToConstraint = hierarchy->getSize().y;
         }
 
-        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 25), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 25));
+        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24));
     }
 
     focused = false;

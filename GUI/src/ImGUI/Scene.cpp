@@ -119,15 +119,26 @@ void PEditor::Scene::setSelectedGameObject(GameObject* go)
 }
 
 
+void PEditor::Scene::renderChildGameObjects(GameObject* go)
+{
+	for (auto pair : go->getChildren()) {
+		renderChildGameObjects(pair.second);
+		pair.second->render(renderer, camera);
+	}
+}
+
 void PEditor::Scene::renderGameObjects()
 {
 	std::vector<GameObject*> sortedGameObjects;
 	for (const auto& pair : gameObjects) {
-		sortedGameObjects.push_back(pair.second);
+		if(pair.second->getParent() == nullptr)
+			sortedGameObjects.push_back(pair.second);
 	}
+
 	std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), compareGameObjectsRenderOrder);
 
 	for(auto gO : sortedGameObjects) {
+		renderChildGameObjects(gO);
 		gO->render(renderer, camera);
 	}
 }
@@ -201,7 +212,8 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 	ImVec2 mousePos = ImGui::GetMousePos();
 
 	for (const auto& pair : gameObjects) {
-		pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
+		if(mouseInsideWindow(mousePos))
+			pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
 	}
 
 	if (!(SDL_GetModState() & KMOD_SHIFT)) {
@@ -219,7 +231,7 @@ void PEditor::Scene::render()
 	ImVec2 componentsWindowPos = imGUIManager->getComponents()->getPosition();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-	ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 25), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 25));
+	ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
 
 	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 

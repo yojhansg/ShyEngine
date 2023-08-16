@@ -39,10 +39,10 @@ void PEditor::ComponentWindow::render()
 
 
 	if (focused) {
-		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 25), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 25));
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 24), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 24));
 	}
 	else {
-		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 25), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 25));
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 24));
 	}
 
 	focused = false;

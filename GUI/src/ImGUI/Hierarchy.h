@@ -21,6 +21,11 @@ namespace PEditor {
 		virtual void render();
 	private:
 
+		void handleDragAndDrop(GameObject* source, GameObject* destination);
+
+		bool isChildrenTheSelectedObject(GameObject* go);
+
+		void renderGameObjectHierarchy(GameObject* gameObject, int indentLevel);
 		void showRenamePopup(GameObject* gameObject);
 		void showGameObjectMenu(GameObject* gameObject);
 

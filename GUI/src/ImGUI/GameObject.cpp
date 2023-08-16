@@ -183,6 +183,7 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 	}
 }
 
+
 PEditor::GameObject::GameObject(std::string& path)
 {
 	id = GameObject::lastId;
@@ -192,6 +193,8 @@ PEditor::GameObject::GameObject(std::string& path)
 	imagePath = path;
 
 	prefab = false;
+
+	parent = nullptr;
 
 	text = nullptr;
 
@@ -355,6 +358,26 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 	}
 }
 
+void PEditor::GameObject::translateChildren(GameObject* go, ImVec2* previousPos)
+{
+	for (auto childPair : go->getChildren()) {
+
+		ImVec2 childPos = childPair.second->getPosition();
+
+
+		float xDiff = go->getPosition().x - previousPos->x;
+		float yDiff = go->getPosition().y - previousPos->y;
+
+		previousPos->x = childPos.x;
+		previousPos->y = childPos.y;
+
+		childPair.second->setPosition(ImVec2(childPos.x + xDiff, childPos.y + yDiff));
+
+		translateChildren(childPair.second, previousPos);
+	}
+
+}
+
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
@@ -363,18 +386,17 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 		toDelete();
 	}
 
-	if (isMouseInsideGameObject) {
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+	if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
-			if (!leftMouseButtonDown) {
-				leftMouseButtonDown = true;
-			}
+		if (!leftMouseButtonDown) {
+			leftMouseButtonDown = true;
+		}
 
-			if (visible) {
-				imGuiManager->getScene()->setSelectedGameObject(this);
-			}
+		if (visible && isMouseInsideGameObject) {
+			imGuiManager->getScene()->setSelectedGameObject(this);
 		}
 	}
+
 
 
 	if (imGuiManager->getScene()->getSelectedGameObject() == this) {
@@ -385,50 +407,57 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 			}
 		}
 
-			if (event->type == SDL_MOUSEBUTTONUP)
+		if (event->type == SDL_MOUSEBUTTONUP)
+		{
+			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
 			{
-				if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+				leftMouseButtonDown = false;
+			}
+
+			if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+			{
+				rightMouseButtonDown = false;
+			}
+		}
+
+		if (SDL_GetModState() & KMOD_SHIFT) {
+			showGizmo = true;
+
+			if (event->type == SDL_MOUSEMOTION)
+			{
+				if (leftMouseButtonDown)
 				{
-					leftMouseButtonDown = false;
+
+					ImVec2* previousPos = new ImVec2{ pos->x, pos->y };
+
+					pos->x = mousePos.x - size->x / 2;
+					pos->y = mousePos.y - size->y / 2;
+
+					translateChildren(this, previousPos);
+
+					delete previousPos;
 				}
 
-				if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+				if (rightMouseButtonDown)
 				{
-					rightMouseButtonDown = false;
+					rotation += (previousMousePosX - mousePos.x) * 0.5f;
+					rotation += (previousMousePosY - mousePos.y) * 0.5f;
 				}
 			}
 
-			if (SDL_GetModState() & KMOD_SHIFT) {
-				showGizmo = true;
-
-				if (event->type == SDL_MOUSEMOTION)
+			if (event->type == SDL_MOUSEWHEEL) {
+				if (event->wheel.y > 0) // scroll up
 				{
-					if (leftMouseButtonDown)
-					{
-						pos->x = mousePos.x - size->x / 2;
-						pos->y = mousePos.y - size->y / 2;
-					}
-
-					if (rightMouseButtonDown)
-					{
-						rotation += (previousMousePosX - mousePos.x) * 0.5f;
-						rotation += (previousMousePosY - mousePos.y) * 0.5f;
-					}
+					size->x += 5;
+					size->y += 5;
 				}
-
-				if (event->type == SDL_MOUSEWHEEL) {
-					if (event->wheel.y > 0) // scroll up
-					{
-						size->x += 5;
-						size->y += 5;
-					}
-					else if (event->wheel.y < 0) // scroll down
-					{
-						size->x -= 5;
-						size->y -= 5;
-					}
+				else if (event->wheel.y < 0) // scroll down
+				{
+					size->x -= 5;
+					size->y -= 5;
 				}
 			}
+		}
 	}
 
 	previousMousePosX = mousePos.x;
@@ -522,6 +551,46 @@ void PEditor::GameObject::toDelete()
 bool PEditor::GameObject::isPrefab()
 {
 	return prefab;
+}
+
+void PEditor::GameObject::setParent(GameObject* go)
+{
+	parent = go;
+}
+
+PEditor::GameObject* PEditor::GameObject::getParent()
+{
+	return parent;
+}
+
+void PEditor::GameObject::removeChild(GameObject* go)
+{
+	go->setParent(nullptr);
+	children.erase(go->getId());
+}
+
+void PEditor::GameObject::addChild(GameObject* go)
+{
+	go->setParent(this);
+	children.insert({ go->getId(), go });
+}
+
+std::unordered_map<int, PEditor::GameObject*> PEditor::GameObject::getChildren()
+{
+	return children;
+}
+
+bool PEditor::GameObject::isAscendant(GameObject* go)
+{
+	for (auto childPair : children)
+	{
+		GameObject* child = childPair.second;
+		if (child == go || child->isAscendant(go))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 std::string PEditor::GameObject::toJson()

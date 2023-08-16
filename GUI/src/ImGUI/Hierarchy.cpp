@@ -38,10 +38,10 @@ void PEditor::Hierarchy::render()
 	std::unordered_map<int, PEditor::GameObject*> gameObjects = scene->getGameObjects();
 
 	if (focused) {
-		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 25), ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 25));
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 24), ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 24));
 	}
 	else {
-		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 25), ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 25));
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 24));
 	}
 
 	focused = false;
@@ -69,6 +69,7 @@ void PEditor::Hierarchy::render()
 	}
 
 	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {
+		
 
 		ImGui::Text("Visible");
 		ImGui::SameLine();
@@ -80,41 +81,8 @@ void PEditor::Hierarchy::render()
 		int i = 0;
 		for (auto pair : gameObjects)
 		{
-			ImGui::Dummy(ImVec2(7, 0));
-			ImGui::SameLine();
-
-			//Checkbox to make the object visible/invisible
-			bool isVisible = pair.second->isVisible();
-			std::string checkboxId = "##" + std::to_string(i);
-
-			if (ImGui::Checkbox(checkboxId.c_str(), &isVisible))
-			{
-				pair.second->setVisible(isVisible);
-			}
-
-			ImGui::SameLine();
-			ImGui::Dummy(ImVec2(67, 0)); 
-			ImGui::SameLine();
-
-			std::string nameId = pair.second->getName() + "##" + std::to_string(i);
-
-			//Selectable to select the gameobject in the scene
-			if (ImGui::Selectable(nameId.c_str(), pair.second == scene->getSelectedGameObject()))
-			{
-				scene->setSelectedGameObject(pair.second);
-			}
-
-			//If selectable is hovered and rightClicked opens the gameobject menu popup
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
-				ImGui::OpenPopup("Gameobject Menu");
-			}
-
-		
-			//Shows the popups when opened
-			showGameObjectMenu(pair.second);
-			showRenamePopup(pair.second);
-
-			i++;
+			if(pair.second->getParent() == nullptr)
+				renderGameObjectHierarchy(pair.second, 0);
 		}
 
 		ImGui::EndListBox();
@@ -123,14 +91,144 @@ void PEditor::Hierarchy::render()
 	ImGui::End();
 }
 
+void PEditor::Hierarchy::handleDragAndDrop(GameObject* source, GameObject* destination)
+{
+	if (destination == source->getParent()) {
+		destination->removeChild(source);
+
+		source->setParent(destination->getParent());
+
+		if (source->getParent() != nullptr) {
+			source->getParent()->addChild(source);
+		}
+	}
+	else if (source->getId() != destination->getId() && !source->isAscendant(destination) && destination != source->getParent())
+	{
+		// Remove source from its current parent
+		GameObject* parent = source->getParent();
+		if (parent)
+		{
+			parent->removeChild(source);
+		}
+
+		// Set the destination as the new parent
+		destination->addChild(source);
+	}
+}
+
+
+bool PEditor::Hierarchy::isChildrenTheSelectedObject(GameObject* go)
+{
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	PEditor::Scene* scene = imGUIManager->getScene();
+
+	for (auto child : go->getChildren()) {
+		if (child.second == scene->getSelectedGameObject()) {
+			return true;
+		}
+
+		return isChildrenTheSelectedObject(child.second);
+	}
+
+	return false;
+}
+
+
+void PEditor::Hierarchy::renderGameObjectHierarchy(GameObject* gameObject, int indentLevel)
+{
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	PEditor::Scene* scene = imGUIManager->getScene();
+
+	// Calculate the indentation based on the indent level
+	float indentSpacing = 20.0f * indentLevel;
+	ImVec2 dummySize = ImVec2(indentSpacing, 0);
+
+	ImGui::Dummy(dummySize);
+	ImGui::SameLine();
+
+	bool isVisible = gameObject->isVisible();
+	std::string checkboxId = "##" + std::to_string(gameObject->getId());
+
+	if (ImGui::Checkbox(checkboxId.c_str(), &isVisible)) {
+		gameObject->setVisible(isVisible);
+	}
+
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(67, 0));
+	ImGui::SameLine();
+
+	std::string nameId = gameObject->getName() + "##" + std::to_string(gameObject->getId());
+
+
+	if (ImGui::Selectable(nameId.c_str(), gameObject == scene->getSelectedGameObject(), ImGuiSelectableFlags_AllowItemOverlap)) {
+		scene->setSelectedGameObject(gameObject);
+	}
+
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover))
+	{
+		ImGui::SetDragDropPayload("payload", &gameObject, sizeof(GameObject*));
+
+		ImGui::TextUnformatted(gameObject->getName().c_str());
+
+		ImGui::EndDragDropSource();
+	}
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("payload"))
+		{
+			GameObject* sourceObject = *(GameObject**)payload->Data;
+
+			handleDragAndDrop(sourceObject, gameObject);
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+
+	if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
+		ImGui::OpenPopup("Gameobject Menu##" + gameObject->getId());
+	}
+
+	showGameObjectMenu(gameObject);
+	showRenamePopup(gameObject);
+
+	if (gameObject->getChildren().size() > 0) {
+
+		ImGui::SameLine();
+		
+		float treeNodeWidth = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x;
+		ImGui::SetNextItemWidth(treeNodeWidth);
+
+		bool isChildSelected = isChildrenTheSelectedObject(gameObject);
+		if (isChildSelected) {
+			ImGui::SetNextItemOpen(true);
+		}
+
+		if(ImGui::TreeNodeEx((void*)(intptr_t)gameObject->getId(), ImGuiTreeNodeFlags_None, ""))
+		{
+			// Recursively render children
+			for (auto pair : gameObject->getChildren()) {
+				renderGameObjectHierarchy(pair.second, indentLevel + 1);
+			}
+
+			ImGui::TreePop();
+		}
+
+		if (isChildSelected && ImGui::IsItemClicked()) {
+			scene->setSelectedGameObject(nullptr);
+		}
+	}
+}
+
 void PEditor::Hierarchy::showRenamePopup(GameObject* gameObject)
 {
 	if (shouldOpenRenamePopup) {
-		ImGui::OpenPopup("Rename Object");
+		ImGui::OpenPopup("Rename Object##" + gameObject->getId());
 		shouldOpenRenamePopup = false;
 	}
 
-	if (ImGui::BeginPopup("Rename Object"))
+	if (ImGui::BeginPopup("Rename Object##" + gameObject->getId()))
 	{
 		ImGui::Text(("Insert new name for GameObject: " + gameObject->getName()).c_str());
 
@@ -158,7 +256,7 @@ void PEditor::Hierarchy::showRenamePopup(GameObject* gameObject)
 
 void PEditor::Hierarchy::showGameObjectMenu(GameObject* gameObject)
 {
-	if (ImGui::BeginPopup("Gameobject Menu"))
+	if (ImGui::BeginPopup("Gameobject Menu##" + gameObject->getId()))
 	{
 		if (ImGui::MenuItem("Create prefab", NULL, false)) {
 
