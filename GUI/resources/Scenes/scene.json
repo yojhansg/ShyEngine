@@ -2,15 +2,45 @@
     "name": "scene",
     "objects": [
         {
-            "name": "Empty gameobject",
+            "name": "script",
             "order": 0,
             "localPosition": "0.000000, 0.000000",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
-            "components": [],
-            "scripts": {
-                "Saludar": []
-            }
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "script.png"
+                    }
+                },
+                {
+                    "component": "OverlayButton",
+                    "attributes": {
+                        "defaultColor": "1.000000,0.000000,0.000000",
+                        "scale": "0.000000",
+                        "hoverColor": "0.000000,0.000000,0.000000",
+                        "downColor": "0.000000,0.000000,0.000000"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "icon",
+            "order": 0,
+            "localPosition": "0.000000, 0.000000",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "icon.png"
+                    }
+                }
+            ],
+            "scripts": null
         }
     ]
 }

@@ -111,7 +111,7 @@ void ImGUIManager::initImGUI()
 	style.Colors[ImGuiCol_PopupBg] = ImVec4(color_for_pops.x, color_for_pops.y, color_for_pops.z, 0.92f);
 	//style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 0.73f);
 
-	style.WindowRounding = 10;
+	style.WindowRounding = 0;
 
 
 	// Setup Platform/Renderer backends
@@ -149,7 +149,8 @@ void ImGUIManager::initWindows()
 	addWindow(scriptCreation);
 
 
-	addWindow(new PEditor::Console());
+	console = new PEditor::Console();
+	addWindow(console);
 }
 
 void ImGUIManager::initSDL()
@@ -240,6 +241,7 @@ ImGUIManager* ImGUIManager::getInstance()
 void ImGUIManager::loop()
 {
     SDL_SetWindowSize(window, 1080, 720);
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 
     PEditor::ProjectsManager dialog;
@@ -287,6 +289,8 @@ void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
 
 void ImGUIManager::update()
 {
+	PEditor::Game::CheckEnd();
+
     for (auto window : windows)
     {
         switch (state)
@@ -303,7 +307,6 @@ void ImGUIManager::update()
                 break;
         }
     }
-
 }
 
 void ImGUIManager::render()
@@ -321,7 +324,8 @@ void ImGUIManager::render()
         switch (state)
         {
         case ImGUIManager::SCRIPTING_WINDOW:
-            if (window == scriptCreation) 
+            if (window == scriptCreation ||
+				window == console) 
                 window->render();
             break;
         case ImGUIManager::EDITOR_WINDOW:
@@ -446,5 +450,11 @@ PEditor::ComponentWindow* ImGUIManager::getComponents()
 PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
 {
 	return scriptCreation;
+}
+
+void ImGUIManager::OpenScript(const std::string& script)
+{
+	scriptCreation->SetName(script);
+	changeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
 }
 

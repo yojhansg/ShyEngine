@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 struct SDL_Surface;
 struct SDL_Window;
@@ -15,6 +16,7 @@ namespace PEditor {
 	class ComponentWindow;
 	class ScriptCreation;
 	class ProjectsManager;
+	class Console;
 };
 
 #define SDL_WIN_WIDTH 1920
@@ -54,13 +56,13 @@ private:
 	void createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY);
 	void createSDLRenderer();
 
-	PEditor::Scene* scene;
+	PEditor::Scene* scene = nullptr;
 	PEditor::MenuBar* menuBar = nullptr;
 	PEditor::Hierarchy* hierarchy = nullptr;
 	PEditor::FileExplorer* fileExplorer = nullptr;
 	PEditor::ComponentWindow* components = nullptr;
 	PEditor::ScriptCreation* scriptCreation = nullptr;
-
+	PEditor::Console* console = nullptr;
 
 public:
 
@@ -93,6 +95,8 @@ public:
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::ComponentWindow* getComponents();
 	PEditor::ScriptCreation* getScriptCreation();
+
+	void OpenScript(const std::string& script);
 
 	~ImGUIManager();
 };

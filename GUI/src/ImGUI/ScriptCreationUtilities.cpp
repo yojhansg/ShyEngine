@@ -5,6 +5,7 @@
 #include "ComponentManager.h"
 #include "ImGUIManager.h"
 #include <algorithm>
+#include "Console.h"
 
 void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
 {
@@ -782,7 +783,7 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 		outputStr = "Utilities::Vector2D";
 		break;
 	case ::Components::AttributesType::STRING:
-		outputStr = "std::string";
+		outputStr = "string";
 		break;
 	case ::Components::AttributesType::BOOL:
 		outputStr = "bool";
@@ -905,7 +906,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		ImGui::Text("Name the script");
 
-
+		ImGui::PushItemWidth(300);
 		ImGui::InputText("", nameBuffer, CharBufferSize);
 
 
@@ -1040,7 +1041,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 			else Close();
 		}
 
-
+		ImGui::PushItemWidth(300);
 		if (ImGui::InputText("Node search", nameSearch, CharBufferSize)) {
 
 			showNodeSearch = std::string(nameSearch).length() > 0;
@@ -1076,6 +1077,12 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 
 			creator->AddNode(new ScriptComment("Write comment here"));
+		}
+
+
+		if (ImGui::Button("Open console")) {
+
+			Console::ForceOpen();
 		}
 
 

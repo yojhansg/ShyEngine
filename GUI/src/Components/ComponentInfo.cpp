@@ -72,7 +72,7 @@ namespace Components {
 			value.value.valueVector2 = { 0.0f, 0.0f };
 			type = AttributesType::VECTOR2;
 		}
-		else if (typeString == "std::string") {
+		else if (typeString == "std::string" || typeString == "string") {
 			value.valueString = "";
 			type = AttributesType::STRING;
 		}
@@ -86,6 +86,11 @@ namespace Components {
 		}
 		else if (typeString == "char") {
 			value.value.valueChar = ' ';
+			type = AttributesType::CHAR;
+		}
+		else if (typeString == "gameObject") {
+			value.value.valueFloat = 0.0f;
+			type = AttributesType::GAMEOBJECT;
 		}
 		else {
 			type = AttributesType::NONE;
@@ -148,6 +153,8 @@ namespace Components {
 		case AttributesType::CHAR:
 			if (value.value.valueChar == '\0') return "";
 			return std::string(1, value.value.valueChar);
+		case AttributesType::GAMEOBJECT:
+			return std::to_string(value.value.valueFloat);
 		default:
 			return "";
 			break;

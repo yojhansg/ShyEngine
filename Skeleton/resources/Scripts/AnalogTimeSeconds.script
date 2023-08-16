@@ -1,0 +1,64 @@
+{
+    "nodeCount": 20,
+    "update": 0, 
+
+    "functions" : [
+
+        {
+            "index": 0, 
+            "function": "Transform_SetLocalRotation",
+            "input": [
+                1, 7
+            ]
+        },
+        {
+            "index": 1, 
+            "function": "Entity"
+        },
+        {
+            "index": 2,
+            "function": "RealTime_Seconds",
+            "input": [
+                3
+            ]
+        },
+        {
+            "index": 3,
+            "function": "RealTime_Now"
+        },
+        {
+            "index": 4,
+            "function": "Math_Multiply",
+            "input":[
+                2, 5
+            ]
+        },
+        {
+            "index": 7,
+            "function": "Math_Subtract",
+            "input":[
+                4, 6
+            ]
+        }
+    ],
+
+    "consts":[
+
+
+
+        {
+            "index": 5,
+            "comment": "@ Conversion de hora a rotacion",
+            "type": "float",
+            "value": 6
+        },
+
+        {
+            "index": 6,
+            "comment": "@ Offset para el punto inicial de la rotacion",
+            "type": "float",
+            "value": 0
+        }
+
+    ]
+ }

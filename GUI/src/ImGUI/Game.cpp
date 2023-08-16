@@ -12,11 +12,12 @@ PEditor::Game::Game(const std::string& path) : path(path)
 	isRunning = false;
 	instance = this;
 	game = NULL;
+	gameEnded = false;
 }
 
 PEditor::Game::~Game()
 {
-	if(isRunning)
+	if (isRunning)
 		Stop();
 	instance = nullptr;
 }
@@ -48,27 +49,44 @@ void PEditor::Game::Stop()
 		instance->stop();
 }
 
+void PEditor::Game::CheckEnd()
+{
+	if (instance->gameEnded && instance->gameThread.joinable()) {
+
+		instance->gameThread.join();
+		instance->gameEnded = false;
+		instance->isRunning = false;
+	}
+}
+
 bool PEditor::Game::IsRunning()
 {
 	return instance->isRunning;
 }
 
-std::string PEditor::Game::GetOutput()
+bool PEditor::Game::PendingOutput()
 {
-	return std::string();
+	return !instance->output.empty();
 }
 
 std::string PEditor::Game::FlushOutput()
 {
-	std::string out = instance->output;
-	instance->output = "";
-	return out;
+	std::string str;
+
+	if (instance->output.try_pop(str))
+	{
+		return str;
+	}
+
+	return "";
 }
 
 
 
 void PEditor::Game::play()
 {
+	output.clear();
+
 	HANDLE hChildStdoutRead, hChildStdoutWrite;
 	SECURITY_ATTRIBUTES saAttr;
 
@@ -101,6 +119,8 @@ void PEditor::Game::play()
 
 	gameThread = std::thread(&Game::readOutput, this, hChildStdoutRead, hChildStdoutWrite);
 
+	//gameThread.detach();
+
 	isRunning = true;
 }
 
@@ -126,11 +146,10 @@ void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite
 		}
 
 		std::string output(buffer, bytesRead);
-		std::cout << output;
+		this->output.push(output);
+
+		//std::cout << output << "jeje" << std::endl;
 	}
-
-
-	std::cout << "fin del hilo" << std::endl;
 
 
 	CloseHandle(hChildStdoutRead);
@@ -144,5 +163,5 @@ void PEditor::Game::readOutput(HANDLE hChildStdoutRead, HANDLE hChildStdoutWrite
 	CloseHandle(pi.hThread);
 
 	game = NULL;
-	isRunning = false;
+	gameEnded = true;
 }

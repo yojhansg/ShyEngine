@@ -128,9 +128,6 @@
     <ClCompile Include="..\..\src\ImGUI\ScriptCreation.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp">
-      <Filter>Archivos de encabezado</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
@@ -138,6 +135,9 @@
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\Game.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

@@ -43,6 +43,8 @@ namespace PEditor {
 
 		bool showGizmo;
 
+		bool prefab;
+
 		bool waitingToDelete;
 
 		ImVec2* size;
@@ -60,6 +62,7 @@ namespace PEditor {
 		void drawBool(std::string attrName, ::Components::Attribute* attr);
 		void drawColor(std::string attrName, ::Components::Attribute* attr);
 		void drawChar(std::string attrName, ::Components::Attribute* attr);
+		void drawGameobject(std::string attrName, ::Components::Attribute* attr);
 
 	public:
 
@@ -98,6 +101,8 @@ namespace PEditor {
 		bool isWaitingToDelete();
 		void toDelete();
 	
+		bool isPrefab();
+
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
 		std::string toJson();

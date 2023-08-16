@@ -40,10 +40,13 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawColor(attributeName + it->first, attr);
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
+					break;
+				case ::Components::AttributesType::GAMEOBJECT:
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				default:
 					break;
@@ -100,6 +103,9 @@ void PEditor::GameObject::drawScriptsInEditor()
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
+				case ::Components::AttributesType::GAMEOBJECT:
+					drawGameobject(attributeName + it->first, attr);
+					break;
 				default:
 					break;
 				}
@@ -107,6 +113,14 @@ void PEditor::GameObject::drawScriptsInEditor()
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
+
+
+			if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+				
+				ImGUIManager::getInstance()->OpenScript(scriptName);
+			}
+
+
 
 			if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
 				it = scripts.erase(it);
@@ -164,6 +178,19 @@ void PEditor::GameObject::drawChar(std::string attrName, ::Components::Attribute
 	}
 }
 
+void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr)
+{
+	std::unordered_map<int, PEditor::GameObject*> gameObjects = imGuiManager->getScene()->getGameObjects();
+
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), gameObjects.find((int)attr->value.value.valueFloat)->second->getName().c_str())) {
+		for (int i = 0; i < gameObjects.size(); i++) {
+			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
+				attr->value.value.valueFloat  = gameObjects[i]->getId();
+		}
+		ImGui::EndCombo();
+	}
+}
+
 PEditor::GameObject::GameObject(std::string& path)
 {
 	id = GameObject::lastId;
@@ -171,6 +198,8 @@ PEditor::GameObject::GameObject(std::string& path)
 	GameObject::lastId++;
 
 	imagePath = path;
+
+	prefab = false;
 
 	text = nullptr;
 
@@ -498,6 +527,11 @@ void PEditor::GameObject::toDelete()
 	waitingToDelete = true;
 }
 
+bool PEditor::GameObject::isPrefab()
+{
+	return prefab;
+}
+
 std::string PEditor::GameObject::toJson()
 {
 	nlohmann::ordered_json j;
@@ -529,7 +563,7 @@ std::string PEditor::GameObject::toJson()
 	j["components"] = componentsJson;
 
 
-	nlohmann::ordered_json scriptsJson;
+	nlohmann::ordered_json scriptsJson = nlohmann::json();
 	for (auto it = scripts.begin(); it != scripts.end(); it++) {
 		auto scriptJson = j.parse(it->second.ToJson());
 

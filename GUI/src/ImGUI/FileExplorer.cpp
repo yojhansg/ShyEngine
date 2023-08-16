@@ -13,7 +13,7 @@
 namespace fs = std::filesystem;
 
 
-PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove)
+PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
@@ -158,8 +158,7 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 					size_t dotPos = filename.find_last_of(".");
 					std::string filenameWithoutExtension = filename.substr(0, dotPos);
 
-					ImGUIManager::getInstance()->getScriptCreation()->SetName(filenameWithoutExtension);
-					ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::SCRIPTING_WINDOW);
+					ImGUIManager::getInstance()->OpenScript(filenameWithoutExtension);
 				}
 			}
 

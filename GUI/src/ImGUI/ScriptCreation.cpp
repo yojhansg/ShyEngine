@@ -172,13 +172,11 @@ void PEditor::ScriptCreation::Load()
 	std::string fileName = std::string(menuBar->GetName());
 	if (fileName.size() == 0) {
 
-
 		ScriptCreationUtilities::ScriptEvent* start = new ScriptCreationUtilities::ScriptEvent("start");
 		ScriptCreationUtilities::ScriptEvent* update = new ScriptCreationUtilities::ScriptEvent("update");
 
 		start->SetPosition(250, 250);
 		update->SetPosition(250, 750);
-
 
 		AddEvent("start", start);
 		AddEvent("update", update);
@@ -364,6 +362,7 @@ void PEditor::ScriptCreation::Load()
 			event->GetScriptFlow()->SetNext(GetNodes()[idx]->GetScriptFlow());
 		}
 		SetNode(event->GetId(), event);
+		this->events.emplace(type, event);
 	}
 
 
@@ -430,16 +429,11 @@ std::vector<PEditor::ScriptCreationUtilities::ScriptNode*>& PEditor::ScriptCreat
 
 void PEditor::ScriptCreation::render()
 {
-	ImGui::OpenPopup("Create script");
 	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
 
-
-	if (ImGui::BeginPopup("Create script", ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
+	if (ImGui::Begin("Create script", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
 	{
-		//ImGui::SetWindowFocus();
-
-
 		auto background = ImGui::GetWindowDrawList();
 
 		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ImColor(30, 30, 30, 255));
@@ -478,7 +472,8 @@ void PEditor::ScriptCreation::render()
 		bool eraseNode = false;
 
 
-
+		auto& style = ImGui::GetStyle();
+		style.WindowRounding = 10;
 		for (auto node : nodes) {
 
 			if (node != nullptr) {
@@ -495,6 +490,7 @@ void PEditor::ScriptCreation::render()
 			if (!eraseNode)
 				nodeIdx++;
 		}
+		style.WindowRounding = 0;
 
 		if (eraseNode)
 		{
@@ -519,9 +515,9 @@ void PEditor::ScriptCreation::render()
 			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 		}
 
-		ImGui::EndPopup();
 	}
 
+	ImGui::End();
 
 }
 

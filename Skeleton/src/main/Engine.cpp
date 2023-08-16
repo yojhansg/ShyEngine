@@ -37,6 +37,8 @@ bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("config");
 
+	//data.windowSize.set(1920, 1080);
+
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
 		return false;
@@ -61,13 +63,13 @@ bool Engine::init() {
 
 	renderManager = ECS::RenderManager::init();
 
-	inputManager = Input::InputManager::init(data.closeWithEscape);  
+	inputManager = Input::InputManager::init(data.closeWithEscape);
 
-	engineTime = Utilities::Time::init(); 
+	engineTime = Utilities::Time::init();
 
 	Resources::ResourcesManager::init();
 
-	ECS::ContactListener::init(); 
+	ECS::ContactListener::init();
 
 	ECS::PrefabManager::init("prefabs");
 
@@ -79,7 +81,7 @@ bool Engine::init() {
 
 	ComponentFactory::init();
 
-	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate 
+	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
 
 
 

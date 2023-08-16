@@ -18,6 +18,7 @@ namespace Components {
 		BOOL,
 		COLOR,
 		CHAR,
+		GAMEOBJECT
 	};
 
 

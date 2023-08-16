@@ -1,0 +1,54 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "index": 3,
+            "serialized": false,
+            "type": "float",
+            "value": 17.0,
+            "x": 159.0,
+            "y": 123.0
+        },
+        {
+            "index": 4,
+            "serialized": false,
+            "type": "float",
+            "value": 21.0,
+            "x": 205.0,
+            "y": 567.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "start",
+            "x": 828.0,
+            "y": 817.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Print",
+            "index": 1,
+            "input": [
+                2
+            ],
+            "x": 1127.0,
+            "y": 398.0
+        },
+        {
+            "function": "Math_Add",
+            "index": 2,
+            "input": [
+                3,
+                4
+            ],
+            "x": 730.0,
+            "y": 214.0
+        }
+    ],
+    "nodeCount": 5,
+    "serializedValues": [],
+    "start": 1
+}
