@@ -1,6 +1,8 @@
 #include "Music.h"
 #include "SoundManager.h"
 
+#include <ConsoleManager.h>
+
 namespace Sound {
 
 	Music::Music(const std::string& filepath) {
@@ -8,7 +10,12 @@ namespace Sound {
 		soundManager = Sound::SoundManager::instance();
 
 		mix_music = Mix_LoadMUS(filepath.c_str());
-		assert(mix_music != NULL, Mix_GetError());
+
+		if (mix_music == NULL) {
+			Console::Output::PrintError("Invalid argument value", Mix_GetError());
+			music_id = 0;
+			return;
+		}
 
 		music_id = soundManager->loadMusic(mix_music);
 

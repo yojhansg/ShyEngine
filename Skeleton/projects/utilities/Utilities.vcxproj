@@ -143,7 +143,6 @@
     <ClInclude Include="..\..\src\utilities\Color.h" />
     <ClInclude Include="..\..\src\utilities\EditorExport.h" />
     <ClInclude Include="..\..\src\utilities\EngineTime.h" />
-    <ClInclude Include="..\..\src\utilities\SDLUtils.h" />
     <ClInclude Include="..\..\src\utilities\Singleton.h" />
     <ClInclude Include="..\..\src\utilities\StringTrim.h" />
     <ClInclude Include="..\..\src\utilities\Utils.h" />

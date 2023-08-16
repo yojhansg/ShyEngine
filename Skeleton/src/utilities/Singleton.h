@@ -29,7 +29,10 @@ namespace Utilities {
 		Singleton<T>& operator=(const Singleton<T>& o) = delete;
 		Singleton(const Singleton<T>& o) = delete;
 
-		virtual ~Singleton() {
+		virtual ~Singleton() {}
+
+		virtual bool Valid() {
+			return true;
 		}
 
 		// some singletons need to be initialised with some parameters, we

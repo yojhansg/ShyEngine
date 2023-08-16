@@ -8,26 +8,26 @@ namespace Utilities {
 
 	public:
 
-		// Convierte un angulo de grados a radianes
-		static float DegreesToRadians(float angle);
-
-		// Convierte un angulo de radianes a grados
-		static float RadiansToDegrees(float angle);
-
-		// Genera un numero aleatorio entre min y max
-		static float RandomBetween(float min, float max);
-
-		// Genera un angulo aleatorio entre dos dados (en grados)
-		static float RandomAngleBetween(float min, float max);
-
-		// Genera un entero aleatorio entre min y max
+		// Returns a random integer between min and max.
 		static int RandomIntBetween(int min, int max);
 
-		// Genera un color aleatorio
+		// Returns a random float between min and max.
+		static float RandomBetween(float min, float max);
+
+		// Returns a random angle between two given values (in degrees).
+		static float RandomAngleBetween(float min, float max);
+
+		// Converts an angle from degrees to radians.
+		static float DegreesToRadians(float angle);
+
+		// Converts an angle from radians to degrees.
+		static float RadiansToDegrees(float angle);
+
+		// Generates a random color.
 		static Color RandomColor();
 
-		// Genera un color aleatorio entre otros dados
-		static Color RandomColorBetween(const Color& c1, const Color& c2);
+		// Generates a random color among the given ones.
+		static Color RandomColorBetween(cColor c1, cColor c2);
 
 	};
 

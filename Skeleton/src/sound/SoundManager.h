@@ -1,5 +1,6 @@
 #pragma once
 
+#include "EditorExport.h"
 #include "Singleton.h"
 #include "SDL_mixer.h"
 #include <string>
@@ -7,13 +8,11 @@
 
 namespace Sound {
 
-	class SoundManager : public Utilities::Singleton<SoundManager> {
+	EditorManager SoundManager : public Utilities::Singleton<SoundManager> {
 
 		friend Singleton<SoundManager>;
 
-	public:
-
-		~SoundManager();
+	publish:
 
 		// Sets the master volume (affects music and sound channels)
 		// Volume should be between 0 and 1
@@ -21,6 +20,12 @@ namespace Sound {
 
 		// Sets the number of channels handled by the audio engine
 		void setChannelsCapacity(float nChannels);
+
+	public:
+
+		~SoundManager();
+
+		bool Valid() override;
 
 		// Channels
 
@@ -105,12 +110,14 @@ namespace Sound {
 
 		SoundManager();
 
-		void initSDLMixer();
+		bool initSDLMixer();
 		void closeSDLMixer();
 
 		int nChannels;
 
 		std::vector<Mix_Chunk*> sfxs;
 		std::vector<Mix_Music*> music;
+
+		bool valid;
 	};
 }

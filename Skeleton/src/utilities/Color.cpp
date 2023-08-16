@@ -30,9 +30,8 @@ Utilities::Color Utilities::Color::CreateColor(std::string const& str)
 	colores["grey"] = Grey();
 	colores["darkGrey"] = DarkGrey();
 
-	if (colores.contains(str)) {
+	if (colores.contains(str))
 		return colores[str];
-	}
 
 
 	std::string trimed = Utilities::trim(str, "([ )]");
@@ -70,6 +69,7 @@ Utilities::Color Utilities::Color::Red()
 	return CreateColor(255, 0, 0);
 }
 
+
 Utilities::Color Utilities::Color::Green()
 {
 	return CreateColor(255, 0, 0);
@@ -105,19 +105,15 @@ Utilities::Color Utilities::Color::White()
 	return CreateColor(255, 255, 255);
 }
 
-
 Utilities::Color Utilities::Color::Grey()
 {
 	return CreateColor(200, 200, 200);
 }
 
-
 Utilities::Color Utilities::Color::DarkGrey()
 {
 	return CreateColor(51, 51, 51);
 }
-
-
 
 Utilities::Color::operator std::string() const {
 
