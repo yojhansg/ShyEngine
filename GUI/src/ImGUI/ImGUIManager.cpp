@@ -158,12 +158,12 @@ void ImGUIManager::initSDL()
 	std::cout << "INITIALISING SDL\n";
 
 	// Initialize SDL. If something fails it returns -1 and we throw an exception
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
-		system("pause");
+	//if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+	//	std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
+	//	system("pause");
 
-		// ERROR HANDLING
-	}
+	//	// ERROR HANDLING
+	//}
 
 	originalWindowSize = new ImVec2(SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
 	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
@@ -216,6 +216,8 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
+	SplashScreen();
+
 	gameSize = new ImVec2{ GAME_WIDTH, GAME_HEIGHT };
 
 	initImGUI();
@@ -226,6 +228,43 @@ void ImGUIManager::init()
 	Components::ComponentManager::ReadScripts("Scripts");
 
 	PEditor::Game::Init("Main_Debug.exe");
+}
+
+void ImGUIManager::SplashScreen()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
+		system("pause");
+
+		// ERROR HANDLING
+	}
+
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500,
+		SDL_WINDOW_BORDERLESS
+	);
+
+	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	SDL_SetWindowBordered(window, SDL_FALSE);
+	SDL_SetWindowOpacity(window, 0.75f);
+
+	auto surf = IMG_Load("SplashScreen.png");
+	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Color transparente (RGBA)
+	SDL_RenderClear(renderer);
+
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+	SDL_RenderPresent(renderer);
+	SDL_Delay(1500);
+
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(texture);
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -240,6 +279,7 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
+	
     SDL_SetWindowSize(window, 1080, 720);
 	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	SDL_SetWindowResizable(window, SDL_FALSE);

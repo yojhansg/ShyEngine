@@ -64,6 +64,9 @@ private:
 	PEditor::ScriptCreation* scriptCreation = nullptr;
 	PEditor::Console* console = nullptr;
 
+
+	void SplashScreen();
+
 public:
 
 	static ImGUIManager* getInstance();
