@@ -40,13 +40,10 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawColor(attributeName + it->first, attr);
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
-					break;
-				case ::Components::AttributesType::GAMEOBJECT:
-					drawGameobject(attributeName + it->first, attr);
 					break;
 				default:
 					break;
@@ -103,9 +100,6 @@ void PEditor::GameObject::drawScriptsInEditor()
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
-				case ::Components::AttributesType::GAMEOBJECT:
-					drawGameobject(attributeName + it->first, attr);
-					break;
 				default:
 					break;
 				}
@@ -195,8 +189,6 @@ PEditor::GameObject::GameObject(std::string& path)
 	GameObject::lastId++;
 
 	imagePath = path;
-
-	prefab = false;
 
 	text = nullptr;
 
@@ -524,11 +516,6 @@ void PEditor::GameObject::toDelete()
 	waitingToDelete = true;
 }
 
-bool PEditor::GameObject::isPrefab()
-{
-	return prefab;
-}
-
 std::string PEditor::GameObject::toJson()
 {
 	nlohmann::ordered_json j;
@@ -560,7 +547,7 @@ std::string PEditor::GameObject::toJson()
 	j["components"] = componentsJson;
 
 
-	nlohmann::ordered_json scriptsJson = nlohmann::json();
+	nlohmann::ordered_json scriptsJson;
 	for (auto it = scripts.begin(); it != scripts.end(); it++) {
 		auto scriptJson = j.parse(it->second.ToJson());
 

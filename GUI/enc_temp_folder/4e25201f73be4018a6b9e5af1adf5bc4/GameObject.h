@@ -43,8 +43,6 @@ namespace PEditor {
 
 		bool showGizmo;
 
-		bool prefab;
-
 		bool waitingToDelete;
 
 		ImVec2* size;
@@ -101,8 +99,6 @@ namespace PEditor {
 		bool isWaitingToDelete();
 		void toDelete();
 	
-		bool isPrefab();
-
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
 		std::string toJson();
