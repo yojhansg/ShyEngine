@@ -1,0 +1,77 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "name": "folder",
+            "id": 3,
+            "childs": [],
+            "order": 0,
+            "localPosition": "0.000000, 0.000000",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "folder.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "file",
+            "id": 4,
+            "childs": [],
+            "order": 0,
+            "localPosition": "947.272705, 517.482910",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "file.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "gizmo",
+            "id": 5,
+            "childs": [],
+            "order": 0,
+            "localPosition": "941.832336, 223.702484",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "gizmo.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "icon",
+            "id": 6,
+            "childs": [],
+            "order": 0,
+            "localPosition": "501.161682, 656.212524",
+            "localScale": "100.000000, 100.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "icon.png"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ]
+}

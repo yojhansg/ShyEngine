@@ -83,7 +83,7 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 
 	selectedGameObject = nullptr;
 
-	std::string defaultScenePath = "Scenes/scene.json";
+	std::string defaultScenePath = "Scenes/scene.scene";
 	if (std::filesystem::exists(defaultScenePath)) {
 		loadScene(defaultScenePath);
 	}
@@ -171,7 +171,7 @@ void PEditor::Scene::saveScene()
 
 	j = j.parse(toJson());
 
-	std::string path = "Scenes/scene.json";
+	std::string path = "Scenes/scene.scene";
 
 	std::ofstream outputFile(path);
 	if (outputFile.is_open()) {
@@ -189,14 +189,14 @@ void PEditor::Scene::update()
 
 	auto it = gameObjects.begin();
 	while (it != gameObjects.end()) {
-		GameObject* currentGameObject = it->second;
+		GameObject* go = it->second;
 
-		currentGameObject->update();
+		go->update();
 
-		if (currentGameObject->isWaitingToDelete()) {
+		if (go->isWaitingToDelete()) {
 			selectedGameObject = nullptr;
 
-			delete currentGameObject;
+			delete go;
 			it = gameObjects.erase(it);
 		}
 		else {
@@ -278,6 +278,15 @@ std::string PEditor::Scene::toJson()
 }
 
 void PEditor::Scene::loadScene(std::string path) {
+	//Delete info of previous scene;
+	selectedGameObject = nullptr;
+
+	for (const auto& pair : gameObjects) {
+		delete pair.second;
+	}
+	gameObjects.clear();
+
+
 	std::ifstream inputFile(path);
 
 	if (!inputFile.is_open()) {

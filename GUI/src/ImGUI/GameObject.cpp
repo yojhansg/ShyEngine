@@ -40,7 +40,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawGameobject(attributeName + it->first, attr);
+					drawColor(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
@@ -273,6 +273,14 @@ PEditor::GameObject::GameObject(std::string& path)
 
 PEditor::GameObject::~GameObject()
 {
+	if (parent != nullptr) {
+		parent->removeChild(this);
+	}
+
+	for (auto child : children) {
+		child.second->setParent(nullptr);
+	}
+
 	components.clear();
 
 	delete pos;
@@ -440,6 +448,7 @@ void PEditor::GameObject::rotateChildren(GameObject* go, GameObject* goCenter, f
 		rotateChildren(child.second, goCenter, rotationAngle);
 	}
 }
+
 
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
@@ -621,6 +630,10 @@ bool PEditor::GameObject::isWaitingToDelete()
 void PEditor::GameObject::toDelete()
 {
 	waitingToDelete = true;
+
+	for (auto child : children) {
+		child.second->toDelete();
+	}
 }
 
 bool PEditor::GameObject::isPrefab()
