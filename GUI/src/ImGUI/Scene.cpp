@@ -88,19 +88,21 @@ PEditor::Scene::~Scene()
 
 	SDL_DestroyTexture(targetTexture); 
 
-	for (auto gameObject : gameObjects) {
-		delete gameObject;
+	for (const auto& pair : gameObjects) {
+		delete pair.second;
 	}
+	gameObjects.clear();
 
 	delete camera;
 }
 
 void PEditor::Scene::addGameObject(std::string path)
 {
-	gameObjects.push_back(new PEditor::GameObject(path));
+	GameObject* go = (new PEditor::GameObject(path));
+	gameObjects.emplace(go->getId(), go);
 }
 
-std::vector<PEditor::GameObject*> PEditor::Scene::getGameObjects()
+std::unordered_map<int, PEditor::GameObject*> PEditor::Scene::getGameObjects()
 {
 	return gameObjects;
 }
@@ -118,10 +120,14 @@ void PEditor::Scene::setSelectedGameObject(GameObject* go)
 
 void PEditor::Scene::renderGameObjects()
 {
-	std::sort(gameObjects.begin(), gameObjects.end(), compareGameObjectsRenderOrder);
+	std::vector<GameObject*> sortedGameObjects;
+	for (const auto& pair : gameObjects) {
+		sortedGameObjects.push_back(pair.second);
+	}
+	std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), compareGameObjectsRenderOrder);
 
-	for (auto gameObject : gameObjects) {
-		gameObject->render(renderer, camera);
+	for(auto gO : sortedGameObjects) {
+		gO->render(renderer, camera);
 	}
 }
 
@@ -170,14 +176,17 @@ void PEditor::Scene::loadScene() {
 
 void PEditor::Scene::update()
 {
-	for (auto it = gameObjects.begin(); it != gameObjects.end();)
-	{
-		(*it)->update();
 
-		if ((*it)->isWaitingToDelete()) {
+	auto it = gameObjects.begin();
+	while (it != gameObjects.end()) {
+		GameObject* currentGameObject = it->second;
+
+		currentGameObject->update();
+
+		if (currentGameObject->isWaitingToDelete()) {
 			selectedGameObject = nullptr;
 
-			delete* it;
+			delete currentGameObject;
 			it = gameObjects.erase(it);
 		}
 		else {
@@ -190,8 +199,8 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	ImVec2 mousePos = ImGui::GetMousePos();
 
-	for (auto gameObject : gameObjects) {
-		gameObject->handleInput(event, mouseInsideGameObject(gameObject, mousePos), getMousePosInsideScene(mousePos));
+	for (const auto& pair : gameObjects) {
+		pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
 	}
 
 	if (!(SDL_GetModState() & KMOD_SHIFT)) {
@@ -247,8 +256,8 @@ std::string PEditor::Scene::toJson()
 	j["name"] = "scene";
 
 	nlohmann::ordered_json gameObjectsJson = nlohmann::json::array();
-	for (auto gameObject : gameObjects) {
-		gameObjectsJson.push_back(j.parse(gameObject->toJson()));
+	for (const auto& pair : gameObjects) {
+		gameObjectsJson.push_back(j.parse(pair.second->toJson()));
 	}
 
 	j["objects"] = gameObjectsJson;

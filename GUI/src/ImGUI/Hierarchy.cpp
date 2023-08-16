@@ -35,7 +35,7 @@ void PEditor::Hierarchy::render()
 	PEditor::Scene* scene = imGUIManager->getScene();
 	PEditor::FileExplorer* fileExplorer = imGUIManager->getFileExplorer();
 	
-	std::vector<GameObject*> gameObjects = scene->getGameObjects();
+	std::unordered_map<int, PEditor::GameObject*> gameObjects = scene->getGameObjects();
 
 	if (focused) {
 		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 25), ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 25));
@@ -78,30 +78,30 @@ void PEditor::Hierarchy::render()
 		ImGui::Separator();
 
 		int i = 0;
-		for (auto gameObject : gameObjects)
+		for (auto pair : gameObjects)
 		{
 			ImGui::Dummy(ImVec2(7, 0));
 			ImGui::SameLine();
 
 			//Checkbox to make the object visible/invisible
-			bool isVisible = gameObject->isVisible();
+			bool isVisible = pair.second->isVisible();
 			std::string checkboxId = "##" + std::to_string(i);
 
 			if (ImGui::Checkbox(checkboxId.c_str(), &isVisible))
 			{
-				gameObject->setVisible(isVisible);
+				pair.second->setVisible(isVisible);
 			}
 
 			ImGui::SameLine();
 			ImGui::Dummy(ImVec2(67, 0)); 
 			ImGui::SameLine();
 
-			std::string nameId = gameObject->getName() + "##" + std::to_string(i);
+			std::string nameId = pair.second->getName() + "##" + std::to_string(i);
 
 			//Selectable to select the gameobject in the scene
-			if (ImGui::Selectable(nameId.c_str(), gameObject == scene->getSelectedGameObject()))
+			if (ImGui::Selectable(nameId.c_str(), pair.second == scene->getSelectedGameObject()))
 			{
-				scene->setSelectedGameObject(gameObject);
+				scene->setSelectedGameObject(pair.second);
 			}
 
 			//If selectable is hovered and rightClicked opens the gameobject menu popup
@@ -111,8 +111,8 @@ void PEditor::Hierarchy::render()
 
 		
 			//Shows the popups when opened
-			showGameObjectMenu(gameObject);
-			showRenamePopup(gameObject);
+			showGameObjectMenu(pair.second);
+			showRenamePopup(pair.second);
 
 			i++;
 		}

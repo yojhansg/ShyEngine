@@ -40,7 +40,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawColor(attributeName + it->first, attr);
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
@@ -172,14 +172,9 @@ void PEditor::GameObject::drawChar(std::string attrName, ::Components::Attribute
 
 void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr)
 {
-	std::vector<PEditor::GameObject*> gameObjects = imGuiManager->getScene()->getGameObjects();
+	std::unordered_map<int, PEditor::GameObject*> gameObjects = imGuiManager->getScene()->getGameObjects();
 
-	std::map<int, GameObject*> gameObjectMap;
-	for (GameObject* gameObject : gameObjects) {
-		gameObjectMap[gameObject->getId()] = gameObject;
-	}
-
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), gameObjectMap.find((int)attr->value.value.valueFloat)->second->getName().c_str())) {
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), gameObjects.find((int)attr->value.value.valueFloat)->second->getName().c_str())) {
 		for (int i = 0; i < gameObjects.size(); i++) {
 			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
 				attr->value.value.valueFloat  = gameObjects[i]->getId();
