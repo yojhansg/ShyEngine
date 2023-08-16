@@ -52,8 +52,8 @@ bool PEditor::Scene::compareGameObjectsRenderOrder(GameObject* a, GameObject* b)
 	return a->getRenderOrder() < b->getRenderOrder();
 }
 
-PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse
-| ImGuiWindowFlags_NoBringToFrontOnFocus)
+PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse
+	| ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	imGUIManager->setScene(this);
@@ -79,15 +79,15 @@ PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScro
 
 	renderer = imGUIManager->getRenderer();
 
-	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowOriWidth , windowOriHeight);
-	
+	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowOriWidth, windowOriHeight);
+
 	selectedGameObject = nullptr;
 }
 
 PEditor::Scene::~Scene()
 {
 
-	SDL_DestroyTexture(targetTexture); 
+	SDL_DestroyTexture(targetTexture);
 
 	for (const auto& pair : gameObjects) {
 		delete pair.second;
@@ -131,13 +131,13 @@ void PEditor::Scene::renderGameObjects()
 {
 	std::vector<GameObject*> sortedGameObjects;
 	for (const auto& pair : gameObjects) {
-		if(pair.second->getParent() == nullptr)
+		if (pair.second->getParent() == nullptr)
 			sortedGameObjects.push_back(pair.second);
 	}
 
 	std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), compareGameObjectsRenderOrder);
 
-	for(auto gO : sortedGameObjects) {
+	for (auto gO : sortedGameObjects) {
 		renderChildGameObjects(gO);
 		gO->render(renderer, camera);
 	}
@@ -150,7 +150,7 @@ void PEditor::Scene::renderFrame()
 	SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(),camera->getPosition().y * camera->getScrollFactor());
+	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(), camera->getPosition().y * camera->getScrollFactor());
 
 	float width = gameSizeX * camera->getScrollFactor();
 	float height = gameSizeY * camera->getScrollFactor();
@@ -162,7 +162,6 @@ void PEditor::Scene::renderFrame()
 
 void PEditor::Scene::saveScene()
 {
-
 	nlohmann::ordered_json j;
 
 	j = j.parse(toJson());
@@ -212,14 +211,14 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 	ImVec2 mousePos = ImGui::GetMousePos();
 
 	for (const auto& pair : gameObjects) {
-		if(mouseInsideWindow(mousePos))
+		if (mouseInsideWindow(mousePos))
 			pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
 	}
 
 	if (!(SDL_GetModState() & KMOD_SHIFT)) {
 		camera->handleInput(event, mouseInsideWindow(mousePos));
 	}
-	
+
 }
 
 void PEditor::Scene::render()
@@ -265,12 +264,12 @@ std::string PEditor::Scene::toJson()
 {
 	nlohmann::ordered_json j;
 
-	//TODO cambiar nombre al que queramos
 	j["name"] = "scene";
 
 	nlohmann::ordered_json gameObjectsJson = nlohmann::json::array();
 	for (const auto& pair : gameObjects) {
-		gameObjectsJson.push_back(j.parse(pair.second->toJson()));
+		if (pair.second->getParent() == nullptr)
+			gameObjectsJson.push_back(j.parse(pair.second->toJson()));
 	}
 
 	j["objects"] = gameObjectsJson;
