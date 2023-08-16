@@ -12,8 +12,10 @@ namespace PEditor{
          ImGUIManager* imGuiManager;
 
          bool shouldOpenRenamePopup;
+         bool shouldOpenSaveScenePopup;
 
          void showRenamePopup(GameObject* gameObject);
+         void showSaveScenePopup();
 
      public:
         MenuBar();

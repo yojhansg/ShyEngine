@@ -33,7 +33,8 @@ void PEditor::MenuBar::render()
             ImGui::MenuItem("Open Scene", NULL, false);
             ImGui::Separator();
             if (ImGui::MenuItem("Save Scene", NULL, false)) {
-                ImGUIManager::getInstance()->getScene()->saveScene();
+
+                shouldOpenSaveScenePopup = true;
             }
 
             ImGui::Separator();
@@ -65,7 +66,7 @@ void PEditor::MenuBar::render()
         {
             if (ImGui::MenuItem("Play", NULL, false))
             {
-                ImGUIManager::getInstance()->getScene()->saveScene();
+                ImGUIManager::getInstance()->getScene()->saveScene("Scenes/scene.scene");
                 Game::Play();
             };
 
@@ -120,6 +121,7 @@ void PEditor::MenuBar::render()
     }
 
     showRenamePopup(gameObject);
+    showSaveScenePopup();
 }
 
 void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
@@ -147,6 +149,43 @@ void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
         {
             if (strlen(nameBuffer) > 0) {
                 gameObject->setName(nameBuffer);
+            }
+
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void PEditor::MenuBar::showSaveScenePopup()
+{
+    if (shouldOpenSaveScenePopup)
+    {
+        ImGui::OpenPopup("Save scene");
+        shouldOpenSaveScenePopup = false;
+    }
+
+    if (ImGui::BeginPopup("Save scene"))
+    {
+        ImGui::Text(("Insert name for the scene:"));
+
+        ImGui::Separator();
+
+        static char nameBuffer[256];  // Buffer to hold the new name
+
+        // Display an input text field for renaming
+        if (ImGui::InputText("Scene name", nameBuffer, sizeof(nameBuffer)))
+        {
+        }
+
+        if (ImGui::Button("Ok"))
+        {
+            if (strlen(nameBuffer) > 0) {
+                imGuiManager->getScene()->saveScene("Scenes/" + std::string(nameBuffer) + ".scene");
+            }
+            else {
+                imGuiManager->getScene()->saveScene("Scenes/scene.scene");
             }
 
             ImGui::CloseCurrentPopup();

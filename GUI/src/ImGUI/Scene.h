@@ -58,7 +58,7 @@ namespace PEditor {
 		void renderGameObjects();
 		void renderFrame();
 
-		void saveScene();
+		void saveScene(std::string path);
 		void loadScene(std::string path);
 
 		virtual void update();

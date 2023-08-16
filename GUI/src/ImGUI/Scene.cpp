@@ -165,13 +165,11 @@ void PEditor::Scene::renderFrame()
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
-void PEditor::Scene::saveScene()
+void PEditor::Scene::saveScene(std::string path)
 {
 	nlohmann::ordered_json j;
 
 	j = j.parse(toJson());
-
-	std::string path = "Scenes/scene.scene";
 
 	std::ofstream outputFile(path);
 	if (outputFile.is_open()) {
