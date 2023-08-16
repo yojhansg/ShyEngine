@@ -40,13 +40,10 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawColor(attributeName + it->first, attr);
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
-					break;
-				case ::Components::AttributesType::GAMEOBJECT:
-					drawGameobject(attributeName + it->first, attr);
 					break;
 				default:
 					break;
@@ -103,9 +100,6 @@ void PEditor::GameObject::drawScriptsInEditor()
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
-				case ::Components::AttributesType::GAMEOBJECT:
-					drawGameobject(attributeName + it->first, attr);
-					break;
 				default:
 					break;
 				}
@@ -195,8 +189,6 @@ PEditor::GameObject::GameObject(std::string& path)
 	GameObject::lastId++;
 
 	imagePath = path;
-
-	prefab = false;
 
 	text = nullptr;
 
@@ -522,11 +514,6 @@ bool PEditor::GameObject::isWaitingToDelete()
 void PEditor::GameObject::toDelete()
 {
 	waitingToDelete = true;
-}
-
-bool PEditor::GameObject::isPrefab()
-{
-	return prefab;
 }
 
 std::string PEditor::GameObject::toJson()
