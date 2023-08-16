@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 struct SDL_Surface;
 struct SDL_Window;
@@ -94,6 +95,8 @@ public:
 	PEditor::FileExplorer* getFileExplorer();
 	PEditor::ComponentWindow* getComponents();
 	PEditor::ScriptCreation* getScriptCreation();
+
+	void OpenScript(const std::string& script);
 
 	~ImGUIManager();
 };

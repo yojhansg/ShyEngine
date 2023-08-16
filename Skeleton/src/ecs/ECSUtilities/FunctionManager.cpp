@@ -2958,62 +2958,62 @@ Scripting::Variable ScriptFunctionality_Vector2D_Zero(std::vector<Scripting::Var
 }
 Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	bool ret = manager->String_Equals(vec[0].str, vec[1].str);
+	bool ret = manager->Text_Equals(vec[0].str, vec[1].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_Concatenate(vec[0].str, vec[1].str);
+	std::string ret = manager->Text_Concatenate(vec[0].str, vec[1].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_Substring(vec[0].str, vec[1].value.Float, vec[2].value.Float);
+	std::string ret = manager->Text_Substring(vec[0].str, vec[1].value.Float, vec[2].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_Begining(vec[0].str, vec[1].value.Float);
+	std::string ret = manager->Text_Begining(vec[0].str, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_End(vec[0].str, vec[1].value.Float);
+	std::string ret = manager->Text_End(vec[0].str, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_Trim(vec[0].str, vec[1].str);
+	std::string ret = manager->Text_Trim(vec[0].str, vec[1].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_TrimBlanks(vec[0].str);
+	std::string ret = manager->Text_TrimBlanks(vec[0].str);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	char ret = manager->String_GetLetter(vec[0].str, vec[1].value.Float);
+	char ret = manager->Text_GetLetter(vec[0].str, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	int ret = manager->String_Find(vec[0].str, vec[1].value.Char);
+	int ret = manager->Text_Find(vec[0].str, vec[1].value.Char);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_ToString(vec[0]);
+	std::string ret = manager->Text_ToString(vec[0]);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_LeadingZeros(vec[0].value.Float, vec[1].value.Float);
+	std::string ret = manager->Text_LeadingZeros(vec[0].value.Float, vec[1].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_String_RemoveDecimals(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	std::string ret = manager->String_RemoveDecimals(vec[0].value.Float);
+	std::string ret = manager->Text_RemoveDecimals(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec){

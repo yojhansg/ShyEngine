@@ -263,7 +263,8 @@ void PEditor::Hierarchy::showGameObjectMenu(GameObject* gameObject)
 		}
 
 		if (ImGui::MenuItem("Add script", NULL, false)) {
-			ImGUIManager::getInstance()->changeEditorState(ImGUIManager::EDITOR_STATE::SCRIPTING_WINDOW);
+
+			ImGUIManager::getInstance()->OpenScript("");
 		}
 
 		ImGui::Separator();

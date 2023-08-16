@@ -114,6 +114,14 @@ void PEditor::GameObject::drawScriptsInEditor()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
 
+
+			if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+				
+				ImGUIManager::getInstance()->OpenScript(scriptName);
+			}
+
+
+
 			if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
 				it = scripts.erase(it);
 			}

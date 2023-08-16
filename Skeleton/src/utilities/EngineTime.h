@@ -10,8 +10,8 @@ namespace Utilities {
 
 		friend Singleton<Time>;
 
-
 	publish:
+
 		float GetTimeSinceBegining();
 		float GetTimeSinceBeginingMilliseconds();
 		float GetDeltaTime();
@@ -19,6 +19,7 @@ namespace Utilities {
 		float GetPhysicsDeltaTime();
 		float ScaleWithDeltaTime(float val);
 		float ScaleWithPhysicsDeltaTime(float val);
+
 	public:
 
 		float calculateFrameRate();
@@ -33,5 +34,6 @@ namespace Utilities {
 	private:
 
 		Time();
+
 	};
 }

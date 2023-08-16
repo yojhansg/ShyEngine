@@ -1,6 +1,6 @@
 #include "Console.h"
 #include "Game.h"
-
+#include "ImGUIManager.h"
 #include "imgui.h"
 
 bool PEditor::Console::forceOpen = false;
@@ -51,18 +51,21 @@ void PEditor::Console::render()
 
 			size_t divide = str.find_last_of(':') + 1;
 
-			if (divide != str.npos) {
+			std::string principio = str.substr(0, divide);
 
-				std::string principio = str.substr(0, divide);
+			std::string fin = str.substr(divide);
 
-				std::string fin = str.substr(divide);
+			divide = principio.find(']') + 1;
+			std::string fecha = principio.substr(0, divide);
+			std::string tipo = principio.substr(divide);
 
-				divide = principio.find(']') + 1;
-				std::string fecha = principio.substr(0, divide);
-				std::string tipo = principio.substr(divide);
+			divide = tipo.find(':') + 1;
+			std::string objeto = tipo.substr(0, divide);
+			std::string script = tipo.substr(divide);
 
-				messages.push_back({ {51, 153, 255}, fecha, tipo, fin });
-			}
+
+
+			messages.push_back({ {51, 153, 255}, fecha + objeto, script, fin });
 		}
 	}
 
@@ -78,15 +81,24 @@ void PEditor::Console::render()
 		auto contentSize = ImGui::CalcTextSize(
 			(message.date + message.type + message.message).c_str(), nullptr, false, windowWidth);
 
-		ImGui::BeginChild(message.message.c_str(), ImVec2(windowWidth, contentSize.y));
+		ImGui::BeginChild(std::to_string(messageIdx).c_str(), ImVec2(windowWidth, contentSize.y));
 
 		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(message.color.r, message.color.g, message.color.b, 255));
 		ImGui::TextWrapped(message.date.c_str());
 		ImGui::SameLine();
+
 		ImGui::TextWrapped(message.type.c_str());
+		
+		if (ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+		{
+			if (ImGui::IsMouseDoubleClicked(0))
+			{
+				ImGUIManager::getInstance()->OpenScript(message.type.substr(1, message.type.size() - 2));
+			}
+		}
+		
 		ImGui::SameLine();
 		ImGui::PopStyleColor();
-
 		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 255, 255));
 		ImGui::TextWrapped(message.message.c_str());
 		ImGui::PopStyleColor();

@@ -37,7 +37,6 @@ namespace Utilities {
 
 	std::string Time::Time2String(float time) {
 
-
 		float whole;
 
 		int mill = std::modf(time, &whole) * 1000;
@@ -45,7 +44,6 @@ namespace Utilities {
 		int min = whole / 60;
 
 		int sec = (int)whole % 60;
-
 
 		std::stringstream stream;
 
@@ -56,13 +54,11 @@ namespace Utilities {
 		return stream.str();
 	}
 
-	float Time::ScaleWithDeltaTime(float val)
-	{
+	float Time::ScaleWithDeltaTime(float val) {
 		return val * GetDeltaTime();
 	}
 
-	float Time::ScaleWithPhysicsDeltaTime(float val)
-	{
+	float Time::ScaleWithPhysicsDeltaTime(float val) {
 		return val * GetPhysicsDeltaTime();
 	}
 

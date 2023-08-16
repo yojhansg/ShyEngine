@@ -29,7 +29,7 @@ namespace Utilities {
 		operator std::string() const;
 	};
 
-	// needed for printing a value of tyep Vector2D with std::cout.
+	// Needed for printing a value of tyep Vector2D with std::cout.
 	// The definition is in .cpp
 	std::ostream& operator<<(std::ostream& os, const Color& v);
 

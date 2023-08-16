@@ -452,3 +452,9 @@ PEditor::ScriptCreation* ImGUIManager::getScriptCreation()
 	return scriptCreation;
 }
 
+void ImGUIManager::OpenScript(const std::string& script)
+{
+	scriptCreation->SetName(script);
+	changeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
+}
+

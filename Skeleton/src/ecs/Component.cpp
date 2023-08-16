@@ -11,6 +11,7 @@ namespace ECS {
 		active = true;
 		removed = false;
 		inRemovedComponentList = false;
+		valid = true;
 	}
 
 	bool Component::isActive() {

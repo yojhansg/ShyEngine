@@ -1,10 +1,19 @@
 #include "SoundManager.h"
 #include "SDL.h"
 
+#include <ConsoleManager.h>
+
+#define MAX_CHANNELS_CAPACITY 32
+#define MIN_CHANNELS_CAPACITY 4
+
 namespace Sound {
 
 	SoundManager::SoundManager() {
-		initSDLMixer();
+		valid = initSDLMixer();
+	}
+
+	bool SoundManager::Valid() {
+		return valid;
 	}
 
 	SoundManager::~SoundManager() {
@@ -12,15 +21,21 @@ namespace Sound {
 	}
 
 	void SoundManager::setMasterVolume(float volume) {
-		assert(volume >= 0.0f && volume <= 1.0f, "Volume value must be between 0 and 1!");
+
+		if (volume < 0.0f || volume > 1.0f)
+			Console::Output::PrintWarning("Invalid argument value", "Volume value must be between 0 and 1!");
 
 		Mix_MasterVolume(volume * MIX_MAX_VOLUME);
 	}
 
 	void SoundManager::setChannelsCapacity(float nChannels) {
-		this->nChannels = nChannels;
 
-		Mix_AllocateChannels(nChannels);
+		if (nChannels < MIN_CHANNELS_CAPACITY || nChannels > MAX_CHANNELS_CAPACITY)
+			Console::Output::PrintError("Invalid argument value", "The number of channels can not be greater than 32 or less than 4!");
+		else {
+			this->nChannels = nChannels;
+			Mix_AllocateChannels(nChannels);
+		}
 	}
 
 
@@ -36,98 +51,136 @@ namespace Sound {
 
 	int SoundManager::playSound(int id, int loop, int channel) {
 
-		if (channel != -1)
-			assert(channel >= 0 && channel < nChannels, "Channel must be between -1 and " + nChannels + ".\n");
+		if (channel < -1 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between -1 and " + nChannels - 1);
+			return -1;
+		}
 
 		int ret = Mix_PlayChannel(channel, sfxs[id], loop);
 
-		assert(ret != -1, "Sound could not be played\n");
+		if (ret == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 
 		return ret;
 	}
 
 	int SoundManager::fadeInChannel(int channel, int id, int loops, int ms) {
 
-		if (channel != -1)
-			assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < -1 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between -1 and " + nChannels - 1);
+			return -1;
+		}
 
 		int ret = Mix_FadeInChannel(channel, sfxs[id], loops, ms);
 
-		assert(ret != -1, "Sound could not be played\n");
+		if (ret == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 
 		return ret;
 	}
 
 	void SoundManager::fadeOutChannel(int channel, int ms) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
-		assert(Mix_FadeOutChannel(channel, ms) != -1, Mix_GetError());
+		if (Mix_FadeOutChannel(channel, ms) == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 	}
 
 	void SoundManager::stopChannel(int channel) {
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
 
-		assert(Mix_HaltChannel(channel) != -1, Mix_GetError());
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
+
+		if (Mix_HaltChannel(channel) == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 	}
 
 	void SoundManager::pauseChannel(int channel) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
 		Mix_Pause(channel);
 	}
 
 	bool SoundManager::pausedChannel(int channel) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels)
+			Console::Output::PrintWarning("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
 
 		return Mix_Paused(channel);
 	}
 
 	void SoundManager::resumeChannel(int channel) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
 		Mix_Resume(channel);
 	}
 
 	bool SoundManager::isChannelPlaying(int channel) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels)
+			Console::Output::PrintWarning("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
 
 		return Mix_Playing(channel) != 0;
 	}
 
 	void SoundManager::setChannelVolume(int channel, int volume) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
-		assert(volume >= 0 && volume < MIX_MAX_VOLUME, "Volume must be a value between 0 and 127 both included\n");
+		if (volume < 0 || volume >= MIX_MAX_VOLUME)
+			Console::Output::PrintWarning("Invalid argument value", "Volume value must be between 0 and " + MIX_MAX_VOLUME - 1);
 
 		Mix_Volume(channel, volume);
 	}
 
 	int SoundManager::getChannelVolume(int channel) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return 0;
+		}
 
 		return Mix_Volume(channel, -1);
 	}
 
 	void SoundManager::setChannelPosition(int channel, int angle, int distance) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
-		assert(Mix_SetPosition(channel, angle, distance) != 0, Mix_GetError());
+		if (Mix_SetPosition(channel, angle, distance) == 0)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 
 	}
 
 	void SoundManager::setChannelPanning(int channel, int left, int right) {
 
-		assert(channel >= 0 && channel < nChannels, "Channel must be between 0 and " + nChannels + ".\n");
+		if (channel < 0 || channel >= nChannels) {
+			Console::Output::PrintError("Invalid argument value", "Channel value must be between 0 and " + nChannels - 1);
+			return;
+		}
 
-		assert(Mix_SetPanning(channel, left, right) != 0, Mix_GetError());
+		if (Mix_SetPanning(channel, left, right) == 0)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 
 	}
 
@@ -147,8 +200,8 @@ namespace Sound {
 		if (isMusicPlaying())
 			haltMusic();
 
-		int e = Mix_PlayMusic(music[id], loop);
-		assert(e == 0, Mix_GetError());
+		if (Mix_PlayMusic(music[id], loop) == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 	}
 
 	void SoundManager::fadeInMusic(int id, int loops, int ms) {
@@ -156,8 +209,8 @@ namespace Sound {
 		if (isMusicPlaying())
 			haltMusic();
 
-		int e = Mix_FadeInMusic(music[id], loops, ms);
-		assert(e == 0, Mix_GetError());
+		if (Mix_FadeInMusic(music[id], loops, ms) == -1)
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", Mix_GetError());
 	}
 
 	void SoundManager::fadeOutMusic(int ms) {
@@ -196,20 +249,42 @@ namespace Sound {
 		Mix_RewindMusic();
 	}
 
-	void SoundManager::initSDLMixer() {
-		int e = Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID);
-		assert(e > 0, Mix_GetError());
+	bool SoundManager::initSDLMixer() {
 
-		SDL_Init(SDL_INIT_AUDIO);
+		int flags = MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID;
+
+		int e = Mix_Init(flags);
+
+		// Checks for errors in the SDL_Mixer initialisation
+		if ((e & flags) != flags) {
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", "Could not initialise SDLMixer!");
+			Mix_Quit();
+			return false;
+		}
+
+		e = SDL_Init(SDL_INIT_AUDIO);
+
+		// Checks for errors in the SDL_Init method
+		if (e < 0) {
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", SDL_GetError());
+			Mix_Quit();
+			return false;
+		}
 
 		e = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-		assert(e >= 0, Mix_GetError());
+		if (e == -1) {
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", "Could not initialise SDLMixer!");
+			Mix_Quit();
+			return false;
+		}
 
 		nChannels = 8;
 
+		return true;
 	}
 
 	void SoundManager::closeSDLMixer() {
 		Mix_Quit(); 
 	}
+
 }

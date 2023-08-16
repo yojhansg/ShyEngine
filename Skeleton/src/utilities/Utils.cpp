@@ -6,15 +6,8 @@
 
 namespace Utilities {
 
-	float Utils::DegreesToRadians(float angle) {
-
-		return angle * PI / 180.0f;
-
-	}
-
-	float Utils::RadiansToDegrees(float angle) {
-
-		return angle * 180.0f / PI;
+	int Utils::RandomIntBetween(int min, int max) {
+		return min + std::rand() % (max - min + 1);
 	}
 
 	float Utils::RandomBetween(float min, float max) {
@@ -28,8 +21,12 @@ namespace Utilities {
 		return DegreesToRadians(degree);
 	}
 
-	int Utils::RandomIntBetween(int min, int max) {
-		return min + std::rand() % (max - min + 1);
+	float Utils::DegreesToRadians(float angle) {
+		return angle * PI / 180.0f;
+	}
+
+	float Utils::RadiansToDegrees(float angle) {
+		return angle * 180.0f / PI;
 	}
 
 	Color Utils::RandomColor() {
@@ -42,7 +39,7 @@ namespace Utilities {
 		return c;
 	}
 
-	Color Utils::RandomColorBetween(const Color& c1, const Color& c2) {
+	Color Utils::RandomColorBetween(cColor c1, cColor c2) {
 		Color c;
 
 		c.r = RandomIntBetween(c1.r, c2.r);

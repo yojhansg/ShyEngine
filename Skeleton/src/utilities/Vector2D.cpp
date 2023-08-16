@@ -3,11 +3,12 @@
 #include <string>
 #include "StringTrim.h"
 
+
 #define PI 3.14159265358979323846264338327950288f
 
 namespace Utilities {
 
-	// for printing an object of type Vector2D
+	// Printing a Vector2D
 	std::ostream& operator<<(std::ostream& os, const Vector2D& v) {
 		os << "(" << v.getX() << "," << v.getY() << ")";
 		return os;
@@ -23,8 +24,6 @@ namespace Utilities {
 		else if (degrees <= -180.0f) {
 			degrees = 360.0f + degrees;
 		}
-
-		assert(degrees >= -180.0f && degrees <= 180.0f);
 
 		float angle = degrees * PI / 180.0f;
 		float sine = sin(angle);
@@ -50,8 +49,8 @@ namespace Utilities {
 		angle = (abs(K + angle) < abs(angle)) ? K + angle : angle;
 		return angle * 180.0f / PI;
 	}
-	Vector2D::Vector2D(const char* str): Vector2D(std::string(str)) {
-	}
+
+	Vector2D::Vector2D(const char* str) : Vector2D(std::string(str)) {}
 
 	Vector2D::Vector2D(std::string const& str) {
 
