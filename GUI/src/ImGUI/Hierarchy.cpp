@@ -7,7 +7,7 @@
 #include <string>
 #include "FileExplorer.h"
 
-PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoMove | NoCollapse )
+PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoMove | NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();

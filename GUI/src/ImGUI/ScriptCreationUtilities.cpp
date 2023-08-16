@@ -906,7 +906,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 		ImGui::Text("Name the script");
 
-
+		ImGui::PushItemWidth(300);
 		ImGui::InputText("", nameBuffer, CharBufferSize);
 
 
@@ -1041,7 +1041,7 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 			else Close();
 		}
 
-
+		ImGui::PushItemWidth(300);
 		if (ImGui::InputText("Node search", nameSearch, CharBufferSize)) {
 
 			showNodeSearch = std::string(nameSearch).length() > 0;

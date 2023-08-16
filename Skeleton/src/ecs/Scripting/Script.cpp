@@ -114,7 +114,6 @@ void ECS::Script::Initialise(cstring path)
 {
 	name = path;
 
-	//TODO: Guardar un script en lugar de leerlo cada vez
 	nodes = Scripting::ScriptManager::LoadScript(path);
 }
 

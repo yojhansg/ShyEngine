@@ -45,5 +45,6 @@
             "type": "string"
         }
     ],
-    "start": 3
+    "start": 3,
+    "update": 3
 }

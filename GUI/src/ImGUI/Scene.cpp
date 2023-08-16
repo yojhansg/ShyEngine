@@ -52,7 +52,8 @@ bool PEditor::Scene::compareGameObjectsRenderOrder(GameObject* a, GameObject* b)
 	return a->getRenderOrder() < b->getRenderOrder();
 }
 
-PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse)
+PEditor::Scene::Scene(): Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse
+| ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	imGUIManager->setScene(this);

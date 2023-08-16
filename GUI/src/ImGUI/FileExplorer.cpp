@@ -13,7 +13,7 @@
 namespace fs = std::filesystem;
 
 
-PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove)
+PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
