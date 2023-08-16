@@ -369,7 +369,13 @@ namespace Components {
 				attribute.value.value.valueFloat = attributeJson["value"];
 			}
 			else if (attributeJson["value"].is_string()) {
-				attribute.value.valueString = attributeJson["value"];
+				std::string valueStr = attributeJson["value"];
+				if (valueStr.size() == 1) {
+					attribute.value.value.valueChar = valueStr[0];
+				}
+				else {
+					attribute.value.valueString = valueStr;
+				}
 			}
 	
 			//ADD REMAINING TYPES
