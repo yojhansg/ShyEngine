@@ -20,12 +20,13 @@
 #include "Console.h"
 #include "Preferences.h"
 
+#define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
+
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
 
 	gameSize = nullptr;
-	originalWindowSize = nullptr;
 	scene = nullptr;
 	window = nullptr;
 
@@ -37,7 +38,6 @@ struct ImVec3 { float x, y, z; ImVec3(float _x = 0.0f, float _y = 0.0f, float _z
 
 void ImGUIManager::initImGUI()
 {
-	std::cout << "INITIALISING IMGUI\n";
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -57,7 +57,6 @@ void ImGUIManager::initImGUI()
 
 	auto defaultFont = io.Fonts->AddFontFromFileTTF("Fonts/Montserrat-Regular.ttf", 18.0f);
 	io.FontDefault = defaultFont;
-
 
 	ImVec3 color_for_text = ImVec3(236.f / 255.f, 240.f / 255.f, 241.f / 255.f);
 	ImVec3 color_for_head = ImVec3(41.f / 255.f, 128.f / 255.f, 185.f / 255.f);
@@ -114,7 +113,6 @@ void ImGUIManager::initImGUI()
 
 	style.WindowRounding = 0;
 
-
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
 	ImGui_ImplSDLRenderer_Init(renderer);
@@ -123,9 +121,6 @@ void ImGUIManager::initImGUI()
 
 void ImGUIManager::initWindows()
 {
-
-	std::cout << "INITIALISING WINDOWS\n";
-
 	//MENU BAR
 	menuBar = new PEditor::MenuBar();
 	addWindow(menuBar);
@@ -158,8 +153,6 @@ void ImGUIManager::initWindows()
 
 void ImGUIManager::initSDL()
 {
-	std::cout << "INITIALISING SDL\n";
-
 	// Initialize SDL. If something fails it returns -1 and we throw an exception
 	//if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 	//	std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
@@ -168,8 +161,7 @@ void ImGUIManager::initSDL()
 	//	// ERROR HANDLING
 	//}
 
-	originalWindowSize = new ImVec2(SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
-	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
+	createSDLWindow("SHY Engine", _Centered, _WindowMainSize);
 	createSDLRenderer();
 
 
@@ -184,7 +176,7 @@ void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int siz
 
 	// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-	window = SDL_CreateWindow(name, posX, posY, sizeX, sizeY, window_flags);
+	window = SDL_CreateWindow(name, posX, posY, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
 	if (!window) {
@@ -221,7 +213,7 @@ void ImGUIManager::init()
 {
 	SplashScreen();
 
-	gameSize = new ImVec2{ GAME_WIDTH, GAME_HEIGHT };
+	gameSize = new ImVec2{ _WindowMainSize };
 
 	initImGUI();
 
@@ -282,9 +274,8 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-
-	SDL_SetWindowSize(window, 1080, 720);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	//SDL_SetWindowSize(window, _ProjectSelectionDialogueSize);
+	SDL_SetWindowPosition(window, _Centered);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 
 	PEditor::ProjectsManager dialog;
@@ -294,8 +285,8 @@ void ImGUIManager::loop()
 		return;
 
 	SDL_SetWindowResizable(window, SDL_TRUE);
-	SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	SDL_SetWindowSize(window, _WindowMainSize);
+	SDL_SetWindowPosition(window, _Centered);
 
 	initWindows();
 
@@ -427,11 +418,6 @@ SDL_Renderer* ImGUIManager::getRenderer()
 	return renderer;
 }
 
-ImVec2 ImGUIManager::getOriginalWindowSize()
-{
-	return *originalWindowSize;
-}
-
 
 ImGUIManager::~ImGUIManager()
 {
@@ -452,7 +438,6 @@ ImGUIManager::~ImGUIManager()
 		delete window;
 	}
 
-	delete originalWindowSize;
 	delete gameSize;
 
 }

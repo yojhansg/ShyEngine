@@ -68,7 +68,7 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 
 	float menuBarHeight = ImGui::GetFrameHeight();
 
-	windowOriPosX = SDL_WIN_WIDTH / 2 - windowOriWidth / 2;
+	windowOriPosX = TARGET_WIDTH / 2 - windowOriWidth / 2;
 	windowOriPosY = menuBarHeight;
 
 	setSize(ImVec2(windowOriWidth, windowOriHeight));
