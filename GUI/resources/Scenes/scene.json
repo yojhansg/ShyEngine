@@ -2,45 +2,37 @@
     "name": "scene",
     "objects": [
         {
-            "name": "script",
+            "name": "folder",
+            "childs": [],
             "order": 0,
-            "localPosition": "0.000000, 0.000000",
-            "localScale": "100.000000, 100.000000",
-            "localRotation": "0.000000",
+            "localPosition": "1334.826294, 576.023926",
+            "localScale": "270.000000, 270.000000",
+            "localRotation": "-325.595398",
             "components": [
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "script.png"
+                        "fileName": "folder.png"
                     }
                 },
                 {
                     "component": "OverlayButton",
                     "attributes": {
-                        "defaultColor": "1.000000,0.000000,0.000000",
-                        "scale": "0.000000",
-                        "hoverColor": "0.000000,0.000000,0.000000",
-                        "downColor": "0.000000,0.000000,0.000000"
+                        "defaultColor": "0.000000, 0.000000, 0.000000",
+                        "scale": "156.000000",
+                        "downColor": "0.000000, 0.000000, 0.000000",
+                        "hoverColor": "0.000000, 0.000000, 0.000000"
                     }
                 }
             ],
-            "scripts": null
-        },
-        {
-            "name": "icon",
-            "order": 0,
-            "localPosition": "0.000000, 0.000000",
-            "localScale": "100.000000, 100.000000",
-            "localRotation": "0.000000",
-            "components": [
-                {
-                    "component": "Image",
-                    "attributes": {
-                        "fileName": "icon.png"
+            "scripts": {
+                "Saludos": {
+                    "Hola": {
+                        "type": "string",
+                        "value": "Hbobo"
                     }
                 }
-            ],
-            "scripts": null
+            }
         }
     ]
 }

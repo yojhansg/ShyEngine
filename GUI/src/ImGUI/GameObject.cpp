@@ -217,16 +217,14 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	SDL_FreeSurface(surface);
 
-	if (path != "") {
+	if (imagePath != "") {
 		//Add component image
 		::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
 		::Components::AttributeValue attributeValue;
 		attributeValue.valueString = path;
 		imageComponent.getAttribute("fileName").SetValue(attributeValue);
 		addComponent(imageComponent);
-	}
 
-	if (path != "") {
 		//Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
 		std::size_t extensionPos = path.find_last_of('.');
 		name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
@@ -554,7 +552,7 @@ void PEditor::GameObject::update()
 void PEditor::GameObject::addComponent(::Components::Component comp)
 {
 	if (components.find(comp.getName()) == components.end()) {
-		components.emplace(comp.getName(), comp);
+		components.insert({ comp.getName(), comp });
 	}
 }
 
@@ -699,6 +697,66 @@ std::string PEditor::GameObject::toJson()
 
 
 	return j.dump(2);
+}
+
+PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
+{
+	nlohmann::ordered_json jsonData;
+	try {
+		jsonData = nlohmann::json::parse(json);
+	}
+	catch (const nlohmann::json::parse_error& e) {
+		std::cerr << "JSON parse error: " << e.what() << std::endl;
+		return nullptr;
+	}
+
+	std::string goName = jsonData["name"];
+
+	PEditor::GameObject* gameObject = new PEditor::GameObject(goName);
+	gameObject->name = goName;
+
+
+	for (const auto& childJson : jsonData["childs"]) {
+		PEditor::GameObject* child = PEditor::GameObject::fromJson(childJson.dump());
+
+		gameObject->addChild(child);
+		child->setParent(gameObject);
+	}
+
+	gameObject->renderOrder = jsonData["order"];
+
+	// Deserialize localPosition, localScale, and localRotation
+	std::string localPositionStr = jsonData["localPosition"];
+	std::string localScaleStr = jsonData["localScale"];
+	std::string localRotation = jsonData["localRotation"];
+
+	// Parse localPosition and localScale
+	ImVec2* localPosition;
+	ImVec2* localScale;
+	localPosition = new ImVec2();
+	localScale = new ImVec2();
+
+	sscanf_s(localPositionStr.c_str(), "%f, %f", &localPosition->x, &localPosition->y);
+	sscanf_s(localScaleStr.c_str(), "%f, %f", &localScale->x, &localScale->y);
+
+	gameObject->pos = localPosition;
+	gameObject->size = localScale;
+	gameObject->rotation = std::stof(localRotation);
+
+
+	for (const auto& compJson : jsonData["components"]) {
+		Components::Component component = Components::Component::fromJson(compJson.dump());
+		gameObject->addComponent(component);
+	}
+
+
+	for (const auto& scriptJson : jsonData["scripts"].items()) {
+
+		Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
+		gameObject->addScript(script);
+	}
+
+	return gameObject;
 }
 
 

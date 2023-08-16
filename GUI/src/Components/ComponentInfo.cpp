@@ -2,6 +2,8 @@
 #include "nlohmann/json.hpp"
 
 namespace Components {
+	std::unordered_map<std::string, AttributesType> Attribute::attributeTypes;
+
 	Component::Component()
 	{
 		name = "";
@@ -95,6 +97,8 @@ namespace Components {
 		else {
 			type = AttributesType::NONE;
 		}
+
+		Attribute::attributeTypes[this->name] = this->type;
 	}
 
 	Attribute::Attribute(const std::string& name)
@@ -137,17 +141,17 @@ namespace Components {
 			return std::to_string(value.value.valueFloat);
 			break;
 		case AttributesType::VECTOR2:
-			stringValue = std::to_string(value.value.valueVector2.x) + "," + std::to_string(value.value.valueVector2.y);
+			stringValue = std::to_string(value.value.valueVector2.x) + ", " + std::to_string(value.value.valueVector2.y);
 			return stringValue;
 			break;
 		case AttributesType::STRING:
 			return value.valueString;
 			break;
 		case AttributesType::BOOL:
-			return std::to_string(value.value.valueBool);
+			return value.value.valueBool ? "true" : "false";
 			break;
 		case AttributesType::COLOR:
-			stringValue = std::to_string(value.value.valueColor.r) + "," + std::to_string(value.value.valueColor.g) + "," + std::to_string(value.value.valueColor.b);
+			stringValue = std::to_string(value.value.valueColor.r) + ", " + std::to_string(value.value.valueColor.g) + ", " + std::to_string(value.value.valueColor.b);
 			return stringValue;
 			break;
 		case AttributesType::CHAR:
@@ -159,6 +163,44 @@ namespace Components {
 			return "";
 			break;
 		}
+	}
+
+	Attribute Attribute::fromJson(std::string name, std::string json)
+	{
+		Attribute attribute;
+
+		attribute.name = name;
+		attribute.type = Attribute::attributeTypes[name];
+
+		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);;
+
+		switch (attribute.type) {
+		case AttributesType::FLOAT:
+			attribute.value.value.valueFloat = std::stof(jsonData.get<std::string>());
+			break;
+		case AttributesType::VECTOR2:
+			sscanf_s(jsonData.get<std::string>().c_str(), "%f, %f", &attribute.value.value.valueVector2.x, &attribute.value.value.valueVector2.y);
+			break;
+		case AttributesType::STRING:
+			attribute.value.valueString = jsonData.get<std::string>();
+			break;
+		case AttributesType::BOOL:
+			attribute.value.value.valueBool = jsonData.get<std::string>() == "true" ? true : false;
+			break;
+		case AttributesType::COLOR:
+			sscanf_s(jsonData.get<std::string>().c_str(), "%f, %f, %f", &attribute.value.value.valueColor.r, &attribute.value.value.valueColor.g, &attribute.value.value.valueColor.b);
+			break;
+		case AttributesType::CHAR:
+			attribute.value.value.valueChar = jsonData.get<std::string>()[0];
+			break;
+		case AttributesType::GAMEOBJECT:
+			attribute.value.value.valueFloat = std::stof(jsonData.get<std::string>());
+			break;
+		default:
+			break;
+		}
+
+		return attribute;
 	}
 
 	std::string Component::toJson() {
@@ -174,6 +216,23 @@ namespace Components {
 		j["attributes"] = attributesJson;
 
 		return j.dump(2);
+	}
+
+	::Components::Component Component::fromJson(std::string json) {
+		::Components::Component component;
+
+		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);
+
+		component.name = jsonData["component"];
+
+
+		nlohmann::json attributesJson = jsonData["attributes"];
+		for (const auto& attrJson : attributesJson.items()) {
+			::Components::Attribute attr = ::Components::Attribute::fromJson(attrJson.key(), attrJson.value().dump());
+			component.attributes[attr.getName()] = attr;
+		}
+
+		return component;
 	}
 
 	Method::Method()
@@ -287,5 +346,37 @@ namespace Components {
 
 
 		return root.dump(2);
+	}
+
+	Script Script::fromJson(std::string name, std::string json) {
+		Script script(name);
+
+		nlohmann::json jsonData = nlohmann::json::parse(json);
+
+
+		for (const auto& jsonEntry : jsonData.items()) {
+			const std::string attributeName = jsonEntry.key();
+			const nlohmann::json& attributeJson = jsonEntry.value();
+
+			const std::string attributeType = attributeJson["type"];
+
+			Attribute attribute(attributeName, attributeType);
+
+			if (attributeJson["value"].is_boolean()) {
+				attribute.value.value.valueBool = attributeJson["value"];
+			}
+			else if (attributeJson["value"].is_number_float()) {
+				attribute.value.value.valueFloat = attributeJson["value"];
+			}
+			else if (attributeJson["value"].is_string()) {
+				attribute.value.valueString = attributeJson["value"];
+			}
+	
+			//ADD REMAINING TYPES
+
+			script.AddAttribute(attributeName, attribute);
+		}
+
+		return script;
 	}
 }
