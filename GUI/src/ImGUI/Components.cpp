@@ -9,7 +9,7 @@
 #include "FileExplorer.h"
 
 
-PEditor::ComponentWindow::ComponentWindow() : Window("Components", NoCollapse | NoMove)
+PEditor::ComponentWindow::ComponentWindow() : Window("Components", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();

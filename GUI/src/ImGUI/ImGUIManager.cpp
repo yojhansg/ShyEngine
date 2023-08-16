@@ -111,7 +111,7 @@ void ImGUIManager::initImGUI()
 	style.Colors[ImGuiCol_PopupBg] = ImVec4(color_for_pops.x, color_for_pops.y, color_for_pops.z, 0.92f);
 	//style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 0.73f);
 
-	style.WindowRounding = 10;
+	style.WindowRounding = 0;
 
 
 	// Setup Platform/Renderer backends
@@ -149,7 +149,8 @@ void ImGUIManager::initWindows()
 	addWindow(scriptCreation);
 
 
-	addWindow(new PEditor::Console());
+	console = new PEditor::Console();
+	addWindow(console);
 }
 
 void ImGUIManager::initSDL()
@@ -323,7 +324,8 @@ void ImGUIManager::render()
         switch (state)
         {
         case ImGUIManager::SCRIPTING_WINDOW:
-            if (window == scriptCreation) 
+            if (window == scriptCreation ||
+				window == console) 
                 window->render();
             break;
         case ImGUIManager::EDITOR_WINDOW:
