@@ -11,6 +11,7 @@ PEditor::Window::Window(std::string _windowName, WindowFlags f = None)
 	flags = f;
 	windowName = _windowName;
 
+	canBeDisplayedOnTop = false;
 
 	windowWidth = windowOriWidth = 50;
 	windowHeight = windowOriHeight = 50;
@@ -72,5 +73,10 @@ bool PEditor::Window::isFocused()
 
 PEditor::Window::~Window()
 {
+}
+
+bool PEditor::Window::CanBeDrawnOnTop()
+{
+	return canBeDisplayedOnTop;
 }
 

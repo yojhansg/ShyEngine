@@ -75,6 +75,9 @@
     <ClInclude Include="..\..\src\ImGUI\Game.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Preferences.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\imgui.cpp">
@@ -138,6 +141,9 @@
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Preferences.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
