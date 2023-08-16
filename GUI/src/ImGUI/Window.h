@@ -50,6 +50,7 @@ namespace PEditor {
         int windowOriWidth, windowOriHeight;
         int windowOriPosX, windowOriPosY;
 
+        bool canBeDisplayedOnTop;
         bool focused;
     public:
         
@@ -68,5 +69,8 @@ namespace PEditor {
         bool isFocused();
 
         virtual ~Window();
+
+
+        bool CanBeDrawnOnTop();
     };
 }

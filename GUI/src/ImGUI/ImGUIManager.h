@@ -19,11 +19,11 @@ namespace PEditor {
 	class Console;
 };
 
-#define SDL_WIN_WIDTH 1920
-#define SDL_WIN_HEIGHT 1080
+#define TARGET_WIDTH 1920
+#define TARGET_HEIGHT 1080
 
-#define GAME_WIDTH 1920
-#define GAME_HEIGHT 1080
+#define _ProjectSelectionDialogueSize 1080, 720
+#define _WindowMainSize 1920, 1080
 
 class ImGUIManager
 {
@@ -47,7 +47,6 @@ private:
 	// All editor windows
 	std::vector<PEditor::Window*> windows;
 
-	ImVec2* originalWindowSize;
 	ImVec2* gameSize;
 
 	void initImGUI();
@@ -63,6 +62,9 @@ private:
 	PEditor::ComponentWindow* components = nullptr;
 	PEditor::ScriptCreation* scriptCreation = nullptr;
 	PEditor::Console* console = nullptr;
+
+
+	void SplashScreen();
 
 public:
 

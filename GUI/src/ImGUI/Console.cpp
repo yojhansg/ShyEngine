@@ -14,6 +14,7 @@ PEditor::Console::Console() : PEditor::Window("Console", 0)
 	windowWidth = 700;
 	windowHeight = 700;
 
+	canBeDisplayedOnTop = true;
 }
 
 void PEditor::Console::ForceOpen()

@@ -18,13 +18,15 @@
 #include "ProjectsManager.h"
 #include "Game.h"
 #include "Console.h"
+#include "Preferences.h"
+
+#define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
 
 ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
 
 	gameSize = nullptr;
-	originalWindowSize = nullptr;
 	scene = nullptr;
 	window = nullptr;
 
@@ -36,7 +38,6 @@ struct ImVec3 { float x, y, z; ImVec3(float _x = 0.0f, float _y = 0.0f, float _z
 
 void ImGUIManager::initImGUI()
 {
-	std::cout << "INITIALISING IMGUI\n";
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -56,7 +57,6 @@ void ImGUIManager::initImGUI()
 
 	auto defaultFont = io.Fonts->AddFontFromFileTTF("Fonts/Montserrat-Regular.ttf", 18.0f);
 	io.FontDefault = defaultFont;
-
 
 	ImVec3 color_for_text = ImVec3(236.f / 255.f, 240.f / 255.f, 241.f / 255.f);
 	ImVec3 color_for_head = ImVec3(41.f / 255.f, 128.f / 255.f, 185.f / 255.f);
@@ -113,7 +113,6 @@ void ImGUIManager::initImGUI()
 
 	style.WindowRounding = 0;
 
-
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
 	ImGui_ImplSDLRenderer_Init(renderer);
@@ -122,9 +121,6 @@ void ImGUIManager::initImGUI()
 
 void ImGUIManager::initWindows()
 {
-
-	std::cout << "INITIALISING WINDOWS\n";
-
 	//MENU BAR
 	menuBar = new PEditor::MenuBar();
 	addWindow(menuBar);
@@ -151,22 +147,21 @@ void ImGUIManager::initWindows()
 
 	console = new PEditor::Console();
 	addWindow(console);
+
+	addWindow(new PEditor::Preferences());
 }
 
 void ImGUIManager::initSDL()
 {
-	std::cout << "INITIALISING SDL\n";
-
 	// Initialize SDL. If something fails it returns -1 and we throw an exception
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
-		system("pause");
+	//if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+	//	std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
+	//	system("pause");
 
-		// ERROR HANDLING
-	}
+	//	// ERROR HANDLING
+	//}
 
-	originalWindowSize = new ImVec2(SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
-	createSDLWindow("PEditor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WIN_WIDTH, SDL_WIN_HEIGHT);
+	createSDLWindow("SHY Engine", _Centered, _WindowMainSize);
 	createSDLRenderer();
 
 
@@ -181,7 +176,7 @@ void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int siz
 
 	// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-	window = SDL_CreateWindow(name, posX, posY, sizeX, sizeY, window_flags);
+	window = SDL_CreateWindow(name, posX, posY, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
 	if (!window) {
@@ -216,16 +211,55 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
-	gameSize = new ImVec2{ GAME_WIDTH, GAME_HEIGHT };
+	SplashScreen();
+
+	gameSize = new ImVec2{ _WindowMainSize };
 
 	initImGUI();
 
-    Components::ComponentManager::Initialise();
-    Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
-    Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
+	Components::ComponentManager::Initialise();
+	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
+	Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
 	Components::ComponentManager::ReadScripts("Scripts");
 
 	PEditor::Game::Init("Main_Debug.exe");
+}
+
+void ImGUIManager::SplashScreen()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
+		system("pause");
+
+		// ERROR HANDLING
+	}
+
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500,
+		SDL_WINDOW_BORDERLESS
+	);
+
+	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	SDL_SetWindowBordered(window, SDL_FALSE);
+	SDL_SetWindowOpacity(window, 0.75f);
+
+	auto surf = IMG_Load("SplashScreen.png");
+	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Color transparente (RGBA)
+	SDL_RenderClear(renderer);
+
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+	SDL_RenderPresent(renderer);
+	SDL_Delay(1500);
+
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(texture);
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+
 }
 
 ImGUIManager* ImGUIManager::getInstance()
@@ -240,19 +274,19 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
-    SDL_SetWindowSize(window, 1080, 720);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	//SDL_SetWindowSize(window, _ProjectSelectionDialogueSize);
+	SDL_SetWindowPosition(window, _Centered);
 	SDL_SetWindowResizable(window, SDL_FALSE);
 
-    PEditor::ProjectsManager dialog;
-    auto result = dialog.ManageProjectSelection(renderer);
+	PEditor::ProjectsManager dialog;
+	auto result = dialog.ManageProjectSelection(renderer);
 
-    if (result == PEditor::ProjectsManager::Result::CLOSED)
-        return;
+	if (result == PEditor::ProjectsManager::Result::CLOSED)
+		return;
 
 	SDL_SetWindowResizable(window, SDL_TRUE);
-	SDL_SetWindowSize(window, originalWindowSize->x, originalWindowSize->y);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	SDL_SetWindowSize(window, _WindowMainSize);
+	SDL_SetWindowPosition(window, _Centered);
 
 	initWindows();
 
@@ -272,16 +306,16 @@ void ImGUIManager::exit()
 
 void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
 
-    switch (state)
-    {
-        case ImGUIManager::EDITOR_WINDOW:
-            break;
-        case ImGUIManager::SCRIPTING_WINDOW:
-            scriptCreation->Load();
-            break;
-        default:
-            break;
-    }
+	switch (state)
+	{
+	case ImGUIManager::EDITOR_WINDOW:
+		break;
+	case ImGUIManager::SCRIPTING_WINDOW:
+		scriptCreation->Load();
+		break;
+	default:
+		break;
+	}
 
 	this->state = state;
 }
@@ -291,22 +325,25 @@ void ImGUIManager::update()
 {
 	PEditor::Game::CheckEnd();
 
-    for (auto window : windows)
-    {
-        switch (state)
-        {
-            case ImGUIManager::SCRIPTING_WINDOW:
-                if (window == scriptCreation) 
-                    window->update();
-                break;
-            case ImGUIManager::EDITOR_WINDOW:
-                if (window != scriptCreation)
-                    window->update();
-                break;
-            default:
-                break;
-        }
-    }
+	for (auto window : windows)
+	{
+		if (window->CanBeDrawnOnTop())
+			window->update();
+		else
+		switch (state)
+		{
+		case ImGUIManager::SCRIPTING_WINDOW:
+			if (window == scriptCreation)
+				window->update();
+			break;
+		case ImGUIManager::EDITOR_WINDOW:
+			if (window != scriptCreation)
+				window->update();
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void ImGUIManager::render()
@@ -319,23 +356,25 @@ void ImGUIManager::render()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-    for (auto window : windows)
-    {
-        switch (state)
-        {
-        case ImGUIManager::SCRIPTING_WINDOW:
-            if (window == scriptCreation ||
-				window == console) 
-                window->render();
-            break;
-        case ImGUIManager::EDITOR_WINDOW:
-            if (window != scriptCreation)
-                window->render();
-            break;
-        default:
-            break;
-        }
-    }
+	for (auto window : windows)
+	{
+		if (window->CanBeDrawnOnTop())
+			window->render();
+		else
+			switch (state)
+			{
+			case ImGUIManager::SCRIPTING_WINDOW:
+				if (window == scriptCreation)
+					window->render();
+				break;
+			case ImGUIManager::EDITOR_WINDOW:
+				if (window != scriptCreation)
+					window->render();
+				break;
+			default:
+				break;
+			}
+	}
 
 	// Rendering
 	ImGui::Render();
@@ -359,9 +398,9 @@ void ImGUIManager::handleInput()
 		if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 			exitGame = true;
 
-        for (auto window : windows)
-            window->handleInput(&event);
-    }
+		for (auto window : windows)
+			window->handleInput(&event);
+	}
 }
 
 void ImGUIManager::addWindow(PEditor::Window* window)
@@ -377,11 +416,6 @@ void ImGUIManager::setScene(PEditor::Scene* scene)
 SDL_Renderer* ImGUIManager::getRenderer()
 {
 	return renderer;
-}
-
-ImVec2 ImGUIManager::getOriginalWindowSize()
-{
-	return *originalWindowSize;
 }
 
 
@@ -404,8 +438,7 @@ ImGUIManager::~ImGUIManager()
 		delete window;
 	}
 
-    delete originalWindowSize;
-    delete gameSize;
+	delete gameSize;
 
 }
 
