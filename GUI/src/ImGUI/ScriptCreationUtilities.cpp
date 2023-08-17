@@ -6,6 +6,7 @@
 #include "ImGUIManager.h"
 #include <algorithm>
 #include "Console.h"
+#include "ColorPalette.h"
 
 void PEditor::ScriptCreationUtilities::ScriptNode::RemoveInput(ScriptNode* node)
 {
@@ -631,6 +632,13 @@ std::string PEditor::ScriptCreationUtilities::ScriptMethod::GetStringId()
 int PEditor::ScriptCreationUtilities::Bezier::pointCount = 50;
 float PEditor::ScriptCreationUtilities::Bezier::thickness = 1;
 
+float PEditor::ScriptCreationUtilities::Bezier::r = 1;
+float PEditor::ScriptCreationUtilities::Bezier::g = 1;
+float PEditor::ScriptCreationUtilities::Bezier::b = 1;
+float PEditor::ScriptCreationUtilities::Bezier::a = 1;
+
+
+
 
 void PEditor::ScriptCreationUtilities::Bezier::ResetThickness()
 {
@@ -652,6 +660,30 @@ void PEditor::ScriptCreationUtilities::Bezier::ResetPointCount()
 	pointCount = 50;
 }
 
+void PEditor::ScriptCreationUtilities::Bezier::SetColor(float r, float g, float b)
+{
+	Bezier::r = r;
+	Bezier::g = g;
+	Bezier::b = g;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetColor()
+{
+	Bezier::r = 1;
+	Bezier::g = 1;
+	Bezier::b = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::SetAlpha(float a)
+{
+	Bezier::a = a;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetAlpha()
+{
+	Bezier::a = 1;
+}
+
 void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1)
 {
 	ImVec2 a = ImVec2(x, y);
@@ -667,7 +699,7 @@ void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1
 
 
 	auto drawList = ImGui::GetForegroundDrawList();
-	drawList->AddBezierCubic(a, b, c, d, IM_COL32(255, 255, 255, 255), thickness, pointCount);
+	drawList->AddBezierCubic(a, b, c, d, RGBA2ImColor(Bezier::r, Bezier::g, Bezier::b, Bezier::a), thickness, pointCount);
 }
 
 
@@ -678,10 +710,10 @@ int PEditor::ScriptCreationUtilities::Grid::spacing = 50;
 int PEditor::ScriptCreationUtilities::Grid::x_offset = 0;
 int PEditor::ScriptCreationUtilities::Grid::y_offset = 0;
 
-int PEditor::ScriptCreationUtilities::Grid::r = 255;
-int PEditor::ScriptCreationUtilities::Grid::g = 255;
-int PEditor::ScriptCreationUtilities::Grid::b = 255;
-int PEditor::ScriptCreationUtilities::Grid::a = 255;
+float PEditor::ScriptCreationUtilities::Grid::r = 1;
+float PEditor::ScriptCreationUtilities::Grid::g = 1;
+float PEditor::ScriptCreationUtilities::Grid::b = 1;
+float PEditor::ScriptCreationUtilities::Grid::a = 1;
 
 
 
@@ -716,17 +748,26 @@ void PEditor::ScriptCreationUtilities::Grid::ResetInterval()
 	Grid::interval = 5;
 }
 
-void PEditor::ScriptCreationUtilities::Grid::SetColor(int r, int g, int b, int a)
+void PEditor::ScriptCreationUtilities::Grid::SetColor(float r, float g, float b)
 {
 	Grid::r = r;
 	Grid::g = g;
 	Grid::b = b;
-	Grid::a = a;
 }
 
 void PEditor::ScriptCreationUtilities::Grid::ResetColor()
 {
 	r = g = b = a = 255;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetAlpha(float a)
+{
+	Grid::a = a;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetAlpha()
+{
+	Grid::a = 1;
 }
 
 void PEditor::ScriptCreationUtilities::Grid::Draw()
@@ -744,7 +785,7 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 		float t = interval_y == 0 ? thickness * intervalScale : thickness;
 
-		drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), IM_COL32(r, g, b, a), t);
+		drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), RGBA2ImColor(r, g, b, a), t);
 
 		interval_y = (interval_y + 1) % interval;
 	}
@@ -753,7 +794,7 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 		float t = interval_x == 0 ? thickness * intervalScale : thickness;
 
-		drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), IM_COL32(r, g, b, a), t);
+		drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), RGBA2ImColor(r, g, b, a), t);
 
 		interval_x = (interval_x + 1) % interval;
 	}
