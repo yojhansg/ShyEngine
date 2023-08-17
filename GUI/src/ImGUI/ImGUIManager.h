@@ -17,6 +17,7 @@ namespace PEditor {
 	class ScriptCreation;
 	class ProjectsManager;
 	class Console;
+	struct ProjectInfo;
 };
 
 #define TARGET_WIDTH 1920
@@ -41,6 +42,9 @@ private:
 	SDL_Surface* winSurface = nullptr;
 	SDL_Renderer* renderer = nullptr;
 
+	// Project info structure 
+	PEditor::ProjectInfo* projecInfo;
+
 	bool exitGame = false;
 	EDITOR_STATE state;
 
@@ -63,7 +67,6 @@ private:
 	PEditor::ScriptCreation* scriptCreation = nullptr;
 	PEditor::Console* console = nullptr;
 
-
 	void SplashScreen();
 
 public:
@@ -84,6 +87,7 @@ public:
 	void setScene(PEditor::Scene* scene);
 
 	void changeEditorState(const EDITOR_STATE& state);
+	void setProjectInfo(PEditor::ProjectInfo* pInfo);
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getOriginalWindowSize();
