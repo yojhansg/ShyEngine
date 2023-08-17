@@ -41,7 +41,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawGameobject(attributeName + it->first, attr);
+					drawColor(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
