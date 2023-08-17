@@ -412,8 +412,9 @@ namespace PEditor {
 
                 // Remove the path from the recent projects file for those projects that couldn't be opened (marked as deleted).
                 for (i = 0; i < deletedProjects.size(); i++) {
-                    std::string a(jsonData["Recent Projects Paths"][deletedProjects[i]]);
                     jsonData["Recent Projects Paths"].erase(deletedProjects[i]);
+                    for (int c = i + 1; c < deletedProjects.size(); c++)
+                        deletedProjects[c]--;
                 }
 
                 // After updating de JSON, dumps its content to the 'recentProjectsFile'
