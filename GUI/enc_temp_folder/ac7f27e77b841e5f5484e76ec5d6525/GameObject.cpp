@@ -257,6 +257,8 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	text = nullptr;
 
+	isOverlay = false;
+
 	SDL_Surface* surface = IMG_Load(path.c_str());
 
 	if (surface != nullptr) {
@@ -378,6 +380,7 @@ void PEditor::GameObject::drawTransformInEditor()
 		ImGui::Text("Render order");
 		ImGui::InputInt("##render_order", &renderOrder);
 
+		ImGui::Checkbox("Is overlay", &isOverlay);
 	}
 }
 
@@ -588,6 +591,10 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 void PEditor::GameObject::update()
 {
+	if (parent != nullptr) {
+		isOverlay = parent->isOverlay;
+	}
+
 	if (components.find("Image") == components.end()) {
 		text = nullptr;
 		return;
@@ -744,6 +751,7 @@ std::string PEditor::GameObject::toJson(bool isPrefab)
 
 	j["childs"] = childsJson;
 
+	j["withOverlay"] = isOverlay ? "true" : "false";
 	j["order"] = renderOrder;
 
 	j["localPosition"] = std::to_string(pos->x) + ", " + std::to_string(pos->y);
@@ -804,7 +812,8 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPref
 		gameObject->addChild(child);
 		child->setParent(gameObject);
 	}
-	
+
+	gameObject->isOverlay = jsonData["withOverlay"] == "true" ? true : false;
 	gameObject->renderOrder = jsonData["order"];
 
 	// Deserialize localPosition, localScale, and localRotation
