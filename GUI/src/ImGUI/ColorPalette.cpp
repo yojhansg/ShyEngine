@@ -116,21 +116,6 @@ void PEditor::ColorPalette::Apply()
 	auto& io = ImGui::GetIO();
 
 	io.FontDefault = current.fontPtr;
-	// Establecer la fuente personalizada como la fuente por defecto en la configuración de ImGui
-	//auto font = current.fontPtr;
-	////io.Fonts->Build();
-	//if (initialisation)
-	//	io.FontDefault = font;
-	//	//ImGui::PushFont(font);
-
-	//else {
-
-	//	std::cout << current.font << std::endl;
-	//	io.FontDefault = font;
-	//	//ImGui::PopFont();
-	//	//ImGui::PushFont(font);
-	//}
-
 
 	ImGuiStyle& style = ImGui::GetStyle();
 
@@ -217,11 +202,61 @@ void PEditor::ColorPalette::render()
 
 	for (auto& palette : palettes) {
 
+		//TODO: push de los colores
+		ImGui::PushFont(palette.second.fontPtr);
+
+
 		if (ImGui::Button(palette.first.c_str())) {
 
 			SwapPalette(palette.first);
 		}
+
+
+
+		ImGui::PopFont();
 	}
+
+
+	float color[3]{ 0 ,0 ,0 };
+#define Color2FloatArr(color, arr) arr[0] = color.r;arr[1] = color.g;arr[2] = color.b
+#define FloatArr2Color(color, arr) color.r = arr[0]; color.g = arr[1]; color.b = arr[1]
+
+	//Color2FloatArr(current.text, color);
+	//ImGui::ColorEdit3("Text", &current.text.r);
+	//FloatArr2Color(current.text, color);
+
+	//Color2FloatArr(current.area, color);
+	//ImGui::ColorEdit3("Area", color);
+	//FloatArr2Color(current.area, color);
+
+	//Color2FloatArr(current.body, color);
+	//ImGui::ColorEdit3("Body", color);
+	//FloatArr2Color(current.body, color);
+
+	//Color2FloatArr(current.head, color);
+	//ImGui::ColorEdit3("Head", color);
+	//FloatArr2Color(current.head, color);
+
+	//Color2FloatArr(current.popups, color);
+	//ImGui::ColorEdit3("Pop ups", color);
+	//FloatArr2Color(current.popups, color);
+
+
+	ImGui::ColorEdit3("Text", &current.text.r);
+
+	ImGui::ColorEdit3("Area", &current.area.r);
+
+	ImGui::ColorEdit3("Body", &current.body.r);
+
+	ImGui::ColorEdit3("Head", &current.head.r);
+
+	ImGui::ColorEdit3("Pop ups", &current.popups.r);
+
+	if (ImGui::Button("Apply")) {
+
+		pendingApply = true;
+	}
+
 
 	ImGui::End();
 }

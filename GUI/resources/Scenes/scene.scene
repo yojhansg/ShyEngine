@@ -6,7 +6,7 @@
             "id": 3,
             "childs": [],
             "order": 0,
-            "localPosition": "0.000000, 0.000000",
+            "localPosition": "1092.431519, 584.515564",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
             "components": [
@@ -17,14 +17,21 @@
                     }
                 }
             ],
-            "scripts": null
+            "scripts": {
+                "Saludos": {
+                    "Hola": {
+                        "type": "string",
+                        "value": "Hola que tal"
+                    }
+                }
+            }
         },
         {
             "name": "file",
             "id": 4,
             "childs": [],
             "order": 0,
-            "localPosition": "947.272705, 517.482910",
+            "localPosition": "161.817017, 653.449890",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
             "components": [
@@ -42,7 +49,7 @@
             "id": 5,
             "childs": [],
             "order": 0,
-            "localPosition": "941.832336, 223.702484",
+            "localPosition": "1749.959595, 78.112778",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
             "components": [
@@ -60,7 +67,7 @@
             "id": 6,
             "childs": [],
             "order": 0,
-            "localPosition": "501.161682, 656.212524",
+            "localPosition": "267.869934, 337.942474",
             "localScale": "100.000000, 100.000000",
             "localRotation": "0.000000",
             "components": [

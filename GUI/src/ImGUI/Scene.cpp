@@ -184,7 +184,6 @@ void PEditor::Scene::saveScene(std::string path)
 
 void PEditor::Scene::update()
 {
-
 	auto it = gameObjects.begin();
 	while (it != gameObjects.end()) {
 		GameObject* go = it->second;
