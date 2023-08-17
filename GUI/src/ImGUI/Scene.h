@@ -49,6 +49,7 @@ namespace PEditor {
 		virtual ~Scene();
 
 		void addGameObject(std::string path);
+		void addGameObject(GameObject* go);
 		std::unordered_map<int, PEditor::GameObject*> getGameObjects();
 
 		GameObject* getSelectedGameObject();

@@ -737,7 +737,7 @@ std::string PEditor::GameObject::toJson(bool isPrefab)
 	return j.dump(2);
 }
 
-PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
+PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPrefab)
 {
 	nlohmann::ordered_json jsonData;
 	try {
@@ -753,7 +753,10 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
 	PEditor::GameObject* gameObject = new PEditor::GameObject(goName);
 	gameObject->name = goName;
 
-	gameObject->id = jsonData["id"];
+	//if its prefab we leave the autoassigned id
+	if (!isPrefab) {
+		gameObject->id = jsonData["id"];
+	}
 
 	for (const auto& childJson : jsonData["childs"]) {
 		PEditor::GameObject* child = PEditor::GameObject::fromJson(childJson.dump());

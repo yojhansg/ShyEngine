@@ -108,6 +108,11 @@ void PEditor::Scene::addGameObject(std::string path)
 	gameObjects.emplace(go->getId(), go);
 }
 
+void PEditor::Scene::addGameObject(GameObject* go)
+{
+	gameObjects.emplace(go->getId(), go);
+}
+
 std::unordered_map<int, PEditor::GameObject*> PEditor::Scene::getGameObjects()
 {
 	return gameObjects;

@@ -119,6 +119,6 @@ namespace PEditor {
 		void drawScriptsInEditor();
 		std::string toJson(bool isPrefab = false);
 
-		static GameObject* fromJson(std::string json);
+		static GameObject* fromJson(std::string json, bool isPrefab = false);
 	};
 }
