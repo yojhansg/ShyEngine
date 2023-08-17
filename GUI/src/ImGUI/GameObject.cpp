@@ -9,6 +9,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentManager.h";
 #include "ComponentInfo.h"
+#include <fstream>
 
 int PEditor::GameObject::lastId = 0;
 
@@ -184,11 +185,46 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 
 	GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
 
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), go == nullptr ? nullptr : go->getName().c_str())) {
-		for (int i = 0; i < gameObjects.size(); i++) {
-			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
-				attr->value.value.valueFloat  = gameObjects[i]->getId();
+	std::string name = "";
+	if (attr->value.valueString != "") {
+		name = attr->value.valueString;
+	}
+
+	if (go != nullptr) {
+		name = go->getName().c_str();
+	}
+
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
+		for (auto go : gameObjects) {
+			if (ImGui::Selectable(go.second->getName().c_str()))
+				attr->value.value.valueFloat  = go.second->getId();
 		}
+
+
+		for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
+			if (entry.path().extension() == ".prefab") {
+				std::string prefabFileName = entry.path().filename().string();
+				if (ImGui::Selectable(prefabFileName.c_str())) {
+					
+					std::ifstream inputFile("Prefabs/" + prefabFileName);
+
+					nlohmann::ordered_json jsonData;
+					try {
+						inputFile >> jsonData;
+					}
+					catch (const nlohmann::json::parse_error& e) {
+						std::cerr << "JSON parse error: " << e.what() << std::endl;
+						return;
+					}
+					inputFile.close();
+
+					attr->value.value.valueFloat = jsonData["id"];
+					attr->value.valueString = prefabFileName;
+
+				}
+			}
+		}
+
 		ImGui::EndCombo();
 	}
 
@@ -196,6 +232,7 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 
 	if (ImGui::Button(("X##" + attrName).c_str())) {
 		attr->value.value.valueFloat = -1;
+		attr->value.valueString = "";
 	}
 }
 
@@ -215,8 +252,6 @@ PEditor::GameObject::GameObject(std::string& path)
 	GameObject::lastId++;
 
 	imagePath = path;
-
-	prefab = false;
 
 	parent = nullptr;
 
@@ -342,6 +377,7 @@ void PEditor::GameObject::drawTransformInEditor()
 
 		ImGui::Text("Render order");
 		ImGui::InputInt("##render_order", &renderOrder);
+
 	}
 }
 
@@ -393,13 +429,15 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 
 void PEditor::GameObject::translateChildren(GameObject* go, ImVec2* previousPos)
 {
+	ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
+
 	for (auto childPair : go->getChildren()) {
 
 		ImVec2 childPos = childPair.second->getPosition();
 
 
-		float xDiff = go->getPosition().x - previousPos->x;
-		float yDiff = go->getPosition().y - previousPos->y;
+		float xDiff = go->getPosition().x - parentPreviousPos.x;
+		float yDiff = go->getPosition().y - parentPreviousPos.y;
 
 		previousPos->x = childPos.x;
 		previousPos->y = childPos.y;
@@ -563,6 +601,7 @@ void PEditor::GameObject::update()
 
 		if (surface != nullptr) {
 			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+			imagePath = currentImagePath;
 		}
 		else {
 			text = nullptr;
@@ -636,11 +675,6 @@ void PEditor::GameObject::toDelete()
 	}
 }
 
-bool PEditor::GameObject::isPrefab()
-{
-	return prefab;
-}
-
 void PEditor::GameObject::setParent(GameObject* go)
 {
 	parent = go;
@@ -681,7 +715,7 @@ bool PEditor::GameObject::isAscendant(GameObject* go)
 	return false;
 }
 
-std::string PEditor::GameObject::toJson()
+std::string PEditor::GameObject::toJson(bool isPrefab)
 {
 	nlohmann::ordered_json j;
 	j["name"] = name;
@@ -693,7 +727,20 @@ std::string PEditor::GameObject::toJson()
 		childsJson.push_back(child);
 	}
 
-	j["id"] = id;
+	if (isPrefab) {
+		//if its a prefab it needs a new Id
+		std::unordered_map<int, PEditor::GameObject*> gameObjects = ImGUIManager::getInstance()->getScene()->getGameObjects();
+		while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+			GameObject::lastId++;
+		}
+
+		j["id"] = GameObject::lastId;
+
+		GameObject::lastId++;
+	}
+	else {
+		j["id"] = id;
+	}
 
 	j["childs"] = childsJson;
 
@@ -730,7 +777,7 @@ std::string PEditor::GameObject::toJson()
 	return j.dump(2);
 }
 
-PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
+PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPrefab)
 {
 	nlohmann::ordered_json jsonData;
 	try {
@@ -746,7 +793,10 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
 	PEditor::GameObject* gameObject = new PEditor::GameObject(goName);
 	gameObject->name = goName;
 
-	gameObject->id = jsonData["id"];
+	//if its prefab we leave the autoassigned id
+	if (!isPrefab) {
+		gameObject->id = jsonData["id"];
+	}
 
 	for (const auto& childJson : jsonData["childs"]) {
 		PEditor::GameObject* child = PEditor::GameObject::fromJson(childJson.dump());
@@ -754,7 +804,7 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
 		gameObject->addChild(child);
 		child->setParent(gameObject);
 	}
-
+	
 	gameObject->renderOrder = jsonData["order"];
 
 	// Deserialize localPosition, localScale, and localRotation

@@ -90,7 +90,6 @@ public:
 	void setProjectInfo(PEditor::ProjectInfo* pInfo);
 
 	SDL_Renderer* getRenderer();
-	ImVec2 getOriginalWindowSize();
 	ImVec2 getMainWindowSize();
 
 	ImVec2 getGameSize();

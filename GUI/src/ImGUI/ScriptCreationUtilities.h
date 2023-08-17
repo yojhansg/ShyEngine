@@ -845,6 +845,17 @@ namespace PEditor {
 			//Numero de puntos de la linea
 			static int pointCount;
 
+			//Colores de la linea
+			static float r, g, b, a;
+
+			//Ancho del contorno
+			static float outlineThickness;
+			//Colores del contorno
+			static float r_outline, g_outline, b_outline;
+
+			//Curvatura
+			static float curvature;
+
 		public:
 
 			/*
@@ -866,6 +877,59 @@ namespace PEditor {
 				Restablece el numero de puntos a su valor determinado
 			*/
 			static void ResetPointCount();
+
+
+			/*
+				Establece el color de la linea
+			*/
+			static void SetColor(float r, float g, float b);
+
+			/*
+				Restablece el color de la linea
+			*/
+			static void ResetColor();
+
+
+			/*
+				Establece el color de la linea
+			*/
+			static void SetOutlineColor(float r, float g, float b);
+
+			/*
+				Restablece el color de la linea
+			*/
+			static void ResetOutlineColor();
+
+			/*
+				Cambia el grosor del contorno de la linea
+			*/
+			static void SetOutlineThickness(float thickness);
+
+			/*
+				Restablece el grosor del contorno de la linea
+			*/
+			static void ResetOutlineThickness();
+
+			/*
+				Establece la opacidad de la linea
+			*/
+			static void SetAlpha(float a);
+
+			/*
+				Restablece la opacidad de la linea
+			*/
+			static void ResetAlpha();
+
+			/*
+				Establece la curvatura de la linea
+			*/
+			static void SetCurvature(float curv);
+
+
+			/*
+				Restablece la curvatura de la linea
+			*/
+			static void ResetCurvature();
 
 
 			/*
@@ -905,7 +969,7 @@ namespace PEditor {
 			static int x_offset, y_offset;
 
 			//Color de las lineas
-			static int r, g, b, a;
+			static float r, g, b, a;
 
 		public:
 
@@ -942,7 +1006,7 @@ namespace PEditor {
 			/*
 				Cambiar el color de las lineas
 			*/
-			static void SetColor(int r, int g, int b, int a);
+			static void SetColor(float r, float g, float b);
 
 			/*
 				Cambiar el color de las lineas a su valor predeterminado
@@ -950,8 +1014,39 @@ namespace PEditor {
 			static void ResetColor();
 
 			/*
+				Cambiar la transparencia de la linea
+			*/
+			static void SetAlpha(float a);
+
+			/*
+				Resetear la transparencia de la linea
+			*/
+			static void ResetAlpha();
+
+			/*
 				Dibuja la cuadricula sobre la ventana actual
 			*/
+
+
+			/*
+				Cambiar el grosor estandar de la linea
+			*/
+			static void SetThickness(float thickness);
+			/*
+				Resetear el grosor estandar de la linea
+			*/
+			static void ResetThickness();
+
+			/*
+				Cambiar el grosor de forma proporcional de las lineas de intervalo
+			*/
+			static void SetIntervalScale(float scale);
+			/*
+				Resetear el grosor de las lineas de intervalo
+			*/
+			static void ResetIntevalScale();
+
+
 			static void Draw();
 		};
 

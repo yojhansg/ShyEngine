@@ -10,6 +10,8 @@
 
 #include "Game.h"
 #include "Preferences.h"
+#include "nlohmann/json.hpp"
+#include "ColorPalette.h"
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
@@ -29,12 +31,16 @@ void PEditor::MenuBar::render()
 
         if (ImGui::BeginMenu("File"))
         {
-            ImGui::MenuItem("New Scene", NULL, false);
-            ImGui::MenuItem("Open Scene", NULL, false);
+            if (ImGui::MenuItem("New scene", NULL, false)) {
+
+                shouldOpenNewScenePopup = true;
+            }
+
             ImGui::Separator();
+
             if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                shouldOpenSaveScenePopup = true;
+                imGuiManager->getScene()->saveScene(imGuiManager->getScene()->getPath());
             }
 
             ImGui::Separator();
@@ -58,6 +64,10 @@ void PEditor::MenuBar::render()
                 Preferences::Open();
             }
 
+            if (ImGui::MenuItem("Theme selector")) {
+
+                ColorPalette::Open();
+            }
 
             ImGui::EndMenu();
         }
@@ -93,7 +103,7 @@ void PEditor::MenuBar::render()
             if (ImGui::BeginMenu("GameObject"))
             {
                 if (ImGui::MenuItem("Create prefab", NULL, false)) {
-
+                    shouldOpenSavePrefabPopup = true;
                 }
 
                 if (ImGui::MenuItem("Add script", NULL, false)) {
@@ -121,18 +131,21 @@ void PEditor::MenuBar::render()
     }
 
     showRenamePopup(gameObject);
-    showSaveScenePopup();
+    showNewScenePopup();
+    showSavePrefabPopup(gameObject);
 }
 
 void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
 {
+    if (gameObject == nullptr) return;
+
     if (shouldOpenRenamePopup)
     {
-        ImGui::OpenPopup("Rename Object");
+        ImGui::OpenPopup("Rename Object##" + gameObject->getId());
         shouldOpenRenamePopup = false;
     }
 
-    if (ImGui::BeginPopup("Rename Object"))
+    if (ImGui::BeginPopup("Rename Object##" + gameObject->getId()))
     {
         ImGui::Text(("Insert new name for GameObject: " + gameObject->getName()).c_str());
 
@@ -158,12 +171,12 @@ void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
     }
 }
 
-void PEditor::MenuBar::showSaveScenePopup()
+void PEditor::MenuBar::showNewScenePopup()
 {
-    if (shouldOpenSaveScenePopup)
+    if (shouldOpenNewScenePopup)
     {
         ImGui::OpenPopup("Save scene");
-        shouldOpenSaveScenePopup = false;
+        shouldOpenNewScenePopup = false;
     }
 
     if (ImGui::BeginPopup("Save scene"))
@@ -184,8 +197,58 @@ void PEditor::MenuBar::showSaveScenePopup()
             if (strlen(nameBuffer) > 0) {
                 imGuiManager->getScene()->saveScene("Scenes/" + std::string(nameBuffer) + ".scene");
             }
-            else {
-                imGuiManager->getScene()->saveScene("Scenes/scene.scene");
+
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void PEditor::MenuBar::showSavePrefabPopup(GameObject* go)
+{
+    if (go == nullptr) return;
+
+    if (shouldOpenSavePrefabPopup)
+    {
+        ImGui::OpenPopup("Save prefab" + go->getId());
+        shouldOpenSavePrefabPopup = false;
+    }
+
+    if (ImGui::BeginPopup("Save prefab" + go->getId()))
+    {
+        ImGui::Text(("Insert name for the prefab:"));
+
+        ImGui::Separator();
+
+        static char nameBuffer[256];  
+
+        if (ImGui::InputText("Prefab name", nameBuffer, sizeof(nameBuffer)))
+        {
+        }
+
+        if (ImGui::Button("Ok"))
+        {
+            if (strlen(nameBuffer) > 0) {
+                nlohmann::ordered_json j;
+
+                j = j.parse(go->toJson());
+
+
+                std::string filePath = "Prefabs/" + std::string(nameBuffer) + ".prefab";
+
+                if (!std::filesystem::exists(filePath)) {
+                    std::filesystem::create_directories("Prefabs");
+                }
+
+                std::ofstream outputFile(filePath);
+                if (outputFile.is_open()) {
+                    outputFile << j.dump(4);
+                    outputFile.close();
+                }
+                else {
+                    //ERROR HANDLING
+                }
             }
 
             ImGui::CloseCurrentPopup();

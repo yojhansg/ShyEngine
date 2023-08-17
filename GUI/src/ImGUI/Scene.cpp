@@ -74,6 +74,7 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 	setSize(ImVec2(windowOriWidth, windowOriHeight));
 	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
+	path = "Scenes/scene.scene";
 
 	camera = new Camera(ImVec2(50, 50), 0.5);
 
@@ -105,6 +106,11 @@ PEditor::Scene::~Scene()
 void PEditor::Scene::addGameObject(std::string path)
 {
 	GameObject* go = (new PEditor::GameObject(path));
+	gameObjects.emplace(go->getId(), go);
+}
+
+void PEditor::Scene::addGameObject(GameObject* go)
+{
 	gameObjects.emplace(go->getId(), go);
 }
 
@@ -171,6 +177,8 @@ void PEditor::Scene::saveScene(std::string path)
 
 	j = j.parse(toJson());
 
+	this->path = path;
+
 	std::ofstream outputFile(path);
 	if (outputFile.is_open()) {
 		outputFile << j.dump(4);
@@ -184,7 +192,6 @@ void PEditor::Scene::saveScene(std::string path)
 
 void PEditor::Scene::update()
 {
-
 	auto it = gameObjects.begin();
 	while (it != gameObjects.end()) {
 		GameObject* go = it->second;
@@ -229,7 +236,12 @@ void PEditor::Scene::render()
 
 	ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
 
-	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
+	size_t lastPathSlashPosition = path.find_last_of("/\\");
+	size_t lastPathDotPosition = path.find_last_of(".");
+	
+	std::string sceneFilename = path.substr(lastPathSlashPosition + 1, lastPathDotPosition - lastPathSlashPosition - 1);
+
+	ImGui::Begin((windowName + ": " + sceneFilename).c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
 	ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
 	ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
@@ -255,6 +267,11 @@ void PEditor::Scene::render()
 
 	ImGui::End();
 
+}
+
+std::string PEditor::Scene::getPath()
+{
+	return path;
 }
 
 std::string PEditor::Scene::toJson()
@@ -284,6 +301,7 @@ void PEditor::Scene::loadScene(std::string path) {
 	}
 	gameObjects.clear();
 
+	this->path = path;
 
 	std::ifstream inputFile(path);
 

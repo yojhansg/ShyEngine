@@ -43,8 +43,6 @@ namespace PEditor {
 
 		bool showGizmo;
 
-		bool prefab;
-
 		bool waitingToDelete;
 
 		ImVec2* size;
@@ -109,8 +107,6 @@ namespace PEditor {
 		bool isWaitingToDelete();
 		void toDelete();
 	
-		bool isPrefab();
-
 		void setParent(GameObject* go);
 		GameObject* getParent();
 		void removeChild(GameObject* go);
@@ -121,8 +117,8 @@ namespace PEditor {
 
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
-		std::string toJson();
+		std::string toJson(bool isPrefab = false);
 
-		static GameObject* fromJson(std::string json);
+		static GameObject* fromJson(std::string json, bool isPrefab = false);
 	};
 }

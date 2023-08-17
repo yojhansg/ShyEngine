@@ -9,6 +9,9 @@
 #include "ScriptCreation.h"
 #include "Components.h"
 #include "Hierarchy.h"
+#include "GameObject.h"
+#include <fstream>
+#include "nlohmann/json.hpp"
 
 namespace fs = std::filesystem;
 
@@ -172,6 +175,37 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 				}
 			}
 
+			if (extension == ".prefab") {
+
+				ImGui::SameLine();
+				std::string buttonId = "Create Gameobject from prefab##" + filename;
+				if (ImGui::Button(buttonId.c_str())) {
+					std::string relativePath = file.path().lexically_relative(projectPath).string();
+
+					std::ifstream inputFile(relativePath);
+
+					if (!inputFile.is_open()) {
+						std::cerr << "Error opening JSON file: " << relativePath << std::endl;
+						return;
+					}
+
+
+					nlohmann::ordered_json jsonData;
+					try {
+						inputFile >> jsonData;
+					}
+					catch (const nlohmann::json::parse_error& e) {
+						std::cerr << "JSON parse error: " << e.what() << std::endl;
+						return;
+					}
+
+					inputFile.close();
+
+					GameObject* go = GameObject::fromJson(jsonData.dump(), true);
+
+					ImGUIManager::getInstance()->getScene()->addGameObject(go);
+				}
+			}
 		}
 
 		ImGui::SetWindowFontScale(1);
