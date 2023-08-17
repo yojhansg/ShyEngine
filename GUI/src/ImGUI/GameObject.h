@@ -48,6 +48,8 @@ namespace PEditor {
 		ImVec2* size;
 		ImVec2* pos;
 
+		bool isOverlay;
+
 		float previousMousePosX;
 		float previousMousePosY;
 		float rotation;
