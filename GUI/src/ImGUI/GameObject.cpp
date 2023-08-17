@@ -9,6 +9,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentManager.h";
 #include "ComponentInfo.h"
+#include <fstream>
 
 int PEditor::GameObject::lastId = 0;
 
@@ -184,11 +185,46 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 
 	GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
 
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), go == nullptr ? nullptr : go->getName().c_str())) {
+	std::string name = "";
+	if (attr->value.valueString != "") {
+		name = attr->value.valueString;
+	}
+
+	if (go != nullptr) {
+		name = go->getName().c_str();
+	}
+
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
 		for (auto go : gameObjects) {
 			if (ImGui::Selectable(go.second->getName().c_str()))
 				attr->value.value.valueFloat  = go.second->getId();
 		}
+
+
+		for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
+			if (entry.path().extension() == ".prefab") {
+				std::string prefabFileName = entry.path().filename().string();
+				if (ImGui::Selectable(prefabFileName.c_str())) {
+					
+					std::ifstream inputFile("Prefabs/" + prefabFileName);
+
+					nlohmann::ordered_json jsonData;
+					try {
+						inputFile >> jsonData;
+					}
+					catch (const nlohmann::json::parse_error& e) {
+						std::cerr << "JSON parse error: " << e.what() << std::endl;
+						return;
+					}
+					inputFile.close();
+
+					attr->value.value.valueFloat = jsonData["id"];
+					attr->value.valueString = prefabFileName;
+
+				}
+			}
+		}
+
 		ImGui::EndCombo();
 	}
 
@@ -196,6 +232,7 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 
 	if (ImGui::Button(("X##" + attrName).c_str())) {
 		attr->value.value.valueFloat = -1;
+		attr->value.valueString = "";
 	}
 }
 
