@@ -12,11 +12,11 @@ namespace PEditor{
          ImGUIManager* imGuiManager;
 
          bool shouldOpenRenamePopup;
-         bool shouldOpenSaveScenePopup;
+         bool shouldOpenNewScenePopup;
          bool shouldOpenSavePrefabPopup;
 
          void showRenamePopup(GameObject* gameObject);
-         void showSaveScenePopup();
+         void showNewScenePopup();
          void showSavePrefabPopup(GameObject* gameObject);
 
      public:

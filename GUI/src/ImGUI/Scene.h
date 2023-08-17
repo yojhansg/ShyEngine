@@ -33,6 +33,8 @@ namespace PEditor {
 
 		Camera* camera;
 
+		std::string path;
+
 		std::unordered_map<int, GameObject*> gameObjects;
 		GameObject* selectedGameObject;
 
@@ -65,6 +67,8 @@ namespace PEditor {
 		virtual void update();
 		virtual void handleInput(SDL_Event* event);
 		virtual void render();
+
+		std::string getPath();
 
 		std::string toJson();
 	};

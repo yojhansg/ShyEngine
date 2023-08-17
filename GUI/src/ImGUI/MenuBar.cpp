@@ -31,12 +31,16 @@ void PEditor::MenuBar::render()
 
         if (ImGui::BeginMenu("File"))
         {
-            ImGui::MenuItem("New Scene", NULL, false);
-            ImGui::MenuItem("Open Scene", NULL, false);
+            if (ImGui::MenuItem("New scene", NULL, false)) {
+
+                shouldOpenNewScenePopup = true;
+            }
+
             ImGui::Separator();
+
             if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                shouldOpenSaveScenePopup = true;
+                imGuiManager->getScene()->saveScene(imGuiManager->getScene()->getPath());
             }
 
             ImGui::Separator();
@@ -127,7 +131,7 @@ void PEditor::MenuBar::render()
     }
 
     showRenamePopup(gameObject);
-    showSaveScenePopup();
+    showNewScenePopup();
     showSavePrefabPopup(gameObject);
 }
 
@@ -167,12 +171,12 @@ void PEditor::MenuBar::showRenamePopup(GameObject* gameObject)
     }
 }
 
-void PEditor::MenuBar::showSaveScenePopup()
+void PEditor::MenuBar::showNewScenePopup()
 {
-    if (shouldOpenSaveScenePopup)
+    if (shouldOpenNewScenePopup)
     {
         ImGui::OpenPopup("Save scene");
-        shouldOpenSaveScenePopup = false;
+        shouldOpenNewScenePopup = false;
     }
 
     if (ImGui::BeginPopup("Save scene"))
@@ -192,9 +196,6 @@ void PEditor::MenuBar::showSaveScenePopup()
         {
             if (strlen(nameBuffer) > 0) {
                 imGuiManager->getScene()->saveScene("Scenes/" + std::string(nameBuffer) + ".scene");
-            }
-            else {
-                imGuiManager->getScene()->saveScene("Scenes/scene.scene");
             }
 
             ImGui::CloseCurrentPopup();

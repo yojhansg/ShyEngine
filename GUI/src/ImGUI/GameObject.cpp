@@ -41,7 +41,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawGameobject(attributeName + it->first, attr);
+					drawColor(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
@@ -377,6 +377,7 @@ void PEditor::GameObject::drawTransformInEditor()
 
 		ImGui::Text("Render order");
 		ImGui::InputInt("##render_order", &renderOrder);
+
 	}
 }
 
@@ -428,13 +429,15 @@ void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 
 void PEditor::GameObject::translateChildren(GameObject* go, ImVec2* previousPos)
 {
+	ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
+
 	for (auto childPair : go->getChildren()) {
 
 		ImVec2 childPos = childPair.second->getPosition();
 
 
-		float xDiff = go->getPosition().x - previousPos->x;
-		float yDiff = go->getPosition().y - previousPos->y;
+		float xDiff = go->getPosition().x - parentPreviousPos.x;
+		float yDiff = go->getPosition().y - parentPreviousPos.y;
 
 		previousPos->x = childPos.x;
 		previousPos->y = childPos.y;
@@ -801,7 +804,7 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPref
 		gameObject->addChild(child);
 		child->setParent(gameObject);
 	}
-
+	
 	gameObject->renderOrder = jsonData["order"];
 
 	// Deserialize localPosition, localScale, and localRotation
