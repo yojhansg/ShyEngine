@@ -86,7 +86,6 @@ public:
 	void changeEditorState(const EDITOR_STATE& state);
 
 	SDL_Renderer* getRenderer();
-	ImVec2 getOriginalWindowSize();
 	ImVec2 getMainWindowSize();
 
 	ImVec2 getGameSize();

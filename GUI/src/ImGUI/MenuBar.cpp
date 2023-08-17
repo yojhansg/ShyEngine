@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "Preferences.h"
 #include "nlohmann/json.hpp"
+#include "ColorPalette.h"
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
@@ -59,6 +60,10 @@ void PEditor::MenuBar::render()
                 Preferences::Open();
             }
 
+            if (ImGui::MenuItem("Theme selector")) {
+
+                ColorPalette::Open();
+            }
 
             ImGui::EndMenu();
         }

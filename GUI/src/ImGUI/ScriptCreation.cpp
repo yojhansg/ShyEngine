@@ -4,6 +4,8 @@
 #include <iostream>
 
 #include <fstream>
+
+#include "ColorPalette.h"
 #include "ScriptCreationUtilities.h"
 
 #include "ComponentManager.h"
@@ -434,11 +436,15 @@ void PEditor::ScriptCreation::render()
 
 	if (ImGui::Begin("Create script", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
 	{
+
 		auto background = ImGui::GetWindowDrawList();
+		
+		auto& palette = ColorPalette::GetCurrentPalette();
+		auto color = palette.scriptBackground;
+		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color)));
 
-		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ImColor(30, 30, 30, 255));
-
-
+		auto lineColor = palette.line;
+		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
 
 		if (lerping) {
 
@@ -464,8 +470,11 @@ void PEditor::ScriptCreation::render()
 			}
 		}
 
+
+		auto gridColor = palette.grid;
+
 		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
-		ScriptCreationUtilities::Grid::SetColor(100, 100, 100, 255);
+		ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(gridColor));
 		ScriptCreationUtilities::Grid::Draw();
 
 		int nodeIdx = 0;

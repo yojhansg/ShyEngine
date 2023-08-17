@@ -561,6 +561,7 @@ void PEditor::GameObject::update()
 
 		if (surface != nullptr) {
 			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+			imagePath = currentImagePath;
 		}
 		else {
 			text = nullptr;
