@@ -482,7 +482,7 @@ void PEditor::ScriptCreation::render()
 		ScriptCreationUtilities::Grid::Draw();
 
 
-
+		ScriptCreationUtilities::Bezier::SetAlpha(palette.lineAlpha);
 		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(palette.line));
 		ScriptCreationUtilities::Bezier::SetThickness(palette.lineThickness);
 		ScriptCreationUtilities::Bezier::SetCurvature(palette.lineCurvature);

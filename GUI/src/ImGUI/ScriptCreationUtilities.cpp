@@ -436,7 +436,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 	Bezier::SetOutlineColor(ColorPaletteParams(palette.flowlineOutline));
 
 	Bezier::SetAlpha(palette.flowlineAlpha);
-	
+
 	ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.flowline, palette.flowlineAlpha);
 	ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.flowlineAlpha);
 
@@ -546,6 +546,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 
 	Bezier::SetOutlineThickness(palette.lineOutlineThickness);
 	Bezier::SetOutlineColor(ColorPaletteParams(palette.lineOutline));
+	Bezier::SetAlpha(palette.lineAlpha);
 
 }
 
@@ -765,7 +766,7 @@ void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1
 	ImVec2 c = ImVec2(x1 - x_increment, y1);
 
 	if (outlineThickness > 0)
-		drawList->AddBezierCubic(a, b, c, d, 
+		drawList->AddBezierCubic(a, b, c, d,
 			RGBA2ImColor(Bezier::r_outline, Bezier::g_outline, Bezier::b_outline, Bezier::a), thickness + outlineThickness * 2, pointCount);
 
 	drawList->AddBezierCubic(a, b, c, d, RGBA2ImColor(Bezier::r, Bezier::g, Bezier::b, Bezier::a), thickness, pointCount);
@@ -874,7 +875,8 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 		float t = interval_y == 0 ? thickness * intervalScale : thickness;
 
-		drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), RGBA2ImColor(r, g, b, a), t);
+		if (t > 0)
+			drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), RGBA2ImColor(r, g, b, a), t);
 
 		interval_y = (interval_y + 1) % interval;
 	}
@@ -883,7 +885,8 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 		float t = interval_x == 0 ? thickness * intervalScale : thickness;
 
-		drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), RGBA2ImColor(r, g, b, a), t);
+		if (t > 0)
+			drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), RGBA2ImColor(r, g, b, a), t);
 
 		interval_x = (interval_x + 1) % interval;
 	}

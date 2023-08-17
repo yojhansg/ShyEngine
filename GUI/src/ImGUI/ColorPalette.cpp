@@ -51,6 +51,9 @@ void PEditor::ColorPalette::LoadDefaultPalette()
 	palette.hover = { 1, .6f, .6f };
 	palette.buttonThickness = 1;
 
+	palette.windowRounding = 0;
+	palette.nodeRounding = 10;
+
 	palette.line = { 1, 1, 1 };
 	palette.lineThickness = 1;
 	palette.lineOutline = { 1, 1, 1 };
@@ -238,10 +241,18 @@ void PEditor::ColorPalette::render()
 		ImGui::PopFont();
 	}
 
+
+#define ShowColor(name, color) if (ImGui::ColorEdit3(name, &color.r)) areThereChanges = true;
+#define ShowFloat(name, value, speed, min, max)\
+	if (ImGui::DragFloat(name, &value), speed, min, max, "%.3f", ImGuiSliderFlags_AlwaysClamp) {\
+	 areThereChanges = true; if(value < min) value = min; if(value > max) value = max;}
+
+
 	bool areThereChanges = false;
 
 	if (ImGui::CollapsingHeader("Editor")) {
 
+		ImGui::Indent();
 		if (ImGui::ColorEdit3("Text", &current.text.r)) areThereChanges = true;
 
 		if (ImGui::ColorEdit3("Area", &current.area.r)) areThereChanges = true;
@@ -252,42 +263,61 @@ void PEditor::ColorPalette::render()
 
 		if (ImGui::ColorEdit3("Pop ups", &current.popups.r)) areThereChanges = true;
 
-		if (ImGui::InputFloat("Window rounding", &current.windowRounding)) areThereChanges = true;
+		if (ImGui::DragFloat("Window rounding", &current.windowRounding, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+		//ShowFloat("Window rounding", current.windowRounding, 1, 0, 100);
+
+		ImGui::Unindent();
 	}
 
 	if (ImGui::CollapsingHeader("Scripting")) {
-
+		ImGui::Indent();
 		if (ImGui::ColorEdit3("Background", &current.scriptBackground.r)) areThereChanges = true;
 		if (ImGui::ColorEdit3("Hover", &current.hover.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Button thickness", &current.buttonThickness)) areThereChanges = true;
-		if (ImGui::InputFloat("Node rounding", &current.nodeRounding)) areThereChanges = true;
+		if (ImGui::DragFloat("Button thickness", &current.buttonThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+		if (ImGui::DragFloat("Node rounding", &current.nodeRounding, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+		if (ImGui::CollapsingHeader("Graphics")) {
+
+			ImGui::Indent();
+			if (ImGui::CollapsingHeader("Input line")) {
+				ImGui::Indent();
+				if (ImGui::DragFloat("Thickness##Input", &current.lineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (ImGui::ColorEdit3("Color##Input", &current.line.r)) areThereChanges = true;
+				if (ImGui::DragFloat("Outline thickness##Input", &current.lineOutlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (current.lineOutlineThickness > 0)
+					if (ImGui::ColorEdit3("Outline color##Input", &current.lineOutline.r)) areThereChanges = true;
+				if (ImGui::DragFloat("Curvature##Input", &current.lineCurvature, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (ImGui::DragFloat("Alpha##Input", &current.lineAlpha, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+
+				ImGui::Unindent();
+			}
+			if (ImGui::CollapsingHeader("Flow line")) {
+				ImGui::Indent();
+				if (ImGui::DragFloat("Thickness##Flow", &current.flowlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (ImGui::ColorEdit3("Color##Flow", &current.flowline.r)) areThereChanges = true;
+				if (ImGui::DragFloat("Outline thickness##Flow", &current.flowlineOutlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (current.flowlineOutlineThickness > 0)
+					if (ImGui::ColorEdit3("Outline color##Flow", &current.flowlineOutline.r)) areThereChanges = true;
+				if (ImGui::DragFloat("Curvature##Flow", &current.flowlineCurvature, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				if (ImGui::DragFloat("Alpha##Flow", &current.flowlineAlpha, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+				ImGui::Unindent();
+			}
+
+			if (ImGui::CollapsingHeader("Grid")) {
+				ImGui::Indent();
+				if (ImGui::DragFloat("Spacing##Grid", &current.gridSpacing, 2, 2, 1000, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
+				if (ImGui::DragFloat("Thickness##Grid", &current.gridThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
+				if (ImGui::ColorEdit3("Color##Grid", &current.grid.r)) areThereChanges = true;
+				if (ImGui::DragInt("Interval##Grid", &current.gridInterval, .2, 1, 100, "%d", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
+				if (ImGui::DragFloat("Interval Scale##Grid", &current.gridIntervalScale, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
+				ImGui::Unindent();
+			}
+
+			ImGui::Unindent();
+		}
 
 
-		if (ImGui::ColorEdit3("Lines", &current.line.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Line thickness", &current.lineThickness))areThereChanges = true;
-		if(ImGui::InputFloat("Line outline",&current.lineOutlineThickness))areThereChanges = true;
-		if(current.lineOutlineThickness > 0)
-			if (ImGui::ColorEdit3("Outline color", &current.lineOutline.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Line curvature", &current.lineCurvature))areThereChanges = true;
-		if (ImGui::InputFloat("Line alpha", &current.lineAlpha))areThereChanges = true;
-
-
-		if (ImGui::ColorEdit3("Flow lines", &current.flowline.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Flow line thickness", &current.flowlineThickness))areThereChanges = true;
-		if (ImGui::InputFloat("Flow line outline", &current.flowlineOutlineThickness))areThereChanges = true;
-		if (current.flowlineOutlineThickness > 0)
-			if (ImGui::ColorEdit3("Flow outline color", &current.flowlineOutline.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Flow line curvature", &current.flowlineCurvature))areThereChanges = true;
-		if (ImGui::InputFloat("Flow line alpha", &current.flowlineAlpha))areThereChanges = true;
-
-
-
-		if (ImGui::ColorEdit3("Grid", &current.grid.r)) areThereChanges = true;
-		if (ImGui::InputFloat("Grid spacing", &current.gridSpacing))areThereChanges = true;
-		if (ImGui::InputFloat("Grid thickness", &current.gridThickness))areThereChanges = true;
-		if (ImGui::InputInt("Grid interval", &current.gridInterval))areThereChanges = true;
-		if (ImGui::InputFloat("Grid interval scale", &current.gridIntervalScale))areThereChanges = true;
-
+		ImGui::Unindent();
 	}
 
 
