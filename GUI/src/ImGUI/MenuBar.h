@@ -13,9 +13,11 @@ namespace PEditor{
 
          bool shouldOpenRenamePopup;
          bool shouldOpenSaveScenePopup;
+         bool shouldOpenSavePrefabPopup;
 
          void showRenamePopup(GameObject* gameObject);
          void showSaveScenePopup();
+         void showSavePrefabPopup(GameObject* gameObject);
 
      public:
         MenuBar();

@@ -5,7 +5,9 @@
 #include "Scene.h"
 #include "SDL.h"
 #include <string>
+#include "nlohmann/json.hpp"
 #include "FileExplorer.h"
+#include <fstream>
 
 PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoMove | NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus)
 {
@@ -192,6 +194,7 @@ void PEditor::Hierarchy::renderGameObjectHierarchy(GameObject* gameObject, int i
 
 	showGameObjectMenu(gameObject);
 	showRenamePopup(gameObject);
+	showSavePrefabPopup(gameObject);
 
 	if (gameObject->getChildren().size() > 0) {
 
@@ -259,7 +262,7 @@ void PEditor::Hierarchy::showGameObjectMenu(GameObject* gameObject)
 	if (ImGui::BeginPopup("Gameobject Menu##" + gameObject->getId()))
 	{
 		if (ImGui::MenuItem("Create prefab", NULL, false)) {
-
+			shouldOpenSavePrefabPopup = true;
 		}
 
 		if (ImGui::MenuItem("Add script", NULL, false)) {
@@ -282,5 +285,56 @@ void PEditor::Hierarchy::showGameObjectMenu(GameObject* gameObject)
 
 		ImGui::EndMenu();
 
+	}
+}
+
+void PEditor::Hierarchy::showSavePrefabPopup(GameObject* go)
+{
+	if (shouldOpenSavePrefabPopup)
+	{
+		ImGui::OpenPopup("Save prefab##" + go->getId());
+		shouldOpenSavePrefabPopup = false;
+	}
+
+	if (ImGui::BeginPopup("Save prefab##" + go->getId()))
+	{
+		ImGui::Text(("Insert name for the prefab:"));
+
+		ImGui::Separator();
+
+		static char nameBuffer[256];
+
+		if (ImGui::InputText("Prefab name", nameBuffer, sizeof(nameBuffer)))
+		{
+		}
+
+		if (ImGui::Button("Ok"))
+		{
+			if (strlen(nameBuffer) > 0) {
+				nlohmann::ordered_json j;
+
+				j = j.parse(go->toJson());
+
+
+				std::string filePath = "Prefabs/" + std::string(nameBuffer) + ".prefab";
+
+				if (!std::filesystem::exists(filePath)) {
+					std::filesystem::create_directories("Prefabs");
+				}
+
+				std::ofstream outputFile(filePath);
+				if (outputFile.is_open()) {
+					outputFile << j.dump(4);
+					outputFile.close();
+				}
+				else {
+					//ERROR HANDLING
+				}
+			}
+
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
 	}
 }

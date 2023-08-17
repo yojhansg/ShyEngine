@@ -28,7 +28,9 @@ namespace PEditor {
 		void renderGameObjectHierarchy(GameObject* gameObject, int indentLevel);
 		void showRenamePopup(GameObject* gameObject);
 		void showGameObjectMenu(GameObject* gameObject);
+		void showSavePrefabPopup(GameObject* gameObject);
 
 		bool shouldOpenRenamePopup;
+		bool shouldOpenSavePrefabPopup;
 	};
 }

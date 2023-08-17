@@ -216,8 +216,6 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	imagePath = path;
 
-	prefab = false;
-
 	parent = nullptr;
 
 	text = nullptr;
@@ -636,11 +634,6 @@ void PEditor::GameObject::toDelete()
 	}
 }
 
-bool PEditor::GameObject::isPrefab()
-{
-	return prefab;
-}
-
 void PEditor::GameObject::setParent(GameObject* go)
 {
 	parent = go;
@@ -681,7 +674,7 @@ bool PEditor::GameObject::isAscendant(GameObject* go)
 	return false;
 }
 
-std::string PEditor::GameObject::toJson()
+std::string PEditor::GameObject::toJson(bool isPrefab)
 {
 	nlohmann::ordered_json j;
 	j["name"] = name;
@@ -693,7 +686,20 @@ std::string PEditor::GameObject::toJson()
 		childsJson.push_back(child);
 	}
 
-	j["id"] = id;
+	if (isPrefab) {
+		//if its a prefab it needs a new Id
+		std::unordered_map<int, PEditor::GameObject*> gameObjects = ImGUIManager::getInstance()->getScene()->getGameObjects();
+		while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+			GameObject::lastId++;
+		}
+
+		j["id"] = GameObject::lastId;
+
+		GameObject::lastId++;
+	}
+	else {
+		j["id"] = id;
+	}
 
 	j["childs"] = childsJson;
 
