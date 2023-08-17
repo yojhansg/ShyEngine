@@ -182,18 +182,34 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 {
 	std::unordered_map<int, PEditor::GameObject*> gameObjects = imGuiManager->getScene()->getGameObjects();
 
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), gameObjects.find((int)attr->value.value.valueFloat)->second->getName().c_str())) {
-		for (int i = 0; i < gameObjects.size(); i++) {
-			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
-				attr->value.value.valueFloat  = gameObjects[i]->getId();
+	GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
+
+	if(ImGui::BeginCombo(("##" + attrName).c_str(), go == nullptr ? nullptr : go->getName().c_str())) {
+		for (auto go : gameObjects) {
+			if (ImGui::Selectable(go.second->getName().c_str()))
+				attr->value.value.valueFloat  = go.second->getId();
 		}
 		ImGui::EndCombo();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button(("X##" + attrName).c_str())) {
+		attr->value.value.valueFloat = -1;
 	}
 }
 
 
 PEditor::GameObject::GameObject(std::string& path)
 {
+	Scene* scene = ImGUIManager::getInstance()->getScene();
+	std::unordered_map<int, PEditor::GameObject*> gameObjects = scene->getGameObjects();
+
+	//Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
+	while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+		GameObject::lastId++;
+	}
+
 	id = GameObject::lastId;
 
 	GameObject::lastId++;
@@ -217,16 +233,14 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	SDL_FreeSurface(surface);
 
-	if (path != "") {
+	if (imagePath != "") {
 		//Add component image
 		::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
 		::Components::AttributeValue attributeValue;
 		attributeValue.valueString = path;
 		imageComponent.getAttribute("fileName").SetValue(attributeValue);
 		addComponent(imageComponent);
-	}
 
-	if (path != "") {
 		//Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
 		std::size_t extensionPos = path.find_last_of('.');
 		name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
@@ -259,6 +273,14 @@ PEditor::GameObject::GameObject(std::string& path)
 
 PEditor::GameObject::~GameObject()
 {
+	if (parent != nullptr) {
+		parent->removeChild(this);
+	}
+
+	for (auto child : children) {
+		child.second->setParent(nullptr);
+	}
+
 	components.clear();
 
 	delete pos;
@@ -427,6 +449,7 @@ void PEditor::GameObject::rotateChildren(GameObject* go, GameObject* goCenter, f
 	}
 }
 
+
 void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
@@ -554,7 +577,7 @@ void PEditor::GameObject::update()
 void PEditor::GameObject::addComponent(::Components::Component comp)
 {
 	if (components.find(comp.getName()) == components.end()) {
-		components.emplace(comp.getName(), comp);
+		components.insert({ comp.getName(), comp });
 	}
 }
 
@@ -607,6 +630,10 @@ bool PEditor::GameObject::isWaitingToDelete()
 void PEditor::GameObject::toDelete()
 {
 	waitingToDelete = true;
+
+	for (auto child : children) {
+		child.second->toDelete();
+	}
 }
 
 bool PEditor::GameObject::isPrefab()
@@ -666,6 +693,8 @@ std::string PEditor::GameObject::toJson()
 		childsJson.push_back(child);
 	}
 
+	j["id"] = id;
+
 	j["childs"] = childsJson;
 
 	j["order"] = renderOrder;
@@ -699,6 +728,67 @@ std::string PEditor::GameObject::toJson()
 
 
 	return j.dump(2);
+}
+
+PEditor::GameObject* PEditor::GameObject::fromJson(std::string json)
+{
+	nlohmann::ordered_json jsonData;
+	try {
+		jsonData = nlohmann::json::parse(json);
+	}
+	catch (const nlohmann::json::parse_error& e) {
+		std::cerr << "JSON parse error: " << e.what() << std::endl;
+		return nullptr;
+	}
+
+	std::string goName = jsonData["name"];
+
+	PEditor::GameObject* gameObject = new PEditor::GameObject(goName);
+	gameObject->name = goName;
+
+	gameObject->id = jsonData["id"];
+
+	for (const auto& childJson : jsonData["childs"]) {
+		PEditor::GameObject* child = PEditor::GameObject::fromJson(childJson.dump());
+
+		gameObject->addChild(child);
+		child->setParent(gameObject);
+	}
+
+	gameObject->renderOrder = jsonData["order"];
+
+	// Deserialize localPosition, localScale, and localRotation
+	std::string localPositionStr = jsonData["localPosition"];
+	std::string localScaleStr = jsonData["localScale"];
+	std::string localRotation = jsonData["localRotation"];
+
+	// Parse localPosition and localScale
+	ImVec2* localPosition;
+	ImVec2* localScale;
+	localPosition = new ImVec2();
+	localScale = new ImVec2();
+
+	sscanf_s(localPositionStr.c_str(), "%f, %f", &localPosition->x, &localPosition->y);
+	sscanf_s(localScaleStr.c_str(), "%f, %f", &localScale->x, &localScale->y);
+
+	gameObject->pos = localPosition;
+	gameObject->size = localScale;
+	gameObject->rotation = std::stof(localRotation);
+
+
+	for (const auto& compJson : jsonData["components"]) {
+		Components::Component component = Components::Component::fromJson(compJson.dump());
+		gameObject->addComponent(component);
+	}
+
+
+	for (const auto& scriptJson : jsonData["scripts"].items()) {
+
+		Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
+		gameObject->addScript(script);
+	}
+
+	return gameObject;
 }
 
 

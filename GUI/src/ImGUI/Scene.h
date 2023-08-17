@@ -58,8 +58,8 @@ namespace PEditor {
 		void renderGameObjects();
 		void renderFrame();
 
-		void saveScene();
-		void loadScene();
+		void saveScene(std::string path);
+		void loadScene(std::string path);
 
 		virtual void update();
 		virtual void handleInput(SDL_Event* event);

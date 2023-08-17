@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <unordered_map>
 
 namespace Components {
 
@@ -50,6 +50,8 @@ namespace Components {
 		std::string name;
 		std::string typeStr;
 
+		static std::unordered_map<std::string, AttributesType> attributeTypes;
+
 	public:
 		Attribute();
 		Attribute(const std::string& name, const std::string& typeString);
@@ -62,6 +64,8 @@ namespace Components {
 		std::string getName() const;
 		std::string getTypeStr() const;
 		std::string toJson();
+
+		static Attribute fromJson(std::string name, std::string json);
 
 		AttributeValue value;
 	};
@@ -119,6 +123,8 @@ namespace Components {
 		void addMethod(const Method& method);
 
 		std::string toJson();
+
+		static Component fromJson(std::string json);
 	};
 
 
@@ -140,6 +146,8 @@ namespace Components {
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
 
 		std::string ToJson();
+
+		static Script fromJson(std::string name, std::string json);
 	};
 
 }

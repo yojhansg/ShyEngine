@@ -162,6 +162,16 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 				}
 			}
 
+			if (extension == ".scene") {
+
+				ImGui::SameLine();
+				std::string buttonId = "Load scene##" + filename;
+				std::string relativePath = file.path().lexically_relative(projectPath).string();
+				if (ImGui::Button(buttonId.c_str())) {
+					ImGUIManager::getInstance()->getScene()->loadScene(relativePath);
+				}
+			}
+
 		}
 
 		ImGui::SetWindowFontScale(1);

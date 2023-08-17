@@ -82,6 +82,11 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 	targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowOriWidth, windowOriHeight);
 
 	selectedGameObject = nullptr;
+
+	std::string defaultScenePath = "Scenes/scene.scene";
+	if (std::filesystem::exists(defaultScenePath)) {
+		loadScene(defaultScenePath);
+	}
 }
 
 PEditor::Scene::~Scene()
@@ -160,13 +165,11 @@ void PEditor::Scene::renderFrame()
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
-void PEditor::Scene::saveScene()
+void PEditor::Scene::saveScene(std::string path)
 {
 	nlohmann::ordered_json j;
 
 	j = j.parse(toJson());
-
-	std::string path = "Scenes/scene.json";
 
 	std::ofstream outputFile(path);
 	if (outputFile.is_open()) {
@@ -179,25 +182,19 @@ void PEditor::Scene::saveScene()
 
 }
 
-void PEditor::Scene::loadScene() {
-
-	// TODO Abrir explorador de archivos para seleccionar scene.json
-
-}
-
 void PEditor::Scene::update()
 {
 
 	auto it = gameObjects.begin();
 	while (it != gameObjects.end()) {
-		GameObject* currentGameObject = it->second;
+		GameObject* go = it->second;
 
-		currentGameObject->update();
+		go->update();
 
-		if (currentGameObject->isWaitingToDelete()) {
+		if (go->isWaitingToDelete()) {
 			selectedGameObject = nullptr;
 
-			delete currentGameObject;
+			delete go;
 			it = gameObjects.erase(it);
 		}
 		else {
@@ -275,5 +272,47 @@ std::string PEditor::Scene::toJson()
 	j["objects"] = gameObjectsJson;
 
 	return j.dump(2);
+
+}
+
+void PEditor::Scene::loadScene(std::string path) {
+	//Delete info of previous scene;
+	selectedGameObject = nullptr;
+
+	for (const auto& pair : gameObjects) {
+		delete pair.second;
+	}
+	gameObjects.clear();
+
+
+	std::ifstream inputFile(path);
+
+	if (!inputFile.is_open()) {
+		std::cerr << "Error opening JSON file: " << path << std::endl;
+		return;
+	}
+
+
+	nlohmann::ordered_json jsonData;
+	try {
+		inputFile >> jsonData;
+	}
+	catch (const nlohmann::json::parse_error& e) {
+		std::cerr << "JSON parse error: " << e.what() << std::endl;
+		return;
+	}
+
+	inputFile.close();
+
+	//Add scene name property
+
+	nlohmann::json gameObjectsJson = jsonData["objects"];
+
+	// Iterate through the game objects JSON array
+	for (const auto& gameObjectJson : gameObjectsJson) {
+		GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
+
+		gameObjects.insert({gameObject->getId(), gameObject});
+	}
 
 }

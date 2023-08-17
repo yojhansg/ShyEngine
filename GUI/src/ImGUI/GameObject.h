@@ -122,5 +122,7 @@ namespace PEditor {
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
 		std::string toJson();
+
+		static GameObject* fromJson(std::string json);
 	};
 }
