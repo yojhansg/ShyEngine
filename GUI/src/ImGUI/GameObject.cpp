@@ -40,7 +40,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawBool(attributeName+ it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
-					drawColor(attributeName + it->first, attr);
+					drawGameobject(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::CHAR:
 					drawChar(attributeName + it->first, attr);
@@ -185,9 +185,9 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 	GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
 
 	if(ImGui::BeginCombo(("##" + attrName).c_str(), go == nullptr ? nullptr : go->getName().c_str())) {
-		for (int i = 0; i < gameObjects.size(); i++) {
-			if (ImGui::Selectable(gameObjects[i]->getName().c_str()))
-				attr->value.value.valueFloat  = gameObjects[i]->getId();
+		for (auto go : gameObjects) {
+			if (ImGui::Selectable(go.second->getName().c_str()))
+				attr->value.value.valueFloat  = go.second->getId();
 		}
 		ImGui::EndCombo();
 	}
