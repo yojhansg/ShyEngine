@@ -21,12 +21,6 @@ namespace PEditor {
 
 		};
 
-#define ColorPaletteParams(color) color.r, color.g, color.b
-#define ColorPalette2ImVec4(color) ImVec4(ColorPaletteParams(color), 1)
-#define ColorPalette2ImColor(color) ImColor(ColorPalette2ImVec4(color)
-#define RGBA2ImColor(r, g, b, a) ImColor(ImVec4(r, g, b, a))
-#define RGB2ImColor(r, g, b) RGBA2ImColor(r, g, b, 1)
-
 		struct Palette {
 
 			Color text;
@@ -36,8 +30,34 @@ namespace PEditor {
 			Color popups;
 
 			Color scriptBackground;
-			Color line;
+
+			float windowRounding;
+
+			//Scripting
+			float nodeRounding;
+
 			Color grid;
+			float gridThickness;
+			float gridSpacing;
+			float gridIntervalScale;
+			int gridInterval;
+			
+			Color hover;
+			float buttonThickness;
+
+			Color line;
+			float lineThickness;
+			Color lineOutline;
+			float lineOutlineThickness;
+			float lineCurvature;
+			float lineAlpha;
+
+			Color flowline;
+			float flowlineThickness;
+			Color flowlineOutline;
+			float flowlineOutlineThickness;
+			float flowlineCurvature;
+			float flowlineAlpha;
 
 			ImFont* fontPtr;
 			std::string font;
@@ -58,8 +78,6 @@ namespace PEditor {
 		bool visible;
 		bool pendingApply;
 		bool initialisation;
-
-		int loadedFonts;
 
 		void LoadPalettes();
 		void LoadDefaultPalette();
@@ -87,3 +105,14 @@ namespace PEditor {
 	};
 
 }
+
+
+
+
+#define ColorPaletteParams(color) color.r, color.g, color.b
+#define ColorPalette2ImVec4(color) ImVec4(ColorPaletteParams(color), 1)
+#define ColorPaletteAlpha2ImVec4(color, a) ImVec4(ColorPaletteParams(color), a)
+#define ColorPalette2ImColor(color) ImColor(ColorPalette2ImVec4(color))
+#define ColorPaletteAlpha2ImColor(color, a) ImColor(ColorPaletteAlpha2ImVec4(color, a))
+#define RGBA2ImColor(r, g, b, a) ImColor(ImVec4(r, g, b, a))
+#define RGB2ImColor(r, g, b) RGBA2ImColor(r, g, b, 1)

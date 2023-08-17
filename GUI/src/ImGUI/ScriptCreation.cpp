@@ -441,7 +441,7 @@ void PEditor::ScriptCreation::render()
 		
 		auto& palette = ColorPalette::GetCurrentPalette();
 		auto color = palette.scriptBackground;
-		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color)));
+		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
 
 		auto lineColor = palette.line;
 		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
@@ -474,15 +474,29 @@ void PEditor::ScriptCreation::render()
 		auto gridColor = palette.grid;
 
 		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
+		ScriptCreationUtilities::Grid::SetThickness(palette.gridThickness);
+		ScriptCreationUtilities::Grid::SetSpacing(palette.gridSpacing);
+		ScriptCreationUtilities::Grid::SetIntervalScale(palette.gridIntervalScale);
+		ScriptCreationUtilities::Grid::SetInterval(palette.gridInterval);
 		ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(gridColor));
 		ScriptCreationUtilities::Grid::Draw();
+
+
+
+		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(palette.line));
+		ScriptCreationUtilities::Bezier::SetThickness(palette.lineThickness);
+		ScriptCreationUtilities::Bezier::SetCurvature(palette.lineCurvature);
+
+		ScriptCreationUtilities::Bezier::SetOutlineThickness(palette.lineOutlineThickness);
+		ScriptCreationUtilities::Bezier::SetOutlineColor(ColorPaletteParams(palette.lineOutline));
+
 
 		int nodeIdx = 0;
 		bool eraseNode = false;
 
 
 		auto& style = ImGui::GetStyle();
-		style.WindowRounding = 10;
+		style.WindowRounding = palette.nodeRounding;
 		for (auto node : nodes) {
 
 			if (node != nullptr) {

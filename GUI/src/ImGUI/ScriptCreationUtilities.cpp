@@ -117,8 +117,12 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManageOutputNode()
 
 
 	ImGui::SetCursorPos(ImVec2(outputNodePositionTop.x - windowPosition.x, outputNodePositionTop.y - windowPosition.y));
-	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(outputButtonSize, outputButtonSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(outputButtonSize, outputButtonSize * 2), false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
+
+	auto& palette = ColorPalette::GetCurrentPalette();
+	ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
+	ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
 	bool isCurrentlySelected = currentlySelectedOutput == this;
 
@@ -127,11 +131,11 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManageOutputNode()
 		if (ImGui::IsMouseClicked(0) || isCurrentlySelected)
 		{
 			currentlySelectedOutput = this;
-			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255));
+			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, nodeColor);
 		}
 
 		else
-			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(150, 100, 100, 255), 1);
+			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, hoverColor, palette.buttonThickness);
 
 
 
@@ -142,9 +146,9 @@ void PEditor::ScriptCreationUtilities::ScriptNode::ManageOutputNode()
 
 
 		if (isCurrentlySelected || outputConexions.size() > 0)
-			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255));
+			drawList->AddTriangleFilled(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, nodeColor);
 		else
-			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, IM_COL32(255, 255, 255, 255), 1);
+			drawList->AddTriangle(outputNodePosition, outputNodePositionTop, outputNodePositionBottom, nodeColor, palette.buttonThickness);
 
 	}
 
@@ -422,6 +426,20 @@ bool PEditor::ScriptCreationUtilities::ScriptFlow::RemovePrevious(ScriptFlow* pr
 
 void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float y, const std::string& tooltip)
 {
+	auto& palette = ColorPalette::GetCurrentPalette();
+
+	Bezier::SetColor(ColorPaletteParams(palette.flowline));
+	Bezier::SetThickness(palette.flowlineThickness);
+	Bezier::SetCurvature(palette.flowlineCurvature);
+
+	Bezier::SetOutlineThickness(palette.flowlineOutlineThickness);
+	Bezier::SetOutlineColor(ColorPaletteParams(palette.flowlineOutline));
+
+	Bezier::SetAlpha(palette.flowlineAlpha);
+	
+	ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.flowline, palette.flowlineAlpha);
+	ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.flowlineAlpha);
+
 	auto drawList = ImGui::GetWindowDrawList();
 
 	auto windowSize = ImGui::GetWindowSize();
@@ -437,9 +455,8 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 
 
 	ImGui::SetCursorPos(ImVec2(nextNodePositionLeft.x - windowPosition.x, nextNodePositionTop.y - windowPosition.y));
-	ImGui::BeginChild((node->GetStringId() + "next node" + std::to_string(y)).c_str(), ImVec2(nodeSize * 2, nodeSize * 2), true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::BeginChild((node->GetStringId() + "next node" + std::to_string(y)).c_str(), ImVec2(nodeSize * 2, nodeSize * 2), false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	Bezier::SetThickness(5);
 
 	bool isCurrentlySelected = currentSelectedFlow == this;
 
@@ -448,10 +465,10 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		if (ImGui::IsMouseClicked(0) || isCurrentlySelected)
 		{
 			currentSelectedFlow = this;
-			drawList->AddQuadFilled(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, IM_COL32(255, 255, 255, 255));
+			drawList->AddQuadFilled(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, nodeColor);
 		}
 		else
-			drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, IM_COL32(150, 100, 100, 255), 1);
+			drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, hoverColor, palette.buttonThickness);
 
 
 		if (tooltip != "") {
@@ -461,11 +478,11 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 	else {
 
 		if (isCurrentlySelected || next != nullptr)
-			drawList->AddQuadFilled(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, IM_COL32(255, 255, 255, 255));
+			drawList->AddQuadFilled(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, nodeColor);
 
 		else
 
-			drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, IM_COL32(255, 255, 255, 255), 1);
+			drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, nodeColor, palette.buttonThickness);
 	}
 
 	ImGui::EndChild();
@@ -484,7 +501,7 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		ImVec2 bottomRightCorner = ImVec2(windowPosition.x + windowSize.x, windowPosition.y + windowSize.y);
 		if (ImGui::IsMouseHoveringRect(windowPosition, bottomRightCorner)) {
 
-			drawList->AddRectFilled(windowPosition, bottomRightCorner, IM_COL32(100, 100, 100, 100));
+			drawList->AddRectFilled(windowPosition, bottomRightCorner, hoverColor);
 
 			if (ImGui::IsMouseReleased(0)) {
 
@@ -516,12 +533,20 @@ void PEditor::ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float
 		ImVec2 previousPosC = ImVec2(previousPos.x + nodeSize + nodeSize, previousPos.y);
 		ImVec2 previousPosD = ImVec2(previousPos.x + nodeSize, previousPos.y + nodeSize);
 
-		drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, IM_COL32(255, 255, 255, 255));
+		drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, nodeColor);
 	}
 
 
 
-	Bezier::ResetThickness();
+
+
+	Bezier::SetColor(ColorPaletteParams(palette.line));
+	Bezier::SetThickness(palette.lineThickness);
+	Bezier::SetCurvature(palette.lineCurvature);
+
+	Bezier::SetOutlineThickness(palette.lineOutlineThickness);
+	Bezier::SetOutlineColor(ColorPaletteParams(palette.lineOutline));
+
 }
 
 
@@ -543,9 +568,11 @@ PEditor::ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Metho
 
 void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 {
-
 	auto drawList = ImGui::GetWindowDrawList();
 
+	auto& palette = ColorPalette::GetCurrentPalette();
+	ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
+	ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
 	ImGui::Indent();
 
@@ -593,14 +620,14 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 				ScriptNode::currentlySelectedOutput = nullptr;
 			}
 
-			drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+			drawList->AddTriangleFilled(a, b, c, hoverColor);
 		}
 		else
 
 			if (input[idx] != nullptr)
-				drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+				drawList->AddTriangleFilled(a, b, c, nodeColor);
 			else
-				drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+				drawList->AddTriangle(a, b, c, nodeColor, palette.buttonThickness);
 
 
 
@@ -637,7 +664,12 @@ float PEditor::ScriptCreationUtilities::Bezier::g = 1;
 float PEditor::ScriptCreationUtilities::Bezier::b = 1;
 float PEditor::ScriptCreationUtilities::Bezier::a = 1;
 
+float PEditor::ScriptCreationUtilities::Bezier::r_outline = 1;
+float PEditor::ScriptCreationUtilities::Bezier::g_outline = 1;
+float PEditor::ScriptCreationUtilities::Bezier::b_outline = 1;
 
+float PEditor::ScriptCreationUtilities::Bezier::curvature = .5f;
+float PEditor::ScriptCreationUtilities::Bezier::outlineThickness = 0;
 
 
 void PEditor::ScriptCreationUtilities::Bezier::ResetThickness()
@@ -647,7 +679,7 @@ void PEditor::ScriptCreationUtilities::Bezier::ResetThickness()
 
 void PEditor::ScriptCreationUtilities::Bezier::SetThickness(float t)
 {
-	thickness = 3;
+	thickness = t;
 }
 
 void PEditor::ScriptCreationUtilities::Bezier::SetPointCount(int c)
@@ -664,7 +696,7 @@ void PEditor::ScriptCreationUtilities::Bezier::SetColor(float r, float g, float 
 {
 	Bezier::r = r;
 	Bezier::g = g;
-	Bezier::b = g;
+	Bezier::b = b;
 }
 
 void PEditor::ScriptCreationUtilities::Bezier::ResetColor()
@@ -672,6 +704,30 @@ void PEditor::ScriptCreationUtilities::Bezier::ResetColor()
 	Bezier::r = 1;
 	Bezier::g = 1;
 	Bezier::b = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::SetOutlineColor(float r, float g, float b)
+{
+	Bezier::r_outline = r;
+	Bezier::g_outline = g;
+	Bezier::b_outline = b;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetOutlineColor()
+{
+	Bezier::r_outline = 1;
+	Bezier::g_outline = 1;
+	Bezier::b_outline = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::SetOutlineThickness(float thickness)
+{
+	Bezier::outlineThickness = thickness;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetOutlineThickness()
+{
+	Bezier::outlineThickness = 0;
 }
 
 void PEditor::ScriptCreationUtilities::Bezier::SetAlpha(float a)
@@ -684,21 +740,34 @@ void PEditor::ScriptCreationUtilities::Bezier::ResetAlpha()
 	Bezier::a = 1;
 }
 
+void PEditor::ScriptCreationUtilities::Bezier::SetCurvature(float curv)
+{
+	Bezier::curvature = curv;
+}
+
+void PEditor::ScriptCreationUtilities::Bezier::ResetCurvature()
+{
+	Bezier::curvature = 0.5f;
+}
+
 void PEditor::ScriptCreationUtilities::Bezier::Draw(int x, int y, int x1, int y1)
 {
+	auto drawList = ImGui::GetForegroundDrawList();
+
 	ImVec2 a = ImVec2(x, y);
 	ImVec2 d = ImVec2(x1, y1);
 
 	float x_distance = d.x - a.x;
-	const float bezierMagnitude = 0.5f;
 
-	float x_increment = std::abs(x_distance * bezierMagnitude);
+	float x_increment = std::abs(x_distance * curvature);
 
 	ImVec2 b = ImVec2(x + x_increment, y);
 	ImVec2 c = ImVec2(x1 - x_increment, y1);
 
+	if (outlineThickness > 0)
+		drawList->AddBezierCubic(a, b, c, d, 
+			RGBA2ImColor(Bezier::r_outline, Bezier::g_outline, Bezier::b_outline, Bezier::a), thickness + outlineThickness * 2, pointCount);
 
-	auto drawList = ImGui::GetForegroundDrawList();
 	drawList->AddBezierCubic(a, b, c, d, RGBA2ImColor(Bezier::r, Bezier::g, Bezier::b, Bezier::a), thickness, pointCount);
 }
 
@@ -768,6 +837,26 @@ void PEditor::ScriptCreationUtilities::Grid::SetAlpha(float a)
 void PEditor::ScriptCreationUtilities::Grid::ResetAlpha()
 {
 	Grid::a = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetThickness(float thickness)
+{
+	Grid::thickness = thickness;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetThickness()
+{
+	Grid::thickness = 1;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::SetIntervalScale(float scale)
+{
+	Grid::intervalScale = scale;
+}
+
+void PEditor::ScriptCreationUtilities::Grid::ResetIntevalScale()
+{
+	Grid::intervalScale = 4;
 }
 
 void PEditor::ScriptCreationUtilities::Grid::Draw()
@@ -1139,7 +1228,8 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 		auto size = ImGui::GetWindowSize();
 
 		auto drawList = ImGui::GetWindowDrawList();
-		drawList->AddRectFilled(ImVec2(0, 0), windowSize, IM_COL32(10, 10, 10, 255), 0, 0);
+
+		drawList->AddRectFilled(ImVec2(0, 0), windowSize, ColorPalette2ImColor(ColorPalette::GetCurrentPalette().scriptBackground), 0, 0);
 
 
 		ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
@@ -1267,7 +1357,7 @@ void PEditor::ScriptCreationUtilities::ScriptNode::FromJson(nlohmann::json& root
 	id = root["index"].get<int>();
 
 	x = root.contains("x") ? root["x"].get<float>() : 0;
-	y = root.contains("y") ? root["y"].get<float>(): 0;
+	y = root.contains("y") ? root["y"].get<float>() : 0;
 }
 
 
@@ -1278,7 +1368,7 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptMethod::ToJson()
 
 	if (method.getComponent() != method.getName())
 		root["function"] = method.getComponent() + "_" + method.getName();
-	else 
+	else
 		root["function"] = method.getComponent();
 
 	root["input"] = json::array();
@@ -1506,7 +1596,6 @@ void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 	A->ManageNextNode(x, y, a_tooltip);
 
 
-
 	ImVec2 a = ImVec2(x, y);
 	A->GetPreviousNodePosition(&a.x, NULL);
 
@@ -1541,10 +1630,13 @@ void PEditor::ScriptCreationUtilities::ScriptFork::updateAndRender()
 
 	auto drawList = ImGui::GetWindowDrawList();
 
+	auto& colorPalette = ColorPalette::GetCurrentPalette();
+	ImColor nodeColor = ColorPaletteAlpha2ImColor(colorPalette.line, colorPalette.lineAlpha);
+
 	if (drawInputFilled)
-		drawList->AddTriangleFilled(a, b, c, IM_COL32(255, 255, 255, 255));
+		drawList->AddTriangleFilled(a, b, c, nodeColor);
 	else
-		drawList->AddTriangle(a, b, c, IM_COL32(255, 255, 255, 255), 1);
+		drawList->AddTriangle(a, b, c, nodeColor, colorPalette.buttonThickness);
 
 	if (condition != nullptr) {
 

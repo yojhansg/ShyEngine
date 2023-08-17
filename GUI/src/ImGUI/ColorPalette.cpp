@@ -18,13 +18,12 @@ PEditor::ColorPalette::ColorPalette(const std::string& path) : Window("Palette s
 	visible = false;
 	pendingApply = false;
 
-	loadedFonts = 0;
-
 	LoadDefaultPalette();
 	LoadPalettes();
 
 	windowWidth = 500;
 	windowHeight = 500;
+	canBeDisplayedOnTop = true;
 
 	SwapPalette("Default");
 	Apply();
@@ -47,10 +46,30 @@ void PEditor::ColorPalette::LoadDefaultPalette()
 	palette.body = { 0.1725490196078431f , 0.2431372549019608f , 0.3137254901960784f };
 	palette.popups = { 0.1294117647058824f , 0.1803921568627451f , 0.2352941176470588f };
 
-	palette.line = { 1, 1, 1 };
-	palette.grid = { .4f, .4f, .4f };
 	palette.scriptBackground = { .12f, .12f, .12f };
 
+	palette.hover = { 1, .6f, .6f };
+	palette.buttonThickness = 1;
+
+	palette.line = { 1, 1, 1 };
+	palette.lineThickness = 1;
+	palette.lineOutline = { 1, 1, 1 };
+	palette.lineOutlineThickness = 0;
+	palette.lineCurvature = 0.5f;
+	palette.lineAlpha = 1;
+
+	palette.flowline = { 1, 1, 1 };
+	palette.flowlineThickness = 5;
+	palette.flowlineOutline = { 1, 1, 1 };
+	palette.flowlineOutlineThickness = 0;
+	palette.flowlineCurvature = 0.5f;
+	palette.flowlineAlpha = 1;
+
+	palette.grid = { .4f, .4f, .4f };
+	palette.gridInterval = 5;
+	palette.gridThickness = 1;
+	palette.gridIntervalScale = 4;
+	palette.gridSpacing = 50;
 
 	palette.font = "Fonts/Montserrat-Regular.ttf";
 	palette.fontSize = 18.f;
@@ -84,7 +103,7 @@ void PEditor::ColorPalette::LoadPalettes() {
 		palette.fontSize = paletteInfo["fontSize"].get<int>();
 
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
-	//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
+		//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
 
 #define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());
 
@@ -97,7 +116,11 @@ void PEditor::ColorPalette::LoadPalettes() {
 		ReadPaletteValue(grid, palette, paletteInfo);
 		ReadPaletteValue(line, palette, paletteInfo);
 
+		//TODO: leer el resto de colores
 #undef ReadPaletteValue
+
+
+		//TODO: leer valores que no sean colores
 
 		palettes.emplace(name, palette);
 	}
@@ -165,7 +188,7 @@ void PEditor::ColorPalette::Apply()
 	style.Colors[ImGuiCol_PopupBg] = toVec4(current.popups, 0.92f);
 	//style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 0.73f);
 
-	style.WindowRounding = 0;
+	style.WindowRounding = current.windowRounding;
 
 	pendingApply = false;
 }
@@ -212,47 +235,63 @@ void PEditor::ColorPalette::render()
 		}
 
 
-
 		ImGui::PopFont();
 	}
 
+	bool areThereChanges = false;
 
-	float color[3]{ 0 ,0 ,0 };
-#define Color2FloatArr(color, arr) arr[0] = color.r;arr[1] = color.g;arr[2] = color.b
-#define FloatArr2Color(color, arr) color.r = arr[0]; color.g = arr[1]; color.b = arr[1]
+	if (ImGui::CollapsingHeader("Editor")) {
 
-	//Color2FloatArr(current.text, color);
-	//ImGui::ColorEdit3("Text", &current.text.r);
-	//FloatArr2Color(current.text, color);
+		if (ImGui::ColorEdit3("Text", &current.text.r)) areThereChanges = true;
 
-	//Color2FloatArr(current.area, color);
-	//ImGui::ColorEdit3("Area", color);
-	//FloatArr2Color(current.area, color);
+		if (ImGui::ColorEdit3("Area", &current.area.r)) areThereChanges = true;
 
-	//Color2FloatArr(current.body, color);
-	//ImGui::ColorEdit3("Body", color);
-	//FloatArr2Color(current.body, color);
+		if (ImGui::ColorEdit3("Body", &current.body.r)) areThereChanges = true;
 
-	//Color2FloatArr(current.head, color);
-	//ImGui::ColorEdit3("Head", color);
-	//FloatArr2Color(current.head, color);
+		if (ImGui::ColorEdit3("Head", &current.head.r)) areThereChanges = true;
 
-	//Color2FloatArr(current.popups, color);
-	//ImGui::ColorEdit3("Pop ups", color);
-	//FloatArr2Color(current.popups, color);
+		if (ImGui::ColorEdit3("Pop ups", &current.popups.r)) areThereChanges = true;
+
+		if (ImGui::InputFloat("Window rounding", &current.windowRounding)) areThereChanges = true;
+	}
+
+	if (ImGui::CollapsingHeader("Scripting")) {
+
+		if (ImGui::ColorEdit3("Background", &current.scriptBackground.r)) areThereChanges = true;
+		if (ImGui::ColorEdit3("Hover", &current.hover.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Button thickness", &current.buttonThickness)) areThereChanges = true;
+		if (ImGui::InputFloat("Node rounding", &current.nodeRounding)) areThereChanges = true;
 
 
-	ImGui::ColorEdit3("Text", &current.text.r);
+		if (ImGui::ColorEdit3("Lines", &current.line.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Line thickness", &current.lineThickness))areThereChanges = true;
+		if(ImGui::InputFloat("Line outline",&current.lineOutlineThickness))areThereChanges = true;
+		if(current.lineOutlineThickness > 0)
+			if (ImGui::ColorEdit3("Outline color", &current.lineOutline.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Line curvature", &current.lineCurvature))areThereChanges = true;
+		if (ImGui::InputFloat("Line alpha", &current.lineAlpha))areThereChanges = true;
 
-	ImGui::ColorEdit3("Area", &current.area.r);
 
-	ImGui::ColorEdit3("Body", &current.body.r);
+		if (ImGui::ColorEdit3("Flow lines", &current.flowline.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Flow line thickness", &current.flowlineThickness))areThereChanges = true;
+		if (ImGui::InputFloat("Flow line outline", &current.flowlineOutlineThickness))areThereChanges = true;
+		if (current.flowlineOutlineThickness > 0)
+			if (ImGui::ColorEdit3("Flow outline color", &current.flowlineOutline.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Flow line curvature", &current.flowlineCurvature))areThereChanges = true;
+		if (ImGui::InputFloat("Flow line alpha", &current.flowlineAlpha))areThereChanges = true;
 
-	ImGui::ColorEdit3("Head", &current.head.r);
 
-	ImGui::ColorEdit3("Pop ups", &current.popups.r);
 
-	if (ImGui::Button("Apply")) {
+		if (ImGui::ColorEdit3("Grid", &current.grid.r)) areThereChanges = true;
+		if (ImGui::InputFloat("Grid spacing", &current.gridSpacing))areThereChanges = true;
+		if (ImGui::InputFloat("Grid thickness", &current.gridThickness))areThereChanges = true;
+		if (ImGui::InputInt("Grid interval", &current.gridInterval))areThereChanges = true;
+		if (ImGui::InputFloat("Grid interval scale", &current.gridIntervalScale))areThereChanges = true;
+
+	}
+
+
+	if (areThereChanges) {
 
 		pendingApply = true;
 	}

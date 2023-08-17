@@ -848,6 +848,14 @@ namespace PEditor {
 			//Colores de la linea
 			static float r, g, b, a;
 
+			//Ancho del contorno
+			static float outlineThickness;
+			//Colores del contorno
+			static float r_outline, g_outline, b_outline;
+
+			//Curvatura
+			static float curvature;
+
 		public:
 
 			/*
@@ -881,6 +889,27 @@ namespace PEditor {
 			*/
 			static void ResetColor();
 
+
+			/*
+				Establece el color de la linea
+			*/
+			static void SetOutlineColor(float r, float g, float b);
+
+			/*
+				Restablece el color de la linea
+			*/
+			static void ResetOutlineColor();
+
+			/*
+				Cambia el grosor del contorno de la linea
+			*/
+			static void SetOutlineThickness(float thickness);
+
+			/*
+				Restablece el grosor del contorno de la linea
+			*/
+			static void ResetOutlineThickness();
+
 			/*
 				Establece la opacidad de la linea
 			*/
@@ -890,6 +919,18 @@ namespace PEditor {
 				Restablece la opacidad de la linea
 			*/
 			static void ResetAlpha();
+
+			/*
+				Establece la curvatura de la linea
+			*/
+			static void SetCurvature(float curv);
+
+
+			/*
+				Restablece la curvatura de la linea
+			*/
+			static void ResetCurvature();
+
 
 			/*
 				Dibuja una curva bezier cubica entre los dos puntos dados
@@ -985,6 +1026,27 @@ namespace PEditor {
 			/*
 				Dibuja la cuadricula sobre la ventana actual
 			*/
+
+
+			/*
+				Cambiar el grosor estandar de la linea
+			*/
+			static void SetThickness(float thickness);
+			/*
+				Resetear el grosor estandar de la linea
+			*/
+			static void ResetThickness();
+
+			/*
+				Cambiar el grosor de forma proporcional de las lineas de intervalo
+			*/
+			static void SetIntervalScale(float scale);
+			/*
+				Resetear el grosor de las lineas de intervalo
+			*/
+			static void ResetIntevalScale();
+
+
 			static void Draw();
 		};
 
