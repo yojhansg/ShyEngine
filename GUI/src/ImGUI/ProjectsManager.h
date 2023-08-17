@@ -24,13 +24,18 @@ namespace PEditor {
 
 	public:
 
-		enum Result { OPENED, CREATED, CLOSED };
+		enum Result { ENTERED, CLOSED };
 
 		ProjectsManager();
+
+		// Create the folder in AppData to contain the recent projects file
+		bool MakeFolderToStoreRecentProjects();
 
 		Result ManageProjectSelection(SDL_Renderer* renderer);
 
 	private:
+
+		ImGUIManager* imGuiManager;
 
 		bool windowClosed;
 
@@ -47,14 +52,29 @@ namespace PEditor {
 		static char open_project_path[256]; 
 
 		// Folder and files paths information
-		static const std::wstring projectfileExtension;
-		static const std::wstring projectsfileFolder;
-		static const std::wstring projectsfileName;
+		static std::wstring projectfileExtension;
+		static std::wstring projectsfileFolder;
+		static std::wstring projectsfileName;
 
+		// Project information values
+		std::string name;
+		std::string createPath;
+		std::string openPath;
+		std::string creationDate;
+
+		// Recent projects information
 		std::vector<ProjectInfo> recentProjectsInfo;
 
 		// Path to the file that stores the recent projects paths
 		std::wstring recentProjectsFile;
+
+		// String to store the error messages
+		std::wstring errorMessage;
+		bool showPopUpWindowNewProject;
+		bool showPopUpWindowOpenProject;
+
+		void StartImGuiFrame();
+		void ImGuiRender(SDL_Renderer* renderer);
 
 		// Handles de input of the ImGui windows
 		void HandleInput();
@@ -66,6 +86,8 @@ namespace PEditor {
 		// Gets the current date to store it in the project file
 		std::string getCurrentDate();
 
+		bool ReadInfoFromProjectFile(const std::string& filepath);
+
 		// Main windows
 		Result NewProject();
 		Result OpenProject();
@@ -73,17 +95,23 @@ namespace PEditor {
 
 		// Create a project file and stores it in the specified path
 		// and with the specified name given in the form
-		void SaveProject();
+		// Returns true if everything went correctly, false otherwise
+		bool SaveProject();
 
 		// Adds the path of the new project in the recent projects file
-		void StoreProjectPath(const std::string& path);
+		bool StoreProjectPath(const std::string& path);
 
-		// Create the folder in AppData to contain the recent projects file
-		void MakeFolderToStoreRecentProjects();
+		// Ask users for permission to create the 'Recent Projects' file in the AppData path.
 		bool AskForPermission();
+
+		// Shows a pop-up window with an error message
+		void ShowErrorPopup(const std::wstring& errorMessage);
 
 		// Check if a file has a certain extension
 		bool HasExtension(const std::wstring& filePath, const std::wstring& extension);
+		bool IsDirectoryEmpty(const std::string& directory);
+		bool HasNestedDirectoryWithName(const std::string& parentDir, const std::string& dirName);
+		std::string GetLastPathComponent(const std::string& path, char delimiter);
 
 	};
 

@@ -30,6 +30,7 @@ ImGUIManager::ImGUIManager() {
 	gameSize = nullptr;
 	scene = nullptr;
 	window = nullptr;
+	projecInfo = nullptr;
 
 	state = EDITOR_WINDOW;
 
@@ -154,7 +155,7 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
-	SplashScreen();
+	//SplashScreen();
 
 	gameSize = new ImVec2{ _WindowMainSize };
 
@@ -224,6 +225,10 @@ void ImGUIManager::loop()
 	SDL_SetWindowResizable(window, SDL_FALSE);
 
 	PEditor::ProjectsManager dialog;
+
+	if (!dialog.MakeFolderToStoreRecentProjects())
+		return;
+
 	auto result = dialog.ManageProjectSelection(renderer);
 
 	if (result == PEditor::ProjectsManager::Result::CLOSED)
@@ -264,6 +269,10 @@ void ImGUIManager::changeEditorState(const EDITOR_STATE& state) {
 	}
 
 	this->state = state;
+}
+
+void ImGUIManager::setProjectInfo(PEditor::ProjectInfo* pInfo) {
+	this->projecInfo = pInfo;
 }
 
 
@@ -370,22 +379,21 @@ ImGUIManager::~ImGUIManager()
 {
 	PEditor::Game::Release();
 	Components::ComponentManager::Release();
+
 	// Cleanup
 	ImGui_ImplSDLRenderer_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 	for (auto window : windows)
-	{
 		delete window;
-	}
 
 	delete gameSize;
+	delete projecInfo;
 
 }
 
