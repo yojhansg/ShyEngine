@@ -2,16 +2,28 @@
     "name": "scene",
     "objects": [
         {
-            "name": "Empty gameobject",
-            "id": 7,
+            "name": "Boton",
+            "id": 2,
             "childs": [],
             "order": 0,
             "localPosition": "0.000000, 0.000000",
-            "localScale": "100.000000, 100.000000",
+            "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
-            "components": [],
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Button.png"
+                    }
+                }
+            ],
             "scripts": {
-                "Suma": []
+                "Derecha": {
+                    "Increment": {
+                        "type": "float",
+                        "value": 0.20000000298023224
+                    }
+                }
             }
         }
     ]

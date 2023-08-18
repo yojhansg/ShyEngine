@@ -7,7 +7,19 @@
 namespace PEditor {
 
 
+	struct ProjectData {
+
+		std::string name;
+		std::string icon;
+		std::string path;
+
+		int windowWidht;
+		int windowHeight;
+	};
+
 	class Preferences : public Window {
+
+
 
 
 	private:

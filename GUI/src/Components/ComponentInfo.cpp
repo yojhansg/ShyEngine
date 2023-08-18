@@ -82,7 +82,7 @@ namespace Components {
 			value.value.valueBool = false;
 			type = AttributesType::BOOL;
 		}
-		else if ("color") {
+		else if (typeString == "color") {
 			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 			type = AttributesType::COLOR;
 		}
@@ -91,7 +91,7 @@ namespace Components {
 			type = AttributesType::CHAR;
 		}
 		else if (typeString == "Entity") {
-			value.value.valueFloat = -1.0f;
+			value.value.entityIdx = -1;
 			type = AttributesType::GAMEOBJECT;
 		}
 		else {
@@ -158,7 +158,7 @@ namespace Components {
 			if (value.value.valueChar == '\0') return "";
 			return std::string(1, value.value.valueChar);
 		case AttributesType::GAMEOBJECT:
-			return std::to_string(value.value.valueFloat);
+			return std::to_string(value.value.entityIdx);
 		default:
 			return "";
 			break;
@@ -172,7 +172,7 @@ namespace Components {
 		attribute.name = name;
 		attribute.type = Attribute::attributeTypes[name];
 
-		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);;
+		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);
 
 		switch (attribute.type) {
 		case AttributesType::FLOAT:
@@ -194,7 +194,7 @@ namespace Components {
 			attribute.value.value.valueChar = jsonData.get<std::string>()[0];
 			break;
 		case AttributesType::GAMEOBJECT:
-			attribute.value.value.valueFloat = std::stof(jsonData.get<std::string>());
+			attribute.value.value.entityIdx = std::stoi(jsonData.get<std::string>());
 			break;
 		default:
 			break;
@@ -317,24 +317,27 @@ namespace Components {
 
 			switch (attr.second.getType())
 			{
-				case Components::AttributesType::BOOL:
-					value["value"] = attr.second.value.value.valueBool;
+			case Components::AttributesType::BOOL:
+				value["value"] = attr.second.value.value.valueBool;
 				break;
-				case Components::AttributesType::FLOAT:
-					value["value"] = attr.second.value.value.valueFloat;
-					break;
-				case Components::AttributesType::CHAR:
-					value["value"] = attr.second.value.value.valueChar;
-					break;
-				case Components::AttributesType::STRING:
-					value["value"] = attr.second.value.valueString;
-					break;
-				case Components::AttributesType::VECTOR2:
-					//value["value"] = attr.second.value.value.valueBool;
-					break;
-				case Components::AttributesType::COLOR:
-					//value["value"] = attr.second.value.value.valueBool;
-					break;
+			case Components::AttributesType::FLOAT:
+				value["value"] = attr.second.value.value.valueFloat;
+				break;
+			case Components::AttributesType::CHAR:
+				value["value"] = attr.second.value.value.valueChar;
+				break;
+			case Components::AttributesType::STRING:
+				value["value"] = attr.second.value.valueString;
+				break;
+			case Components::AttributesType::VECTOR2:
+				//value["value"] = attr.second.value.value.valueBool;
+				break;
+			case Components::AttributesType::COLOR:
+				//value["value"] = attr.second.value.value.valueBool;
+				break;
+			case Components::AttributesType::GAMEOBJECT:
+				value["value"] = attr.second.value.value.entityIdx;
+				break;
 
 			default:
 				break;
@@ -362,22 +365,48 @@ namespace Components {
 
 			Attribute attribute(attributeName, attributeType);
 
-			if (attributeJson["value"].is_boolean()) {
-				attribute.value.value.valueBool = attributeJson["value"];
+
+			switch (attribute.getType()) {
+			case Components::AttributesType::BOOL:
+				
+				attribute.value.value.valueBool = attributeJson["value"].get<bool>();
+				break;
+			case Components::AttributesType::FLOAT:
+				attribute.value.value.valueFloat = attributeJson["value"].get<float>();
+				break;
+			case Components::AttributesType::CHAR:
+				attribute.value.value.valueChar = attributeJson["value"].get<char>();
+				break;
+			case Components::AttributesType::STRING:
+				attribute.value.valueString = attributeJson["value"].get<std::string>();
+				break;
+			case Components::AttributesType::VECTOR2:
+				//value["value"] = attr.second.value.value.valueBool;
+				break;
+			case Components::AttributesType::COLOR:
+				//value["value"] = attr.second.value.value.valueBool;
+				break;
+			case Components::AttributesType::GAMEOBJECT:
+				attribute.value.value.entityIdx = attributeJson["value"].get<int>();
+				break;
 			}
-			else if (attributeJson["value"].is_number_float()) {
-				attribute.value.value.valueFloat = attributeJson["value"];
-			}
-			else if (attributeJson["value"].is_string()) {
-				std::string valueStr = attributeJson["value"];
-				if (valueStr.size() == 1) {
-					attribute.value.value.valueChar = valueStr[0];
-				}
-				else {
-					attribute.value.valueString = valueStr;
-				}
-			}
-	
+
+			//if (attributeJson["value"].is_boolean()) {
+			//	attribute.value.value.valueBool = attributeJson["value"];
+			//}
+			//else if (attributeJson["value"].is_number_float()) {
+			//	attribute.value.value.valueFloat = attributeJson["value"];
+			//}
+			//else if (attributeJson["value"].is_string()) {
+			//	std::string valueStr = attributeJson["value"];
+			//	if (valueStr.size() == 1) {
+			//		attribute.value.value.valueChar = valueStr[0];
+			//	}
+			//	else {
+			//		attribute.value.valueString = valueStr;
+			//	}
+			//}
+
 			//ADD REMAINING TYPES
 
 			script.AddAttribute(attributeName, attribute);
