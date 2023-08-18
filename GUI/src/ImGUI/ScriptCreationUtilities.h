@@ -348,6 +348,7 @@ namespace PEditor {
 
 		private:
 
+			bool alwaysSerialize;
 			bool serialized;
 			char serializedName[256];
 

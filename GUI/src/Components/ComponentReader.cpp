@@ -170,15 +170,15 @@ namespace Components {
 						AttributeValue value;
 
 
-						if (typeString == "int" || typeString == "float") {
+						if (typeString == "float") {
 							type = AttributesType::FLOAT;
 							value.value.valueFloat = sv["defaultValue"].get<float>();
 						}
-						else if (typeString == "Utilities::Vector2D") {
+						else if (typeString == "Vector2D") {
 							type = AttributesType::VECTOR2;
 							//value.value.valueFloat = sv["value"].get<float>();
 						}
-						else if (typeString == "std::string" || typeString == "string") {
+						else if (typeString == "string") {
 							type = AttributesType::STRING;
 							value.valueString = sv["defaultValue"].get<std::string>();
 						}
@@ -186,7 +186,7 @@ namespace Components {
 							type = AttributesType::BOOL;
 							value.value.valueBool = sv["defaultValue"].get<bool>();
 						}
-						else if (typeString == "Utilities::Color") {
+						else if (typeString == "color") {
 							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 							type = AttributesType::COLOR;
 						}

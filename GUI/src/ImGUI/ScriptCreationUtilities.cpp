@@ -608,7 +608,7 @@ void PEditor::ScriptCreationUtilities::ScriptMethod::updateAndRender()
 			ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 			(
 				in.getTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-				in.getTypeStr() == "cVariable"
+				in.getTypeStr() == "any"
 				)
 
 			) {
@@ -896,6 +896,8 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 {
+	alwaysSerialize = false;
+
 	serialized = false;
 
 	attrValue = ::Components::AttributeValue();
@@ -913,7 +915,7 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 		outputStr = "float";
 		break;
 	case ::Components::AttributesType::VECTOR2:
-		outputStr = "Utilities::Vector2D";
+		outputStr = "Vector2D";
 		break;
 	case ::Components::AttributesType::STRING:
 		outputStr = "string";
@@ -922,9 +924,12 @@ PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::Attribu
 		outputStr = "bool";
 		break;
 	case ::Components::AttributesType::COLOR:
-		outputStr = "Utilities::Color";
+		outputStr = "color";
 		break;
-
+	case ::Components::AttributesType::GAMEOBJECT:
+		outputStr = "Entity";
+		alwaysSerialize = true;
+		break;
 	}
 
 }
@@ -988,11 +993,12 @@ void PEditor::ScriptCreationUtilities::ScriptInput::updateAndRender()
 	}
 
 
+	if (!alwaysSerialize) {
+		ImGui::Checkbox("Serialize", &serialized);
+		if (serialized) {
 
-	ImGui::Checkbox("Serialize", &serialized);
-	if (serialized) {
-
-		ImGui::InputText("Name", serializedName, 256);
+			ImGui::InputText("Name", serializedName, 256);
+		}
 	}
 }
 
@@ -1068,7 +1074,10 @@ void PEditor::ScriptCreationUtilities::ScriptMenuBar::UpdateAndRender()
 
 				type = ::Components::AttributesType::COLOR;
 			}
+			if (ImGui::MenuItem("Entity")) {
 
+				type = ::Components::AttributesType::GAMEOBJECT;
+			}
 
 			if (type != ::Components::AttributesType::NONE)
 			{
@@ -1453,7 +1462,7 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 		root["value"] = attrValue.value.valueFloat;
 	}
 	else if (attrType == Components::AttributesType::VECTOR2) {
-		root["type"] = "vector2D";
+		root["type"] = "Vector2D";
 		root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
 	}
 	else if (attrType == Components::AttributesType::STRING) {

@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Aug 14 20:55:31 2023
+//Creation time: Fri Aug 18 04:37:02 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -38,6 +38,7 @@
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
 #include <PhysicsManager.h>
+#include <SoundManager.h>
 #include <EngineTime.h>
 
 
@@ -224,13 +225,13 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Logic_And",ScriptFunctionality_Logic_And);
 	map.emplace("Logic_Or",ScriptFunctionality_Logic_Or);
 	map.emplace("Logic_Negate",ScriptFunctionality_Logic_Negate);
-	map.emplace("Vector2D_Create",ScriptFunctionality_Vector2D_Create);
 	map.emplace("Vector2D_Magnitude",ScriptFunctionality_Vector2D_Magnitude);
 	map.emplace("Vector2D_X",ScriptFunctionality_Vector2D_X);
 	map.emplace("Vector2D_Y",ScriptFunctionality_Vector2D_Y);
-	map.emplace("Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
 	map.emplace("Vector2D_Angle",ScriptFunctionality_Vector2D_Angle);
 	map.emplace("Vector2D_AngleWithVector",ScriptFunctionality_Vector2D_AngleWithVector);
+	map.emplace("Vector2D_Create",ScriptFunctionality_Vector2D_Create);
+	map.emplace("Vector2D_Normalize",ScriptFunctionality_Vector2D_Normalize);
 	map.emplace("Vector2D_Rotate",ScriptFunctionality_Vector2D_Rotate);
 	map.emplace("Vector2D_Add",ScriptFunctionality_Vector2D_Add);
 	map.emplace("Vector2D_Subtract",ScriptFunctionality_Vector2D_Subtract);
@@ -243,18 +244,18 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Vector2D_Down",ScriptFunctionality_Vector2D_Down);
 	map.emplace("Vector2D_One",ScriptFunctionality_Vector2D_One);
 	map.emplace("Vector2D_Zero",ScriptFunctionality_Vector2D_Zero);
-	map.emplace("String_Equals",ScriptFunctionality_String_Equals);
-	map.emplace("String_Concatenate",ScriptFunctionality_String_Concatenate);
-	map.emplace("String_Substring",ScriptFunctionality_String_Substring);
-	map.emplace("String_Begining",ScriptFunctionality_String_Begining);
-	map.emplace("String_End",ScriptFunctionality_String_End);
-	map.emplace("String_Trim",ScriptFunctionality_String_Trim);
-	map.emplace("String_TrimBlanks",ScriptFunctionality_String_TrimBlanks);
-	map.emplace("String_GetLetter",ScriptFunctionality_String_GetLetter);
-	map.emplace("String_Find",ScriptFunctionality_String_Find);
-	map.emplace("String_ToString",ScriptFunctionality_String_ToString);
-	map.emplace("String_LeadingZeros",ScriptFunctionality_String_LeadingZeros);
-	map.emplace("String_RemoveDecimals",ScriptFunctionality_String_RemoveDecimals);
+	map.emplace("Text_Equals",ScriptFunctionality_Text_Equals);
+	map.emplace("Text_Concatenate",ScriptFunctionality_Text_Concatenate);
+	map.emplace("Text_Substring",ScriptFunctionality_Text_Substring);
+	map.emplace("Text_Begining",ScriptFunctionality_Text_Begining);
+	map.emplace("Text_End",ScriptFunctionality_Text_End);
+	map.emplace("Text_Trim",ScriptFunctionality_Text_Trim);
+	map.emplace("Text_TrimBlanks",ScriptFunctionality_Text_TrimBlanks);
+	map.emplace("Text_GetLetter",ScriptFunctionality_Text_GetLetter);
+	map.emplace("Text_Find",ScriptFunctionality_Text_Find);
+	map.emplace("Text_ToString",ScriptFunctionality_Text_ToString);
+	map.emplace("Text_LeadingZeros",ScriptFunctionality_Text_LeadingZeros);
+	map.emplace("Text_RemoveDecimals",ScriptFunctionality_Text_RemoveDecimals);
 	map.emplace("Attribute_Set",ScriptFunctionality_Attribute_Set);
 	map.emplace("Attribute_Get",ScriptFunctionality_Attribute_Get);
 	map.emplace("Attribute_SetLocal",ScriptFunctionality_Attribute_SetLocal);
@@ -283,10 +284,18 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Camera_GetScale",ScriptFunctionality_Camera_GetScale);
 	map.emplace("Camera_SetScale",ScriptFunctionality_Camera_SetScale);
 	map.emplace("Random_UnitValue",ScriptFunctionality_Random_UnitValue);
+	map.emplace("Random_NumberBetween",ScriptFunctionality_Random_NumberBetween);
 	map.emplace("Random_Between",ScriptFunctionality_Random_Between);
+	map.emplace("DegreesTo_Radians",ScriptFunctionality_DegreesTo_Radians);
+	map.emplace("RadiansTo_Degrees",ScriptFunctionality_RadiansTo_Degrees);
+	map.emplace("Random_AngleBetween",ScriptFunctionality_Random_AngleBetween);
 	map.emplace("Random_UnitVector",ScriptFunctionality_Random_UnitVector);
 	map.emplace("Random_ScaledVector",ScriptFunctionality_Random_ScaledVector);
+	map.emplace("Random_Color",ScriptFunctionality_Random_Color);
+	map.emplace("Random_ColorBetween",ScriptFunctionality_Random_ColorBetween);
 	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
+	map.emplace("SoundManager_setMasterVolume",SoundManager_setMasterVolume);
+	map.emplace("SoundManager_setChannelsCapacity",SoundManager_setChannelsCapacity);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
 	map.emplace("Time_GetTimeSinceBeginingMilliseconds",Time_GetTimeSinceBeginingMilliseconds);
 	map.emplace("Time_GetDeltaTime",Time_GetDeltaTime);
@@ -2861,11 +2870,6 @@ Scripting::Variable ScriptFunctionality_Logic_Negate(std::vector<Scripting::Vari
 	bool ret = manager->Logic_Negate(vec[0].value.Bool);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Vector2D_Create(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Vector2D ret = manager->Vector2D_Create(vec[0].value.Float, vec[1].value.Float);
-	return ret;
-}
 Scripting::Variable ScriptFunctionality_Vector2D_Magnitude(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Vector2D_Magnitude(vec[0].vector);
@@ -2881,11 +2885,6 @@ Scripting::Variable ScriptFunctionality_Vector2D_Y(std::vector<Scripting::Variab
 	float ret = manager->Vector2D_Y(vec[0].vector);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec){
-	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Vector2D ret = manager->Vector2D_Normalize(vec[0].vector);
-	return ret;
-}
 Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Vector2D_Angle(vec[0].vector);
@@ -2894,6 +2893,16 @@ Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Vector2D_AngleWithVector(vec[0].vector, vec[1].vector);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Create(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Create(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Normalize(vec[0].vector);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Vector2D_Rotate(std::vector<Scripting::Variable>const& vec){
@@ -2956,62 +2965,62 @@ Scripting::Variable ScriptFunctionality_Vector2D_Zero(std::vector<Scripting::Var
 	Vector2D ret = manager->Vector2D_Zero();
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Equals(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	bool ret = manager->Text_Equals(vec[0].str, vec[1].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Concatenate(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_Concatenate(vec[0].str, vec[1].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Substring(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_Substring(vec[0].str, vec[1].value.Float, vec[2].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Begining(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_Begining(vec[0].str, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_End(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_End(vec[0].str, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Trim(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_Trim(vec[0].str, vec[1].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_TrimBlanks(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_TrimBlanks(vec[0].str);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_GetLetter(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	char ret = manager->Text_GetLetter(vec[0].str, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_Find(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	int ret = manager->Text_Find(vec[0].str, vec[1].value.Char);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_ToString(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_ToString(vec[0]);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_LeadingZeros(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_LeadingZeros(vec[0].value.Float, vec[1].value.Float);
 	return ret;
 }
-Scripting::Variable ScriptFunctionality_String_RemoveDecimals(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ScriptFunctionality_Text_RemoveDecimals(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Text_RemoveDecimals(vec[0].value.Float);
 	return ret;
@@ -3156,24 +3165,64 @@ Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::
 	float ret = manager->Random_UnitValue();
 	return ret;
 }
+Scripting::Variable ScriptFunctionality_Random_NumberBetween(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Random_NumberBetween(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
 Scripting::Variable ScriptFunctionality_Random_Between(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Random_Between(vec[0].value.Float, vec[1].value.Float);
 	return ret;
 }
+Scripting::Variable ScriptFunctionality_DegreesTo_Radians(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->DegreesTo_Radians(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_RadiansTo_Degrees(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->RadiansTo_Degrees(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_AngleBetween(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Random_AngleBetween(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
 Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Utilities::Vector2D ret = manager->Random_UnitVector();
+	Vector2D ret = manager->Random_UnitVector();
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
-	Utilities::Vector2D ret = manager->Random_ScaledVector(vec[0].value.Float);
+	Vector2D ret = manager->Random_ScaledVector(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Color ret = manager->Random_Color();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_ColorBetween(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Color ret = manager->Random_ColorBetween(vec[0].value.color, vec[1].value.color);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->OpenURL(vec[0].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec){
+	SoundManager* manager = SoundManager::instance();
+	manager->setMasterVolume(vec[0].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable SoundManager_setChannelsCapacity(std::vector<Scripting::Variable>const& vec){
+	SoundManager* manager = SoundManager::instance();
+	manager->setChannelsCapacity(vec[0].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec){

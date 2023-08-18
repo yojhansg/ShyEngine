@@ -66,15 +66,15 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "int" || typeString == "float") {
+		if (typeString == "float") {
 			value.value.valueFloat = 0.0f;
 			type = AttributesType::FLOAT;
 		}
-		else if (typeString == "Utilities::Vector2D") {
+		else if (typeString == "Vector2D") {
 			value.value.valueVector2 = { 0.0f, 0.0f };
 			type = AttributesType::VECTOR2;
 		}
-		else if (typeString == "std::string" || typeString == "string") {
+		else if (typeString == "string") {
 			value.valueString = "";
 			type = AttributesType::STRING;
 		}
@@ -82,7 +82,7 @@ namespace Components {
 			value.value.valueBool = false;
 			type = AttributesType::BOOL;
 		}
-		else if (typeString == "Utilities::Color") {
+		else if ("color") {
 			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 			type = AttributesType::COLOR;
 		}
@@ -90,7 +90,7 @@ namespace Components {
 			value.value.valueChar = ' ';
 			type = AttributesType::CHAR;
 		}
-		else if (typeString == "gameObject") {
+		else if (typeString == "Entity") {
 			value.value.valueFloat = -1.0f;
 			type = AttributesType::GAMEOBJECT;
 		}

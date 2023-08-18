@@ -287,6 +287,7 @@ namespace PEditor {
             ShowErrorPopup(errorMessage);
         }
 
+
         ImGui::End();
 
         return Result::CLOSED;
@@ -294,7 +295,7 @@ namespace PEditor {
 
     ProjectsManager::Result ProjectsManager::CloseEditor() {
 
-        ImGui::Begin("CLOSE", (bool*)0, NoMove | NoResize | NoCollapse);
+        ImGui::Begin("CLOSE", (bool*)0, NoMove | NoResize | NoCollapse | NoDecoration);
 
         ImVec2 size = ImGui::GetWindowSize();
         w = size.x; h = size.y;

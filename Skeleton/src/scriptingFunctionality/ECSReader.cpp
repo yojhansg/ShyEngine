@@ -384,6 +384,7 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 }
 
 
+
 #define TAB "\t"
 #define NEWLINE "\n"
 #define VARIABLE "Scripting::Variable"
@@ -1076,6 +1077,38 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 }
 
 
+std::string ECSReader::ProcessType(std::string const& input)
+{
+	if (input == "std::string" || input == "string" || input == "cstring")
+		return "string";
+
+	if (input == "float" || input == "int" || input == "double")
+		return "float";
+
+	if (input == "Utilities::Vector2D" || input == "Vector2D" || input == "cVector2D")
+		return "Vector2D";
+
+	if (input == "char")
+		return "char";
+
+	if (input == "Color" || input == "Utilities::Color" || input == "cColor")
+		return "color";
+
+	if (input == "bool")
+		return "bool";
+
+	if (input == "Entity*" || input == "ECS::Entity*")
+		return "Entity";
+
+	if (input == "void")
+		return "void";
+
+	if (input == "cVariable" || input == "Scripting::Variable")
+		return "any";
+
+	std::cout << "Error con el tipo: " << input << std::endl;
+	return "";
+}
 
 
 ECSReader& ECSReader::GenerateComponentsJSON()
@@ -1092,7 +1125,7 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 				cmp["attributes"] += {
 
-					{"type", attr.type},
+					{"type", ProcessType(attr.type)},
 					{ "name" , attr.name }
 				};
 			}
@@ -1105,15 +1138,20 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 				json methodData = json::basic_json();
 
-				methodData["return"] = method.returnType;
+				methodData["return"] = ProcessType(method.returnType);
 				methodData["name"] = method.methodName;
 
-				json inputJson;
+				json inputJson = nlohmann::ordered_json();
+
+				inputJson += {
+					{"type", "Entity"},
+					{ "name", "entity"}
+				};
 
 				for (auto& input : method.input) {
 					inputJson +=
 					{
-						{"type", input.type},
+						{"type", ProcessType(input.type)},
 						{ "name", input.name }
 					};
 				}
@@ -1186,11 +1224,11 @@ ECSReader& ECSReader::GenerateManagersJSON()
 			for (auto& input : method.input) {
 
 				inputJson.push_back(
-					{ {"name", input.name}, {"type", input.type} });
+					{ {"name", input.name}, {"type", ProcessType(input.type)} });
 			}
 
 			methodJson["input"] = inputJson;
-			methodJson["return"] = method.returnType;
+			methodJson["return"] = ProcessType(method.returnType);
 			methodJson["name"] = method.methodName;
 
 			managerJson["methods"].push_back(methodJson);

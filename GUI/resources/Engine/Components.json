@@ -7,71 +7,89 @@
             },
             {
                 "name": "currentFrame",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "currentAnimation",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "animationColumns",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "animationRows",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "animationSheetStyle",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "animationLenght",
-                "type": "int"
+                "type": "float"
             }
         ],
         "methods": [
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "str",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "frame",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "animation",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "column",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "row",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "ChangeAnimationPath",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "AdvanceFrame",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "AdvanceAnimation",
                 "return": "void"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "idx",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetFrame",
@@ -80,37 +98,60 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "idx",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetAnimation",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetFrame",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "GetAnimation",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetAnimation",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "lenght",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetAnimationLenght",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getAnimationLenght",
-                "return": "int"
+                "return": "float"
             }
         ]
     },
@@ -119,7 +160,7 @@
         "attributes": [
             {
                 "name": "bodyType",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "mass",
@@ -143,7 +184,7 @@
         "attributes": [
             {
                 "name": "bodyType",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "mass",
@@ -171,7 +212,7 @@
             },
             {
                 "name": "bodyType",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "mass",
@@ -195,7 +236,7 @@
         "attributes": [
             {
                 "name": "bodyType",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "mass",
@@ -219,37 +260,51 @@
         "attributes": [
             {
                 "name": "fileName",
-                "type": "std::string"
+                "type": "string"
             }
         ],
         "methods": [
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getTextureWidth",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "getTextureHeight",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getTextureHeight",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "x",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "y",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "w",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "h",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "setSrcRect",
@@ -258,27 +313,40 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "x",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "y",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "setRotaionPoint",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "scaledSize",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "texturePath",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "ChangeTexture",
@@ -287,8 +355,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "flipmode",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "setFlipMode",
@@ -301,7 +373,7 @@
         "attributes": [
             {
                 "name": "fileName",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "loop",
@@ -320,42 +392,70 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "musicPath",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "changeMusic",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "play",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "pause",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "stop",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "resume",
                 "return": "void"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "seconds",
                         "type": "float"
                     },
                     {
                         "name": "loops=-1",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "playWithFadeIn",
@@ -363,6 +463,10 @@
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "seconds",
                         "type": "float"
@@ -372,22 +476,41 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isPlaying",
                 "return": "bool"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isPaused",
                 "return": "bool"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "rewind",
                 "return": "void"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "volume",
                         "type": "float"
@@ -397,12 +520,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getVolume",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "play",
                         "type": "bool"
@@ -414,6 +546,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "loop",
                         "type": "bool"
                     }
@@ -422,7 +558,12 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isOnLoop",
                 "return": "bool"
             }
@@ -432,39 +573,39 @@
         "attributes": [
             {
                 "name": "placement",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "position",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "size",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "anchor",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "left",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "top",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "right",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "bottom",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "color",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "renderScale",
@@ -477,19 +618,28 @@
         ],
         "methods": [
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetPlacement",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "position",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "size",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetPositioned",
@@ -498,20 +648,24 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "left",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "top",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "right",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "bottom",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetStreched",
@@ -520,8 +674,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "position",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Move",
@@ -530,8 +688,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "position",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "MoveTo",
@@ -540,48 +702,86 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "size",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetSize",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetPosition",
-                "return": "Utilities::Vector2D"
-            },
-            {
-                "input": null,
-                "name": "GetSize",
-                "return": "Utilities::Vector2D"
-            },
-            {
-                "input": null,
-                "name": "GetTop",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "GetLeft",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "GetRight",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "GetBottom",
-                "return": "int"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetSize",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetTop",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetLeft",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetRight",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetBottom",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "pos",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetTop",
@@ -590,8 +790,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "pos",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetLeft",
@@ -600,8 +804,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "pos",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetRight",
@@ -610,75 +818,131 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "pos",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetBottom",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetAnchor",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "anchor",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetAnchor",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "SetAnchorCenter",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "SetAnchorTopLeft",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "SetAnchorTopRight",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "SetAnchorBottomLeft",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "SetAnchorBottomRight",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetColor",
-                "return": "Utilities::Color"
+                "return": "color"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "color",
-                        "type": "Utilities::Color"
+                        "type": "color"
                     }
                 ],
                 "name": "SetColor",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetRenderScale",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "newRenderScale",
                         "type": "float"
@@ -688,12 +952,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "ResetRenderScale",
                 "return": "void"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "value",
                         "type": "bool"
@@ -703,7 +976,12 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "IsInteractable",
                 "return": "bool"
             }
@@ -713,15 +991,15 @@
         "attributes": [
             {
                 "name": "defaultColor",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "hoverColor",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "downColor",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "scale",
@@ -733,24 +1011,33 @@
         "attributes": [
             {
                 "name": "path",
-                "type": "std::string"
+                "type": "string"
             }
         ],
         "methods": [
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "texture",
-                        "type": "std::string"
+                        "type": "string"
                     }
                 ],
                 "name": "SetTexture",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetTexture",
-                "return": "std::string"
+                "return": "string"
             }
         ]
     },
@@ -758,64 +1045,87 @@
         "attributes": [
             {
                 "name": "pointSize",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "path",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "text",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "horizontalAlignment",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "verticalAlignment",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "fit",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "lineSpacing",
-                "type": "int"
+                "type": "float"
             }
         ],
         "methods": [
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetFit",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "fit",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetFit",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetVerticalAlignment",
-                "return": "int"
-            },
-            {
-                "input": null,
-                "name": "GetHorizontalAlignment",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetHorizontalAlignment",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "align",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetVerticalAlignment",
@@ -824,53 +1134,84 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "align",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetHorizontalAlignment",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetFont",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "font",
-                        "type": "std::string"
+                        "type": "string"
                     }
                 ],
                 "name": "SetFont",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetText",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "text",
-                        "type": "std::string"
+                        "type": "string"
                     }
                 ],
                 "name": "SetText",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetPointSize",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "size",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "SetPointSize",
@@ -886,7 +1227,7 @@
             },
             {
                 "name": "maxParticles",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "loop",
@@ -934,7 +1275,7 @@
             },
             {
                 "name": "size",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "randomSizeBetweenTwoValues",
@@ -942,11 +1283,11 @@
             },
             {
                 "name": "sizeFirstValue",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "sizeSecondValue",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "angle",
@@ -982,7 +1323,7 @@
             },
             {
                 "name": "color",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "randomColorBetweenTwoColors",
@@ -990,15 +1331,15 @@
             },
             {
                 "name": "colorFirstValue",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "colorSecondValue",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "layerName",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "sensor",
@@ -1074,31 +1415,31 @@
             },
             {
                 "name": "fileName",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "flipmode",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "srcX",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "srcY",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "srcWidth",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "srcHeight",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "alpha",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "randomAlphaBetweenTwoValues",
@@ -1106,11 +1447,11 @@
             },
             {
                 "name": "alphaFirstValue",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "alphaSecondValue",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "emissionRateOverTime",
@@ -1134,7 +1475,7 @@
             },
             {
                 "name": "endColor",
-                "type": "Utilities::Color"
+                "type": "color"
             },
             {
                 "name": "overLifeTimeSize",
@@ -1142,7 +1483,7 @@
             },
             {
                 "name": "endSize",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "overLifeTimeAlpha",
@@ -1150,25 +1491,39 @@
             },
             {
                 "name": "endAlpha",
-                "type": "int"
+                "type": "float"
             }
         ],
         "methods": [
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "startEmitting",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isEmitting",
                 "return": "bool"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "texturePath",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "changeTexture",
@@ -1177,16 +1532,20 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "time",
                         "type": "float"
                     },
                     {
                         "name": "particles",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "cycles",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "rate",
@@ -1206,7 +1565,7 @@
         "attributes": [
             {
                 "name": "bodyType",
-                "type": "int"
+                "type": "float"
             },
             {
                 "name": "mass",
@@ -1229,6 +1588,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "trigger",
                         "type": "bool"
                     }
@@ -1237,12 +1600,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isTrigger",
                 "return": "bool"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "friction",
                         "type": "float"
@@ -1252,12 +1624,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getFriction",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "bounciness",
                         "type": "float"
@@ -1267,12 +1648,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getBounciness",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "x",
                         "type": "float"
@@ -1286,7 +1676,12 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getLinearVelocity",
                 "return": "Vector2D"
             }
@@ -1297,7 +1692,7 @@
         "attributes": [
             {
                 "name": "fileName",
-                "type": "std::string"
+                "type": "string"
             },
             {
                 "name": "loop",
@@ -1328,42 +1723,70 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "soundPath",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "changeSound",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "play",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "pause",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "stop",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "resume",
                 "return": "void"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "seconds",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "loops=-1",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "playWithfadeIn",
@@ -1372,25 +1795,43 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "seconds",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "fadeOut",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isPlaying",
                 "return": "bool"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isPaused",
                 "return": "bool"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "volume",
                         "type": "float"
@@ -1400,12 +1841,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getVolume",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "play",
                         "type": "bool"
@@ -1417,6 +1867,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "loop",
                         "type": "bool"
                     }
@@ -1425,12 +1879,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isOnLoop",
                 "return": "bool"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "enable",
                         "type": "bool"
@@ -1440,12 +1903,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "isSpatialSoundEnabled",
                 "return": "bool"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "panning",
                         "type": "float"
@@ -1455,12 +1927,21 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getPanning",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "distance",
                         "type": "float"
@@ -1470,7 +1951,12 @@
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "getAudibleDistance",
                 "return": "float"
             }
@@ -1480,11 +1966,11 @@
         "attributes": [
             {
                 "name": "localPosition",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "localScale",
-                "type": "Utilities::Vector2D"
+                "type": "Vector2D"
             },
             {
                 "name": "localRotation",
@@ -1493,20 +1979,34 @@
         ],
         "methods": [
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetLocalPosition",
-                "return": "Utilities::Vector2D"
-            },
-            {
-                "input": null,
-                "name": "GetWorldPosition",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetWorldPosition",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "position",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetLocalPosition",
@@ -1514,6 +2014,10 @@
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "x",
                         "type": "float"
@@ -1525,6 +2029,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "y",
                         "type": "float"
                     }
@@ -1535,28 +2043,46 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "position",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetWorldPosition",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetLocalScale",
-                "return": "Utilities::Vector2D"
-            },
-            {
-                "input": null,
-                "name": "GetWorldScale",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "GetWorldScale",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "scale",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetScale",
@@ -1564,6 +2090,10 @@
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "x",
                         "type": "float"
@@ -1575,6 +2105,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "y",
                         "type": "float"
                     }
@@ -1585,25 +2119,43 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "scale",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetWorldScale",
                 "return": "void"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetLocalRotation",
                 "return": "float"
             },
             {
-                "input": null,
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
                 "name": "GetWorldRotation",
                 "return": "float"
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "rotation",
                         "type": "float"
@@ -1615,6 +2167,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "rotation",
                         "type": "float"
                     }
@@ -1625,8 +2181,12 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "direction",
-                        "type": "Utilities::Vector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Translate",
@@ -1634,6 +2194,10 @@
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "x",
                         "type": "float"
@@ -1645,6 +2209,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "y",
                         "type": "float"
                     }
@@ -1655,6 +2223,10 @@
             {
                 "input": [
                     {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "rotation",
                         "type": "float"
                     }
@@ -1664,6 +2236,10 @@
             },
             {
                 "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
                     {
                         "name": "scale",
                         "type": "float"

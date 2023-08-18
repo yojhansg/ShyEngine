@@ -21,7 +21,6 @@ namespace Sound {
 	}
 
 	void SoundManager::setMasterVolume(float volume) {
-
 		if (volume < 0.0f || volume > 1.0f)
 			Console::Output::PrintWarning("Invalid argument value", "Volume value must be between 0 and 1!");
 

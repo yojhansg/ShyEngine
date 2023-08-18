@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Aug 14 20:55:31 2023
+//Creation time : Fri Aug 18 04:37:02 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -194,13 +194,13 @@ Scripting::Variable ScriptFunctionality_Logic_GreaterOrEqual(std::vector<Scripti
 Scripting::Variable ScriptFunctionality_Logic_And(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Or(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Negate(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Vector2D_Create(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Magnitude(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_X(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Y(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Angle(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_AngleWithVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Create(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Normalize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Rotate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Add(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting::Variable>const& vec);
@@ -213,18 +213,18 @@ Scripting::Variable ScriptFunctionality_Vector2D_Right(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_Down(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_One(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Zero(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Equals(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Concatenate(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Substring(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Begining(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_End(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Trim(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_TrimBlanks(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_GetLetter(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_Find(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_ToString(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_LeadingZeros(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ScriptFunctionality_String_RemoveDecimals(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Equals(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Concatenate(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Substring(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Begining(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_End(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Trim(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_TrimBlanks(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_GetLetter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_Find(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_ToString(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_LeadingZeros(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Text_RemoveDecimals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_Set(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_Get(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Attribute_SetLocal(std::vector<Scripting::Variable>const& vec);
@@ -253,10 +253,18 @@ Scripting::Variable ScriptFunctionality_Camera_SetPosition(std::vector<Scripting
 Scripting::Variable ScriptFunctionality_Camera_GetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Camera_SetScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitValue(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Random_NumberBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_Between(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_DegreesTo_Radians(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_RadiansTo_Degrees(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Random_AngleBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Random_ColorBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundManager_setChannelsCapacity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBeginingMilliseconds(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetDeltaTime(std::vector<Scripting::Variable>const& vec);

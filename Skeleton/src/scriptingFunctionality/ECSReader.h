@@ -238,6 +238,11 @@ public:
 		std::string TypeConversion(std::string const& convertName);
 	};
 
+	/*
+		Ajusta los tipos para ser procesados por el motor
+	*/
+	std::string ProcessType(std::string const& input);
+
 private:
 
 	/*

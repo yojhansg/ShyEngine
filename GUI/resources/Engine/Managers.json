@@ -5,11 +5,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "val",
-                        "type": "cVariable"
+                        "type": "any"
                     }
                 ],
                 "name": "Set",
@@ -19,21 +19,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "Get",
-                "return": "Scripting::Variable"
+                "return": "any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "val",
-                        "type": "cVariable"
+                        "type": "any"
                     }
                 ],
                 "name": "SetLocal",
@@ -43,21 +43,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "GetLocal",
-                "return": "Scripting::Variable"
+                "return": "any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "val",
-                        "type": "cVariable"
+                        "type": "any"
                     }
                 ],
                 "name": "SetGlobal",
@@ -67,11 +67,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "GetGlobal",
-                "return": "Scripting::Variable"
+                "return": "any"
             }
         ],
         "name": "Attribute"
@@ -81,13 +81,13 @@
             {
                 "input": [],
                 "name": "GetPosition",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
                     {
                         "name": "newPosition",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "SetPosition",
@@ -114,24 +114,39 @@
     {
         "methods": [
             {
+                "input": [
+                    {
+                        "name": "angle",
+                        "type": "float"
+                    }
+                ],
+                "name": "Radians",
+                "return": "float"
+            }
+        ],
+        "name": "DegreesTo"
+    },
+    {
+        "methods": [
+            {
                 "input": [],
                 "name": "Entity",
-                "return": "ECS::Entity*"
+                "return": "Entity"
             },
             {
                 "input": [
                     {
                         "name": "ent",
-                        "type": "ECS::Entity*"
+                        "type": "Entity"
                     }
                 ],
                 "name": "Name",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [],
                 "name": "CurrentName",
-                "return": "std::string"
+                "return": "string"
             }
         ],
         "name": "Entity"
@@ -142,11 +157,11 @@
                 "input": [
                     {
                         "name": "ent",
-                        "type": "ECS::Entity*"
+                        "type": "Entity"
                     },
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "EntityEvent",
@@ -156,7 +171,7 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "GlobalEvent",
@@ -170,7 +185,7 @@
             {
                 "input": [],
                 "name": "Graph",
-                "return": "std::string"
+                "return": "string"
             }
         ],
         "name": "Graph"
@@ -460,7 +475,7 @@
                 "input": [
                     {
                         "name": "url",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "OpenURL",
@@ -500,7 +515,7 @@
                 "input": [
                     {
                         "name": "val",
-                        "type": "cVariable"
+                        "type": "any"
                     }
                 ],
                 "name": "Print",
@@ -512,8 +527,37 @@
     {
         "methods": [
             {
+                "input": [
+                    {
+                        "name": "angle",
+                        "type": "float"
+                    }
+                ],
+                "name": "Degrees",
+                "return": "float"
+            }
+        ],
+        "name": "RadiansTo"
+    },
+    {
+        "methods": [
+            {
                 "input": [],
                 "name": "UnitValue",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "min",
+                        "type": "float"
+                    },
+                    {
+                        "name": "max",
+                        "type": "float"
+                    }
+                ],
+                "name": "NumberBetween",
                 "return": "float"
             },
             {
@@ -531,9 +575,23 @@
                 "return": "float"
             },
             {
+                "input": [
+                    {
+                        "name": "min",
+                        "type": "float"
+                    },
+                    {
+                        "name": "max",
+                        "type": "float"
+                    }
+                ],
+                "name": "AngleBetween",
+                "return": "float"
+            },
+            {
                 "input": [],
                 "name": "UnitVector",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
             },
             {
                 "input": [
@@ -543,7 +601,26 @@
                     }
                 ],
                 "name": "ScaledVector",
-                "return": "Utilities::Vector2D"
+                "return": "Vector2D"
+            },
+            {
+                "input": [],
+                "name": "Color",
+                "return": "color"
+            },
+            {
+                "input": [
+                    {
+                        "name": "c1",
+                        "type": "color"
+                    },
+                    {
+                        "name": "c2",
+                        "type": "color"
+                    }
+                ],
+                "name": "ColorBetween",
+                "return": "color"
             }
         ],
         "name": "Random"
@@ -553,171 +630,171 @@
             {
                 "input": [],
                 "name": "Now",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "WeekDay",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "ShortWeekDay",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Month",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "ShortMonth",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "DayOfWeekIndex",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "MonthIndex",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "MonthDay",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Year",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Hours",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Minutes",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Seconds",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "now",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Since",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "HourTime",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "PreciseHourTime",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "TimeStamp",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Date",
-                "return": "std::string"
+                "return": "string"
             }
         ],
         "name": "RealTime"
@@ -733,7 +810,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Save",
@@ -743,7 +820,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Load",
@@ -753,11 +830,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "std::string"
+                        "type": "string"
                     },
                     {
                         "name": "value",
-                        "type": "Scripting::Variable"
+                        "type": "any"
                     }
                 ],
                 "name": "SetSlot",
@@ -767,21 +844,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "std::string"
+                        "type": "string"
                     }
                 ],
                 "name": "GetSlot",
-                "return": "Scripting::Variable"
+                "return": "any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "std::string"
+                        "type": "string"
                     },
                     {
                         "name": "value",
-                        "type": "Scripting::Variable"
+                        "type": "any"
                     }
                 ],
                 "name": "Set",
@@ -791,11 +868,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "std::string"
+                        "type": "string"
                     }
                 ],
                 "name": "Get",
-                "return": "Scripting::Variable"
+                "return": "any"
             },
             {
                 "input": [],
@@ -806,7 +883,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Exists",
@@ -816,7 +893,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "DeleteSave",
@@ -831,11 +908,11 @@
                 "input": [
                     {
                         "name": "scenePath",
-                        "type": "std::string"
+                        "type": "string"
                     },
                     {
                         "name": "pushMode",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "ChangeScene",
@@ -854,12 +931,12 @@
             {
                 "input": [],
                 "name": "getNumberOfScenes",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [],
                 "name": "GetCurrentScenePath",
-                "return": "std::string"
+                "return": "string"
             }
         ],
         "name": "SceneManager"
@@ -869,12 +946,37 @@
             {
                 "input": [
                     {
+                        "name": "volume",
+                        "type": "float"
+                    }
+                ],
+                "name": "setMasterVolume",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "nChannels",
+                        "type": "float"
+                    }
+                ],
+                "name": "setChannelsCapacity",
+                "return": "void"
+            }
+        ],
+        "name": "SoundManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "b",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "Equals",
@@ -884,95 +986,95 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "b",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "Concatenate",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "begin",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "end",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Substring",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "b",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "Begining",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "b",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "End",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "values",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "Trim",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     }
                 ],
                 "name": "TrimBlanks",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "b",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "GetLetter",
@@ -982,7 +1084,7 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cstring"
+                        "type": "string"
                     },
                     {
                         "name": "c",
@@ -990,31 +1092,31 @@
                     }
                 ],
                 "name": "Find",
-                "return": "int"
+                "return": "float"
             },
             {
                 "input": [
                     {
                         "name": "variable",
-                        "type": "cVariable"
+                        "type": "any"
                     }
                 ],
                 "name": "ToString",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
                     {
                         "name": "number",
-                        "type": "int"
+                        "type": "float"
                     },
                     {
                         "name": "zeroCount",
-                        "type": "int"
+                        "type": "float"
                     }
                 ],
                 "name": "LeadingZeros",
-                "return": "std::string"
+                "return": "string"
             },
             {
                 "input": [
@@ -1024,10 +1126,10 @@
                     }
                 ],
                 "name": "RemoveDecimals",
-                "return": "std::string"
+                "return": "string"
             }
         ],
-        "name": "String"
+        "name": "Text"
     },
     {
         "methods": [
@@ -1084,6 +1186,60 @@
             {
                 "input": [
                     {
+                        "name": "vec",
+                        "type": "Vector2D"
+                    }
+                ],
+                "name": "Magnitude",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Vector2D"
+                    }
+                ],
+                "name": "X",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Vector2D"
+                    }
+                ],
+                "name": "Y",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Vector2D"
+                    }
+                ],
+                "name": "Angle",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Vector2D"
+                    },
+                    {
+                        "name": "other",
+                        "type": "Vector2D"
+                    }
+                ],
+                "name": "AngleWithVector",
+                "return": "float"
+            },
+            {
+                "input": [
+                    {
                         "name": "x",
                         "type": "float"
                     },
@@ -1099,37 +1255,7 @@
                 "input": [
                     {
                         "name": "vec",
-                        "type": "cVector2D"
-                    }
-                ],
-                "name": "Magnitude",
-                "return": "float"
-            },
-            {
-                "input": [
-                    {
-                        "name": "vec",
-                        "type": "cVector2D"
-                    }
-                ],
-                "name": "X",
-                "return": "float"
-            },
-            {
-                "input": [
-                    {
-                        "name": "vec",
-                        "type": "cVector2D"
-                    }
-                ],
-                "name": "Y",
-                "return": "float"
-            },
-            {
-                "input": [
-                    {
-                        "name": "vec",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Normalize",
@@ -1139,31 +1265,7 @@
                 "input": [
                     {
                         "name": "vec",
-                        "type": "cVector2D"
-                    }
-                ],
-                "name": "Angle",
-                "return": "float"
-            },
-            {
-                "input": [
-                    {
-                        "name": "vec",
-                        "type": "cVector2D"
-                    },
-                    {
-                        "name": "other",
-                        "type": "cVector2D"
-                    }
-                ],
-                "name": "AngleWithVector",
-                "return": "float"
-            },
-            {
-                "input": [
-                    {
-                        "name": "vec",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "angle",
@@ -1177,11 +1279,11 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "b",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Add",
@@ -1191,11 +1293,11 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "b",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Subtract",
@@ -1205,11 +1307,11 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "b",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Dot",
@@ -1219,11 +1321,11 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "b",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "Cross",
@@ -1233,7 +1335,7 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "cVector2D"
+                        "type": "Vector2D"
                     },
                     {
                         "name": "b",

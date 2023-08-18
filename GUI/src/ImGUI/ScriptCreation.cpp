@@ -272,7 +272,7 @@ void PEditor::ScriptCreation::Load()
 			type = ::Components::AttributesType::FLOAT;
 			value.value.valueFloat = constNode["value"].get<float>();
 		}
-		else if (typeStr == "vector2D") {
+		else if (typeStr == "Vector2D") {
 			//TODO: despues de la serializacion
 		}
 		else if (typeStr == "string") {
