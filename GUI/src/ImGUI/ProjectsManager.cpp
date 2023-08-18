@@ -511,7 +511,8 @@ namespace PEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, createPath));
+        std::string folderPath = std::filesystem::path(openPath).parent_path().string();
+        imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
         return true;
 
