@@ -7,6 +7,8 @@
 #include "ConsoleManager.h"
 
 #include "Scripting/Script.h"
+#include "ReferencesManager.h"
+
 namespace ECS {
 
 	Entity::Entity(const std::string& ent_name, int renderOrder) {
@@ -23,7 +25,7 @@ namespace ECS {
 		inRenderSet = false;
 	}
 
-	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder) {
+	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder, int id) {
 
 		name = ent_name;
 		active = true;
@@ -31,6 +33,7 @@ namespace ECS {
 		scene = ent_scene;
 
 		this->renderOrder = renderOrder;
+		this->id = id;
 
 		inRenderSet = false;
 	}
@@ -39,6 +42,7 @@ namespace ECS {
 		for (auto c : components) {
 			delete c; c = nullptr;
 		}
+
 		components.clear();
 		removedComponents.clear();
 
@@ -46,6 +50,8 @@ namespace ECS {
 			RenderManager::instance()->RemoveElement(renderIt);
 
 		inRenderSet = false;
+
+		ReferencesManager::instance()->RemoveEntityFromMap(id);
 	}
 
 	Scene* Entity::getScene() {

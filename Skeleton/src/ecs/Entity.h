@@ -38,7 +38,7 @@ namespace ECS {
 
 		Entity(const std::string& ent_name, int renderOrder);
 
-		Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder);
+		Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder, int id);
 
 		~Entity();
 

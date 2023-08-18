@@ -16,6 +16,8 @@ namespace ECS {
 		void AddEntityToMap(int id, Entity* e);
 		void RemoveEntityFromMap(int id);
 
+		bool IsEntityValid(int id);
+
 	private:
 
 		std::unordered_map<int, Entity*> map;

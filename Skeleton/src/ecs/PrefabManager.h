@@ -3,6 +3,7 @@
 #include "Singleton.h"
 #include <string>
 #include <unordered_map>
+#include <EditorExport.h>
 
 #undef new
 #include "json.hpp"
@@ -16,13 +17,15 @@ namespace ECS {
 	class Entity;
 	class Scene;
 
-	class PrefabManager : public Utilities::Singleton<PrefabManager> {
+	EditorManager PrefabManager : public Utilities::Singleton<PrefabManager> {
 
 	public:
 
 		PrefabManager();
 
 		PrefabManager(std::string const& prefabsPath);
+
+	publish:
 
 		// Instancia una entidad con transform en la escena a partir un prefab
 		void InstantiatePrefabWithTransform(const std::string& prefabName, Scene* scene);
@@ -42,6 +45,8 @@ namespace ECS {
 
 		std::unordered_map<std::string, nlohmann::json> prefabsWithOverlay;
 
+
+		// TODO IDs a los prefabs
 	};
 
 }

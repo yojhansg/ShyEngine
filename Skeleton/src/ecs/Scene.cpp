@@ -138,9 +138,9 @@ namespace ECS {
         name = sce_name;
     }
 
-    Entity* Scene::createEntity(const std::string& name, int renderOder) {
+    Entity* Scene::createEntity(const std::string& name, int renderOder, int id) {
         
-        Entity* e = new Entity(name, this, renderOder);
+        Entity* e = new Entity(name, this, renderOder, id);
         entities.push_back(e);
 
         return e;

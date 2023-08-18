@@ -15,6 +15,7 @@
 
 #include <fstream>
 #include <unordered_map>
+#include "ReferencesManager.h"
 
 using namespace nlohmann;
 
@@ -85,6 +86,7 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 
 	int renderOrder = 0;
 	std::string objectName = "New Entity";
+	int id = 0;
 
 	if (obj.contains("name"))
 		objectName = obj["name"].get<std::string>();
@@ -92,7 +94,12 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 	if (obj.contains("order")) // TODO: mover el orden al transform ya que es la posicion z
 		renderOrder = obj["order"].get<int>();
 
-	ECS::Entity* entity = scene->createEntity(objectName, renderOrder);
+	if (obj.contains("id"))
+		id = obj["id"].get<int>();
+
+	ECS::Entity* entity = scene->createEntity(objectName, renderOrder, id);
+
+	ReferencesManager::instance()->AddEntityToMap(id, entity);
 
 	// Transform component
 	ECS::Transform* transform = entity->addComponent<ECS::Transform>();
@@ -147,12 +154,17 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent)
 {
 	std::string name = "New Overlay";
+	int id = 0;
 
 	if (overlay.contains("name"))
 		name = overlay["name"].get<std::string>();
 
-	ECS::Entity* entity = scene->createEntity(name);
+	if (overlay.contains("id"))
+		id = overlay["id"].get<int>();
 
+	ECS::Entity* entity = scene->createEntity(name, 0, id);
+
+	ReferencesManager::instance()->AddEntityToMap(id, entity);
 
 	// Overlay Component
 	ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();
