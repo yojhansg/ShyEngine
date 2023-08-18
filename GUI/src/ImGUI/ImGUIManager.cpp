@@ -274,6 +274,11 @@ void ImGUIManager::setProjectInfo(PEditor::ProjectInfo* pInfo) {
 	this->projecInfo = pInfo;
 }
 
+PEditor::ProjectInfo& ImGUIManager::getProjectInfo()
+{
+	return *projecInfo;
+}
+
 
 void ImGUIManager::update()
 {

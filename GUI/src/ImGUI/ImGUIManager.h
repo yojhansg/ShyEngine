@@ -86,6 +86,7 @@ public:
 
 	void changeEditorState(const EDITOR_STATE& state);
 	void setProjectInfo(PEditor::ProjectInfo* pInfo);
+	PEditor::ProjectInfo& getProjectInfo();
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getMainWindowSize();

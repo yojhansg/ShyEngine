@@ -5,6 +5,9 @@
 #include "nlohmann/json.hpp"
 #include <fstream>
 
+#include "ImGUIManager.h"
+#include "ProjectsManager.h"
+
 using nlohmann::json;
 using nlohmann::ordered_json;
 
@@ -25,8 +28,7 @@ PEditor::Preferences::Preferences() : PEditor::Window("Preferences", 0)
 	data.width = 1920;
 	data.height = 1080;
 	data.initialScene = "scene";
-	data.name = "Batalla final";
-	data.path = "Mi/ruta/jeje";
+	data.name = ImGUIManager::getInstance()->getProjectInfo().name;
 	data.windowTitle = "ShyIcon.png";
 	data.icon = "ShyIcon.png";
 	data.creator = "Yojhan";
@@ -148,8 +150,7 @@ void PEditor::Preferences::GenerateDebug()
 	root["debugPhysics"] = true;
 	root["debugFrameRate"] = true;
 
-	//TODO:
-	root["path"] = "";
+	root["path"] = ImGUIManager::getInstance()->getProjectInfo().path;
 
 	std::ofstream file("config.json");
 
@@ -162,7 +163,7 @@ void PEditor::Preferences::GenerateRelease()
 {
 	ordered_json root = instance->BasicData();
 
-
+	root["path"] = "";
 	root["splashScreen"] = true;
 	root["debugPhysics"] = false;
 	root["debugFrameRate"] = false;
