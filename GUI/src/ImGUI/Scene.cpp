@@ -26,9 +26,9 @@ bool PEditor::Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
 
 	mousePos = getMousePosInsideScene(mousePos);
 
-	ImVec2 gOPos = go->getPosition();
+	ImVec2 gOPos = go->getAdjustedPosition();
 
-	return (mousePos.x > gOPos.x && mousePos.x < gOPos.x + go->getWidth() && mousePos.y > gOPos.y && mousePos.y < gOPos.y + go->getHeight());
+	return (mousePos.x > gOPos.x && mousePos.x < gOPos.x + go->getSize().x * go->getScale_x() && mousePos.y > gOPos.y && mousePos.y < gOPos.y + go->getSize().y * go->getScale_y());
 }
 
 ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
@@ -224,9 +224,14 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	ImVec2 mousePos = ImGui::GetMousePos();
 
+	bool anyGoSelected = false;
 	for (const auto& pair : gameObjects) {
 		if (mouseInsideWindow(mousePos))
-			pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
+			anyGoSelected |= pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
+	}
+
+	if (!anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+		setSelectedGameObject(nullptr);
 	}
 
 	if (!(SDL_GetModState() & KMOD_SHIFT)) {

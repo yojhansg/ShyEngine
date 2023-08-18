@@ -45,8 +45,9 @@ namespace PEditor {
 
 		bool waitingToDelete;
 
-		ImVec2* size;
+		ImVec2* scale;
 		ImVec2* pos;
+		ImVec2* size;
 
 		float previousMousePosX;
 		float previousMousePosY;
@@ -84,13 +85,13 @@ namespace PEditor {
 		bool isVisible();
 		void setVisible(bool visible);
 
-		int getWidth();
-		int getHeight();
+		float getScale_x();
+		float getScale_y();
 
 		void drawTransformInEditor();
 
 		void render(SDL_Renderer* renderer, Camera* camera);
-		void handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
+		bool handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 		void update();
 
 		void addComponent(::Components::Component comp);
@@ -103,6 +104,9 @@ namespace PEditor {
 		void setName(const std::string newName);
 		ImVec2 getPosition();
 		float getRotation();
+
+		ImVec2 getAdjustedPosition();
+		ImVec2 getSize();
 
 		bool isWaitingToDelete();
 		void toDelete();

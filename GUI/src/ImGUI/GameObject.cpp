@@ -240,6 +240,11 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 
 PEditor::GameObject::GameObject(std::string& path)
 {
+	pos = new ImVec2(0, 0);
+	scale = new ImVec2(1, 1);
+	size = new ImVec2(100, 100);
+
+
 	Scene* scene = ImGUIManager::getInstance()->getScene();
 	std::unordered_map<int, PEditor::GameObject*> gameObjects = scene->getGameObjects();
 
@@ -258,16 +263,25 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	text = nullptr;
 
-	SDL_Surface* surface = IMG_Load(path.c_str());
+	if (path.size() > 0) {
 
-	if (surface != nullptr) {
-		text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
-	}
-	else {
-		imagePath = "";
+		SDL_Surface* surface = IMG_Load(path.c_str());
+
+		if (surface != nullptr) {
+		
+			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
+
+			int w, h;
+			SDL_QueryTexture(text, NULL, NULL, &w, &h);
+			*size = ImVec2(w, h);
+		}
+		else {
+			imagePath = "";
+		}
+
+		SDL_FreeSurface(surface);
 	}
 
-	SDL_FreeSurface(surface);
 
 	if (imagePath != "") {
 		//Add component image
@@ -285,13 +299,11 @@ PEditor::GameObject::GameObject(std::string& path)
 		name = "Empty gameobject";
 	}
 
-	pos = new ImVec2(0, 0);
-	size = new ImVec2(100, 100);
 
 	imGuiManager = ImGUIManager::getInstance();
 
 	//Gizmo texture
-	surface = IMG_Load("gizmo.png");
+	SDL_Surface* surface = IMG_Load("gizmo.png");
 	gizmoText = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 
 	SDL_FreeSurface(surface);
@@ -320,6 +332,7 @@ PEditor::GameObject::~GameObject()
 	components.clear();
 
 	delete pos;
+	delete scale;
 	delete size;
 }
 
@@ -350,14 +363,14 @@ void PEditor::GameObject::setVisible(bool visible)
 		setChildrenVisible(this, visible);
 	}
 }
-int PEditor::GameObject::getWidth()
+float PEditor::GameObject::getScale_x()
 {
-	return size->x;
+	return scale->x;
 }
 
-int PEditor::GameObject::getHeight()
+float PEditor::GameObject::getScale_y()
 {
-	return size->y;
+	return scale->y;
 }
 
 void PEditor::GameObject::drawTransformInEditor()
@@ -369,7 +382,7 @@ void PEditor::GameObject::drawTransformInEditor()
 		ImGui::DragFloat2("##position_drag", (float*)pos, 0.3f, 0.0f, 0.0f, "%.2f");
 
 		ImGui::Text("Scale");
-		ImGui::DragFloat2("##scale_drag", (float*)size, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat2("##scale_drag", (float*)scale, 0.02f, 0.0f, FLT_MAX, "%.2f");
 
 
 		ImGui::Text("Rotation");
@@ -384,25 +397,10 @@ void PEditor::GameObject::drawTransformInEditor()
 
 void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 {
-	ImVec2 position = getPosition();
+	ImVec2 position = getAdjustedPosition();
 
-	//El punto 0, 0 es el centro del frame
-	position.x += Preferences::GetData().width * 0.5f;
-	position.y += Preferences::GetData().height * 0.5f;
-
-	int tWidth = 1, tHeight = 1;
-	SDL_Texture* texture = getTexture();
-
-	if (texture != nullptr)
-		SDL_QueryTexture(texture, NULL, NULL, &tWidth, &tHeight);
-
-	float width = tWidth * getWidth();
-	float height = tHeight * getHeight();
-
-	//El origen de los objetos es el centro
-	position.x -= width * 0.5f;
-	position.y -= height * 0.5f;
-
+	float width = size->x * getScale_x();
+	float height = size->y * getScale_y();
 
 	//Posicion y tama�os relativos al frame de la escena
 	ImVec2 relativePosition = ImVec2((position.x + camera->getPosition().x) * camera->getScrollFactor(),
@@ -469,8 +467,8 @@ void PEditor::GameObject::scaleChildren(GameObject* go, int scaleFactor)
 {
 	for (auto childPair : go->getChildren()) {
 
-		childPair.second->size->x += scaleFactor;
-		childPair.second->size->y += scaleFactor;
+		childPair.second->scale->x += scaleFactor;
+		childPair.second->scale->y += scaleFactor;
 
 		scaleChildren(childPair.second, scaleFactor);
 	}
@@ -504,7 +502,7 @@ void PEditor::GameObject::rotateChildren(GameObject* go, GameObject* goCenter, f
 }
 
 
-void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
+bool PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
 {
 	showGizmo = false;
 
@@ -520,6 +518,7 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 		if (visible && isMouseInsideGameObject) {
 			imGuiManager->getScene()->setSelectedGameObject(this);
+			return true;
 		}
 	}
 
@@ -555,8 +554,8 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 					ImVec2* previousPos = new ImVec2{ pos->x, pos->y };
 
-					pos->x = mousePos.x - size->x / 2;
-					pos->y = mousePos.y - size->y / 2;
+					pos->x = mousePos.x - scale->x / 2;
+					pos->y = mousePos.y - scale->y / 2;
 
 					translateChildren(this, previousPos);
 
@@ -579,16 +578,16 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 				if (event->wheel.y > 0) // scroll up
 				{
-					size->x += 5;
-					size->y += 5;
+					scale->x += 5;
+					scale->y += 5;
 
 					scaleFactor = 5;
 
 				}
 				else if (event->wheel.y < 0) // scroll down
 				{
-					size->x -= 5;
-					size->y -= 5;
+					scale->x -= 5;
+					scale->y -= 5;
 
 					scaleFactor = -5;
 				}
@@ -600,6 +599,8 @@ void PEditor::GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameOb
 
 	previousMousePosX = mousePos.x;
 	previousMousePosY = mousePos.y;
+
+	return false;
 }
 
 void PEditor::GameObject::update()
@@ -618,8 +619,15 @@ void PEditor::GameObject::update()
 		if (surface != nullptr) {
 			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
 			imagePath = currentImagePath;
+
+			int w, h;
+			SDL_QueryTexture(text, NULL, NULL, &w, &h);
+			*size = ImVec2(w, h);
+
 		}
 		else {
+
+			*size = ImVec2(100, 100);
 			text = nullptr;
 			imagePath = "";
 		}
@@ -676,6 +684,30 @@ float PEditor::GameObject::getRotation()
 {
 	return rotation;
 }
+
+ImVec2 PEditor::GameObject::getAdjustedPosition()
+{
+	ImVec2 position = *pos;
+
+	//El punto 0, 0 es el centro del frame
+	position.x += Preferences::GetData().width * 0.5f;
+	position.y += Preferences::GetData().height * 0.5f;
+
+	float width =  size->x * getScale_x();
+	float height = size->y * getScale_y();
+
+	//El origen de los objetos es el centro
+	position.x -= width * 0.5f;
+	position.y -= height * 0.5f;
+
+	return position;
+}
+
+ImVec2 PEditor::GameObject::getSize()
+{
+	return *size;
+}
+
 
 bool PEditor::GameObject::isWaitingToDelete()
 {
@@ -763,7 +795,7 @@ std::string PEditor::GameObject::toJson(bool isPrefab)
 	j["order"] = renderOrder;
 
 	j["localPosition"] = std::to_string(pos->x) + ", " + std::to_string(pos->y);
-	j["localScale"] = std::to_string(size->x) + ", " + std::to_string(size->y);
+	j["localScale"] = std::to_string(scale->x) + ", " + std::to_string(scale->y);
 	j["localRotation"] = std::to_string(rotation);
 
 	nlohmann::ordered_json componentsJson = nlohmann::json::array();
@@ -838,7 +870,7 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPref
 	sscanf_s(localScaleStr.c_str(), "%f, %f", &localScale->x, &localScale->y);
 
 	gameObject->pos = localPosition;
-	gameObject->size = localScale;
+	gameObject->scale = localScale;
 	gameObject->rotation = std::stof(localRotation);
 
 
