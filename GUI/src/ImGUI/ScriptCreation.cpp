@@ -1,6 +1,7 @@
 #include "ScriptCreation.h"
 #include "imgui.h"
 #include "ImGUIManager.h"
+#include "ProjectsManager.h"
 #include <iostream>
 
 #include <fstream>
@@ -157,7 +158,7 @@ void PEditor::ScriptCreation::Save()
 	}
 
 
-	std::ofstream file("scripts/" + std::string(menuBar->GetName()) + ".script");
+	std::ofstream file(ImGUIManager::getInstance()->getProjectInfo().path + "/Scripts/" + std::string(menuBar->GetName()) + ".script");
 
 	file << root.dump(4);
 
@@ -187,7 +188,7 @@ void PEditor::ScriptCreation::Load()
 		return;
 	}
 
-	std::ifstream fileStream("scripts/" + fileName + ".script");
+	std::ifstream fileStream(ImGUIManager::getInstance()->getProjectInfo().path + "/Scripts/" + fileName + ".script");
 
 	if (!fileStream.good() || !json::accept(fileStream))
 	{

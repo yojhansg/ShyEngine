@@ -142,10 +142,10 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 			if (extension == ".png" || extension == ".jpg")
 			{
 
-				int rel = fs::path(projectPath + "/images").compare(file.path().parent_path());
+				int rel = fs::path(projectPath + "/Images").compare(file.path().parent_path());
 				if (rel <= 0)
 				{
-					std::string relativePath = file.path().lexically_relative(projectPath + "/images").string();
+					std::string relativePath = file.path().lexically_relative(projectPath + "/Images").string();
 					std::string buttonId = "Create GameObject##" + relativePath;
 					ImGui::SameLine();
 

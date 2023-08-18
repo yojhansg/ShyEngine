@@ -34,7 +34,7 @@ namespace Resources {
 
 
 		static std::string GetResourcesPath();
-
+		static void SetResourcesPath(const std::string& path);
 	private:
 
 		std::string resourcesPath;

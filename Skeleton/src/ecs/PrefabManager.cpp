@@ -33,7 +33,6 @@ namespace ECS {
 		std::ifstream fileStream("Prefabs/" + prefabsPath + SceneLoader::extension);
 
 		if (!fileStream.good()) {
-			Console::Output::PrintError("Prefabs loading", "Cannot open prefabs file <" + prefabsPath + ">");
 			return;
 		}
 

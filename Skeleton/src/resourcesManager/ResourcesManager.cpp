@@ -87,3 +87,9 @@ std::string Resources::ResourcesManager::GetResourcesPath()
 {
 	return instance()->resourcesPath;
 }
+
+void Resources::ResourcesManager::SetResourcesPath(const std::string& path)
+{
+	instance()->resourcesPath = path + "/";;
+}
+

@@ -80,6 +80,11 @@ namespace PEditor {
 
 			TODO:
 
+			-Crear escenas
+			-Mostrar el icono de la imagen al lado de su fichero
+			-Boton para abrir carpetas en el explorador de archivos
+			-Boton para refrescar
+			-Error al crear un proyecto y leer la carpeta
 			-En la escena, renderizar el rectangulo de la camara lo ultimo para evitar que cambie de grosor
 			-Resource manager editor
 			-Motor: Guardar los valores serializados para cada script, no 

@@ -110,5 +110,9 @@ void PEditor::Console::render()
 		messageIdx++;
 	}
 
+
+	auto winSize = ImGui::GetWindowSize();
+	windowWidth = winSize.x;
+	windowHeight = winSize.y;
 	ImGui::End();
 }

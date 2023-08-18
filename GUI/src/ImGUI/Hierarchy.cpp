@@ -26,6 +26,7 @@ PEditor::Hierarchy::Hierarchy() : Window("Hierarchy", NoMove | NoCollapse | ImGu
 	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 	
 	shouldOpenRenamePopup = false;
+	shouldOpenSavePrefabPopup = false;
 }		
 
 void PEditor::Hierarchy::render()
