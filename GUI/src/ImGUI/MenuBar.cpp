@@ -12,6 +12,7 @@
 #include "Preferences.h"
 #include "nlohmann/json.hpp"
 #include "ColorPalette.h"
+#include "Preferences.h"
 
 PEditor::MenuBar::MenuBar() : Window("", None)
 {
@@ -76,6 +77,9 @@ void PEditor::MenuBar::render()
         {
             if (ImGui::MenuItem("Play", NULL, false))
             {
+                Preferences::GenerateDebug();
+
+                //Todo: guardar escena actual
                 ImGUIManager::getInstance()->getScene()->saveScene("Scenes/scene.scene");
                 Game::Play();
             };

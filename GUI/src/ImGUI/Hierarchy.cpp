@@ -70,7 +70,7 @@ void PEditor::Hierarchy::render()
 		scene->addGameObject("");
 	}
 
-	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 35))) {
+	if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 75))) {
 		
 
 		ImGui::Text("Visible");

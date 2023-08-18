@@ -20,7 +20,6 @@ namespace Scripting {
 
 	private:
 
-		Variable value;
 		std::string name;
 	};
 

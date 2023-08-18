@@ -26,18 +26,6 @@ void Scripting::Function::Operate(Node*& nextNode, int iterationIdx)
 	output = ScriptManager::CallFunction(methodName, inputVariable);
 }
 
-void Scripting::Function::ForceReevaluation()
-{
-	iterationIdx = -1;
-	for (auto& in : input) {
-
-		in->ForceReevaluation();
-	}
-
-	if (next)
-		next->ForceReevaluation();
-}
-
 
 void Scripting::Function::SetNextNode(Scripting::Node* nextNode)
 {

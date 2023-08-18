@@ -27,7 +27,6 @@ ImGUIManager* ImGUIManager::instance = nullptr;
 
 ImGUIManager::ImGUIManager() {
 
-	gameSize = nullptr;
 	scene = nullptr;
 	window = nullptr;
 	projecInfo = nullptr;
@@ -65,6 +64,8 @@ void ImGUIManager::initImGUI()
 
 void ImGUIManager::initWindows()
 {
+	addWindow(new PEditor::Preferences());
+
 	//MENU BAR
 	menuBar = new PEditor::MenuBar();
 	addWindow(menuBar);
@@ -92,7 +93,6 @@ void ImGUIManager::initWindows()
 	console = new PEditor::Console();
 	addWindow(console);
 
-	addWindow(new PEditor::Preferences());
 }
 
 void ImGUIManager::initSDL()
@@ -156,8 +156,6 @@ void ImGUIManager::createSDLRenderer()
 void ImGUIManager::init()
 {
 	SplashScreen();
-
-	gameSize = new ImVec2{ _WindowMainSize };
 
 	initImGUI();
 
@@ -393,9 +391,7 @@ ImGUIManager::~ImGUIManager()
 	for (auto window : windows)
 		delete window;
 
-	delete gameSize;
 	delete projecInfo;
-
 }
 
 ImVec2 ImGUIManager::getMainWindowSize()
@@ -404,11 +400,6 @@ ImVec2 ImGUIManager::getMainWindowSize()
 	SDL_GetWindowSize(window, &w, &h);
 
 	return ImVec2(w, h);
-}
-
-ImVec2 ImGUIManager::getGameSize()
-{
-	return *gameSize;
 }
 
 PEditor::Scene* ImGUIManager::getScene()

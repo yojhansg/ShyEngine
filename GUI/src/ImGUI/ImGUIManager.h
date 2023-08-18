@@ -51,8 +51,6 @@ private:
 	// All editor windows
 	std::vector<PEditor::Window*> windows;
 
-	ImVec2* gameSize;
-
 	void initImGUI();
 	void initSDL();
 	void initWindows();
@@ -91,8 +89,6 @@ public:
 
 	SDL_Renderer* getRenderer();
 	ImVec2 getMainWindowSize();
-
-	ImVec2 getGameSize();
 
 	PEditor::Scene* getScene();
 	PEditor::MenuBar* getMenuBar();

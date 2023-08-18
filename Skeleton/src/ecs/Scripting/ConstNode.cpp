@@ -2,14 +2,20 @@
 #include "ScriptManager.h"
 #include "Script.h"
 
-Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val): Scripting::OutputNode(idx), value(val)
+Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val): Scripting::OutputNode(idx)
 {
-	originalValue = output = value;
+	originalValue = output = val;
 }
 
 void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 {
 	next = nullptr;
+
+	if (originalValue.type == Variable::Type::Entity)
+	{
+		//TODO: hacer algo con el id
+		originalValue.value.entity = nullptr;
+	}
 
 	if (name.size() == 0) return;
 

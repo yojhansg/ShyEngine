@@ -21,11 +21,6 @@ namespace Scripting {
 		return Variable();
 	}
 
-	Variable Scripting::Variable::Int(int value)
-	{
-		return value;
-	}
-
 	Variable Scripting::Variable::Float(float value)
 	{
 		return value;

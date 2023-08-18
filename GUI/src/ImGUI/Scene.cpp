@@ -11,6 +11,7 @@
 #include "Hierarchy.h"
 #include "FileExplorer.h"
 #include "Components.h"
+#include "Preferences.h"
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
 {
@@ -32,6 +33,9 @@ bool PEditor::Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
 
 ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
 {
+	float gameSizeX = Preferences::GetData().width;
+	float gameSizeY= Preferences::GetData().height;
+
 	//In case the editor is rescaled we need this
 	float windowScaleFactor = (float)windowWidth / windowOriWidth;
 
@@ -58,9 +62,6 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	imGUIManager->setScene(this);
 
-	gameSizeX = imGUIManager->getGameSize().x;
-	gameSizeY = imGUIManager->getGameSize().y;
-
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
 	windowOriWidth = mainWindowSize.x * SCENE_WIN_WIDTH_RATIO;
@@ -74,7 +75,7 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 	setSize(ImVec2(windowOriWidth, windowOriHeight));
 	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
-	path = "Scenes/scene.scene";
+	path = "Scenes/" + Preferences::GetData().initialScene;
 
 	camera = new Camera(ImVec2(50, 50), 0.5);
 
@@ -162,6 +163,9 @@ void PEditor::Scene::renderFrame()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
 	ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(), camera->getPosition().y * camera->getScrollFactor());
+
+	float gameSizeX = Preferences::GetData().width;
+	float gameSizeY = Preferences::GetData().height;
 
 	float width = gameSizeX * camera->getScrollFactor();
 	float height = gameSizeY * camera->getScrollFactor();

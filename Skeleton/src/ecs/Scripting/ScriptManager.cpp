@@ -235,6 +235,11 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				Utilities::Color col = Utilities::Color::CreateColor(constValue["value"].get<std::string>());
 				value = col;
 			}
+			else if (type == "Entity") {
+
+				value.type = Variable::Type::Entity;
+				value.value.entityId = constValue["value"].get<int>();
+			}
 
 			if (allScriptNodes[nodeIdx] != nullptr) {
 

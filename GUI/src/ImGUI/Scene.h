@@ -28,9 +28,6 @@ namespace PEditor {
 		SDL_Renderer* renderer = nullptr;
 		SDL_Texture* targetTexture = nullptr;
 
-		float gameSizeX;
-		float gameSizeY;
-
 		Camera* camera;
 
 		std::string path;
