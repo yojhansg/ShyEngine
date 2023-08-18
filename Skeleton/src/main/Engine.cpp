@@ -67,7 +67,7 @@ bool Engine::init() {
 
 	engineTime = Utilities::Time::init();
 
-	Resources::ResourcesManager::init();
+	Resources::ResourcesManager::init(data.resourcesPath);
 
 	ECS::ContactListener::init();
 
@@ -91,6 +91,12 @@ bool Engine::init() {
 
 	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
+
+	if (sceneManager->getNumberOfScenes() == 0)
+	{
+		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");
+		return false;
+	}
 
 	if (data.useSplashScreen)
 		sceneManager->SplashScreen();

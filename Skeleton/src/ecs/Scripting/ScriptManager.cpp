@@ -9,6 +9,7 @@
 #include <ConsoleManager.h>
 
 #include "json.hpp"
+#include "ResourcesManager.h"
 
 using namespace nlohmann;
 
@@ -134,7 +135,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		return manager->scripts[path];
 	}
 
-	std::ifstream fileStream("Scripts/" + path + manager->extension);
+	std::ifstream fileStream(Resources::ResourcesManager::GetResourcesPath() + "Scripts/" + path + manager->extension);
 
 	if (!fileStream.good())
 	{

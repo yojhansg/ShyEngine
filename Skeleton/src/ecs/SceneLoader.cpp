@@ -16,6 +16,7 @@
 #include <fstream>
 #include <unordered_map>
 #include "ReferencesManager.h"
+#include "ResourcesManager.h"
 
 using namespace nlohmann;
 
@@ -27,7 +28,9 @@ const std::string ECS::SceneLoader::extension = ".scene";
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
-	std::ifstream fileStream("Scenes/" + scenePath + extension);
+	std::string completePath = Resources::ResourcesManager::GetResourcesPath() + "Scenes/" + scenePath + extension;
+
+	std::ifstream fileStream(completePath);
 
 	if (!fileStream.good())
 	{

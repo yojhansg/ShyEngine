@@ -100,8 +100,13 @@ namespace ECS {
 
 		if (scenes.size() > 0) scenes.top()->onSceneDown();
 
-		scenes.push(LoadScene(currentScenePath));
-		scenes.top()->start();
+		auto scene = LoadScene(currentScenePath);
+
+		if (scene != nullptr) {
+
+			scenes.push(scene);
+			scenes.top()->start();
+		}
 	}
 
 	void SceneManager::popScene() {
