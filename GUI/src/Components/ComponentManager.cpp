@@ -61,6 +61,7 @@ void Components::ComponentManager::ReadScripts(cstring path)
 	scriptPath = path;
 
 	instance->scripts = ComponentReader::ReadScripts(path);
+
 }
 
 void Components::ComponentManager::ReloadScripts()

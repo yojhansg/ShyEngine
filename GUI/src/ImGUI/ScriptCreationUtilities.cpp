@@ -896,9 +896,8 @@ void PEditor::ScriptCreationUtilities::Grid::Draw()
 
 PEditor::ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 {
-	alwaysSerialize = false;
-
 	serialized = false;
+	alwaysSerialize = false;
 
 	attrValue = ::Components::AttributeValue();
 
@@ -995,10 +994,11 @@ void PEditor::ScriptCreationUtilities::ScriptInput::updateAndRender()
 
 	if (!alwaysSerialize) {
 		ImGui::Checkbox("Serialize", &serialized);
-		if (serialized) {
+	}
 
-			ImGui::InputText("Name", serializedName, 256);
-		}
+	if (alwaysSerialize || serialized) {
+
+		ImGui::InputText("Name", serializedName, 256);
 	}
 }
 
@@ -1476,7 +1476,10 @@ nlohmann::json PEditor::ScriptCreationUtilities::ScriptInput::ToJson()
 	else if (attrType == Components::AttributesType::COLOR) {
 		root["type"] = "color";
 		root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
-
+	}
+	else if (attrType == Components::AttributesType::GAMEOBJECT) {
+		root["type"] = "Entity";
+		root["value"] = attrValue.value.entityIdx;
 	}
 
 	return root;
@@ -1489,7 +1492,7 @@ void PEditor::ScriptCreationUtilities::ScriptInput::SetValue(::Components::Attri
 
 bool PEditor::ScriptCreationUtilities::ScriptInput::IsSerialized()
 {
-	return serialized;
+	return serialized || alwaysSerialize;
 }
 
 std::string PEditor::ScriptCreationUtilities::ScriptInput::GetName()

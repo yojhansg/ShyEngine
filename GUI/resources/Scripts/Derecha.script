@@ -1,0 +1,79 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "index": 3,
+            "name": "Increment",
+            "serialized": true,
+            "type": "float",
+            "value": 1.0,
+            "x": 933.0,
+            "y": 715.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 1717.0,
+            "y": -67.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Entity",
+            "index": 1,
+            "input": [],
+            "x": 778.0,
+            "y": 43.0
+        },
+        {
+            "function": "Transform_SetLocalPositionX",
+            "index": 2,
+            "input": [
+                1,
+                4
+            ],
+            "x": 1998.0,
+            "y": 100.0
+        },
+        {
+            "function": "Math_Add",
+            "index": 4,
+            "input": [
+                6,
+                3
+            ],
+            "x": 1710.0,
+            "y": 345.0
+        },
+        {
+            "function": "Transform_GetLocalPosition",
+            "index": 5,
+            "input": [
+                1
+            ],
+            "x": 1119.0,
+            "y": -122.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 6,
+            "input": [
+                5
+            ],
+            "x": 1454.0,
+            "y": 71.0
+        }
+    ],
+    "nodeCount": 7,
+    "serializedValues": [
+        {
+            "defaultValue": 1.0,
+            "name": "Increment",
+            "type": "float"
+        }
+    ],
+    "update": 2
+}

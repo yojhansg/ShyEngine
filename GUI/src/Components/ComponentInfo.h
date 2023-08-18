@@ -38,6 +38,7 @@ namespace Components {
 				float b;
 			} valueColor;
 			char valueChar;
+			int entityIdx;
 		} value;
 
 		std::string valueString;

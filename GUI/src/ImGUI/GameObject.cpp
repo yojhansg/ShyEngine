@@ -38,7 +38,7 @@ void PEditor::GameObject::drawComponentsInEditor()
 					drawString(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::BOOL:
-					drawBool(attributeName+ it->first, attr);
+					drawBool(attributeName + it->first, attr);
 					break;
 				case ::Components::AttributesType::COLOR:
 					drawColor(attributeName + it->first, attr);
@@ -117,7 +117,7 @@ void PEditor::GameObject::drawScriptsInEditor()
 
 
 			if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-				
+
 				ImGUIManager::getInstance()->OpenScript(scriptName);
 			}
 
@@ -150,7 +150,7 @@ void PEditor::GameObject::drawFloat(std::string attrName, ::Components::Attribut
 void PEditor::GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
 {
 
-	ImGui::DragFloat2(("##" + attrName).c_str(), (float*) &attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 }
 
 void PEditor::GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
@@ -194,36 +194,36 @@ void PEditor::GameObject::drawGameobject(std::string attrName, ::Components::Att
 		name = go->getName().c_str();
 	}
 
-	if(ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
+	if (ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
 		for (auto go : gameObjects) {
 			if (ImGui::Selectable(go.second->getName().c_str()))
-				attr->value.value.valueFloat  = go.second->getId();
+				attr->value.value.valueFloat = go.second->getId();
 		}
 
+		if (std::filesystem::is_directory("Prefabs"))
+			for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
+				if (entry.path().extension() == ".prefab") {
+					std::string prefabFileName = entry.path().filename().string();
+					if (ImGui::Selectable(prefabFileName.c_str())) {
 
-		for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
-			if (entry.path().extension() == ".prefab") {
-				std::string prefabFileName = entry.path().filename().string();
-				if (ImGui::Selectable(prefabFileName.c_str())) {
-					
-					std::ifstream inputFile("Prefabs/" + prefabFileName);
+						std::ifstream inputFile("Prefabs/" + prefabFileName);
 
-					nlohmann::ordered_json jsonData;
-					try {
-						inputFile >> jsonData;
+						nlohmann::ordered_json jsonData;
+						try {
+							inputFile >> jsonData;
+						}
+						catch (const nlohmann::json::parse_error& e) {
+							std::cerr << "JSON parse error: " << e.what() << std::endl;
+							return;
+						}
+						inputFile.close();
+
+						attr->value.value.valueFloat = jsonData["id"];
+						attr->value.valueString = prefabFileName;
+
 					}
-					catch (const nlohmann::json::parse_error& e) {
-						std::cerr << "JSON parse error: " << e.what() << std::endl;
-						return;
-					}
-					inputFile.close();
-
-					attr->value.value.valueFloat = jsonData["id"];
-					attr->value.valueString = prefabFileName;
-
 				}
 			}
-		}
 
 		ImGui::EndCombo();
 	}
@@ -804,7 +804,7 @@ PEditor::GameObject* PEditor::GameObject::fromJson(std::string json, bool isPref
 		gameObject->addChild(child);
 		child->setParent(gameObject);
 	}
-	
+
 	gameObject->renderOrder = jsonData["order"];
 
 	// Deserialize localPosition, localScale, and localRotation

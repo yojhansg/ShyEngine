@@ -287,6 +287,10 @@ void PEditor::ScriptCreation::Load()
 
 			//TODO: despues de la serializacion
 		}
+		else if (typeStr == "Entity") {
+			type = ::Components::AttributesType::GAMEOBJECT;
+			value.value.entityIdx = -1;
+		}
 
 		
 

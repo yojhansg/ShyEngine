@@ -155,7 +155,7 @@ void ImGUIManager::createSDLRenderer()
 
 void ImGUIManager::init()
 {
-	//SplashScreen();
+	SplashScreen();
 
 	gameSize = new ImVec2{ _WindowMainSize };
 
@@ -218,6 +218,7 @@ ImGUIManager* ImGUIManager::getInstance()
 
 void ImGUIManager::loop()
 {
+
 	addWindow(new PEditor::ColorPalette("theme"));
 
 	//SDL_SetWindowSize(window, _ProjectSelectionDialogueSize);
@@ -246,7 +247,6 @@ void ImGUIManager::loop()
 		update();
 		handleInput();
 		render();
-
 	}
 
 }

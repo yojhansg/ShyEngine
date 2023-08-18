@@ -76,11 +76,24 @@ namespace PEditor {
 			Serializar condicionales
 			Serializar eventos
 			Serializar comentarios
+			SerializedValues: Es la forma de serializar variables en el scripting
 
 			TODO:
 
+			-Resource manager editor
+
+			-Color de la escena
+			-Highlight color
+
+			-La creacion de un nodo no tiene en cuenta el scroll
+			-Hacer que al pulsar el boton de añadir un script añada el script una vez se cierre la ventana de scripting
+			-Cuando se edite un script que ya ha sido creado no permitir cambiar el nombre
+			-Quitar try catchs del codigo
+			Quitar la edicion de nombre del script. En el momento en el que se guarde pedir el nombre al usuario
+
 			===Funcionalidad nueva===
-			-SerializedValues: Es la forma de serializar variables en el scripting
+			-Si no se seleccion la primera entidad entonces que se seleccione la entidad del script
+			-Poder serializar entidades
 			-Names: Es la forma de tener metodos en el scripting
 
 			Para el motor: falta el setSerializedValue
@@ -90,6 +103,11 @@ namespace PEditor {
 			-Control z manager
 			-Poder quitar un nodo siguiente
 			-Todos los metodos de componentes tienen como primer parametro un puntero a la entidad
+
+			-Quitar el scroll de la escena en el caso de no tener el focus en la ventana (o que haya otra ventana por delante)
+			-Cambiar como se importan los assets de imagenes
+			-Hacer que al crear una imagen por defecto tenga de escala el tamaño de la imagen
+			-Cambiar el punto centra de la escena por la imagen
 
 			===Mejoras de codigo e implementacion===
 

@@ -190,6 +190,10 @@ namespace Components {
 							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 							type = AttributesType::COLOR;
 						}
+						else if (typeString == "Entity") {
+							type = AttributesType::GAMEOBJECT;
+							value.value.entityIdx = -1;
+						}
 						else {
 							type = AttributesType::NONE;
 						}
