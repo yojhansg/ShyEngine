@@ -55,7 +55,7 @@ namespace PEditor {
     }
 
     ProjectsManager::Result ProjectsManager::ManageProjectSelection(SDL_Renderer* renderer) {
-
+         
         Result result = Result::CLOSED;
 
         while (!windowClosed) {

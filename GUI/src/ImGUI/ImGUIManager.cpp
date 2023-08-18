@@ -119,7 +119,7 @@ void ImGUIManager::initSDL()
 void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
 
 	// Create our window
-	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
 	window = SDL_CreateWindow(name, posX, posY, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
@@ -237,6 +237,7 @@ void ImGUIManager::loop()
 	SDL_SetWindowResizable(window, SDL_TRUE);
 	SDL_SetWindowSize(window, _WindowMainSize);
 	SDL_SetWindowPosition(window, _Centered);
+	SDL_SetWindowBordered(window, SDL_TRUE);
 
 	initWindows();
 

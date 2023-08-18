@@ -18,7 +18,7 @@
 
 using namespace nlohmann;
 
-const std::string ECS::SceneLoader::extension = ".json";
+const std::string ECS::SceneLoader::extension = ".scene";
 
 
 
