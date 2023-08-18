@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Fri Aug 18 04:37:02 2023
+//Creation time: Fri Aug 18 04:40:40 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -46,7 +46,7 @@ using namespace ECS;
 using namespace Physics;
 using namespace Input;
 using namespace Scripting;
-
+using namespace Sound;
 
 
 void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){

@@ -748,7 +748,7 @@ using namespace ECS;
 using namespace Physics;
 using namespace Input;
 using namespace Scripting;
-
+using namespace Sound;
 
 
 void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){
