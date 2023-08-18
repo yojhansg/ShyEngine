@@ -1,9 +1,9 @@
 #include "ResourcesManager.h"
 #include <RendererManager.h>
-#include <Texture.h>
-#include <Font.h>
 #include <SoundEffect.h>
+#include <Texture.h>
 #include <Music.h>
+#include <Font.h>
 
 Resources::ResourcesManager::ResourcesManager() {}
 

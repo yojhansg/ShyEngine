@@ -27,7 +27,7 @@ namespace ECS {
     publish:
 
         // Select another music asset
-        void changeMusic(cstring musicPath);
+        void loadMusic(cstring musicPath);
 
         // Plays the current music
         void play();

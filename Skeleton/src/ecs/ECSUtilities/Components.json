@@ -400,7 +400,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "changeMusic",
+                "name": "loadMusic",
                 "return": "void"
             },
             {
@@ -1731,7 +1731,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "changeSound",
+                "name": "loadSound",
                 "return": "void"
             },
             {

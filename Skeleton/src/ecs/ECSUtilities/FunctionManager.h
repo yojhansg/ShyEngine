@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Fri Aug 18 04:40:40 2023
+//Creation time : Fri Aug 18 15:21:18 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -36,7 +36,7 @@ Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const&
 Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_loadMusic(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_play(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_pause(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_stop(std::vector<Scripting::Variable>const& vec);
@@ -107,7 +107,7 @@ Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_loadSound(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_pause(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_stop(std::vector<Scripting::Variable>const& vec);

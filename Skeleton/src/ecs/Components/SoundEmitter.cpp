@@ -7,6 +7,7 @@
 #include <SoundManager.h>
 #include <ScriptFunctionality.h>
 #include <RendererManager.h>
+#include <ConsoleManager.h>
 #include <cmath>
 
 #define MIX_MAX_PANNING 255
@@ -47,9 +48,13 @@ namespace ECS {
 	void SoundEmitter::init() {
 
 		transform = getEntity()->getComponent<Transform>();
-		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		changeSound(fileName);
+		if (transform == nullptr) {
+			Console::Output::PrintError("Missing transform", "The entity must contain a Transform component.");
+			return;
+		}
+
+		loadSound(fileName);
 
 		sound_id = soundEffect->getSoundId();
 
@@ -87,7 +92,7 @@ namespace ECS {
 
 	}
 
-	void SoundEmitter::changeSound(cstring soundPath) {
+	void SoundEmitter::loadSound(cstring soundPath) {
 		fileName = soundPath;
 
 		soundEffect = Resources::ResourcesManager::instance()->addSound(fileName);
@@ -159,7 +164,8 @@ namespace ECS {
 
 	void SoundEmitter::setVolume(float volume) {
 
-		assert(volume >= 0.0f && volume <= 1.0f, "Volume value must be between 0 and 1!");
+		if (volume < 0.0f || volume > 1.0f)
+			Console::Output::PrintWarning("Invalid argument value", "Volume value must be between 0 and 1");
 
 		this->volume = volume;
 	}
@@ -190,7 +196,8 @@ namespace ECS {
 
 	void SoundEmitter::setPanning(float panning) {
 
-		assert(panning >= 0.0f && panning <= 1.0f, "Panning value must be between 0 and 1!");
+		if (volume < 0.0f || volume > 1.0f)
+			Console::Output::PrintWarning("Invalid argument value", "Panning value must be between 0 and 1");
 
 		this->panning = panning;
 

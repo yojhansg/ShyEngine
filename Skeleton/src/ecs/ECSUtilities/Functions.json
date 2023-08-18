@@ -132,15 +132,6 @@
         }
     },
     "MusicEmitter": {
-        "changeMusic": {
-            "input": [
-                {
-                    "name": "musicPath",
-                    "type": "cstring"
-                }
-            ],
-            "return": "void"
-        },
         "fadeOut": {
             "input": [
                 {
@@ -161,6 +152,15 @@
         },
         "isPlaying": {
             "return": "bool"
+        },
+        "loadMusic": {
+            "input": [
+                {
+                    "name": "musicPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
         },
         "pause": {
             "return": "void"
@@ -589,15 +589,6 @@
         }
     },
     "SoundEmitter": {
-        "changeSound": {
-            "input": [
-                {
-                    "name": "soundPath",
-                    "type": "cstring"
-                }
-            ],
-            "return": "void"
-        },
         "enableSpatialSound": {
             "input": [
                 {
@@ -636,6 +627,15 @@
         },
         "isSpatialSoundEnabled": {
             "return": "bool"
+        },
+        "loadSound": {
+            "input": [
+                {
+                    "name": "soundPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
         },
         "pause": {
             "return": "void"

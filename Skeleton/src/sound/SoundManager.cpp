@@ -270,6 +270,7 @@ namespace Sound {
 			return false;
 		}
 
+		//TODO Añadir estos parametros en Preferences
 		e = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 		if (e == -1) {
 			Console::Output::PrintError("Sound engine (SDL_Mixer)", "Could not initialise SDLMixer!");

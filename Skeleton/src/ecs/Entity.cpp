@@ -19,6 +19,7 @@ namespace ECS {
 		hasRemovedComponents = false;
 
 		this->renderOrder = renderOrder;
+		this->id = 0;
 
 		inRenderSet = false;
 	}

@@ -32,7 +32,7 @@ namespace ECS {
 	publish:
 
 		// Select another sound asset
-		void changeSound(cstring soundPath);
+		void loadSound(cstring soundPath);
 
 		// Plays the current sound
 		void play();

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Singleton.h>
 #include <unordered_map>
+#include <Singleton.h>
 #include <string>
 
 namespace Renderer {

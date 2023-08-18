@@ -26,6 +26,8 @@ namespace PEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
+    const std::vector<std::string> ProjectsManager::assetsFolders = { "Images", "Sounds", "Fonts", "Scenes", "Prefabs", "Scripts" };
+
     ProjectsManager::ProjectsManager() {
 
         imGuiManager = ImGUIManager::getInstance();
@@ -103,7 +105,7 @@ namespace PEditor {
                 windowClosed = true;
             if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)
                 windowClosed = true;
-            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
                 windowClosed = true;
         }
 
@@ -330,11 +332,11 @@ namespace PEditor {
                     return false;
                 }
 
-                // Ask for user permission. If denied the folder wont be created.
-                if (!AskForPermission()) {
-                    std::cout << "PROJECTS MANAGER: Without user permission, the necessary files wont be created, and therefore, the editor wont be opened.." << std::endl;
-                    return false;
-                }
+                //// Ask for user permission. If denied the folder wont be created.
+                //if (!AskForPermission()) {
+                //    std::cout << "PROJECTS MANAGER: Without user permission, the necessary files wont be created, and therefore, the editor wont be opened.." << std::endl;
+                //    return false;
+                //}
 
                 // The folder is created
                 std::filesystem::create_directories(projectsDir, ec);
@@ -477,6 +479,9 @@ namespace PEditor {
         }
 
         if (!StoreProjectPath(path))
+            return false;
+
+        if (!CreateAssetsFolders(folder))
             return false;
 
         // Store the values in the .shyproject file
@@ -671,6 +676,23 @@ namespace PEditor {
         }
         return false;
 
+    }
+
+    bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
+
+        for (auto f : assetsFolders) {
+
+            std::error_code ec;
+            std::filesystem::create_directories(root + "\\Assets\\" + f, ec);
+
+            if (ec) {
+                errorMessage = L"Error while creating the project assets folders.";
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     bool ProjectsManager::AskForPermission() {
