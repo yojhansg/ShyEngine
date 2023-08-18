@@ -80,8 +80,10 @@ namespace PEditor {
 
 			TODO:
 
+			-En la escena, renderizar el rectangulo de la camara lo ultimo para evitar que cambie de grosor
 			-Resource manager editor
-
+			-Motor: Guardar los valores serializados para cada script, no 
+			para cada entidad
 			-Color de la escena
 			-Highlight color
 

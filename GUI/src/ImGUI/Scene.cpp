@@ -34,7 +34,7 @@ bool PEditor::Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
 ImVec2 PEditor::Scene::getMousePosInsideScene(ImVec2 mousePos)
 {
 	float gameSizeX = Preferences::GetData().width;
-	float gameSizeY= Preferences::GetData().height;
+	float gameSizeY = Preferences::GetData().height;
 
 	//In case the editor is rescaled we need this
 	float windowScaleFactor = (float)windowWidth / windowOriWidth;
@@ -75,9 +75,15 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 	setSize(ImVec2(windowOriWidth, windowOriHeight));
 	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
-	path = "Scenes/" + Preferences::GetData().initialScene;
+	path = "Scenes/" + Preferences::GetData().initialScene + ".scene";
 
-	camera = new Camera(ImVec2(50, 50), 0.5);
+
+	float scrollFactor = .5f;
+	camera = new Camera(
+		ImVec2(
+			(windowOriWidth  - Preferences::GetData().width * scrollFactor) * 0.5f,
+			(windowOriHeight - Preferences::GetData().height * scrollFactor) * 0.5f
+		), scrollFactor);
 
 	renderer = imGUIManager->getRenderer();
 
@@ -85,9 +91,9 @@ PEditor::Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScr
 
 	selectedGameObject = nullptr;
 
-	std::string defaultScenePath = "Scenes/scene.scene";
-	if (std::filesystem::exists(defaultScenePath)) {
-		loadScene(defaultScenePath);
+
+	if (std::filesystem::exists(path)) {
+		loadScene(path);
 	}
 }
 
@@ -150,8 +156,8 @@ void PEditor::Scene::renderGameObjects()
 	std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), compareGameObjectsRenderOrder);
 
 	for (auto gO : sortedGameObjects) {
-		renderChildGameObjects(gO);
 		gO->render(renderer, camera);
+		renderChildGameObjects(gO);
 	}
 }
 
@@ -242,7 +248,7 @@ void PEditor::Scene::render()
 
 	size_t lastPathSlashPosition = path.find_last_of("/\\");
 	size_t lastPathDotPosition = path.find_last_of(".");
-	
+
 	std::string sceneFilename = path.substr(lastPathSlashPosition + 1, lastPathDotPosition - lastPathSlashPosition - 1);
 
 	ImGui::Begin((windowName + ": " + sceneFilename).c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
@@ -334,7 +340,7 @@ void PEditor::Scene::loadScene(std::string path) {
 	for (const auto& gameObjectJson : gameObjectsJson) {
 		GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
 
-		gameObjects.insert({gameObject->getId(), gameObject});
+		gameObjects.insert({ gameObject->getId(), gameObject });
 	}
 
 }

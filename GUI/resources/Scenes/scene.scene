@@ -13,7 +13,7 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "Button.png"
+                        "fileName": "Images/Button.png"
                     }
                 }
             ],
@@ -21,7 +21,7 @@
                 "Derecha": {
                     "Increment": {
                         "type": "float",
-                        "value": 0.20000000298023224
+                        "value": 0.0
                     }
                 }
             }

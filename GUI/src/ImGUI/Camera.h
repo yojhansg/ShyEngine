@@ -11,7 +11,7 @@ private:
 	float scrollFactor;
 	float posX, posY;
 
-	bool rightMouseButtonDown;
+	bool middleMouseButton;
 	float mousePosX, mousePosY;
 	float clickOffsetX, clickOffsetY;
 

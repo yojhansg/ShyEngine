@@ -7,7 +7,7 @@ Camera::Camera(ImVec2 position, float sf)
 {
 	scrollFactor = sf;
 
-	rightMouseButtonDown = false;
+	middleMouseButton = false;
 
 	clickOffsetX = clickOffsetY = 0;
 	mousePosX = mousePosY = 0;
@@ -21,9 +21,9 @@ void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow)
 	if (isMouseInsideWindow) {
 		if (event->type == SDL_MOUSEBUTTONDOWN)
 		{
-			if (!rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+			if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 			{
-				rightMouseButtonDown = true;
+				middleMouseButton = true;
 
 				clickOffsetX = mousePosX - posX;
 				clickOffsetY = mousePosY - posY;
@@ -35,7 +35,7 @@ void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow)
 			mousePosX = event->motion.x;
 			mousePosY = event->motion.y;
 
-			if (rightMouseButtonDown)
+			if (middleMouseButton)
 			{
 				posX = mousePosX - clickOffsetX;
 				posY = mousePosY - clickOffsetY;
@@ -56,9 +56,9 @@ void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow)
 
 	if (event->type == SDL_MOUSEBUTTONUP)
 	{
-		if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+		if (middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 		{
-			rightMouseButtonDown = false;
+			middleMouseButton = false;
 		}
 	}
 }

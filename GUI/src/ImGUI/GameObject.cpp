@@ -9,6 +9,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentManager.h";
 #include "ComponentInfo.h"
+#include "Preferences.h"
 #include <fstream>
 
 int PEditor::GameObject::lastId = 0;
@@ -384,8 +385,23 @@ void PEditor::GameObject::drawTransformInEditor()
 void PEditor::GameObject::render(SDL_Renderer* renderer, Camera* camera)
 {
 	ImVec2 position = getPosition();
-	float width = getWidth();
-	float height = getHeight();
+
+	//El punto 0, 0 es el centro del frame
+	position.x += Preferences::GetData().width * 0.5f;
+	position.y += Preferences::GetData().height * 0.5f;
+
+	int tWidth = 1, tHeight = 1;
+	SDL_Texture* texture = getTexture();
+
+	if (texture != nullptr)
+		SDL_QueryTexture(texture, NULL, NULL, &tWidth, &tHeight);
+
+	float width = tWidth * getWidth();
+	float height = tHeight * getHeight();
+
+	//El origen de los objetos es el centro
+	position.x -= width * 0.5f;
+	position.y -= height * 0.5f;
 
 
 	//Posicion y tama�os relativos al frame de la escena
