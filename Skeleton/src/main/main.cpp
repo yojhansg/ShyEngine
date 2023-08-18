@@ -17,7 +17,7 @@ void saveTimesPlayed() {
 
 	if (!save->Exists(1)) {
 
-		save->SetSlot("contador", Scripting::Variable::Int(0));
+		save->SetSlot("contador", Scripting::Variable::Float(0));
 	}
 
 	else {

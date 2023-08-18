@@ -29,3 +29,14 @@ bool ECS::ReferencesManager::IsEntityValid(int id) {
 	Console::Output::PrintError("Entity with non-existent ID", "The validity of the entity cannot be checked because there is no reference with that ID.");
 	return false;
 }
+
+ECS::Entity* ECS::ReferencesManager::GetEntity(int id)
+{
+	if (IsEntityValid(id)) {
+		return map[id];
+	}
+
+	Console::Output::PrintError("Destroyed entity", "The entity you are trying to access has been destroyed");
+
+	return nullptr;
+}

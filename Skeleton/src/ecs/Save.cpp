@@ -46,7 +46,7 @@ void ECS::SaveManager::Save(int slot)
 
 	json root;
 
-	map["currentEngineDay"] = Scripting::Variable::Int(std::time(NULL) / (1440) - 1166934);
+	map["currentEngineDay"] = Scripting::Variable::Float((int)(std::time(NULL) / (1440)) - 1166934);
 
 
 	int idx = 0;

@@ -1,8 +1,9 @@
 #include "ConstNode.h"
 #include "ScriptManager.h"
 #include "Script.h"
+#include "ReferencesManager.h"
 
-Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val): Scripting::OutputNode(idx)
+Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val) : Scripting::OutputNode(idx)
 {
 	originalValue = output = val;
 }
@@ -14,7 +15,15 @@ void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 	if (originalValue.type == Variable::Type::Entity)
 	{
 		//TODO: hacer algo con el id
-		originalValue.value.entity = nullptr;
+		int id = originalValue.value.entityId;
+		if (ECS::ReferencesManager::instance()->IsEntityValid(id)) {
+
+
+			output.value.entity = ECS::ReferencesManager::instance()->GetEntity(id);
+		}
+		else {
+			output.value.entity = nullptr;
+		}
 	}
 
 	if (name.size() == 0) return;
