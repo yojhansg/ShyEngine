@@ -22,8 +22,6 @@ namespace ECS {
 
 	PrefabManager::PrefabManager(std::string const& prefabsPath) {
 
-		prefabId = -1;
-
 		LoadPrefabs(prefabsPath);
 
 	}

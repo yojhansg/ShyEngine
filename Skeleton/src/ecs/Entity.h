@@ -223,6 +223,9 @@ namespace ECS {
 		// Order to render elements
 		int renderOrder;
 
+		// Entity ID
+		int id;
+
 		//Iterator to render set
 		std::multiset<Entity*>::iterator renderIt;
 
