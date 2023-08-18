@@ -21,14 +21,14 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMo
 	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
 	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
 
-    windowOriWidth = mainWindowSize.x;
-    windowOriHeight = mainWindowSize.y * FILEEXPLORER_WIN_HEIGHT_RATIO;
+	windowOriWidth = mainWindowSize.x;
+	windowOriHeight = mainWindowSize.y * FILEEXPLORER_WIN_HEIGHT_RATIO;
 
-    windowOriPosX = 0;
-    windowOriPosY = mainWindowSize.y - windowOriHeight;
+	windowOriPosX = 0;
+	windowOriPosY = mainWindowSize.y - windowOriHeight;
 
-    setSize(ImVec2(windowOriWidth, windowOriHeight));
-    setPosition(ImVec2(windowOriPosX, windowOriPosY));
+	setSize(ImVec2(windowOriWidth, windowOriHeight));
+	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
 	char buffer[FILENAME_MAX];
 	_getcwd(buffer, FILENAME_MAX);
@@ -143,11 +143,17 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
 			if (extension == ".png" || extension == ".jpg")
 			{
-				ImGui::SameLine();
-				std::string relativePath = file.path().lexically_relative(projectPath).string();
-				std::string buttonId = "Create GameObject##" + relativePath;
-				if (ImGui::Button(buttonId.c_str())) {
-					ImGUIManager::getInstance()->getScene()->addGameObject(relativePath);
+
+				int rel = fs::path(projectPath + "/images").compare(file.path().parent_path());
+				if (rel <= 0)
+				{
+					std::string relativePath = file.path().lexically_relative(projectPath + "/images").string();
+					std::string buttonId = "Create GameObject##" + relativePath;
+					ImGui::SameLine();
+
+					if (ImGui::Button(buttonId.c_str())) {
+						ImGUIManager::getInstance()->getScene()->addGameObject(relativePath);
+					}
 				}
 			}
 
@@ -215,49 +221,49 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 
 void PEditor::FileExplorer::render()
 {
-    ImGUIManager* imGUIManager = ImGUIManager::getInstance();
-    ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
-    PEditor::ComponentWindow* components = imGUIManager->getComponents();
-    PEditor::Hierarchy* hierarchy = imGUIManager->getHierarchy();
+	ImGUIManager* imGUIManager = ImGUIManager::getInstance();
+	ImVec2 mainWindowSize = imGUIManager->getMainWindowSize();
+	PEditor::ComponentWindow* components = imGUIManager->getComponents();
+	PEditor::Hierarchy* hierarchy = imGUIManager->getHierarchy();
 
-    if (focused) {
-        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
-    }
-    else {
-        float sizeYToConstraint;
+	if (focused) {
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
+	}
+	else {
+		float sizeYToConstraint;
 
-        if (components->isFocused()) {
-            sizeYToConstraint = components->getSize().y;
-        }
-        else {
-            sizeYToConstraint = hierarchy->getSize().y;
-        }
+		if (components->isFocused()) {
+			sizeYToConstraint = components->getSize().y;
+		}
+		else {
+			sizeYToConstraint = hierarchy->getSize().y;
+		}
 
-        ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24));
-    }
+		ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24));
+	}
 
-    focused = false;
+	focused = false;
 
-    // Draw the file explorer 
-    ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
+	// Draw the file explorer 
+	ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
-    if (ImGui::IsWindowFocused()) {
-        focused = true;
-    }
+	if (ImGui::IsWindowFocused()) {
+		focused = true;
+	}
 
-    ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-    ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-    windowWidth = imGUIWindowSize.x;
-    windowHeight = imGUIWindowSize.y;
-    windowPosX = imGUIWindowPos.x;
-    windowPosY = imGUIWindowPos.y;
+	ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
+	ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
+	windowWidth = imGUIWindowSize.x;
+	windowHeight = imGUIWindowSize.y;
+	windowPosX = imGUIWindowPos.x;
+	windowPosY = imGUIWindowPos.y;
 
-    ImGui::SetWindowPos(ImVec2(0, mainWindowSize.y - windowHeight));
-    ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
+	ImGui::SetWindowPos(ImVec2(0, mainWindowSize.y - windowHeight));
+	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
 	drawFileExplorerWindow();
 
-    ImGui::End();
-   
+	ImGui::End();
+
 
 }

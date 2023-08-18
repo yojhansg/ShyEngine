@@ -13,7 +13,7 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "Images/Button.png"
+                        "fileName": "Button.png"
                     }
                 }
             ],

@@ -613,7 +613,7 @@ void PEditor::GameObject::update()
 	std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
 
 	if (currentImagePath != imagePath) {
-		SDL_Surface* surface = IMG_Load(currentImagePath.c_str());
+		SDL_Surface* surface = IMG_Load(std::string("Images/" + currentImagePath).c_str());
 
 		if (surface != nullptr) {
 			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);
