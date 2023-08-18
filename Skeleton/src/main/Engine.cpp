@@ -71,7 +71,7 @@ bool Engine::init() {
 
 	ECS::ContactListener::init();
 
-	ECS::PrefabManager::init("prefabs");
+	ECS::PrefabManager::init("Prefabs/prefabs"); //TODO data.prefabs ¿?
 
 	if (!Sound::SoundManager::init()->Valid()) return false;
 

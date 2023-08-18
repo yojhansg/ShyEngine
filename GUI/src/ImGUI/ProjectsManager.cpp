@@ -38,6 +38,8 @@ namespace PEditor {
 
         creationDate = name = createPath = openPath = "";
 
+        errorMessage = L"Default error message. No one knows what went wrong :(";
+
         w = h = 0.0f;
     }
 
