@@ -19,9 +19,9 @@ public:
 	static DataLoader Load(std::string const& path);
 
 	bool valid;
-	bool fullScreen; //TODO: no se usa
-	bool vsync; //TODO: no se usa
-	bool useSplashScreen; //TODO: no se usa
+	bool fullScreen; 
+	bool vsync; 
+	bool useSplashScreen; 
 	bool debugPhysics;
 	bool debugFrameRate;
 	bool closeWithEscape;
@@ -29,11 +29,13 @@ public:
 	float timeToDoubleClick;
 	float timeToHoldClick;
 
-	std::string game; //TODO: no se usa
-	std::string creator; //TODO: no se usa
+	std::string game; 
+	std::string creator;
 	std::string windowTitle;
-	std::string windowIcon; //TODO: no se usa
-	std::string initialScene; //TODO: no se usa
+	std::string windowIcon; 
+	std::string initialScene; 
+
+	std::string resourcesPath;
 
 	Utilities::Vector2D windowSize;
 	Utilities::Vector2D gravity;

@@ -45,7 +45,7 @@ namespace ECS {
 
 		std::unordered_map<std::string, nlohmann::json> prefabsWithOverlay;
 
-
+		int prefabId;
 		// TODO IDs a los prefabs
 	};
 

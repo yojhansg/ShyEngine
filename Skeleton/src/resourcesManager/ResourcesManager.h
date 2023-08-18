@@ -32,9 +32,15 @@ namespace Resources {
 		Sound::SoundEffect* addSound(std::string const& key);
 		Sound::Music* addMusic(std::string const& key);
 
+
+		static std::string GetResourcesPath();
+
 	private:
 
+		std::string resourcesPath;
+
 		ResourcesManager();
+		ResourcesManager(const std::string& path);
 		
 		resources_map<Renderer::Texture*> textures;
 		resources_map<Renderer::Font*> fonts;

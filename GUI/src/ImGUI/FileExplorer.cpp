@@ -12,6 +12,7 @@
 #include "GameObject.h"
 #include <fstream>
 #include "nlohmann/json.hpp"
+#include "ProjectsManager.h"
 
 namespace fs = std::filesystem;
 
@@ -30,9 +31,7 @@ PEditor::FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMo
 	setSize(ImVec2(windowOriWidth, windowOriHeight));
 	setPosition(ImVec2(windowOriPosX, windowOriPosY));
 
-	char buffer[FILENAME_MAX];
-	_getcwd(buffer, FILENAME_MAX);
-	projectPath = buffer;
+	projectPath = ImGUIManager::getInstance()->getProjectInfo().path;
 	currentPath = projectPath;
 
 	std::string imgPath = "folder.png";
@@ -63,7 +62,6 @@ void PEditor::FileExplorer::drawFileExplorerWindow()
 	if (!fs::is_directory(folder))
 	{
 		ImGui::Text("Invalid folder path: %s", currentPath);
-		ImGui::End();
 		return;
 	}
 

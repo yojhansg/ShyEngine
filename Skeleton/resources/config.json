@@ -1,15 +1,18 @@
 {
-   
-    "game": "Flappy bird", 
+    "closeWithScape": true,
     "creator": "Yojhan",
-    "windowTitle": "Flappy Bird",
-    "initialScene": "MainMenu",
-    "windowIcon": "",
-    "windowSize": "800, 1000",
-    "gravity": "0, -9.81f",
-    "splashScreen": false,
-    "vsync": true,
-    "fullScreen": false,
+    "debugFrameRate": true,
     "debugPhysics": true,
-    "debugFrameRate": true
+    "fullScreen": false,
+    "game": "Batalla final",
+    "gravity": "0.000000, 9.810000",
+    "initialScene": "scene",
+    "path": "C:/Users/sryoj/Documents/ShyEngine/Yojhan",
+    "splashScreen": false,
+    "timeToDoubleClick": 0.5,
+    "timeToHoldClick": 0.10000000149011612,
+    "vsync": true,
+    "windowIcon": "ShyIcon.png",
+    "windowSize": "1920, 1080",
+    "windowTitle": "La casa de los espiritus"
 }

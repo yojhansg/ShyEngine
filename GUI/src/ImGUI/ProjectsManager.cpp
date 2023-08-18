@@ -12,6 +12,7 @@
 #include <Shlobj.h>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <ctime>
 
 using namespace nlohmann;
@@ -176,6 +177,9 @@ namespace PEditor {
                 else {
                     windowClosed = true;
                     ImGui::End();
+
+
+
                     return Result::ENTERED;
                 }
             }
@@ -240,7 +244,10 @@ namespace PEditor {
                     showPopUpWindowOpenProject = true;
                 else {
 
-                    imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, openPath));
+
+                    std::string folderPath = std::filesystem::path(openPath).parent_path().string();
+
+                    imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                     windowClosed = true;
                     ImGui::End();
@@ -277,7 +284,10 @@ namespace PEditor {
             if (!ReadInfoFromProjectFile(recentProjectOpenedPath))
                 showPopUpWindowOpenProject = true;
             else {
-                imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, openPath));
+
+                std::string folderPath = std::filesystem::path(openPath).parent_path().string();
+
+                imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                 windowClosed = true;
                 ImGui::End();
@@ -501,7 +511,8 @@ namespace PEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, createPath));
+        std::string folderPath = std::filesystem::path(openPath).parent_path().string();
+        imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
         return true;
 
