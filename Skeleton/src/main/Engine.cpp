@@ -186,5 +186,11 @@ void Engine::update() {
 }
 
 void Engine::close() {
+
+	Console::Output::PrintNoFormat("Hey] que pasa: : : Tonto");
+
 	sceneManager->close();
+
+	Console::Output::PrintNoFormat("Hey] que pasa: : : Tonto 2");
+
 }

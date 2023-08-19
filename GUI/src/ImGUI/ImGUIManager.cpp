@@ -163,7 +163,7 @@ void ImGUIManager::init()
 	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
 	Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
 
-	PEditor::Game::Init("Main_Debug.exe");
+	PEditor::Game::Init("Main_Debug.exe", "Main_Release.exe");
 }
 
 void ImGUIManager::SplashScreen()

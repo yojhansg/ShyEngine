@@ -7,7 +7,7 @@
 PEditor::Game* PEditor::Game::instance = nullptr;
 
 
-PEditor::Game::Game(const std::string& path) : path(path)
+PEditor::Game::Game(const std::string& path, const std::string& releasePath) : path(path), releasePath(releasePath)
 {
 	isRunning = false;
 	instance = this;
@@ -22,10 +22,11 @@ PEditor::Game::~Game()
 	instance = nullptr;
 }
 
-void PEditor::Game::Init(const std::string& path)
+void PEditor::Game::Init(const std::string& path, const std::string& releasePath)
 {
 	Release();
-	instance = new Game(path);
+
+	instance = new Game(path, releasePath);
 }
 
 void PEditor::Game::Release()
@@ -37,10 +38,10 @@ void PEditor::Game::Release()
 	}
 }
 
-void PEditor::Game::Play()
+void PEditor::Game::Play(bool debug)
 {
 	if (!IsRunning())
-		instance->play();
+		instance->play(debug);
 }
 
 void PEditor::Game::Stop()
@@ -83,7 +84,7 @@ std::string PEditor::Game::FlushOutput()
 
 
 
-void PEditor::Game::play()
+void PEditor::Game::play(bool debug)
 {
 	output.clear();
 
@@ -108,7 +109,7 @@ void PEditor::Game::play()
 	si.dwFlags |= STARTF_USESTDHANDLES;
 
 	// Replace "your_command_here" with the actual command you want to execute
-	if (!CreateProcessA(NULL, (LPSTR)path.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+	if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
 		std::cerr << "Error creating process." << std::endl;
 		return;
 	}
