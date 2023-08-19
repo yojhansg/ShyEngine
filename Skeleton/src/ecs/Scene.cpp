@@ -147,6 +147,18 @@ namespace ECS {
 
     }
 
+    Entity* Scene::createEntityNoId(const std::string& name, int renderOder) {
+
+        Entity* e = new Entity(name, renderOder);
+
+        e->scene = this;
+
+        entities.push_back(e);
+
+        return e;
+    }
+
+
     void Scene::removeEntity(Entity* ent) {
         std::list<Entity*>::iterator it = entities.begin();
         while (it != entities.end()) {

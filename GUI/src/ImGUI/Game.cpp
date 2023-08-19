@@ -33,7 +33,7 @@ void PEditor::Game::Release()
 {
 	if (instance != nullptr)
 	{
-		delete instance;
+		Stop();
 		instance = nullptr;
 	}
 }

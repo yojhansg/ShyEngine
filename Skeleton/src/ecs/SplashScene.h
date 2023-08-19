@@ -22,7 +22,7 @@ namespace ECS {
 
 
 		static void CreateSplashScreen(Scene* scene);
-
+		static void LoadResources();
 
 	private:
 

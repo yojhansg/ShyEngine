@@ -161,14 +161,19 @@ void PEditor::Preferences::GenerateDebug()
 
 void PEditor::Preferences::GenerateRelease()
 {
-	ordered_json root = instance->BasicData();
+	json root = instance->BasicData();
 
-	root["path"] = "";
 	root["splashScreen"] = true;
 	root["debugPhysics"] = false;
 	root["debugFrameRate"] = false;
 
-	root["path"] = "";
+	root["path"] = ImGUIManager::getInstance()->getProjectInfo().path;
+
+	std::ofstream file("config.json");
+
+	file << root.dump(4);
+
+	file.close();
 }
 
 

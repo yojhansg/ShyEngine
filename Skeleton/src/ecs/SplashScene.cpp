@@ -6,6 +6,7 @@
 #include "Components/OverlayText.h"
 #include "Components/OverlayImage.h"
 #include "RendererManager.h"
+#include "ResourcesManager.h"
 
 ECS::SplashScene::SplashScene()
 {
@@ -34,7 +35,7 @@ void ECS::SplashScene::SetMaxtTime(float time)
 
 void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 {
-	Entity* manager = scene->createEntity("Manager");
+	Entity* manager = scene->createEntityNoId("Manager");
 	manager->addComponent<ECS::SplashScene>();
 
 	auto overlay = manager->addComponent<ECS::Overlay>();
@@ -49,7 +50,7 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 
 	int fit = 1;
 
-	Entity* center = scene->createEntity("text");
+	Entity* center = scene->createEntityNoId("text");
 	auto textOverlay = center->addComponent<ECS::Overlay>();
 	textOverlay->SetPositioned({ 0, 0 }, { size, sizey });
 	textOverlay->SetParent(overlay);
@@ -62,7 +63,7 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	text->SetVerticalAlignment(1);
 
 
-	center = scene->createEntity("text");
+	center = scene->createEntityNoId("text");
 	textOverlay = center->addComponent<ECS::Overlay>();
 	textOverlay->SetPositioned({ 0, size / 5.4f }, { size, sizey });
 	textOverlay->SetParent(overlay);
@@ -73,4 +74,15 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	text->SetFont("Default.ttf");
 	text->SetHorizontalAlignment(1);
 	text->SetVerticalAlignment(1);
+}
+
+
+//TODO: cambiar el nombre de estos recursos
+void ECS::SplashScene::LoadResources()
+{
+	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
+	Resources::ResourcesManager::instance()->addFont("Default.ttf", size / 10);
+	Resources::ResourcesManager::instance()->addFont("Cute Notes.ttf", size / 4);
+
+	Resources::ResourcesManager::instance()->addTexture("fondoWindows.jpg");
 }

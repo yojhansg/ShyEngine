@@ -9,10 +9,7 @@ Resources::ResourcesManager::ResourcesManager() : resourcesPath("") {}
 
 Resources::ResourcesManager::ResourcesManager(const std::string& path) {
 
-	if (path == "")
-		resourcesPath = "";
-	else
-		resourcesPath = path + "/";
+	SetResourcesPath(path);
 }
 
 Resources::ResourcesManager::~ResourcesManager() {
@@ -90,6 +87,9 @@ std::string Resources::ResourcesManager::GetResourcesPath()
 
 void Resources::ResourcesManager::SetResourcesPath(const std::string& path)
 {
-	instance()->resourcesPath = path + "/";;
+	if (path == "")
+		instance()->resourcesPath = "";
+	else
+		instance()->resourcesPath = path + "/";;
 }
 

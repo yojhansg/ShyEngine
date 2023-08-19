@@ -39,54 +39,54 @@ void Game::initScenes() {
 
 void Game::firstScene() {
 
-	auto physics = Physics::PhysicsManager::instance();
+	//auto physics = Physics::PhysicsManager::instance();
 
-	physics->addCollisionLayer("Ground");
-	physics->addCollisionLayer("Player");
+	//physics->addCollisionLayer("Ground");
+	//physics->addCollisionLayer("Player");
 
-	auto renderer = Renderer::RendererManager::instance();
-	auto sound = Sound::SoundManager::instance();
+	//auto renderer = Renderer::RendererManager::instance();
+	//auto sound = Sound::SoundManager::instance();
 
-	physics->setCollisionBetweenLayers("Ground", "Player", true);
+	//physics->setCollisionBetweenLayers("Ground", "Player", true);
 
-	sound->setMasterVolume(0.1f);
+	//sound->setMasterVolume(0.1f);
 
-	// 1.- Scene
-	scene = sceneManager->createScene("Default scene");
+	//// 1.- Scene
+	//scene = sceneManager->createScene("Default scene");
 
-	// 2.- Entities
+	//// 2.- Entities
 
-		// Link
-		ECS::Entity* player = scene->createEntity("Player");
+	//	// Link
+	//	ECS::Entity* player = scene->createEntity("Player");
 
-		auto tr = player->addComponent<ECS::Transform>();
-		auto im = player->addComponent<ECS::Image>("images/link.png");
-		auto body = player->addComponent<ECS::BoxBody>();
-		auto lComp = player->addComponent<ECS::LinkComponent>();
+	//	auto tr = player->addComponent<ECS::Transform>();
+	//	auto im = player->addComponent<ECS::Image>("images/link.png");
+	//	auto body = player->addComponent<ECS::BoxBody>();
+	//	auto lComp = player->addComponent<ECS::LinkComponent>();
 
-		// Ground
-		ECS::Entity* ground = scene->createEntity("Ground");
-	
-		auto grTr = ground->addComponent<ECS::Transform>();
-		auto grIm = ground->addComponent<ECS::Image>("images/ground.png");
-		auto grBody = ground->addComponent<ECS::EdgeBody>();
+	//	// Ground
+	//	ECS::Entity* ground = scene->createEntity("Ground");
+	//
+	//	auto grTr = ground->addComponent<ECS::Transform>();
+	//	auto grIm = ground->addComponent<ECS::Image>("images/ground.png");
+	//	auto grBody = ground->addComponent<ECS::EdgeBody>();
 
-	
-	// 3.- Init
-	scene->init();
+	//
+	//// 3.- Init
+	//scene->init();
 
-	// 4.- Components settings
+	//// 4.- Components settings
 
-		// Player
-		tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
-		tr->SetScale({0.5f, 0.5f});
-		body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
-		body->setFriction(0.5f);
-		body->setCollisionLayer("Player");
+	//	// Player
+	//	tr->SetLocalPosition({ 0, renderer->getHeight() / 3.0f });
+	//	tr->SetScale({0.5f, 0.5f});
+	//	body->setBodyType((int) ECS::PhysicBody::BODY_TYPE::DYNAMIC);
+	//	body->setFriction(0.5f);
+	//	body->setCollisionLayer("Player");
 
-		// Ground
-		grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
-		grBody->addOffSet(0, grBody->getSize().getY() / 2);
-		grBody->setCollisionLayer("Ground");
+	//	// Ground
+	//	grTr->SetLocalPosition({ 0, -renderer->getHeight() / 3.0f });
+	//	grBody->addOffSet(0, grBody->getSize().getY() / 2);
+	//	grBody->setCollisionLayer("Ground");
 
 }

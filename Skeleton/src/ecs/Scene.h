@@ -49,6 +49,9 @@ namespace ECS {
 		// Creates an entity on the scene and returns the pointer
 		Entity* createEntity(const std::string& name = "New Entity", int renderOrder = 0, int id = 0);
 
+		//Creates an entity but doesnt aply any ID
+		Entity* createEntityNoId(const std::string& name = "New Entity", int renderOrder = 0);
+
 		// Destroys an entity with a given pointer
 		void removeEntity(Entity* ent);
 

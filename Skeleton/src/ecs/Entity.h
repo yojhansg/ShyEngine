@@ -225,6 +225,7 @@ namespace ECS {
 
 		// Entity ID
 		int id;
+		bool usesId;
 
 		//Iterator to render set
 		std::multiset<Entity*>::iterator renderIt;

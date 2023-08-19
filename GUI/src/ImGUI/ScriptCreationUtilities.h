@@ -80,6 +80,7 @@ namespace PEditor {
 
 			TODO:
 
+			-Quitar los singleton del editor
 			-Crear escenas
 			-Mostrar el icono de la imagen al lado de su fichero
 			-Boton para abrir carpetas en el explorador de archivos

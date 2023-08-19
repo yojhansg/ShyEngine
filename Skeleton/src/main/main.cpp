@@ -62,11 +62,7 @@ void saveTimesPlayed() {
 
 		engine.update();
 
-		std::cout << "]::Before closing!\n";
-
 		engine.close();
-
-		std::cout << "]::This was My Engine!" << std::endl;
 
 		return 0;
 	}

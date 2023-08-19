@@ -58,6 +58,7 @@ namespace ECS {
 		scenes.push(scene);
 	}
 
+
 	void SceneManager::ResetScene() {
 		
 		ChangeScene(currentScenePath, LOAD_MODE::POP_AND_PUSH);
