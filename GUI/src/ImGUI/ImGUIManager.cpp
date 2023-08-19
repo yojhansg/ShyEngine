@@ -119,7 +119,7 @@ void ImGUIManager::initSDL()
 void ImGUIManager::createSDLWindow(const char* name, int posX, int posY, int sizeX, int sizeY) {
 
 	// Create our window
-	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 	window = SDL_CreateWindow(name, posX, posY, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
@@ -220,7 +220,6 @@ void ImGUIManager::loop()
 
 	//SDL_SetWindowSize(window, _ProjectSelectionDialogueSize);
 	SDL_SetWindowPosition(window, _Centered);
-	SDL_SetWindowResizable(window, SDL_FALSE);
 
 	PEditor::ProjectsManager dialog;
 
@@ -237,7 +236,6 @@ void ImGUIManager::loop()
 	SDL_SetWindowResizable(window, SDL_TRUE);
 	SDL_SetWindowSize(window, _WindowMainSize);
 	SDL_SetWindowPosition(window, _Centered);
-	SDL_SetWindowBordered(window, SDL_TRUE);
 
 	initWindows();
 
@@ -354,9 +352,8 @@ void ImGUIManager::handleInput()
 
 		if (event.type == SDL_QUIT)
 			exitGame = true;
-		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-			exitGame = true;
-		if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+
+		else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
 			exitGame = true;
 
 		for (auto window : windows)

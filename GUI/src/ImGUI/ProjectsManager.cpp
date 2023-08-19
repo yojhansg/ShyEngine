@@ -29,6 +29,8 @@ namespace PEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
+    const std::vector<std::string> ProjectsManager::assetsFolders = { "Images", "Sounds", "Music", "Fonts", "Scenes", "Prefabs", "Scripts" };
+
     ProjectsManager::ProjectsManager() {
 
         imGuiManager = ImGUIManager::getInstance();
@@ -37,7 +39,7 @@ namespace PEditor {
         invalidNewProjectPath = invalidOpenProjectPath = false;
         showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
 
-        creationDate = name = createPath = openPath = "";
+        creationDate = name = createPath = openPath = lastSavedProjectPath = "";
 
         errorMessage = L"Default error message. No one knows what went wrong :(";
 
@@ -61,7 +63,7 @@ namespace PEditor {
 
 
     ProjectsManager::Result ProjectsManager::ManageProjectSelection(SDL_Renderer* renderer) {
-         
+
         Result result = Result::CLOSED;
 
         while (!windowClosed) {
@@ -105,11 +107,9 @@ namespace PEditor {
         {
             ImGui_ImplSDL2_ProcessEvent(&event);
 
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 windowClosed = true;
             if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)
-                windowClosed = true;
-            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 windowClosed = true;
         }
 
@@ -125,6 +125,7 @@ namespace PEditor {
         ImGui::SetCursorPosY(h / 12.0f);
 
         ImGui::Text("Project Name:");
+        ImGui::SetNextItemWidth(w / 1.2f);
         ImGui::InputText("##project_name", project_name, IM_ARRAYSIZE(project_name));
 
         // Shows an error message
@@ -137,6 +138,7 @@ namespace PEditor {
         ImGui::SetCursorPosY(h / 4.0f);
 
         ImGui::Text("Project Path:");
+        ImGui::SetNextItemWidth(w / 1.2f);
         ImGui::InputText("##project_path", create_project_path, IM_ARRAYSIZE(create_project_path));
 
         // Select folder button logic
@@ -146,6 +148,7 @@ namespace PEditor {
             ZeroMemory(&bi, sizeof(bi));
             bi.hwndOwner = GetForegroundWindow();
             bi.ulFlags = BIF_USENEWUI | BIF_RETURNONLYFSDIRS;
+
             LPITEMIDLIST pidl = SHBrowseForFolderA(&bi);
 
             if (pidl) {
@@ -179,9 +182,8 @@ namespace PEditor {
                     showPopUpWindowNewProject = true;
                 else {
                     windowClosed = true;
+
                     ImGui::End();
-
-
 
                     return Result::ENTERED;
                 }
@@ -206,12 +208,13 @@ namespace PEditor {
         ImGui::SetCursorPosY(h / 12.0f);
 
         ImGui::Text("Project Path:");
+        ImGui::SetNextItemWidth(w / 1.2f);
         ImGui::InputText("##project_path", open_project_path, IM_ARRAYSIZE(open_project_path));
 
         // Select file logic button
-        if (ImGui::Button("Select File", ImVec2(w / 2.0f, h / 20.0f))) {
+        if (ImGui::Button("Select File", ImVec2(w / 4.0f, h / 20.0f))) {
 
-          OPENFILENAMEA ofn;  // Estructura de diálogo de archivo
+          OPENFILENAMEA ofn;  // Estructura de diï¿½logo de archivo
           char fileName[MAX_PATH] = "";
           ZeroMemory(&ofn, sizeof(ofn));
           ofn.lStructSize = sizeof(ofn);
@@ -235,7 +238,7 @@ namespace PEditor {
 
 
         // Open project logic button
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.5f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.3f));
         if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f)))
         {
             // Input validation
@@ -260,7 +263,7 @@ namespace PEditor {
 
         }
 
-        ImGui::SetCursorPosY(h / 2.5f);
+        ImGui::SetCursorPosY(h / 2.3f);
         ImGui::Text("Recent Projects:");
 
         // Listbox for the recent projects
@@ -276,9 +279,9 @@ namespace PEditor {
                     recentProjectOpenedPath = recentProjectsInfo[i].path;
                 }
             }
-        }
 
-        ImGui::EndListBox();
+            ImGui::EndListBox();
+        }
 
 
         // On opened one of the recent projects
@@ -298,9 +301,8 @@ namespace PEditor {
             }
         }
 
-        if (showPopUpWindowOpenProject) {
+        if (showPopUpWindowOpenProject)
             ShowErrorPopup(errorMessage);
-        }
 
 
         ImGui::End();
@@ -315,9 +317,9 @@ namespace PEditor {
         ImVec2 size = ImGui::GetWindowSize();
         w = size.x; h = size.y;
 
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.0f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 8.0f, h / 2.0f));
 
-        if (ImGui::Button("Close", ImVec2(w / 2.0f, h / 5.0f)))
+        if (ImGui::Button("Close", ImVec2(w / 4.0f, h / 5.0f)))
             windowClosed = true;
 
         ImGui::End();
@@ -346,10 +348,10 @@ namespace PEditor {
                 }
 
                 // Ask for user permission. If denied the folder wont be created.
-                if (!AskForPermission()) {
-                    std::cout << "PROJECTS MANAGER: Without user permission, the necessary files wont be created, and therefore, the editor wont be opened.." << std::endl;
-                    return false;
-                }
+                //if (!AskForPermission()) {
+                //    std::cout << "PROJECTS MANAGER: Without user permission, the necessary files wont be created, and therefore, the editor wont be opened.." << std::endl;
+                //    return false;
+                //}
 
                 // The folder is created
                 std::filesystem::create_directories(projectsDir, ec);
@@ -363,6 +365,7 @@ namespace PEditor {
                 // The JSON is created with an empty array of paths to be dumped into the recent projects file.
                 nlohmann::json j;
                 j["Recent Projects Paths"] = json::array();
+                j["Last Project Saved Path"] = "";
 
                 std::ofstream jsonFile(recentProjectsFile);
 
@@ -395,10 +398,13 @@ namespace PEditor {
                 fileStreamIn.close();
 
                 // Check if the 'recentProjectsFile' contains the expected format
-                if (!jsonData.contains("Recent Projects Paths") || !jsonData["Recent Projects Paths"].is_array()) {
+                if (!jsonData.contains("Recent Projects Paths") || !jsonData.contains("Last Project Saved Path") || !jsonData["Recent Projects Paths"].is_array()) {
                     std::cout << "PROJECTS MANAGER: The recent projects file does not contain the expected format." << std::endl;
                     return false;
                 }
+
+                // Save the information of the last saved project path
+                lastSavedProjectPath = jsonData["Last Project Saved Path"];
 
                 // Save the information of name, path, and date for all recent projects.
                 int i = 0;
@@ -445,6 +451,9 @@ namespace PEditor {
                 fileStreamOut.close();
 
                 // The 'recentProjectsFile' is now updated correctly.
+
+                strncpy_s(create_project_path, sizeof(create_project_path), lastSavedProjectPath.c_str(), _TRUNCATE);
+
             }
 
         }
@@ -494,7 +503,10 @@ namespace PEditor {
         if (!StoreProjectPath(path))
             return false;
 
-        // Store the values in the project file
+        if (!CreateAssetsFolders(folder))
+            return false;
+
+        // Store the values in the .shyproject file
         nlohmann::json j;
 
         creationDate = getCurrentDate();
@@ -549,6 +561,8 @@ namespace PEditor {
 
         // Adds the path of the new project to the json
         if (!containsPath) {
+
+            json["Last Project Saved Path"] = std::string(create_project_path);
             json["Recent Projects Paths"].push_back(path);
 
             // Write the json in the recent projects file
@@ -631,8 +645,25 @@ namespace PEditor {
             return tokens.back();
         }
 
-        return ""; // Devuelve una cadena vacía si no hay elementos
+        return "";
 
+    }
+
+    bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
+
+        for (auto f : assetsFolders) {
+
+            std::error_code ec;
+            std::filesystem::create_directories(root + "\\Assets\\" + f, ec);
+
+            if (ec) {
+                errorMessage = L"Error while creating the project assets folders.";
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     bool ProjectsManager::IsDirectoryEmpty(const std::string& directory) {
@@ -641,7 +672,7 @@ namespace PEditor {
         HANDLE findHandle = FindFirstFileA((directory + "\\*").c_str(), &findData);
 
         if (findHandle == INVALID_HANDLE_VALUE) {
-            // Error handling if directory doesn't exist or there was a problem opening it
+            errorMessage = L"The directory doesn't exist or there was a problem opening it.";
             return false;
         }
 
