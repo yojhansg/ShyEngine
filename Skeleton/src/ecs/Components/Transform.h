@@ -7,12 +7,10 @@
 
 #include <list>
 
-class Game;
 namespace ECS {
 
 	class Transform : public Component {
 	public:
-		friend Game;
 
 		Transform();
 		Transform(const Utilities::Vector2D& position, const Utilities::Vector2D& scale, float rotation);
@@ -59,9 +57,6 @@ namespace ECS {
 
 		void SetLocalRotation(float rotation);
 		void SetWorldRotation(float rotation);
-
-
-
 
 		void Translate(Utilities::Vector2D direction);
 

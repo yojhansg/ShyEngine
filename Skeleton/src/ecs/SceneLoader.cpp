@@ -3,20 +3,19 @@
 #include "ConsoleManager.h"
 #include "SceneManager.h"
 #include "Component.h"
+#include "Script.h"
 #include "Entity.h"
 #include "Scene.h"
-#include "Script.h"
-
-#include "Components/Overlay.h"
-#include "Components/Transform.h"
 
 #include "ECSUtilities/ClassReflection.h"
-#include "ConsoleManager.h"
-
-#include <fstream>
-#include <unordered_map>
+#include "Components/Transform.h"
+#include "Components/Overlay.h"
 #include "ReferencesManager.h"
 #include "ResourcesManager.h"
+#include "ConsoleManager.h"
+
+#include <unordered_map>
+#include <fstream>
 
 using namespace nlohmann;
 
@@ -35,7 +34,6 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	if (!fileStream.good())
 	{
 		Console::Output::PrintError("Scene loading", "Cannot open scene <" + scenePath + ">");
-
 		return nullptr;
 	}
 
@@ -50,28 +48,39 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 	json file = json::parse(fileStream);
 
+
+	if (!file.contains("name")) {
+		Console::Output::PrintError("Load scene error", "The scene file doesn't have a valid format.");
+		return nullptr;
+	}
+
 	Scene* scene = SceneManager::instance()->createScene(file["name"].get<std::string>());
 
+
+
+	if (!file.contains("objects")) {
+		Console::Output::PrintError("Load scene error", "The scene file doesn't have a valid format.");
+		return nullptr;
+	}
+
 	// Entities with transform processing
-	if (file.contains("objects")) {
+	jsonarray objects = file["objects"].get<jsonarray>();
+	for (auto& obj : objects)
+		ProcessEntityWithTransform(scene, obj, nullptr);
 
-		jsonarray objects = file["objects"].get<jsonarray>();
 
-		for (auto& obj : objects) {
-			ProcessEntityWithTransform(scene, obj, nullptr);
-		}
 
+	if (!file.contains("overlays")) {
+		Console::Output::PrintError("Load scene error", "The scene file doesn't have a valid format.");
+		return nullptr;
 	}
 
 	// Entities with overlay processing
-	if (file.contains("overlays")) {
-
-		jsonarray overlays = file["overlays"].get<jsonarray>();
-
-		for (auto& overlay : overlays) {
-			ProcessEntityWithOverlay(scene, overlay, nullptr);
-		}
+	jsonarray overlays = file["overlays"].get<jsonarray>();
+	for (auto& overlay : overlays) {
+		ProcessEntityWithOverlay(scene, overlay, nullptr);
 	}
+
 
 	fileStream.close();
 
@@ -91,14 +100,30 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 	std::string objectName = "New Entity";
 	int id = 0;
 
-	if (obj.contains("name"))
-		objectName = obj["name"].get<std::string>();
 
-	if (obj.contains("order")) // TODO: mover el orden al transform ya que es la posicion z
-		renderOrder = obj["order"].get<int>();
+	if (!obj.contains("name")) {
+		Console::Output::PrintError("Load entity error", "The entity JSON doesn't have a valid format.");
+		return;
+	}
 
-	if (obj.contains("id"))
-		id = obj["id"].get<int>();
+	objectName = obj["name"].get<std::string>();
+
+
+	if (!obj.contains("order")) { // TODO: mover el orden al transform ya que es la posicion z
+		Console::Output::PrintError("Load entity error", "The entity JSON doesn't have a valid format.");
+		return;
+	}
+
+	renderOrder = obj["order"].get<int>();
+
+
+	if (!obj.contains("id")) {
+		Console::Output::PrintError("Load entity error", "The entity JSON doesn't have a valid format.");
+		return;
+	}
+
+	id = obj["id"].get<int>();
+
 
 	ECS::Entity* entity = scene->createEntity(objectName, renderOrder, id);
 
@@ -113,9 +138,12 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 
 	for (auto& attr : transformAttributes) {
 
-		if (obj.contains(attr)) {
-			map[attr] = obj[attr].get<std::string>();
+		if (!obj.contains(attr)) {
+			Console::Output::PrintError("Load transform error", "The transform component doesn't have a valid format.");
+			return;
 		}
+
+		map[attr] = obj[attr].get<std::string>();
 	}
 
 
@@ -123,29 +151,38 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 	transform->SetParent(parent);
 
 
-	// All compomnents
-	if (obj.contains("components")) {
+	if (!obj.contains("components")) {
+		Console::Output::PrintError("Load components error", "The components JSON doesn't have a valid format.");
+		return;
+	}
 
-		jsonarray components = obj["components"].get<jsonarray>();
-		for (auto& compInfo : components) {
-			ProcessComponent(entity, compInfo);
-		}
+	// All compomnents
+	jsonarray components = obj["components"].get<jsonarray>();
+	for (auto& compInfo : components) {
+		ProcessComponent(entity, compInfo);
+	}
+
+
+	if (!obj.contains("scripts")) {
+		Console::Output::PrintError("Load scripts error", "The scripts JSON doesn't have a valid format.");
+		return;
 	}
 
 	// Scritps
-	if (obj.contains("scripts")) {
-		ProcessScripts(obj, entity);
+	ProcessScripts(obj, entity);
+
+
+	if (!obj.contains("childs")) {
+		Console::Output::PrintError("Load childs error", "The childs JSON doesn't have a valid format.");
+		return;
 	}
 
 
 	// Entity childs
-	if (obj.contains("childs")) {
+	jsonarray childs = obj["childs"].get<jsonarray>();
 
-		jsonarray childs = obj["childs"].get<jsonarray>();
-
-		for (auto& child : childs) {
-			ProcessEntityWithTransform(scene, child, transform);
-		}
+	for (auto& child : childs) {
+		ProcessEntityWithTransform(scene, child, transform);
 	}
 }
 
@@ -159,11 +196,20 @@ void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::jso
 	std::string name = "New Overlay";
 	int id = 0;
 
-	if (overlay.contains("name"))
-		name = overlay["name"].get<std::string>();
+	if (!overlay.contains("name")) {
+		Console::Output::PrintError("Load entity error", "The entity JSON doesn't have a valid format.");
+		return;
+	}
 
-	if (overlay.contains("id"))
-		id = overlay["id"].get<int>();
+	name = overlay["name"].get<std::string>();
+
+
+	if (!overlay.contains("id")) {
+		Console::Output::PrintError("Load entity error", "The entity JSON doesn't have a valid format.");
+		return;
+	}
+
+	id = overlay["id"].get<int>();
 
 	ECS::Entity* entity = scene->createEntity(name, 0, id);
 
@@ -178,40 +224,51 @@ void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::jso
 
 	for (auto& attr : overlayAttributes) {
 
-		if (overlay.contains(attr)) {
-			map[attr] = overlay[attr].get<std::string>();
+		if (!overlay.contains(attr)) {
+			Console::Output::PrintError("Load transform error", "The transform component doesn't have a valid format.");
+			return;
 		}
+
+		map[attr] = overlay[attr].get<std::string>();
 	}
 
 	ClassReflection::instance()->ReflectOverlay(overlayElement, map);
 	overlayElement->SetParent(parent);
 
 
+	if (!overlay.contains("components")) {
+		Console::Output::PrintError("Load components error", "The components JSON doesn't have a valid format.");
+		return;
+	}
+
 	// All components
-	if (overlay.contains("components")) {
-		jsonarray components = overlay["components"].get<jsonarray>();
+	jsonarray components = overlay["components"].get<jsonarray>();
 
-		for (auto& compInfo : components) {
-			ProcessComponent(entity, compInfo);
-		}
-
+	for (auto& compInfo : components) {
+		ProcessComponent(entity, compInfo);
 	}
 
-	// Scripts
-	if (overlay.contains("scripts")) {
-		ProcessScripts(overlay, entity);
+
+	if (!overlay.contains("scripts")) {
+		Console::Output::PrintError("Load scripts error", "The scripts JSON doesn't have a valid format.");
+		return;
 	}
 
+	// Scritps
+	ProcessScripts(overlay, entity);
+
+
+
+	if (!overlay.contains("childs")) {
+		Console::Output::PrintError("Load childs error", "The childs JSON doesn't have a valid format.");
+		return;
+	}
 
 	// Entity childs
-	if (overlay.contains("childs")) {
+	jsonarray childs = overlay["childs"].get<jsonarray>();
 
-		jsonarray childs = overlay["childs"].get<jsonarray>();
-
-		for (auto& child : childs)
-			ProcessEntityWithOverlay(scene, child, overlayElement);
-
-	}
+	for (auto& child : childs)
+		ProcessEntityWithOverlay(scene, child, overlayElement);
 
 }
 
@@ -219,8 +276,8 @@ void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::jso
 
 // ------------------------- PROCESS COMPONENT ----------------------------
 
-void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& compInfo)
-{
+void ECS::SceneLoader::ProcessComponent(ECS::Entity* entity, nlohmann::json& compInfo) {
+
 	std::string componentStr = compInfo["component"].get<std::string>();
 
 	ECS::Component* component = entity->addComponent(componentStr);

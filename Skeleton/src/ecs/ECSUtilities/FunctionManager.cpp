@@ -20,7 +20,6 @@
 
 #include <Components/Animation.h>
 #include <Components/BoxBody.h>
-#include <Components/ChainBody.h>
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
@@ -602,7 +601,7 @@ Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& v
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_ChangeTexture", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
-	self->ChangeTexture(vec[1].str);
+	self->loadTexture(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec){
@@ -642,7 +641,7 @@ Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>con
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", vec[0].value.entity->getEntityName(), MusicEmitter);
 		return Scripting::Variable::Null();
 	}
-	self->changeMusic(vec[1].str);
+	self->loadMusic(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable MusicEmitter_play(std::vector<Scripting::Variable>const& vec){
@@ -1712,7 +1711,7 @@ Scripting::Variable ParticleSystem_changeTexture(std::vector<Scripting::Variable
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", vec[0].value.entity->getEntityName(), ParticleSystem);
 		return Scripting::Variable::Null();
 	}
-	self->changeTexture(vec[1].str);
+	self->loadTexture(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec){
@@ -1917,7 +1916,7 @@ Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>con
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", vec[0].value.entity->getEntityName(), SoundEmitter);
 		return Scripting::Variable::Null();
 	}
-	self->changeSound(vec[1].str);
+	self->loadSound(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec){

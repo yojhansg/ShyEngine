@@ -28,6 +28,7 @@ namespace ECS {
 		void render() override;
 
 	publish:
+
 		int getTextureWidth();
 
 		int getTextureHeight();
@@ -38,7 +39,7 @@ namespace ECS {
 
 		Utilities::Vector2D scaledSize();
 
-		void ChangeTexture(cstring texturePath);
+		void loadTexture(cstring texturePath);
 
 		// Sets the flip mode for the image
 		// 0 for no flip, 1 for flip horizontally

@@ -6,7 +6,6 @@
 #include "Font.h"
 #include "Texture.h"
 #include "Overlay.h"
-
 #include "SDL.h"
 #include "SDL_ttf.h"
 
@@ -39,6 +38,12 @@ void ECS::OverlayText::init()
 {
 	overlay = entity->getComponent<ECS::Overlay>();
 
+	if (overlay == nullptr) {
+		printError("Entity does not contain overlay component. Removing component", "OverlayImage");
+		this->remove();
+		return;
+	}
+
 	if (font == nullptr)
 		createFont();
 	if (texture == nullptr)
@@ -62,11 +67,9 @@ void ECS::OverlayText::createTexture()
 {
 	freeTexture();
 
-	if ((Fit)fit == Fit::WrapClamp || (Fit)fit == Fit::WrapOverflow) {
+	if ((Fit)fit == Fit::WrapClamp || (Fit)fit == Fit::WrapOverflow)
 		texture = font->CreateWrappedText(text, overlay->GetSize().getX());
-	}
 	else
-
 		texture = font->CreateText(text);
 }
 
@@ -77,7 +80,6 @@ void ECS::OverlayText::render()
 
 	overlay->GetRenderRect(destination.x, destination.y, destination.w, destination.h);
 
-
 	SDL_Rect source = { 0, 0, texture->getWidth(), texture->getHeight() };
 
 	switch ((Fit)fit) {
@@ -85,10 +87,8 @@ void ECS::OverlayText::render()
 	case Fit::WrapClamp:
 	case Fit::Clamp: {
 
-
 		int w = std::min(source.w, destination.w);
 		int h = std::min(source.h, destination.h);
-
 
 		if (horizontalAlignment != (int)HorizontalAlignment::Left) {
 

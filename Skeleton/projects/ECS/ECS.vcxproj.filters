@@ -57,16 +57,10 @@
     <ClInclude Include="..\..\src\ecs\Components\Transform.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\LinkComponent.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\ContactListener.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\BoxBody.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\ChainBody.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\Components\CircleBody.h">
@@ -144,9 +138,6 @@
     <ClInclude Include="..\..\src\ecs\Components\MusicEmitter.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\BallComponent.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\Particle.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -185,9 +176,6 @@
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\LinkComponent.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -198,9 +186,6 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\ChainBody.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\ECSUtilities\FunctionManager.cpp">
@@ -270,9 +255,6 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Components\MusicEmitter.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\BallComponent.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ecs\Particle.cpp">

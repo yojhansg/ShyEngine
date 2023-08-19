@@ -36,6 +36,7 @@ namespace ECS {
 
 		OverlayText();
 		~OverlayText();
+
 	private:
 
 		Overlay* overlay;

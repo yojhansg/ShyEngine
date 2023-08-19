@@ -1,12 +1,13 @@
 #include "Save.h"
 
-#include "ConsoleManager.h"
-#include <json.hpp>
-#include <fstream>
-#include "Entity.h"
-#include <vector>
+#include <ConsoleManager.h>
 #include <filesystem>
 #include <iostream>
+#include <json.hpp>
+#include <Entity.h>
+#include <fstream>
+#include <vector>
+
 using namespace nlohmann;
 
 using jsonarray = std::vector<json>;
@@ -14,7 +15,6 @@ using jsonarray = std::vector<json>;
 ECS::SaveManager::SaveManager()
 {
 	std::filesystem::create_directory(std::filesystem::path("Saves"));
-
 
 	Load(0);
 	currentLoaded = -1;

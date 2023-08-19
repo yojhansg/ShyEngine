@@ -7,10 +7,10 @@
 #include <string>
 #include <Vector2D.h>
 #include <EditorExport.h>
+
 /*
 Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
 */
-
 
 //TODO: terminar partida con escape que sea un parametro que se lea del fichero global
 namespace Utilities {
@@ -45,6 +45,8 @@ namespace Input {
 
 		~InputManager();
 
+		bool Valid() override;
+
 		// Called in the main loop to check is window is closed
 		bool handleInput(SDL_Event& e);
 
@@ -54,9 +56,8 @@ namespace Input {
 
 		bool keyUpEvent();
 
-
-
 	public:
+
 		bool isKeyDown(SDL_Scancode key);
 
 		bool isKeyUp(SDL_Scancode key);
@@ -116,6 +117,8 @@ namespace Input {
 		InputManager();
 		InputManager(bool closeWithEscape);
 
+		bool valid;
+
 		// Clear the state
 		void clearState();
 
@@ -152,9 +155,9 @@ namespace Input {
 
 		// ----- CONTROLLER -------
 
-		void initialiseJoysticks();
+		bool initialiseJoysticks();
 
-		void addJoystick(int joystick_id);
+		bool addJoystick(int joystick_id);
 
 		void removeJoystick(int joystick_id);
 

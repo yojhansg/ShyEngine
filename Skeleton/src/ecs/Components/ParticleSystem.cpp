@@ -164,7 +164,7 @@ namespace ECS {
 
 		// Custom values
 
-		duration = 20.0f;
+		/*duration = 20.0f;
 		playOnStart = true;
 		loop = true;
 
@@ -225,7 +225,7 @@ namespace ECS {
 		overLifeTimeAlpha = true;
 		endAlpha = 0;
 
-		addBurst(2, 50, 5, 4, 1); 
+		addBurst(2, 50, 5, 4, 1); */
 
 	}
 
@@ -236,7 +236,11 @@ namespace ECS {
 	void ParticleSystem::init() {
 
 		tr = this->getEntity()->getComponent<Transform>();
-		assert(tr != nullptr, "La entidad debe contener un componente Transform");
+		if (tr == nullptr) {
+			printError("Missing transform", "The entity must contain a transform component.");
+			this->remove();
+			return;
+		}
 
 		for (int i = 0; i < maxParticles; i++)
 			particles.push_back(new Particle(this, i));
@@ -415,7 +419,7 @@ namespace ECS {
 		return emitting;
 	}
 
-	void ParticleSystem::changeTexture(cstring texturePath) {
+	void ParticleSystem::loadTexture(cstring texturePath) {
 		fileName = texturePath;
 		texture = Resources::ResourcesManager::instance()->addTexture(fileName);
 		srcWidth = texture->getWidth(); srcHeight = texture->getHeight();

@@ -4,6 +4,7 @@
 #include <string>
 #include <Vector2D.h>
 #include <Color.h>
+#include <EditorExport.h>
 
 class SDL_Window;
 struct SDL_Renderer;
@@ -16,14 +17,17 @@ namespace Scripting {
 
 namespace Renderer {
 
-	class RendererManager : public Utilities::Singleton<RendererManager> {
+	EditorManager RendererManager : public Utilities::Singleton<RendererManager> {
 
 		friend Singleton<RendererManager>;
 
 		friend Scripting::ScriptFunctionality;
+
 	public:
 
 		~RendererManager();
+
+		bool Valid() override;
 
 		SDL_Window* getWindow();
 		SDL_Renderer* getRenderer();
@@ -31,6 +35,20 @@ namespace Renderer {
 		void clearRenderer(cColor color = Utilities::Color(255, 255, 255));
 		void presentRenderer();
 		void CopyTargetTextureContent();
+
+		// Camera methods
+		void AdjustRectToCamera(int* x, int* y, int* w, int* h);
+
+		Utilities::Vector2D CameraPosition();
+		float CameraScale();
+
+		void SetCameraPosition(cVector2D vec);
+		void SetCameraScale(float scale);
+
+		// Render target (In case we need to run the engine inside the editor)
+		void SetRenderTarget(bool renderOnTarget);
+
+	publish:
 
 		int getWidth();
 		int getHeight();
@@ -40,35 +58,23 @@ namespace Renderer {
 		void resizeWindow(int w, int h);
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
-
-		void AdjustRectToCamera(int* x, int* y, int* w, int* h);
-
-		Utilities::Vector2D CameraPosition();
-		float CameraScale();
-
-		void SetCameraPosition(cVector2D vec);
-		void SetCameraScale(float scale);
-
 		void SetWindowIcon(const std::string& path);
-
-		void SetRenderTarget(bool renderOnTarget);
 
 	private:
 
 		RendererManager();
 		RendererManager(const std::string& windowTitle, int width, int height, bool vsync);
 
-		void initSDL(bool vsync);
+		bool initSDL(bool vsync);
 		void closeSDL();
 
-		void CreateTargetTexture();
-
-		std::string windowTitle;
 		int width; 
 		int height;
 
 		SDL_Window* window; // the window
 		SDL_Renderer* renderer; // the renderer
+
+		std::string windowTitle;
 
 		SDL_Surface* icon;
 
@@ -76,5 +82,7 @@ namespace Renderer {
 
 		float cameraScale;
 		Utilities::Vector2D cameraPosition;
+
+		bool valid;
 	};
 }

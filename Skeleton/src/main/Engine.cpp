@@ -1,11 +1,11 @@
 #include "Engine.h"
-#include "Game.h"
 #include "DataLoader.h"
+#include "SplashScene.h"
 
-#include <ECSUtilities/FunctionManager.h>
-#include <ECSUtilities/ComponentFactory.h>
-#include <ECSUtilities/ClassReflection.h>
 #include <Scripting/ScriptFunctionality.h>
+#include <ECSUtilities/ComponentFactory.h>
+#include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ClassReflection.h>
 #include <Scripting/ScriptManager.h>
 
 #include <ResourcesManager.h>
@@ -21,9 +21,8 @@
 #include <SceneManager.h>
 #include <EngineTime.h>
 #include <Component.h>
-#include <Scene.h>
 #include <filesystem>
-#include "SplashScene.h"
+#include <Scene.h>
 #include <chrono>
 
 using namespace std::chrono;
@@ -58,14 +57,18 @@ bool Engine::init() {
 	// --------------------------------- MANAGERS -----------------------------------
 
 	sceneManager = ECS::SceneManager::init();
+	if (!sceneManager->Valid()) return false;
 
 	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
+	if (!rendererManager->Valid()) return false;
 
 	physicsManager = Physics::PhysicsManager::init(data.gravity);
-
-	renderManager = ECS::RenderManager::init();
+	if (!physicsManager->Valid()) return false;
 
 	inputManager = Input::InputManager::init(data.closeWithEscape);
+	if (!inputManager->Valid()) return false;
+
+	renderManager = ECS::RenderManager::init();
 
 	engineTime = Utilities::Time::init();
 
@@ -89,14 +92,14 @@ bool Engine::init() {
 
 	// Maximun size = 64x64 pixels
 	rendererManager->SetWindowIcon("icon.png");
+	rendererManager->SetRenderTarget(false);
 
 
-	if (data.resourcesPath != "") {
+	if (data.resourcesPath != "")
 		std::filesystem::current_path(data.resourcesPath);
-	}
 
 	if (data.windowIcon != "")
-		rendererManager->SetWindowIcon(data.resourcesPath + "/" + data.windowIcon);
+		rendererManager->SetWindowIcon(data.resourcesPath + "\\" + data.windowIcon);
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
@@ -194,6 +197,7 @@ void Engine::update() {
 
 void Engine::close() {
 
+	rendererManager->close();
 	sceneManager->close();
 
 }

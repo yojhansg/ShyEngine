@@ -141,32 +141,27 @@ namespace ECS {
 	{
 		Scene* scene = SceneLoader::LoadScene(scenePath);
 
-		if (scene == nullptr) {
+		if (scene == nullptr)
 			return nullptr;
-		}
 
 		scene->init();
 		return scene;
 	}
 
 	void SceneManager::SetScene(ECS::Scene* scene) {
-
 		scenes.push(scene);
 		scene->start();
 	}
 
-	void SceneManager::EndGame()
-	{
+	void SceneManager::EndGame() {
 		ChangeScene("", LOAD_MODE::CLEAR);
 	}
 
-	void SceneManager::SetCameraScale(float newScale)
-	{
+	void SceneManager::SetCameraScale(float newScale) {
 		scenes.top()->cameraScale = newScale;
 	}
 
-	void SceneManager::SetCameraPosition(Utilities::Vector2D const& newPosition)
-	{
+	void SceneManager::SetCameraPosition(Utilities::Vector2D const& newPosition) {
 		scenes.top()->cameraPosition = newPosition;
 	}
 

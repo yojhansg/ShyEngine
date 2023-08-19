@@ -2,7 +2,6 @@
 
 #include "Components/Animation.h"
 #include "Components/BoxBody.h"
-#include "Components/ChainBody.h"
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
@@ -22,7 +21,6 @@ ClassReflection::ClassReflection(){
 
 	reflectionMethods["Animation"] = &ClassReflection::ReflectAnimation;
 	reflectionMethods["BoxBody"] = &ClassReflection::ReflectBoxBody;
-	reflectionMethods["ChainBody"] = &ClassReflection::ReflectChainBody;
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
 	reflectionMethods["EdgeBody"] = &ClassReflection::ReflectEdgeBody;
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
@@ -66,20 +64,6 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		BoxBody* self = static_cast<BoxBody*>(selfComp);
-		if(map.contains("bodyType"))
-			self->bodyType = std::stoi(map.at("bodyType"));
-		if(map.contains("mass"))
-			self->mass = std::stof(map.at("mass"));
-		if(map.contains("bounciness"))
-			self->bounciness = std::stof(map.at("bounciness"));
-		if(map.contains("trigger"))
-			self->trigger = map.at("trigger") == "true" ? true : false;
-		if(map.contains("freezeRotation"))
-			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
-
-}
-	void ClassReflection::ReflectChainBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
-		ChainBody* self = static_cast<ChainBody*>(selfComp);
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))

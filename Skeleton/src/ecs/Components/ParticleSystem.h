@@ -99,7 +99,7 @@ namespace ECS {
 
         bool isEmitting();
 
-        void changeTexture(cstring texturePath);
+        void loadTexture(cstring texturePath);
 
         void addBurst(float time, int particles, int cycles, float rate, float probability);
 

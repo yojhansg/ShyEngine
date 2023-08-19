@@ -1,7 +1,9 @@
 #include "PhysicsManager.h"
+#include "box2d/b2_contact.h"
 #include "box2d/box2d.h"
 #include "DebugDraw.h"
-#include "box2d/b2_contact.h"
+
+#include <ConsoleManager.h>
 
 const int MAX_COLLISION_LAYERS = 16;
 
@@ -40,6 +42,10 @@ namespace Physics {
 
 	}
 
+	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
+		initPhysicsManager(gravity, velocityIterations, positionIterations);
+	}
+
 	PhysicsManager::PhysicsManager() {
 		initPhysicsManager(Utilities::Vector2D(0, 9.8f), 6, 3);
 	}
@@ -56,26 +62,26 @@ namespace Physics {
 	void PhysicsManager::handleBodies() {
 
 		for (int i = 0; i < disabledBodies.size(); i++) disabledBodies[i]->SetEnabled(false);
-
 		disabledBodies.clear();
 
 		for (int i = 0; i < enabledBodies.size(); i++) enabledBodies[i]->SetEnabled(true);
-
 		enabledBodies.clear();
 
 	}
 
-	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
-		initPhysicsManager(gravity, velocityIterations, positionIterations);
-	}
-
 	void PhysicsManager::addCollisionLayer(const std::string& layerName) {
 
-		// Can not add more layers than the maximum
-		assert(layersCount < MAX_COLLISION_LAYERS, "Numero maximo de capas de colision alcanzado!");
+		// Check if the maximun number of physics layers was reached
+		if (layersCount >= MAX_COLLISION_LAYERS) {
+			Console::Output::PrintError("Physics layers", "Maximum number of layers reached.");
+			return;
+		}
 
-		// Layers name must be unique
-		assert(layers.find(layerName) == layers.end(), "Ya existe una capa con el mismo nombre!");
+		// Check if there is already an exisiting layer with the same name
+		if (layers.find(layerName) != layers.end()) {
+			Console::Output::PrintError("Physics layers", "There is already a layer with the same name. Layers must be unique.");
+			return;
+		}
 
 		layers.insert(std::make_pair(layerName, freeLayers.top()));
 
@@ -87,11 +93,17 @@ namespace Physics {
 
 	void PhysicsManager::removeCollisionLayer(const std::string& layerName) {
 
-		// Default layer can not be deleted, so at least there is always one layer
-		assert(layerName != "Default", "No se puede eliminar la capa por defecto!");
+		// Check if the layer to be deleted is not the default layer
+		if (layerName == "Default") {
+			Console::Output::PrintError("Physics layers", "The default layer cannot be deleted.");
+			return;
+		}
 
 		// A non-existing layer can not be deleted
-		assert(layers.find(layerName) != layers.end(), "La capa con nombre " + layerName + " no existe!");
+		if (layers.find(layerName) == layers.end()) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerName + " doesn't exist.");
+			return;
+		}
 
 		int removedLayerIndex = layers.at(layerName);
 
@@ -144,6 +156,15 @@ namespace Physics {
 
 		collision_matrix[layerA][layerB] = collide;
 		collision_matrix[layerB][layerA] = collide;
+
+	}
+
+	bool PhysicsManager::layersCollide(const std::string& layerNameA, const std::string& layerNameB) {
+
+		int layerA = layers.at(layerNameA);
+		int layerB = layers.at(layerNameB);
+
+		return collision_matrix[layerA][layerB];
 
 	}
 

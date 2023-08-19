@@ -17,15 +17,13 @@ namespace ECS {
 	class Entity;
 	class Scene;
 
-	EditorManager PrefabManager : public Utilities::Singleton<PrefabManager> {
+	class PrefabManager : public Utilities::Singleton<PrefabManager> {
 
 	public:
 
 		PrefabManager();
 
 		PrefabManager(std::string const& prefabsPath);
-
-	publish:
 
 		// Instancia una entidad con transform en la escena a partir un prefab
 		void InstantiatePrefabWithTransform(const std::string& prefabName, Scene* scene);
@@ -45,7 +43,6 @@ namespace ECS {
 
 		std::unordered_map<std::string, nlohmann::json> prefabsWithOverlay;
 
-		int prefabId;
 		// TODO IDs a los prefabs
 	};
 

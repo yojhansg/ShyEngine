@@ -14,6 +14,7 @@ namespace ECS {
 	public:
 
 		OverlayButton();
+
 	private:
 
 		Overlay* overlay;
@@ -23,7 +24,6 @@ namespace ECS {
 		reflect Utilities::Color downColor;
 
 		reflect float scale;
-
 
 		void init() override;
 		void start() override;

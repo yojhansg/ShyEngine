@@ -1,5 +1,6 @@
 #include "InputManager.h"
 #include <Vector2D.h>
+#include <ConsoleManager.h>
 
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
@@ -7,17 +8,19 @@
 
 namespace Input {
 
-	InputManager::InputManager(): InputManager(true){
-
-	}
+	InputManager::InputManager() : InputManager(true) {}
 
 	InputManager::InputManager(bool closeWithEscape): closeWithEscape(closeWithEscape) {
 
 		kbState_ = SDL_GetKeyboardState(0);
 
-		initialiseJoysticks();
+		valid = initialiseJoysticks();
 
 		clearState();
+	}
+
+	bool InputManager::Valid() {
+		return valid;
 	}
 
 	InputManager::~InputManager() {
@@ -45,10 +48,18 @@ namespace Input {
 
 	void InputManager::update(const SDL_Event& event) {
 
+		int numJoysticks = SDL_NumJoysticks();
+
+		// Check for SDL_NumJoysticks() error
+		if (numJoysticks < 0) {
+			Console::Output::PrintError("SDL Joystick Query", SDL_GetError());
+			return;
+		}
+
 		// Checking for controllers connections or disconnections
-		if (numJoysticksConnected < SDL_NumJoysticks())
+		if (numJoysticksConnected < numJoysticks)
 			joystickConnected();
-		else if (numJoysticksConnected > SDL_NumJoysticks())
+		else if (numJoysticksConnected > numJoysticks)
 			joystickDisconnected();
 
 		switch (event.type) {
@@ -90,6 +101,7 @@ namespace Input {
 		mousePos_.setY(mouse_y);
 	}
 
+
 	// --------- KB ------------
 
 	void InputManager::onKeyDown(const SDL_Event& event) {
@@ -115,6 +127,7 @@ namespace Input {
 	bool InputManager::isKeyUp(SDL_Scancode key) {
 		return keyUpEvent() && kbState_[key] == 0;
 	}
+
 
 	// ----------- MOUSE -----------------
 
@@ -178,11 +191,24 @@ namespace Input {
 		}
 	}
 
+
 	// ---------- CONTROLLER -----------
 
-	void InputManager::initialiseJoysticks() {
+	bool InputManager::initialiseJoysticks() {
 
 		int nJoysticks = SDL_NumJoysticks();
+
+		// Check for SDL_NumJoysticks() error
+		if (nJoysticks < 0) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return false;
+		}
+
+		// Check for SDL_JoystickEventState(SDL_ENABLE) error
+		if (SDL_JoystickEventState(SDL_ENABLE) < 0) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return false;
+		}
 
 		if (nJoysticks > 0) {
 
@@ -190,26 +216,50 @@ namespace Input {
 
 			clearJoysticksButtons();
 
-			SDL_JoystickEventState(SDL_ENABLE);
 		}
 
 		numJoysticksConnected = nJoysticks;
+
+		return true;
 	}
 
-	void InputManager::addJoystick(int joystick_id) {
+	bool InputManager::addJoystick(int joystick_id) {
+
 		SDL_Joystick* joy = SDL_JoystickOpen(joystick_id);
 
-		assert(joy != NULL);
+		// Check for SDL_JoystickOpen() error
+		if (joy == NULL) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return false;
+		}
 
+		const char* buffer = SDL_JoystickName(joy);
+		std::string joystickName(buffer);
+
+		// Check for SDL_JoystickName() error
+		if (buffer == NULL) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return false;
+		}
+
+		int joyNButtons = SDL_JoystickNumButtons(joy);
+		if (joyNButtons < 0) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return false;
+		}
+
+		// Adds the information
 		joysticks.push_back(joy);
 
-		joystickNames.push_back(SDL_JoystickName(joy));
+		joystickNames.push_back(joystickName);
 
 		joystickValues.push_back(std::make_pair(new Utilities::Vector2D(0, 0), new Utilities::Vector2D(0, 0)));
 
 		joystickTriggerValues.push_back(std::make_pair(0, 0));
 
-		joystickNumButtons.push_back(SDL_JoystickNumButtons(joy));
+		joystickNumButtons.push_back(joyNButtons);
+
+		return true;
 	}
 
 	void InputManager::removeJoystick(int joystick_id) {
@@ -231,7 +281,14 @@ namespace Input {
 	void InputManager::clearJoysticksButtons() {
 
 		for (auto i = 0u; i < joysticks.size(); i++) {
-			joystickButtonStates.push_back(std::vector<bool>(SDL_JoystickNumButtons(joysticks[i]), false));
+
+			int joyNButtons = SDL_JoystickNumButtons(joysticks[i]);
+			if (joyNButtons < 0) {
+				Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+				return;
+			}
+
+			joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
 		}
 	}
 
@@ -244,7 +301,13 @@ namespace Input {
 
 		addJoystick(numJoysticksConnected);
 
-		joystickButtonStates.push_back(std::vector<bool>(SDL_JoystickNumButtons(joysticks[numJoysticksConnected]), false));
+		int joyNButtons = SDL_JoystickNumButtons(joysticks[numJoysticksConnected]);
+		if (joyNButtons < 0) {
+			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			return;
+		}
+
+		joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
 
 		numJoysticksConnected++;
 	}

@@ -1,13 +1,10 @@
 #include "ComponentFactory.h"
 
 #include "Components/Animation.h"
-#include "Components/BallComponent.h"
 #include "Components/BoxBody.h"
-#include "Components/ChainBody.h"
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
-#include "Components/LinkComponent.h"
 #include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
@@ -23,13 +20,10 @@
 ComponentFactory::ComponentFactory(){
 
 	components["Animation"] = &ComponentFactory::CreateAnimation;
-	components["BallComponent"] = &ComponentFactory::CreateBallComponent;
 	components["BoxBody"] = &ComponentFactory::CreateBoxBody;
-	components["ChainBody"] = &ComponentFactory::CreateChainBody;
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
-	components["LinkComponent"] = &ComponentFactory::CreateLinkComponent;
 	components["MusicEmitter"] = &ComponentFactory::CreateMusicEmitter;
 	components["Overlay"] = &ComponentFactory::CreateOverlay;
 	components["OverlayButton"] = &ComponentFactory::CreateOverlayButton;
@@ -49,16 +43,8 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::Animation();
 
 }
-	ECS::Component* ComponentFactory::CreateBallComponent(){
-		return new ECS::BallComponent();
-
-}
 	ECS::Component* ComponentFactory::CreateBoxBody(){
 		return new ECS::BoxBody();
-
-}
-	ECS::Component* ComponentFactory::CreateChainBody(){
-		return new ECS::ChainBody();
 
 }
 	ECS::Component* ComponentFactory::CreateCircleBody(){
@@ -71,10 +57,6 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateImage(){
 		return new ECS::Image();
-
-}
-	ECS::Component* ComponentFactory::CreateLinkComponent(){
-		return new ECS::LinkComponent();
 
 }
 	ECS::Component* ComponentFactory::CreateMusicEmitter(){

@@ -5,13 +5,15 @@
 
 Renderer::Texture::Texture(const std::string& filepath) {
 
-	//TODO control de errores al crear textura (esta con asserts)
+	texture = nullptr;
+	width = height = 0;
+
 	// Surface and texture
 	SDL_Surface* surface = IMG_Load(filepath.c_str());
 
 	if (surface == nullptr)
 	{
-		Console::Output::PrintError("Texture error", "Couldnt load texture <" + filepath + ">");
+		Console::Output::PrintError("Texture loading error", "Couldnt load texture from file <" + filepath + ">");
 		return;
 	}
 
@@ -19,9 +21,10 @@ Renderer::Texture::Texture(const std::string& filepath) {
 
 	if (texture == nullptr)
 	{
-		Console::Output::PrintError("Texture error", "Couldnt load texture <" + filepath + ">");
+		Console::Output::PrintError("Texture loading error", "Couldnt load texture from file <" + filepath + ">");
 		return;
 	}
+
 	width = surface->w; height = surface->h;
 
 	SDL_FreeSurface(surface);
@@ -31,7 +34,10 @@ Renderer::Texture::Texture(SDL_Texture* text)
 {
 	texture = text;
 
-	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height) < 0) {
+		Console::Output::PrintError("Texture loading error", SDL_GetError());
+		return;
+	}
 }
 
 

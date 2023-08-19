@@ -4,6 +4,7 @@
 #include "Music.h"
 
 #include <ResourcesManager.h>
+#include <ConsoleManager.h>
 #include <SoundManager.h>
 
 namespace ECS {
@@ -34,9 +35,14 @@ namespace ECS {
 	void MusicEmitter::init() {
 
 		transform = getEntity()->getComponent<Transform>();
-		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		changeMusic(fileName);
+		if (transform == nullptr) {
+			printError("Missing transform", "The entity must contain a transform component.");
+			this->remove();
+			return;
+		}
+
+		loadMusic(fileName);
 
 		music_id = music->getMusicId();
 	}
@@ -48,7 +54,7 @@ namespace ECS {
 
 	}
 	
-	void MusicEmitter::changeMusic(cstring soundPath) {
+	void MusicEmitter::loadMusic(cstring soundPath) {
 		fileName = soundPath;
 
 		music = Resources::ResourcesManager::instance()->addMusic(fileName);
@@ -128,7 +134,10 @@ namespace ECS {
 
 	void MusicEmitter::setVolume(float volume) {
 
-		assert(volume >= 0.0f && volume <= 1.0f, "Volume value must be between 0 and 1!");
+		if (volume < 0.0f || volume > 1.0f) {
+			Console::Output::PrintError("Invalid volume argument", "Volume value must be between 0 and 1!");
+			return;
+		}
 
 		this->volume = volume;
 	}

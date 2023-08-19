@@ -27,36 +27,39 @@ namespace Physics {
 
 		b2World* getWorld();
 
-		void setGravity(const Utilities::Vector2D& gravity);
-		Utilities::Vector2D getGravity();
-
 		void fixedUpdate(float fixedDeltaTime);
 
-	publish:
 		void debugDraw();
 
 		void enableDebugDraw(bool enable);
 
 		void handleBodies();
 
-	public:
 		void setContactListener(b2ContactListener* contactListener);
 
 		float getScreenToWorldFactor();
-
-		void addCollisionLayer(const std::string& layerName);
-
-		void removeCollisionLayer(const std::string& layerName);
 
 		int getLayerBits(const std::string& layerName);
 
 		int getMaskBits(const std::string& layerName);
 
+		void setBodyEnabled(b2Body* body, bool enabled);
+
+	publish:
+
+		Utilities::Vector2D getGravity();
+
+		void setGravity(const Utilities::Vector2D& gravity);
+
+		void addCollisionLayer(const std::string& layerName);
+
+		void removeCollisionLayer(const std::string& layerName);
+
 		void setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide);
 
-		bool layersExists(const std::string& layerName);
+		bool layersCollide(const std::string& layerNameA, const std::string& layerNameB);
 
-		void setBodyEnabled(b2Body* body, bool enabled);
+		bool layersExists(const std::string& layerName);
 
 	private:
 

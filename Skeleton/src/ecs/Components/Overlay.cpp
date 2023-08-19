@@ -1,8 +1,9 @@
 #include "Overlay.h"
 #include "RendererManager.h"
-#include "SDL_rect.h"
-#include "SDL_render.h"
 #include "OverlayManager.h"
+#include "ConsoleManager.h"
+#include "SDL_render.h"
+#include "SDL_rect.h"
 #include "Texture.h"
 
 ECS::Overlay::Overlay() {
@@ -332,9 +333,7 @@ void ECS::Overlay::CalculateRenderRect(int& x, int& y, int& w, int& h)
 		break;
 	}
 	default:
-		//TODO: error
-		
-		print("Entity with invalid placement", "Overlay");
+		Console::Output::PrintError("Overlay component", "Entity with invalid placement.");
 		break;
 	}
 

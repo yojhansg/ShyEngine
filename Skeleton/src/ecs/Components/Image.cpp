@@ -1,11 +1,12 @@
 #include "Image.h"
 #include "Entity.h"
 #include "Transform.h"
-#include <SDL_image.h>
-#include <Texture.h>
+
+#include <ScriptFunctionality.h>
 #include <ResourcesManager.h>
 #include <RendererManager.h>
-#include <ScriptFunctionality.h>
+#include <SDL_image.h>
+#include <Texture.h>
 
 namespace ECS {
 
@@ -25,9 +26,14 @@ namespace ECS {
 		renderer = Renderer::RendererManager::instance()->getRenderer();
 
 		transform = getEntity()->getComponent<Transform>();
-		assert(transform != nullptr, "La entidad debe contener un componente Transform");
 
-		ChangeTexture(fileName);
+		if (transform == nullptr) {
+			printError("Missing transform", "The entity must contain a transform component.");
+			this->remove();
+			return;
+		}
+
+		loadTexture(fileName);
 
 		// Rotation point
 		rotationPoint = new SDL_Point({ srcWidth / 2, srcHeight / 2 });
@@ -84,7 +90,7 @@ namespace ECS {
 		return { texture->getWidth() * scale.getX(), texture->getHeight() * scale.getY() };
 	}
 
-	void Image::ChangeTexture(cstring texturePath) {
+	void Image::loadTexture(cstring texturePath) {
 		fileName = texturePath;
 		texture = Resources::ResourcesManager::instance()->addTexture(fileName);
 		srcWidth = texture->getWidth(); srcHeight = texture->getHeight();

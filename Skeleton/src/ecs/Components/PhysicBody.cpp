@@ -2,6 +2,8 @@
 #include "PhysicsManager.h"
 #include "box2d/b2_world.h"
 #include "Transform.h"
+
+#include <ConsoleManager.h>
 #include <Entity.h>
 
 namespace ECS {
@@ -57,7 +59,12 @@ namespace ECS {
 	void PhysicBody::init() {
 
 		transform = this->getEntity()->getComponent<Transform>();
-		assert(transform != nullptr, "La entidad debe contener un componente Transform");
+
+		if (transform == nullptr) {
+			printError("Missing transform", "The entity must contain a transform component.");
+			this->remove();
+			return;
+		}
 
 		world = Physics::PhysicsManager::instance()->getWorld();
 
@@ -267,7 +274,10 @@ namespace ECS {
 
 	void PhysicBody::setCollisionLayer(const std::string& layerName) {
 
-		assert(pm->layersExists(layerName), "La capa con nombre " + layerName + " no existe");
+		if (!pm->layersExists(layerName)) {
+			Console::Output::PrintError("Physics Body", "The layer with name " + layerName + " does not exist.");
+			return;
+		}
 
 		this->layerName = layerName;
 	}

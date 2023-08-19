@@ -9,8 +9,8 @@ Renderer::Font::Font(const std::string& filepath, int pointSize) : pointSize(poi
 {
 	font = TTF_OpenFont(filepath.c_str(), pointSize);
 
-	if(font == nullptr)
-		Console::Output::PrintError("Invalid font", "Font couldnt be loaded <" + path + ">");
+	if (font == NULL)
+		Console::Output::PrintError("Invalid font", "Font couldnt be loaded from file <" + path + ">");
 }
 
 Renderer::Font::~Font()
@@ -19,21 +19,28 @@ Renderer::Font::~Font()
 	font = nullptr;
 }
 
-TTF_Font* Renderer::Font::getSDLFont()
-{
+TTF_Font* Renderer::Font::getSDLFont() {
 	return font;
 }
 
 Renderer::Texture* Renderer::Font::CreateText(std::string const& message)
 {
-	if (font == nullptr) {
-
-		Console::Output::PrintError("Font error", "Tried to create text from an invalid font <" + path + ">");
-		return nullptr;
-	}
 	SDL_Surface* surface = TTF_RenderText_Solid(font, message.c_str(), { 255, 255, 255, 255 });
 
+	// Check for errors on surface creation
+	if (surface == NULL) {
+		Console::Output::PrintError("Font loading error", "Couldnt create the surface of the font from file  <" + path + ">");
+		return nullptr;
+	}
+
 	auto sdlText = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
+
+	// Check for errors on texture creation
+	if (sdlText == NULL) {
+		Console::Output::PrintError("Font loading error", SDL_GetError());
+		SDL_FreeSurface(surface);
+		return nullptr;
+	}
 
 	SDL_FreeSurface(surface);
 
@@ -44,16 +51,22 @@ Renderer::Texture* Renderer::Font::CreateText(std::string const& message)
 
 Renderer::Texture* Renderer::Font::CreateWrappedText(std::string const& message, int maxSize)
 {
-	if (font == nullptr) {
+	SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(font, message.c_str(), { 255, 255, 255, 255 }, maxSize);
 
-		Console::Output::PrintError("Font error", "Tried to create text from an invalid font <" + path + ">");
+	// Check for errors on surface creation
+	if (surface == NULL) {
+		Console::Output::PrintError("Font loading error", "Couldnt create the surface of the font from file  <" + path + ">");
 		return nullptr;
 	}
 
-
-	SDL_Surface* surface = TTF_RenderText_Solid_Wrapped(font, message.c_str(), { 255, 255, 255, 255 }, maxSize);
-
 	auto sdlText = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
+
+	// Check for errors on texture creation
+	if (sdlText == NULL) {
+		Console::Output::PrintError("Font loading error", SDL_GetError());
+		SDL_FreeSurface(surface);
+		return nullptr;
+	}
 
 	SDL_FreeSurface(surface);
 

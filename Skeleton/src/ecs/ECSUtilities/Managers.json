@@ -488,23 +488,80 @@
         "methods": [
             {
                 "input": [],
-                "name": "debugDraw",
+                "name": "getGravity",
+                "return": "Vector2D"
+            },
+            {
+                "input": [
+                    {
+                        "name": "Utilities::Vector2D&gravity",
+                        "type": ""
+                    }
+                ],
+                "name": "setGravity",
                 "return": "void"
             },
             {
                 "input": [
                     {
-                        "name": "enable",
-                        "type": "bool"
+                        "name": "std::string&layerName",
+                        "type": ""
                     }
                 ],
-                "name": "enableDebugDraw",
+                "name": "addCollisionLayer",
                 "return": "void"
             },
             {
-                "input": [],
-                "name": "handleBodies",
+                "input": [
+                    {
+                        "name": "std::string&layerName",
+                        "type": ""
+                    }
+                ],
+                "name": "removeCollisionLayer",
                 "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "std::string&layerNameA",
+                        "type": ""
+                    },
+                    {
+                        "name": "std::string&layerNameB",
+                        "type": ""
+                    },
+                    {
+                        "name": "collide",
+                        "type": "bool"
+                    }
+                ],
+                "name": "setCollisionBetweenLayers",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "std::string&layerNameA",
+                        "type": ""
+                    },
+                    {
+                        "name": "std::string&layerNameB",
+                        "type": ""
+                    }
+                ],
+                "name": "layersCollide",
+                "return": "bool"
+            },
+            {
+                "input": [
+                    {
+                        "name": "std::string&layerName",
+                        "type": ""
+                    }
+                ],
+                "name": "layersExists",
+                "return": "bool"
             }
         ],
         "name": "PhysicsManager"

@@ -19,17 +19,15 @@ ECS::Animation::Animation()
 	animationLenght = 0;
 }
 
-ECS::Animation::~Animation()
-{
-}
+ECS::Animation::~Animation() {}
 
 void ECS::Animation::init()
 {
-
 	image = entity->getComponent<ECS::Image>();
 
 	if (image == nullptr) {
-		//TODO: Lanzar error y eliminar el componente
+		printError("Animation Component", "The entity doesn't contain a valid image component.");
+		this->remove();
 		return;
 	}
 
@@ -39,8 +37,7 @@ void ECS::Animation::init()
 	ChangeAnimationFrame();
 }
 
-void ECS::Animation::start()
-{
+void ECS::Animation::start() {
 	ChangeAnimationFrame();
 }
 
@@ -57,7 +54,7 @@ void ECS::Animation::update(float dt)
 
 void ECS::Animation::ChangeAnimationPath(cstring str, int frame, int animation, int column, int row)
 {
-	image->ChangeTexture(str);
+	image->loadTexture(str);
 
 	animationRows = row;
 	animationColumns = column;
@@ -88,7 +85,6 @@ void ECS::Animation::AdvanceAnimation()
 	int maxFrames = animationSheetStyle == (int)AnimationSheet::Horizontal ? animationRows : animationColumns;
 
 	if (currentAnimation >= maxFrames) currentAnimation = 0;
-
 
 	ChangeAnimationFrame();
 }

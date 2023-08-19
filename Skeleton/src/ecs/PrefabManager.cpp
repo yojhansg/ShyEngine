@@ -44,17 +44,26 @@ namespace ECS {
 
 		json json = json::parse(fileStream);
 
-		if (!json.contains("prefabs")) return; // TODO Manejar el error
+		if (!json.contains("prefabs")) {
+			Console::Output::PrintError("Load prefabs error", "The prefabs file doesn't have a valid format.");
+			return;
+		}
 
 		jsonarray prefabsArray = json["prefabs"].get<jsonarray>();
 
 		for (auto& pref : prefabsArray) {
 
-			// Si el JSON no contiene atributo "name"
-			if (!pref.contains("name")) continue;
+			// If the JSON doesn't contain the "name" attribute
+			if (!pref.contains("name")) {
+				Console::Output::PrintError("Load prefabs error", "The prefabs file doesn't have a valid format.");
+				return;
+			}
 
-			// Si el JSON no contiene atributo "withOverlay"
-			if (!pref.contains("withOverlay")) continue;
+			// If the JSON doesn't contain the "withOverlay" attribute
+			if (!pref.contains("withOverlay")) {
+				Console::Output::PrintError("Load prefabs error", "The prefabs file doesn't have a valid format.");
+				return;
+			}
 
 			bool wOverlay = pref["withOverlay"].get<bool>();
 
@@ -68,21 +77,16 @@ namespace ECS {
 
 	void PrefabManager::InstantiatePrefabWithTransform(const std::string& prefabName, Scene* scene) {
 
-		if (!prefabsWithTransform.contains(prefabName)) return; // TODO Manejar el error
+		if (!prefabsWithTransform.contains(prefabName)) {
+			Console::Output::PrintError("Instantiate prefab", "There is no prefab with name: " + prefabName);
+			return;
+		}
 
 		// Se accede al map para obtener el json correspondiente al nombre del prefab proporcionado
 		json prefabData = prefabsWithTransform[prefabName].get<json>();
 
-		// Si el JSON no contiene atributo "name"
-		if (!prefabData.contains("name")) return; // TODO Manejar el error
-
-		// Si el JSON no contiene atributo "renderOrder"
-		if (!prefabData.contains("order")) return; // TODO: mover el orden al transform ya que es la posicion z
-
-
 		// Se crea la entidad en la escena proporcionada
 		ECS::Entity* entity = scene->createEntity(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
-
 
 
 			// Transform
@@ -113,21 +117,16 @@ namespace ECS {
 
 	void PrefabManager::InstantiatePrefabWithOverlay(const std::string& prefabName, Scene* scene) {
 
-		if (!prefabsWithOverlay.contains(prefabName)) return; // TODO Manejar el error
+		if (!prefabsWithOverlay.contains(prefabName)) {
+			Console::Output::PrintError("Instantiate prefab", "There is no prefab with name: " + prefabName);
+			return;
+		}
 
 		// Se accede al map para obtener el json correspondiente al nombre del prefab proporcionado
 		json prefabData = prefabsWithOverlay[prefabName].get<json>();
 
-		// Si el JSON no contiene atributo "name"
-		if (!prefabData.contains("name")) return; // TODO Manejar el error
-
-		// Si el JSON no contiene atributo "renderOrder"
-		if (!prefabData.contains("order")) return; // TODO Manejar el error y mover el orden al transform ya que es la posicion z
-
-
 		// Se crea la entidad en la escena proporcionada
 		ECS::Entity* entity = scene->createEntity(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
-
 
 
 			// Overlay Component
@@ -151,7 +150,6 @@ namespace ECS {
 			AddComponentsAndScriptsToEntity(prefabData, entity);
 
 
-
 		// Se inicializa la entidad en la escena
 		entity->init();
 		entity->start();
@@ -160,20 +158,24 @@ namespace ECS {
 
 	void PrefabManager::AddComponentsAndScriptsToEntity(nlohmann::json& prefabData, Entity* entity) {
 
-		// Components
-		if (prefabData.contains("components")) {
-
-			jsonarray components = prefabData["components"].get<jsonarray>();
-
-			for (auto& compInfo : components)
-				SceneLoader::ProcessComponent(entity, compInfo);
+		if (!prefabData.contains("components")) {
+			Console::Output::PrintError("Instantiate prefab", "The prefab file doesnt have a valid format");
+			return;
 		}
 
+		// Components
+		jsonarray components = prefabData["components"].get<jsonarray>();
+		for (auto& compInfo : components)
+			SceneLoader::ProcessComponent(entity, compInfo);
+
+
+		if (!prefabData.contains("scritps")) {
+			Console::Output::PrintError("Instantiate prefab", "The prefab file doesnt have a valid format");
+			return;
+		}
 
 		// Scripts 
-		if (prefabData.contains("scritps")) {
-			SceneLoader::ProcessScripts(prefabData, entity);
-		}
+		SceneLoader::ProcessScripts(prefabData, entity);
 
 	}
 
