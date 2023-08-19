@@ -190,7 +190,6 @@ namespace Renderer {
 
 		if (icon == NULL) {
 
-			//TODO: error
 			Console::Output::PrintError("Window icon", "Cannot change window icon. Error loading file <" + path + ">");
 			return;
 		}

@@ -28,7 +28,7 @@ const std::string ECS::SceneLoader::extension = ".scene";
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
-	std::string completePath = Resources::ResourcesManager::GetResourcesPath() + "Scenes/" + scenePath + extension;
+	std::string completePath = "Scenes/" + scenePath + extension;
 
 	std::ifstream fileStream(completePath);
 

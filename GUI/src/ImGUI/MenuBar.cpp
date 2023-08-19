@@ -75,14 +75,25 @@ void PEditor::MenuBar::render()
 
         if (ImGui::BeginMenu("Game"))
         {
-            if (ImGui::MenuItem("Play", NULL, false))
+            if (ImGui::MenuItem("Run debug mode", NULL, false))
             {
                 Preferences::GenerateDebug();
 
                 //Todo: guardar escena actual
                 ImGUIManager::getInstance()->getScene()->saveScene("Scenes/scene.scene");
-                Game::Play();
+                Game::Play(true);
             };
+
+            if (ImGui::MenuItem("Run release mode", NULL, false))
+            {
+                Preferences::GenerateRelease();
+
+                //Todo: guardar escena actual
+                ImGUIManager::getInstance()->getScene()->saveScene("Scenes/scene.scene");
+                Game::Play(false);
+            };
+
+            ImGui::Separator();
 
             if (ImGui::MenuItem("Stop", NULL, false)) {
                 

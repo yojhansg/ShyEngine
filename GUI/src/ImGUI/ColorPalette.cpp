@@ -105,7 +105,7 @@ void PEditor::ColorPalette::LoadPalettes() {
 		palette.font = paletteInfo["font"].get<std::string>();
 		palette.fontSize = paletteInfo["fontSize"].get<int>();
 
-		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
+		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(("Fonts/" + palette.font).c_str(), palette.fontSize);
 		//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
 
 #define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());

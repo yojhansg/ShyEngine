@@ -22,6 +22,7 @@
 #include <EngineTime.h>
 #include <Component.h>
 #include <Scene.h>
+#include <filesystem>
 #include <chrono>
 
 using namespace std::chrono;
@@ -67,7 +68,7 @@ bool Engine::init() {
 
 	engineTime = Utilities::Time::init();
 
-	Resources::ResourcesManager::init(data.resourcesPath);
+	Resources::ResourcesManager::init();
 
 	ECS::ContactListener::init();
 
@@ -83,23 +84,33 @@ bool Engine::init() {
 
 	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
 
-
-
 	// Maximun size = 64x64 pixels
-	rendererManager->SetWindowIcon(data.windowIcon);
+	rendererManager->SetWindowIcon("icon.png");
+	rendererManager->SetWindowIcon(data.resourcesPath + "/" + data.windowIcon);
 	physicsManager->enableDebugDraw(data.debugPhysics);
+
+	if (data.useSplashScreen)
+		sceneManager->SplashScreen();
+	/*
+		Load aditional default engine resources
+	*/
+	//Resources::ResourcesManager::instance()->addFont("Defaut", 18.0f);
+	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
+
+	if (data.resourcesPath != "") {
+		Console::Output::Print("Folder path updated!", data.resourcesPath);
+		std::filesystem::current_path(data.resourcesPath);
+	}
 
 	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
+
 
 	if (sceneManager->getNumberOfScenes() == 0)
 	{
 		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");
 		return false;
 	}
-
-	if (data.useSplashScreen)
-		sceneManager->SplashScreen();
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
 	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);
@@ -175,5 +186,11 @@ void Engine::update() {
 }
 
 void Engine::close() {
+
+	Console::Output::PrintNoFormat("Hey] que pasa: : : Tonto");
+
 	sceneManager->close();
+
+	Console::Output::PrintNoFormat("Hey] que pasa: : : Tonto 2");
+
 }

@@ -1,18 +1,27 @@
 #include "Texture.h"
 #include "RendererManager.h"
 #include <SDL_image.h>
-#include <cassert>
+#include "ConsoleManager.h"
 
 Renderer::Texture::Texture(const std::string& filepath) {
 
 	//TODO control de errores al crear textura (esta con asserts)
 	// Surface and texture
 	SDL_Surface* surface = IMG_Load(filepath.c_str());
-	assert(surface != nullptr, "Couldn't load image: " + filepath);
+
+	if (surface == nullptr)
+	{
+		Console::Output::PrintError("Texture error", "Couldnt load texture <" + filepath + ">");
+		return;
+	}
 
 	texture = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
-	assert(texture != nullptr, "Couldn't load image: " + filepath);
 
+	if (texture == nullptr)
+	{
+		Console::Output::PrintError("Texture error", "Couldnt load texture <" + filepath + ">");
+		return;
+	}
 	width = surface->w; height = surface->h;
 
 	SDL_FreeSurface(surface);

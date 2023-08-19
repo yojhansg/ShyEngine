@@ -12,6 +12,7 @@
 #include "FileExplorer.h"
 #include "Components.h"
 #include "Preferences.h"
+#include "ProjectsManager.h"
 
 bool PEditor::Scene::mouseInsideWindow(ImVec2 mousePos)
 {
@@ -189,13 +190,16 @@ void PEditor::Scene::saveScene(std::string path)
 
 	this->path = path;
 
-	std::ofstream outputFile(path);
+	std::ofstream outputFile(ImGUIManager::getInstance()->getProjectInfo().path + "/Scenes/scene.scene");
 	if (outputFile.is_open()) {
 		outputFile << j.dump(4);
 		outputFile.close();
 	}
 	else {
 		//ERROR HANDLING
+
+		std::cout << "Error al guardar la escena" << std::endl;
+
 	}
 
 }
@@ -224,18 +228,19 @@ void PEditor::Scene::handleInput(SDL_Event* event)
 {
 	ImVec2 mousePos = ImGui::GetMousePos();
 
+	bool insideWindow = mouseInsideWindow(mousePos);
 	bool anyGoSelected = false;
 	for (const auto& pair : gameObjects) {
-		if (mouseInsideWindow(mousePos))
+		if (insideWindow)
 			anyGoSelected |= pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
 	}
 
-	if (!anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+	if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 		setSelectedGameObject(nullptr);
 	}
 
 	if (!(SDL_GetModState() & KMOD_SHIFT)) {
-		camera->handleInput(event, mouseInsideWindow(mousePos));
+		camera->handleInput(event, insideWindow);
 	}
 
 }
@@ -318,10 +323,10 @@ void PEditor::Scene::loadScene(std::string path) {
 
 	this->path = path;
 
-	std::ifstream inputFile(path);
+	std::ifstream inputFile(ImGUIManager::getInstance()->getProjectInfo().path + "/Scenes/scene.scene");
 
 	if (!inputFile.is_open()) {
-		std::cerr << "Error opening JSON file: " << path << std::endl;
+
 		return;
 	}
 

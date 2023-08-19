@@ -3,6 +3,7 @@
 #include "SDL_image.h"
 #include "imgui.h"
 #include "ImGUIManager.h"
+#include "ProjectsManager.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "SDL.h"
@@ -265,7 +266,7 @@ PEditor::GameObject::GameObject(std::string& path)
 
 	if (path.size() > 0) {
 
-		SDL_Surface* surface = IMG_Load(path.c_str());
+		SDL_Surface* surface = IMG_Load(std::string(ImGUIManager::getInstance()->getProjectInfo().path + "/Images/" + path).c_str());
 
 		if (surface != nullptr) {
 		
@@ -614,7 +615,7 @@ void PEditor::GameObject::update()
 	std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
 
 	if (currentImagePath != imagePath) {
-		SDL_Surface* surface = IMG_Load(std::string("Images/" + currentImagePath).c_str());
+		SDL_Surface* surface = IMG_Load(std::string(ImGUIManager::getInstance()->getProjectInfo().path +  "/Images/" + currentImagePath).c_str());
 
 		if (surface != nullptr) {
 			text = SDL_CreateTextureFromSurface(ImGUIManager::getInstance()->getRenderer(), surface);

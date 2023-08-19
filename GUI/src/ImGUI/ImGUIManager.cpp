@@ -162,9 +162,8 @@ void ImGUIManager::init()
 	Components::ComponentManager::Initialise();
 	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
 	Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
-	Components::ComponentManager::ReadScripts("Scripts");
 
-	PEditor::Game::Init("Main_Debug.exe");
+	PEditor::Game::Init("Main_Debug.exe", "Main_Release.exe");
 }
 
 void ImGUIManager::SplashScreen()
@@ -231,6 +230,8 @@ void ImGUIManager::loop()
 
 	if (result == PEditor::ProjectsManager::Result::CLOSED)
 		return;
+
+	Components::ComponentManager::ReadScripts(projecInfo->path + "/Scripts");
 
 	SDL_SetWindowResizable(window, SDL_TRUE);
 	SDL_SetWindowSize(window, _WindowMainSize);

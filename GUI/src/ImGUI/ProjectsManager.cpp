@@ -17,13 +17,15 @@
 
 using namespace nlohmann;
 
+#define ProjectExtension ".shyproject"
+
 namespace PEditor {
 
     char ProjectsManager::project_name[128] = "";
     char ProjectsManager::create_project_path[256] = "";
     char ProjectsManager::open_project_path[256] = "";
 
-    std::wstring ProjectsManager::projectfileExtension = L".shyproject";
+    std::wstring ProjectsManager::projectfileExtension = L"" ProjectExtension;
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
@@ -59,8 +61,9 @@ namespace PEditor {
         SDL_RenderPresent(renderer);
     }
 
+
     ProjectsManager::Result ProjectsManager::ManageProjectSelection(SDL_Renderer* renderer) {
-         
+
         Result result = Result::CLOSED;
 
         while (!windowClosed) {
@@ -162,7 +165,7 @@ namespace PEditor {
         if (invalidNewProjectPath)
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Can not be empty and \nmust be an existing folder!");
         else
-            createPath = std::string(create_project_path) + "\\" + std::string(project_name) + "\\" + std::string(project_name) + ".shyproject";
+            createPath = std::string(create_project_path) + "\\" + std::string(project_name) + "\\" + std::string(project_name) + ProjectExtension;
 
 
         ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.0f));
@@ -211,7 +214,7 @@ namespace PEditor {
         // Select file logic button
         if (ImGui::Button("Select File", ImVec2(w / 4.0f, h / 20.0f))) {
 
-          OPENFILENAMEA ofn;  // Estructura de diálogo de archivo
+          OPENFILENAMEA ofn;  // Estructura de diï¿½logo de archivo
           char fileName[MAX_PATH] = "";
           ZeroMemory(&ofn, sizeof(ofn));
           ofn.lStructSize = sizeof(ofn);
@@ -229,7 +232,7 @@ namespace PEditor {
 
         // Shows an error message
         if (invalidOpenProjectPath)
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Cannot be empty and must be an existing .shyproject file!");
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Cannot be empty and must be an existing " ProjectExtension " file!");
         else
             openPath = open_project_path;
 
@@ -476,7 +479,7 @@ namespace PEditor {
                 errorMessage = L"There is already a project with the same name in the selected directory.";
                 return false;
             }
-            else path = std::string(create_project_path) + "\\" + std::string(project_name) + ".shyproject";
+            else path = std::string(create_project_path) + "\\" + std::string(project_name) + ProjectExtension;
         }
         else {
 
@@ -485,7 +488,7 @@ namespace PEditor {
                 return false;
             }
 
-            // The folder which contains the .shyproject file is created
+            // The folder which contains the project file is created
             folder = std::string(create_project_path) + "\\" + std::string(project_name);
 
             std::error_code ec;
