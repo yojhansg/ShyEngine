@@ -62,11 +62,15 @@ namespace PEditor {
 		std::string openPath;
 		std::string creationDate;
 
+		// Assets folders names
+		const static std::vector<std::string> assetsFolders;
+
 		// Recent projects information
 		std::vector<ProjectInfo> recentProjectsInfo;
 
 		// Path to the file that stores the recent projects paths
 		std::wstring recentProjectsFile;
+		std::string lastSavedProjectPath;
 
 		// String to store the error messages
 		std::wstring errorMessage;
@@ -93,10 +97,13 @@ namespace PEditor {
 		Result OpenProject();
 		Result CloseEditor();
 
-		// Create a project file and stores it in the specified path
+		// Creates a project file and stores it in the specified path
 		// and with the specified name given in the form
 		// Returns true if everything went correctly, false otherwise
 		bool SaveProject();
+
+		// Creates all assets folders needed (Images, Sound, Fonts, Scenes, etc.)
+		bool CreateAssetsFolders(const std::string& root);
 
 		// Adds the path of the new project in the recent projects file
 		bool StoreProjectPath(const std::string& path);
