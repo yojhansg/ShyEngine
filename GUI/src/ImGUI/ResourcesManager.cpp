@@ -32,4 +32,19 @@ namespace ShyEditor {
 		instance->engineResourcesPath = path;
 	}
 
+	void ResourcesManager::UnselectAsset()
+	{
+		instance->currentAsset.valid = false;
+	}
+
+	void ResourcesManager::SelectAsset(const Asset& asset)
+	{
+		instance->currentAsset = asset;
+	}
+
+	const Asset& ResourcesManager::SelectedAsset()
+	{
+		return instance->currentAsset;
+	}
+
 }

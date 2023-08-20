@@ -8,6 +8,18 @@ namespace ShyEditor {
 	template<typename T>
 	using resources_map = std::unordered_map<std::string, T>;
 
+
+	struct Asset {
+
+		std::string name;
+		std::string extension;
+		std::string path;
+
+
+		bool valid;
+	};
+
+
 	class ResourcesManager {
 
 	public:
@@ -25,6 +37,11 @@ namespace ShyEditor {
 		static std::string GetEngineResourcesPath();
 		static void SetEngineResourcesPath(const std::string& path);
 
+
+		static void UnselectAsset();
+		static void SelectAsset(const Asset& asset);
+		static const Asset& SelectedAsset();
+
 	private:
 
 		ResourcesManager();
@@ -34,6 +51,8 @@ namespace ShyEditor {
 		std::string editorResourcesPath;
 		std::string engineResourcesPath;
 
+
+		Asset currentAsset;
 	};
 
 }
