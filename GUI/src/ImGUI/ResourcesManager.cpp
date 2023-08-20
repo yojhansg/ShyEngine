@@ -50,7 +50,6 @@ namespace ShyEditor {
 		instance = nullptr;
 	}
 
-	void ResourcesManager::AddEditorResource() {
 	Font* ResourcesManager::AddFont(const std::string& key, int pointSize) {
 
 		if (instance->engineFonts.contains(key))
