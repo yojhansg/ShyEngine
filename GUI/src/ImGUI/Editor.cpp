@@ -2,6 +2,7 @@
 
 #include "imgui_impl_sdlrenderer.h"
 #include "ComponentManager.h"
+#include "ResourcesManager.h" 
 #include "ProjectsManager.h"
 #include "imgui_impl_sdl.h"
 #include "ScriptCreation.h"

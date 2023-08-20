@@ -24,8 +24,10 @@ namespace ShyEditor {
 
 	public:
 
-		static Texture* AddTexture(const std::string& key, bool isEditorResource);
-		static Font* AddFont(const std::string& key, int pointSize);
+		static ResourcesManager* GetInstance();
+
+		Texture* AddTexture(const std::string& key, bool isEditorResource);
+		Font* AddFont(const std::string& key, int pointSize);
 
 		static std::string GetEditorResourcesPath();
 		static void SetEditorResourcesPath(const std::string& path);

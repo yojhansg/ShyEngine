@@ -5,8 +5,11 @@
 #include "ScriptCreation.h"
 #include "GameObject.h"
 #include "Components.h"
+
+#include "ResourcesManager.h"
 #include "Hierarchy.h"
 #include "SDL_image.h"
+#include "Texture.h"
 #include "Editor.h"
 #include "Scene.h"
 #include "SDL.h"
@@ -15,6 +18,10 @@
 #include <direct.h>
 #include <imgui.h>
 #include <fstream>
+
+#define FolderImage "folder.png"
+#define FileImage "file.png"
+#define ScriptImage "script.png"
 
 namespace fs = std::filesystem;
 
@@ -37,30 +44,19 @@ namespace ShyEditor {
 		projectPath = editor->getProjectInfo().path;
 		currentPath = projectPath;
 
-		std::string imgPath = "folder.png";
-		SDL_Surface* surface = IMG_Load(imgPath.c_str());
-		folderTexture = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
+		folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
+		file = ResourcesManager::GetInstance()->AddTexture(FileImage, true);
+		script = ResourcesManager::GetInstance()->AddTexture(ScriptImage, true);
 
-		imgPath = "file.png";
-		surface = IMG_Load(imgPath.c_str());
-		fileTexture = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
-
-		imgPath = "script.png";
-		surface = IMG_Load(imgPath.c_str());
-		scriptTexture = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
-
-		SDL_FreeSurface(surface);
 	}
 
 	void FileExplorer::drawFileExplorerWindow()
 	{
-
 		// Open the specified folder
 
-		fs::path folder(currentPath);
+		fs::path explorerFolder(currentPath);
 
-
-		if (!fs::is_directory(folder))
+		if (!fs::is_directory(explorerFolder))
 		{
 			ImGui::Text("Invalid folder path: %s", currentPath);
 			return;
@@ -75,23 +71,23 @@ namespace ShyEditor {
 			if (ImGui::Button("^"))
 			{
 				// Navigate to parent folder
-				currentPath = folder.parent_path().string();
+				currentPath = explorerFolder.parent_path().string();
 			}
 		}
 
 		ImGui::Separator();
 
 		// Display a list of all directories in the folder
-		for (auto& file : fs::directory_iterator(folder))
+		for (auto& explorerFile : fs::directory_iterator(explorerFolder))
 		{
-			if (file.is_directory())
+			if (explorerFile.is_directory())
 			{
-				std::string filename = file.path().filename().string();
+				std::string filename = explorerFile.path().filename().string();
 
-				ImTextureID texture = file.is_directory() ? folderTexture : fileTexture;
+				ImTextureID texture = explorerFile.is_directory() ? folder->getSDLTexture() : file->getSDLTexture();
 
-				if (file.path().extension().string() == ".script") texture = scriptTexture;
-
+				if (explorerFile.path().extension().string() == ".script") 
+					texture = script->getSDLTexture();
 
 
 				const float iconSize = ImGui::GetTextLineHeight() + 8;
@@ -105,28 +101,25 @@ namespace ShyEditor {
 
 				// Display directories in blue color
 				if (ImGui::Selectable(filename.c_str(), false))
-				{
-					currentPath = file.path().string();
-				}
+					currentPath = explorerFile.path().string();
 
 				ImGui::PopStyleColor(1);
 			}
-
 
 			ImGui::SetWindowFontScale(1);
 		}
 
 		// Display a list of all files in the folder
-		for (auto& file : fs::directory_iterator(folder))
+		for (auto& explorerFile : fs::directory_iterator(explorerFolder))
 		{
-			if (!file.is_directory())
+			if (!explorerFile.is_directory())
 			{
-				std::string filename = file.path().filename().string();
+				std::string filename = explorerFile.path().filename().string();
 
-				ImTextureID texture = file.is_directory() ? folderTexture : fileTexture;
+				ImTextureID texture = explorerFile.is_directory() ? folder->getSDLTexture() : file->getSDLTexture();
 
-				if (file.path().extension().string() == ".script") texture = scriptTexture;
-
+				if (explorerFile.path().extension().string() == ".script") 
+					texture = script->getSDLTexture();
 
 
 				const float iconSize = ImGui::GetTextLineHeight() + 8;
@@ -138,15 +131,14 @@ namespace ShyEditor {
 
 				// Display files in default color
 				ImGui::Text(filename.c_str());
-				std::string extension = file.path().extension().string();
+				std::string extension = explorerFile.path().extension().string();
 
 				if (extension == ".png" || extension == ".jpg")
 				{
-
-					int rel = fs::path(projectPath + "/Images").compare(file.path().parent_path());
+					int rel = fs::path(projectPath + "/Images").compare(explorerFile.path().parent_path());
 					if (rel <= 0)
 					{
-						std::string relativePath = file.path().lexically_relative(projectPath + "/Images").string();
+						std::string relativePath = explorerFile.path().lexically_relative(projectPath + "/Images").string();
 						std::string buttonId = "Create GameObject##" + relativePath;
 						ImGui::SameLine();
 
@@ -174,7 +166,7 @@ namespace ShyEditor {
 
 					ImGui::SameLine();
 					std::string buttonId = "Load scene##" + filename;
-					std::string relativePath = file.path().lexically_relative(projectPath).string();
+					std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();
 					if (ImGui::Button(buttonId.c_str())) {
 						editor->getScene()->loadScene(relativePath);
 					}
@@ -185,7 +177,7 @@ namespace ShyEditor {
 					ImGui::SameLine();
 					std::string buttonId = "Create Gameobject from prefab##" + filename;
 					if (ImGui::Button(buttonId.c_str())) {
-						std::string relativePath = file.path().lexically_relative(projectPath).string();
+						std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();
 
 						std::ifstream inputFile(relativePath);
 
@@ -224,9 +216,8 @@ namespace ShyEditor {
 		ComponentWindow* components = editor->getComponents();
 		Hierarchy* hierarchy = editor->getHierarchy();
 
-		if (focused) {
+		if (focused)
 			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
-		}
 		else {
 			float sizeYToConstraint;
 
@@ -245,9 +236,8 @@ namespace ShyEditor {
 		// Draw the file explorer 
 		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
-		if (ImGui::IsWindowFocused()) {
+		if (ImGui::IsWindowFocused())
 			focused = true;
-		}
 
 		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
 		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
