@@ -9,9 +9,10 @@ struct ImFont;
 
 namespace ShyEditor {
 
-	class ColorPalette : public Window
-	{
+	class ColorPalette : public Window {
+
 	public:
+
 		struct Color {
 
 			float r, g, b;

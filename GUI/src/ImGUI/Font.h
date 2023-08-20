@@ -11,7 +11,7 @@ namespace ShyEditor {
 
 	public:
 
-		Font(const std::string& filepat, int pointSize);
+		Font(const std::string& filepath, int pointSize);
 
 		~Font();
 

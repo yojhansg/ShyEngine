@@ -8,6 +8,8 @@ namespace ShyEditor {
 	template<typename T>
 	using resources_map = std::unordered_map<std::string, T>;
 
+	class Texture;
+	class Font;
 
 	struct Asset {
 
@@ -19,7 +21,6 @@ namespace ShyEditor {
 		bool valid = true;
 	};
 
-
 	class ResourcesManager {
 
 	public:
@@ -29,12 +30,9 @@ namespace ShyEditor {
 
 		static void Init();
 		static void Release();
-
-
-		static void AddEditorResource();
-		static void AddEngineResource();
-
-
+		
+		static Texture* AddTexture(const std::string& key, bool isEditorResource);
+		static Font* AddFont(const std::string& key, int pointSize);
 
 		static std::string GetEditorResourcesPath();
 		static void SetEditorResourcesPath(const std::string& path);
@@ -57,6 +55,10 @@ namespace ShyEditor {
 		std::string editorResourcesPath;
 		std::string engineResourcesPath;
 
+		resources_map<Texture*> editorTextures;
+
+		resources_map<Texture*> engineTextures;
+		resources_map<Font*> engineFonts;
 
 		Asset currentAsset;
 	};
