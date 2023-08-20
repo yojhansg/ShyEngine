@@ -7,7 +7,20 @@ namespace ShyEditor {
 
 	ResourcesManager* ResourcesManager::instance = nullptr;
 
-	ResourcesManager::ResourcesManager() {}
+	ResourcesManager::ResourcesManager() {
+	
+		editorResourcesPath = "";
+		engineResourcesPath = "";
+
+	}
+
+	ResourcesManager* ResourcesManager::GetInstance() {
+
+		if (instance == nullptr)
+			instance = new ResourcesManager();
+
+		return instance;
+	}
 
 	Texture* ResourcesManager::AddTexture(const std::string& key, bool isEditorResource) {
 
@@ -18,7 +31,7 @@ namespace ShyEditor {
 			if (instance->editorTextures.contains(key))
 				return instance->editorTextures.at(key);
 
-			texture = new Texture(instance->editorResourcesPath + "Images/" + key);
+			texture = new Texture(instance->editorResourcesPath + "images\\" + key);
 
 			instance->editorTextures.insert(std::make_pair(key, texture));
 
@@ -28,7 +41,7 @@ namespace ShyEditor {
 			if (instance->engineTextures.contains(key))
 				return instance->engineTextures.at(key);
 
-			texture = new Texture(instance->engineResourcesPath + "Images/" + key);
+			texture = new Texture(instance->engineResourcesPath + "Images\\" + key);
 
 			instance->engineTextures.insert(std::make_pair(key, texture));
 
@@ -55,7 +68,7 @@ namespace ShyEditor {
 		if (instance->engineFonts.contains(key))
 			return instance->engineFonts.at(key);
 
-		Font* font = new Font(instance->engineResourcesPath + "Fonts/" + key, pointSize);
+		Font* font = new Font(instance->engineResourcesPath + "Fonts\\" + key, pointSize);
 
 		instance->engineFonts.insert(std::make_pair(key, font));
 

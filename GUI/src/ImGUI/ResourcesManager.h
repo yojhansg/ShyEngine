@@ -25,14 +25,10 @@ namespace ShyEditor {
 
 	public:
 
-		enum AssetType {EDITOR_ASSET, ENGINE_ASSET};
+		static ResourcesManager* GetInstance();
 
-
-		static void Init();
-		static void Release();
-		
-		static Texture* AddTexture(const std::string& key, bool isEditorResource);
-		static Font* AddFont(const std::string& key, int pointSize);
+		Texture* AddTexture(const std::string& key, bool isEditorResource);
+		Font* AddFont(const std::string& key, int pointSize);
 
 		static std::string GetEditorResourcesPath();
 		static void SetEditorResourcesPath(const std::string& path);

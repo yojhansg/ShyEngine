@@ -7,10 +7,11 @@
 
 #define FILEEXPLORER_WIN_HEIGHT_RATIO 0.3f
 
-struct SDL_Texture;
 class Editor;
 
 namespace ShyEditor {
+
+	class Texture;
 
 	class FileExplorer : public Window {
 
@@ -18,12 +19,12 @@ namespace ShyEditor {
 
 		Editor* editor;
 
+		Texture* file;
+		Texture* script;
+		Texture* folder;
+
 		std::string projectPath;
 		std::string currentPath;
-
-		SDL_Texture* fileTexture;
-		SDL_Texture* scriptTexture;
-		SDL_Texture* folderTexture;
 
 	public:
 
