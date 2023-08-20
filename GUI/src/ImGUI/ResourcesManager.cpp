@@ -8,6 +8,18 @@ namespace ShyEditor {
 
 	}
 
+	void ResourcesManager::Init()
+	{
+		instance = new ResourcesManager();
+		instance->currentAsset.valid = false;
+	}
+
+	void ResourcesManager::Release()
+	{
+		delete instance;
+		instance = nullptr;
+	}
+
 	void ResourcesManager::AddEditorResource() {
 
 	}
@@ -40,6 +52,11 @@ namespace ShyEditor {
 	void ResourcesManager::SelectAsset(const Asset& asset)
 	{
 		instance->currentAsset = asset;
+	}
+
+	bool ResourcesManager::IsAnyAssetSelected()
+	{
+		return instance->currentAsset.valid;
 	}
 
 	const Asset& ResourcesManager::SelectedAsset()

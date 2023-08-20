@@ -20,6 +20,8 @@
 #include "Game.h"
 #include "SDL.h"
 
+#include "ResourcesManager.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -69,6 +71,8 @@ bool Editor::Init() {
 
 	ShyEditor::Game::Init("Main_Debug.exe", "Main_Release.exe");
 
+	ShyEditor::ResourcesManager::Init();
+
 	return true;
 }
 
@@ -102,6 +106,8 @@ void Editor::End() {
 }
 
 void Editor::Close() {
+
+	ShyEditor::ResourcesManager::Release();
 
 	ShyEditor::Game::Release();
 	Components::ComponentManager::Release();
@@ -339,6 +345,11 @@ void Editor::render()
 			default:
 				break;
 			}
+	}
+
+	if (ImGui::IsMouseReleased(0)) {
+
+		ShyEditor::ResourcesManager::UnselectAsset();
 	}
 
 	// Rendering

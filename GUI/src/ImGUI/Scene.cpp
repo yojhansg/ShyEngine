@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "imgui.h"
 #include "SDL.h"
+#include "ResourcesManager.h"
 
 #include <string>
 #include <fstream>
@@ -84,7 +85,7 @@ namespace ShyEditor {
 		path = "Scenes/" + Preferences::GetData().initialScene + ".scene";
 
 
-		float scrollFactor = .5f;
+		float scrollFactor = 1.f;
 		camera = new Camera(
 			ImVec2(
 				(windowOriWidth - Preferences::GetData().width * scrollFactor) * 0.5f,
@@ -115,10 +116,11 @@ namespace ShyEditor {
 		delete camera;
 	}
 
-	void Scene::addGameObject(std::string path)
+	GameObject* Scene::addGameObject(std::string path)
 	{
 		GameObject* go = (new GameObject(path));
 		gameObjects.emplace(go->getId(), go);
+		return go;
 	}
 
 	void Scene::addGameObject(GameObject* go)
@@ -267,6 +269,31 @@ namespace ShyEditor {
 
 		ImGui::Begin((windowName + ": " + sceneFilename).c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
+		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
+
+			ImVec2 max = ImVec2(windowWidth + windowPosX, windowPosY + windowHeight);
+
+			if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), max)) {
+				auto& asset = ResourcesManager::SelectedAsset();
+
+				if (asset.extension == ".png" || asset.extension == ".jpg") {
+
+					GameObject* go = editor->getScene()->addGameObject(asset.relativePath);
+
+					ImVec2 position = getMousePosInsideScene(ImGui::GetMousePos());
+					position.x -= Preferences::GetData().width * 0.5f;
+					position.y -= Preferences::GetData().height * 0.5f;
+
+					go->setPosition(position);
+					selectedGameObject = go;
+				}
+			}
+		}
+
+
+		float menuBarHeight = ImGui::GetFrameHeight();
+		ImGui::SetWindowPos(ImVec2(hierarchyWindowSize.x, menuBarHeight));
+
 		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
 		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
 		windowWidth = imGUIWindowSize.x;
@@ -274,9 +301,6 @@ namespace ShyEditor {
 		windowPosX = imGUIWindowPos.x;
 		windowPosY = imGUIWindowPos.y;
 
-		float menuBarHeight = ImGui::GetFrameHeight();
-
-		ImGui::SetWindowPos(ImVec2(hierarchyWindowSize.x, menuBarHeight));
 
 		SDL_SetRenderTarget(renderer, targetTexture);
 		SDL_RenderClear(renderer);

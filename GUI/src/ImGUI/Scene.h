@@ -46,7 +46,7 @@ namespace ShyEditor {
 		Scene();
 		virtual ~Scene();
 
-		void addGameObject(std::string path);
+		GameObject* addGameObject(std::string path);
 		void addGameObject(GameObject* go);
 
 		std::unordered_map<int, GameObject*> getGameObjects();

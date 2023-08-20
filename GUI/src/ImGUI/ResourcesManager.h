@@ -14,9 +14,9 @@ namespace ShyEditor {
 		std::string name;
 		std::string extension;
 		std::string path;
+		std::string relativePath;
 
-
-		bool valid;
+		bool valid = true;
 	};
 
 
@@ -25,6 +25,11 @@ namespace ShyEditor {
 	public:
 
 		enum AssetType {EDITOR_ASSET, ENGINE_ASSET};
+
+
+		static void Init();
+		static void Release();
+
 
 		static void AddEditorResource();
 		static void AddEngineResource();
@@ -40,6 +45,7 @@ namespace ShyEditor {
 
 		static void UnselectAsset();
 		static void SelectAsset(const Asset& asset);
+		static bool IsAnyAssetSelected();
 		static const Asset& SelectedAsset();
 
 	private:

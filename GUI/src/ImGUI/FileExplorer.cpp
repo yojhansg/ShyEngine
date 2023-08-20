@@ -15,6 +15,8 @@
 #include <direct.h>
 #include <imgui.h>
 #include <fstream>
+#include "ResourcesManager.h"
+#include <Windows.h>
 
 namespace fs = std::filesystem;
 
@@ -104,9 +106,11 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
 
 				// Display directories in blue color
-				if (ImGui::Selectable(filename.c_str(), false))
+				if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
 				{
-					currentPath = file.path().string();
+
+					if (ImGui::IsMouseDoubleClicked(0))
+						currentPath = file.path().string();
 				}
 
 				ImGui::PopStyleColor(1);
@@ -128,7 +132,6 @@ namespace ShyEditor {
 				if (file.path().extension().string() == ".script") texture = scriptTexture;
 
 
-
 				const float iconSize = ImGui::GetTextLineHeight() + 8;
 				ImGui::Image(texture, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
 
@@ -136,9 +139,53 @@ namespace ShyEditor {
 
 				ImGui::SetWindowFontScale(1.5);
 
-				// Display files in default color
-				ImGui::Text(filename.c_str());
+
+				std::string path = file.path().string();
+				size_t dotPos = filename.find_last_of(".");
+				std::string filenameWithoutExtension = filename.substr(0, dotPos);
+
 				std::string extension = file.path().extension().string();
+				// Display files in default color
+				if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick)) {
+
+					if (ImGui::IsMouseDoubleClicked(0)) {
+
+						if (extension == ".script") {
+
+							editor->OpenScript(filenameWithoutExtension);
+						}
+						else if (extension == ".scene") {
+
+							std::string relativePath = file.path().lexically_relative(projectPath).string();
+							editor->getScene()->loadScene(relativePath);
+
+						}
+
+						else
+							ShellExecuteA(NULL, "open", (LPCSTR)file.path().string().c_str(), NULL, NULL, SW_SHOWNORMAL);
+					}
+
+				}
+				else {
+
+					if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+					{
+						std::string relativePath = file.path().lexically_relative(projectPath + "/Images").string();
+
+
+						Asset asset;
+
+						asset.extension = extension;
+						asset.name = filenameWithoutExtension;
+						asset.path = path;
+						asset.relativePath = relativePath;
+						ResourcesManager::SelectAsset(asset);
+
+					}
+
+				}
+
+
 
 				if (extension == ".png" || extension == ".jpg")
 				{
@@ -161,11 +208,10 @@ namespace ShyEditor {
 					ImGui::SameLine();
 					std::string buttonId = "Open script##" + filename;
 					if (ImGui::Button(buttonId.c_str())) {
-						ImGui::OpenPopup("Create script");
 
+						ImGui::OpenPopup("Create script");
 						size_t dotPos = filename.find_last_of(".");
 						std::string filenameWithoutExtension = filename.substr(0, dotPos);
-
 						editor->OpenScript(filenameWithoutExtension);
 					}
 				}
@@ -220,6 +266,7 @@ namespace ShyEditor {
 
 	void FileExplorer::render()
 	{
+
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 		ComponentWindow* components = editor->getComponents();
 		Hierarchy* hierarchy = editor->getHierarchy();
