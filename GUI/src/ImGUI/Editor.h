@@ -77,7 +77,7 @@ private:
 	void handleInput();
 
 	// Logic for running the projects management window
-	void runProjectsWindow();
+	bool runProjectsWindow();
 
 	// Initialisation 
 	bool initImGUIAndSDL();
@@ -95,19 +95,19 @@ private:
 	// Project info structure 
 	ShyEditor::ProjectInfo* projecInfo;
 
-	bool exitEditor = false;
+	bool exitEditor;
 	EDITOR_STATE state;
 
 	// All editor windows
 	std::vector<ShyEditor::Window*> windows;
 
 	// References to the ImGUI windows
-	ShyEditor::Scene* scene = nullptr;
-	ShyEditor::MenuBar* menuBar = nullptr;
-	ShyEditor::Hierarchy* hierarchy = nullptr;
-	ShyEditor::FileExplorer* fileExplorer = nullptr;
-	ShyEditor::ComponentWindow* components = nullptr;
-	ShyEditor::ScriptCreation* scriptCreation = nullptr;
-	ShyEditor::Console* console = nullptr;
+	ShyEditor::Scene* scene;
+	ShyEditor::MenuBar* menuBar;
+	ShyEditor::Hierarchy* hierarchy;
+	ShyEditor::FileExplorer* fileExplorer;
+	ShyEditor::ComponentWindow* components;
+	ShyEditor::ScriptCreation* scriptCreation;
+	ShyEditor::Console* console;
 
 };

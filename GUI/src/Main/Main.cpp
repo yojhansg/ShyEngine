@@ -21,12 +21,12 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, int nCmdShow) {
 
 	Editor* editor = Editor::getInstance();
 
-	if (!Editor::Init()) {
-		Editor::Close();
+	if (!editor->Init()) {
+		editor->Close();
 		return -1;
 	}
 
-	Editor::Loop();
+	editor->Loop();
 
 	editor->Close();
 

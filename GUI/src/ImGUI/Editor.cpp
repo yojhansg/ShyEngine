@@ -45,14 +45,23 @@ Editor::Editor() {
 	state = EDITOR_WINDOW;
 }
 
+Editor::~Editor() {}
+
+Editor* Editor::getInstance()
+{
+	if (instance == nullptr) {
+		instance = new Editor();
+	}
+
+	return instance;
+}
 
 bool Editor::Init() {
 
-	instance->initImGUIAndSDL();
-	instance->initSDL();
-
-
 	instance->SplashScreen();
+
+	if (!instance->initImGUIAndSDL())
+		return false;
 
 	Components::ComponentManager::Initialise();
 	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
@@ -66,15 +75,18 @@ bool Editor::Init() {
 void Editor::Loop() {
 
 	// The projects management window
-	instance->runProjectsWindow();
+	if (!instance->runProjectsWindow())
+		instance->exitEditor = true;
 
-	// Configure the SDL window to start the editor
-	SDL_SetWindowResizable(instance->window, SDL_TRUE);
-	SDL_SetWindowSize(instance->window, _WindowMainSize);
-	SDL_SetWindowPosition(instance->window, _Centered);
+	if (!instance->exitEditor) {
+		// Configure the SDL window to start the editor
+		SDL_SetWindowResizable(instance->window, SDL_TRUE);
+		SDL_SetWindowSize(instance->window, _WindowMainSize);
+		SDL_SetWindowPosition(instance->window, _Centered);
 
-	// Init the ImGUI windows in the editor
-	instance->SetUpWindows();
+		// Init the ImGUI windows in the editor
+		instance->SetUpWindows();
+	}
 
 	// Editor main loop
 	while (!instance->exitEditor) {
@@ -130,7 +142,8 @@ bool Editor::initImGUIAndSDL() {
 
 	// SDL
 
-		initSDL();
+		if (!initSDL())
+			return false;
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -141,7 +154,8 @@ bool Editor::initImGUIAndSDL() {
 }
 
 bool Editor::initSDL() {
-	// Initialize SDL.
+
+	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		// Avisar por el log
 		return false;
@@ -174,10 +188,12 @@ bool Editor::initSDL() {
 	// MANAGER Mover recurso al manager
 	SDL_SetWindowIcon(window, IMG_Load("shyIcon2.png"));
 
+	return true;
+
 }
 
-void Editor::SetUpWindows()
-{
+void Editor::SetUpWindows() {
+
 	// PREFERENCES
 	addWindow(new ShyEditor::Preferences());
 
@@ -208,16 +224,14 @@ void Editor::SetUpWindows()
 	// CONSOLE
 	console = new ShyEditor::Console();
 	addWindow(console);
-
 }
 
-void Editor::SplashScreen()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
-		system("pause");
+void Editor::SplashScreen() {
 
-		// ERROR HANDLING
+	// Initialize SDL
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		// Avisar por el log
+		return;
 	}
 
 	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500,
@@ -249,7 +263,7 @@ void Editor::SplashScreen()
 }
 
 
-void Editor::runProjectsWindow() {
+bool Editor::runProjectsWindow() {
 
 	instance->addWindow(new ShyEditor::ColorPalette("theme"));
 
@@ -258,14 +272,16 @@ void Editor::runProjectsWindow() {
 	ShyEditor::ProjectsManager dialog;
 
 	if (!dialog.MakeFolderToStoreRecentProjects())
-		return;
+		return false;
 
 	auto result = dialog.ManageProjectSelection(instance->renderer);
 
 	if (result == ShyEditor::ProjectsManager::Result::CLOSED)
-		return;
+		return false;
 
 	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "/Scripts");
+
+	return true;
 
 }
 
@@ -351,15 +367,6 @@ void Editor::handleInput()
 	}
 }
 
-Editor* Editor::getInstance()
-{
-	if (instance == nullptr) {
-		instance = new Editor();
-	}
-
-	return instance;
-}
-
 void Editor::changeEditorState(const EDITOR_STATE& state) {
 
 	switch (state)
@@ -380,72 +387,54 @@ void Editor::setProjectInfo(ShyEditor::ProjectInfo* pInfo) {
 	this->projecInfo = pInfo;
 }
 
-ShyEditor::ProjectInfo& Editor::getProjectInfo()
-{
+ShyEditor::ProjectInfo& Editor::getProjectInfo() {
 	return *projecInfo;
 }
 
-void Editor::addWindow(ShyEditor::Window* window)
-{
+void Editor::addWindow(ShyEditor::Window* window) {
 	windows.push_back(window);
 }
 
-void Editor::setScene(ShyEditor::Scene* scene)
-{
+void Editor::setScene(ShyEditor::Scene* scene) {
 	this->scene = scene;
 }
 
-SDL_Renderer* Editor::getRenderer()
-{
+SDL_Renderer* Editor::getRenderer() {
 	return renderer;
 }
 
-
-Editor::~Editor()
-{
-	
-}
-
-ImVec2 Editor::getMainWindowSize()
-{
+ImVec2 Editor::getMainWindowSize() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
 	return ImVec2(w, h);
 }
 
-ShyEditor::Scene* Editor::getScene()
-{
+ShyEditor::Scene* Editor::getScene() {
 	return scene;
 }
 
-ShyEditor::MenuBar* Editor::getMenuBar()
-{
+ShyEditor::MenuBar* Editor::getMenuBar() {
 	return menuBar;
 }
 
-ShyEditor::Hierarchy* Editor::getHierarchy()
-{
+ShyEditor::Hierarchy* Editor::getHierarchy() {
 	return hierarchy;
 }
 
-ShyEditor::FileExplorer* Editor::getFileExplorer()
-{
+ShyEditor::FileExplorer* Editor::getFileExplorer() {
 	return fileExplorer;
 }
 
-ShyEditor::ComponentWindow* Editor::getComponents()
-{
+ShyEditor::ComponentWindow* Editor::getComponents() {
 	return components;
 }
 
-ShyEditor::ScriptCreation* Editor::getScriptCreation()
-{
+ShyEditor::ScriptCreation* Editor::getScriptCreation() {
 	return scriptCreation;
 }
 
-void Editor::OpenScript(const std::string& script)
-{
+void Editor::OpenScript(const std::string& script) {
 	scriptCreation->SetName(script);
 	changeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
 }
