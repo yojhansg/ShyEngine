@@ -24,7 +24,7 @@
 
 
 
-namespace PEditor {
+namespace ShyEditor {
 
 	class ScriptCreation;
 

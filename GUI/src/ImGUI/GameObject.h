@@ -3,14 +3,13 @@
 #include <list>
 #include <unordered_map>
 
-union SDL_Event;
-
-struct ImVec2;
-struct SDL_Texture;
 struct SDL_Renderer;
-class ImGUIManager;
+struct SDL_Texture;
+struct ImVec2;
+
+union SDL_Event;
 class Transform;
-class Camera;
+class Editor;
 
 namespace Components {
 	class Component;
@@ -18,9 +17,14 @@ namespace Components {
 	class Script;
 }
 
-namespace PEditor {
-	class GameObject
-	{
+namespace ShyEditor {
+
+	class Camera;
+
+	class GameObject {
+
+	private:
+
 		static int lastId;
 
 		std::string name;
@@ -34,7 +38,7 @@ namespace PEditor {
 
 		std::unordered_map<std::string, Components::Script> scripts;
 
-		ImGUIManager* imGuiManager;
+		Editor* editor;
 
 		bool visible;
 
@@ -118,11 +122,11 @@ namespace PEditor {
 		std::unordered_map<int, GameObject*> getChildren();
 		bool isAscendant(GameObject* go);
 
-
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
 		std::string toJson(bool isPrefab = false);
 
 		static GameObject* fromJson(std::string json, bool isPrefab = false);
+
 	};
 }

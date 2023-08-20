@@ -46,6 +46,7 @@ namespace Components {
 
 
 	class Attribute {
+
 	private:
 		AttributesType type;
 		std::string name;
@@ -54,6 +55,7 @@ namespace Components {
 		static std::unordered_map<std::string, AttributesType> attributeTypes;
 
 	public:
+
 		Attribute();
 		Attribute(const std::string& name, const std::string& typeString);
 		Attribute(const std::string& name);
@@ -74,13 +76,16 @@ namespace Components {
 	using Variable = Attribute;
 
 	class Method {
+
 	private:
+
 		std::string component;
 		std::string name;
 
 		Variable returnType;
 		std::vector<Variable> input;
 	public:
+
 		Method();
 		Method(Method const& other);
 		Method(const std::string& name, const std::string& className);
@@ -130,7 +135,6 @@ namespace Components {
 
 
 	class Script {
-
 
 	private:
 

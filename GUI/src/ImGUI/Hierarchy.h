@@ -2,24 +2,27 @@
 #include <vector>
 #include "Window.h"
 
-union SDL_Event;
-
 #define HIERARCHY_WIN_WIDTH_RATIO 0.4f
 #define HIERARCHY_WIN_HEIGHT_RATIO 0.7f
 
-namespace PEditor {
+union SDL_Event;
+class Editor;
+
+namespace ShyEditor {
+
 	class GameObject;
 
-	class Hierarchy: public Window
-	{
-	private:
+	class Hierarchy: public Window {
 
 	public:
 		
 		Hierarchy();
 
 		virtual void render();
+
 	private:
+
+		Editor* editor;
 
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
 
@@ -32,5 +35,6 @@ namespace PEditor {
 
 		bool shouldOpenRenamePopup;
 		bool shouldOpenSavePrefabPopup;
+
 	};
 }

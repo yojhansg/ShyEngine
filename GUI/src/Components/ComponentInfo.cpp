@@ -2,12 +2,14 @@
 #include "nlohmann/json.hpp"
 
 namespace Components {
+
 	std::unordered_map<std::string, AttributesType> Attribute::attributeTypes;
 
 	Component::Component()
 	{
 		name = "";
 	}
+
 	Component::Component(const Component& other)
 	{
 		name = other.name;
@@ -15,42 +17,43 @@ namespace Components {
 		methods = other.methods;
 		attributes = other.attributes;
 	}
-	Components::Component::Component(cstring name)
+
+	Component::Component(cstring name)
 	{
 		this->name = name;
 	}
 
-	cstring Components::Component::getName()
+	cstring Component::getName()
 	{
 		return name;
 	}
 
-	Attribute& Components::Component::getAttribute(cstring name)
+	Attribute& Component::getAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	Method& Components::Component::getMethod(cstring name)
+	Method& Component::getMethod(cstring name)
 	{
 		return methods[name];
 	}
 
-	std::unordered_map<std::string, Attribute>& Components::Component::getAllAttributes()
+	std::unordered_map<std::string, Attribute>& Component::getAllAttributes()
 	{
 		return attributes;
 	}
 
-	std::unordered_map<std::string, Method>& Components::Component::getAllMethods()
+	std::unordered_map<std::string, Method>& Component::getAllMethods()
 	{
 		return methods;
 	}
 
-	void Components::Component::addAttribute(const Attribute& attribute)
+	void Component::addAttribute(const Attribute& attribute)
 	{
 		attributes.emplace(attribute.getName(), attribute);
 	}
 
-	void Components::Component::addMethod(const Method& method)
+	void Component::addMethod(const Method& method)
 	{
 		methods.emplace(method.getName(), method);
 	}
@@ -218,8 +221,9 @@ namespace Components {
 		return j.dump(2);
 	}
 
-	::Components::Component Component::fromJson(std::string json) {
-		::Components::Component component;
+	Component Component::fromJson(std::string json) {
+
+		Component component;
 
 		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);
 
@@ -235,9 +239,7 @@ namespace Components {
 		return component;
 	}
 
-	Method::Method()
-	{
-	}
+	Method::Method() {}
 
 	Method::Method(Method const& other)
 	{
@@ -284,10 +286,7 @@ namespace Components {
 	}
 
 
-	Script::Script(cstring name) : name(name)
-	{
-
-	}
+	Script::Script(cstring name) : name(name) {}
 
 	std::string Script::GetName()
 	{
@@ -301,8 +300,6 @@ namespace Components {
 	std::unordered_map<std::string, Attribute>& Script::getAllAttributes() {
 		return attributes;
 	}
-
-
 
 	std::string Script::ToJson() {
 
@@ -343,7 +340,6 @@ namespace Components {
 				break;
 			}
 
-
 			root[attr.first] = value;
 		}
 
@@ -364,7 +360,6 @@ namespace Components {
 			const std::string attributeType = attributeJson["type"];
 
 			Attribute attribute(attributeName, attributeType);
-
 
 			switch (attribute.getType()) {
 			case Components::AttributesType::BOOL:

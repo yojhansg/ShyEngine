@@ -1,11 +1,9 @@
 #pragma once
 
-
 #include <string>
 #include <unordered_map>
 
 #include "ComponentInfo.h"
-
 
 namespace Components {
 
@@ -13,17 +11,13 @@ namespace Components {
 
 	class ComponentManager {
 
-
 	private:
 
 		static ComponentManager* instance;
 		static void EnsureInitialised();
 
-
 		std::unordered_map<std::string, Component> components;
 		std::unordered_map<std::string, Component> managers;
-
-
 
 		static std::string scriptPath;
 		std::vector<Script> scripts;

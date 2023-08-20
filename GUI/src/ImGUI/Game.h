@@ -5,8 +5,7 @@
 #include <thread>
 #include <concurrent_queue.h>
 
-namespace PEditor
-{
+namespace ShyEditor {
 
 	class Game {
 

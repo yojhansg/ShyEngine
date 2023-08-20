@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-class ImGUIManager;
+class Editor;
 struct SDL_Renderer;
 
-namespace PEditor {
+namespace ShyEditor {
 
 	struct ProjectInfo {
 
@@ -35,7 +35,7 @@ namespace PEditor {
 
 	private:
 
-		ImGUIManager* imGuiManager;
+		Editor* editor;
 
 		bool windowClosed;
 

@@ -5,22 +5,29 @@ union SDL_Event;
 struct ImVec2;
 class Image;
 
-class Camera
-{
-private:
-	float scrollFactor;
-	float posX, posY;
+namespace ShyEditor {
 
-	bool middleMouseButton;
-	float mousePosX, mousePosY;
-	float clickOffsetX, clickOffsetY;
+	class Camera {
 
-public:
-	Camera(ImVec2 position, float scrollFactor);
+	private:
 
-	void handleInput(SDL_Event* event, bool isMouseInsideWindow);
+		float scrollFactor;
+		float posX, posY;
 
-	ImVec2 getPosition();
-	float getScrollFactor();
-};
+		bool middleMouseButton;
+		float mousePosX, mousePosY;
+		float clickOffsetX, clickOffsetY;
+
+	public:
+
+		Camera(ImVec2 position, float scrollFactor);
+
+		void handleInput(SDL_Event* event, bool isMouseInsideWindow);
+
+		ImVec2 getPosition();
+		float getScrollFactor();
+
+	};
+
+}
 

@@ -36,7 +36,7 @@
     <ClInclude Include="..\..\src\ImGUI\Camera.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ImGUI\ImGUIManager.h">
+    <ClInclude Include="..\..\src\ImGUI\Editor.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\Window.h">
@@ -81,6 +81,15 @@
     <ClInclude Include="..\..\src\ImGUI\ColorPalette.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\ResourcesManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Font.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\Texture.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\imgui.cpp">
@@ -110,7 +119,7 @@
     <ClCompile Include="..\..\src\ImGUI\GameObject.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImGUI\ImGUIManager.cpp">
+    <ClCompile Include="..\..\src\ImGUI\Editor.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\Scene.cpp">
@@ -150,6 +159,15 @@
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\ColorPalette.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\ResourcesManager.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Font.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\Texture.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

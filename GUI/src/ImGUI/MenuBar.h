@@ -1,15 +1,18 @@
 #pragma once
+
 #include "Window.h"
 
-class ImGUIManager;
+class Editor;
 
-namespace PEditor{
+namespace ShyEditor {
+
     class GameObject;
 
-    class MenuBar: public Window
-    {
+    class MenuBar: public Window {
+
      private:
-         ImGUIManager* imGuiManager;
+
+         Editor* editor;
 
          bool shouldOpenRenamePopup;
          bool shouldOpenNewScenePopup;
@@ -20,8 +23,10 @@ namespace PEditor{
          void showSavePrefabPopup(GameObject* gameObject);
 
      public:
+
         MenuBar();
 
         virtual void render();
+
     };
 };

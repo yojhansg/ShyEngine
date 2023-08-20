@@ -1,19 +1,15 @@
 #pragma once
+
 #include "Window.h"
-#include <string>
-
-#include <vector>
-#include <unordered_map>
-
 #include "ComponentInfo.h"
 
+#include <unordered_map>
+#include <string>
+#include <vector>
 
+class Editor;
 
-
-class ImGUIManager;
-
-namespace PEditor {
-
+namespace ShyEditor {
 
     namespace ScriptCreationUtilities {
 
@@ -23,9 +19,8 @@ namespace PEditor {
         class ScriptMenuBar;
     }
 
+    class ScriptCreation : public Window {
 
-    class ScriptCreation : public Window
-    {
     private:
 
         static ScriptCreation* instance;
@@ -36,20 +31,18 @@ namespace PEditor {
         bool scrolled;
         bool modified;
 
-
         bool lerping;
         float lerp_t;
         float lerpDuration;
         int initialx, initialy;
         int finalx, finaly;
 
-
         std::vector<ScriptCreationUtilities::ScriptNode*> nodes;
         std::unordered_map<std::string, ScriptCreationUtilities::ScriptEvent*> events;
 
         ScriptCreationUtilities::ScriptMenuBar* menuBar;
 
-        ImGUIManager* imGuiManager;
+        Editor* editor;
 
         ScriptCreationUtilities::ScriptDropdownSelection* dropDownSelection;
 
@@ -59,6 +52,7 @@ namespace PEditor {
 
 
     public:
+
         ScriptCreation();
         ~ScriptCreation();
 
@@ -82,12 +76,12 @@ namespace PEditor {
         static void ResetModified();
         static void Lerp(int x, int y, float lerpDuration);
 
-
         std::vector<ScriptCreationUtilities::ScriptNode*>& GetNodes();
         
         void ClearScript();
         virtual void render();
 
         void SetName(const std::string& name);
+
     };
 };

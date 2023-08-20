@@ -1,28 +1,27 @@
 #pragma once
-#include <vector>
-#include <iostream>
-#include "Window.h"
+
 #include <unordered_map>
+#include <iostream>
+#include <vector>
 
-union SDL_Event;
-
-struct SDL_Renderer;
-struct SDL_Texture;
-struct ImVec2;
-class Camera;
-class string;
-class ImGUIManager;
-
-namespace PEditor {
-	class GameObject;
-};
+#include "Window.h"
 
 #define SCENE_WIN_WIDTH_RATIO 0.6f
 #define SCENE_WIN_HEIGHT_RATIO 0.7f
 
-namespace PEditor {
-	class Scene : public Window
-	{
+struct SDL_Renderer;
+struct SDL_Texture;
+union SDL_Event;
+struct ImVec2;
+
+
+namespace ShyEditor {
+
+	class GameObject;
+	class Camera;
+
+	class Scene : public Window {
+
 	private:
 
 		SDL_Renderer* renderer = nullptr;
@@ -49,7 +48,8 @@ namespace PEditor {
 
 		void addGameObject(std::string path);
 		void addGameObject(GameObject* go);
-		std::unordered_map<int, PEditor::GameObject*> getGameObjects();
+
+		std::unordered_map<int, GameObject*> getGameObjects();
 
 		GameObject* getSelectedGameObject();
 		void setSelectedGameObject(GameObject* go);
@@ -66,8 +66,8 @@ namespace PEditor {
 		virtual void render();
 
 		std::string getPath();
-
 		std::string toJson();
+
 	};
 
 }

@@ -3,9 +3,7 @@
 #include "Window.h"
 #include <string>
 
-
-namespace PEditor {
-
+namespace ShyEditor {
 
 	class Console : public Window {
 
@@ -24,6 +22,7 @@ namespace PEditor {
 
 
 	private:
+
 		bool visible;
 		bool gameOpenedLastFrame;
 

@@ -36,9 +36,10 @@ enum WindowFlags_
 union SDL_Event;
 struct ImVec2;
 
-namespace PEditor {
-    class Window
-    {
+namespace ShyEditor {
+
+    class Window {
+
     protected:
 
         WindowFlags flags;
@@ -52,8 +53,9 @@ namespace PEditor {
 
         bool canBeDisplayedOnTop;
         bool focused;
+
     public:
-        
+
         Window(std::string windowName, WindowFlags flags);
 
         void setPosition(ImVec2 position);
@@ -70,7 +72,7 @@ namespace PEditor {
 
         virtual ~Window();
 
-
         bool CanBeDrawnOnTop();
+
     };
 }

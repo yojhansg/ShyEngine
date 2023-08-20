@@ -1,9 +1,8 @@
 #include "ComponentReader.h"
 #include "nlohmann/json.hpp"
 
-#include <fstream>
 #include <filesystem>
-
+#include <fstream>
 #include <iostream>
 
 using nlohmann::json;
@@ -13,7 +12,6 @@ namespace Components {
 	Component ComponentReader::ReadComponent(cstring name, json data)
 	{
 		Component cmp(name);
-
 
 		if (data.contains("attributes"))
 		{
@@ -55,7 +53,7 @@ namespace Components {
 		return cmp;
 	}
 
-	std::vector<Component> Components::ComponentReader::ReadComponents(cstring filePath)
+	std::vector<Component> ComponentReader::ReadComponents(cstring filePath)
 	{
 		std::ifstream fileStream(filePath);
 
@@ -197,7 +195,6 @@ namespace Components {
 						else {
 							type = AttributesType::NONE;
 						}
-
 
 
 						Attribute attribute(name);

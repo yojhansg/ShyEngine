@@ -1,17 +1,23 @@
 #pragma once
-#include <vector>
+
 #include "Window.h"
+
+#include <vector>
 #include <string>
-
-
-struct SDL_Texture;
 
 #define FILEEXPLORER_WIN_HEIGHT_RATIO 0.3f
 
-namespace PEditor {
-	class FileExplorer : public Window
-	{
+struct SDL_Texture;
+class Editor;
+
+namespace ShyEditor {
+
+	class FileExplorer : public Window {
+
 	private:
+
+		Editor* editor;
+
 		std::string projectPath;
 		std::string currentPath;
 

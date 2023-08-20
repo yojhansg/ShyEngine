@@ -5,10 +5,9 @@
 #include <unordered_map>
 #include <string>
 
-
 struct ImFont;
 
-namespace PEditor {
+namespace ShyEditor {
 
 	class ColorPalette : public Window
 	{
@@ -83,8 +82,8 @@ namespace PEditor {
 		void LoadDefaultPalette();
 
 		void Apply();
-	public:
 
+	public:
 
 		ColorPalette(const std::string& path);
 		~ColorPalette();
@@ -99,14 +98,11 @@ namespace PEditor {
 
 		static void ApplyPalette();
 
-
 		static Palette& GetCurrentPalette();
 
 	};
 
 }
-
-
 
 
 #define ColorPaletteParams(color) color.r, color.g, color.b

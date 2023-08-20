@@ -1,7 +1,7 @@
 #include "imgui_impl_sdlrenderer.h"
 #include "ProjectsManager.h"
 #include "imgui_impl_sdl.h"
-#include "ImGUIManager.h"
+#include "Editor.h"
 #include "Window.h"
 #include "imgui.h"
 #include "SDL.h"
@@ -15,11 +15,11 @@
 #include <filesystem>
 #include <ctime>
 
-using namespace nlohmann;
-
 #define ProjectExtension ".shyproject"
 
-namespace PEditor {
+using namespace nlohmann;
+
+namespace ShyEditor {
 
     char ProjectsManager::project_name[128] = "";
     char ProjectsManager::create_project_path[256] = "";
@@ -33,7 +33,7 @@ namespace PEditor {
 
     ProjectsManager::ProjectsManager() {
 
-        imGuiManager = ImGUIManager::getInstance();
+        editor = Editor::getInstance();
 
         windowClosed = invalidProjectName = false;
         invalidNewProjectPath = invalidOpenProjectPath = false;
@@ -253,7 +253,7 @@ namespace PEditor {
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
 
-                    imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                     windowClosed = true;
                     ImGui::End();
@@ -293,7 +293,7 @@ namespace PEditor {
 
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
 
-                imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                 windowClosed = true;
                 ImGui::End();
@@ -527,7 +527,7 @@ namespace PEditor {
         outputFile.close();
 
         std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-        imGuiManager->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+        editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
         return true;
 

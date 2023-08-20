@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Window.h"
-#include <string>
 
+#include <string>
 #include <nlohmann/json_fwd.hpp>
 
-namespace PEditor {
-
+namespace ShyEditor {
 
 	struct ProjectData {
 
@@ -15,7 +14,6 @@ namespace PEditor {
 
 		std::string icon;
 		std::string initialScene;
-
 
 		std::string windowTitle;
 
@@ -43,14 +41,14 @@ namespace PEditor {
 		bool debugFramerate;
 	};
 
-	class Preferences : public Window {
 
+	class Preferences : public Window {
 
 	private:
 
 		static Preferences* instance;
-		bool open;
-		bool visible;
+
+		bool open, visible;
 
 		ProjectData data;
 
@@ -67,10 +65,10 @@ namespace PEditor {
 		static void GenerateDebug();
 		static void GenerateRelease();
 
-
 		virtual void render();
 
 		static ProjectData& GetData();
+
 	};
 
 }

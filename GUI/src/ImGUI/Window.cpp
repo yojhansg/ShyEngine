@@ -1,82 +1,80 @@
 #include "Window.h"
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
+
 #include "imgui_impl_sdlrenderer.h"
-#include "SDL.h"
-#include "ImGUIManager.h"
+#include "imgui_impl_sdl.h"
 #include "SDL_image.h"
+#include "Editor.h"
+#include "imgui.h"
+#include "SDL.h"
 
-PEditor::Window::Window(std::string _windowName, WindowFlags f = None)
-{
-	flags = f;
-	windowName = _windowName;
+namespace ShyEditor {
 
-	canBeDisplayedOnTop = false;
+	Window::Window(std::string _windowName, WindowFlags f = None)
+	{
+		flags = f;
+		windowName = _windowName;
 
-	windowWidth = windowOriWidth = 50;
-	windowHeight = windowOriHeight = 50;
+		canBeDisplayedOnTop = false;
 
-	windowPosX = 0;
-	windowPosY = 0;
+		windowWidth = windowOriWidth = 50;
+		windowHeight = windowOriHeight = 50;
 
-	focused = false;
-}
+		windowPosX = 0;
+		windowPosY = 0;
 
-void PEditor::Window::setSize(ImVec2 size)
-{
-	windowWidth = size.x;
-	windowHeight = size.y;
-}
-void PEditor::Window::setPosition(ImVec2 position)
-{
-	windowPosX = position.x;
-	windowPosY = position.y;
-}
+		focused = false;
+	}
 
-
-ImVec2 PEditor::Window::getSize()
-{
-	return ImVec2(windowWidth, windowHeight);
-}
-
-ImVec2 PEditor::Window::getPosition()
-{
-	return ImVec2(windowPosX, windowPosY);
-}
+	void Window::setSize(ImVec2 size)
+	{
+		windowWidth = size.x;
+		windowHeight = size.y;
+	}
+	void Window::setPosition(ImVec2 position)
+	{
+		windowPosX = position.x;
+		windowPosY = position.y;
+	}
 
 
-void PEditor::Window::update()
-{
-}
+	ImVec2 Window::getSize()
+	{
+		return ImVec2(windowWidth, windowHeight);
+	}
 
-void PEditor::Window::render()
-{	
-	ImGui::Begin(windowName.c_str(),(bool*)0, (ImGuiWindowFlags_) flags);
+	ImVec2 Window::getPosition()
+	{
+		return ImVec2(windowPosX, windowPosY);
+	}
+
+	void Window::update() {}
+
+	void Window::render()
+	{
+		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
 
-	ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
+		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
-	ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
+		ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
 
 
-	ImGui::End();
-}
+		ImGui::End();
+	}
 
-void PEditor::Window::handleInput(SDL_Event* event)
-{
-}
+	void Window::handleInput(SDL_Event* event) {}
 
-bool PEditor::Window::isFocused()
-{
-	return focused;
-}
+	bool Window::isFocused()
+	{
+		return focused;
+	}
 
-PEditor::Window::~Window()
-{
-}
+	Window::~Window() {}
 
-bool PEditor::Window::CanBeDrawnOnTop()
-{
-	return canBeDisplayedOnTop;
+	bool Window::CanBeDrawnOnTop()
+	{
+		return canBeDisplayedOnTop;
+	}
+
 }
 
