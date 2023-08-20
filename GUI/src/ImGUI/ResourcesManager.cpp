@@ -1,18 +1,53 @@
 #include "ResourcesManager.h"
 
+#include "Texture.h"
+#include "Font.h"
+
 namespace ShyEditor {
 
 	ResourcesManager* ResourcesManager::instance = nullptr;
 
-	ResourcesManager::ResourcesManager() {
+	ResourcesManager::ResourcesManager() {}
+
+	Texture* ResourcesManager::AddTexture(const std::string& key, bool isEditorResource) {
+
+		Texture* texture = nullptr;
+
+		if (isEditorResource) {
+
+			if (instance->editorTextures.contains(key))
+				return instance->editorTextures.at(key);
+
+			texture = new Texture(instance->editorResourcesPath + "Images/" + key);
+
+			instance->editorTextures.insert(std::make_pair(key, texture));
+
+		}
+		else {
+
+			if (instance->engineTextures.contains(key))
+				return instance->engineTextures.at(key);
+
+			texture = new Texture(instance->engineResourcesPath + "Images/" + key);
+
+			instance->engineTextures.insert(std::make_pair(key, texture));
+
+		}
+
+		return texture;
 
 	}
 
-	void ResourcesManager::AddEditorResource() {
+	Font* ResourcesManager::AddFont(const std::string& key, int pointSize) {
 
-	}
+		if (instance->engineFonts.contains(key))
+			return instance->engineFonts.at(key);
 
-	void ResourcesManager::AddEngineResource() {
+		Font* font = new Font(instance->engineResourcesPath + "Fonts/" + key, pointSize);
+
+		instance->engineFonts.insert(std::make_pair(key, font));
+
+		return font;
 
 	}
 

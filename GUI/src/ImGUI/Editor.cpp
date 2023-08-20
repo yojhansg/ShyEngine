@@ -185,8 +185,9 @@ bool Editor::initSDL() {
 			return false;
 		}
 
-	// MANAGER Mover recurso al manager
+	SDL_Surface* s = IMG_Load("shyIcon2.png");
 	SDL_SetWindowIcon(window, IMG_Load("shyIcon2.png"));
+	SDL_FreeSurface(s);
 
 	return true;
 
@@ -369,15 +370,14 @@ void Editor::handleInput()
 
 void Editor::changeEditorState(const EDITOR_STATE& state) {
 
-	switch (state)
-	{
-	case Editor::EDITOR_WINDOW:
-		break;
-	case Editor::SCRIPTING_WINDOW:
-		scriptCreation->Load();
-		break;
-	default:
-		break;
+	switch (state) {
+		case Editor::EDITOR_WINDOW:
+			break;
+		case Editor::SCRIPTING_WINDOW:
+			scriptCreation->Load();
+			break;
+		default:
+			break;
 	}
 
 	this->state = state;
