@@ -42,6 +42,10 @@ namespace ShyEditor {
 		static bool IsAnyAssetSelected();
 		static const Asset& SelectedAsset();
 
+
+		static void Init();
+		static void Release();
+
 	private:
 
 		ResourcesManager();

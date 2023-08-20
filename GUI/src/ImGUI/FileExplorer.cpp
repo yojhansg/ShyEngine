@@ -106,7 +106,7 @@ namespace ShyEditor {
 				{
 
 					if (ImGui::IsMouseDoubleClicked(0))
-						currentPath = file.path().string();
+						currentPath = explorerFile.path().string();
 				}
 
 				ImGui::PopStyleColor(1);
@@ -135,11 +135,11 @@ namespace ShyEditor {
 				ImGui::SetWindowFontScale(1.5);
 
 
-				std::string path = file.path().string();
+				std::string path = explorerFile.path().string();
 				size_t dotPos = filename.find_last_of(".");
 				std::string filenameWithoutExtension = filename.substr(0, dotPos);
 
-				std::string extension = file.path().extension().string();
+				std::string extension = explorerFile.path().extension().string();
 				// Display files in default color
 				if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick)) {
 
@@ -151,13 +151,13 @@ namespace ShyEditor {
 						}
 						else if (extension == ".scene") {
 
-							std::string relativePath = file.path().lexically_relative(projectPath).string();
+							std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();
 							editor->getScene()->loadScene(relativePath);
 
 						}
 
 						else
-							ShellExecuteA(NULL, "open", (LPCSTR)file.path().string().c_str(), NULL, NULL, SW_SHOWNORMAL);
+							ShellExecuteA(NULL, "open", (LPCSTR)explorerFile.path().string().c_str(), NULL, NULL, SW_SHOWNORMAL);
 					}
 
 				}
@@ -165,7 +165,7 @@ namespace ShyEditor {
 
 					if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					{
-						std::string relativePath = file.path().lexically_relative(projectPath + "/Images").string();
+						std::string relativePath = explorerFile.path().lexically_relative(projectPath + "/Images").string();
 
 
 						Asset asset;
