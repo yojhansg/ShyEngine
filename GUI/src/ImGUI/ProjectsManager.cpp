@@ -26,8 +26,8 @@ namespace ShyEditor {
     char ProjectsManager::open_project_path[256] = "";
 
     std::wstring ProjectsManager::projectfileExtension = L"" ProjectExtension;
-    std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
-    std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
+    std::wstring ProjectsManager::projectsfileFolder = L"ShyEngine\\RecentProjects\\";
+    std::wstring ProjectsManager::projectsfileName = L"recentprojects.json";
 
     ProjectsManager::ProjectsManager() {
 
@@ -37,7 +37,7 @@ namespace ShyEditor {
         invalidNewProjectPath = invalidOpenProjectPath = false;
         showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
 
-        creationDate = name = createPath = openPath = lastSavedProjectPath = "";
+        creationDate = name = projectFilePath = openPath = lastSavedProjectPath = "";
 
         errorMessage = L"Default error message. No one knows what went wrong :(";
 
@@ -163,7 +163,7 @@ namespace ShyEditor {
         if (invalidNewProjectPath)
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid project path. Can not be empty and \nmust be an existing folder!");
         else
-            createPath = std::string(create_project_path) + "\\" + std::string(project_name) + "\\" + std::string(project_name) + ProjectExtension;
+            projectFilePath = std::string(create_project_path) + "\\" + std::string(project_name) + "\\" + std::string(project_name) + ProjectExtension;
 
 
         ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.0f));
@@ -212,19 +212,19 @@ namespace ShyEditor {
         // Select file logic button
         if (ImGui::Button("Select File", ImVec2(w / 4.0f, h / 20.0f))) {
 
-          OPENFILENAMEA ofn;  // Estructura de di�logo de archivo
-          char fileName[MAX_PATH] = "";
-          ZeroMemory(&ofn, sizeof(ofn));
-          ofn.lStructSize = sizeof(ofn);
-          ofn.hwndOwner = GetForegroundWindow();
-          ofn.lpstrFilter = "Todos los archivos\0*.*\0";
-          ofn.lpstrFile = fileName;
-          ofn.nMaxFile = MAX_PATH;
-          ofn.lpstrTitle = "Seleccionar Archivo";
-          ofn.Flags = OFN_FILEMUSTEXIST;
+            OPENFILENAMEA ofn;  // Estructura de di�logo de archivo
+            char fileName[MAX_PATH] = "";
+            ZeroMemory(&ofn, sizeof(ofn));
+            ofn.lStructSize = sizeof(ofn);
+            ofn.hwndOwner = GetForegroundWindow();
+            ofn.lpstrFilter = "Todos los archivos\0*.*\0";
+            ofn.lpstrFile = fileName;
+            ofn.nMaxFile = MAX_PATH;
+            ofn.lpstrTitle = "Seleccionar Archivo";
+            ofn.Flags = OFN_FILEMUSTEXIST;
 
-          if (GetOpenFileNameA(&ofn))
-              strncpy_s(open_project_path, sizeof(open_project_path), fileName, _TRUNCATE);
+            if (GetOpenFileNameA(&ofn))
+                strncpy_s(open_project_path, sizeof(open_project_path), fileName, _TRUNCATE);
 
         }
 
@@ -248,9 +248,7 @@ namespace ShyEditor {
                     showPopUpWindowOpenProject = true;
                 else {
 
-
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-
                     editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
                     windowClosed = true;
@@ -267,7 +265,7 @@ namespace ShyEditor {
         // Listbox for the recent projects
         bool recentProjectOpened = false;
         std::string recentProjectOpenedPath;
-        if (ImGui::BeginListBox("##", ImVec2(w - w /10, h / 2))) {
+        if (ImGui::BeginListBox("##", ImVec2(w - w / 10, h / 2))) {
 
             for (int i = 0; i < recentProjectsInfo.size() && !recentProjectOpened; i++) {
 
@@ -290,7 +288,6 @@ namespace ShyEditor {
             else {
 
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-
                 editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
                 windowClosed = true;
@@ -331,7 +328,7 @@ namespace ShyEditor {
             std::wstring appDataDir(appDataPath);
             CoTaskMemFree(appDataPath);
 
-            std::wstring projectsDir = appDataDir + projectsfileFolder;
+            std::wstring projectsDir = appDataDir + L"\\" + projectsfileFolder;
 
             recentProjectsFile = projectsDir + projectsfileName;
 
@@ -466,18 +463,18 @@ namespace ShyEditor {
 
     bool ProjectsManager::SaveProject() {
 
-        std::string folder = std::string(create_project_path);
-        std::string path = createPath;
+        std::string folder = std::string(create_project_path) + "\\";
+        std::string path = projectFilePath; // (Ends with .shyproject)
 
         // If the create path is an empty folder with the same name as the project
         // the folder project wont be created, it uses the create path.
-        if (GetLastPathComponent(folder, '\\') == name) {
+        if (GetLastPathComponent(create_project_path, '\\') == name) {
 
-            if (!IsDirectoryEmpty(folder)) {
-                errorMessage = L"There is already a project with the same name in the selected directory.";
+            if (!IsDirectoryEmpty(create_project_path)) {
+                errorMessage = L"The selected directory is not empty.";
                 return false;
             }
-            else path = std::string(create_project_path) + "\\" + std::string(project_name) + ProjectExtension;
+            else path = folder + std::string(project_name) + ProjectExtension;
         }
         else {
 
@@ -487,7 +484,7 @@ namespace ShyEditor {
             }
 
             // The folder which contains the project file is created
-            folder = std::string(create_project_path) + "\\" + std::string(project_name);
+            folder += std::string(project_name) + "\\";
 
             std::error_code ec;
             std::filesystem::create_directories(folder, ec);
@@ -524,7 +521,7 @@ namespace ShyEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        std::string folderPath = std::filesystem::path(createPath).parent_path().string();
+        std::string folderPath = std::filesystem::path(path).parent_path().string();
         editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
         return true;
@@ -532,8 +529,6 @@ namespace ShyEditor {
     }
 
     bool ProjectsManager::StoreProjectPath(const std::string& path) {
-
-        std::string folder = std::string(create_project_path) + "\\" + std::string(project_name);
 
         // Add the project path to the recent projects
         std::ifstream fileStreamIn(recentProjectsFile);
@@ -650,10 +645,10 @@ namespace ShyEditor {
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
         std::error_code ec;
-        std::filesystem::create_directories(root + "\\Assets\\", ec);
+        std::filesystem::create_directories(root + "Assets\\", ec);
 
         if (ec) {
-            errorMessage = L"Error while creating the project assets folders.";
+            errorMessage = L"Error while creating the project assets folder.";
             return false;
         }
 

@@ -47,9 +47,9 @@ namespace ShyEditor {
 		float w, h;
 
 		// Buffers to store the input values
-		static char project_name[128]; 
-		static char create_project_path[256]; 
-		static char open_project_path[256]; 
+		static char project_name[128];
+		static char create_project_path[256];
+		static char open_project_path[256];
 
 		// Folder and files paths information
 		static std::wstring projectfileExtension;
@@ -58,7 +58,7 @@ namespace ShyEditor {
 
 		// Project information values
 		std::string name;
-		std::string createPath;
+		std::string projectFilePath;
 		std::string openPath;
 		std::string creationDate;
 
