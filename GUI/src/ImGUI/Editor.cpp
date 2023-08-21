@@ -358,7 +358,7 @@ void Editor::UpdateAndRenderWindows()
 
 	for (auto window : windows)
 	{
-		if (window->CanBeDrawnOnTop())
+		if (window->CanBeDrawnOnTop() && !window->isDocked())
 			window->UpdateWindow();
 		else
 			switch (state)

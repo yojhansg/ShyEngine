@@ -72,7 +72,7 @@ namespace ShyEditor {
 				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
 			}
 
-			ImGui::Begin(windowName.c_str(), (bool*)0, /*(ImGuiWindowFlags_)flags*/0);
+			ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
 			Behaviour();
 
@@ -106,6 +106,11 @@ namespace ShyEditor {
 	bool Window::CanBeDrawnOnTop()
 	{
 		return canBeDisplayedOnTop;
+	}
+
+	bool Window::isDocked()
+	{
+		return docked;
 	}
 
 	void Window::Hide()

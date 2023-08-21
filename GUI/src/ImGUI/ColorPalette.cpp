@@ -11,7 +11,7 @@ namespace ShyEditor {
 
 	ColorPalette* ColorPalette::instance = nullptr;
 
-	ColorPalette::ColorPalette(const std::string& path) : Window("Palette selector", 0), path(path)
+	ColorPalette::ColorPalette(const std::string& path) : Window("Palette selector", NoCollapse), path(path)
 	{
 		initialisation = true;
 		current = {};
@@ -205,21 +205,19 @@ namespace ShyEditor {
 
 	void ColorPalette::Open()
 	{
-		instance->open = true;
+		instance->Show();
+		//instance->open = true;
 	}
 
 	void ColorPalette::Behaviour()
 	{
-		if (open) {
+		/*if (open) {
 
 			open = false;
 			visible = true;
 
 			ImGui::SetNextWindowFocus();
-		}
-
-		if (!visible) return;
-
+		}*/
 
 		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
 		ImGui::Begin(windowName.c_str(), &visible, flags);

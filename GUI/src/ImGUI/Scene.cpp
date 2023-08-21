@@ -63,8 +63,7 @@ namespace ShyEditor {
 		return a->getRenderOrder() < b->getRenderOrder();
 	}
 
-	Scene::Scene() : Window("Scene", NoMove | NoResize | NoCollapse | NoScrollbar | NoScrollWithMouse
-		| ImGuiWindowFlags_NoBringToFrontOnFocus)
+	Scene::Scene() : Window("Scene",NoCollapse | NoScrollbar | NoScrollWithMouse)
 	{
 		Editor* editor = Editor::getInstance();
 		editor->setScene(this);

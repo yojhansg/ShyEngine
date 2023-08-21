@@ -11,7 +11,7 @@
 
 namespace ShyEditor {
 
-	ComponentWindow::ComponentWindow() : Window("Components", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
+	ComponentWindow::ComponentWindow() : Window("Components", NoCollapse)
 	{
 		Editor* editor = Editor::getInstance();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();

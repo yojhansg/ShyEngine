@@ -1050,7 +1050,7 @@ namespace ShyEditor {
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20, 0));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(20, 0));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(1, 0));
-		if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMainMenuBar()) {
 
 
 			ImGui::Text("Name the script");
@@ -1238,7 +1238,7 @@ namespace ShyEditor {
 			}
 
 
-			ImGui::EndMenuBar();
+			ImGui::EndMainMenuBar();
 		}
 		ImGui::PopStyleVar(3);
 

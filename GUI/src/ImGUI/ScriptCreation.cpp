@@ -17,7 +17,7 @@ namespace ShyEditor {
 
 	ScriptCreation* ScriptCreation::instance = nullptr;
 
-	ScriptCreation::ScriptCreation() : Window("", None)
+	ScriptCreation::ScriptCreation() : Window("Create script", ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus)
 	{
 		editor = Editor::getInstance();
 
@@ -35,6 +35,13 @@ namespace ShyEditor {
 
 		modified = false;
 		scrolled = false;
+
+		docked = false;
+
+		windowPosX = windowPosY = 0;
+
+		windowWidth = Editor::getInstance()->getMainWindowSize().x;
+		windowHeight = Editor::getInstance()->getMainWindowSize().y;
 
 		instance = this;
 	}
@@ -434,114 +441,108 @@ namespace ShyEditor {
 
 	void ScriptCreation::Behaviour()
 	{
-		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-		ImGui::SetNextWindowPos(ImVec2(0, 0));
-
-		if (ImGui::Begin("Create script", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus))
-		{
-
-			auto background = ImGui::GetWindowDrawList();
-
-			auto& palette = ColorPalette::GetCurrentPalette();
-			auto color = palette.scriptBackground;
-			background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
-
-			auto lineColor = palette.line;
-			ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
-
-			if (lerping) {
-
-				ManageLerp();
-			}
-			else {
-
-				auto mouseScroll = ImGui::GetMouseDragDelta(2);
-
-				scrollx = mouseScroll.x;
-				scrolly = mouseScroll.y;
-
-				if (scrollx != 0 || scrolly != 0)
-					scrolled = true;
-
-				if (ImGui::IsMouseReleased(2)) {
-
-					xpos += scrollx;
-					ypos += scrolly;
-
-					scrollx = scrolly = 0;
-					scrolled = true;
-				}
-			}
+		ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
+		ImGui::SetWindowPos(ImVec2(0, 0));
 
 
-			auto gridColor = palette.grid;
+		auto background = ImGui::GetWindowDrawList();
 
-			ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
-			ScriptCreationUtilities::Grid::SetThickness(palette.gridThickness);
-			ScriptCreationUtilities::Grid::SetSpacing(palette.gridSpacing);
-			ScriptCreationUtilities::Grid::SetIntervalScale(palette.gridIntervalScale);
-			ScriptCreationUtilities::Grid::SetInterval(palette.gridInterval);
-			ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(gridColor));
-			ScriptCreationUtilities::Grid::Draw();
+		auto& palette = ColorPalette::GetCurrentPalette();
+		auto color = palette.scriptBackground;
+		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
 
-			ScriptCreationUtilities::Bezier::SetAlpha(palette.lineAlpha);
-			ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(palette.line));
-			ScriptCreationUtilities::Bezier::SetThickness(palette.lineThickness);
-			ScriptCreationUtilities::Bezier::SetCurvature(palette.lineCurvature);
+		auto lineColor = palette.line;
+		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
 
-			ScriptCreationUtilities::Bezier::SetOutlineThickness(palette.lineOutlineThickness);
-			ScriptCreationUtilities::Bezier::SetOutlineColor(ColorPaletteParams(palette.lineOutline));
+		if (lerping) {
 
+			ManageLerp();
+		}
+		else {
 
-			int nodeIdx = 0;
-			bool eraseNode = false;
+			auto mouseScroll = ImGui::GetMouseDragDelta(2);
 
+			scrollx = mouseScroll.x;
+			scrolly = mouseScroll.y;
 
-			auto& style = ImGui::GetStyle();
-			style.WindowRounding = palette.nodeRounding;
-			for (auto node : nodes) {
-
-				if (node != nullptr) {
-
-					if (node->UpdateAndRenderWindow()) {
-
-						eraseNode = true;
-					}
-
-					if (eraseNode)
-						node->SetID(node->GetId() - 1);
-				}
-
-				if (!eraseNode)
-					nodeIdx++;
-			}
-			style.WindowRounding = 0;
-
-			if (eraseNode)
-			{
+			if (scrollx != 0 || scrolly != 0)
 				scrolled = true;
-				nodes[nodeIdx]->OnRemoved();
-				delete nodes[nodeIdx];
-				nodes.erase(nodes.begin() + nodeIdx);
+
+			if (ImGui::IsMouseReleased(2)) {
+
+				xpos += scrollx;
+				ypos += scrolly;
+
+				scrollx = scrolly = 0;
+				scrolled = true;
 			}
-
-
-			dropDownSelection->UpdateAndRender();
-
-			menuBar->UpdateAndRender();
-
-
-			scrolled = false;
-
-
-			if (ImGui::IsMouseReleased(0)) {
-				ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
-				ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
-			}
-
 		}
 
-		ImGui::End();
+
+		auto gridColor = palette.grid;
+
+		ScriptCreationUtilities::Grid::SetOffset(xpos + scrollx, ypos + scrolly);
+		ScriptCreationUtilities::Grid::SetThickness(palette.gridThickness);
+		ScriptCreationUtilities::Grid::SetSpacing(palette.gridSpacing);
+		ScriptCreationUtilities::Grid::SetIntervalScale(palette.gridIntervalScale);
+		ScriptCreationUtilities::Grid::SetInterval(palette.gridInterval);
+		ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(gridColor));
+		ScriptCreationUtilities::Grid::Draw();
+
+		ScriptCreationUtilities::Bezier::SetAlpha(palette.lineAlpha);
+		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(palette.line));
+		ScriptCreationUtilities::Bezier::SetThickness(palette.lineThickness);
+		ScriptCreationUtilities::Bezier::SetCurvature(palette.lineCurvature);
+
+		ScriptCreationUtilities::Bezier::SetOutlineThickness(palette.lineOutlineThickness);
+		ScriptCreationUtilities::Bezier::SetOutlineColor(ColorPaletteParams(palette.lineOutline));
+
+
+		int nodeIdx = 0;
+		bool eraseNode = false;
+
+
+		auto& style = ImGui::GetStyle();
+		style.WindowRounding = palette.nodeRounding;
+		for (auto node : nodes) {
+
+			if (node != nullptr) {
+
+				if (node->UpdateAndRenderWindow()) {
+
+					eraseNode = true;
+				}
+
+				if (eraseNode)
+					node->SetID(node->GetId() - 1);
+			}
+
+			if (!eraseNode)
+				nodeIdx++;
+		}
+		style.WindowRounding = 0;
+
+		if (eraseNode)
+		{
+			scrolled = true;
+			nodes[nodeIdx]->OnRemoved();
+			delete nodes[nodeIdx];
+			nodes.erase(nodes.begin() + nodeIdx);
+		}
+
+
+		dropDownSelection->UpdateAndRender();
+
+		menuBar->UpdateAndRender();
+
+
+		scrolled = false;
+
+
+		if (ImGui::IsMouseReleased(0)) {
+			ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
+			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
+		}
 
 	}
 

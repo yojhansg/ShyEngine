@@ -14,7 +14,7 @@
 
 namespace ShyEditor {
 
-	Hierarchy::Hierarchy() : Window("Hierarchy", NoMove | NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus)
+	Hierarchy::Hierarchy() : Window("Hierarchy", NoCollapse)
 	{
 		editor = Editor::getInstance();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();

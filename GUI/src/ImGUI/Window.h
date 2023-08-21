@@ -73,13 +73,9 @@ namespace ShyEditor {
         void UpdateWindow();
         virtual void HandleInput(SDL_Event* event);
 
-        void SetTop(Window* other);
-        void SetLeft(Window* other);
-        void SetRight(Window* other);
-        void SetBottom(Window* other);
-
         bool isFocused();
         bool CanBeDrawnOnTop();
+        bool isDocked();
 
         void Hide();
         void Show();
