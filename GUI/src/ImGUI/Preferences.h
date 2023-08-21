@@ -48,7 +48,7 @@ namespace ShyEditor {
 
 		static Preferences* instance;
 
-		bool open, visible;
+		bool open;
 
 		ProjectData data;
 
@@ -65,7 +65,7 @@ namespace ShyEditor {
 		static void GenerateDebug();
 		static void GenerateRelease();
 
-		virtual void render();
+		void Behaviour() override;
 
 		static ProjectData& GetData();
 

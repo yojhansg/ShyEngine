@@ -32,9 +32,11 @@ namespace ShyEditor {
 
 		shouldOpenRenamePopup = false;
 		shouldOpenSavePrefabPopup = false;
+
+		docked = true;
 	}
 
-	void Hierarchy::render()
+	void Hierarchy::Behaviour()
 	{
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
@@ -43,31 +45,6 @@ namespace ShyEditor {
 
 		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
 
-		if (focused)
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 24), 
-						  ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 24));
-		else
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 24), 
-						  ImVec2(mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 24));
-
-		focused = false;
-
-		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
-
-		if (ImGui::IsWindowFocused())
-			focused = true;
-
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-		windowWidth = imGUIWindowSize.x;
-		windowHeight = imGUIWindowSize.y;
-		windowPosX = imGUIWindowPos.x;
-		windowPosY = imGUIWindowPos.y;
-
-		float menuBarHeight = ImGui::GetFrameHeight();
-
-		ImGui::SetWindowPos(ImVec2(0, menuBarHeight));
-		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
 
 		if (ImGui::Button("Add empty gameobject")) {
 			scene->addGameObject("");
@@ -92,7 +69,6 @@ namespace ShyEditor {
 			ImGui::EndListBox();
 		}
 
-		ImGui::End();
 	}
 
 	void Hierarchy::handleDragAndDrop(GameObject* source, GameObject* destination)

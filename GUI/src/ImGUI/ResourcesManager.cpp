@@ -10,7 +10,7 @@ namespace ShyEditor {
 	ResourcesManager::ResourcesManager() {
 	
 		editorResourcesPath = "";
-		engineResourcesPath = "";
+		engineResourcesPath = ""; 
 
 	}
 
@@ -31,7 +31,7 @@ namespace ShyEditor {
 			if (instance->editorTextures.contains(key))
 				return instance->editorTextures.at(key);
 
-			texture = new Texture(instance->editorResourcesPath + "images\\" + key);
+			texture = new Texture(instance->editorResourcesPath + "Images\\" + key);
 
 			instance->editorTextures.insert(std::make_pair(key, texture));
 
@@ -49,6 +49,18 @@ namespace ShyEditor {
 
 		return texture;
 
+	}
+
+	void ResourcesManager::Init()
+	{
+		instance = new ResourcesManager();
+		instance->currentAsset.valid = false;
+	}
+
+	void ResourcesManager::Release()
+	{
+		delete instance;
+		instance = nullptr;
 	}
 
 	Font* ResourcesManager::AddFont(const std::string& key, int pointSize) {
@@ -88,6 +100,11 @@ namespace ShyEditor {
 	void ResourcesManager::SelectAsset(const Asset& asset)
 	{
 		instance->currentAsset = asset;
+	}
+
+	bool ResourcesManager::IsAnyAssetSelected()
+	{
+		return instance->currentAsset.valid;
 	}
 
 	const Asset& ResourcesManager::SelectedAsset()

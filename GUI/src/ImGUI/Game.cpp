@@ -3,7 +3,8 @@
 #include <iostream>
 #include <Windows.h>
 #include <io.h>
-
+#include "Editor.h"
+#include "Console.h"
 
 namespace ShyEditor {
 
@@ -86,6 +87,8 @@ namespace ShyEditor {
 
 	void Game::play(bool debug)
 	{
+		Editor::getInstance()->getConsole()->Show();
+
 		output.clear();
 
 		HANDLE hChildStdoutRead, hChildStdoutWrite;

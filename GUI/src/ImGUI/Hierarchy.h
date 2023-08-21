@@ -18,9 +18,11 @@ namespace ShyEditor {
 		
 		Hierarchy();
 
-		virtual void render();
 
-	private:
+	protected:
+
+		void Behaviour() override;
+
 
 		Editor* editor;
 

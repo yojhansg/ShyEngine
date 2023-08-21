@@ -15,7 +15,7 @@ namespace ShyEditor {
 
 		ComponentWindow();
 
-		virtual void render();
+		void Behaviour() override;
 
 	};
 }

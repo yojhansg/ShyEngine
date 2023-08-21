@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "imgui.h"
 #include "SDL.h"
+#include "ResourcesManager.h"
 
 #include <string>
 #include <fstream>
@@ -84,7 +85,7 @@ namespace ShyEditor {
 		path = "Scenes/" + Preferences::GetData().initialScene + ".scene";
 
 
-		float scrollFactor = .5f;
+		float scrollFactor = 1.f;
 		camera = new Camera(
 			ImVec2(
 				(windowOriWidth - Preferences::GetData().width * scrollFactor) * 0.5f,
@@ -100,6 +101,7 @@ namespace ShyEditor {
 		if (std::filesystem::exists(path))
 			loadScene(path);
 
+		docked = true;
 	}
 
 	Scene::~Scene()
@@ -115,10 +117,11 @@ namespace ShyEditor {
 		delete camera;
 	}
 
-	void Scene::addGameObject(std::string path)
+	GameObject* Scene::addGameObject(std::string path)
 	{
 		GameObject* go = (new GameObject(path));
 		gameObjects.emplace(go->getId(), go);
+		return go;
 	}
 
 	void Scene::addGameObject(GameObject* go)
@@ -208,27 +211,8 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::update()
-	{
-		auto it = gameObjects.begin();
-		while (it != gameObjects.end()) {
-			GameObject* go = it->second;
 
-			go->update();
-
-			if (go->isWaitingToDelete()) {
-				selectedGameObject = nullptr;
-
-				delete go;
-				it = gameObjects.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-	}
-
-	void Scene::handleInput(SDL_Event* event)
+	void Scene::HandleInput(SDL_Event* event)
 	{
 		ImVec2 mousePos = ImGui::GetMousePos();
 
@@ -249,8 +233,26 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::render()
+	void Scene::Behaviour()
 	{
+		auto it = gameObjects.begin();
+		while (it != gameObjects.end()) {
+			GameObject* go = it->second;
+
+			go->update();
+
+			if (go->isWaitingToDelete()) {
+				selectedGameObject = nullptr;
+
+				delete go;
+				it = gameObjects.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+
 		Editor* editor = Editor::getInstance();
 		FileExplorer* fileExplorer = editor->getFileExplorer();
 
@@ -258,25 +260,34 @@ namespace ShyEditor {
 		ImVec2 componentsWindowPos = editor->getComponents()->getPosition();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
-		ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
+		//ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
 
 		size_t lastPathSlashPosition = path.find_last_of("/\\");
 		size_t lastPathDotPosition = path.find_last_of(".");
 
 		std::string sceneFilename = path.substr(lastPathSlashPosition + 1, lastPathDotPosition - lastPathSlashPosition - 1);
 
-		ImGui::Begin((windowName + ": " + sceneFilename).c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
+		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-		windowWidth = imGUIWindowSize.x;
-		windowHeight = imGUIWindowSize.y;
-		windowPosX = imGUIWindowPos.x;
-		windowPosY = imGUIWindowPos.y;
+			ImVec2 max = ImVec2(windowWidth + windowPosX, windowPosY + windowHeight);
 
-		float menuBarHeight = ImGui::GetFrameHeight();
+			if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), max)) {
+				auto& asset = ResourcesManager::SelectedAsset();
 
-		ImGui::SetWindowPos(ImVec2(hierarchyWindowSize.x, menuBarHeight));
+				if (asset.extension == ".png" || asset.extension == ".jpg") {
+
+					GameObject* go = editor->getScene()->addGameObject(asset.relativePath);
+
+					ImVec2 position = getMousePosInsideScene(ImGui::GetMousePos());
+					position.x -= Preferences::GetData().width * 0.5f;
+					position.y -= Preferences::GetData().height * 0.5f;
+
+					go->setPosition(position);
+					selectedGameObject = go;
+				}
+			}
+		}
+
 
 		SDL_SetRenderTarget(renderer, targetTexture);
 		SDL_RenderClear(renderer);
@@ -287,9 +298,6 @@ namespace ShyEditor {
 		SDL_SetRenderTarget(renderer, NULL);
 
 		ImGui::Image(targetTexture, ImVec2(windowWidth, windowOriHeight * windowWidth / windowOriWidth));
-
-		ImGui::End();
-
 	}
 
 	std::string Scene::getPath()

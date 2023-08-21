@@ -65,15 +65,20 @@ public:
 	ShyEditor::FileExplorer* getFileExplorer();
 	ShyEditor::ComponentWindow* getComponents();
 	ShyEditor::ScriptCreation* getScriptCreation();
+	ShyEditor::Console* getConsole();
 
+
+	int Example();
+	int Probando();
 private:
 
 	Editor();
 	~Editor();
 
 	// Loop methods
-	void update();
-	void render();
+
+
+	void UpdateAndRenderWindows();
 	void handleInput();
 
 	// Logic for running the projects management window

@@ -1,249 +1,27 @@
 #include "GameObject.h"
 
-#include "ComponentManager.h";
-#include "ProjectsManager.h"
+#include "ResourcesManager.h"
+#include "ComponentManager.h"
 #include "nlohmann/json.hpp"
 #include "ComponentInfo.h"
 #include "Preferences.h"
-#include "SDL_image.h"
+#include "Texture.h"
 #include "Editor.h"
 #include "Camera.h"
-#include "imgui.h"
 #include "Scene.h"
+#include "imgui.h"
 #include "SDL.h"
 
 #include <fstream>
+
+#define GizmoImage "gizmo.png"
 
 
 namespace ShyEditor {
 
 	int GameObject::lastId = 0;
 
-	void GameObject::drawComponentsInEditor()
-	{
-		for (auto it = components.begin(); it != components.end();) {
-			std::string componentName = (*it).second.getName();
-
-			if (ImGui::CollapsingHeader(componentName.c_str()))
-			{
-				for (auto& attribute : (*it).second.getAllAttributes()) {
-					std::string attributeName = attribute.first;
-					::Components::Attribute* attr = &attribute.second;
-
-					ImGui::Text(attributeName.c_str());
-
-					switch (attr->getType())
-					{
-					case ::Components::AttributesType::FLOAT:
-						drawFloat(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::VECTOR2:
-						drawVector2(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::STRING:
-						drawString(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::BOOL:
-						drawBool(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::COLOR:
-						drawColor(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::CHAR:
-						drawChar(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::GAMEOBJECT:
-						drawGameobject(attributeName + it->first, attr);
-						break;
-					default:
-						break;
-					}
-				}
-
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
-
-				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-					it = components.erase(it);
-				}
-				else {
-					++it;
-				}
-
-				ImGui::PopStyleColor(2);
-
-			}
-			else {
-				++it;
-			}
-		}
-	}
-
-	void GameObject::drawScriptsInEditor()
-	{
-		for (auto it = scripts.begin(); it != scripts.end();) {
-			std::string scriptName = (*it).first;
-			if (ImGui::CollapsingHeader(scriptName.c_str()))
-			{
-				for (auto& attribute : (*it).second.getAllAttributes()) {
-					std::string attributeName = attribute.first;
-					::Components::Attribute* attr = &attribute.second;
-
-					ImGui::Text(attributeName.c_str());
-
-					switch (attr->getType())
-					{
-					case ::Components::AttributesType::FLOAT:
-						drawFloat(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::VECTOR2:
-						drawVector2(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::STRING:
-						drawString(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::BOOL:
-						drawBool(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::COLOR:
-						drawColor(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::CHAR:
-						drawChar(attributeName + it->first, attr);
-					case ::Components::AttributesType::GAMEOBJECT:
-						drawGameobject(attributeName + it->first, attr);
-						break;
-					default:
-						break;
-					}
-				}
-
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
-
-
-				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-
-					editor->OpenScript(scriptName);
-				}
-
-
-				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-					it = scripts.erase(it);
-				}
-				else {
-					++it;
-				}
-
-				ImGui::PopStyleColor(2);
-
-			}
-			else {
-				++it;
-			}
-		}
-
-	}
-
-
-
-	void GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr)
-	{
-		ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
-	}
-
-	void GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr)
-	{
-
-		ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
-	}
-
-	void GameObject::drawString(std::string attrName, ::Components::Attribute* attr)
-	{
-		char inputBuffer[256];
-		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
-
-		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
-			attr->value.valueString = inputBuffer;
-		}
-	}
-
-	void GameObject::drawBool(std::string attrName, ::Components::Attribute* attr)
-	{
-		ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
-	}
-
-	void GameObject::drawColor(std::string attrName, ::Components::Attribute* attr)
-	{
-		ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
-	}
-
-	void GameObject::drawChar(std::string attrName, ::Components::Attribute* attr)
-	{
-		if (ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank)) {
-		}
-	}
-
-	void GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr)
-	{
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
-
-		GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
-
-		std::string name = "";
-		if (attr->value.valueString != "") {
-			name = attr->value.valueString;
-		}
-
-		if (go != nullptr) {
-			name = go->getName().c_str();
-		}
-
-		if (ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
-			for (auto go : gameObjects) {
-				if (ImGui::Selectable(go.second->getName().c_str()))
-					attr->value.value.valueFloat = go.second->getId();
-			}
-
-			if (std::filesystem::is_directory("Prefabs"))
-				for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
-					if (entry.path().extension() == ".prefab") {
-						std::string prefabFileName = entry.path().filename().string();
-						if (ImGui::Selectable(prefabFileName.c_str())) {
-
-							std::ifstream inputFile("Prefabs/" + prefabFileName);
-
-							nlohmann::ordered_json jsonData;
-							try {
-								inputFile >> jsonData;
-							}
-							catch (const nlohmann::json::parse_error& e) {
-								std::cerr << "JSON parse error: " << e.what() << std::endl;
-								return;
-							}
-							inputFile.close();
-
-							attr->value.value.valueFloat = jsonData["id"];
-							attr->value.valueString = prefabFileName;
-
-						}
-					}
-				}
-
-			ImGui::EndCombo();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button(("X##" + attrName).c_str())) {
-			attr->value.value.valueFloat = -1;
-			attr->value.valueString = "";
-		}
-	}
-
-
-	GameObject::GameObject(std::string& path)
-	{
+	GameObject::GameObject(std::string& path) {
 		editor = Editor::getInstance();
 
 		pos = new ImVec2(0, 0);
@@ -253,7 +31,7 @@ namespace ShyEditor {
 		Scene* scene = editor->getScene();
 		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
 
-		//Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
+		// Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
 		while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
 			GameObject::lastId++;
 		}
@@ -266,37 +44,23 @@ namespace ShyEditor {
 
 		parent = nullptr;
 
-		text = nullptr;
+		texture = nullptr;
 
 		if (path.size() > 0) {
-
-			SDL_Surface* surface = IMG_Load(std::string(editor->getProjectInfo().path + "/Images/" + path).c_str());
-
-			if (surface != nullptr) {
-
-				text = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
-
-				int w, h;
-				SDL_QueryTexture(text, NULL, NULL, &w, &h);
-				*size = ImVec2(w, h);
-			}
-			else {
-				imagePath = "";
-			}
-
-			SDL_FreeSurface(surface);
+			texture = ResourcesManager::GetInstance()->AddTexture(path, false);
+			*size = ImVec2(texture->getWidth(), texture->getHeight());
 		}
 
 
 		if (imagePath != "") {
-			//Add component image
+			// Add component image
 			::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
 			::Components::AttributeValue attributeValue;
 			attributeValue.valueString = path;
 			imageComponent.getAttribute("fileName").SetValue(attributeValue);
 			addComponent(imageComponent);
 
-			//Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
+			// Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
 			std::size_t extensionPos = path.find_last_of('.');
 			name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
 		}
@@ -307,11 +71,8 @@ namespace ShyEditor {
 
 		editor = editor;
 
-		//Gizmo texture
-		SDL_Surface* surface = IMG_Load("gizmo.png");
-		gizmoText = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
-
-		SDL_FreeSurface(surface);
+		// Gizmo texture
+		gizmo = ResourcesManager::GetInstance()->AddTexture(GizmoImage, true);
 
 		showGizmo = false;
 		visible = true;
@@ -322,90 +83,33 @@ namespace ShyEditor {
 		previousMousePosY = 0;
 
 		renderOrder = 0;
+
 	}
 
-	GameObject::~GameObject()
-	{
-		if (parent != nullptr) {
-			parent->removeChild(this);
-		}
+	GameObject::~GameObject() {
 
-		for (auto child : children) {
+		if (parent != nullptr)
+			parent->removeChild(this);
+
+		for (auto child : children)
 			child.second->setParent(nullptr);
-		}
 
 		components.clear();
 
 		delete pos;
 		delete scale;
 		delete size;
+
 	}
 
-	SDL_Texture* GameObject::getTexture()
-	{
-		return text;
-	}
 
-	std::string GameObject::getName()
-	{
-		return name;
-	}
 
-	bool GameObject::isVisible()
-	{
-		return visible;
-	}
 
-	int GameObject::getId()
-	{
-		return id;
-	}
 
-	int GameObject::getRenderOrder()
-	{
-		return renderOrder;
-	}
+	// ------------------------------------- Render, update and input -----------------------------------
 
-	void GameObject::setVisible(bool visible)
-	{
-		if (this->parent == nullptr) {
-			this->visible = visible;
-			setChildrenVisible(this, visible);
-		}
-	}
+	void GameObject::render(SDL_Renderer* renderer, Camera* camera) {
 
-	float GameObject::getScale_x()
-	{
-		return scale->x;
-	}
-
-	float GameObject::getScale_y()
-	{
-		return scale->y;
-	}
-
-	void GameObject::drawTransformInEditor()
-	{
-		if (ImGui::CollapsingHeader("Transform"))
-		{
-
-			ImGui::Text("Position");
-			ImGui::DragFloat2("##position_drag", (float*)pos, 0.3f, 0.0f, 0.0f, "%.2f");
-
-			ImGui::Text("Scale");
-			ImGui::DragFloat2("##scale_drag", (float*)scale, 0.02f, 0.0f, FLT_MAX, "%.2f");
-
-			ImGui::Text("Rotation");
-			ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
-
-			ImGui::Text("Render order");
-			ImGui::InputInt("##render_order", &renderOrder);
-
-		}
-	}
-
-	void GameObject::render(SDL_Renderer* renderer, Camera* camera)
-	{
 		ImVec2 position = getAdjustedPosition();
 
 		float width = size->x * getScale_x();
@@ -420,9 +124,8 @@ namespace ShyEditor {
 
 		SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
 
-		if (visible) {
-			SDL_RenderCopyEx(renderer, getTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
-		}
+		if (visible)
+			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
 
 		// Render outline
 		if (this == editor->getScene()->getSelectedGameObject())
@@ -445,73 +148,39 @@ namespace ShyEditor {
 				dst.x += dst.w / 2;
 				dst.y -= dst.h / 2;
 
-				SDL_RenderCopy(renderer, gizmoText, NULL, &dst);
+				SDL_RenderCopy(renderer, gizmo->getSDLTexture(), NULL, &dst);
 			}
 		}
 	}
 
-	void GameObject::translateChildren(GameObject* go, ImVec2* previousPos)
-	{
-		ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
+	void GameObject::update() {
 
-		for (auto childPair : go->getChildren()) {
+		if (components.find("Image") == components.end()) {
+			texture = nullptr;
+			return;
+		}
 
-			ImVec2 childPos = childPair.second->getPosition();
+		Components::Component* imageComponent = &components.find("Image")->second;
+		std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
 
-			float xDiff = go->getPosition().x - parentPreviousPos.x;
-			float yDiff = go->getPosition().y - parentPreviousPos.y;
+		if (currentImagePath != imagePath) {
 
-			previousPos->x = childPos.x;
-			previousPos->y = childPos.y;
+			texture = ResourcesManager::GetInstance()->AddTexture(currentImagePath, false);
 
-			childPair.second->setPosition(ImVec2(childPos.x + xDiff, childPos.y + yDiff));
-
-			translateChildren(childPair.second, previousPos);
+			if (texture != nullptr) {
+				imagePath = currentImagePath;
+				*size = ImVec2(texture->getWidth(), texture->getHeight());
+			}
+			else {
+				*size = ImVec2(100, 100);
+				imagePath = "";
+			}
 		}
 
 	}
 
-	void GameObject::scaleChildren(GameObject* go, int scaleFactor)
-	{
-		for (auto childPair : go->getChildren()) {
+	bool GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos) {
 
-			childPair.second->scale->x += scaleFactor;
-			childPair.second->scale->y += scaleFactor;
-
-			scaleChildren(childPair.second, scaleFactor);
-		}
-	}
-
-	void GameObject::setChildrenVisible(GameObject* go, bool visible)
-	{
-		for (auto childPair : go->getChildren()) {
-
-			childPair.second->visible = visible;
-
-			setChildrenVisible(childPair.second, visible);
-		}
-	}
-
-	void GameObject::rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle)
-	{
-		float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
-
-		for (auto child : go->getChildren())
-		{
-			float newX = cos(angleRadians) * (child.second->pos->x - goCenter->pos->x) - sin(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->x;
-			float newY = sin(angleRadians) * (child.second->pos->x - goCenter->pos->x) + cos(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->y;
-
-			child.second->pos->x = newX;
-			child.second->pos->y = newY;
-			child.second->rotation += rotationAngle;
-
-			rotateChildren(child.second, goCenter, rotationAngle);
-		}
-	}
-
-
-	bool GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos)
-	{
 		showGizmo = false;
 
 		if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->getSelectedGameObject() == this) {
@@ -542,7 +211,6 @@ namespace ShyEditor {
 				rightMouseButtonDown = false;
 			}
 		}
-
 
 		if (editor->getScene()->getSelectedGameObject() == this) {
 			if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
@@ -611,49 +279,66 @@ namespace ShyEditor {
 		return false;
 	}
 
-	void GameObject::update()
-	{
-		if (components.find("Image") == components.end()) {
-			text = nullptr;
-			return;
-		}
 
-		Components::Component* imageComponent = &components.find("Image")->second;
-		std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
 
-		if (currentImagePath != imagePath) {
-			SDL_Surface* surface = IMG_Load(std::string(editor->getProjectInfo().path + "/Images/" + currentImagePath).c_str());
 
-			if (surface != nullptr) {
-				text = SDL_CreateTextureFromSurface(editor->getRenderer(), surface);
-				imagePath = currentImagePath;
 
-				int w, h;
-				SDL_QueryTexture(text, NULL, NULL, &w, &h);
-				*size = ImVec2(w, h);
+	// ----------------------------- Name, ID and texture getters/setters ---------------------------
 
-			}
-			else {
-
-				*size = ImVec2(100, 100);
-				text = nullptr;
-				imagePath = "";
-			}
-
-			SDL_FreeSurface(surface);
-		}
-
+	std::string GameObject::getName() {
+		return name;
 	}
 
-	void GameObject::addComponent(::Components::Component comp)
-	{
+	void GameObject::setName(const std::string& newName) {
+		name = newName;
+	}
+
+	Texture* GameObject::getTexture() {
+		return texture;
+	}
+
+	int GameObject::getId() {
+		return id;
+	}
+
+
+
+
+
+
+	// ----------------------------------- Visibility getters/setters -----------------------------------
+
+	int GameObject::getRenderOrder() {
+		return renderOrder;
+	}
+
+	bool GameObject::isVisible() {
+		return visible;
+	}
+
+	void GameObject::setVisible(bool visible) {
+		if (this->parent == nullptr) {
+			this->visible = visible;
+			setChildrenVisible(this, visible);
+		}
+	}
+
+
+
+
+
+
+	// ----------------------------------- Components and Scripts logic --------------------------------------
+
+	void GameObject::addComponent(::Components::Component comp) {
+
 		if (components.find(comp.getName()) == components.end()) {
 			components.insert({ comp.getName(), comp });
 		}
 	}
 
-	void GameObject::addScript(::Components::Script script)
-	{
+	void GameObject::addScript(::Components::Script script) {
+
 		if (scripts.contains(script.GetName()))
 		{
 			return;
@@ -662,39 +347,35 @@ namespace ShyEditor {
 		scripts.emplace(script.GetName(), script);
 	}
 
-	std::unordered_map<std::string, ::Components::Component>* GameObject::getComponents()
-	{
+	std::unordered_map<std::string, ::Components::Component>* GameObject::getComponents() {
 		return &components;
 	}
 
-	std::unordered_map<std::string, ::Components::Script>* GameObject::getScripts()
-	{
+	std::unordered_map<std::string, ::Components::Script>* GameObject::getScripts() {
 		return &scripts;
 	}
 
-	void GameObject::setPosition(ImVec2 newPos)
-	{
+
+
+
+
+	// --------------------------------- Tranform attributes getters/setters -----------------------------------
+
+	void GameObject::setPosition(ImVec2 newPos) {
 		pos->x = newPos.x;
 		pos->y = newPos.y;
 	}
 
-	void GameObject::setName(const std::string newName)
-	{
-		name = newName;
-	}
-
-	ImVec2 GameObject::getPosition()
-	{
+	ImVec2 GameObject::getPosition() {
 		return *pos;
 	}
 
-	float GameObject::getRotation()
-	{
+	float GameObject::getRotation() {
 		return rotation;
 	}
 
-	ImVec2 GameObject::getAdjustedPosition()
-	{
+	ImVec2 GameObject::getAdjustedPosition() {
+
 		ImVec2 position = *pos;
 
 		//El punto 0, 0 es el centro del frame
@@ -711,19 +392,30 @@ namespace ShyEditor {
 		return position;
 	}
 
-	ImVec2 GameObject::getSize()
-	{
+	ImVec2 GameObject::getSize() {
 		return *size;
 	}
 
+	float GameObject::getScale_x() {
+		return scale->x;
+	}
 
-	bool GameObject::isWaitingToDelete()
-	{
+	float GameObject::getScale_y() {
+		return scale->y;
+	}
+
+
+
+
+
+
+	// --------------------------------------- Deleting gameobject logic ---------------------------------------
+
+	bool GameObject::isWaitingToDelete() {
 		return waitingToDelete;
 	}
 
-	void GameObject::toDelete()
-	{
+	void GameObject::toDelete() {
 		waitingToDelete = true;
 
 		for (auto child : children) {
@@ -731,48 +423,361 @@ namespace ShyEditor {
 		}
 	}
 
-	void GameObject::setParent(GameObject* go)
-	{
+
+
+
+
+	// --------------------------------- Gameobject children and parent logic ------------------------------------
+
+	void GameObject::setParent(GameObject* go) {
 		parent = go;
 	}
 
-	GameObject* GameObject::getParent()
-	{
+	GameObject* GameObject::getParent() {
 		return parent;
 	}
 
-	void GameObject::removeChild(GameObject* go)
-	{
+	void GameObject::removeChild(GameObject* go) {
 		go->setParent(nullptr);
 		children.erase(go->getId());
 	}
 
-	void GameObject::addChild(GameObject* go)
-	{
+	void GameObject::addChild(GameObject* go) {
 		go->setParent(this);
 		children.insert({ go->getId(), go });
 	}
 
-	std::unordered_map<int, GameObject*> GameObject::getChildren()
-	{
+	std::unordered_map<int, GameObject*> GameObject::getChildren() {
 		return children;
 	}
 
-	bool GameObject::isAscendant(GameObject* go)
-	{
-		for (auto childPair : children)
-		{
+	bool GameObject::isAscendant(GameObject* go) {
+
+		for (auto childPair : children) {
 			GameObject* child = childPair.second;
+
 			if (child == go || child->isAscendant(go))
-			{
 				return true;
-			}
 		}
+
 		return false;
 	}
 
-	std::string GameObject::toJson(bool isPrefab)
-	{
+
+
+
+
+
+	// ---------------------------------------- Gameobject drawing logic ----------------------------------------------
+
+	void GameObject::drawTransformInEditor() {
+
+		if (ImGui::CollapsingHeader("Transform")) {
+
+			ImGui::Text("Position");
+			ImGui::DragFloat2("##position_drag", (float*)pos, 0.3f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Scale");
+			ImGui::DragFloat2("##scale_drag", (float*)scale, 0.02f, 0.0f, FLT_MAX, "%.2f");
+
+			ImGui::Text("Rotation");
+			ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Render order");
+			ImGui::InputInt("##render_order", &renderOrder);
+		}
+	}
+
+	void GameObject::drawComponentsInEditor() {
+
+		for (auto it = components.begin(); it != components.end();) {
+			std::string componentName = (*it).second.getName();
+
+			if (ImGui::CollapsingHeader(componentName.c_str()))
+			{
+				for (auto& attribute : (*it).second.getAllAttributes()) {
+					std::string attributeName = attribute.first;
+					::Components::Attribute* attr = &attribute.second;
+
+					ImGui::Text(attributeName.c_str());
+
+					switch (attr->getType())
+					{
+					case ::Components::AttributesType::FLOAT:
+						drawFloat(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::VECTOR2:
+						drawVector2(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::STRING:
+						drawString(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::BOOL:
+						drawBool(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::COLOR:
+						drawColor(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::CHAR:
+						drawChar(attributeName + it->first, attr);
+						break;
+					case ::Components::AttributesType::GAMEOBJECT:
+						drawGameobject(attributeName + it->first, attr);
+						break;
+					default:
+						break;
+					}
+				}
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
+
+				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+					it = components.erase(it);
+				}
+				else {
+					++it;
+				}
+
+				ImGui::PopStyleColor(2);
+
+			}
+			else {
+				++it;
+			}
+		}
+	}
+
+	void GameObject::drawScriptsInEditor() {
+
+		for (auto it = scripts.begin(); it != scripts.end();) {
+			std::string scriptName = (*it).first;
+			if (ImGui::CollapsingHeader(scriptName.c_str()))
+			{
+				for (auto& attribute : (*it).second.getAllAttributes()) {
+					std::string attributeName = attribute.first;
+					::Components::Attribute* attr = &attribute.second;
+
+					ImGui::Text(attributeName.c_str());
+
+					switch (attr->getType()) {
+
+						case Components::AttributesType::FLOAT:
+							drawFloat(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::VECTOR2:
+							drawVector2(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::STRING:
+							drawString(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::BOOL:
+							drawBool(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::COLOR:
+							drawColor(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::CHAR:
+							drawChar(attributeName + it->first, attr);
+						case Components::AttributesType::GAMEOBJECT:
+							drawGameobject(attributeName + it->first, attr);
+							break;
+						default:
+							break;
+					}
+				}
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
+
+				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+
+					editor->OpenScript(scriptName);
+				}
+
+				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+					it = scripts.erase(it);
+				}
+				else {
+					++it;
+				}
+
+				ImGui::PopStyleColor(2);
+
+			}
+			else {
+				++it;
+			}
+		}
+
+	}
+
+	void GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr) {
+
+		ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
+	}
+
+	void GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr) {
+
+		ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+	}
+
+	void GameObject::drawString(std::string attrName, ::Components::Attribute* attr) {
+
+		char inputBuffer[256];
+		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
+
+		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer)))
+			attr->value.valueString = inputBuffer;
+
+	}
+
+	void GameObject::drawBool(std::string attrName, ::Components::Attribute* attr) {
+
+		ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
+	}
+
+	void GameObject::drawColor(std::string attrName, ::Components::Attribute* attr) {
+
+		ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
+	}
+
+	void GameObject::drawChar(std::string attrName, ::Components::Attribute* attr) {
+
+		if (ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank)) {
+
+		}
+	}
+
+	void GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr) {
+
+		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+
+		GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
+
+		std::string name = "";
+		if (attr->value.valueString != "") {
+			name = attr->value.valueString;
+		}
+
+		if (go != nullptr) {
+			name = go->getName().c_str();
+		}
+
+		if (ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
+			for (auto go : gameObjects) {
+				if (ImGui::Selectable(go.second->getName().c_str()))
+					attr->value.value.valueFloat = go.second->getId();
+			}
+
+			if (std::filesystem::is_directory("Prefabs"))
+				for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
+					if (entry.path().extension() == ".prefab") {
+						std::string prefabFileName = entry.path().filename().string();
+						if (ImGui::Selectable(prefabFileName.c_str())) {
+
+							std::ifstream inputFile("Prefabs/" + prefabFileName);
+
+							nlohmann::ordered_json jsonData;
+							try {
+								inputFile >> jsonData;
+							}
+							catch (const nlohmann::json::parse_error& e) {
+								std::cerr << "JSON parse error: " << e.what() << std::endl;
+								return;
+							}
+							inputFile.close();
+
+							attr->value.value.valueFloat = jsonData["id"];
+							attr->value.valueString = prefabFileName;
+
+						}
+					}
+				}
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button(("X##" + attrName).c_str())) {
+			attr->value.value.valueFloat = -1;
+			attr->value.valueString = "";
+		}
+	}
+
+
+
+
+
+	// ---------------------- Gameobject children settings (Transform and visibility) ----------------------
+
+	void GameObject::translateChildren(GameObject* go, ImVec2* previousPos) {
+
+		ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
+
+		for (auto childPair : go->getChildren()) {
+
+			ImVec2 childPos = childPair.second->getPosition();
+
+			float xDiff = go->getPosition().x - parentPreviousPos.x;
+			float yDiff = go->getPosition().y - parentPreviousPos.y;
+
+			previousPos->x = childPos.x;
+			previousPos->y = childPos.y;
+
+			childPair.second->setPosition(ImVec2(childPos.x + xDiff, childPos.y + yDiff));
+
+			translateChildren(childPair.second, previousPos);
+		}
+	}
+
+	void GameObject::scaleChildren(GameObject* go, int scaleFactor) {
+
+		for (auto childPair : go->getChildren()) {
+
+			childPair.second->scale->x += scaleFactor;
+			childPair.second->scale->y += scaleFactor;
+
+			scaleChildren(childPair.second, scaleFactor);
+		}
+	}
+
+	void GameObject::setChildrenVisible(GameObject* go, bool visible) {
+
+		for (auto childPair : go->getChildren()) {
+
+			childPair.second->visible = visible;
+
+			setChildrenVisible(childPair.second, visible);
+		}
+	}
+
+	void GameObject::rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle) {
+
+		float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
+
+		for (auto child : go->getChildren())
+		{
+			float newX = cos(angleRadians) * (child.second->pos->x - goCenter->pos->x) - sin(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->x;
+			float newY = sin(angleRadians) * (child.second->pos->x - goCenter->pos->x) + cos(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->y;
+
+			child.second->pos->x = newX;
+			child.second->pos->y = newY;
+			child.second->rotation += rotationAngle;
+
+			rotateChildren(child.second, goCenter, rotationAngle);
+		}
+	}
+
+
+
+
+
+	// ------------------------ Serialization and deseralization logic -------------------------
+
+	std::string GameObject::toJson(bool isPrefab) {
+
 		nlohmann::ordered_json j;
 		j["name"] = name;
 
@@ -833,8 +838,8 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
-	GameObject* GameObject::fromJson(std::string json, bool isPrefab)
-	{
+	GameObject* GameObject::fromJson(std::string json, bool isPrefab) {
+
 		nlohmann::ordered_json jsonData;
 		try {
 			jsonData = nlohmann::json::parse(json);

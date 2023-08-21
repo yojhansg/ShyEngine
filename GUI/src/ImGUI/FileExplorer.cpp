@@ -18,6 +18,8 @@
 #include <direct.h>
 #include <imgui.h>
 #include <fstream>
+#include "ResourcesManager.h"
+#include <Windows.h>
 
 #define FolderImage "folder.png"
 #define FileImage "file.png"
@@ -27,7 +29,7 @@ namespace fs = std::filesystem;
 
 namespace ShyEditor {
 
-	FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
+	FileExplorer::FileExplorer() : Window("File Explorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
 	{
 		editor = Editor::getInstance();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
@@ -47,7 +49,9 @@ namespace ShyEditor {
 		folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
 		file = ResourcesManager::GetInstance()->AddTexture(FileImage, true);
 		script = ResourcesManager::GetInstance()->AddTexture(ScriptImage, true);
+		
 
+		docked = true;
 	}
 
 	void FileExplorer::drawFileExplorerWindow()
@@ -100,8 +104,12 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
 
 				// Display directories in blue color
-				if (ImGui::Selectable(filename.c_str(), false))
-					currentPath = explorerFile.path().string();
+				if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+				{
+
+					if (ImGui::IsMouseDoubleClicked(0))
+						currentPath = explorerFile.path().string();
+				}
 
 				ImGui::PopStyleColor(1);
 			}
@@ -121,7 +129,6 @@ namespace ShyEditor {
 				if (explorerFile.path().extension().string() == ".script") 
 					texture = script->getSDLTexture();
 
-
 				const float iconSize = ImGui::GetTextLineHeight() + 8;
 				ImGui::Image(texture, ImVec2(iconSize, iconSize), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
 
@@ -129,9 +136,53 @@ namespace ShyEditor {
 
 				ImGui::SetWindowFontScale(1.5);
 
-				// Display files in default color
-				ImGui::Text(filename.c_str());
+
+				std::string path = explorerFile.path().string();
+				size_t dotPos = filename.find_last_of(".");
+				std::string filenameWithoutExtension = filename.substr(0, dotPos);
+
 				std::string extension = explorerFile.path().extension().string();
+				// Display files in default color
+				if (ImGui::Selectable(filename.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick)) {
+
+					if (ImGui::IsMouseDoubleClicked(0)) {
+
+						if (extension == ".script") {
+
+							editor->OpenScript(filenameWithoutExtension);
+						}
+						else if (extension == ".scene") {
+
+							std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();
+							editor->getScene()->loadScene(relativePath);
+
+						}
+
+						else
+							ShellExecuteA(NULL, "open", (LPCSTR)explorerFile.path().string().c_str(), NULL, NULL, SW_SHOWNORMAL);
+					}
+
+				}
+				else {
+
+					if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+					{
+						std::string relativePath = explorerFile.path().lexically_relative(projectPath + "/Images").string();
+
+
+						Asset asset;
+
+						asset.extension = extension;
+						asset.name = filenameWithoutExtension;
+						asset.path = path;
+						asset.relativePath = relativePath;
+						ResourcesManager::SelectAsset(asset);
+
+					}
+
+				}
+
+
 
 				if (extension == ".png" || extension == ".jpg")
 				{
@@ -153,11 +204,10 @@ namespace ShyEditor {
 					ImGui::SameLine();
 					std::string buttonId = "Open script##" + filename;
 					if (ImGui::Button(buttonId.c_str())) {
-						ImGui::OpenPopup("Create script");
 
+						ImGui::OpenPopup("Create script");
 						size_t dotPos = filename.find_last_of(".");
 						std::string filenameWithoutExtension = filename.substr(0, dotPos);
-
 						editor->OpenScript(filenameWithoutExtension);
 					}
 				}
@@ -210,49 +260,9 @@ namespace ShyEditor {
 
 	}
 
-	void FileExplorer::render()
+	void FileExplorer::Behaviour()
 	{
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-		ComponentWindow* components = editor->getComponents();
-		Hierarchy* hierarchy = editor->getHierarchy();
-
-		if (focused)
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
-		else {
-			float sizeYToConstraint;
-
-			if (components->isFocused()) {
-				sizeYToConstraint = components->getSize().y;
-			}
-			else {
-				sizeYToConstraint = hierarchy->getSize().y;
-			}
-
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24));
-		}
-
-		focused = false;
-
-		// Draw the file explorer 
-		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
-
-		if (ImGui::IsWindowFocused())
-			focused = true;
-
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-		windowWidth = imGUIWindowSize.x;
-		windowHeight = imGUIWindowSize.y;
-		windowPosX = imGUIWindowPos.x;
-		windowPosY = imGUIWindowPos.y;
-
-		ImGui::SetWindowPos(ImVec2(0, mainWindowSize.y - windowHeight));
-		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-
 		drawFileExplorerWindow();
-
-		ImGui::End();
-
 	}
 
 }

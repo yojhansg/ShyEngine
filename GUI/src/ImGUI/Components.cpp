@@ -24,55 +24,12 @@ namespace ShyEditor {
 		windowOriPosX = mainWindowSize.x - windowOriWidth;
 		windowOriPosY = menuBarHeight;
 
-		setSize(ImVec2(windowOriWidth, windowOriHeight));
-		setPosition(ImVec2(windowOriPosX, windowOriPosY));
+		docked = true;
 	}
 
-	void ComponentWindow::render()
+	void ComponentWindow::Behaviour()
 	{
-
-		Editor* editor = Editor::getInstance();
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-
-		Scene* scene = editor->getScene();
-		FileExplorer* fileExplorer = editor->getFileExplorer();
-
-		GameObject* gameObject = scene->getSelectedGameObject();
-
-
-		if (focused) 
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - mainWindowSize.y * 0.5f - 24), 
-						 ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - mainWindowSize.y * 0.1f - 24));
-		else
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x * 0.1f, mainWindowSize.y - fileExplorer->getSize().y - 24), 
-						 ImVec2(mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO, mainWindowSize.y - fileExplorer->getSize().y - 24));
-
-		focused = false;
-
-		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
-
-		if (ImGui::IsWindowFocused())
-			focused = true;
-
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-
-		if (windowPosX < mainWindowSize.x - mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO) {
-			windowPosX = mainWindowSize.x - mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
-			windowWidth = mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
-		}
-		else {
-			windowPosX = imGUIWindowPos.x;
-			windowWidth = mainWindowSize.x - imGUIWindowPos.x;
-		}
-
-		windowPosY = imGUIWindowPos.y;
-		windowHeight = imGUIWindowSize.y;
-
-		float menuBarHeight = ImGui::GetFrameHeight();
-
-		ImGui::SetWindowPos(ImVec2(windowPosX, menuBarHeight));
-		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
+		GameObject* gameObject = Editor::getInstance()->getScene()->getSelectedGameObject();
 
 		if (gameObject != nullptr) {
 
@@ -125,7 +82,6 @@ namespace ShyEditor {
 
 		}
 
-		ImGui::End();
 
 	}
 }

@@ -16,8 +16,9 @@ namespace ShyEditor {
 		std::string name;
 		std::string extension;
 		std::string path;
+		std::string relativePath;
 
-		bool valid;
+		bool valid = true;
 	};
 
 	class ResourcesManager {
@@ -38,7 +39,12 @@ namespace ShyEditor {
 
 		static void UnselectAsset();
 		static void SelectAsset(const Asset& asset);
+		static bool IsAnyAssetSelected();
 		static const Asset& SelectedAsset();
+
+
+		static void Init();
+		static void Release();
 
 	private:
 

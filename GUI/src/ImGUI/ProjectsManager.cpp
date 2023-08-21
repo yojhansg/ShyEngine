@@ -1,6 +1,6 @@
-#include "imgui_impl_sdlrenderer.h"
+#include "imgui_impl_sdlrenderer2.h"
 #include "ProjectsManager.h"
-#include "imgui_impl_sdl.h"
+#include "imgui_impl_sdl2.h"
 #include "Editor.h"
 #include "Window.h"
 #include "imgui.h"
@@ -47,7 +47,7 @@ namespace ShyEditor {
     }
 
     void ProjectsManager::StartImGuiFrame() {
-        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDLRenderer2_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
     }
@@ -57,7 +57,7 @@ namespace ShyEditor {
         ImGui::Render();
         SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
         SDL_RenderClear(renderer);
-        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
     }
 

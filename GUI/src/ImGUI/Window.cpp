@@ -1,13 +1,17 @@
 #include "Window.h"
 
-#include "imgui_impl_sdlrenderer.h"
-#include "imgui_impl_sdl.h"
+#include "imgui_impl_sdlrenderer2.h"
+#include "imgui_impl_sdl2.h"
 #include "SDL_image.h"
 #include "Editor.h"
 #include "imgui.h"
 #include "SDL.h"
 
+
+#include "imgui_internal.h"
+
 namespace ShyEditor {
+
 
 	Window::Window(std::string _windowName, WindowFlags f = None)
 	{
@@ -23,6 +27,9 @@ namespace ShyEditor {
 		windowPosY = 0;
 
 		focused = false;
+		visible = true;
+		docked = false;
+
 	}
 
 	void Window::setSize(ImVec2 size)
@@ -47,22 +54,46 @@ namespace ShyEditor {
 		return ImVec2(windowPosX, windowPosY);
 	}
 
-	void Window::update() {}
-
-	void Window::render()
+	void Window::Behaviour()
 	{
-		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
-
-		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-
-		ImGui::SetWindowPos(ImVec2(windowPosX, windowPosY));
-
-
-		ImGui::End();
 	}
 
-	void Window::handleInput(SDL_Event* event) {}
+	void Window::HandleInput(SDL_Event* event) {}
+
+	void Window::UpdateWindow()
+	{
+		if (visible) {
+
+			if (!docked)
+			{
+
+				ImGui::SetNextWindowPos(ImVec2(windowPosX, windowPosY), ImGuiCond_Once);
+				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
+			}
+
+			ImGui::Begin(windowName.c_str(), (bool*)0, /*(ImGuiWindowFlags_)flags*/0);
+
+			Behaviour();
+
+			auto pos = ImGui::GetWindowPos();
+			auto size = ImGui::GetWindowSize();
+
+			windowPosX = pos.x;
+			windowPosY = pos.y;
+
+			windowWidth = size.x;
+			windowHeight = size.y;
+
+
+			focused = ImGui::IsWindowFocused();
+
+
+			ImGui::End();
+
+		}
+
+	}
 
 	bool Window::isFocused()
 	{
@@ -75,6 +106,25 @@ namespace ShyEditor {
 	{
 		return canBeDisplayedOnTop;
 	}
+
+	void Window::Hide()
+	{
+		visible = false;
+	}
+
+	void Window::Show()
+	{
+		visible = true;
+	}
+
+	bool Window::IsMouseHoveringWindow()
+	{
+		auto mouse = ImGui::GetMousePos();
+
+		return mouse.x > windowPosX && mouse.x < windowPosX + windowWidth &&
+			mouse.y > windowPosY && mouse.y < windowPosY + windowHeight;
+	}
+
 
 }
 

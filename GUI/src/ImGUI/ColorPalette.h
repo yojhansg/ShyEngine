@@ -75,7 +75,6 @@ namespace ShyEditor {
 		std::unordered_map<std::string, Palette> palettes;
 
 		bool open;
-		bool visible;
 		bool pendingApply;
 		bool initialisation;
 
@@ -95,7 +94,7 @@ namespace ShyEditor {
 
 		static void Open();
 
-		void render() override;
+		void Behaviour() override;
 
 		static void ApplyPalette();
 

@@ -5,45 +5,20 @@
 
 namespace ShyEditor {
 
-	bool Console::forceOpen = false;
 
 	Console::Console() : Window("Console", 0)
 	{
-		visible = false;
-
-		gameOpenedLastFrame = false;
-
 		windowWidth = 700;
 		windowHeight = 700;
 
 		canBeDisplayedOnTop = true;
+
+		Hide();
 	}
 
-	void Console::ForceOpen()
+
+	void Console::Behaviour()
 	{
-		forceOpen = true;
-	}
-
-	void Console::render()
-	{
-		bool gameOpened = Game::IsRunning();
-
-		if (!gameOpenedLastFrame && gameOpened)
-		{
-			visible = true;
-		}
-
-		gameOpenedLastFrame = gameOpened;
-
-		if (forceOpen)
-		{
-			visible = true;
-			forceOpen = false;
-		}
-
-
-		if (!visible) return;
-
 		//ImGui::SetNextWindowFocus();
 
 		while (Game::PendingOutput()) {
