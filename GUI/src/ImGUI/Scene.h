@@ -23,6 +23,9 @@ namespace ShyEditor {
 
 	private:
 
+
+		int viewMode;
+
 		SDL_Renderer* renderer;
 
 		Camera* camera;
@@ -31,6 +34,10 @@ namespace ShyEditor {
 
 		std::unordered_map<int, GameObject*> gameObjects;
 		GameObject* selectedGameObject;
+
+
+		std::vector<GameObject*> overlays;
+
 
 		static bool CompareGameObjectsRenderOrder(GameObject* a, GameObject* b);
 
@@ -61,6 +68,9 @@ namespace ShyEditor {
 		std::string getPath();
 		std::string toJson();
 
+		ImVec2 MousePositionInScene();
+
+		bool IsMouseHoveringGameObject(GameObject* gameObject);
 	};
 
 }

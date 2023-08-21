@@ -48,6 +48,8 @@ namespace ShyEditor {
 			loadScene(scenePath);
 
 		docked = true;
+
+		viewMode = 0;
 	}
 
 
@@ -88,30 +90,46 @@ namespace ShyEditor {
 
 		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 
-			ImVec2 max = ImVec2(windowWidth + windowPosX, windowPosY + windowHeight);
-
-			if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), max)) {
+			if (IsMouseHoveringWindow()) {
 				auto& asset = ResourcesManager::SelectedAsset();
 
 				if (asset.extension == ".png" || asset.extension == ".jpg") {
 
-					std::cout << "TODO: arrastrar un objeto";
-					//GameObject* go = editor->getScene()->AddGameObject(asset.relativePath);
+					GameObject* go = AddGameObject(asset.relativePath);
 
-					//ImVec2 position = getMousePosInsideScene(ImGui::GetMousePos());
-					//position.x -= Preferences::GetData().width * 0.5f;
-					//position.y -= Preferences::GetData().height * 0.5f;
+					ImVec2 position = MousePositionInScene();
 
-					//go->setPosition(position);
-					//selectedGameObject = go;
+					go->setPosition(position);
+					selectedGameObject = go;
 				}
 			}
 		}
 
 		camera->PrepareCameraRender();
 
-		RenderGameObjects();
-		RenderFrame();
+
+		switch (viewMode)
+		{
+		case 0:
+
+			RenderGameObjects();
+			RenderUI();
+			break;
+		case 1:
+
+			RenderGameObjects();
+			RenderFrame();
+
+			break;
+		case 2:
+
+			RenderUI();
+
+			break;
+
+		default:
+			break;
+		}
 
 		camera->StopCameraRender();
 
@@ -122,9 +140,13 @@ namespace ShyEditor {
 		float spacing = 50 * camera->GetScale();
 		int interval = 5;
 
+		int offset_x = windowWidth * 0.5f;
+		int offset_y = windowHeight * 0.5f;
+
+
 		ScriptCreationUtilities::Grid::SetSpacing(spacing);
 		ScriptCreationUtilities::Grid::SetInterval(interval);
-		ScriptCreationUtilities::Grid::SetOffset(camera->GetPosition().x, camera->GetPosition().y);
+		ScriptCreationUtilities::Grid::SetOffset(offset_x + camera->GetPosition().x, offset_y + camera->GetPosition().y);
 		ScriptCreationUtilities::Grid::Draw();
 
 
@@ -134,7 +156,54 @@ namespace ShyEditor {
 
 		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
 		ImGui::SliderFloat("Zoom (-/+)", &camera->GetScale(), camera->GetMinScale(), camera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
+
+		ImGui::SameLine();
+
+		ImGui::RadioButton("##Scene view - Both", &viewMode, 0);
+		ImGui::SameLine();
+		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
+		ImGui::SameLine();
+		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
 	}
+
+
+
+	ImVec2 Scene::MousePositionInScene()
+	{
+		ImVec2 mousepos = ImGui::GetMousePos();
+
+		mousepos.x -= windowPosX;
+		mousepos.y -= windowPosY;
+
+		ImVec2 cameraPosition = camera->GetPosition();
+
+		mousepos.x -= cameraPosition.x;
+		mousepos.y -= cameraPosition.y;
+
+		//Trasladar el origen de coordenadas de la esquina superior al centro
+		mousepos.x -= windowWidth * 0.5f;
+		mousepos.y -= windowHeight * 0.5f;
+
+		return mousepos;
+	}
+
+
+
+	bool Scene::IsMouseHoveringGameObject(GameObject* gameObject)
+	{
+		auto mousePos = MousePositionInScene();
+
+		auto goPos = gameObject->getAdjustedPosition();
+		auto goSize = gameObject->getSize();
+
+		goSize.x *= gameObject->getScale_x();
+		goSize.y *= gameObject->getScale_y();
+
+		return mousePos.x > goPos.x && mousePos.x < goPos.x + goSize.x &&
+			mousePos.y > goPos.y && mousePos.y < goPos.y + goSize.y;
+	}
+
+
 
 
 	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b)
@@ -227,12 +296,22 @@ namespace ShyEditor {
 			frameRect.w -= 2;
 			frameRect.h -= 2;
 		}
-		
+
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	}
 
 	void Scene::RenderUI()
 	{
+
+
+
+
+
+
+
+
+
+
 	}
 
 	void Scene::saveScene(std::string path)
@@ -263,10 +342,19 @@ namespace ShyEditor {
 		ImVec2 mousePos = ImGui::GetMousePos();
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyGoSelected = false;
-		for (const auto& pair : gameObjects) {
 
-			//if (insideWindow)
-			//	anyGoSelected |= pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+		{
+			for (const auto& pair : gameObjects) {
+
+
+				if (IsMouseHoveringGameObject(pair.second)) {
+
+
+					anyGoSelected = true;
+					selectedGameObject = pair.second;
+				}
+			}
 		}
 
 		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
