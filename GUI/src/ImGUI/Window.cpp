@@ -1,7 +1,7 @@
 #include "Window.h"
 
-#include "imgui_impl_sdlrenderer.h"
-#include "imgui_impl_sdl.h"
+#include "imgui_impl_sdlrenderer2.h"
+#include "imgui_impl_sdl2.h"
 #include "SDL_image.h"
 #include "Editor.h"
 #include "imgui.h"

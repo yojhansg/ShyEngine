@@ -27,12 +27,6 @@
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h">
       <Filter>ImGUI_files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.h">
-      <Filter>ImGUI_files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.h">
-      <Filter>ImGUI_files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ImGUI\Camera.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -90,6 +84,12 @@
     <ClInclude Include="..\..\src\ImGUI\Texture.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.h">
+      <Filter>ImGUI_files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.h">
+      <Filter>ImGUI_files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\imgui.cpp">
@@ -105,12 +105,6 @@
       <Filter>ImGUI_files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp">
-      <Filter>ImGUI_files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.cpp">
-      <Filter>ImGUI_files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.cpp">
       <Filter>ImGUI_files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp">
@@ -169,6 +163,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ImGUI\Texture.cpp">
       <Filter>Archivos de recursos\Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.cpp">
+      <Filter>ImGUI_files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.cpp">
+      <Filter>ImGUI_files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

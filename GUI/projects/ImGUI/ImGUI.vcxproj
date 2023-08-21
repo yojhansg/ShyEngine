@@ -96,8 +96,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.h" />
-    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.h" />
+    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.h" />
     <ClInclude Include="..\..\dependencies\imgui\imconfig.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
@@ -122,8 +122,8 @@
     <ClInclude Include="..\..\src\ImGUI\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl.cpp" />
-    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_draw.cpp" />
