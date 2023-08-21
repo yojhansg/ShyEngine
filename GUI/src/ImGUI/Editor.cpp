@@ -319,9 +319,11 @@ void Editor::UpdateAndRenderWindows()
 
 		auto id = ImGui::DockSpaceOverViewport();
 
-		if (ImGui::DockBuilderGetNode(id) == nullptr) {
+		auto rootNode = ImGui::DockBuilderGetNode(id);
+		if (rootNode->IsEmpty()) {
 
 			ImGui::DockBuilderRemoveNode(id);
+			
 			ImGui::DockBuilderAddNode(id);
 			ImGui::DockBuilderSetNodeSize(id, getMainWindowSize());
 
@@ -339,6 +341,12 @@ void Editor::UpdateAndRenderWindows()
 
 			ImGui::DockBuilderFinish(id);
 		}
+		else {
+
+
+			std::cout << "no es nulo" << std::endl;
+		}
+		
 	}
 	else
 		ImGui::DockSpaceOverViewport();
