@@ -13,15 +13,15 @@
 namespace ShyEditor {
 
 
-	Window::Window(std::string _windowName, WindowFlags f = None)
+	Window::Window(std::string _windowName, int f = 0)
 	{
 		flags = f;
 		windowName = _windowName;
 
 		canBeDisplayedOnTop = false;
 
-		windowWidth = windowOriWidth = 50;
-		windowHeight = windowOriHeight = 50;
+		windowWidth = 50;
+		windowHeight = 50;
 
 		windowPosX = 0;
 		windowPosY = 0;
@@ -72,9 +72,7 @@ namespace ShyEditor {
 				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
 			}
 
-			ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
-
-			Behaviour();
+			ImGui::Begin(windowName.c_str(), &visible, (ImGuiWindowFlags_)flags);
 
 			auto pos = ImGui::GetWindowPos();
 			auto size = ImGui::GetWindowSize();
@@ -85,6 +83,7 @@ namespace ShyEditor {
 			windowWidth = size.x;
 			windowHeight = size.y;
 
+			Behaviour();
 
 			docked = ImGui::IsWindowDocked();
 			focused = ImGui::IsWindowFocused();

@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "SDL.h"
 #include "ResourcesManager.h"
+#include "ScriptCreationUtilities.h"
 
 #include <string>
 #include <fstream>
@@ -20,94 +21,39 @@
 
 namespace ShyEditor {
 
-	bool Scene::mouseInsideWindow(ImVec2 mousePos)
-	{
-		float mouseX = mousePos.x;
-		float mouseY = mousePos.y;
 
-		return (mouseX > windowPosX && mouseX < windowPosX + windowWidth && mouseY > windowPosY + 15 && mouseY < windowPosY + windowHeight);
-	}
 
-	bool Scene::mouseInsideGameObject(GameObject* go, ImVec2 mousePos)
-	{
-
-		mousePos = getMousePosInsideScene(mousePos);
-
-		ImVec2 gOPos = go->getAdjustedPosition();
-
-		return (mousePos.x > gOPos.x && mousePos.x < gOPos.x + go->getSize().x * go->getScale_x() && mousePos.y > gOPos.y && mousePos.y < gOPos.y + go->getSize().y * go->getScale_y());
-	}
-
-	ImVec2 Scene::getMousePosInsideScene(ImVec2 mousePos)
-	{
-		float gameSizeX = Preferences::GetData().width;
-		float gameSizeY = Preferences::GetData().height;
-
-		//In case the editor is rescaled we need this
-		float windowScaleFactor = (float)windowWidth / windowOriWidth;
-
-		//The gameFrame size and position inside the ImGUI window
-		ImVec2 framePosition = ImVec2(camera->getPosition().x * camera->getScrollFactor() * windowScaleFactor, camera->getPosition().y * camera->getScrollFactor() * windowScaleFactor);
-		float frameWidth = gameSizeX * camera->getScrollFactor() * windowScaleFactor;
-		float frameHeight = gameSizeY * camera->getScrollFactor() * windowScaleFactor;
-
-		//Mouse position inside the IMGUIWindow
-		float mouseX = (mousePos.x - windowPosX - 8 - framePosition.x) / frameWidth * gameSizeX;
-		float mouseY = (mousePos.y - windowPosY - 27 - framePosition.y) / frameHeight * gameSizeY;
-
-		return ImVec2(mouseX, mouseY);
-	}
-
-	bool Scene::compareGameObjectsRenderOrder(GameObject* a, GameObject* b)
-	{
-		return a->getRenderOrder() < b->getRenderOrder();
-	}
-
-	Scene::Scene() : Window("Scene",NoCollapse | NoScrollbar | NoScrollWithMouse)
+	Scene::Scene() : Window("Scene", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse)
 	{
 		Editor* editor = Editor::getInstance();
 		editor->setScene(this);
 
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
-		windowOriWidth = mainWindowSize.x * SCENE_WIN_WIDTH_RATIO;
-		windowOriHeight = mainWindowSize.y * SCENE_WIN_HEIGHT_RATIO;
-
 		float menuBarHeight = ImGui::GetFrameHeight();
 
-		windowOriPosX = TARGET_WIDTH / 2 - windowOriWidth / 2;
-		windowOriPosY = menuBarHeight;
-
-		setSize(ImVec2(windowOriWidth, windowOriHeight));
-		setPosition(ImVec2(windowOriPosX, windowOriPosY));
-
-		path = "Scenes/" + Preferences::GetData().initialScene + ".scene";
-
-
-		float scrollFactor = 1.f;
-		camera = new Camera(
-			ImVec2(
-				(windowOriWidth - Preferences::GetData().width * scrollFactor) * 0.5f,
-				(windowOriHeight - Preferences::GetData().height * scrollFactor) * 0.5f
-			), scrollFactor);
+		scenePath = "Scenes/" + Preferences::GetData().initialScene + ".scene";
 
 		renderer = editor->getRenderer();
 
-		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowOriWidth, windowOriHeight);
+		camera = new Camera(
+			ImVec2(0, 0), 1, renderer);
+
+
+		camera->SetConstrains(.1, 10.0);
 
 		selectedGameObject = nullptr;
 
-		if (std::filesystem::exists(path))
-			loadScene(path);
+		if (std::filesystem::exists(scenePath))
+			loadScene(scenePath);
 
 		docked = true;
 	}
 
+
 	Scene::~Scene()
 	{
-
-		SDL_DestroyTexture(targetTexture);
-
+		
 		for (const auto& pair : gameObjects) {
 			delete pair.second;
 		}
@@ -116,43 +62,123 @@ namespace ShyEditor {
 		delete camera;
 	}
 
-	GameObject* Scene::addGameObject(std::string path)
+
+	void Scene::Behaviour()
+	{
+		if (camera->ShouldResize(windowWidth, windowHeight))
+			camera->Resize(windowWidth, windowHeight);
+
+		auto it = gameObjects.begin();
+		while (it != gameObjects.end()) {
+			GameObject* go = it->second;
+
+			go->update();
+
+			if (go->isWaitingToDelete()) {
+				selectedGameObject = nullptr;
+
+				delete go;
+				it = gameObjects.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+
+		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
+
+			ImVec2 max = ImVec2(windowWidth + windowPosX, windowPosY + windowHeight);
+
+			if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), max)) {
+				auto& asset = ResourcesManager::SelectedAsset();
+
+				if (asset.extension == ".png" || asset.extension == ".jpg") {
+
+					std::cout << "TODO: arrastrar un objeto";
+					//GameObject* go = editor->getScene()->AddGameObject(asset.relativePath);
+
+					//ImVec2 position = getMousePosInsideScene(ImGui::GetMousePos());
+					//position.x -= Preferences::GetData().width * 0.5f;
+					//position.y -= Preferences::GetData().height * 0.5f;
+
+					//go->setPosition(position);
+					//selectedGameObject = go;
+				}
+			}
+		}
+
+		camera->PrepareCameraRender();
+
+		RenderGameObjects();
+		RenderFrame();
+
+		camera->StopCameraRender();
+
+		ImGui::SetCursorPos(ImVec2(0, 0));
+		ImGui::Image(camera->GetTexture(), ImVec2(windowWidth, windowHeight));
+
+
+		//cambiar las propiedades del grid dependiendo del orden de magnitud
+
+
+		float spacing = 50 * camera->GetScale();
+		int interval = 5;
+
+		ScriptCreationUtilities::Grid::SetSpacing(spacing);
+		ScriptCreationUtilities::Grid::SetInterval(interval);
+		ScriptCreationUtilities::Grid::SetOffset(camera->GetPosition().x, camera->GetPosition().y);
+		ScriptCreationUtilities::Grid::Draw();
+
+
+		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
+		ImGui::SliderFloat("Zoom (-/+)", &camera->GetScale(), camera->GetMinScale(), camera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
+	}
+
+
+	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b)
+	{
+		return a->getRenderOrder() < b->getRenderOrder();
+	}
+
+
+	GameObject* Scene::AddGameObject(std::string path)
 	{
 		GameObject* go = (new GameObject(path));
 		gameObjects.emplace(go->getId(), go);
 		return go;
 	}
 
-	void Scene::addGameObject(GameObject* go)
+	void Scene::AddGameObject(GameObject* go)
 	{
 		gameObjects.emplace(go->getId(), go);
 	}
 
-	std::unordered_map<int, GameObject*> Scene::getGameObjects()
+	std::unordered_map<int, GameObject*>& Scene::getGameObjects()
 	{
 		return gameObjects;
 	}
 
-	GameObject* Scene::getSelectedGameObject()
+	GameObject* Scene::GetSelectedGameObject()
 	{
 		return selectedGameObject;
 	}
 
-	void Scene::setSelectedGameObject(GameObject* go)
+	void Scene::SetSelectedGameObject(GameObject* go)
 	{
 		selectedGameObject = go;
 	}
 
 
-	void Scene::renderChildGameObjects(GameObject* go)
+	void Scene::RenderChildGameObjects(GameObject* go)
 	{
 		for (auto pair : go->getChildren()) {
-			renderChildGameObjects(pair.second);
+			RenderChildGameObjects(pair.second);
 			pair.second->render(renderer, camera);
 		}
 	}
 
-	void Scene::renderGameObjects()
+	void Scene::RenderGameObjects()
 	{
 		std::vector<GameObject*> sortedGameObjects;
 		for (const auto& pair : gameObjects) {
@@ -160,32 +186,36 @@ namespace ShyEditor {
 				sortedGameObjects.push_back(pair.second);
 		}
 
-		std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), compareGameObjectsRenderOrder);
+		std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), CompareGameObjectsRenderOrder);
 
 		for (auto gO : sortedGameObjects) {
 			gO->render(renderer, camera);
-			renderChildGameObjects(gO);
+			RenderChildGameObjects(gO);
 		}
 	}
 
-	void Scene::renderFrame()
+	void Scene::RenderFrame()
 	{
 		// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
 		Uint8 r, g, b, a;
 		SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-		ImVec2 position = ImVec2(camera->getPosition().x * camera->getScrollFactor(), camera->getPosition().y * camera->getScrollFactor());
+		ImVec2 position = ImVec2(camera->GetPosition().x * camera->GetScale(), camera->GetPosition().y * camera->GetScale());
 
 		float gameSizeX = Preferences::GetData().width;
 		float gameSizeY = Preferences::GetData().height;
 
-		float width = gameSizeX * camera->getScrollFactor();
-		float height = gameSizeY * camera->getScrollFactor();
+		float width = gameSizeX * camera->GetScale();
+		float height = gameSizeY * camera->GetScale();
 
 		SDL_Rect frameRect = { position.x, position.y, width, height };
 		SDL_RenderDrawRect(renderer, &frameRect);
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	}
+
+	void Scene::RenderUI()
+	{
 	}
 
 	void Scene::saveScene(std::string path)
@@ -194,7 +224,7 @@ namespace ShyEditor {
 
 		j = j.parse(toJson());
 
-		this->path = path;
+		this->scenePath = path;
 
 		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + "/Scenes/scene.scene");
 		if (outputFile.is_open()) {
@@ -214,16 +244,16 @@ namespace ShyEditor {
 	void Scene::HandleInput(SDL_Event* event)
 	{
 		ImVec2 mousePos = ImGui::GetMousePos();
-
-		bool insideWindow = mouseInsideWindow(mousePos);
+		bool insideWindow = IsMouseHoveringWindow();
 		bool anyGoSelected = false;
 		for (const auto& pair : gameObjects) {
-			if (insideWindow)
-				anyGoSelected |= pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
+
+			//if (insideWindow)
+			//	anyGoSelected |= pair.second->handleInput(event, mouseInsideGameObject(pair.second, mousePos), getMousePosInsideScene(mousePos));
 		}
 
 		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			setSelectedGameObject(nullptr);
+			SetSelectedGameObject(nullptr);
 		}
 
 		if (!(SDL_GetModState() & KMOD_SHIFT)) {
@@ -232,76 +262,9 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::Behaviour()
-	{
-		auto it = gameObjects.begin();
-		while (it != gameObjects.end()) {
-			GameObject* go = it->second;
-
-			go->update();
-
-			if (go->isWaitingToDelete()) {
-				selectedGameObject = nullptr;
-
-				delete go;
-				it = gameObjects.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-
-
-		Editor* editor = Editor::getInstance();
-		FileExplorer* fileExplorer = editor->getFileExplorer();
-
-		ImVec2 hierarchyWindowSize = editor->getHierarchy()->getSize();
-		ImVec2 componentsWindowPos = editor->getComponents()->getPosition();
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-
-		//ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
-
-		size_t lastPathSlashPosition = path.find_last_of("/\\");
-		size_t lastPathDotPosition = path.find_last_of(".");
-
-		std::string sceneFilename = path.substr(lastPathSlashPosition + 1, lastPathDotPosition - lastPathSlashPosition - 1);
-
-		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
-
-			ImVec2 max = ImVec2(windowWidth + windowPosX, windowPosY + windowHeight);
-
-			if (ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), max)) {
-				auto& asset = ResourcesManager::SelectedAsset();
-
-				if (asset.extension == ".png" || asset.extension == ".jpg") {
-
-					GameObject* go = editor->getScene()->addGameObject(asset.relativePath);
-
-					ImVec2 position = getMousePosInsideScene(ImGui::GetMousePos());
-					position.x -= Preferences::GetData().width * 0.5f;
-					position.y -= Preferences::GetData().height * 0.5f;
-
-					go->setPosition(position);
-					selectedGameObject = go;
-				}
-			}
-		}
-
-
-		SDL_SetRenderTarget(renderer, targetTexture);
-		SDL_RenderClear(renderer);
-
-		renderGameObjects();
-		renderFrame();
-
-		SDL_SetRenderTarget(renderer, NULL);
-
-		ImGui::Image(targetTexture, ImVec2(windowWidth, windowOriHeight * windowWidth / windowOriWidth));
-	}
-
 	std::string Scene::getPath()
 	{
-		return path;
+		return scenePath;
 	}
 
 	std::string Scene::toJson()
@@ -331,7 +294,7 @@ namespace ShyEditor {
 		}
 		gameObjects.clear();
 
-		this->path = path;
+		this->scenePath = path;
 
 		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + "/Scenes/scene.scene");
 

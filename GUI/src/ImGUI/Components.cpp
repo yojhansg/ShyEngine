@@ -11,25 +11,14 @@
 
 namespace ShyEditor {
 
-	ComponentWindow::ComponentWindow() : Window("Components", NoCollapse)
+	ComponentWindow::ComponentWindow() : Window("Components", ImGuiWindowFlags_NoCollapse)
 	{
-		Editor* editor = Editor::getInstance();
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-
-		windowOriWidth = mainWindowSize.x * COMPONENTS_WIN_WIDTH_RATIO;
-		windowOriHeight = mainWindowSize.y * COMPONENTS_WIN_HEIGHT_RATIO;
-
-		float menuBarHeight = ImGui::GetFrameHeight();
-
-		windowOriPosX = mainWindowSize.x - windowOriWidth;
-		windowOriPosY = menuBarHeight;
-
 		docked = true;
 	}
 
 	void ComponentWindow::Behaviour()
 	{
-		GameObject* gameObject = Editor::getInstance()->getScene()->getSelectedGameObject();
+		GameObject* gameObject = Editor::getInstance()->getScene()->GetSelectedGameObject();
 
 		if (gameObject != nullptr) {
 

@@ -26,7 +26,7 @@ namespace ShyEditor {
     void MenuBar::Update()
     {
 
-        GameObject* gameObject = editor->getScene()->getSelectedGameObject();
+        GameObject* gameObject = editor->getScene()->GetSelectedGameObject();
 
         if (ImGui::BeginMainMenuBar())
         {

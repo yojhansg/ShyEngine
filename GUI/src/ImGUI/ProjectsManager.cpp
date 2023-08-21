@@ -115,7 +115,7 @@ namespace ShyEditor {
 
     ProjectsManager::Result ProjectsManager::NewProject() {
 
-        ImGui::Begin("Create Project", (bool*)0, NoMove | NoResize | NoCollapse);
+        ImGui::Begin("Create Project", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
         ImVec2 size = ImGui::GetWindowSize();
         w = size.x; h = size.y;
@@ -198,7 +198,7 @@ namespace ShyEditor {
 
     ProjectsManager::Result ProjectsManager::OpenProject() {
 
-        ImGui::Begin("Open Project", (bool*)0, NoMove | NoResize | NoCollapse);
+        ImGui::Begin("Open Project", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
         ImVec2 size = ImGui::GetWindowSize();
         w = size.x; h = size.y;
@@ -314,7 +314,7 @@ namespace ShyEditor {
 
     ProjectsManager::Result ProjectsManager::CloseEditor() {
 
-        ImGui::Begin("CLOSE", (bool*)0, NoMove | NoResize | NoCollapse | NoDecoration);
+        ImGui::Begin("CLOSE", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
 
         ImVec2 size = ImGui::GetWindowSize();
         w = size.x; h = size.y;

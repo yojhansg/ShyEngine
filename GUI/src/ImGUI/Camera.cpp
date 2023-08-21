@@ -5,18 +5,49 @@
 
 namespace ShyEditor {
 
-	Camera::Camera(ImVec2 position, float sf)
+	Camera::Camera(ImVec2 position, float scale, SDL_Renderer* renderer)
 	{
-		scrollFactor = sf;
+		this->scale = scale;
 
 		middleMouseButton = false;
 
-		clickOffsetX = clickOffsetY = 0;
-		mousePosX = mousePosY = 0;
+		camera_position_x = position.x;
+		camera_position_y = position.y;
 
-		posX = position.x;
-		posY = position.y;
+		this->renderer = renderer;
+
+		texture_h = texture_w = 0;
+		targetTexture = nullptr;
+
+		maxScale = 10;
+		minScale = 0.1;
 	}
+
+	Camera::~Camera()
+	{
+		if (targetTexture != nullptr)
+		{
+			SDL_DestroyTexture(targetTexture);
+			targetTexture = nullptr;
+		}
+	}
+
+
+	void Camera::GenerateTexture(int w, int h)
+	{
+		if (targetTexture != nullptr) {
+
+			SDL_DestroyTexture(targetTexture);
+			targetTexture = nullptr;
+		}
+
+
+		texture_w = w;
+		texture_h = h;
+		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+	}
+
+
 
 	void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow)
 	{
@@ -26,32 +57,43 @@ namespace ShyEditor {
 				if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 				{
 					middleMouseButton = true;
-
-					clickOffsetX = mousePosX - posX;
-					clickOffsetY = mousePosY - posY;
 				}
 			}
+
 
 			if (event->type == SDL_MOUSEMOTION)
 			{
-				mousePosX = event->motion.x;
-				mousePosY = event->motion.y;
-
 				if (middleMouseButton)
 				{
-					posX = mousePosX - clickOffsetX;
-					posY = mousePosY - clickOffsetY;
+					camera_position_x -= event->motion.xrel;
+					camera_position_y -= event->motion.yrel;
+
+
 				}
 			}
+
+
+#define ScrollSpeed 0.025f
 
 			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
 				if (event->wheel.y > 0) // scroll up
 				{
-					scrollFactor += 0.025;
+					scale += ScrollSpeed;
+
+					if (scale > maxScale) {
+
+						scale = maxScale;
+					}
+
 				}
 				else if (event->wheel.y < 0) // scroll down
 				{
-					scrollFactor -= 0.025;
+					scale -= ScrollSpeed;
+
+					if (scale < minScale) {
+
+						scale = minScale;
+					}
 				}
 			}
 		}
@@ -65,13 +107,61 @@ namespace ShyEditor {
 		}
 	}
 
-	ImVec2 Camera::getPosition()
+	void Camera::SetConstrains(float min, float max)
 	{
-		return ImVec2(posX, posY);
+		minScale = min;
+		maxScale = max;
 	}
 
-	float Camera::getScrollFactor() {
-		return scrollFactor;
+	ImVec2 Camera::GetPosition()
+	{
+		return ImVec2(-camera_position_x, -camera_position_y);
+	}
+
+	float& Camera::GetScale() {
+		return scale;
+	}
+
+	void Camera::AddPosition(float x, float y)
+	{
+		camera_position_x += x;
+		camera_position_y += y;
+	}
+
+	float Camera::GetMinScale()
+	{
+		return minScale;
+	}
+
+	float Camera::GetMaxScale()
+	{
+		return maxScale;
+	}
+
+	bool Camera::ShouldResize(int w, int h)
+	{
+		return targetTexture == nullptr || w != texture_w || h != texture_h;
+	}
+
+	void Camera::Resize(int w, int h)
+	{
+		GenerateTexture(w, h);
+	}
+
+	void Camera::PrepareCameraRender()
+	{
+		SDL_SetRenderTarget(renderer, targetTexture);
+		SDL_RenderClear(renderer);
+	}
+
+	void Camera::StopCameraRender()
+	{
+		SDL_SetRenderTarget(renderer, NULL);
+	}
+
+	SDL_Texture* Camera::GetTexture()
+	{
+		return targetTexture;
 	}
 
 }

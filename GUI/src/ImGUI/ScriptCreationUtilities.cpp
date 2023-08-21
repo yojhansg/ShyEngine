@@ -61,7 +61,7 @@ namespace ShyEditor {
 			else
 				ImGui::SetNextWindowPos(position, ImGuiCond_Once);
 
-			int flag = ImGuiWindowFlags_NoSavedSettings;
+			int flag = ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoDocking;
 			if (!resizable)
 			{
 				ImGui::SetNextWindowSize(size, ImGuiCond_None);
@@ -869,6 +869,8 @@ namespace ShyEditor {
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 		auto windowSize = ImGui::GetWindowSize();
+		auto windowPos = ImGui::GetWindowPos();
+
 
 		int interval_x = (-x_offset / spacing) % interval;
 		int interval_y = (-y_offset / spacing) % interval;
@@ -881,7 +883,7 @@ namespace ShyEditor {
 			float t = interval_y == 0 ? thickness * intervalScale : thickness;
 
 			if (t > 0)
-				drawList->AddLine(ImVec2(0, row), ImVec2(windowSize.x, row), RGBA2ImColor(r, g, b, a), t);
+				drawList->AddLine(ImVec2(windowPos.x, windowPos.y + row), ImVec2(windowPos.x + windowSize.x, windowPos.y + row), RGBA2ImColor(r, g, b, a), t);
 
 			interval_y = (interval_y + 1) % interval;
 		}
@@ -891,7 +893,7 @@ namespace ShyEditor {
 			float t = interval_x == 0 ? thickness * intervalScale : thickness;
 
 			if (t > 0)
-				drawList->AddLine(ImVec2(col, 0), ImVec2(col, windowSize.y), RGBA2ImColor(r, g, b, a), t);
+				drawList->AddLine(ImVec2(windowPos.x + col, windowPos.y), ImVec2(windowPos.x + col, windowPos.y + windowSize.y), RGBA2ImColor(r, g, b, a), t);
 
 			interval_x = (interval_x + 1) % interval;
 		}

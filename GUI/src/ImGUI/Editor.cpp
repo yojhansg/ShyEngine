@@ -94,7 +94,7 @@ void Editor::Loop() {
 		SDL_SetWindowResizable(instance->window, SDL_TRUE);
 		SDL_SetWindowSize(instance->window, _WindowMainSize);
 		SDL_SetWindowPosition(instance->window, _Centered);
-
+		
 		// Init the ImGUI windows in the editor
 		instance->SetUpWindows();
 	}
@@ -324,7 +324,7 @@ void Editor::UpdateAndRenderWindows()
 		if (rootNode->IsEmpty()) {
 
 			ImGui::DockBuilderRemoveNode(id);
-			
+
 			ImGui::DockBuilderAddNode(id);
 			ImGui::DockBuilderSetNodeSize(id, getMainWindowSize());
 
@@ -347,10 +347,13 @@ void Editor::UpdateAndRenderWindows()
 
 			std::cout << "no es nulo" << std::endl;
 		}
-		
+
 	}
 	else
-		ImGui::DockSpaceOverViewport();
+	{
+		if (state == Editor::EDITOR_WINDOW)
+			ImGui::DockSpaceOverViewport();
+	}
 
 
 

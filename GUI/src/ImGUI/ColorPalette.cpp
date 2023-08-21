@@ -11,7 +11,7 @@ namespace ShyEditor {
 
 	ColorPalette* ColorPalette::instance = nullptr;
 
-	ColorPalette::ColorPalette(const std::string& path) : Window("Palette selector", NoCollapse), path(path)
+	ColorPalette::ColorPalette(const std::string& path) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), path(path)
 	{
 		initialisation = true;
 		current = {};

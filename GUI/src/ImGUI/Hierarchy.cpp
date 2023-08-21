@@ -14,22 +14,8 @@
 
 namespace ShyEditor {
 
-	Hierarchy::Hierarchy() : Window("Hierarchy", NoCollapse)
+	Hierarchy::Hierarchy() : Window("Hierarchy", ImGuiWindowFlags_NoCollapse)
 	{
-		editor = Editor::getInstance();
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-
-		windowOriWidth = mainWindowSize.x * HIERARCHY_WIN_WIDTH_RATIO;
-		windowOriHeight = mainWindowSize.y * HIERARCHY_WIN_HEIGHT_RATIO;
-
-		float menuBarHeight = ImGui::GetFrameHeight();
-
-		windowOriPosX = 0;
-		windowOriPosY = menuBarHeight;
-
-		setSize(ImVec2(windowOriWidth, windowOriHeight));
-		setPosition(ImVec2(windowOriPosX, windowOriPosY));
-
 		shouldOpenRenamePopup = false;
 		shouldOpenSavePrefabPopup = false;
 
@@ -38,6 +24,8 @@ namespace ShyEditor {
 
 	void Hierarchy::Behaviour()
 	{
+		Editor* editor = Editor::getInstance();
+
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
 		Scene* scene = editor->getScene();
@@ -47,7 +35,7 @@ namespace ShyEditor {
 
 
 		if (ImGui::Button("Add empty gameobject")) {
-			scene->addGameObject("");
+			scene->AddGameObject("");
 		}
 
 		if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 75))) {
@@ -99,10 +87,10 @@ namespace ShyEditor {
 
 	bool Hierarchy::isChildrenTheSelectedObject(GameObject* go)
 	{
-		Scene* scene = editor->getScene();
+		Scene* scene = Editor::getInstance()->getScene();
 
 		for (auto child : go->getChildren()) {
-			if (child.second == scene->getSelectedGameObject()) {
+			if (child.second == scene->GetSelectedGameObject()) {
 				return true;
 			}
 
@@ -115,7 +103,7 @@ namespace ShyEditor {
 
 	void Hierarchy::renderGameObjectHierarchy(GameObject* gameObject, int indentLevel)
 	{
-		Scene* scene = editor->getScene();
+		Scene* scene = Editor::getInstance()->getScene();
 
 		// Calculate the indentation based on the indent level
 		float indentSpacing = 20.0f * indentLevel;
@@ -138,8 +126,8 @@ namespace ShyEditor {
 		std::string nameId = gameObject->getName() + "##" + std::to_string(gameObject->getId());
 
 
-		if (ImGui::Selectable(nameId.c_str(), gameObject == scene->getSelectedGameObject(), ImGuiSelectableFlags_AllowItemOverlap)) {
-			scene->setSelectedGameObject(gameObject);
+		if (ImGui::Selectable(nameId.c_str(), gameObject == scene->GetSelectedGameObject(), ImGuiSelectableFlags_AllowItemOverlap)) {
+			scene->SetSelectedGameObject(gameObject);
 		}
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover))
@@ -195,7 +183,7 @@ namespace ShyEditor {
 			}
 
 			if (isChildSelected && ImGui::IsItemClicked()) {
-				scene->setSelectedGameObject(nullptr);
+				scene->SetSelectedGameObject(nullptr);
 			}
 		}
 	}
@@ -244,7 +232,7 @@ namespace ShyEditor {
 
 			if (ImGui::MenuItem("Add script", NULL, false)) {
 
-				editor->OpenScript("");
+				Editor::getInstance()->OpenScript("");
 			}
 
 			ImGui::Separator();

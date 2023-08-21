@@ -24,8 +24,6 @@ namespace ShyEditor {
 		void Behaviour() override;
 
 
-		Editor* editor;
-
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
 
 		bool isChildrenTheSelectedObject(GameObject* go);

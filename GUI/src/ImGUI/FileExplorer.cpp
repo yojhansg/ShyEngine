@@ -29,20 +29,9 @@ namespace fs = std::filesystem;
 
 namespace ShyEditor {
 
-	FileExplorer::FileExplorer() : Window("File Explorer", NoCollapse) {
+	FileExplorer::FileExplorer() : Window("File Explorer", ImGuiWindowFlags_NoCollapse) {
 
 		editor = Editor::getInstance();
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-
-		windowOriWidth = mainWindowSize.x;
-		windowOriHeight = mainWindowSize.y * FILEEXPLORER_WIN_HEIGHT_RATIO;
-
-		windowOriPosX = 0;
-		windowOriPosY = mainWindowSize.y - windowOriHeight;
-
-		setSize(ImVec2(windowOriWidth, windowOriHeight));
-		setPosition(ImVec2(windowOriPosX, windowOriPosY));
-
 		projectPath = editor->getProjectInfo().path;
 		currentPath = projectPath;
 
@@ -193,7 +182,7 @@ namespace ShyEditor {
 						ImGui::SameLine();
 
 						if (ImGui::Button(buttonId.c_str())) {
-							editor->getScene()->addGameObject(relativePath);
+							editor->getScene()->AddGameObject(relativePath);
 						}
 					}
 				}
@@ -249,7 +238,7 @@ namespace ShyEditor {
 
 						GameObject* go = GameObject::fromJson(jsonData.dump(), true);
 
-						editor->getScene()->addGameObject(go);
+						editor->getScene()->AddGameObject(go);
 					}
 				}
 			}

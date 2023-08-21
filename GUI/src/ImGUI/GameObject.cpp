@@ -113,24 +113,28 @@ namespace ShyEditor {
 
 		ImVec2 position = getAdjustedPosition();
 
-		float width = size->x * getScale_x();
-		float height = size->y * getScale_y();
+		ImVec2 cameraPosition = camera->GetPosition();
+		float cameraScale = camera->GetScale();
 
-		// Posicion y tamanios relativos al frame de la escena
-		ImVec2 relativePosition = ImVec2((position.x + camera->getPosition().x) * camera->getScrollFactor(),
-			(position.y + camera->getPosition().y) * camera->getScrollFactor());
+		float width = size->x * getScale_x() * cameraScale;
+		float height = size->y * getScale_y()* cameraScale;
 
-		float relativeWidth = width * camera->getScrollFactor();
-		float relativeHeight = height * camera->getScrollFactor();
 
-		SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
+		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale+ cameraPosition.y);
+
+		SDL_Rect dst = { worldPosition.x, worldPosition.y, width, height };
 
 		// Image render
 		if (visible && texture != NULL)
 			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
 
+
+
+
+
+
 		// Render outline
-		if (this == editor->getScene()->getSelectedGameObject()) {
+		if (this == editor->getScene()->GetSelectedGameObject()) {
 
 			// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
 			Uint8 r, g, b, a;
@@ -138,7 +142,7 @@ namespace ShyEditor {
 
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
-			SDL_Rect outlineRect = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
+			SDL_Rect outlineRect = { worldPosition.x, worldPosition.y, width, height };
 			int thickness = 3;
 
 			for (int i = 0; i < thickness; i++) {
@@ -191,7 +195,7 @@ namespace ShyEditor {
 
 		showGizmo = false;
 
-		if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->getSelectedGameObject() == this) {
+		if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->GetSelectedGameObject() == this) {
 			toDelete();
 		}
 
@@ -201,7 +205,7 @@ namespace ShyEditor {
 				leftMouseButtonDown = true;
 
 			if (visible && isMouseInsideGameObject) {
-				editor->getScene()->setSelectedGameObject(this);
+				editor->getScene()->SetSelectedGameObject(this);
 				return true;
 			}
 		}
@@ -215,7 +219,7 @@ namespace ShyEditor {
 				rightMouseButtonDown = false;
 		}
 
-		if (editor->getScene()->getSelectedGameObject() == this) {
+		if (editor->getScene()->GetSelectedGameObject() == this) {
 
 			if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
 
@@ -378,10 +382,6 @@ namespace ShyEditor {
 	ImVec2 GameObject::getAdjustedPosition() {
 
 		ImVec2 position = *pos;
-
-		// The origin is the center of the frame
-		position.x += Preferences::GetData().width * 0.5f;
-		position.y += Preferences::GetData().height * 0.5f;
 
 		float width = size->x * getScale_x();
 		float height = size->y * getScale_y();
