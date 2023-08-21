@@ -62,9 +62,6 @@ namespace ShyEditor {
 		std::string openPath;
 		std::string creationDate;
 
-		// Assets folders names
-		const static std::vector<std::string> assetsFolders;
-
 		// Recent projects information
 		std::vector<ProjectInfo> recentProjectsInfo;
 

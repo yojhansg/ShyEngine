@@ -22,14 +22,33 @@ namespace ShyEditor {
 	int GameObject::lastId = 0;
 
 	GameObject::GameObject(std::string& path) {
+
 		editor = Editor::getInstance();
 
+		name = "Empty Gameobject";
+
+		// Transform attributes
 		pos = new ImVec2(0, 0);
 		scale = new ImVec2(1, 1);
 		size = new ImVec2(100, 100);
 
-		Scene* scene = editor->getScene();
-		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
+		imagePath = path;
+
+		parent = nullptr;
+
+		showGizmo = false;
+		visible = true;
+		renderOrder = 0;
+
+		waitingToDelete = false;
+
+		previousMousePosX = 0;
+		previousMousePosY = 0;
+
+		// Gets the list of gameobjects in the scene
+		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+
+
 
 		// Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
 		while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
@@ -40,49 +59,31 @@ namespace ShyEditor {
 
 		GameObject::lastId++;
 
-		imagePath = path;
 
-		parent = nullptr;
-
-		texture = nullptr;
-
-		if (path.size() > 0) {
-			texture = ResourcesManager::GetInstance()->AddTexture(path, false);
-			*size = ImVec2(texture->getWidth(), texture->getHeight());
-		}
-
-
-		if (imagePath != "") {
-			// Add component image
-			::Components::Component imageComponent = ::Components::ComponentManager::GetAllComponents().find("Image")->second;
-			::Components::AttributeValue attributeValue;
-			attributeValue.valueString = path;
-			imageComponent.getAttribute("fileName").SetValue(attributeValue);
-			addComponent(imageComponent);
-
-			// Hacemos que el nombre inicial del gameObject sea el nombre de la imagen
-			std::size_t extensionPos = path.find_last_of('.');
-			name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
-		}
-		else {
-			name = "Empty gameobject";
-		}
-
-
-		editor = editor;
 
 		// Gizmo texture
 		gizmo = ResourcesManager::GetInstance()->AddTexture(GizmoImage, true);
 
-		showGizmo = false;
-		visible = true;
+		// Gameobject texture
+		texture = ResourcesManager::GetInstance()->AddTexture(path, false);
 
-		waitingToDelete = false;
+		if (texture->getSDLTexture() != NULL) {
 
-		previousMousePosX = 0;
-		previousMousePosY = 0;
+			// Sets the size of the gameobject based on the texture width and height
+			*size = ImVec2(texture->getWidth(), texture->getHeight());
 
-		renderOrder = 0;
+			// Add component image
+			Components::Component imageComponent = Components::ComponentManager::GetAllComponents().find("Image")->second;
+			Components::AttributeValue attributeValue;
+			attributeValue.valueString = imagePath;
+			imageComponent.getAttribute("fileName").SetValue(attributeValue);
+			this->addComponent(imageComponent);
+
+			// Set the gameobject name as the image name
+			std::size_t extensionPos = path.find_last_of('.');
+			name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
+
+		}
 
 	}
 
@@ -115,7 +116,7 @@ namespace ShyEditor {
 		float width = size->x * getScale_x();
 		float height = size->y * getScale_y();
 
-		// Posicion y tama�os relativos al frame de la escena
+		// Posicion y tamanios relativos al frame de la escena
 		ImVec2 relativePosition = ImVec2((position.x + camera->getPosition().x) * camera->getScrollFactor(),
 			(position.y + camera->getPosition().y) * camera->getScrollFactor());
 
@@ -124,12 +125,13 @@ namespace ShyEditor {
 
 		SDL_Rect dst = { relativePosition.x, relativePosition.y, relativeWidth, relativeHeight };
 
-		if (visible)
+		// Image render
+		if (visible && texture != NULL)
 			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
 
 		// Render outline
-		if (this == editor->getScene()->getSelectedGameObject())
-		{
+		if (this == editor->getScene()->getSelectedGameObject()) {
+
 			// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
 			Uint8 r, g, b, a;
 			SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
@@ -155,25 +157,31 @@ namespace ShyEditor {
 
 	void GameObject::update() {
 
-		if (components.find("Image") == components.end()) {
+		auto image = components.find("Image");
+
+		// If the gameobject has no image component
+		if (image == components.end()) {
 			texture = nullptr;
 			return;
 		}
 
-		Components::Component* imageComponent = &components.find("Image")->second;
-		std::string currentImagePath = imageComponent->getAttribute("fileName").value.valueString;
+		std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
 
+		// Checks if the current path exists in the filesystem
+		if (!std::filesystem::exists(currentImagePath)) return;
+
+		// If the image path have changed, checks if the new path is valid
 		if (currentImagePath != imagePath) {
 
 			texture = ResourcesManager::GetInstance()->AddTexture(currentImagePath, false);
 
-			if (texture != nullptr) {
+			if (texture->getSDLTexture() != NULL) {
 				imagePath = currentImagePath;
 				*size = ImVec2(texture->getWidth(), texture->getHeight());
 			}
 			else {
 				*size = ImVec2(100, 100);
-				imagePath = "";
+				imagePath = "Empty Gameobject";
 			}
 		}
 
@@ -189,9 +197,8 @@ namespace ShyEditor {
 
 		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
-			if (!leftMouseButtonDown) {
+			if (!leftMouseButtonDown) 
 				leftMouseButtonDown = true;
-			}
 
 			if (visible && isMouseInsideGameObject) {
 				editor->getScene()->setSelectedGameObject(this);
@@ -199,20 +206,17 @@ namespace ShyEditor {
 			}
 		}
 
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
+		if (event->type == SDL_MOUSEBUTTONUP) {
+
 			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-			{
 				leftMouseButtonDown = false;
-			}
 
 			if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
-			{
 				rightMouseButtonDown = false;
-			}
 		}
 
 		if (editor->getScene()->getSelectedGameObject() == this) {
+
 			if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
 
 				if (!rightMouseButtonDown) {
@@ -332,17 +336,14 @@ namespace ShyEditor {
 
 	void GameObject::addComponent(::Components::Component comp) {
 
-		if (components.find(comp.getName()) == components.end()) {
+		if (components.find(comp.getName()) == components.end())
 			components.insert({ comp.getName(), comp });
-		}
+
 	}
 
 	void GameObject::addScript(::Components::Script script) {
 
-		if (scripts.contains(script.GetName()))
-		{
-			return;
-		}
+		if (scripts.contains(script.GetName())) return;
 
 		scripts.emplace(script.GetName(), script);
 	}
@@ -378,14 +379,14 @@ namespace ShyEditor {
 
 		ImVec2 position = *pos;
 
-		//El punto 0, 0 es el centro del frame
+		// The origin is the center of the frame
 		position.x += Preferences::GetData().width * 0.5f;
 		position.y += Preferences::GetData().height * 0.5f;
 
 		float width = size->x * getScale_x();
 		float height = size->y * getScale_y();
 
-		//El origen de los objetos es el centro
+		// The game objects have their origin at the center
 		position.x -= width * 0.5f;
 		position.y -= height * 0.5f;
 
@@ -493,70 +494,11 @@ namespace ShyEditor {
 		for (auto it = components.begin(); it != components.end();) {
 			std::string componentName = (*it).second.getName();
 
-			if (ImGui::CollapsingHeader(componentName.c_str()))
-			{
+			if (ImGui::CollapsingHeader(componentName.c_str())) {
+
 				for (auto& attribute : (*it).second.getAllAttributes()) {
 					std::string attributeName = attribute.first;
-					::Components::Attribute* attr = &attribute.second;
-
-					ImGui::Text(attributeName.c_str());
-
-					switch (attr->getType())
-					{
-					case ::Components::AttributesType::FLOAT:
-						drawFloat(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::VECTOR2:
-						drawVector2(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::STRING:
-						drawString(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::BOOL:
-						drawBool(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::COLOR:
-						drawColor(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::CHAR:
-						drawChar(attributeName + it->first, attr);
-						break;
-					case ::Components::AttributesType::GAMEOBJECT:
-						drawGameobject(attributeName + it->first, attr);
-						break;
-					default:
-						break;
-					}
-				}
-
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
-
-				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-					it = components.erase(it);
-				}
-				else {
-					++it;
-				}
-
-				ImGui::PopStyleColor(2);
-
-			}
-			else {
-				++it;
-			}
-		}
-	}
-
-	void GameObject::drawScriptsInEditor() {
-
-		for (auto it = scripts.begin(); it != scripts.end();) {
-			std::string scriptName = (*it).first;
-			if (ImGui::CollapsingHeader(scriptName.c_str()))
-			{
-				for (auto& attribute : (*it).second.getAllAttributes()) {
-					std::string attributeName = attribute.first;
-					::Components::Attribute* attr = &attribute.second;
+					Components::Attribute* attr = &attribute.second;
 
 					ImGui::Text(attributeName.c_str());
 
@@ -579,6 +521,63 @@ namespace ShyEditor {
 							break;
 						case Components::AttributesType::CHAR:
 							drawChar(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::GAMEOBJECT:
+							drawGameobject(attributeName + it->first, attr);
+							break;
+						default:
+							break;
+					}
+				}
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
+
+				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
+					it = components.erase(it);
+				else
+					++it;
+
+				ImGui::PopStyleColor(2);
+
+			}
+			else ++it;
+		}
+	}
+
+	void GameObject::drawScriptsInEditor() {
+
+		for (auto it = scripts.begin(); it != scripts.end();) {
+
+			std::string scriptName = (*it).first;
+			if (ImGui::CollapsingHeader(scriptName.c_str())) {
+
+				for (auto& attribute : (*it).second.getAllAttributes()) {
+					std::string attributeName = attribute.first;
+					Components::Attribute* attr = &attribute.second;
+
+					ImGui::Text(attributeName.c_str());
+
+					switch (attr->getType()) {
+
+						case Components::AttributesType::FLOAT:
+							drawFloat(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::VECTOR2:
+							drawVector2(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::STRING:
+							drawString(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::BOOL:
+							drawBool(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::COLOR:
+							drawColor(attributeName + it->first, attr);
+							break;
+						case Components::AttributesType::CHAR:
+							drawChar(attributeName + it->first, attr);
+							break;
 						case Components::AttributesType::GAMEOBJECT:
 							drawGameobject(attributeName + it->first, attr);
 							break;
@@ -590,24 +589,18 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
 
-				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
-
+				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
 					editor->OpenScript(scriptName);
-				}
 
-				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40))) {
+				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
 					it = scripts.erase(it);
-				}
-				else {
+				else
 					++it;
-				}
 
 				ImGui::PopStyleColor(2);
 
 			}
-			else {
-				++it;
-			}
+			else ++it;
 		}
 
 	}
@@ -656,9 +649,8 @@ namespace ShyEditor {
 		GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
 
 		std::string name = "";
-		if (attr->value.valueString != "") {
+		if (attr->value.valueString != "")
 			name = attr->value.valueString;
-		}
 
 		if (go != nullptr) {
 			name = go->getName().c_str();
@@ -894,7 +886,6 @@ namespace ShyEditor {
 
 
 		for (const auto& scriptJson : jsonData["scripts"].items()) {
-
 			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
 			gameObject->addScript(script);
 		}

@@ -41,7 +41,7 @@ namespace ShyEditor {
 			if (instance->engineTextures.contains(key))
 				return instance->engineTextures.at(key);
 
-			texture = new Texture(instance->engineResourcesPath + "Images\\" + key);
+			texture = new Texture(instance->engineResourcesPath + key);
 
 			instance->engineTextures.insert(std::make_pair(key, texture));
 
@@ -68,7 +68,7 @@ namespace ShyEditor {
 		if (instance->engineFonts.contains(key))
 			return instance->engineFonts.at(key);
 
-		Font* font = new Font(instance->engineResourcesPath + "Fonts\\" + key, pointSize);
+		Font* font = new Font(instance->engineResourcesPath + key, pointSize);
 
 		instance->engineFonts.insert(std::make_pair(key, font));
 

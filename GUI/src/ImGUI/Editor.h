@@ -67,9 +67,9 @@ public:
 	ShyEditor::ScriptCreation* getScriptCreation();
 	ShyEditor::Console* getConsole();
 
-
 	int Example();
 	int Probando();
+
 private:
 
 	Editor();

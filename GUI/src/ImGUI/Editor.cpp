@@ -32,6 +32,8 @@
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
 
+#define DefaultIconImage "shyIcon2.png"
+
 Editor* Editor::instance = nullptr;
 
 Editor::Editor() {
@@ -64,8 +66,6 @@ Editor* Editor::getInstance()
 }
 
 bool Editor::Init() {
-
-
 
 	instance->SplashScreen();
 
@@ -180,7 +180,7 @@ bool Editor::initSDL() {
 	//SDL_WindowFlags imguiWinFlags = SDL_WindowFlags(ImGui::ImGui_ImplSDL2_GetPlatformWindowFlags());
 		// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-	window = SDL_CreateWindow("SHY Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
+	window = SDL_CreateWindow("Shy Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
 	if (window == NULL) {
@@ -200,8 +200,8 @@ bool Editor::initSDL() {
 		return false;
 	}
 
-	SDL_Surface* s = IMG_Load("shyIcon2.png");
-	SDL_SetWindowIcon(window, IMG_Load("shyIcon2.png"));
+	SDL_Surface* s = IMG_Load(DefaultIconImage);
+	SDL_SetWindowIcon(window, s);
 	SDL_FreeSurface(s);
 
 	return true;
@@ -295,8 +295,8 @@ bool Editor::runProjectsWindow() {
 	if (result == ShyEditor::ProjectsManager::Result::CLOSED)
 		return false;
 
-	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "\\Scripts");
-	ShyEditor::ResourcesManager::GetInstance()->SetEngineResourcesPath(instance->projecInfo->path);
+	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "Scripts\\");
+	ShyEditor::ResourcesManager::GetInstance()->SetEngineResourcesPath(instance->projecInfo->path + "Assets\\");
 
 	return true;
 

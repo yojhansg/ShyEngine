@@ -29,8 +29,6 @@ namespace ShyEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
-    const std::vector<std::string> ProjectsManager::assetsFolders = { "Images", "Sounds", "Music", "Fonts", "Scenes", "Prefabs", "Scripts" };
-
     ProjectsManager::ProjectsManager() {
 
         editor = Editor::getInstance();
@@ -253,7 +251,7 @@ namespace ShyEditor {
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
 
-                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
                     windowClosed = true;
                     ImGui::End();
@@ -293,7 +291,7 @@ namespace ShyEditor {
 
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
 
-                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
                 windowClosed = true;
                 ImGui::End();
@@ -526,8 +524,8 @@ namespace ShyEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-        editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+        std::string folderPath = std::filesystem::path(createPath).parent_path().string();
+        editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
 
         return true;
 
@@ -651,16 +649,12 @@ namespace ShyEditor {
 
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
-        for (auto f : assetsFolders) {
+        std::error_code ec;
+        std::filesystem::create_directories(root + "\\Assets\\", ec);
 
-            std::error_code ec;
-            std::filesystem::create_directories(root + "\\Assets\\" + f, ec);
-
-            if (ec) {
-                errorMessage = L"Error while creating the project assets folders.";
-                return false;
-            }
-
+        if (ec) {
+            errorMessage = L"Error while creating the project assets folders.";
+            return false;
         }
 
         return true;

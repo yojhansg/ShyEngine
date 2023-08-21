@@ -29,8 +29,8 @@ namespace fs = std::filesystem;
 
 namespace ShyEditor {
 
-	FileExplorer::FileExplorer() : Window("File Explorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
-	{
+	FileExplorer::FileExplorer() : Window("File Explorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus) {
+
 		editor = Editor::getInstance();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
@@ -50,7 +50,6 @@ namespace ShyEditor {
 		file = ResourcesManager::GetInstance()->AddTexture(FileImage, true);
 		script = ResourcesManager::GetInstance()->AddTexture(ScriptImage, true);
 		
-
 		docked = true;
 	}
 
