@@ -212,6 +212,7 @@ namespace ShyEditor {
         // Select file logic button
         if (ImGui::Button("Select File", ImVec2(w / 4.0f, h / 20.0f))) {
 
+
             OPENFILENAMEA ofn;  // Estructura de di�logo de archivo
             char fileName[MAX_PATH] = "";
             ZeroMemory(&ofn, sizeof(ofn));
@@ -221,10 +222,12 @@ namespace ShyEditor {
             ofn.lpstrFile = fileName;
             ofn.nMaxFile = MAX_PATH;
             ofn.lpstrTitle = "Seleccionar Archivo";
-            ofn.Flags = OFN_FILEMUSTEXIST;
+            ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
             if (GetOpenFileNameA(&ofn))
+            {
                 strncpy_s(open_project_path, sizeof(open_project_path), fileName, _TRUNCATE);
+            }
 
         }
 
@@ -239,6 +242,8 @@ namespace ShyEditor {
         ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.3f));
         if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f)))
         {
+            std::cout << std::filesystem::current_path() << std::endl;
+
             // Input validation
             bool valid = ValidateInputOnOpenProject();
 
@@ -253,6 +258,8 @@ namespace ShyEditor {
 
                     windowClosed = true;
                     ImGui::End();
+                    std::cout << std::filesystem::current_path() << std::endl;
+
                     return Result::ENTERED;
                 }
             }

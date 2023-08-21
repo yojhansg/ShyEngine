@@ -168,7 +168,7 @@ namespace ShyEditor {
 		std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
 
 		// Checks if the current path exists in the filesystem
-		if (!std::filesystem::exists(currentImagePath)) return;
+		//if (!std::filesystem::exists(currentImagePath)) return;
 
 		// If the image path have changed, checks if the new path is valid
 		if (currentImagePath != imagePath) {
