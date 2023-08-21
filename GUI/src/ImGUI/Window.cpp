@@ -7,6 +7,9 @@
 #include "imgui.h"
 #include "SDL.h"
 
+
+#include "imgui_internal.h"
+
 namespace ShyEditor {
 
 
@@ -27,7 +30,6 @@ namespace ShyEditor {
 		visible = true;
 		docked = false;
 
-		top = bottom = left = right = nullptr;
 	}
 
 	void Window::setSize(ImVec2 size)
@@ -63,12 +65,7 @@ namespace ShyEditor {
 	{
 		if (visible) {
 
-			/*if (docked)
-			{
-				ImGui::SetNextWindowPos(WindowCostrainsMin(), ImGuiCond_Always);
-				ImGui::SetWindowSize(CalculateWindowSize(), ImGuiCond_Always);
-			}
-			else*/
+			if (!docked)
 			{
 
 				ImGui::SetNextWindowPos(ImVec2(windowPosX, windowPosY), ImGuiCond_Once);
@@ -96,30 +93,6 @@ namespace ShyEditor {
 
 		}
 
-	}
-
-	void Window::SetTop(Window* other)
-	{
-		top = other;
-		other->bottom = this;
-	}
-
-	void Window::SetLeft(Window* other)
-	{
-		left = other;
-		other->right = this;
-	}
-
-	void Window::SetRight(Window* other)
-	{
-		right = other;
-		other->left = this;
-	}
-
-	void Window::SetBottom(Window* other)
-	{
-		bottom = other;
-		other->top = this;
 	}
 
 	bool Window::isFocused()
@@ -152,53 +125,6 @@ namespace ShyEditor {
 			mouse.y > windowPosY && mouse.y < windowPosY + windowHeight;
 	}
 
-
-	ImVec2 Window::CalculateWindowSize()
-	{
-		ImVec2 min = WindowCostrainsMin();
-		ImVec2 max = WindowCostrainsMax();
-
-		ImVec2 size;
-
-		size.x = max.x - min.x;
-		size.y = max.y - min.y;
-
-		return size;
-	}
-
-	ImVec2 Window::WindowCostrainsMin()
-	{
-		ImVec2 min = ImVec2(0, 0);
-
-		if (left != nullptr) {
-
-			min.x = left->windowPosX + left->windowWidth;
-		}
-
-		if (top != nullptr) {
-
-			min.y = top->windowPosY + top->windowHeight;
-		}
-
-		return min;
-	}
-
-	ImVec2 Window::WindowCostrainsMax()
-	{
-		ImVec2 max = Editor::getInstance()->getMainWindowSize();
-
-		if (right != nullptr) {
-
-			max.x = right->windowPosX;
-		}
-
-		if (bottom != nullptr) {
-
-			max.y = bottom->windowPosY;
-		}
-
-		return max;
-	}
 
 }
 

@@ -5,6 +5,7 @@
 #include "imgui_impl_sdlrenderer2.h"
 #include "imgui_impl_sdl2.h"
 #include "SDL_image.h"
+#include "imgui_internal.h"
 
 
 #include "ComponentManager.h"
@@ -27,6 +28,7 @@
 
 #include <fstream>
 #include <iostream>
+
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
 
@@ -142,7 +144,7 @@ bool Editor::initImGUIAndSDL() {
 	if (!initSDL())
 		return false;
 
-		// Setup Dear ImGui context
+	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -238,10 +240,6 @@ void Editor::SetUpWindows() {
 	console = new ShyEditor::Console();
 	addWindow(console);
 
-
-	scene->SetLeft(hierarchy);
-	scene->SetRight(components);
-	scene->SetBottom(fileExplorer);
 }
 
 void Editor::SplashScreen() {
@@ -312,8 +310,38 @@ void Editor::UpdateAndRenderWindows()
 	ImGui_ImplSDLRenderer2_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-	//ImGui::DockSpaceOverViewport();
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+	auto static once = true;
+
+	if (once) {
+
+		once = false;
+
+		auto id = ImGui::DockSpaceOverViewport();
+
+		if (ImGui::DockBuilderGetNode(id) == nullptr) {
+
+			ImGui::DockBuilderRemoveNode(id);
+			ImGui::DockBuilderAddNode(id);
+			ImGui::DockBuilderSetNodeSize(id, getMainWindowSize());
+
+
+			auto abajo = ImGui::DockBuilderSplitNode(id, ImGuiDir_Down, 0.3f, nullptr, &id);
+			auto izquierda = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.2f, nullptr, &id);
+			auto centro = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.6f, nullptr, &id);
+
+
+			ImGui::DockBuilderDockWindow("Hierarchy", izquierda);
+			ImGui::DockBuilderDockWindow("File Explorer", abajo);
+			ImGui::DockBuilderDockWindow("Scene", centro);
+			ImGui::DockBuilderDockWindow("Components", id);
+
+
+			ImGui::DockBuilderFinish(id);
+		}
+	}
+	else
+		ImGui::DockSpaceOverViewport();
 
 
 

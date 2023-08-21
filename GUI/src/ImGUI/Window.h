@@ -59,10 +59,6 @@ namespace ShyEditor {
         bool visible;
 
         virtual void Behaviour();
-
-        Window* top, * left, * right, * bottom;
-
-        ImVec2 CalculateWindowSize();
     public:
 
         Window(std::string windowName, WindowFlags flags);
@@ -85,13 +81,9 @@ namespace ShyEditor {
         bool isFocused();
         bool CanBeDrawnOnTop();
 
-
         void Hide();
         void Show();
 
         bool IsMouseHoveringWindow();
-
-        ImVec2 WindowCostrainsMin();
-        ImVec2 WindowCostrainsMax();
     };
 }

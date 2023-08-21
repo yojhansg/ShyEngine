@@ -29,7 +29,7 @@ namespace fs = std::filesystem;
 
 namespace ShyEditor {
 
-	FileExplorer::FileExplorer() : Window("FileExplorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
+	FileExplorer::FileExplorer() : Window("File Explorer", NoCollapse | NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus)
 	{
 		editor = Editor::getInstance();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
