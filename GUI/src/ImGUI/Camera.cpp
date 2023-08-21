@@ -45,6 +45,7 @@ namespace ShyEditor {
 		texture_w = w;
 		texture_h = h;
 		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 	}
 
 
@@ -151,6 +152,8 @@ namespace ShyEditor {
 	void Camera::PrepareCameraRender()
 	{
 		SDL_SetRenderTarget(renderer, targetTexture);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_RenderClear(renderer);
 	}
 
@@ -162,6 +165,12 @@ namespace ShyEditor {
 	SDL_Texture* Camera::GetTexture()
 	{
 		return targetTexture;
+	}
+
+	void Camera::CenterPosition(float& x, float& y)
+	{
+		x += texture_w * 0.5f;
+		y += texture_h * 0.5f;
 	}
 
 }

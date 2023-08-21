@@ -122,6 +122,8 @@ namespace ShyEditor {
 
 		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale+ cameraPosition.y);
 
+		camera->CenterPosition(worldPosition.x, worldPosition.y);
+
 		SDL_Rect dst = { worldPosition.x, worldPosition.y, width, height };
 
 		// Image render

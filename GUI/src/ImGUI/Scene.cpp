@@ -53,7 +53,7 @@ namespace ShyEditor {
 
 	Scene::~Scene()
 	{
-		
+
 		for (const auto& pair : gameObjects) {
 			delete pair.second;
 		}
@@ -115,9 +115,6 @@ namespace ShyEditor {
 
 		camera->StopCameraRender();
 
-		ImGui::SetCursorPos(ImVec2(0, 0));
-		ImGui::Image(camera->GetTexture(), ImVec2(windowWidth, windowHeight));
-
 
 		//cambiar las propiedades del grid dependiendo del orden de magnitud
 
@@ -129,6 +126,10 @@ namespace ShyEditor {
 		ScriptCreationUtilities::Grid::SetInterval(interval);
 		ScriptCreationUtilities::Grid::SetOffset(camera->GetPosition().x, camera->GetPosition().y);
 		ScriptCreationUtilities::Grid::Draw();
+
+
+		ImGui::SetCursorPos(ImVec2(0, 0));
+		ImGui::Image(camera->GetTexture(), ImVec2(windowWidth, windowHeight));
 
 
 		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
@@ -201,7 +202,7 @@ namespace ShyEditor {
 		SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-		ImVec2 position = ImVec2(camera->GetPosition().x * camera->GetScale(), camera->GetPosition().y * camera->GetScale());
+		ImVec2 position = camera->GetPosition();
 
 		float gameSizeX = Preferences::GetData().width;
 		float gameSizeY = Preferences::GetData().height;
@@ -209,8 +210,24 @@ namespace ShyEditor {
 		float width = gameSizeX * camera->GetScale();
 		float height = gameSizeY * camera->GetScale();
 
+
+		camera->CenterPosition(position.x, position.y);
+
 		SDL_Rect frameRect = { position.x, position.y, width, height };
-		SDL_RenderDrawRect(renderer, &frameRect);
+
+		int lineThickness = 10;
+
+		for (int i = 0; i < lineThickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
+		{
+
+			SDL_RenderDrawRect(renderer, &frameRect);
+
+			frameRect.x++;
+			frameRect.y++;
+			frameRect.w -= 2;
+			frameRect.h -= 2;
+		}
+		
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	}
 
