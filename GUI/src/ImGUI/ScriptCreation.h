@@ -79,7 +79,7 @@ namespace ShyEditor {
         std::vector<ScriptCreationUtilities::ScriptNode*>& GetNodes();
         
         void ClearScript();
-        virtual void render();
+        void Behaviour() override;
 
         void SetName(const std::string& name);
 

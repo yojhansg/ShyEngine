@@ -1234,7 +1234,7 @@ namespace ShyEditor {
 
 			if (ImGui::Button("Open console")) {
 
-				Console::ForceOpen();
+				Editor::getInstance()->getConsole()->Show();
 			}
 
 

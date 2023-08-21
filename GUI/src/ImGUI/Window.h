@@ -5,6 +5,7 @@
 
 typedef int WindowFlags;
 
+//TODO: quitar esto
 enum WindowFlags_
 {
     None = 0,
@@ -51,12 +52,21 @@ namespace ShyEditor {
         int windowOriWidth, windowOriHeight;
         int windowOriPosX, windowOriPosY;
 
-        bool canBeDisplayedOnTop;
         bool focused;
+        bool canBeDisplayedOnTop;
+        bool docked;
 
+        bool visible;
+
+        virtual void Behaviour();
+
+        Window* top, * left, * right, * bottom;
+
+        ImVec2 CalculateWindowSize();
     public:
 
         Window(std::string windowName, WindowFlags flags);
+        virtual ~Window();
 
         void setPosition(ImVec2 position);
         void setSize(ImVec2 size);
@@ -64,15 +74,24 @@ namespace ShyEditor {
         ImVec2 getSize();
         ImVec2 getPosition();
         
-        virtual void update();
-        virtual void render();
-        virtual void handleInput(SDL_Event* event);
+        void UpdateWindow();
+        virtual void HandleInput(SDL_Event* event);
+
+        void SetTop(Window* other);
+        void SetLeft(Window* other);
+        void SetRight(Window* other);
+        void SetBottom(Window* other);
 
         bool isFocused();
-
-        virtual ~Window();
-
         bool CanBeDrawnOnTop();
 
+
+        void Hide();
+        void Show();
+
+        bool IsMouseHoveringWindow();
+
+        ImVec2 WindowCostrainsMin();
+        ImVec2 WindowCostrainsMax();
     };
 }

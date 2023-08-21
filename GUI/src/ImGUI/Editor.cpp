@@ -61,6 +61,8 @@ Editor* Editor::getInstance()
 
 bool Editor::Init() {
 
+
+
 	instance->SplashScreen();
 
 	if (!instance->initImGUIAndSDL())
@@ -95,9 +97,11 @@ void Editor::Loop() {
 
 	// Editor main loop
 	while (!instance->exitEditor) {
-		instance->update();
+
+		ShyEditor::Game::CheckEnd();
+
 		instance->handleInput();
-		instance->render();
+		instance->UpdateAndRenderWindows();
 	}
 
 }
@@ -134,27 +138,27 @@ bool Editor::initImGUIAndSDL() {
 	// ImGUI
 
 		// Setup Dear ImGui context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		io.ConfigDockingWithShift = true;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigDockingWithShift = true;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsLight();
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
 
 
-	// SDL
+// SDL
 
-		if (!initSDL())
-			return false;
+	if (!initSDL())
+		return false;
 
-		// Setup Platform/Renderer backends
-		ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
-		ImGui_ImplSDLRenderer_Init(renderer);
+	// Setup Platform/Renderer backends
+	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+	ImGui_ImplSDLRenderer_Init(renderer);
 
 
 	return true;
@@ -171,26 +175,26 @@ bool Editor::initSDL() {
 	// WINDOW
 
 		// Create our window
-		SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
-		window = SDL_CreateWindow("SHY Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
+	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("SHY Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
 
-		// Make sure creating the window succeeded
-		if (window == NULL) {
-			SDL_Quit();
-			// Avisar por el log
-			return false;
-		}
+	// Make sure creating the window succeeded
+	if (window == NULL) {
+		SDL_Quit();
+		// Avisar por el log
+		return false;
+	}
 
 	// RENDERER
 
 		// Create our renderer
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-		if (renderer == NULL) {
-			SDL_DestroyWindow(window);
-			SDL_Quit();
-			// Avisar por el log
-			return false;
-		}
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+	if (renderer == NULL) {
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		// Avisar por el log
+		return false;
+	}
 
 	SDL_Surface* s = IMG_Load("shyIcon2.png");
 	SDL_SetWindowIcon(window, IMG_Load("shyIcon2.png"));
@@ -207,7 +211,6 @@ void Editor::SetUpWindows() {
 
 	// MENU BAR
 	menuBar = new ShyEditor::MenuBar();
-	addWindow(menuBar);
 
 	// GAME SCENE
 	scene = new ShyEditor::Scene();
@@ -232,6 +235,11 @@ void Editor::SetUpWindows() {
 	// CONSOLE
 	console = new ShyEditor::Console();
 	addWindow(console);
+
+
+	scene->SetLeft(hierarchy);
+	scene->SetRight(components);
+	scene->SetBottom(fileExplorer);
 }
 
 void Editor::SplashScreen() {
@@ -293,32 +301,8 @@ bool Editor::runProjectsWindow() {
 
 }
 
-void Editor::update()
-{
-	ShyEditor::Game::CheckEnd();
 
-	for (auto window : windows)
-	{
-		if (window->CanBeDrawnOnTop())
-			window->update();
-		else
-			switch (state)
-			{
-			case Editor::SCRIPTING_WINDOW:
-				if (window == scriptCreation)
-					window->update();
-				break;
-			case Editor::EDITOR_WINDOW:
-				if (window != scriptCreation)
-					window->update();
-				break;
-			default:
-				break;
-			}
-	}
-}
-
-void Editor::render()
+void Editor::UpdateAndRenderWindows()
 {
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -327,27 +311,33 @@ void Editor::render()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
+
+	//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
 	ShyEditor::ColorPalette::ApplyPalette();
 
 	for (auto window : windows)
 	{
 		if (window->CanBeDrawnOnTop())
-			window->render();
+			window->UpdateWindow();
 		else
 			switch (state)
 			{
 			case Editor::SCRIPTING_WINDOW:
 				if (window == scriptCreation)
-					window->render();
+					window->UpdateWindow();
 				break;
 			case Editor::EDITOR_WINDOW:
 				if (window != scriptCreation)
-					window->render();
+					window->UpdateWindow();
 				break;
 			default:
 				break;
 			}
 	}
+
+	if (state == Editor::EDITOR_WINDOW)
+		menuBar->Update();
 
 	if (ImGui::IsMouseReleased(0)) {
 
@@ -376,20 +366,20 @@ void Editor::handleInput()
 			exitEditor = true;
 
 		for (auto window : windows)
-			window->handleInput(&event);
+			window->HandleInput(&event);
 	}
 }
 
 void Editor::changeEditorState(const EDITOR_STATE& state) {
 
 	switch (state) {
-		case Editor::EDITOR_WINDOW:
-			break;
-		case Editor::SCRIPTING_WINDOW:
-			scriptCreation->Load();
-			break;
-		default:
-			break;
+	case Editor::EDITOR_WINDOW:
+		break;
+	case Editor::SCRIPTING_WINDOW:
+		scriptCreation->Load();
+		break;
+	default:
+		break;
 	}
 
 	this->state = state;
@@ -444,6 +434,11 @@ ShyEditor::ComponentWindow* Editor::getComponents() {
 
 ShyEditor::ScriptCreation* Editor::getScriptCreation() {
 	return scriptCreation;
+}
+
+ShyEditor::Console* Editor::getConsole()
+{
+	return console;
 }
 
 void Editor::OpenScript(const std::string& script) {

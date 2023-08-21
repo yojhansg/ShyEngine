@@ -432,7 +432,7 @@ namespace ShyEditor {
 		return nodes;
 	}
 
-	void ScriptCreation::render()
+	void ScriptCreation::Behaviour()
 	{
 		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 		ImGui::SetNextWindowPos(ImVec2(0, 0));

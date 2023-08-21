@@ -7,6 +7,8 @@ namespace ShyEditor {
 
 	class Console : public Window {
 
+	private:
+
 		struct Message {
 
 			struct Color {
@@ -21,23 +23,13 @@ namespace ShyEditor {
 		};
 
 
-	private:
-
-		bool visible;
-		bool gameOpenedLastFrame;
-
-		static bool forceOpen;
 
 		std::vector<Message> messages;
 
 	public:
 
 		Console();
-
-		static void ForceOpen();
-
-		virtual void render();
-
+		void Behaviour() override;
 	};
 
 }

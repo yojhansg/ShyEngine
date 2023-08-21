@@ -101,6 +101,7 @@ namespace ShyEditor {
 		if (std::filesystem::exists(path))
 			loadScene(path);
 
+		docked = true;
 	}
 
 	Scene::~Scene()
@@ -210,27 +211,8 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::update()
-	{
-		auto it = gameObjects.begin();
-		while (it != gameObjects.end()) {
-			GameObject* go = it->second;
 
-			go->update();
-
-			if (go->isWaitingToDelete()) {
-				selectedGameObject = nullptr;
-
-				delete go;
-				it = gameObjects.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-	}
-
-	void Scene::handleInput(SDL_Event* event)
+	void Scene::HandleInput(SDL_Event* event)
 	{
 		ImVec2 mousePos = ImGui::GetMousePos();
 
@@ -251,8 +233,26 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::render()
+	void Scene::Behaviour()
 	{
+		auto it = gameObjects.begin();
+		while (it != gameObjects.end()) {
+			GameObject* go = it->second;
+
+			go->update();
+
+			if (go->isWaitingToDelete()) {
+				selectedGameObject = nullptr;
+
+				delete go;
+				it = gameObjects.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+
 		Editor* editor = Editor::getInstance();
 		FileExplorer* fileExplorer = editor->getFileExplorer();
 
@@ -260,14 +260,12 @@ namespace ShyEditor {
 		ImVec2 componentsWindowPos = editor->getComponents()->getPosition();
 		ImVec2 mainWindowSize = editor->getMainWindowSize();
 
-		ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
+		//ImGui::SetNextWindowSizeConstraints(ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24), ImVec2(componentsWindowPos.x - hierarchyWindowSize.x, mainWindowSize.y - fileExplorer->getSize().y - 24));
 
 		size_t lastPathSlashPosition = path.find_last_of("/\\");
 		size_t lastPathDotPosition = path.find_last_of(".");
 
 		std::string sceneFilename = path.substr(lastPathSlashPosition + 1, lastPathDotPosition - lastPathSlashPosition - 1);
-
-		ImGui::Begin((windowName + ": " + sceneFilename).c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
 
 		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 
@@ -291,17 +289,6 @@ namespace ShyEditor {
 		}
 
 
-		float menuBarHeight = ImGui::GetFrameHeight();
-		ImGui::SetWindowPos(ImVec2(hierarchyWindowSize.x, menuBarHeight));
-
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-		windowWidth = imGUIWindowSize.x;
-		windowHeight = imGUIWindowSize.y;
-		windowPosX = imGUIWindowPos.x;
-		windowPosY = imGUIWindowPos.y;
-
-
 		SDL_SetRenderTarget(renderer, targetTexture);
 		SDL_RenderClear(renderer);
 
@@ -311,9 +298,6 @@ namespace ShyEditor {
 		SDL_SetRenderTarget(renderer, NULL);
 
 		ImGui::Image(targetTexture, ImVec2(windowWidth, windowOriHeight * windowWidth / windowOriWidth));
-
-		ImGui::End();
-
 	}
 
 	std::string Scene::getPath()

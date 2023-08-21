@@ -49,7 +49,9 @@ namespace ShyEditor {
 		folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
 		file = ResourcesManager::GetInstance()->AddTexture(FileImage, true);
 		script = ResourcesManager::GetInstance()->AddTexture(ScriptImage, true);
+		
 
+		docked = true;
 	}
 
 	void FileExplorer::drawFileExplorerWindow()
@@ -258,50 +260,9 @@ namespace ShyEditor {
 
 	}
 
-	void FileExplorer::render()
+	void FileExplorer::Behaviour()
 	{
-
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
-		ComponentWindow* components = editor->getComponents();
-		Hierarchy* hierarchy = editor->getHierarchy();
-
-		if (focused)
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y * 0.1f), ImVec2(mainWindowSize.x, mainWindowSize.y * 0.5f));
-		else {
-			float sizeYToConstraint;
-
-			if (components->isFocused()) {
-				sizeYToConstraint = components->getSize().y;
-			}
-			else {
-				sizeYToConstraint = hierarchy->getSize().y;
-			}
-
-			ImGui::SetNextWindowSizeConstraints(ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24), ImVec2(mainWindowSize.x, mainWindowSize.y - sizeYToConstraint - 24));
-		}
-
-		focused = false;
-
-		// Draw the file explorer 
-		ImGui::Begin(windowName.c_str(), (bool*)0, (ImGuiWindowFlags_)flags);
-
-		if (ImGui::IsWindowFocused())
-			focused = true;
-
-		ImVec2 imGUIWindowSize = ImGui::GetWindowSize();
-		ImVec2 imGUIWindowPos = ImGui::GetWindowPos();
-		windowWidth = imGUIWindowSize.x;
-		windowHeight = imGUIWindowSize.y;
-		windowPosX = imGUIWindowPos.x;
-		windowPosY = imGUIWindowPos.y;
-
-		ImGui::SetWindowPos(ImVec2(0, mainWindowSize.y - windowHeight));
-		ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight));
-
 		drawFileExplorerWindow();
-
-		ImGui::End();
-
 	}
 
 }

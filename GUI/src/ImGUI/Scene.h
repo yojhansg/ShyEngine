@@ -61,9 +61,9 @@ namespace ShyEditor {
 		void saveScene(std::string path);
 		void loadScene(std::string path);
 
-		virtual void update();
-		virtual void handleInput(SDL_Event* event);
-		virtual void render();
+		
+		void HandleInput(SDL_Event* event) override;
+		void Behaviour() override;
 
 		std::string getPath();
 		std::string toJson();

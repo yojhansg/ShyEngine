@@ -16,7 +16,6 @@ namespace ShyEditor {
 		initialisation = true;
 		current = {};
 		instance = this;
-		visible = false;
 		pendingApply = false;
 
 		LoadDefaultPalette();
@@ -30,6 +29,8 @@ namespace ShyEditor {
 		Apply();
 
 		initialisation = false;
+
+		Hide();
 	}
 
 	ColorPalette::~ColorPalette()
@@ -207,7 +208,7 @@ namespace ShyEditor {
 		instance->open = true;
 	}
 
-	void ColorPalette::render()
+	void ColorPalette::Behaviour()
 	{
 		if (open) {
 

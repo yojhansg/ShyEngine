@@ -30,7 +30,7 @@ namespace ShyEditor {
 
 		FileExplorer();
 
-		virtual void render();
+		void Behaviour() override;
 
 		void drawFileExplorerWindow();
 	};

@@ -18,10 +18,10 @@ namespace ShyEditor {
 
 	Preferences::Preferences() : Window("Preferences", 0)
 	{
+		Hide();
 		instance = this;
 
 		open = false;
-		visible = false;
 		windowWidth = 700;
 		windowHeight = 700;
 
@@ -50,7 +50,7 @@ namespace ShyEditor {
 	}
 
 
-	void Preferences::render()
+	void Preferences::Behaviour()
 	{
 		if (open) {
 

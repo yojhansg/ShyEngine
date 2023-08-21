@@ -16,14 +16,14 @@
 
 namespace ShyEditor {
 
-    MenuBar::MenuBar() : Window("", None)
+    MenuBar::MenuBar()
     {
         editor = Editor::getInstance();
 
         shouldOpenRenamePopup = false;
     }
 
-    void MenuBar::render()
+    void MenuBar::Update()
     {
 
         GameObject* gameObject = editor->getScene()->getSelectedGameObject();

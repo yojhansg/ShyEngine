@@ -8,7 +8,7 @@ namespace ShyEditor {
 
     class GameObject;
 
-    class MenuBar: public Window {
+    class MenuBar {
 
      private:
 
@@ -26,7 +26,7 @@ namespace ShyEditor {
 
         MenuBar();
 
-        virtual void render();
+        void Update();
 
     };
 };
