@@ -86,6 +86,7 @@ namespace ShyEditor {
 			windowHeight = size.y;
 
 
+			docked = ImGui::IsWindowDocked();
 			focused = ImGui::IsWindowFocused();
 
 
