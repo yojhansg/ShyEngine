@@ -32,7 +32,7 @@
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
 
-#define DefaultIconImage "shyIcon2.png"
+#define DefaultIconImage "Assets/Images/shyIcon2.png"
 
 Editor* Editor::instance = nullptr;
 

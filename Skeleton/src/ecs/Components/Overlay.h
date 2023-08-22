@@ -48,7 +48,7 @@ namespace ECS {
 
 		reflect Utilities::Color color;
 
-		reflect float renderScale;
+		reflect float scale;
 		reflect bool interactable;
 
 	publish:
