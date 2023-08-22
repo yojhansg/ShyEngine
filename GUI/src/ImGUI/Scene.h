@@ -52,8 +52,8 @@ namespace ShyEditor {
 		GameObject* GetSelectedGameObject();
 		void SetSelectedGameObject(GameObject* go);
 
-		void saveScene(std::string sceneName);
-		void loadScene(std::string sceneFile);
+		void saveScene(const std::string& sceneName);
+		void loadScene(const std::string& sceneName);
 
 		void RenderChildGameObjects(GameObject* go);
 		void RenderGameObjects();
@@ -63,11 +63,12 @@ namespace ShyEditor {
 		void HandleInput(SDL_Event* event) override;
 		void Behaviour() override;
 
+		ImVec2 MousePositionInScene();
+		bool IsMouseHoveringGameObject(GameObject* gameObject);
+
 		std::string getPath();
 		std::string toJson();
 
-		ImVec2 MousePositionInScene();
-		bool IsMouseHoveringGameObject(GameObject* gameObject);
 	};
 
 }

@@ -42,7 +42,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                    editor->getScene()->saveScene(editor->getScene()->getPath());
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
                 }
 
                 ImGui::Separator();

@@ -39,11 +39,12 @@ namespace ShyEditor {
 		// Pointer to the selected gameobject in the scene
 		selectedGameObject = nullptr;
 
-		if (std::filesystem::exists(scenePath))
-			loadScene(scenePath);
-
 		docked = true;
 		viewMode = 0;
+
+		// Load the default scene or the last opene scene
+		loadScene(sceneName);
+
 	}
 
 	Scene::~Scene() {
@@ -85,7 +86,7 @@ namespace ShyEditor {
 		selectedGameObject = go;
 	}
 
-	void Scene::saveScene(std::string sceneName) {
+	void Scene::saveScene(const std::string& sceneName) {
 
 		nlohmann::ordered_json j;
 
@@ -101,15 +102,12 @@ namespace ShyEditor {
 			outputFile.close();
 		}
 		else {
-			//ERROR HANDLING
-
-			std::cout << "Error al guardar la escena" << std::endl;
 
 		}
 
 	}
 
-	void Scene::loadScene(std::string sceneFile) {
+	void Scene::loadScene(const std::string& sceneName) {
 
 		// Delete info of previous scene
 		selectedGameObject = nullptr;
@@ -119,7 +117,9 @@ namespace ShyEditor {
 
 		gameObjects.clear();
 
-		this->scenePath = sceneFile;
+		this->scenePath = sceneName + ".scene";
+		this->sceneName = sceneName;
+		name = this->sceneName.c_str();
 
 		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + scenePath);
 
@@ -129,26 +129,14 @@ namespace ShyEditor {
 		}
 
 		nlohmann::ordered_json jsonData;
-		try {
-			inputFile >> jsonData;
-		}
-		catch (const nlohmann::json::parse_error& e) {
-			std::cerr << "JSON parse error: " << e.what() << std::endl;
-			return;
-		}
-
+		inputFile >> jsonData;
 		inputFile.close();
 
-		// Add scene name property
-
 		nlohmann::json gameObjectsJson = jsonData["objects"];
-		sceneName = jsonData["name"];
-		name = sceneName.c_str();
 
 		// Iterate through the game objects JSON array
 		for (const auto& gameObjectJson : gameObjectsJson) {
 			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
-
 			gameObjects.insert({ gameObject->getId(), gameObject });
 		}
 
@@ -218,9 +206,36 @@ namespace ShyEditor {
 
 	}
 
+	void Scene::HandleInput(SDL_Event* event) {
 
-	void Scene::Behaviour()
-	{
+		ImVec2 mousePos = ImGui::GetMousePos();
+		bool insideWindow = IsMouseHoveringWindow();
+		bool anyGoSelected = false;
+
+		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+		{
+			for (const auto& pair : gameObjects) {
+
+				if (IsMouseHoveringGameObject(pair.second)) {
+
+					anyGoSelected = true;
+					selectedGameObject = pair.second;
+				}
+			}
+		}
+
+		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			SetSelectedGameObject(nullptr);
+		}
+
+		if (!(SDL_GetModState() & KMOD_SHIFT)) {
+			camera->handleInput(event, insideWindow);
+		}
+
+	}
+
+	void Scene::Behaviour() {
+
 		if (camera->ShouldResize(windowWidth, windowHeight))
 			camera->Resize(windowWidth, windowHeight);
 
@@ -241,7 +256,6 @@ namespace ShyEditor {
 			}
 		}
 
-
 		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 
 			if (IsMouseHoveringWindow()) {
@@ -250,6 +264,7 @@ namespace ShyEditor {
 				if (asset.extension == ".png" || asset.extension == ".jpg") {
 
 					GameObject* go = AddGameObject(asset.relativePath);
+					go->setName(asset.name);
 
 					ImVec2 position = MousePositionInScene();
 
@@ -261,35 +276,33 @@ namespace ShyEditor {
 
 		camera->PrepareCameraRender();
 
+		switch (viewMode) {
 
-		switch (viewMode)
-		{
-		case 0:
+			case 0:
 
-			RenderGameObjects();
-			RenderUI();
-			break;
-		case 1:
+				RenderGameObjects();
+				RenderUI();
+				break;
+			case 1:
 
-			RenderGameObjects();
-			RenderFrame();
+				RenderGameObjects();
+				RenderFrame();
 
-			break;
-		case 2:
+				break;
+			case 2:
 
-			RenderUI();
+				RenderUI();
 
-			break;
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 
 		camera->StopCameraRender();
 
 
-		//cambiar las propiedades del grid dependiendo del orden de magnitud
-
+		// Cambiar las propiedades del grid dependiendo del orden de magnitud
 
 		float spacing = 50 * camera->GetScale();
 		int interval = 5;
@@ -322,12 +335,11 @@ namespace ShyEditor {
 		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
 		ImGui::SameLine();
 		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
+
 	}
 
+	ImVec2 Scene::MousePositionInScene() {
 
-
-	ImVec2 Scene::MousePositionInScene()
-	{
 		ImVec2 mousepos = ImGui::GetMousePos();
 
 		mousepos.x -= windowPosX;
@@ -345,10 +357,8 @@ namespace ShyEditor {
 		return mousepos;
 	}
 
+	bool Scene::IsMouseHoveringGameObject(GameObject* gameObject) {
 
-
-	bool Scene::IsMouseHoveringGameObject(GameObject* gameObject)
-	{
 		auto mousePos = MousePositionInScene();
 
 		auto goPos = gameObject->getAdjustedPosition();
@@ -361,50 +371,16 @@ namespace ShyEditor {
 			mousePos.y > goPos.y && mousePos.y < goPos.y + goSize.y;
 	}
 
-
-
-
-	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b)
-	{
+	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b) {
 		return a->getRenderOrder() < b->getRenderOrder();
 	}
 
-
-	void Scene::HandleInput(SDL_Event* event)
-	{
-		ImVec2 mousePos = ImGui::GetMousePos();
-		bool insideWindow = IsMouseHoveringWindow();
-		bool anyGoSelected = false;
-
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
-		{
-			for (const auto& pair : gameObjects) {
-
-				if (IsMouseHoveringGameObject(pair.second)) {
-
-					anyGoSelected = true;
-					selectedGameObject = pair.second;
-				}
-			}
-		}
-
-		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			SetSelectedGameObject(nullptr);
-		}
-
-		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-			camera->handleInput(event, insideWindow);
-		}
-
-	}
-
-	std::string Scene::getPath()
-	{
+	std::string Scene::getPath() {
 		return scenePath;
 	}
 
-	std::string Scene::toJson()
-	{
+	std::string Scene::toJson() {
+
 		nlohmann::ordered_json j;
 
 		j["name"] = sceneName;
@@ -418,7 +394,6 @@ namespace ShyEditor {
 		j["objects"] = gameObjectsJson;
 
 		return j.dump(2);
-
 	}
 
 }
