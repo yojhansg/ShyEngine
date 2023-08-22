@@ -48,17 +48,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)Editor</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <TargetName>EditorDebug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)Editor</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <TargetName>EditorRelease</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

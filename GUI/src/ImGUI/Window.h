@@ -25,6 +25,7 @@ namespace ShyEditor {
         bool visible;
 
         virtual void Behaviour();
+
     public:
 
         Window(std::string windowName, int flags);
@@ -35,7 +36,7 @@ namespace ShyEditor {
 
         ImVec2 getSize();
         ImVec2 getPosition();
-        
+
         void UpdateWindow();
         virtual void HandleInput(SDL_Event* event);
 

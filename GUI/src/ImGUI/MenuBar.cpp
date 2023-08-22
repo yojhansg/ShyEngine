@@ -90,7 +90,7 @@ namespace ShyEditor {
                     Preferences::GenerateRelease();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->saveScene("Scenes/scene.scene");
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
                     Game::Play(false);
                 };
 
@@ -204,14 +204,14 @@ namespace ShyEditor {
             static char nameBuffer[256];  // Buffer to hold the new name
 
             // Display an input text field for renaming
-            if (ImGui::InputText("Scene name", nameBuffer, sizeof(nameBuffer)))
-            {
+            if (ImGui::InputText("Scene name", nameBuffer, sizeof(nameBuffer))) {
+
             }
 
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    editor->getScene()->saveScene("Scenes/" + std::string(nameBuffer) + ".scene");
+                    editor->getScene()->saveScene(std::string(nameBuffer));
                 }
 
                 ImGui::CloseCurrentPopup();
