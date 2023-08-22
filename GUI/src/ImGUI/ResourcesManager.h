@@ -25,6 +25,8 @@ namespace ShyEditor {
 
 	public:
 
+		static const std::string ASSETSFOLDER;
+
 		static ResourcesManager* GetInstance();
 
 		Texture* AddTexture(const std::string& key, bool isEditorResource);

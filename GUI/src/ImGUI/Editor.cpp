@@ -259,7 +259,9 @@ void Editor::SplashScreen() {
 	SDL_SetWindowBordered(window, SDL_FALSE);
 	SDL_SetWindowOpacity(window, 0.75f);
 
-	auto surf = IMG_Load("SplashScreen.png");
+	std::string splashscreen = ShyEditor::ResourcesManager::ASSETSFOLDER + "Images\\SplashScreen.png";
+
+	auto surf = IMG_Load(splashscreen.c_str());
 	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Color transparente (RGBA)

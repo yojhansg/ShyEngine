@@ -1,9 +1,11 @@
 #include "ColorPalette.h"
+
+#include "ResourcesManager.h"
+#include "nlohmann/json.hpp"
 #include "imgui.h"
 
 #include <fstream>
 #include <sstream>
-#include "nlohmann/json.hpp"
 
 using nlohmann::json;
 
@@ -76,7 +78,7 @@ namespace ShyEditor {
 		palette.gridIntervalScale = 4;
 		palette.gridSpacing = 50;
 
-		palette.font = "Fonts/Montserrat-Regular.ttf";
+		palette.font = ResourcesManager::ASSETSFOLDER +  "Fonts\\Montserrat-Regular.ttf";
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 
@@ -86,7 +88,7 @@ namespace ShyEditor {
 
 	void ColorPalette::LoadPalettes() {
 
-		std::ifstream fileStream(path + ".palette");
+		std::ifstream fileStream(ResourcesManager::ASSETSFOLDER + path + ".palette");
 
 		if (!fileStream.good() || !json::accept(fileStream))
 		{
@@ -104,10 +106,10 @@ namespace ShyEditor {
 
 			Palette palette{};
 			std::string name = paletteInfo["name"].get<std::string>();
-			palette.font = paletteInfo["font"].get<std::string>();
+			palette.font = ResourcesManager::ASSETSFOLDER + "Fonts\\" + paletteInfo["font"].get<std::string>();
 			palette.fontSize = paletteInfo["fontSize"].get<int>();
 
-			palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(("Fonts/" + palette.font).c_str(), palette.fontSize);
+			palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 			//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
 
 #define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());

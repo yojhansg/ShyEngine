@@ -7,6 +7,8 @@ namespace ShyEditor {
 
 	ResourcesManager* ResourcesManager::instance = nullptr;
 
+	const std::string ResourcesManager::ASSETSFOLDER = "Assets\\";
+
 	ResourcesManager::ResourcesManager() {
 	
 		editorResourcesPath = "";
@@ -31,7 +33,7 @@ namespace ShyEditor {
 			if (instance->editorTextures.contains(key))
 				return instance->editorTextures.at(key);
 
-			texture = new Texture(instance->editorResourcesPath + "Images\\" + key);
+			texture = new Texture(ASSETSFOLDER + "Images\\" + key);
 
 			instance->editorTextures.insert(std::make_pair(key, texture));
 
