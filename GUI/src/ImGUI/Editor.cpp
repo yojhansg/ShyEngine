@@ -94,7 +94,7 @@ void Editor::Loop() {
 		SDL_SetWindowResizable(instance->window, SDL_TRUE);
 		SDL_SetWindowSize(instance->window, _WindowMainSize);
 		SDL_SetWindowPosition(instance->window, _Centered);
-		
+
 		// Init the ImGUI windows in the editor
 		instance->SetUpWindows();
 	}
@@ -344,12 +344,6 @@ void Editor::UpdateAndRenderWindows()
 
 			ImGui::DockBuilderFinish(id);
 		}
-		else {
-
-
-			std::cout << "no es nulo" << std::endl;
-		}
-
 	}
 	else
 	{
@@ -386,7 +380,8 @@ void Editor::UpdateAndRenderWindows()
 
 	if (ImGui::IsMouseReleased(0)) {
 
-		ShyEditor::ResourcesManager::UnselectAsset();
+		if (ShyEditor::ResourcesManager::IsAnyAssetSelected())
+			ShyEditor::ResourcesManager::UnselectAsset();
 	}
 
 	// Rendering

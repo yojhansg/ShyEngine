@@ -26,12 +26,39 @@ namespace ShyEditor {
 		std::string projectPath;
 		std::string currentPath;
 
+		struct Entry {
+
+			bool isFolder;
+			std::string name;
+			std::string path;
+			std::string extension;
+			Texture* texture;
+		};
+
+
+		int currentlySelected;
+		std::vector<Entry> entries;
+
+
+		void ProcessPath();
+
+		int viewMode;
+
+		void DrawList();
+		void DrawIcons();
+
+		void OnItemSelected(Entry& entry);
+		void ItemDrag(Entry& entry);
+
+
+		bool shouldUpdate;
+
 	public:
 
 		FileExplorer();
 
 		void Behaviour() override;
 
-		void drawFileExplorerWindow();
+
 	};
 }
