@@ -58,7 +58,6 @@ namespace ShyEditor {
 		FileExplorer();
 
 		void Behaviour() override;
-
-
+		void HandleInput(SDL_Event* event) override;
 	};
 }

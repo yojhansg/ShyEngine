@@ -340,6 +340,12 @@ namespace ShyEditor {
 		ImGui::SameLine();
 		ImGui::RadioButton("Show icons", &viewMode, 1);
 
+		ImGui::SameLine();
+		if (ImGui::Button("Refresh")) {
+
+			shouldUpdate = true;
+		}
+
 		ImGui::Separator();
 
 		if (viewMode == 0)
@@ -451,6 +457,38 @@ namespace ShyEditor {
 
 
 
+	void FileExplorer::HandleInput(SDL_Event* event)
+	{
+
+		if (event->type == SDL_DROPFILE) {
+
+			std::string sourcePath = event->drop.file;
+
+			if (IsMouseHoveringWindow()) {
+
+				std::filesystem::path src = fs::path(sourcePath);
+				std::filesystem::path dst = fs::path(currentPath + "/" + src.filename().string());
+
+
+
+				bool ret = std::filesystem::copy_file(src, dst);
+
+				if (ret) {
+
+					shouldUpdate = true;
+				}
+				else {
+
+					std::cout << "Error al copiar el fichero: " << std::endl;
+					std::cout << "Origen: "  << src.string() << std::endl;
+					std::cout << "Destino: " << dst.string() << std::endl;
+				}
+
+			}
+			SDL_free(event->drop.file);
+		}
+
+	}
 
 }
 
