@@ -250,16 +250,15 @@ void Editor::SplashScreen() {
 		return;
 	}
 
-	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500,
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 853, 480,
 		SDL_WINDOW_BORDERLESS
 	);
 
 	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	SDL_SetWindowBordered(window, SDL_FALSE);
-	SDL_SetWindowOpacity(window, 0.75f);
 
-	std::string splashscreen = ShyEditor::ResourcesManager::ASSETSFOLDER + "Images\\SplashScreen.png";
+	std::string splashscreen = ShyEditor::ResourcesManager::ASSETSFOLDER + "Images\\ShyLogo.png";
 
 	auto surf = IMG_Load(splashscreen.c_str());
 	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
