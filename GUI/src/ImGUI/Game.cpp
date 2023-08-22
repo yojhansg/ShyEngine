@@ -6,6 +6,8 @@
 #include "Editor.h"
 #include "Console.h"
 
+#include "CheckML.h"
+
 namespace ShyEditor {
 
 	Game* Game::instance = nullptr;
@@ -37,6 +39,7 @@ namespace ShyEditor {
 		if (instance != nullptr)
 		{
 			Stop();
+			delete instance;
 			instance = nullptr;
 		}
 	}

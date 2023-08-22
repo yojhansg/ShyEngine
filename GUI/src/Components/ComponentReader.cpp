@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "CheckML.h"
+
 using nlohmann::json;
 
 namespace Components {

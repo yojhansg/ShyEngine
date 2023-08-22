@@ -1,6 +1,8 @@
 #include "ComponentInfo.h"
 #include "nlohmann/json.hpp"
 
+#include "CheckML.h"
+
 namespace Components {
 
 	std::unordered_map<std::string, AttributesType> Attribute::attributeTypes;

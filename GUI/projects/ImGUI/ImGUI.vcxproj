@@ -111,6 +111,7 @@
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
     <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
     <ClInclude Include="..\..\src\ImGUI\Editor.h" />
+    <ClInclude Include="..\..\src\ImGUI\LogManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
     <ClInclude Include="..\..\src\ImGUI\Preferences.h" />
     <ClInclude Include="..\..\src\ImGUI\ProjectsManager.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
     <ClCompile Include="..\..\src\ImGUI\GameObject.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Editor.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\LogManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Preferences.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp" />

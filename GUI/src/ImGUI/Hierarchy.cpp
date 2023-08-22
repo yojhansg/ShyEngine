@@ -11,6 +11,8 @@
 #include <fstream>
 #include <string>
 
+#include "CheckML.h"
+
 
 namespace ShyEditor {
 

@@ -90,6 +90,9 @@
     <ClInclude Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.h">
       <Filter>ImGUI_files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ImGUI\LogManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\imgui.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdlrenderer2.cpp">
       <Filter>ImGUI_files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImGUI\LogManager.cpp">
+      <Filter>Archivos de recursos\Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

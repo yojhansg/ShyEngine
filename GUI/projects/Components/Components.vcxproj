@@ -146,6 +146,7 @@
     <ClCompile Include="..\..\src\Components\ComponentReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Components\CheckML.h" />
     <ClInclude Include="..\..\src\Components\ComponentInfo.h" />
     <ClInclude Include="..\..\src\Components\ComponentManager.h" />
     <ClInclude Include="..\..\src\Components\ComponentReader.h" />

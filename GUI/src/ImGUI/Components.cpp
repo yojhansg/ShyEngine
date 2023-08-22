@@ -8,6 +8,8 @@
 #include "ComponentManager.h"
 #include "FileExplorer.h"
 
+#include "CheckML.h"
+
 
 namespace ShyEditor {
 

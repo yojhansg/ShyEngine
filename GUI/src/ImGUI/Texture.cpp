@@ -3,6 +3,8 @@
 
 #include "Editor.h"
 
+#include "CheckML.h"
+
 namespace ShyEditor {
 
 	Texture::Texture(const std::string& filepath) {

@@ -3,6 +3,9 @@
 #include "Texture.h"
 #include "Font.h"
 
+#include "CheckML.h"
+
+
 namespace ShyEditor {
 
 	ResourcesManager* ResourcesManager::instance = nullptr;
@@ -59,8 +62,26 @@ namespace ShyEditor {
 		instance->currentAsset.valid = false;
 	}
 
-	void ResourcesManager::Release()
-	{
+	void ResourcesManager::Release() {
+
+		// Editor textures release
+		for (auto it = instance->editorTextures.begin(); it != instance->editorTextures.end(); it++) 
+			delete it->second;
+
+		instance->editorTextures.clear();
+
+		// Engine textures release
+		for (auto it = instance->engineTextures.begin(); it != instance->engineTextures.end(); it++)
+			delete it->second;
+
+		instance->engineTextures.clear();
+
+		// Engine fonts release
+		for (auto it = instance->engineFonts.begin(); it != instance->engineFonts.end(); it++)
+			delete it->second;
+
+		instance->engineFonts.clear();
+
 		delete instance;
 		instance = nullptr;
 	}

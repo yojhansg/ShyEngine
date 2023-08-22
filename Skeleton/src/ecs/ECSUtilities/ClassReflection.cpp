@@ -145,7 +145,7 @@ ClassReflection::ClassReflection(){
 		if(map.contains("color"))
 			self->color = Utilities::Color::CreateColor(map.at("color"));
 		if(map.contains("renderScale"))
-			self->renderScale = std::stof(map.at("renderScale"));
+			self->scale = std::stof(map.at("renderScale"));
 		if(map.contains("interactable"))
 			self->interactable = map.at("interactable") == "true" ? true : false;
 

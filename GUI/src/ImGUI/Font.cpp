@@ -5,6 +5,8 @@
 #include "Texture.h"
 #include "Editor.h"
 
+#include "CheckML.h"
+
 namespace ShyEditor {
 
 	Font::Font(const std::string& filepath, int pointSize) : pointSize(pointSize), path(filepath)

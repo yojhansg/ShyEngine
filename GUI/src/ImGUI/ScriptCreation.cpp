@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "CheckML.h"
+
 using nlohmann::json;
 
 namespace ShyEditor {

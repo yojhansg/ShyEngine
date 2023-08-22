@@ -35,5 +35,8 @@
     <ClInclude Include="..\..\src\Components\ComponentInfo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Components\CheckML.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

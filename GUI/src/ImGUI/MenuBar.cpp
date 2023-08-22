@@ -13,6 +13,8 @@
 #include <fstream>
 #include <tchar.h>
 
+#include "CheckML.h"
+
 
 namespace ShyEditor {
 

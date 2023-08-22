@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "CheckML.h"
+
 namespace Components {
 
 	ComponentManager* ComponentManager::instance = nullptr;

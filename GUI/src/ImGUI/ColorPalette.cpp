@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "CheckML.h"
+
 using nlohmann::json;
 
 namespace ShyEditor {

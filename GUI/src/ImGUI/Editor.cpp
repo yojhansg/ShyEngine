@@ -7,7 +7,6 @@
 #include "SDL_image.h"
 #include "imgui_internal.h"
 
-
 #include "ComponentManager.h"
 #include "ResourcesManager.h" 
 #include "ProjectsManager.h"
@@ -24,10 +23,10 @@
 #include "Scene.h"
 #include "Game.h"
 
-#include "ResourcesManager.h"
-
 #include <fstream>
 #include <iostream>
+
+#include "CheckML.h"
 
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
@@ -58,9 +57,8 @@ Editor::~Editor() {}
 
 Editor* Editor::getInstance()
 {
-	if (instance == nullptr) {
+	if (instance == nullptr)
 		instance = new Editor();
-	}
 
 	return instance;
 }
@@ -73,10 +71,10 @@ bool Editor::Init() {
 		return false;
 
 	Components::ComponentManager::Initialise();
-	Components::ComponentManager::ReadComponentInfo("Engine/Components.json");
-	Components::ComponentManager::ReadManagerInfo("Engine/Managers.json");
+	Components::ComponentManager::ReadComponentInfo("Engine\\Components.json");
+	Components::ComponentManager::ReadManagerInfo("Engine\\Managers.json");
 
-	ShyEditor::Game::Init("Main_Debug.exe", "Main_Release.exe");
+	ShyEditor::Game::Init("Engine\\Main_Debug.exe", "Engine\\Main_Release.exe");
 
 	ShyEditor::ResourcesManager::Init();
 
@@ -117,9 +115,9 @@ void Editor::End() {
 void Editor::Close() {
 
 	ShyEditor::ResourcesManager::Release();
-
 	ShyEditor::Game::Release();
 	Components::ComponentManager::Release();
+
 
 	// Cleanup
 	ImGui_ImplSDLRenderer2_Shutdown();
@@ -130,10 +128,15 @@ void Editor::Close() {
 	SDL_DestroyWindow(instance->window);
 	SDL_Quit();
 
+	delete instance->menuBar;
+
 	for (auto window : instance->windows)
 		delete window;
 
 	delete instance->projecInfo;
+
+	delete instance;
+	instance = nullptr;
 }
 
 

@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "SDL.h"
 
+#include "CheckML.h"
+
 namespace ShyEditor {
 
 	Camera::Camera(ImVec2 position, float scale, SDL_Renderer* renderer)

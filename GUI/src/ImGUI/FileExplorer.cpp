@@ -21,6 +21,8 @@
 #include "ResourcesManager.h"
 #include <Windows.h>
 
+#include "CheckML.h"
+
 #define FolderImage "folder.png"
 #define FileImage "file.png"
 #define ScriptImage "script.png"
