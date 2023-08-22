@@ -21,16 +21,27 @@ namespace ShyEditor {
 
 	int GameObject::lastId = 0;
 
-	GameObject::GameObject(std::string& path) {
+	GameObject::GameObject(std::string& path, bool isTransform): isTransform(isTransform) {
 
 		editor = Editor::getInstance();
 
 		name = "Empty Gameobject";
 
 		// Transform attributes
-		pos = new ImVec2(0, 0);
-		scale = new ImVec2(1, 1);
-		size = new ImVec2(100, 100);
+		transform = nullptr;
+		overlay = nullptr;
+
+		texture_size = new ImVec2(0, 0);
+
+		if (isTransform) {
+
+			transform = new Transform(this);
+		}
+		else {
+
+			overlay = new Overlay(this);
+		}
+
 
 		imagePath = path;
 
@@ -70,7 +81,7 @@ namespace ShyEditor {
 		if (texture->getSDLTexture() != NULL) {
 
 			// Sets the size of the gameobject based on the texture width and height
-			*size = ImVec2(texture->getWidth(), texture->getHeight());
+			*texture_size = ImVec2(texture->getWidth(), texture->getHeight());
 
 			// Add component image
 			Components::Component imageComponent = Components::ComponentManager::GetAllComponents().find("Image")->second;
@@ -97,10 +108,11 @@ namespace ShyEditor {
 
 		components.clear();
 
-		delete pos;
-		delete scale;
-		delete size;
 
+		if (isTransform)
+			delete transform;
+		else
+			delete overlay;
 	}
 
 
@@ -109,15 +121,15 @@ namespace ShyEditor {
 
 	// ------------------------------------- Render, update and input -----------------------------------
 
-	void GameObject::render(SDL_Renderer* renderer, Camera* camera) {
+	void GameObject::RenderTransform(SDL_Renderer* renderer, Camera* camera) {
 
 		ImVec2 position = getAdjustedPosition();
 
 		ImVec2 cameraPosition = camera->GetPosition();
 		float cameraScale = camera->GetScale();
 
-		float width = size->x * getScale_x() * cameraScale;
-		float height = size->y * getScale_y()* cameraScale;
+		float width = texture_size->x * getScale_x() * cameraScale;
+		float height = texture_size->y * getScale_y()* cameraScale;
 
 
 		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale+ cameraPosition.y);
@@ -128,7 +140,7 @@ namespace ShyEditor {
 
 		// Image render
 		if (visible && texture != NULL)
-			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, rotation, NULL, SDL_FLIP_NONE);
+			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, transform->GetRotation(), NULL, SDL_FLIP_NONE);
 
 
 
@@ -183,10 +195,10 @@ namespace ShyEditor {
 
 			if (texture->getSDLTexture() != NULL) {
 				imagePath = currentImagePath;
-				*size = ImVec2(texture->getWidth(), texture->getHeight());
+				*texture_size = ImVec2(texture->getWidth(), texture->getHeight());
 			}
 			else {
-				*size = ImVec2(100, 100);
+				*texture_size = ImVec2(100, 100);
 				imagePath = "Empty Gameobject";
 			}
 		}
@@ -195,97 +207,98 @@ namespace ShyEditor {
 
 	bool GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos) {
 
-		showGizmo = false;
+		//showGizmo = false;
 
-		if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->GetSelectedGameObject() == this) {
-			toDelete();
-		}
+		//if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->GetSelectedGameObject() == this) {
+		//	toDelete();
+		//}
 
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+		//if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
-			if (!leftMouseButtonDown) 
-				leftMouseButtonDown = true;
+		//	if (!leftMouseButtonDown) 
+		//		leftMouseButtonDown = true;
 
-			if (visible && isMouseInsideGameObject) {
-				editor->getScene()->SetSelectedGameObject(this);
-				return true;
-			}
-		}
+		//	if (visible && isMouseInsideGameObject) {
+		//		editor->getScene()->SetSelectedGameObject(this);
+		//		return true;
+		//	}
+		//}
 
-		if (event->type == SDL_MOUSEBUTTONUP) {
+		//if (event->type == SDL_MOUSEBUTTONUP) {
 
-			if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-				leftMouseButtonDown = false;
+		//	if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
+		//		leftMouseButtonDown = false;
 
-			if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
-				rightMouseButtonDown = false;
-		}
+		//	if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
+		//		rightMouseButtonDown = false;
+		//}
 
-		if (editor->getScene()->GetSelectedGameObject() == this) {
+		//if (editor->getScene()->GetSelectedGameObject() == this) {
 
-			if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
+		//	if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
 
-				if (!rightMouseButtonDown) {
-					rightMouseButtonDown = true;
-				}
-			}
+		//		if (!rightMouseButtonDown) {
+		//			rightMouseButtonDown = true;
+		//		}
+		//	}
 
-			if (SDL_GetModState() & KMOD_SHIFT) {
-				showGizmo = true;
+		//	if (SDL_GetModState() & KMOD_SHIFT) {
+		//		showGizmo = true;
 
-				if (event->type == SDL_MOUSEMOTION)
-				{
-					if (leftMouseButtonDown)
-					{
+		//		if (event->type == SDL_MOUSEMOTION)
+		//		{
+		//			if (leftMouseButtonDown)
+		//			{
 
-						ImVec2* previousPos = new ImVec2{ pos->x, pos->y };
+		//				ImVec2* previousPos = new ImVec2{ pos->x, pos->y };
 
-						pos->x = mousePos.x - scale->x / 2;
-						pos->y = mousePos.y - scale->y / 2;
+		//				pos->x = mousePos.x - scale->x / 2;
+		//				pos->y = mousePos.y - scale->y / 2;
 
-						translateChildren(this, previousPos);
+		//				translateChildren(this, previousPos);
 
-						delete previousPos;
-					}
+		//				delete previousPos;
+		//			}
 
-					if (rightMouseButtonDown)
-					{
-						float rotationAngle = (previousMousePosX - mousePos.x) * 0.5f + (previousMousePosY - mousePos.y) * 0.5f;
-						rotation += rotationAngle;
+		//			if (rightMouseButtonDown)
+		//			{
+		//				float rotationAngle = (previousMousePosX - mousePos.x) * 0.5f + (previousMousePosY - mousePos.y) * 0.5f;
+		//				rotation += rotationAngle;
 
-						rotateChildren(this, this, rotationAngle);
+		//				rotateChildren(this, this, rotationAngle);
 
-					}
-				}
+		//			}
+		//		}
 
-				if (event->type == SDL_MOUSEWHEEL) {
+		//		if (event->type == SDL_MOUSEWHEEL) {
 
-					int scaleFactor = 0;
+		//			int scaleFactor = 0;
 
-					if (event->wheel.y > 0) // scroll up
-					{
-						scale->x += 5;
-						scale->y += 5;
+		//			if (event->wheel.y > 0) // scroll up
+		//			{
+		//				scale->x += 5;
+		//				scale->y += 5;
 
-						scaleFactor = 5;
+		//				scaleFactor = 5;
 
-					}
-					else if (event->wheel.y < 0) // scroll down
-					{
-						scale->x -= 5;
-						scale->y -= 5;
+		//			}
+		//			else if (event->wheel.y < 0) // scroll down
+		//			{
+		//				scale->x -= 5;
+		//				scale->y -= 5;
 
-						scaleFactor = -5;
-					}
+		//				scaleFactor = -5;
+		//			}
 
-					scaleChildren(this, scaleFactor);
-				}
-			}
-		}
+		//			scaleChildren(this, scaleFactor);
+		//		}
+		//	}
+		//}
 
-		previousMousePosX = mousePos.x;
-		previousMousePosY = mousePos.y;
+		//previousMousePosX = mousePos.x;
+		//previousMousePosY = mousePos.y;
 
+		//return false;
 		return false;
 	}
 
@@ -369,24 +382,24 @@ namespace ShyEditor {
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
 	void GameObject::setPosition(ImVec2 newPos) {
-		pos->x = newPos.x;
-		pos->y = newPos.y;
+
+		transform->SetPosition(newPos.x, newPos.y);
 	}
 
 	ImVec2 GameObject::getPosition() {
-		return *pos;
+		return transform->GetPosition();
 	}
 
 	float GameObject::getRotation() {
-		return rotation;
+		return transform->GetRotation();
 	}
 
 	ImVec2 GameObject::getAdjustedPosition() {
 
-		ImVec2 position = *pos;
+		ImVec2 position = transform->GetPosition();
 
-		float width = size->x * getScale_x();
-		float height = size->y * getScale_y();
+		float width = texture_size->x * getScale_x();
+		float height = texture_size->y * getScale_y();
 
 		// The game objects have their origin at the center
 		position.x -= width * 0.5f;
@@ -396,15 +409,15 @@ namespace ShyEditor {
 	}
 
 	ImVec2 GameObject::getSize() {
-		return *size;
+		return *texture_size;
 	}
 
 	float GameObject::getScale_x() {
-		return scale->x;
+		return transform->GetScale().x;
 	}
 
 	float GameObject::getScale_y() {
-		return scale->y;
+		return transform->GetScale().y;
 	}
 
 
@@ -478,17 +491,21 @@ namespace ShyEditor {
 		if (ImGui::CollapsingHeader("Transform")) {
 
 			ImGui::Text("Position");
-			ImGui::DragFloat2("##position_drag", (float*)pos, 0.3f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
 
 			ImGui::Text("Scale");
-			ImGui::DragFloat2("##scale_drag", (float*)scale, 0.02f, 0.0f, FLT_MAX, "%.2f");
+			ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
 
 			ImGui::Text("Rotation");
-			ImGui::DragFloat("##rotation_drag", &rotation, 0.1f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f");
 
 			ImGui::Text("Render order");
 			ImGui::InputInt("##render_order", &renderOrder);
 		}
+	}
+
+	void GameObject::drawOverlayInEditor()
+	{
 	}
 
 	void GameObject::drawComponentsInEditor() {
@@ -728,10 +745,10 @@ namespace ShyEditor {
 
 	void GameObject::scaleChildren(GameObject* go, int scaleFactor) {
 
-		for (auto childPair : go->getChildren()) {
+		for (auto& childPair : go->getChildren()) {
 
-			childPair.second->scale->x += scaleFactor;
-			childPair.second->scale->y += scaleFactor;
+			childPair.second->transform->GetScale().x += scaleFactor;
+			childPair.second->transform->GetScale().y += scaleFactor;
 
 			scaleChildren(childPair.second, scaleFactor);
 		}
@@ -751,19 +768,20 @@ namespace ShyEditor {
 
 		float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
 
-		for (auto child : go->getChildren())
+		for (auto& child : go->getChildren())
 		{
-			float newX = cos(angleRadians) * (child.second->pos->x - goCenter->pos->x) - sin(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->x;
-			float newY = sin(angleRadians) * (child.second->pos->x - goCenter->pos->x) + cos(angleRadians) * (child.second->pos->y - goCenter->pos->y) + goCenter->pos->y;
+			auto& childPos = child.second->transform->GetPosition();
 
-			child.second->pos->x = newX;
-			child.second->pos->y = newY;
-			child.second->rotation += rotationAngle;
+			float newX = cos(angleRadians) * (childPos.x - goCenter->transform->GetPosition().x) - sin(angleRadians) * (childPos.y - goCenter->transform->GetPosition().y) + goCenter->transform->GetPosition().x;
+			float newY = sin(angleRadians) * (childPos.x - goCenter->transform->GetPosition().x) + cos(angleRadians) * (childPos.y - goCenter->transform->GetPosition().y) + goCenter->transform->GetPosition().y;
+
+			child.second->transform->GetPosition().x = newX;
+			child.second->transform->GetPosition().y = newY;
+			child.second->transform->GetRotation() += rotationAngle;
 
 			rotateChildren(child.second, goCenter, rotationAngle);
 		}
 	}
-
 
 
 
@@ -801,9 +819,9 @@ namespace ShyEditor {
 
 		j["order"] = renderOrder;
 
-		j["localPosition"] = std::to_string(pos->x) + ", " + std::to_string(pos->y);
-		j["localScale"] = std::to_string(scale->x) + ", " + std::to_string(scale->y);
-		j["localRotation"] = std::to_string(rotation);
+		j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(transform->GetPosition().y);
+		j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
+		j["localRotation"] = std::to_string(transform->GetRotation());
 
 		nlohmann::ordered_json componentsJson = nlohmann::json::array();
 		for (auto it = components.begin(); it != components.end(); it++) {
@@ -845,7 +863,7 @@ namespace ShyEditor {
 
 		std::string goName = jsonData["name"];
 
-		GameObject* gameObject = new GameObject(goName);
+		GameObject* gameObject = new GameObject(goName, true);
 		gameObject->name = goName;
 
 		//if its prefab we leave the autoassigned id
@@ -868,17 +886,10 @@ namespace ShyEditor {
 		std::string localRotation = jsonData["localRotation"];
 
 		// Parse localPosition and localScale
-		ImVec2* localPosition;
-		ImVec2* localScale;
-		localPosition = new ImVec2();
-		localScale = new ImVec2();
+		sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
+		sscanf_s(localScaleStr.c_str(),    "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
 
-		sscanf_s(localPositionStr.c_str(), "%f, %f", &localPosition->x, &localPosition->y);
-		sscanf_s(localScaleStr.c_str(), "%f, %f", &localScale->x, &localScale->y);
-
-		gameObject->pos = localPosition;
-		gameObject->scale = localScale;
-		gameObject->rotation = std::stof(localRotation);
+		gameObject->transform->SetRotation(std::stof(localRotation));
 
 
 		for (const auto& compJson : jsonData["components"]) {
@@ -893,6 +904,72 @@ namespace ShyEditor {
 		}
 
 		return gameObject;
+	}
+
+	bool GameObject::IsTransform()
+	{
+		return isTransform;
+	}
+
+
+
+	//============ COMPONENTS =================================================================================================================================================================
+
+	Transform::Transform(GameObject* obj): obj(obj)
+	{
+		scale = new ImVec2(1, 1);
+		position = new ImVec2(0, 0);
+		rotation = 0;
+	}
+
+	Transform::~Transform()
+	{
+		delete scale;
+		delete position;
+
+		scale = nullptr;
+		position = nullptr;
+	}
+
+	ImVec2& Transform::GetPosition()
+	{
+		return *position;
+	}
+
+	ImVec2& Transform::GetScale()
+	{
+		return *scale;
+	}
+
+	float& Transform::GetRotation()
+	{
+		return rotation;
+	}
+
+	void Transform::SetPosition(float x, float y)
+	{
+		position->x = x;
+		position->y = y;
+	}
+
+	void Transform::SetScale(float x, float y)
+	{
+		scale->x = x;
+		scale->y = y;
+	}
+
+	void Transform::SetRotation(float r)
+	{
+		rotation = r;
+	}
+
+	Overlay::Overlay(GameObject* obj)
+	{
+
+	}
+
+	Overlay::~Overlay()
+	{
 	}
 
 }

@@ -19,15 +19,21 @@ namespace ShyEditor {
 	class Camera;
 	class Texture;
 
+
+
+
+	class Transform;
+	class Overlay;
+
 	class GameObject {
 
 	public:
 
-		GameObject(std::string& path);
+		GameObject(std::string& path, bool isTransform);
 		~GameObject();
 
 		// Render, update and input
-		void render(SDL_Renderer* renderer, Camera* camera);
+		void RenderTransform(SDL_Renderer* renderer, Camera* camera);
 		void update();
 		bool handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
@@ -71,12 +77,15 @@ namespace ShyEditor {
 
 		// Gameobject transform, components and scripts drawing
 		void drawTransformInEditor();
+		void drawOverlayInEditor();
 		void drawComponentsInEditor();
 		void drawScriptsInEditor();
 
 		// Serialization and deseralization logic
 		std::string toJson(bool isPrefab = false);
 		static GameObject* fromJson(std::string json, bool isPrefab = false);
+
+		bool IsTransform();
 
 	private:
 
@@ -103,11 +112,14 @@ namespace ShyEditor {
 		bool showGizmo;
 		int renderOrder;
 
-		// Transform attributes
-		ImVec2* scale;
-		ImVec2* pos;
-		ImVec2* size;
-		float rotation;
+
+		//Positional components
+		bool isTransform;
+		Transform* transform;
+		Overlay* overlay;
+
+		ImVec2* texture_size;
+
 
 		// Gameobject texture and gizmo, path to the image and image component
 		Components::Component* imageComponent;
@@ -137,5 +149,88 @@ namespace ShyEditor {
 		void setChildrenVisible(GameObject* go, bool visible);
 		void rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
 
+	};
+
+
+
+//Components
+
+
+	class Transform {
+
+		GameObject* obj;
+
+		// Transform attributes
+		ImVec2* scale;
+		ImVec2* position;
+		float rotation;
+
+	public:
+		Transform(GameObject* obj);
+		~Transform();
+		
+		ImVec2 &GetPosition();
+		ImVec2 &GetScale();
+		float &GetRotation();
+
+		void SetPosition(float x, float y);
+		void SetScale(float x, float y);
+		void SetRotation(float r);
+	};
+
+
+
+	class Overlay {
+
+		int placement;
+
+		ImVec2* position;
+		ImVec2* size;
+
+		ImVec2* anchor;
+		int left;
+		int top;
+		int right;
+		int bottom;
+
+		//ImColor* color;
+
+		float scale;
+		bool interactable;
+
+
+	public:
+
+		enum class Placement {
+
+			Positioned, Stretched
+		};
+
+		Overlay(GameObject* obj);
+		~Overlay();
+
+		int GetPlacement();
+
+		//Positioned
+		void SetPosition(float x, float y);
+		void SetSize(float x, float y);
+		
+		ImVec2 GetPosition();
+		ImVec2 GetSize();
+
+
+		//Anchor
+		void SetAnchor(float x, float y);
+
+		void SetTop(float x);
+		void SetLeft(float x);
+		void SetRight(float x);
+		void SetBottom(float x);
+
+
+		int GetTop();
+		int GetLeft();
+		int GetRight();
+		int GetBottom();
 	};
 }

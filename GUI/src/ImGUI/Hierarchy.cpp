@@ -33,10 +33,15 @@ namespace ShyEditor {
 
 		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
 
-
-		if (ImGui::Button("Add empty gameobject")) {
+		if (ImGui::Button("Add transform")) {
 			scene->AddGameObject("");
 		}
+
+		if (ImGui::Button("Add overlay")) {
+			scene->AddGameObject("");
+		}
+
+
 
 		if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 75))) {
 

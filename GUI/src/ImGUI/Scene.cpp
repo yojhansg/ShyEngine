@@ -59,7 +59,7 @@ namespace ShyEditor {
 
 	GameObject* Scene::AddGameObject(std::string path) {
 
-		GameObject* go = new GameObject(path);
+		GameObject* go = new GameObject(path, true);
 		gameObjects.emplace(go->getId(), go);
 
 		return go;
@@ -158,7 +158,7 @@ namespace ShyEditor {
 	{
 		for (auto pair : go->getChildren()) {
 			RenderChildGameObjects(pair.second);
-			pair.second->render(renderer, camera);
+			pair.second->RenderTransform(renderer, camera);
 		}
 	}
 
@@ -173,7 +173,7 @@ namespace ShyEditor {
 		std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), CompareGameObjectsRenderOrder);
 
 		for (auto gO : sortedGameObjects) {
-			gO->render(renderer, camera);
+			gO->RenderTransform(renderer, camera);
 			RenderChildGameObjects(gO);
 		}
 	}

@@ -46,26 +46,12 @@ namespace ShyEditor {
 
 	void Preferences::Open()
 	{
-		instance->open = true;
+		instance->visible = true;
 	}
 
 
 	void Preferences::Behaviour()
 	{
-		if (open) {
-
-			open = false;
-			visible = true;
-
-			ImGui::SetNextWindowFocus();
-		}
-
-		if (!visible) return;
-
-		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
-		ImGui::Begin(windowName.c_str(), &visible, flags);
-
-
 		ImGui::TextWrapped("Hola! Estas son las preferencias. Aqui es donde estaran disponibles a modificar los "
 			"distintos valores del editor. Vuelve pronto!");
 
@@ -131,9 +117,6 @@ namespace ShyEditor {
 
 			data.initialScene = buffer;
 		}
-
-
-		ImGui::End();
 	}
 
 	ProjectData& Preferences::GetData()
