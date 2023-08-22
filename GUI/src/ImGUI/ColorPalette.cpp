@@ -78,7 +78,7 @@ namespace ShyEditor {
 		palette.gridIntervalScale = 4;
 		palette.gridSpacing = 50;
 
-		palette.font = ResourcesManager::ASSETSFOLDER +  "Fonts\\Montserrat-Regular.ttf";
+		palette.font = ResourcesManager::ASSETSFOLDER + "Fonts\\Montserrat-Regular.ttf";
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 
