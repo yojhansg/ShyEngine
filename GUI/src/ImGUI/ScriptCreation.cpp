@@ -2,6 +2,7 @@
 
 #include "ScriptCreationUtilities.h"
 #include "ComponentManager.h"
+#include "ResourcesManager.h"
 #include "ProjectsManager.h"
 #include "nlohmann/json.hpp"
 #include "ColorPalette.h"
@@ -164,13 +165,11 @@ namespace ShyEditor {
 				root[event.first] = next->GetId();
 		}
 
-
-		std::ofstream file(editor->getProjectInfo().path + "/Scripts/" + std::string(menuBar->GetName()) + ".script");
+		std::ofstream file(editor->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + std::string(menuBar->GetName()) + ".script");
 
 		file << root.dump(4);
 
 		file.close();
-
 
 
 		ScriptCreation::ResetModified();
@@ -195,7 +194,7 @@ namespace ShyEditor {
 			return;
 		}
 
-		std::ifstream fileStream(editor->getProjectInfo().path + "/Scripts/" + fileName + ".script");
+		std::ifstream fileStream(editor->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + fileName + ".script");
 
 		if (!fileStream.good() || !json::accept(fileStream))
 		{

@@ -49,6 +49,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
+
                     Editor::getInstance()->End();
                 };
 
@@ -81,7 +82,7 @@ namespace ShyEditor {
                     Preferences::GenerateDebug();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->saveScene("Scenes/scene.scene");
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
                     Game::Play(true);
                 };
 
@@ -108,6 +109,7 @@ namespace ShyEditor {
 
             if (ImGui::BeginMenu("Help"))
             {
+                ImGui::MenuItem("Documentation", NULL, false); // Link to the website
                 ImGui::MenuItem("About us", NULL, false);
                 ImGui::EndMenu();
             }
