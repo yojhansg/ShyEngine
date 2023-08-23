@@ -207,6 +207,8 @@ namespace ShyEditor {
 			}
 		}
 
+
+
 	}
 
 	bool GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos) {

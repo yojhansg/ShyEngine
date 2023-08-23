@@ -127,6 +127,7 @@ namespace ShyEditor {
 		// Gameobject texture and gizmo, path to the image and image component
 		Components::Component* imageComponent;
 		std::string imagePath;
+
 		Texture* texture;
 		Texture* gizmo;
 

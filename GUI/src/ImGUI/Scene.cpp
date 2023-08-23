@@ -224,9 +224,6 @@ namespace ShyEditor {
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-
 
 		auto mouse = MousePositionInScene();
 
@@ -242,31 +239,52 @@ namespace ShyEditor {
 			SDL_Rect dest{};
 			overlay->CalculateRectangle(dest.x, dest.y, dest.w, dest.h);
 
-			if (ImGui::IsMouseClicked(0)) {
 
-				const int thickness = 10;
+			bool mouseclicked = ImGui::IsMouseClicked(0);
+
+			const int thickness = 10;
+
+
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
+
+			if (selectedOverlay.overlay == nullptr)
+			{
+
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, thickness)) {
+
+					RenderHorizontalSegment(dest.x, dest.y, dest.w, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_TOP;
+				}
+
+				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, thickness)) {
+
+					RenderHorizontalSegment(dest.x, dest.y + dest.h, dest.w, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_BOTTOM;
+				}
+
+				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, thickness)) {
+
+					RenderVerticalSegment(dest.x, dest.y, dest.h, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_LEFT;
+				}
+
+				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, thickness)) {
+
+					RenderVerticalSegment(dest.x + dest.w, dest.y, dest.h, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_RIGHT;
+				}
+			}
+
+
+
+			if (mouseclicked) {
+
 				if (PointInsideRect(mouse.x, mouse.y, dest.x, dest.y, dest.w, dest.h, thickness)) {
 
 
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, thickness)) {
-
-						selectedOverlay.dir |= DIR_TOP;
-					}
-
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, thickness)) {
-
-						selectedOverlay.dir |= DIR_BOTTOM;
-					}
-
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, thickness)) {
-
-						selectedOverlay.dir |= DIR_LEFT;
-					}
-
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, thickness)) {
-
-						selectedOverlay.dir |= DIR_RIGHT;
-					}
 
 					selectedGameObject = go;
 					selectedOverlay.overlay = overlay;
@@ -276,8 +294,6 @@ namespace ShyEditor {
 				}
 			}
 
-
-			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 		}
 
 		SDL_SetRenderTarget(renderer, currentTarget);
@@ -708,7 +724,7 @@ namespace ShyEditor {
 	{
 		int ht = std::round(thickness * 0.5f);
 
-		SDL_Rect frameRect = { x + ht, y + ht, w, h };
+		SDL_Rect frameRect = { x - ht, y - ht, w + ht * 2, h + ht * 2 };
 
 
 		for (int i = 0; i < thickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
@@ -716,13 +732,45 @@ namespace ShyEditor {
 
 			SDL_RenderDrawRect(renderer, &frameRect);
 
-			frameRect.x--;
-			frameRect.y--;
-			frameRect.w += 2;
-			frameRect.h += 2;
+			frameRect.x++;
+			frameRect.y++;
+			frameRect.w -= 2;
+			frameRect.h -= 2;
 		}
 
 
+	}
+
+	void Scene::RenderHorizontalSegment(int x, int y, int w, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+
+		x -= ht;
+		y -= ht;
+
+		w += ht * 2;
+
+		for (int i = 0; i < ht * 2; i++)
+		{
+
+			SDL_RenderDrawLine(renderer, x, y + i, x + w, y + i);
+		}
+	}
+
+	void Scene::RenderVerticalSegment(int x, int y, int h, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+
+		x -= ht;
+		y -= ht;
+
+		h += ht * 2;
+
+		for (int i = 0; i < ht * 2; i++)
+		{
+
+			SDL_RenderDrawLine(renderer, x + i, y, x + i, y + h);
+		}
 	}
 
 
