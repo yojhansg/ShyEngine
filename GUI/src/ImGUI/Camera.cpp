@@ -43,11 +43,11 @@ namespace ShyEditor {
 			targetTexture = nullptr;
 		}
 
-
 		texture_w = w;
 		texture_h = h;
 		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
 		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
+
 	}
 
 
