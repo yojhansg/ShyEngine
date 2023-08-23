@@ -110,6 +110,7 @@ namespace ShyEditor {
 
 		components.clear();
 
+		delete texture_size;
 
 		if (isTransform)
 			delete transform;

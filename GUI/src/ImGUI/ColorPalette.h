@@ -33,7 +33,7 @@ namespace ShyEditor {
 
 			float windowRounding;
 
-			//Scripting
+			// Scripting
 			float nodeRounding;
 
 			Color grid;
@@ -64,25 +64,6 @@ namespace ShyEditor {
 			float fontSize;
 		};
 
-
-	private:
-
-		static ColorPalette* instance;
-
-		Palette current;
-
-		std::string path;
-		std::unordered_map<std::string, Palette> palettes;
-
-		bool open;
-		bool pendingApply;
-		bool initialisation;
-
-		void LoadPalettes();
-		void LoadDefaultPalette();
-
-		void Apply();
-
 	public:
 
 		ColorPalette(const std::string& path);
@@ -99,6 +80,25 @@ namespace ShyEditor {
 		static void ApplyPalette();
 
 		static Palette& GetCurrentPalette();
+
+
+	private:
+
+		void LoadPalettes();
+		void LoadDefaultPalette();
+
+		void Apply();
+
+		static ColorPalette* instance;
+
+		Palette current;
+
+		std::string path;
+		std::unordered_map<std::string, Palette> palettes;
+
+		bool open;
+		bool pendingApply;
+		bool initialisation;
 
 	};
 

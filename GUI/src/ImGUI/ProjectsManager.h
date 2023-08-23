@@ -56,6 +56,9 @@ namespace ShyEditor {
 		static std::wstring projectsfileFolder;
 		static std::wstring projectsfileName;
 
+		// Needed assets folders
+		static const std::vector<std::string> assetsFolders;
+
 		// Project information values
 		std::string name;
 		std::string projectFilePath;

@@ -19,10 +19,7 @@ namespace ShyEditor {
 
 		bool middleMouseButton;
 
-
 		float minScale, maxScale;
-
-
 
 		int texture_w, texture_h;
 		SDL_Renderer* renderer = nullptr;
@@ -47,10 +44,8 @@ namespace ShyEditor {
 		float GetMinScale();
 		float GetMaxScale();
 
-
 		bool ShouldResize(int w, int h);
 		void Resize(int w, int h);
-
 
 		void PrepareCameraRender();
 		void StopCameraRender();

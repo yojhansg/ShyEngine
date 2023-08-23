@@ -31,6 +31,8 @@ namespace ShyEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"ShyEngine\\RecentProjects\\";
     std::wstring ProjectsManager::projectsfileName = L"recentprojects.json";
 
+    const std::vector<std::string> ProjectsManager::assetsFolders = { "Scripts\\" };
+
     ProjectsManager::ProjectsManager() {
 
         editor = Editor::getInstance();
@@ -659,6 +661,18 @@ namespace ShyEditor {
         if (ec) {
             errorMessage = L"Error while creating the project assets folder.";
             return false;
+        }
+
+        for (int i = 0; i < assetsFolders.size(); i++) {
+
+            std::filesystem::create_directories(root + "Assets\\" + assetsFolders[i], ec);
+
+            std::wstring folderName(assetsFolders[i].begin(), assetsFolders[i].end());
+
+            if (ec) {
+                errorMessage = L"Error while creating the project assets folder with name: " + folderName;
+                return false;
+            }
         }
 
         return true;

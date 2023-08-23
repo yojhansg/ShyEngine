@@ -231,7 +231,6 @@ namespace Components {
 
 		component.name = jsonData["component"];
 
-
 		nlohmann::json attributesJson = jsonData["attributes"];
 		for (const auto& attrJson : attributesJson.items()) {
 			::Components::Attribute attr = ::Components::Attribute::fromJson(attrJson.key(), attrJson.value().dump());

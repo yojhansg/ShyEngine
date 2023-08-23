@@ -15,6 +15,13 @@ namespace ShyEditor {
 
 	class FileExplorer : public Window {
 
+	public:
+
+		FileExplorer();
+
+		void Behaviour() override;
+		void HandleInput(SDL_Event* event) override;
+
 	private:
 
 		Editor* editor;
@@ -22,9 +29,11 @@ namespace ShyEditor {
 		Texture* file;
 		Texture* script;
 		Texture* folder;
+		Texture* scene;
 
 		std::string projectPath;
 		std::string currentPath;
+		std::string relativePath;
 
 		struct Entry {
 
@@ -41,6 +50,7 @@ namespace ShyEditor {
 
 
 		void ProcessPath();
+		std::string GetParentPath(const std::string& path);
 
 		int viewMode;
 
@@ -53,11 +63,5 @@ namespace ShyEditor {
 
 		bool shouldUpdate;
 
-	public:
-
-		FileExplorer();
-
-		void Behaviour() override;
-		void HandleInput(SDL_Event* event) override;
 	};
 }

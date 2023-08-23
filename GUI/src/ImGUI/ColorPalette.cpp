@@ -2,6 +2,7 @@
 
 #include "ResourcesManager.h"
 #include "nlohmann/json.hpp"
+#include "LogManager.h"
 #include "imgui.h"
 
 #include <fstream>
@@ -42,7 +43,7 @@ namespace ShyEditor {
 		instance = nullptr;
 	}
 
-	void ColorPalette::LoadDefaultPalette()
+	void ColorPalette::LoadDefaultPalette() 
 	{
 		Palette palette{};
 
@@ -84,17 +85,22 @@ namespace ShyEditor {
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 
+		if (palette.fontPtr == nullptr)
+			LogManager::LogError("Could not load font with path: " + palette.font);
+
 		palettes.emplace("Default", palette);
 	}
 
 
 	void ColorPalette::LoadPalettes() {
 
-		std::ifstream fileStream(ResourcesManager::ASSETSFOLDER + path + ".palette");
+		std::string palettePath = ResourcesManager::ASSETSFOLDER + path + ".palette";
+
+		std::ifstream fileStream(palettePath);
 
 		if (!fileStream.good() || !json::accept(fileStream))
 		{
-			std::cout << "No se ha podido cargar la paleta" << std::endl;
+			LogManager::LogError("Could not load palette with path: " + palettePath);
 			return;
 		}
 
@@ -112,6 +118,10 @@ namespace ShyEditor {
 			palette.fontSize = paletteInfo["fontSize"].get<int>();
 
 			palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
+
+			if (palette.fontPtr == nullptr)
+				LogManager::LogError("Could not load font with path: " + palette.font);
+
 			//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
 
 #define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());
@@ -126,6 +136,7 @@ namespace ShyEditor {
 			ReadPaletteValue(line, palette, paletteInfo);
 
 			//TODO: leer el resto de colores
+
 #undef ReadPaletteValue
 
 
@@ -227,7 +238,7 @@ namespace ShyEditor {
 		ImGui::Begin(windowName.c_str(), &visible, flags);
 
 
-		ImGui::TextWrapped("Que pasa nene? Te toca elegir el tema venga");
+		ImGui::TextWrapped("Choose theme");
 
 
 		for (auto& palette : palettes) {

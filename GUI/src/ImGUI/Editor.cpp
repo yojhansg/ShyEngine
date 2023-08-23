@@ -14,6 +14,7 @@
 #include "FileExplorer.h"
 #include "ColorPalette.h"
 #include "Preferences.h"
+#include "LogManager.h"
 #include "Components.h"
 #include "GameObject.h"
 #include "Hierarchy.h"
@@ -55,8 +56,7 @@ Editor::Editor() {
 
 Editor::~Editor() {}
 
-Editor* Editor::getInstance()
-{
+Editor* Editor::getInstance() {
 	if (instance == nullptr)
 		instance = new Editor();
 
@@ -65,9 +65,13 @@ Editor* Editor::getInstance()
 
 bool Editor::Init() {
 
-	instance->SplashScreen();
+	if (!instance->SplashScreen())
+		return false;
 
 	if (!instance->initImGUIAndSDL())
+		return false;
+
+	if (!ShyEditor::LogManager::Init())
 		return false;
 
 	Components::ComponentManager::Initialise();
@@ -117,7 +121,7 @@ void Editor::Close() {
 	ShyEditor::ResourcesManager::Release();
 	ShyEditor::Game::Release();
 	Components::ComponentManager::Release();
-
+	ShyEditor::LogManager::Release();
 
 	// Cleanup
 	ImGui_ImplSDLRenderer2_Shutdown();
@@ -245,15 +249,15 @@ void Editor::SetUpWindows() {
 
 }
 
-void Editor::SplashScreen() {
+bool Editor::SplashScreen() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		// Avisar por el log
-		return;
+		return false;
 	}
 
-	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 853, 480,
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540,
 		SDL_WINDOW_BORDERLESS
 	);
 
@@ -280,6 +284,7 @@ void Editor::SplashScreen() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 
+	return true;
 }
 
 

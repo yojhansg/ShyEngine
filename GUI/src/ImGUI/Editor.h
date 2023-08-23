@@ -89,7 +89,7 @@ private:
 	bool initSDL();
 
 	void SetUpWindows();
-	void SplashScreen();
+	bool SplashScreen();
 
 	static Editor* instance;
 
