@@ -271,12 +271,6 @@ namespace ShyEditor {
 
 		Asset asset;
 
-		asset.extension = entry.extension;
-		asset.name = entry.name;
-		asset.path = entry.path;
-		asset.relativePath = relativePath + "\\" + entry.name + entry.extension;
-		ResourcesManager::SelectAsset(asset);
-
 		//asset.extension = entry.extension;
 		//asset.name = entry.name;
 		//asset.path = entry.path;

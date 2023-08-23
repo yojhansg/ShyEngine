@@ -29,11 +29,6 @@ namespace ShyEditor {
 		static std::string GetProjectPath();
 		static void SetProjectPath(const std::string& path);
 
-		static void UnselectAsset();
-		static void SelectAsset(const Asset& asset);
-		static bool IsAnyAssetSelected();
-		static const Asset& SelectedAsset();
-
 		static void Init();
 		static void Release();
 
