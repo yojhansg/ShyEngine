@@ -41,12 +41,30 @@ namespace ShyEditor {
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.65f, 0.2f, 1.0f)); // change header hover color
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.75f, 0.2f, 1.0f)); // change header active color
 
+
+
+			bool isOverlay = !gameObject->IsTransform();
+
 			if (ImGui::CollapsingHeader("Add component"))
 			{
 				for (auto& comp : ::Components::ComponentManager::GetAllComponents()) {
 
-					if (!gameObject->getComponents()->contains(comp.first) && comp.first != "Transform")
-						if (ImGui::Button(comp.first.c_str(), ImVec2(windowWidth, 40))) {
+					const std::string overlayStr = "Overlay";
+					const std::string transformStr = "Transform";
+					
+					std::string compName = comp.first;
+
+					if (compName == transformStr || compName == overlayStr)
+						continue;
+
+					bool constainsOverlay = compName.compare(0, overlayStr.length(), overlayStr) == 0;
+
+					if (isOverlay != constainsOverlay)
+						continue;
+
+					if (!gameObject->getComponents()->contains(compName))
+						if (ImGui::Button(compName.c_str(), ImVec2(windowWidth, 40))) {
+
 							gameObject->addComponent(comp.second);
 						};
 				}

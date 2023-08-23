@@ -490,6 +490,7 @@ namespace ShyEditor {
 		for (auto it = components.begin(); it != components.end();) {
 			std::string componentName = (*it).second.getName();
 
+
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
 
 				for (auto& attribute : (*it).second.getAllAttributes()) {
