@@ -153,6 +153,7 @@ namespace ShyEditor {
 		// Render outline
 		if (this == editor->getScene()->GetSelectedGameObject()) {
 
+			return;
 			// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
 			Uint8 r, g, b, a;
 			SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
@@ -528,16 +529,16 @@ namespace ShyEditor {
 		else {
 
 			ImGui::Text("Left");
-			ImGui::DragFloat2("##Left", (float*)&overlay->GetLeft(), 0.3f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##OverlayLeft", &overlay->GetLeft(), 0.3f, 0.0f, 0.0f, "%d");
 
 			ImGui::Text("Top");
-			ImGui::DragFloat2("##Top", (float*)&overlay->GetTop(), 0.3f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##OverlayTop", &overlay->GetTop(), 0.3f, 0.0f, 0.0f, "%d");
 
 			ImGui::Text("Right");
-			ImGui::DragFloat2("##Right", (float*)&overlay->GetTop(), 0.3f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##OverlayRight", &overlay->GetRight(), 0.3f, 0.0f, 0.0f, "%d");
 
 			ImGui::Text("Bottom");
-			ImGui::DragFloat2("##Bottom", (float*)&overlay->GetBottom(), 0.3f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##OverlayBottom", &overlay->GetBottom(), 0.3f, 0.0f, 0.0f, "%d");
 		}
 
 

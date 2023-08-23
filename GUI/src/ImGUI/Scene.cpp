@@ -188,22 +188,10 @@ namespace ShyEditor {
 		SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-
-		SDL_Rect frameRect = { };
+		SDL_Rect frameRect{};
 		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
 
-		int lineThickness = 10;
-
-		for (int i = 0; i < lineThickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
-		{
-
-			SDL_RenderDrawRect(renderer, &frameRect);
-
-			frameRect.x--;
-			frameRect.y--;
-			frameRect.w += 2;
-			frameRect.h += 2;
-		}
+		RenderRectangle(frameRect.x, frameRect.y, frameRect.w, frameRect.h, 10);
 
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	}
@@ -214,9 +202,16 @@ namespace ShyEditor {
 
 		auto currentTarget = SDL_GetRenderTarget(renderer);
 		SDL_SetRenderTarget(renderer, uiTexture);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_RenderClear(renderer);
+
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+
+
+		auto mouse = MousePositionInScene();
+
+		float cameraScale = sceneCamera->GetScale();
 
 		for (auto go : overlays) {
 
@@ -228,8 +223,53 @@ namespace ShyEditor {
 			SDL_Rect dest{};
 			overlay->CalculateRectangle(dest.x, dest.y, dest.w, dest.h);
 
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderFillRect(renderer, &dest);
+			if (overlay->GetPlacement() == 1) {
+
+
+				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
+
+
+					std::cout << "aaaa" << std::endl;
+				}
+				else {
+
+
+					std::cout << mouse.x << " " << dest.x << std::endl;
+				}
+
+
+				if (ImGui::IsMouseClicked(0)) {
+
+
+					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
+
+						selectedOverlay.overlay = overlay;
+						selectedOverlay.dir |= DIR_TOP;
+					}
+
+					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, 10)) {
+
+						selectedOverlay.overlay = overlay;
+						selectedOverlay.dir |= DIR_BOTTOM;
+					}
+
+					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, 10)) {
+
+						selectedOverlay.overlay = overlay;
+						selectedOverlay.dir |= DIR_LEFT;
+					}
+
+					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, 10)) {
+
+						selectedOverlay.overlay = overlay;
+						selectedOverlay.dir |= DIR_RIGHT;
+					}
+
+				}
+			}
+
+
+			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 		}
 
 		SDL_SetRenderTarget(renderer, currentTarget);
@@ -239,6 +279,44 @@ namespace ShyEditor {
 		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
 
 		SDL_RenderCopy(renderer, uiTexture, NULL, &frameRect);
+
+
+
+
+
+
+		if (ImGui::IsMouseReleased(0))
+		{
+			selectedOverlay.overlay = nullptr;
+			selectedOverlay.dir = 0;
+		}
+
+
+
+		if (selectedOverlay.overlay != nullptr) {
+
+
+			if (selectedOverlay.dir & DIR_TOP) {
+
+				selectedOverlay.overlay->GetTop() = mouse.y;
+			}
+
+			if (selectedOverlay.dir & DIR_LEFT) {
+
+				selectedOverlay.overlay->GetLeft() = mouse.x;
+			}
+
+			if (selectedOverlay.dir & DIR_RIGHT) {
+
+				selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
+			}
+
+			if (selectedOverlay.dir & DIR_BOTTOM) {
+
+				selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
+			}
+		}
+
 	}
 
 	void Scene::HandleInput(SDL_Event* event) {
@@ -315,24 +393,24 @@ namespace ShyEditor {
 
 		switch (viewMode) {
 
-			case 0:
+		case 0:
 
-				RenderGameObjects();
-				RenderUI();
-				break;
-			case 1:
+			RenderGameObjects();
+			RenderUI();
+			break;
+		case 1:
 
-				RenderGameObjects();
+			RenderGameObjects();
 
-				break;
-			case 2:
+			break;
+		case 2:
 
-				RenderUI();
+			RenderUI();
 
-				break;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 
 		RenderFrame();
@@ -393,20 +471,21 @@ namespace ShyEditor {
 		mousepos.x -= windowPosX;
 		mousepos.y -= windowPosY;
 
-		float cameraScale = sceneCamera->GetScale();
 
 		//Trasladar el origen de coordenadas de la esquina superior al centro
 		mousepos.x -= windowWidth * 0.5f;
 		mousepos.y -= windowHeight * 0.5f;
 
+		ImVec2 cameraPosition = sceneCamera->GetPosition();
+		mousepos.x -= cameraPosition.x;
+		mousepos.y -= cameraPosition.y;
+
+		float cameraScale = sceneCamera->GetScale();
+
 		mousepos.x /= cameraScale;
 		mousepos.y /= cameraScale;
 
-		//La posicion de la camara no debe escalarse (ya esta escalada por defecto)
-		ImVec2 cameraPosition = sceneCamera->GetPosition();
 
-		mousepos.x -= cameraPosition.x;
-		mousepos.y -= cameraPosition.y;
 
 
 		return mousepos;
@@ -465,6 +544,39 @@ namespace ShyEditor {
 		y = position.y;
 		w = width;
 		h = height;
+	}
+
+	bool Scene::PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+		return x > sx && x < sx + w && y > sy - ht && y < sy + ht;
+	}
+
+	bool Scene::PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+		return x > sx - ht && x < sx + ht && y > sy && y < sy + h;
+	}
+
+	void Scene::RenderRectangle(int x, int y, int w, int h, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+
+		SDL_Rect frameRect = { x + ht, y + ht, w, h };
+
+
+		for (int i = 0; i < thickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
+		{
+
+			SDL_RenderDrawRect(renderer, &frameRect);
+
+			frameRect.x--;
+			frameRect.y--;
+			frameRect.w += 2;
+			frameRect.h += 2;
+		}
+
+
 	}
 
 

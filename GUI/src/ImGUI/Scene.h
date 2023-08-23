@@ -18,10 +18,29 @@ namespace ShyEditor {
 
 	class GameObject;
 	class Camera;
+	class Overlay;
 
 	class Scene : public Window {
 
 	private:
+
+
+
+		enum Dir {
+
+			DIR_TOP = 1,
+			DIR_BOTTOM = 2,
+			DIR_LEFT = 4,
+			DIR_RIGHT = 8
+		};
+
+		struct {
+
+			int dir = 0;
+			Overlay* overlay = nullptr;
+
+		} selectedOverlay;
+
 
 		SDL_Renderer* renderer;
 
@@ -48,6 +67,13 @@ namespace ShyEditor {
 
 		void CalculateFrameRect(int& x, int& y, int& w, int& h);
 
+
+
+
+		bool PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness);
+		bool PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness);
+
+		void RenderRectangle(int x, int y, int w, int h, int thickness = 1);
 
 	public:
 
