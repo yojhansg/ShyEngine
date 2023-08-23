@@ -38,8 +38,6 @@ bool Engine::init() {
 
 	DataLoader data = DataLoader::Load("config");
 
-	//data.windowSize.set(1920, 1080);
-
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
 		return false;
@@ -68,19 +66,19 @@ bool Engine::init() {
 	inputManager = Input::InputManager::init(data.closeWithEscape);
 	if (!inputManager->Valid()) return false;
 
+	if (!Sound::SoundManager::init()->Valid()) return false;
+
 	renderManager = ECS::RenderManager::init();
 
 	engineTime = Utilities::Time::init();
 
 	Resources::ResourcesManager::init();
 
-	ECS::SplashScene::LoadResources();
+	//ECS::SplashScene::LoadResources();
 
 	ECS::ContactListener::init();
 
-	ECS::PrefabManager::init("Prefabs/prefabs"); //TODO data.prefabs ¿?
-
-	if (!Sound::SoundManager::init()->Valid()) return false;
+	//ECS::PrefabManager::init("Prefabs/prefabs"); //TODO data.prefabs ¿?
 
 	Scripting::ScriptManager::init();
 
@@ -90,37 +88,27 @@ bool Engine::init() {
 
 	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
 
-	// Maximun size = 64x64 pixels
-	rendererManager->SetWindowIcon("icon.png");
+
+
+	// ------- Data configuration ---------
+
+	rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
 	rendererManager->SetRenderTarget(false);
-
-
-	if (data.resourcesPath != "")
-		std::filesystem::current_path(data.resourcesPath);
-
-	if (data.windowIcon != "")
-		rendererManager->SetWindowIcon(data.resourcesPath + "\\" + data.windowIcon);
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	/*
-		Load aditional default engine resources
-	*/
-	//Resources::ResourcesManager::instance()->addFont("Defaut", 18.0f);
 	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
 
-
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->ChangeScene(data.resourcesPath + data.initialScene, (int)ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 
-	if (sceneManager->getNumberOfScenes() == 0)
-	{
+	if (sceneManager->getNumberOfScenes() == 0) {
 		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");
 		return false;
 	}
 
-	if (data.useSplashScreen)
-		sceneManager->SplashScreen();
+	/*if (data.useSplashScreen)
+		sceneManager->SplashScreen();*/
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
 	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);

@@ -60,11 +60,7 @@ public:
 	void OpenScript(const std::string& script);
 
 	ShyEditor::Scene* getScene();
-	ShyEditor::MenuBar* getMenuBar();
-	ShyEditor::Hierarchy* getHierarchy();
 	ShyEditor::FileExplorer* getFileExplorer();
-	ShyEditor::ComponentWindow* getComponents();
-	ShyEditor::ScriptCreation* getScriptCreation();
 	ShyEditor::Console* getConsole();
 
 	int Example();
@@ -76,8 +72,6 @@ private:
 	~Editor();
 
 	// Loop methods
-
-
 	void UpdateAndRenderWindows();
 	void handleInput();
 
@@ -88,7 +82,7 @@ private:
 	bool initImGUIAndSDL();
 	bool initSDL();
 
-	void SetUpWindows();
+	void CreateWindows();
 	bool SplashScreen();
 
 	static Editor* instance;

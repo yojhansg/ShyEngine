@@ -16,7 +16,7 @@ namespace ShyEditor {
 
 	ColorPalette* ColorPalette::instance = nullptr;
 
-	ColorPalette::ColorPalette(const std::string& path) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), path(path)
+	ColorPalette::ColorPalette(const std::string& name) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), name(name)
 	{
 		initialisation = true;
 		current = {};
@@ -81,7 +81,7 @@ namespace ShyEditor {
 		palette.gridIntervalScale = 4;
 		palette.gridSpacing = 50;
 
-		palette.font = ResourcesManager::ASSETSFOLDER + "Fonts\\Montserrat-Regular.ttf";
+		palette.font = ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\Montserrat-Regular.ttf";
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 
@@ -94,12 +94,11 @@ namespace ShyEditor {
 
 	void ColorPalette::LoadPalettes() {
 
-		std::string palettePath = ResourcesManager::ASSETSFOLDER + path + ".palette";
+		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes" + "\\" + name + ".palette";
 
 		std::ifstream fileStream(palettePath);
 
-		if (!fileStream.good() || !json::accept(fileStream))
-		{
+		if (!fileStream.good() || !json::accept(fileStream)) {
 			LogManager::LogError("Could not load palette with path: " + palettePath);
 			return;
 		}
@@ -114,7 +113,7 @@ namespace ShyEditor {
 
 			Palette palette{};
 			std::string name = paletteInfo["name"].get<std::string>();
-			palette.font = ResourcesManager::ASSETSFOLDER + "Fonts\\" + paletteInfo["font"].get<std::string>();
+			palette.font = ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\" + paletteInfo["font"].get<std::string>();
 			palette.fontSize = paletteInfo["fontSize"].get<int>();
 
 			palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);

@@ -108,9 +108,6 @@ namespace ShyEditor {
 		// Adds the path of the new project in the recent projects file
 		bool StoreProjectPath(const std::string& path);
 
-		// Ask users for permission to create the 'Recent Projects' file in the AppData path.
-		bool AskForPermission();
-
 		// Shows a pop-up window with an error message
 		void ShowErrorPopup(const std::wstring& errorMessage);
 

@@ -357,25 +357,25 @@ namespace ShyEditor {
 
 	// ----------------------------------- Components and Scripts logic --------------------------------------
 
-	void GameObject::addComponent(::Components::Component comp) {
+	void GameObject::addComponent(Components::Component comp) {
 
 		if (components.find(comp.getName()) == components.end())
 			components.insert({ comp.getName(), comp });
 
 	}
 
-	void GameObject::addScript(::Components::Script script) {
+	void GameObject::addScript(Components::Script script) {
 
 		if (scripts.contains(script.GetName())) return;
 
 		scripts.emplace(script.GetName(), script);
 	}
 
-	std::unordered_map<std::string, ::Components::Component>* GameObject::getComponents() {
+	std::unordered_map<std::string, Components::Component>* GameObject::getComponents() {
 		return &components;
 	}
 
-	std::unordered_map<std::string, ::Components::Script>* GameObject::getScripts() {
+	std::unordered_map<std::string, Components::Script>* GameObject::getScripts() {
 		return &scripts;
 	}
 

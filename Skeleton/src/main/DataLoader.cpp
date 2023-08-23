@@ -20,14 +20,10 @@ DataLoader DataLoader::Load(std::string const& path) {
 	std::ifstream fileStream(path + extension);
 
 	if (!fileStream.good())
-	{
 		return DataLoader();
-	}
 
-	if (!json::accept(fileStream)) {
-
+	if (!json::accept(fileStream))
 		return DataLoader();
-	}
 
 	fileStream.clear();
 	fileStream.seekg(0);
@@ -37,12 +33,11 @@ DataLoader DataLoader::Load(std::string const& path) {
 
 	DataLoader data;
 
-
-	data.game = LoadValue("game", std::string, "La casa de los espiritus");
+	data.game = LoadValue("game", std::string, "MyGame");
 	data.creator = LoadValue("creator", std::string, "Yojhan, Pablo e Ivan");
-	data.windowTitle = LoadValue("windowTitle", std::string, "La casa de los espiritus");
-	data.windowIcon = LoadValue("windowIcon", std::string, "icon.png");
-	data.initialScene = LoadValue("initialScene", std::string, "DefaultScene");
+	data.windowTitle = LoadValue("windowTitle", std::string, "Game");
+	data.windowIcon = LoadValue("windowIcon", std::string, "Assets\\icon.png");
+	data.initialScene = LoadValue("initialScene", std::string, "Assets\\DefaultScene");
 	data.windowSize = LoadValue("windowSize", std::string, "800, 800");
 	data.gravity = LoadValue("gravity", std::string, "0, 9.81");
 	data.useSplashScreen = LoadValue("splashScreen", bool, true);

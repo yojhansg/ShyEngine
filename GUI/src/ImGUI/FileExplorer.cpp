@@ -76,8 +76,10 @@ namespace ShyEditor {
 			entry.path = path.string();
 			entry.name = path.filename().string();
 
-			if (entry.isFolder)
+			if (entry.isFolder) {
 				entry.texture = folder;
+				entries.push_front(entry);
+			}
 			else {
 				entry.extension = path.extension().string();
 
@@ -87,14 +89,16 @@ namespace ShyEditor {
 				entry.name = entry.name.substr(0, entry.name.find_last_of('.'));
 
 				if (entry.extension == ".png" || entry.extension == ".jpg")
-					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
+					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + "\\" + entry.name + entry.extension, false);
 				else if (entry.extension == ".scene")
 					entry.texture = scene;
+				else if (entry.extension == ".script")
+					entry.texture = script;
 				else
 					entry.texture = file;
-			}
 
-			entries.push_back(entry);
+				entries.push_back(entry);
+			}
 
 		}
 
@@ -103,17 +107,14 @@ namespace ShyEditor {
 
 	std::string FileExplorer::GetParentPath(const std::string& path) {
 
-		std::string result = path.substr(0, path.size() - 1);
+		int cont = 1;
+		for (int i = path.size() - 1; i >= 0; i--) {
+			if (path[i] == '\\') break;
 
-		int cont = 0;
-		for (int i = result.size() - 1; i >= 0; i--) {
-			if (result[i] == '\\')
-				return result.substr(0, result.size() - cont);
-			else 
-				cont++;
+			cont++;
 		}
 
-		return "";
+		return path.substr(0, path.size() - cont);
 
 	}
 
@@ -133,7 +134,7 @@ namespace ShyEditor {
 			if (ImGui::Button("^"))
 			{
 				// Navigate to parent folder
-				currentPath = currentDirectory.parent_path().string() + "\\";
+				currentPath = currentDirectory.parent_path().string();
 
 				relativePath = GetParentPath(relativePath);
 
@@ -213,7 +214,7 @@ namespace ShyEditor {
 			if (entry.isFolder) {
 
 				if (currentPath != projectPath)
-					relativePath += entry.name + "\\";
+					relativePath += "\\" + entry.name;
 
 				currentPath = entry.path;
 				shouldUpdate = true;
@@ -244,16 +245,12 @@ namespace ShyEditor {
 
 		if (entry.isFolder) return;
 
-
-		//TODO: guardar la ruta relativa
-		std::string relativePath = std::filesystem::path(entry.path).lexically_relative(projectPath + "/Images").string();
-
 		Asset asset;
 
 		asset.extension = entry.extension;
 		asset.name = entry.name;
 		asset.path = entry.path;
-		asset.relativePath = relativePath;
+		asset.relativePath = relativePath + "\\" + entry.name + entry.extension;
 		ResourcesManager::SelectAsset(asset);
 
 	}

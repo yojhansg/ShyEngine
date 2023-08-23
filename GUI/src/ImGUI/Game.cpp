@@ -1,10 +1,13 @@
 #include "Game.h"
-#include <cstdio>
-#include <iostream>
-#include <Windows.h>
-#include <io.h>
-#include "Editor.h"
+
+#include "Preferences.h"
 #include "Console.h"
+#include "Editor.h"
+
+#include <Windows.h>
+#include <iostream>
+#include <cstdio>
+#include <io.h>
 
 #include "CheckML.h"
 
@@ -114,8 +117,11 @@ namespace ShyEditor {
 		si.hStdOutput = hChildStdoutWrite;
 		si.dwFlags |= STARTF_USESTDHANDLES;
 
-		// Replace "your_command_here" with the actual command you want to execute
-		if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+		std::string newProcessWorkingDirectory = "";
+		if (debug) newProcessWorkingDirectory = "Engine";
+		else newProcessWorkingDirectory = Preferences::GetData().buildPath.c_str();
+
+		if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, newProcessWorkingDirectory.c_str(), &si, &pi)) {
 			std::cerr << "Error creating process." << std::endl;
 			return;
 		}

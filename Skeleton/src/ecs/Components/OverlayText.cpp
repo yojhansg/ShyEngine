@@ -15,7 +15,7 @@
 ECS::OverlayText::OverlayText()
 {
 	pointSize = 32;
-	path = "Default.ttf";
+	path = "Assets\\Default.ttf";
 
 	font = nullptr;
 	texture = nullptr;

@@ -31,7 +31,7 @@ namespace ShyEditor {
 		renderer = editor->getRenderer();
 
 		// Scene path and name
-		scenePath = ResourcesManager::ASSETSFOLDER + "Scenes\\" + Preferences::GetData().initialScene + ".scene";
+		scenePath = ResourcesManager::EDITORASSETSFOLDER + "\\Scenes\\" + Preferences::GetData().initialScene + ".scene";
 		sceneName = "Scene";
 		name = sceneName.c_str();
 
@@ -117,7 +117,7 @@ namespace ShyEditor {
 
 		j = j.parse(toJson());
 
-		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + scenePath);
+		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 		if (outputFile.is_open()) {
 			outputFile << j.dump(4);
 			outputFile.close();
@@ -147,7 +147,7 @@ namespace ShyEditor {
 		this->sceneName = sceneName;
 		name = this->sceneName.c_str();
 
-		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + scenePath);
+		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 
 		if (!inputFile.is_open()) {
 
@@ -616,6 +616,15 @@ namespace ShyEditor {
 		}
 
 		j["objects"] = gameObjectsJson;
+
+		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
+		for (const auto& o : overlays) {
+			if (o->getParent() == nullptr)
+				gameObjectsJson.push_back(j.parse(o->toJson()));
+		}
+
+		j["overlays"] = overlayObjectsJson;
+
 
 		return j.dump(2);
 	}

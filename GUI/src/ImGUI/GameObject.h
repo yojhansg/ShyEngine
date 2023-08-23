@@ -21,8 +21,6 @@ namespace ShyEditor {
 	class Texture;
 
 
-
-
 	class Transform;
 	class Overlay;
 

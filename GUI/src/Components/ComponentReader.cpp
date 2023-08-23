@@ -37,7 +37,6 @@ namespace Components {
 
 				if (method.contains("input") && method["input"].is_array()) {
 
-
 					for (const auto& in : method["input"]) {
 
 						if (!in.is_null())
@@ -54,6 +53,7 @@ namespace Components {
 
 		return cmp;
 	}
+
 
 	std::vector<Component> ComponentReader::ReadComponents(cstring filePath)
 	{
@@ -76,12 +76,8 @@ namespace Components {
 			components.push_back(ReadComponent(item.key(), item.value()));
 		}
 
-
 		return components;
 	}
-
-
-
 
 
 	std::vector<Component> ComponentReader::ReadManagers(cstring filePath)
@@ -125,13 +121,11 @@ namespace Components {
 		return components;
 	}
 
+
 	std::vector<Script> ComponentReader::ReadScripts(cstring filePath)
 	{
 
 		if (!std::filesystem::is_directory(filePath)) {
-
-			std::cout << "Ups" << std::endl;
-
 			return std::vector<Script>();
 		}
 
@@ -144,7 +138,6 @@ namespace Components {
 			if (entry.path().extension() != ".script") continue;
 
 			Script script = Script(entry.path().filename().stem().string());
-
 
 			std::ifstream fileStream(entry.path());
 
@@ -208,7 +201,6 @@ namespace Components {
 					}
 				}
 			}
-
 
 			scripts.push_back(script);
 
