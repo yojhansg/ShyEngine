@@ -62,6 +62,12 @@ namespace ShyEditor {
 
 		gameObjects.clear();
 
+		// Delete overlays in the scene
+		for (const auto& o : overlays)
+			delete o;
+
+		overlays.clear();
+
 		delete sceneCamera;
 	}
 
@@ -132,6 +138,11 @@ namespace ShyEditor {
 
 		gameObjects.clear();
 
+		for (const auto& o : overlays)
+			delete o;
+
+		overlays.clear();
+
 		this->scenePath = sceneName + ".scene";
 		this->sceneName = sceneName;
 		name = this->sceneName.c_str();
@@ -153,6 +164,14 @@ namespace ShyEditor {
 		for (const auto& gameObjectJson : gameObjectsJson) {
 			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
 			gameObjects.insert({ gameObject->getId(), gameObject });
+		}
+
+		nlohmann::json overlaysJson = jsonData["overlays"];
+
+		// Iterate through the overlay objects JSON array
+		for (const auto& overlayJson : overlaysJson) {
+			GameObject* overlay = GameObject::fromJson(overlayJson.dump());
+			overlays.push_back(overlay);
 		}
 
 	}
