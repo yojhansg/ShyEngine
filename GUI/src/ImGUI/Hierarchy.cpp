@@ -33,7 +33,6 @@ namespace ShyEditor {
 		Scene* scene = editor->getScene();
 		FileExplorer* fileExplorer = editor->getFileExplorer();
 
-		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
 
 		if (ImGui::Button("Add transform")) {
 			scene->SetSelectedGameObject(scene->AddGameObject(""));
@@ -44,32 +43,26 @@ namespace ShyEditor {
 		}
 
 
+		ImGui::SeparatorText("Transforms");
 
-		if (ImGui::BeginListBox("##", ImVec2(windowWidth - 15, windowHeight - 75))) {
+		int i = 0;
+		for (auto& pair : scene->getGameObjects())
+		{
+			if (pair.second->getParent() == nullptr) {
 
-			ImGui::Text("Visible");
-			ImGui::SameLine();
-			ImGui::Dummy(ImVec2(50, 0));
-			ImGui::SameLine();
-			ImGui::Text("GameObject");
-			ImGui::Separator();
 
-			ImGui::SeparatorText("Transforms");
-
-			int i = 0;
-			for (auto& pair : gameObjects)
-			{
-				if (pair.second->getParent() == nullptr)
-					RenderGameObject(pair.second, 0);
+				RenderGameObject(pair.second, "Transform");
 			}
+		}
 
-			ImGui::SeparatorText("Overlays");
+		ImGui::SeparatorText("Overlays");
 
-			for (auto& overlay : gameObjects) {
+		for (auto& overlay : scene->getOverlays()) {
 
+			if (overlay->getParent() == nullptr) {
+
+				RenderGameObject(overlay, "Overlay");
 			}
-
-			ImGui::EndListBox();
 		}
 
 	}
@@ -116,56 +109,43 @@ namespace ShyEditor {
 	}
 
 
-	void Hierarchy::RenderGameObject(GameObject* gameObject, int indentLevel)
+	void Hierarchy::RenderGameObject(GameObject* gameObject, const char* type)
 	{
 		Scene* scene = Editor::getInstance()->getScene();
 
-		// Calculate the indentation based on the indent level
-		float indentSpacing = 20.0f * indentLevel;
-		ImVec2 dummySize = ImVec2(indentSpacing, 0);
 
-		ImGui::Dummy(dummySize);
-		ImGui::SameLine();
+		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap;
 
-		bool isVisible = gameObject->isVisible();
-		std::string checkboxId = "##" + std::to_string(gameObject->getId());
-
-		if (ImGui::Checkbox(checkboxId.c_str(), &isVisible)) {
-			gameObject->setVisible(isVisible);
+		if (gameObject->getChildren().size() == 0)
+		{
+			flags |= ImGuiTreeNodeFlags_Leaf;
 		}
 
+		if (scene->GetSelectedGameObject() == gameObject)
+			flags |= ImGuiTreeNodeFlags_Selected;
+
+		ImGui::PushID(gameObject);
+		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
+
 		ImGui::SameLine();
-		ImGui::Dummy(ImVec2(67, 0));
-		ImGui::SameLine();
+		ImGui::Text(gameObject->getName().c_str());
 
-		std::string nameId = gameObject->getName() + "##" + std::to_string(gameObject->getId());
+		//char buffer[256]{};
+
+		//memcpy(buffer, gameObject->getName().c_str(), 256);
+		//ImGui::SameLine();
+		//if (ImGui::InputText("##RenameInPlace", buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
 
 
-		if (ImGui::Selectable(nameId.c_str(), gameObject == scene->GetSelectedGameObject(), ImGuiSelectableFlags_AllowItemOverlap)) {
+		//}
+
+		//gameObject->setName(buffer);
+
+
+		if (ImGui::IsItemClicked()) {
+
 			scene->SetSelectedGameObject(gameObject);
 		}
-
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceNoDisableHover))
-		{
-			ImGui::SetDragDropPayload("payload", &gameObject, sizeof(GameObject*));
-
-			ImGui::TextUnformatted(gameObject->getName().c_str());
-
-			ImGui::EndDragDropSource();
-		}
-
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("payload"))
-			{
-				GameObject* sourceObject = *(GameObject**)payload->Data;
-
-				handleDragAndDrop(sourceObject, gameObject);
-			}
-
-			ImGui::EndDragDropTarget();
-		}
-
 
 		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
 			ImGui::OpenPopup("Gameobject Menu##" + gameObject->getId());
@@ -175,32 +155,43 @@ namespace ShyEditor {
 		showRenamePopup(gameObject);
 		showSavePrefabPopup(gameObject);
 
-		if (gameObject->getChildren().size() > 0) {
 
-			ImGui::SameLine();
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 
-			float treeNodeWidth = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x;
-			ImGui::SetNextItemWidth(treeNodeWidth);
-
-			bool isChildSelected = isChildrenTheSelectedObject(gameObject);
-			if (isChildSelected) {
-				ImGui::SetNextItemOpen(true);
-			}
-
-			if (ImGui::TreeNodeEx((void*)(intptr_t)gameObject->getId(), ImGuiTreeNodeFlags_None, ""))
-			{
-				// Recursively render children
-				for (auto pair : gameObject->getChildren()) {
-					RenderGameObject(pair.second, indentLevel + 1);
-				}
-
-				ImGui::TreePop();
-			}
-
-			if (isChildSelected && ImGui::IsItemClicked()) {
-				scene->SetSelectedGameObject(nullptr);
-			}
+			ImGui::SetDragDropPayload(type, &gameObject, sizeof(GameObject*));
+			ImGui::EndDragDropSource();
 		}
+
+
+		if (ImGui::BeginDragDropTarget()) {
+
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(type))
+			{
+				GameObject* sourceObject = *(GameObject**)payload->Data;
+
+				handleDragAndDrop(sourceObject, gameObject);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
+			ImGui::OpenPopup("Gameobject Menu##" + gameObject->getId());
+		}
+
+		if (isOpen) {
+
+
+			for (auto& child : gameObject->getChildren()) {
+
+
+				RenderGameObject(child.second, type);
+			}
+
+
+			ImGui::TreePop();
+		}
+
+		ImGui::PopID();
 	}
 
 	void Hierarchy::showRenamePopup(GameObject* gameObject)

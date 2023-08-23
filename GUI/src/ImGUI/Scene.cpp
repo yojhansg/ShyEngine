@@ -95,6 +95,11 @@ namespace ShyEditor {
 		return gameObjects;
 	}
 
+	std::vector<GameObject*>& Scene::getOverlays()
+	{
+		return overlays;
+	}
+
 	std::string Scene::getSceneName() {
 		return sceneName;
 	}
@@ -526,6 +531,25 @@ namespace ShyEditor {
 				++it;
 			}
 		}
+
+
+		auto it2 = overlays.begin();
+		while (it2 != overlays.end()) {
+			GameObject* go = *it2;
+
+			go->update();
+
+			if (go->isWaitingToDelete()) {
+				selectedGameObject = nullptr;
+
+				delete go;
+				it2 = overlays.erase(it2);
+			}
+			else {
+				++it2;
+			}
+		}
+
 
 		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 

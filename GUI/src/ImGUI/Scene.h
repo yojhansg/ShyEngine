@@ -94,6 +94,8 @@ namespace ShyEditor {
 
 
 		std::unordered_map<int, GameObject*>& getGameObjects();
+		std::vector<GameObject*>& getOverlays();
+
 		std::string getSceneName();
 
 		GameObject* GetSelectedGameObject();

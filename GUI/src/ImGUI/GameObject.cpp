@@ -440,7 +440,7 @@ namespace ShyEditor {
 	void GameObject::toDelete() {
 		waitingToDelete = true;
 
-		for (auto child : children) {
+		for (auto& child : children) {
 			child.second->toDelete();
 		}
 	}
@@ -832,23 +832,21 @@ namespace ShyEditor {
 		ImVec2 d = ImVec2(min.x, max.y);
 
 
+		size *= 0.25f;
+
+		a.x += size;
+		a.y += size;
+
+		b.x -= size;
+		b.y += size;
+
+		c.x -= size;
+		c.y -= size;
+
+		d.x += size;
+		d.y -= size;
 
 		if (dir.x == dir.y && dir.x == 0) {
-
-			size *= 0.25f;
-
-			a.x += size;
-			a.y += size;
-
-			b.x -= size;
-			b.y += size;
-
-			c.x -= size;
-			c.y -= size;
-
-			d.x += size;
-			d.y -= size;
-
 
 			drawList->AddQuadFilled(a, b, c, d, IM_COL32(255, 255, 255, 255));
 			ImGui::PopID();

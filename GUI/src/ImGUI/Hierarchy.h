@@ -28,7 +28,7 @@ namespace ShyEditor {
 
 		bool isChildrenTheSelectedObject(GameObject* go);
 
-		void RenderGameObject(GameObject* gameObject, int indentLevel);
+		void RenderGameObject(GameObject* gameObject, const char* type);
 
 
 
