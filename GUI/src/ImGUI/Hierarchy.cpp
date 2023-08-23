@@ -22,6 +22,8 @@ namespace ShyEditor {
 		shouldOpenSavePrefabPopup = false;
 
 		docked = true;
+		
+		acceptAssetDrop = true;
 	}
 
 	void Hierarchy::Behaviour()
@@ -66,6 +68,21 @@ namespace ShyEditor {
 			}
 		}
 
+	}
+
+	void Hierarchy::ReceiveAssetDrop(Asset& asset)
+	{
+		std::string extension = asset.extension;
+
+		if (extension == ".png" || extension == ".jpg") {
+
+			auto scene = Editor::getInstance()->getScene();
+
+			GameObject* go = scene->AddGameObject(asset.relativePath);
+			go->setName(asset.name);
+
+			scene->SetSelectedGameObject(go);
+		}
 	}
 
 	void Hierarchy::handleDragAndDrop(GameObject* source, GameObject* destination)
@@ -115,7 +132,7 @@ namespace ShyEditor {
 		Scene* scene = Editor::getInstance()->getScene();
 
 
-		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap;
+		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
 
 		if (gameObject->getChildren().size() == 0)
 		{
@@ -128,20 +145,6 @@ namespace ShyEditor {
 		ImGui::PushID(gameObject);
 		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
 
-		ImGui::SameLine();
-		ImGui::Text(gameObject->getName().c_str());
-
-		//char buffer[256]{};
-
-		//memcpy(buffer, gameObject->getName().c_str(), 256);
-		//ImGui::SameLine();
-		//if (ImGui::InputText("##RenameInPlace", buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
-
-
-		//}
-
-		//gameObject->setName(buffer);
-
 
 		if (ImGui::IsItemClicked()) {
 
@@ -151,6 +154,11 @@ namespace ShyEditor {
 		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
 			ImGui::OpenPopup("Gameobject Menu##" + gameObject->getId());
 		}
+
+
+		ImGui::SameLine();
+		ImGui::Text(gameObject->getName().c_str());
+
 
 		showGameObjectMenu(gameObject);
 		showRenamePopup(gameObject);
@@ -174,11 +182,6 @@ namespace ShyEditor {
 			}
 			ImGui::EndDragDropTarget();
 		}
-
-		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
-			ImGui::OpenPopup("Gameobject Menu##" + gameObject->getId());
-		}
-
 		if (isOpen) {
 
 

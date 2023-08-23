@@ -385,12 +385,6 @@ void Editor::UpdateAndRenderWindows()
 	if (state == Editor::EDITOR_WINDOW)
 		menuBar->Update();
 
-	if (ImGui::IsMouseReleased(0)) {
-
-		if (ShyEditor::ResourcesManager::IsAnyAssetSelected())
-			ShyEditor::ResourcesManager::UnselectAsset();
-	}
-
 	// Rendering
 	ImGui::Render();
 	SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));

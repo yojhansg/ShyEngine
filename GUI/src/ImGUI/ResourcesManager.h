@@ -11,16 +11,6 @@ namespace ShyEditor {
 	class Texture;
 	class Font;
 
-	struct Asset {
-
-		std::string name;
-		std::string extension;
-		std::string path;
-		std::string relativePath;
-
-		bool valid = true;
-	};
-
 	class ResourcesManager {
 
 	public:
@@ -38,12 +28,6 @@ namespace ShyEditor {
 		static std::string GetEngineResourcesPath();
 		static void SetEngineResourcesPath(const std::string& path);
 
-
-		static void UnselectAsset();
-		static void SelectAsset(const Asset& asset);
-		static bool IsAnyAssetSelected();
-		static const Asset& SelectedAsset();
-
 		static void Init();
 		static void Release();
 
@@ -60,8 +44,6 @@ namespace ShyEditor {
 
 		resources_map<Texture*> engineTextures;
 		resources_map<Font*> engineFonts;
-
-		Asset currentAsset;
 	};
 
 }

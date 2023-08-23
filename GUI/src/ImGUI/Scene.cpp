@@ -49,6 +49,8 @@ namespace ShyEditor {
 		docked = true;
 		viewMode = 0;
 
+		acceptAssetDrop = true;
+
 		// Load the default scene or the last opene scene
 		loadScene(sceneName);
 
@@ -553,23 +555,6 @@ namespace ShyEditor {
 		}
 
 
-		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
-
-			if (IsMouseHoveringWindow()) {
-				auto& asset = ResourcesManager::SelectedAsset();
-
-				if (asset.extension == ".png" || asset.extension == ".jpg") {
-
-					GameObject* go = AddGameObject(asset.relativePath);
-					go->setName(asset.name);
-
-					ImVec2 position = MousePositionInScene();
-
-					go->setPosition(position);
-					selectedGameObject = go;
-				}
-			}
-		}
 
 		sceneCamera->PrepareCameraRender();
 
@@ -643,6 +628,24 @@ namespace ShyEditor {
 		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
 		ImGui::SameLine();
 		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
+
+	}
+
+	void Scene::ReceiveAssetDrop(Asset& asset)
+	{
+		std::string extension = asset.extension;
+
+		if (extension == ".png" || extension == ".jpg") {
+
+
+			GameObject* go = AddGameObject(asset.relativePath);
+			go->setName(asset.name);
+
+			ImVec2 position = MousePositionInScene();
+
+			go->setPosition(position);
+			selectedGameObject = go;
+		}
 
 	}
 

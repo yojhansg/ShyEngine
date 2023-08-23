@@ -8,9 +8,9 @@
 #include "SDL.h"
 
 #include "imgui_internal.h"
-
 #include "CheckML.h"
 
+#include "ResourcesManager.h"
 
 namespace ShyEditor {
 
@@ -31,7 +31,7 @@ namespace ShyEditor {
 		focused = false;
 		visible = true;
 		docked = false;
-
+		acceptAssetDrop = false;
 	}
 
 	void Window::setSize(ImVec2 size)
@@ -59,6 +59,11 @@ namespace ShyEditor {
 	void Window::Behaviour()
 	{
 
+	}
+
+	void Window::ReceiveAssetDrop(Asset& asset)
+	{
+		std::cout << asset.name << std::endl;
 	}
 
 	void Window::HandleInput(SDL_Event* event) {}
@@ -91,7 +96,41 @@ namespace ShyEditor {
 			focused = ImGui::IsWindowFocused();
 
 
+			if (acceptAssetDrop && ImGui::IsDragDropActive() && IsMouseHoveringWindow())
+			{
+				int frameHeight = ImGui::GetFrameHeight();
+
+				int margin = 8;
+
+				ImGui::SetCursorPos(ImVec2(margin, frameHeight + margin));
+				ImGui::BeginChild("##End", ImVec2(windowWidth - margin * 2, windowHeight - frameHeight - margin * 2));
+
+				ImGui::EndChild();
+
+
+				if (ImGui::BeginDragDropTarget()) {
+
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Asset"))
+					{
+
+						Asset* asset = (Asset*)payload->Data;
+
+						ReceiveAssetDrop(*asset);
+
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+			}
+
+
+
+
+
+
 			ImGui::End();
+
+
 
 		}
 
