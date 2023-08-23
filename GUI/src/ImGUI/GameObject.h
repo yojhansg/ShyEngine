@@ -57,10 +57,12 @@ namespace ShyEditor {
 		void setPosition(ImVec2 newPos);
 		ImVec2 getPosition();
 		float getRotation();
+		void SetRotation(float r);
 		ImVec2 getAdjustedPosition();
 		ImVec2 getSize();
 		float getScale_x();
 		float getScale_y();
+		void SetScale(float x, float y);
 
 		// Deleting gameobject logic
 		bool isWaitingToDelete();
@@ -125,6 +127,7 @@ namespace ShyEditor {
 		// Gameobject texture and gizmo, path to the image and image component
 		Components::Component* imageComponent;
 		std::string imagePath;
+
 		Texture* texture;
 		Texture* gizmo;
 
@@ -183,6 +186,9 @@ namespace ShyEditor {
 
 
 
+	class OverlayImage;
+	class OverlayText;
+
 	class Overlay {
 
 		GameObject* obj;
@@ -199,12 +205,16 @@ namespace ShyEditor {
 		int right;
 		int bottom;
 
+
+		//TODO: escala, color e interactuable
 		//ImColor* color;
 
 		float scale;
 		bool interactable;
 
 
+		OverlayImage* image;
+		OverlayText* text;
 	public:
 
 		enum class Placement {
@@ -236,5 +246,39 @@ namespace ShyEditor {
 
 		void CalculateRectangle(int& x, int& y, int& w, int& h);
 		ImVec2 CalculateCenterPoint();
+
+		void Update();
+		void Render(SDL_Renderer* renderer, int x, int y, int w, int h);
 	};
+
+
+
+
+	class OverlayImage {
+
+	private:
+
+		Texture* texture;
+		std::string path;
+
+
+	public:
+		OverlayImage();
+
+		void Render(SDL_Renderer* renderer, int x, int y, int w, int h);
+
+		std::string GetPath();
+
+		void SetTexture(std::string path, Texture* texture);
+	};
+
+
+
+	class OverlayText {
+
+
+		std::string path;
+
+	};
+
 }

@@ -8,6 +8,14 @@ struct ImVec2;
 
 namespace ShyEditor {
 
+    struct Asset {
+
+        char name[256];
+        char extension[256];
+        char path[256];
+        char relativePath[256];
+    };
+
     class Window {
 
     protected:
@@ -22,9 +30,12 @@ namespace ShyEditor {
         bool canBeDisplayedOnTop;
         bool docked;
 
+        bool acceptAssetDrop;
+
         bool visible;
 
         virtual void Behaviour();
+        virtual void ReceiveAssetDrop(Asset& asset);
 
     public:
 

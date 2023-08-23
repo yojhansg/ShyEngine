@@ -49,6 +49,8 @@ namespace ShyEditor {
 		docked = true;
 		viewMode = 0;
 
+		acceptAssetDrop = true;
+
 		// Load the default scene or the last opene scene
 		loadScene(sceneName);
 
@@ -93,6 +95,11 @@ namespace ShyEditor {
 
 	std::unordered_map<int, GameObject*>& Scene::getGameObjects() {
 		return gameObjects;
+	}
+
+	std::vector<GameObject*>& Scene::getOverlays()
+	{
+		return overlays;
 	}
 
 	std::string Scene::getSceneName() {
@@ -224,9 +231,6 @@ namespace ShyEditor {
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-
 
 		auto mouse = MousePositionInScene();
 
@@ -242,53 +246,63 @@ namespace ShyEditor {
 			SDL_Rect dest{};
 			overlay->CalculateRectangle(dest.x, dest.y, dest.w, dest.h);
 
-			if (overlay->GetPlacement() == 1) {
+
+			bool mouseclicked = ImGui::IsMouseClicked(0);
+
+			const int thickness = 10;
 
 
-				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 
+			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
 
-					std::cout << "aaaa" << std::endl;
+			if (selectedOverlay.overlay == nullptr)
+			{
+
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, thickness)) {
+
+					RenderHorizontalSegment(dest.x, dest.y, dest.w, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_TOP;
 				}
-				else {
 
+				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, thickness)) {
 
-					std::cout << mouse.x << " " << dest.x << std::endl;
+					RenderHorizontalSegment(dest.x, dest.y + dest.h, dest.w, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_BOTTOM;
 				}
 
+				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, thickness)) {
 
-				if (ImGui::IsMouseClicked(0)) {
+					RenderVerticalSegment(dest.x, dest.y, dest.h, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_LEFT;
+				}
 
+				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, thickness)) {
 
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
-
-						selectedOverlay.overlay = overlay;
-						selectedOverlay.dir |= DIR_TOP;
-					}
-
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, 10)) {
-
-						selectedOverlay.overlay = overlay;
-						selectedOverlay.dir |= DIR_BOTTOM;
-					}
-
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, 10)) {
-
-						selectedOverlay.overlay = overlay;
-						selectedOverlay.dir |= DIR_LEFT;
-					}
-
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, 10)) {
-
-						selectedOverlay.overlay = overlay;
-						selectedOverlay.dir |= DIR_RIGHT;
-					}
-
+					RenderVerticalSegment(dest.x + dest.w, dest.y, dest.h, thickness);
+					if (mouseclicked) selectedOverlay.dir |= DIR_RIGHT;
 				}
 			}
 
 
-			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
+
+			if (mouseclicked) {
+
+				if (PointInsideRect(mouse.x, mouse.y, dest.x, dest.y, dest.w, dest.h, thickness)) {
+
+
+
+					selectedGameObject = go;
+					selectedOverlay.overlay = overlay;
+
+					selectedOverlay.offset_x = dest.x - mouse.x;
+					selectedOverlay.offset_y = dest.y - mouse.y;
+				}
+			}
+
 		}
 
 		SDL_SetRenderTarget(renderer, currentTarget);
@@ -314,26 +328,158 @@ namespace ShyEditor {
 
 		if (selectedOverlay.overlay != nullptr) {
 
+			bool changeSize = selectedOverlay.dir != 0;
+			bool isPositioned = selectedOverlay.overlay->GetPlacement() == 0;
 
-			if (selectedOverlay.dir & DIR_TOP) {
+			if (changeSize) {
 
-				selectedOverlay.overlay->GetTop() = mouse.y;
+
+				if (selectedOverlay.dir & DIR_TOP) {
+
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().y;
+						float anchor = selectedOverlay.overlay->GetAnchor().y;
+						float& size = selectedOverlay.overlay->GetSize().y;
+						float mousePos = mouse.y;
+
+						//Punto central del overlay para posicionarlo correctamente
+						float centerOffset = anchor * size;
+
+						//Guardamos la posicion previa del overlay
+						float py = position;
+						position = mousePos + centerOffset;
+
+						//El incremento es la diferencia entre la posicion actual y la anterior
+						float increment = py - position;
+
+						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
+						position += increment * anchor;
+
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						size += increment;
+					}
+					else
+						selectedOverlay.overlay->GetTop() = mouse.y;
+				}
+
+				if (selectedOverlay.dir & DIR_LEFT) {
+
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().x;
+						float anchor = selectedOverlay.overlay->GetAnchor().x;
+						float& size = selectedOverlay.overlay->GetSize().x;
+						float mousePos = mouse.x;
+
+
+						//Punto central del overlay para posicionarlo correctamente
+						float centerOffset = anchor * size;
+
+						//Guardamos la posicion previa del overlay
+						float py = position;
+						position = mousePos + centerOffset;
+
+						//El incremento es la diferencia entre la posicion actual y la anterior
+						float increment = py - position;
+
+						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
+						position += increment * anchor;
+
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						size += increment;
+					}
+					else
+						selectedOverlay.overlay->GetLeft() = mouse.x;
+				}
+
+				if (selectedOverlay.dir & DIR_RIGHT) {
+
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().x;
+						float anchor = selectedOverlay.overlay->GetAnchor().x;
+						float& size = selectedOverlay.overlay->GetSize().x;
+						float mousePos = mouse.x;
+
+						float centerOffset = anchor * size;
+
+						float psize = size;
+
+						//Calculo las dimensiones del elemento a partir de la esquina superior izquierda al raton
+						size = mousePos - (position - centerOffset);
+
+						float increment = psize - size;
+
+						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//dar la sensacion de que estamos arrastrando desde un lado
+						position -= anchor * increment;
+					}
+					else
+						selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
+				}
+
+				if (selectedOverlay.dir & DIR_BOTTOM) {
+
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().y;
+						float anchor = selectedOverlay.overlay->GetAnchor().y;
+						float& size = selectedOverlay.overlay->GetSize().y;
+						float mousePos = mouse.y;
+
+						float centerOffset = anchor * size;
+
+						float psize = size;
+
+						//Calculo las dimensiones del elemento a partir de la esquina superior izquierda al raton
+						size = mousePos - (position - centerOffset);
+
+						float increment = psize - size;
+
+						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//dar la sensacion de que estamos arrastrando desde un lado
+						position -= anchor * increment;
+					}
+					else
+						selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
+				}
+
+
+			}
+			else {
+
+
+				if (isPositioned) {
+
+					auto& position = selectedOverlay.overlay->GetPosition();
+					auto& anchor = selectedOverlay.overlay->GetAnchor();
+					auto& size = selectedOverlay.overlay->GetSize();
+
+
+					position.x = mouse.x + selectedOverlay.offset_x + anchor.x * size.x;
+					position.y = mouse.y + selectedOverlay.offset_y + anchor.y * size.y;
+				}
+
+				else {
+
+					int& left = selectedOverlay.overlay->GetLeft();
+					int& right = selectedOverlay.overlay->GetRight();
+					int& top = selectedOverlay.overlay->GetTop();
+					int& bottom = selectedOverlay.overlay->GetBottom();
+
+
+					int pleft = left;
+					int ptop = top;
+
+					left = mouse.x + selectedOverlay.offset_x;
+					top = mouse.y + selectedOverlay.offset_y;
+
+					right += pleft - left;
+					bottom += ptop - top;
+				}
 			}
 
-			if (selectedOverlay.dir & DIR_LEFT) {
-
-				selectedOverlay.overlay->GetLeft() = mouse.x;
-			}
-
-			if (selectedOverlay.dir & DIR_RIGHT) {
-
-				selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
-			}
-
-			if (selectedOverlay.dir & DIR_BOTTOM) {
-
-				selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
-			}
 		}
 
 	}
@@ -352,9 +498,67 @@ namespace ShyEditor {
 
 					anyGoSelected = true;
 					selectedGameObject = pair.second;
+					dragging = true;
 				}
+
 			}
 		}
+
+		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
+		{
+			dragging = false;
+		}
+
+		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
+			
+			float invCameraScale = 1.f / sceneCamera->GetScale();
+
+			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
+
+				const float incrementSpeed = .3f;
+
+				float r = selectedGameObject->getRotation();
+
+				r += event->motion.xrel * incrementSpeed;
+				r += event->motion.yrel * incrementSpeed;
+
+				selectedGameObject->SetRotation(r);
+			}
+			else if (ImGui::IsKeyDown(ImGuiKey_LeftAlt)) {
+
+				const float incrementSpeed = .03f;
+
+				float x = selectedGameObject->getScale_x();
+				float y = selectedGameObject->getScale_y();
+
+				float xspeed = std::log10(1 + x) * incrementSpeed;
+				float yspeed = -std::log10(1 + y) * incrementSpeed;
+
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+
+					event->motion.yrel = event->motion.xrel;
+				}
+
+				x += event->motion.xrel * invCameraScale * xspeed;
+				y += -event->motion.yrel * invCameraScale * yspeed;
+
+				x = std::clamp(x, 0.f, FLT_MAX);
+				y = std::clamp(y, 0.f, FLT_MAX);
+
+				selectedGameObject->SetScale(x, y);
+			}
+			else {
+
+				auto pos = selectedGameObject->getPosition();
+				pos.x += event->motion.xrel * invCameraScale;
+				pos.y += event->motion.yrel * invCameraScale;
+
+
+				selectedGameObject->setPosition(pos);
+			}
+		}
+
 
 		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 			SetSelectedGameObject(nullptr);
@@ -390,23 +594,25 @@ namespace ShyEditor {
 			}
 		}
 
-		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
 
-			if (IsMouseHoveringWindow()) {
-				auto& asset = ResourcesManager::SelectedAsset();
+		auto it2 = overlays.begin();
+		while (it2 != overlays.end()) {
+			GameObject* go = *it2;
 
-				if (asset.extension == ".png" || asset.extension == ".jpg") {
+			go->update();
 
-					GameObject* go = AddGameObject(asset.relativePath);
-					go->setName(asset.name);
+			if (go->isWaitingToDelete()) {
+				selectedGameObject = nullptr;
 
-					ImVec2 position = MousePositionInScene();
-
-					go->setPosition(position);
-					selectedGameObject = go;
-				}
+				delete go;
+				it2 = overlays.erase(it2);
+			}
+			else {
+				++it2;
 			}
 		}
+
+
 
 		sceneCamera->PrepareCameraRender();
 
@@ -480,6 +686,24 @@ namespace ShyEditor {
 		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
 		ImGui::SameLine();
 		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
+
+	}
+
+	void Scene::ReceiveAssetDrop(Asset& asset)
+	{
+		std::string extension = asset.extension;
+
+		if (extension == ".png" || extension == ".jpg") {
+
+
+			GameObject* go = AddGameObject(asset.relativePath);
+			go->setName(asset.name);
+
+			ImVec2 position = MousePositionInScene();
+
+			go->setPosition(position);
+			selectedGameObject = go;
+		}
 
 	}
 
@@ -568,20 +792,26 @@ namespace ShyEditor {
 	bool Scene::PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness)
 	{
 		int ht = std::round(thickness * 0.5f);
-		return x > sx && x < sx + w && y > sy - ht && y < sy + ht;
+		return x + ht > sx && x - ht< sx + w && y + ht > sy && y - ht < sy;
 	}
 
 	bool Scene::PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness)
 	{
 		int ht = std::round(thickness * 0.5f);
-		return x > sx - ht && x < sx + ht && y > sy && y < sy + h;
+		return x + ht > sx && x - ht < sx && y + ht> sy && y - ht < sy + h;
+	}
+
+	bool Scene::PointInsideRect(int x, int y, int rx, int ry, int rw, int rh, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+		return x + ht > rx && x - ht< rx + rw && y + ht > ry && y - ht < ry + rh;
 	}
 
 	void Scene::RenderRectangle(int x, int y, int w, int h, int thickness)
 	{
 		int ht = std::round(thickness * 0.5f);
 
-		SDL_Rect frameRect = { x + ht, y + ht, w, h };
+		SDL_Rect frameRect = { x - ht, y - ht, w + ht * 2, h + ht * 2 };
 
 
 		for (int i = 0; i < thickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
@@ -589,13 +819,45 @@ namespace ShyEditor {
 
 			SDL_RenderDrawRect(renderer, &frameRect);
 
-			frameRect.x--;
-			frameRect.y--;
-			frameRect.w += 2;
-			frameRect.h += 2;
+			frameRect.x++;
+			frameRect.y++;
+			frameRect.w -= 2;
+			frameRect.h -= 2;
 		}
 
 
+	}
+
+	void Scene::RenderHorizontalSegment(int x, int y, int w, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+
+		x -= ht;
+		y -= ht;
+
+		w += ht * 2;
+
+		for (int i = 0; i < ht * 2; i++)
+		{
+
+			SDL_RenderDrawLine(renderer, x, y + i, x + w, y + i);
+		}
+	}
+
+	void Scene::RenderVerticalSegment(int x, int y, int h, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+
+		x -= ht;
+		y -= ht;
+
+		h += ht * 2;
+
+		for (int i = 0; i < ht * 2; i++)
+		{
+
+			SDL_RenderDrawLine(renderer, x + i, y, x + i, y + h);
+		}
 	}
 
 

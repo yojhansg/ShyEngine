@@ -85,6 +85,7 @@ namespace ShyEditor {
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
 
+
 		if (palette.fontPtr == nullptr)
 			LogManager::LogError("Could not load font with path: " + palette.font);
 
@@ -225,14 +226,6 @@ namespace ShyEditor {
 
 	void ColorPalette::Behaviour()
 	{
-		/*if (open) {
-
-			open = false;
-			visible = true;
-
-			ImGui::SetNextWindowFocus();
-		}*/
-
 		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
 		ImGui::Begin(windowName.c_str(), &visible, flags);
 
@@ -255,6 +248,7 @@ namespace ShyEditor {
 			ImGui::PopFont();
 		}
 
+		ImGui::ShowFontSelector("Font");
 
 #define ShowColor(name, color) if (ImGui::ColorEdit3(name, &color.r)) areThereChanges = true;
 #define ShowFloat(name, value, speed, min, max)\

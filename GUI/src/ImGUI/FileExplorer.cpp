@@ -175,6 +175,7 @@ namespace ShyEditor {
 		for (auto& entry : entries) {
 
 			ImGui::SetNextItemAllowOverlap();
+
 			if (ImGui::Selectable(std::string("##" + entry.path).c_str(), currentlySelected == idx, ImGuiSelectableFlags_AllowDoubleClick)) {
 
 				currentlySelected = idx;
@@ -185,6 +186,29 @@ namespace ShyEditor {
 
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
+			}
+
+
+			if (ImGui::BeginDragDropSource()) {
+
+
+				std::string relativePath = std::filesystem::path(entry.path).lexically_relative(projectPath + "/Assets").generic_string();
+
+				Asset asset;
+				memcpy(asset.extension, entry.extension.c_str(), 256);
+				memcpy(asset.name, entry.name.c_str(), 256);
+				memcpy(asset.path, entry.path.c_str(), 256);
+				memcpy(asset.relativePath, relativePath.c_str(), 256);
+
+				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
+
+
+				ImGui::Image(entry.texture->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+				ImGui::SameLine();
+				ImGui::Text(asset.name);
+
+
+				ImGui::EndDragDropSource();
 			}
 
 			ImGui::SameLine();
@@ -252,6 +276,12 @@ namespace ShyEditor {
 		asset.path = entry.path;
 		asset.relativePath = relativePath + "\\" + entry.name + entry.extension;
 		ResourcesManager::SelectAsset(asset);
+
+		//asset.extension = entry.extension;
+		//asset.name = entry.name;
+		//asset.path = entry.path;
+		//asset.relativePath = relativePath;
+		//ResourcesManager::SelectAsset(asset);
 
 	}
 
@@ -505,5 +535,3 @@ namespace ShyEditor {
 	//	}
 
 	//}
-
-

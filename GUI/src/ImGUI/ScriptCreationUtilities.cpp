@@ -30,6 +30,10 @@ namespace ShyEditor {
 		initialised = false;
 	}
 
+	ScriptCreationUtilities::ScriptNode::~ScriptNode()
+	{
+	}
+
 	ScriptCreationUtilities::ScriptNode* ScriptCreationUtilities::ScriptNode::SetID(int id)
 	{
 		this->id = id;
@@ -263,6 +267,7 @@ namespace ShyEditor {
 		{
 			p->next = nullptr;
 		}
+
 	}
 
 	void ScriptCreationUtilities::ScriptFlow::RemoveNext()
@@ -569,6 +574,15 @@ namespace ShyEditor {
 		}
 
 		flow = new ScriptFlow(this);
+	}
+
+	ScriptCreationUtilities::ScriptMethod::~ScriptMethod()
+	{
+		if (flow != nullptr)
+		{
+			delete flow;
+			flow = nullptr;
+		}
 	}
 
 
@@ -1558,6 +1572,21 @@ namespace ShyEditor {
 
 	}
 
+	ScriptCreationUtilities::ScriptFork::~ScriptFork()
+	{
+		if (A != nullptr)
+		{
+			delete A;
+			A = nullptr;
+		}
+
+		if (B != nullptr) {
+
+			delete B;
+			B = nullptr;
+		}
+	}
+
 
 
 	nlohmann::json ScriptCreationUtilities::ScriptFork::ToJson()
@@ -1701,6 +1730,15 @@ namespace ShyEditor {
 		h = 100;
 
 		flow = new ScriptFlow(this, true);
+	}
+
+	ScriptCreationUtilities::ScriptEvent::~ScriptEvent()
+	{
+		if (flow != nullptr)
+		{
+			delete flow;
+			flow = nullptr;
+		}
 	}
 
 	void ScriptCreationUtilities::ScriptEvent::updateAndRender()

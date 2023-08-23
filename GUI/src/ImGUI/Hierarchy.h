@@ -22,13 +22,13 @@ namespace ShyEditor {
 	protected:
 
 		void Behaviour() override;
-
+		void ReceiveAssetDrop(Asset& asset) override;
 
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
 
 		bool isChildrenTheSelectedObject(GameObject* go);
 
-		void RenderGameObject(GameObject* gameObject, int indentLevel);
+		void RenderGameObject(GameObject* gameObject, const char* type);
 
 
 
