@@ -6304,6 +6304,7 @@ void ImGui::ShowFontSelector(const char* label)
         }
         ImGui::EndCombo();
     }
+    return;
     ImGui::SameLine();
     HelpMarker(
         "- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n"

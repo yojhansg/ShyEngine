@@ -313,7 +313,26 @@ namespace ShyEditor {
 
 					if (isPositioned)
 					{
+						float& position = selectedOverlay.overlay->GetPosition().y;
+						float anchor = selectedOverlay.overlay->GetAnchor().y;
+						float& size = selectedOverlay.overlay->GetSize().y;
+						float mousePos = mouse.y;
 
+						//Punto central del overlay para posicionarlo correctamente
+						float centerOffset = anchor * size;
+
+						//Guardamos la posicion previa del overlay
+						float py = position;
+						position = mousePos + centerOffset;
+
+						//El incremento es la diferencia entre la posicion actual y la anterior
+						float increment = py - position;
+
+						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
+						position += increment * anchor;
+
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						size += increment;
 					}
 					else
 						selectedOverlay.overlay->GetTop() = mouse.y;
@@ -321,20 +340,87 @@ namespace ShyEditor {
 
 				if (selectedOverlay.dir & DIR_LEFT) {
 
-					selectedOverlay.overlay->GetLeft() = mouse.x;
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().x;
+						float anchor = selectedOverlay.overlay->GetAnchor().x;
+						float& size = selectedOverlay.overlay->GetSize().x;
+						float mousePos = mouse.x;
+
+
+						//Punto central del overlay para posicionarlo correctamente
+						float centerOffset = anchor * size;
+
+						//Guardamos la posicion previa del overlay
+						float py = position;
+						position = mousePos + centerOffset;
+
+						//El incremento es la diferencia entre la posicion actual y la anterior
+						float increment = py - position;
+
+						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
+						position += increment * anchor;
+
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						size += increment;
+					}
+					else
+						selectedOverlay.overlay->GetLeft() = mouse.x;
 				}
 
 				if (selectedOverlay.dir & DIR_RIGHT) {
 
-					selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().x;
+						float anchor = selectedOverlay.overlay->GetAnchor().x;
+						float& size = selectedOverlay.overlay->GetSize().x;
+						float mousePos = mouse.x;
+
+						float centerOffset = anchor * size;
+
+						float psize = size;
+
+						//Calculo las dimensiones del elemento a partir de la esquina superior izquierda al raton
+						size = mousePos - (position - centerOffset);
+
+						float increment = psize - size;
+
+						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//dar la sensacion de que estamos arrastrando desde un lado
+						position -= anchor * increment;
+					}
+					else
+						selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
 				}
 
 				if (selectedOverlay.dir & DIR_BOTTOM) {
 
-					selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
+					if (isPositioned)
+					{
+						float& position = selectedOverlay.overlay->GetPosition().y;
+						float anchor = selectedOverlay.overlay->GetAnchor().y;
+						float& size = selectedOverlay.overlay->GetSize().y;
+						float mousePos = mouse.y;
+
+						float centerOffset = anchor * size;
+
+						float psize = size;
+
+						//Calculo las dimensiones del elemento a partir de la esquina superior izquierda al raton
+						size = mousePos - (position - centerOffset);
+
+						float increment = psize - size;
+
+						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//dar la sensacion de que estamos arrastrando desde un lado
+						position -= anchor * increment;
+					}
+					else
+						selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
 				}
-			
-			
+
+
 			}
 			else {
 
@@ -349,7 +435,7 @@ namespace ShyEditor {
 					position.x = mouse.x + selectedOverlay.offset_x + anchor.x * size.x;
 					position.y = mouse.y + selectedOverlay.offset_y + anchor.y * size.y;
 				}
-				
+
 				else {
 
 					int& left = selectedOverlay.overlay->GetLeft();
@@ -362,7 +448,7 @@ namespace ShyEditor {
 					int ptop = top;
 
 					left = mouse.x + selectedOverlay.offset_x;
-					top =  mouse.y + selectedOverlay.offset_y;
+					top = mouse.y + selectedOverlay.offset_y;
 
 					right += pleft - left;
 					bottom += ptop - top;
