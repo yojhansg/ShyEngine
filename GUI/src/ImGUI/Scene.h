@@ -59,7 +59,14 @@ namespace ShyEditor {
 		int viewMode;
 
 		std::unordered_map<int, GameObject*> gameObjects;
+
+
+
+		bool dragging;
 		GameObject* selectedGameObject;
+
+
+
 
 		std::vector<GameObject*> overlays;
 
@@ -82,6 +89,7 @@ namespace ShyEditor {
 
 		void RenderHorizontalSegment(int x, int y, int w, int thickness = 1);
 		void RenderVerticalSegment(int x, int y, int h, int thickness = 1);
+
 	public:
 
 		Scene();

@@ -317,6 +317,11 @@ namespace ShyEditor {
 		return transform->GetRotation();
 	}
 
+	void GameObject::SetRotation(float r)
+	{
+		transform->SetRotation(r);
+	}
+
 	ImVec2 GameObject::getAdjustedPosition() {
 
 		ImVec2 position = transform->GetPosition();
@@ -341,6 +346,11 @@ namespace ShyEditor {
 
 	float GameObject::getScale_y() {
 		return transform->GetScale().y;
+	}
+
+	void GameObject::SetScale(float x, float y)
+	{
+		transform->SetScale(x, y);
 	}
 
 

@@ -498,9 +498,67 @@ namespace ShyEditor {
 
 					anyGoSelected = true;
 					selectedGameObject = pair.second;
+					dragging = true;
 				}
+
 			}
 		}
+
+		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
+		{
+			dragging = false;
+		}
+
+		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
+			
+			float invCameraScale = 1.f / sceneCamera->GetScale();
+
+			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
+
+				const float incrementSpeed = .3f;
+
+				float r = selectedGameObject->getRotation();
+
+				r += event->motion.xrel * incrementSpeed;
+				r += event->motion.yrel * incrementSpeed;
+
+				selectedGameObject->SetRotation(r);
+			}
+			else if (ImGui::IsKeyDown(ImGuiKey_LeftAlt)) {
+
+				const float incrementSpeed = .03f;
+
+				float x = selectedGameObject->getScale_x();
+				float y = selectedGameObject->getScale_y();
+
+				float xspeed = std::log10(1 + x) * incrementSpeed;
+				float yspeed = -std::log10(1 + y) * incrementSpeed;
+
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+
+					event->motion.yrel = event->motion.xrel;
+				}
+
+				x += event->motion.xrel * invCameraScale * xspeed;
+				y += -event->motion.yrel * invCameraScale * yspeed;
+
+				x = std::clamp(x, 0.f, FLT_MAX);
+				y = std::clamp(y, 0.f, FLT_MAX);
+
+				selectedGameObject->SetScale(x, y);
+			}
+			else {
+
+				auto pos = selectedGameObject->getPosition();
+				pos.x += event->motion.xrel * invCameraScale;
+				pos.y += event->motion.yrel * invCameraScale;
+
+
+				selectedGameObject->setPosition(pos);
+			}
+		}
+
 
 		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 			SetSelectedGameObject(nullptr);

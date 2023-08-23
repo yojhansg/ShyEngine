@@ -59,10 +59,12 @@ namespace ShyEditor {
 		void setPosition(ImVec2 newPos);
 		ImVec2 getPosition();
 		float getRotation();
+		void SetRotation(float r);
 		ImVec2 getAdjustedPosition();
 		ImVec2 getSize();
 		float getScale_x();
 		float getScale_y();
+		void SetScale(float x, float y);
 
 		// Deleting gameobject logic
 		bool isWaitingToDelete();
