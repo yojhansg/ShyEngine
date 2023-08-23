@@ -39,6 +39,9 @@ namespace ShyEditor {
 			int dir = 0;
 			Overlay* overlay = nullptr;
 
+			int offset_x = 0;
+			int offset_y = 0;
+
 		} selectedOverlay;
 
 
@@ -72,6 +75,8 @@ namespace ShyEditor {
 
 		bool PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness);
 		bool PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness);
+
+		bool PointInsideRect(int x, int y, int rx, int ry, int rw, int rh, int thickness = 0);
 
 		void RenderRectangle(int x, int y, int w, int h, int thickness = 1);
 

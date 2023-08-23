@@ -242,48 +242,37 @@ namespace ShyEditor {
 			SDL_Rect dest{};
 			overlay->CalculateRectangle(dest.x, dest.y, dest.w, dest.h);
 
-			if (overlay->GetPlacement() == 1) {
+			if (ImGui::IsMouseClicked(0)) {
+
+				const int thickness = 10;
+				if (PointInsideRect(mouse.x, mouse.y, dest.x, dest.y, dest.w, dest.h, thickness)) {
 
 
-				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
+					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, thickness)) {
 
-
-					std::cout << "aaaa" << std::endl;
-				}
-				else {
-
-
-					std::cout << mouse.x << " " << dest.x << std::endl;
-				}
-
-
-				if (ImGui::IsMouseClicked(0)) {
-
-
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, 10)) {
-
-						selectedOverlay.overlay = overlay;
 						selectedOverlay.dir |= DIR_TOP;
 					}
 
-					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, 10)) {
+					if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, thickness)) {
 
-						selectedOverlay.overlay = overlay;
 						selectedOverlay.dir |= DIR_BOTTOM;
 					}
 
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, 10)) {
+					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, thickness)) {
 
-						selectedOverlay.overlay = overlay;
 						selectedOverlay.dir |= DIR_LEFT;
 					}
 
-					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, 10)) {
+					if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, thickness)) {
 
-						selectedOverlay.overlay = overlay;
 						selectedOverlay.dir |= DIR_RIGHT;
 					}
 
+					selectedGameObject = go;
+					selectedOverlay.overlay = overlay;
+
+					selectedOverlay.offset_x = dest.x - mouse.x;
+					selectedOverlay.offset_y = dest.y - mouse.y;
 				}
 			}
 
@@ -314,26 +303,72 @@ namespace ShyEditor {
 
 		if (selectedOverlay.overlay != nullptr) {
 
+			bool changeSize = selectedOverlay.dir != 0;
+			bool isPositioned = selectedOverlay.overlay->GetPlacement() == 0;
 
-			if (selectedOverlay.dir & DIR_TOP) {
+			if (changeSize) {
 
-				selectedOverlay.overlay->GetTop() = mouse.y;
+
+				if (selectedOverlay.dir & DIR_TOP) {
+
+					if (isPositioned)
+					{
+
+					}
+					else
+						selectedOverlay.overlay->GetTop() = mouse.y;
+				}
+
+				if (selectedOverlay.dir & DIR_LEFT) {
+
+					selectedOverlay.overlay->GetLeft() = mouse.x;
+				}
+
+				if (selectedOverlay.dir & DIR_RIGHT) {
+
+					selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
+				}
+
+				if (selectedOverlay.dir & DIR_BOTTOM) {
+
+					selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
+				}
+			
+			
+			}
+			else {
+
+
+				if (isPositioned) {
+
+					auto& position = selectedOverlay.overlay->GetPosition();
+					auto& anchor = selectedOverlay.overlay->GetAnchor();
+					auto& size = selectedOverlay.overlay->GetSize();
+
+
+					position.x = mouse.x + selectedOverlay.offset_x + anchor.x * size.x;
+					position.y = mouse.y + selectedOverlay.offset_y + anchor.y * size.y;
+				}
+				
+				else {
+
+					int& left = selectedOverlay.overlay->GetLeft();
+					int& right = selectedOverlay.overlay->GetRight();
+					int& top = selectedOverlay.overlay->GetTop();
+					int& bottom = selectedOverlay.overlay->GetBottom();
+
+
+					int pleft = left;
+					int ptop = top;
+
+					left = mouse.x + selectedOverlay.offset_x;
+					top =  mouse.y + selectedOverlay.offset_y;
+
+					right += pleft - left;
+					bottom += ptop - top;
+				}
 			}
 
-			if (selectedOverlay.dir & DIR_LEFT) {
-
-				selectedOverlay.overlay->GetLeft() = mouse.x;
-			}
-
-			if (selectedOverlay.dir & DIR_RIGHT) {
-
-				selectedOverlay.overlay->GetRight() = Preferences::GetData().width - mouse.x;
-			}
-
-			if (selectedOverlay.dir & DIR_BOTTOM) {
-
-				selectedOverlay.overlay->GetBottom() = Preferences::GetData().height - mouse.y;
-			}
 		}
 
 	}
@@ -568,13 +603,19 @@ namespace ShyEditor {
 	bool Scene::PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness)
 	{
 		int ht = std::round(thickness * 0.5f);
-		return x > sx && x < sx + w && y > sy - ht && y < sy + ht;
+		return x + ht > sx && x - ht< sx + w && y + ht > sy && y - ht < sy;
 	}
 
 	bool Scene::PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness)
 	{
 		int ht = std::round(thickness * 0.5f);
-		return x > sx - ht && x < sx + ht && y > sy && y < sy + h;
+		return x + ht > sx && x - ht < sx && y + ht> sy && y - ht < sy + h;
+	}
+
+	bool Scene::PointInsideRect(int x, int y, int rx, int ry, int rw, int rh, int thickness)
+	{
+		int ht = std::round(thickness * 0.5f);
+		return x + ht > rx && x - ht< rx + rw && y + ht > ry && y - ht < ry + rh;
 	}
 
 	void Scene::RenderRectangle(int x, int y, int w, int h, int thickness)

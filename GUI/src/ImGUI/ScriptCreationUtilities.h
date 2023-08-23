@@ -247,6 +247,7 @@ namespace ShyEditor {
 			void FromJson(nlohmann::json&);
 
 
+			virtual ~ScriptNode();
 
 		protected:
 
@@ -526,6 +527,7 @@ namespace ShyEditor {
 				El metodo se puede conseguir usando Components::ComponentManager
 			*/
 			ScriptMethod(::Components::Method&);
+			~ScriptMethod();
 
 			/*
 				Serializar el nodo con la informacion del metodo y las entradas
@@ -605,6 +607,7 @@ namespace ShyEditor {
 				El metodo se puede conseguir usando Components::ComponentManager
 			*/
 			ScriptFork(Fork type);
+			~ScriptFork();
 
 			/*
 				Serializar el nodo con la informacion del metodo y las entradas
@@ -690,6 +693,7 @@ namespace ShyEditor {
 		public:
 
 			ScriptEvent(const std::string& ev);
+			~ScriptEvent();
 
 			/*
 				Convierte un nombre dado de camelCase a uno 
