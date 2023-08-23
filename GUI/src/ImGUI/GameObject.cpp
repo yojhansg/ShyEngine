@@ -23,7 +23,7 @@ namespace ShyEditor {
 
 	int GameObject::lastId = 0;
 
-	GameObject::GameObject(std::string& path, bool isTransform): isTransform(isTransform) {
+	GameObject::GameObject(std::string& path, bool isTransform) : isTransform(isTransform) {
 
 		editor = Editor::getInstance();
 
@@ -131,10 +131,10 @@ namespace ShyEditor {
 		float cameraScale = camera->GetScale();
 
 		float width = texture_size->x * getScale_x() * cameraScale;
-		float height = texture_size->y * getScale_y()* cameraScale;
+		float height = texture_size->y * getScale_y() * cameraScale;
 
 
-		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale+ cameraPosition.y);
+		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale + cameraPosition.y);
 
 		camera->CenterPosition(worldPosition.x, worldPosition.y);
 
@@ -490,24 +490,78 @@ namespace ShyEditor {
 
 	void GameObject::drawTransformInEditor() {
 
-		if (ImGui::CollapsingHeader("Transform")) {
+		ImGui::Text("Position");
+		ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
 
-			ImGui::Text("Position");
-			ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
+		ImGui::Text("Scale");
+		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
 
-			ImGui::Text("Scale");
-			ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
+		ImGui::Text("Rotation");
+		ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f");
 
-			ImGui::Text("Rotation");
-			ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f");
-
-			ImGui::Text("Render order");
-			ImGui::InputInt("##render_order", &renderOrder);
-		}
+		ImGui::Text("Render order");
+		ImGui::InputInt("##render_order", &renderOrder);
 	}
 
 	void GameObject::drawOverlayInEditor()
 	{
+		int& placement = overlay->GetPlacement();
+		ImGui::Combo("Placement mode", &placement,
+
+			"Positioned\0Streched"
+		);
+
+
+		if (placement == 0) {
+
+
+			ImGui::Text("Position");
+			ImGui::DragFloat2("##Overlayposition_drag", (float*)&overlay->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+
+			ImGui::Text("Size");
+			ImGui::DragFloat2("##OverlaySize_drag", (float*)&overlay->GetSize(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+
+		}
+		else {
+
+			ImGui::Text("Left");
+			ImGui::DragFloat2("##Left", (float*)&overlay->GetLeft(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Top");
+			ImGui::DragFloat2("##Top", (float*)&overlay->GetTop(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Right");
+			ImGui::DragFloat2("##Right", (float*)&overlay->GetTop(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Bottom");
+			ImGui::DragFloat2("##Bottom", (float*)&overlay->GetBottom(), 0.3f, 0.0f, 0.0f, "%.2f");
+		}
+
+
+		ImGui::SeparatorText("Anchor");
+
+		ImGui::Text("Anchor");
+		ImGui::DragFloat2("##Anchor_drag", (float*)&overlay->GetAnchor(), 0.3f, 0.0f, 0.0f, "%.2f");
+
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(-1, -1));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(0, 1));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, -1));
+
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(-1, 0));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(0, 0));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 0));
+
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(-1, 1));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(0, -1));
+		ImGui::SameLine();
+		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
 	}
 
 	void GameObject::drawComponentsInEditor() {
@@ -525,29 +579,29 @@ namespace ShyEditor {
 
 					switch (attr->getType()) {
 
-						case Components::AttributesType::FLOAT:
-							drawFloat(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::VECTOR2:
-							drawVector2(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::STRING:
-							drawString(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::BOOL:
-							drawBool(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::COLOR:
-							drawColor(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::CHAR:
-							drawChar(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::GAMEOBJECT:
-							drawGameobject(attributeName + it->first, attr);
-							break;
-						default:
-							break;
+					case Components::AttributesType::FLOAT:
+						drawFloat(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::VECTOR2:
+						drawVector2(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::STRING:
+						drawString(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::BOOL:
+						drawBool(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::COLOR:
+						drawColor(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::CHAR:
+						drawChar(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::GAMEOBJECT:
+						drawGameobject(attributeName + it->first, attr);
+						break;
+					default:
+						break;
 					}
 				}
 
@@ -581,29 +635,29 @@ namespace ShyEditor {
 
 					switch (attr->getType()) {
 
-						case Components::AttributesType::FLOAT:
-							drawFloat(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::VECTOR2:
-							drawVector2(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::STRING:
-							drawString(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::BOOL:
-							drawBool(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::COLOR:
-							drawColor(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::CHAR:
-							drawChar(attributeName + it->first, attr);
-							break;
-						case Components::AttributesType::GAMEOBJECT:
-							drawGameobject(attributeName + it->first, attr);
-							break;
-						default:
-							break;
+					case Components::AttributesType::FLOAT:
+						drawFloat(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::VECTOR2:
+						drawVector2(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::STRING:
+						drawString(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::BOOL:
+						drawBool(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::COLOR:
+						drawColor(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::CHAR:
+						drawChar(attributeName + it->first, attr);
+						break;
+					case Components::AttributesType::GAMEOBJECT:
+						drawGameobject(attributeName + it->first, attr);
+						break;
+					default:
+						break;
 					}
 				}
 
@@ -719,6 +773,124 @@ namespace ShyEditor {
 		}
 	}
 
+	void GameObject::DrawArrowButton(ImVec2& value, const ImVec2& dir)
+	{
+
+		if (!(dir.x == dir.y && dir.x == 0))
+		{
+			//Vertical arrows
+			if (dir.x == 0)
+			{
+				if (dir.y < 0) {
+					if (ImGui::ArrowButton("##Down", ImGuiDir_Down))
+						value = ImVec2(0.5f, 1);
+				}
+				else
+					if (ImGui::ArrowButton("##Up", ImGuiDir_Up))
+						value = ImVec2(0.5f, 0);
+				return;
+			}
+
+			//Horizontal arrows
+			if (dir.y == 0) {
+
+				if (dir.x < 0) {
+					if (ImGui::ArrowButton("##Left", ImGuiDir_Left))
+						value = ImVec2(0, 0.5f);
+				}
+				else
+					if (ImGui::ArrowButton("##Right", ImGuiDir_Right))
+						value = ImVec2(1, 0.5f);
+				return;
+			}
+		}
+
+		ImGui::PushID((void*)&dir);
+
+		int size = ImGui::GetFrameHeight();
+
+		if (ImGui::Button("##", ImVec2(size, size))) {
+
+			value = ImVec2(dir.x * 0.5f + 0.5f, dir.y * 0.5f + 0.5f);
+		}
+
+		auto drawList = ImGui::GetWindowDrawList();
+
+		ImVec2 min = ImGui::GetItemRectMin();
+		ImVec2 max = ImGui::GetItemRectMax();
+
+
+
+		//Diagonal arrows
+		ImVec2 a = min;
+		ImVec2 b = ImVec2(max.x, min.y);
+		ImVec2 c = max;
+		ImVec2 d = ImVec2(min.x, max.y);
+
+
+
+		if (dir.x == dir.y && dir.x == 0) {
+
+			size *= 0.25f;
+
+			a.x += size;
+			a.y += size;
+
+			b.x -= size;
+			b.y += size;
+
+			c.x -= size;
+			c.y -= size;
+
+			d.x += size;
+			d.y -= size;
+
+
+			drawList->AddQuadFilled(a, b, c, d, IM_COL32(255, 255, 255, 255));
+			ImGui::PopID();
+			return;
+		}
+
+
+
+		ImVec2 p1, p2, p3;
+
+
+		if (dir.x < 0)
+		{
+			if (dir.y < 0)
+			{
+				p1 = a;
+				p2 = b;
+				p3 = d;
+			}
+			else {
+				p1 = a;
+				p2 = c;
+				p3 = d;
+			}
+		}
+		else {
+
+			if (dir.y < 0)
+			{
+				p1 = a;
+				p2 = b;
+				p3 = c;
+			}
+			else {
+				p1 = b;
+				p2 = c;
+				p3 = d;
+			}
+		}
+
+
+
+		drawList->AddTriangleFilled(p1, p2, p3, IM_COL32(255, 255, 255, 255));
+
+		ImGui::PopID();
+	}
 
 
 
@@ -889,7 +1061,7 @@ namespace ShyEditor {
 
 		// Parse localPosition and localScale
 		sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
-		sscanf_s(localScaleStr.c_str(),    "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
+		sscanf_s(localScaleStr.c_str(), "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
 
 		gameObject->transform->SetRotation(std::stof(localRotation));
 
@@ -913,11 +1085,16 @@ namespace ShyEditor {
 		return isTransform;
 	}
 
+	Overlay* GameObject::GetOverlay()
+	{
+		return overlay;
+	}
+
 
 
 	//============ COMPONENTS =================================================================================================================================================================
 
-	Transform::Transform(GameObject* obj): obj(obj)
+	Transform::Transform(GameObject* obj) : obj(obj)
 	{
 		scale = new ImVec2(1, 1);
 		position = new ImVec2(0, 0);
@@ -965,13 +1142,158 @@ namespace ShyEditor {
 		rotation = r;
 	}
 
-	Overlay::Overlay(GameObject* obj)
-	{
 
+
+
+	//===== Overlays=====================================
+	Overlay::Overlay(GameObject* obj) : obj(obj)
+	{
+		placement = 0;
+
+		position = new ImVec2(0, 0);
+		anchor = new ImVec2(0.5f, 0.5f);
+		size = new ImVec2(100, 100);
+		scale = 1;
+
+		left = top = right = bottom = 0;
 	}
 
 	Overlay::~Overlay()
 	{
+		delete anchor;
+		delete size;
+		delete position;
+	}
+
+	int& Overlay::GetPlacement()
+	{
+		return placement;
+	}
+
+	ImVec2& Overlay::GetAnchor()
+	{
+		return *anchor;
+	}
+
+	float& Overlay::GetScale()
+	{
+		return scale;
+	}
+
+	bool& Overlay::GetInteractable()
+	{
+		return interactable;
+	}
+
+	ImVec2& Overlay::GetPosition()
+	{
+		return *position;
+	}
+
+	ImVec2& Overlay::GetSize()
+	{
+		return *size;
+	}
+
+	int& Overlay::GetLeft()
+	{
+		return left;
+	}
+
+	int& Overlay::GetRight()
+	{
+		return right;
+	}
+
+	int& Overlay::GetTop()
+	{
+		return top;
+	}
+
+	int& Overlay::GetBottom()
+	{
+		return bottom;
+	}
+
+	void Overlay::CalculateRectangle(int& x, int& y, int& w, int& h)
+	{
+		if (placement == 0) {
+
+			x = (int)std::round(position->x);
+			y = (int)std::round(position->y);
+			w = (int)std::round(size->x);
+			h = (int)std::round(size->y);
+
+			x -= anchor->x * size->x;
+			y -= anchor->y * size->y;
+
+			auto parent = obj->getParent();
+
+			if (parent != nullptr) {
+
+				parent->GetOverlay();
+
+				auto parentPos = parent->GetOverlay()->CalculateCenterPoint();
+				x += parentPos.x;
+				y += parentPos.y;
+			}
+
+		}
+		else {
+
+
+			int parent_left, parent_top, parent_width, parent_height;
+			auto parent = obj->getParent();
+
+
+			if (parent != nullptr) {
+
+				parent->GetOverlay()->CalculateRectangle(parent_left, parent_top, parent_width, parent_height);
+			}
+			else {
+
+				parent_left = 0;
+				parent_top = 0;
+				parent_width = Preferences::GetData().width;
+				parent_height = Preferences::GetData().height;
+			}
+
+			x = parent_left + left;
+			y = parent_top + top;
+			w = parent_width - right - left;
+			h = parent_height - bottom - top;
+		}
+
+	}
+
+	ImVec2 Overlay::CalculateCenterPoint()
+	{
+		ImVec2 center;
+		if (placement == 0) {
+
+			center = *position;
+
+			auto parent = obj->getParent();
+
+			if (parent != nullptr)
+			{
+				auto parentCenter = parent->GetOverlay()->CalculateCenterPoint();
+
+				center.x += parentCenter.x;
+				center.y += parentCenter.y;
+			}
+
+		}
+		else {
+
+			int x, y, w, h;
+			CalculateRectangle(x, y, w, h);
+
+			center = { x + w * anchor->x, y + h * anchor->y };
+
+		}
+
+		return center;
 	}
 
 }

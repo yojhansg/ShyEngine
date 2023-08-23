@@ -39,6 +39,8 @@ namespace ECS {
 
 		reflect Utilities::Vector2D position;
 		reflect Utilities::Vector2D size;
+
+		//Punto central del elemento
 		reflect Utilities::Vector2D anchor;
 
 		reflect int left;

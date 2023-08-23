@@ -36,11 +36,11 @@ namespace ShyEditor {
 		std::unordered_map<int, GameObject*> gameObjects = scene->getGameObjects();
 
 		if (ImGui::Button("Add transform")) {
-			scene->AddGameObject("");
+			scene->SetSelectedGameObject(scene->AddGameObject(""));
 		}
 
 		if (ImGui::Button("Add overlay")) {
-			scene->AddGameObject("");
+			scene->SetSelectedGameObject(scene->AddOverlay(""));
 		}
 
 
@@ -54,11 +54,19 @@ namespace ShyEditor {
 			ImGui::Text("GameObject");
 			ImGui::Separator();
 
+			ImGui::SeparatorText("Transforms");
+
 			int i = 0;
-			for (auto pair : gameObjects)
+			for (auto& pair : gameObjects)
 			{
 				if (pair.second->getParent() == nullptr)
-					renderGameObjectHierarchy(pair.second, 0);
+					RenderGameObject(pair.second, 0);
+			}
+
+			ImGui::SeparatorText("Overlays");
+
+			for (auto& overlay : gameObjects) {
+
 			}
 
 			ImGui::EndListBox();
@@ -108,7 +116,7 @@ namespace ShyEditor {
 	}
 
 
-	void Hierarchy::renderGameObjectHierarchy(GameObject* gameObject, int indentLevel)
+	void Hierarchy::RenderGameObject(GameObject* gameObject, int indentLevel)
 	{
 		Scene* scene = Editor::getInstance()->getScene();
 
@@ -183,7 +191,7 @@ namespace ShyEditor {
 			{
 				// Recursively render children
 				for (auto pair : gameObject->getChildren()) {
-					renderGameObjectHierarchy(pair.second, indentLevel + 1);
+					RenderGameObject(pair.second, indentLevel + 1);
 				}
 
 				ImGui::TreePop();

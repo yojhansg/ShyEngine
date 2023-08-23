@@ -28,7 +28,10 @@ namespace ShyEditor {
 
 		bool isChildrenTheSelectedObject(GameObject* go);
 
-		void renderGameObjectHierarchy(GameObject* gameObject, int indentLevel);
+		void RenderGameObject(GameObject* gameObject, int indentLevel);
+
+
+
 		void showRenamePopup(GameObject* gameObject);
 		void showGameObjectMenu(GameObject* gameObject);
 		void showSavePrefabPopup(GameObject* gameObject);

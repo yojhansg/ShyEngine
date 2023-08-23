@@ -10,6 +10,7 @@
 #define SCENE_WIN_HEIGHT_RATIO 0.7f
 
 struct SDL_Renderer;
+struct SDL_Texture;
 union SDL_Event;
 struct ImVec2;
 
@@ -24,11 +25,15 @@ namespace ShyEditor {
 
 		SDL_Renderer* renderer;
 
+
+		int uiWidth, uiHeight;
+		SDL_Texture* uiTexture;
+
 		std::string scenePath;
 		std::string sceneName;
 		const char* name;
 
-		Camera* camera;
+		Camera* sceneCamera;
 		int viewMode;
 
 		std::unordered_map<int, GameObject*> gameObjects;
@@ -38,6 +43,12 @@ namespace ShyEditor {
 
 		static bool CompareGameObjectsRenderOrder(GameObject* a, GameObject* b);
 
+
+		void ResizeOverlayIfNeccesary();
+
+		void CalculateFrameRect(int& x, int& y, int& w, int& h);
+
+
 	public:
 
 		Scene();
@@ -45,6 +56,9 @@ namespace ShyEditor {
 
 		GameObject* AddGameObject(std::string path);
 		void AddGameObject(GameObject* go);
+
+		GameObject* AddOverlay(std::string path);
+
 
 		std::unordered_map<int, GameObject*>& getGameObjects();
 		std::string getSceneName();

@@ -35,8 +35,13 @@ namespace ShyEditor {
 		sceneName = "Scene";
 		name = sceneName.c_str();
 
-		camera = new Camera(ImVec2(0, 0), 1, renderer);
-		camera->SetConstrains(.1, 10.0);
+		sceneCamera = new Camera(ImVec2(0, 0), 1, renderer);
+		sceneCamera->SetConstrains(.1, 10.0);
+
+		uiTexture = nullptr;
+		uiWidth = 0; uiHeight = 0;
+		ResizeOverlayIfNeccesary();
+
 
 		// Pointer to the selected gameobject in the scene
 		selectedGameObject = nullptr;
@@ -57,7 +62,7 @@ namespace ShyEditor {
 
 		gameObjects.clear();
 
-		delete camera;
+		delete sceneCamera;
 	}
 
 	GameObject* Scene::AddGameObject(std::string path) {
@@ -70,6 +75,14 @@ namespace ShyEditor {
 
 	void Scene::AddGameObject(GameObject* go) {
 		gameObjects.emplace(go->getId(), go);
+	}
+
+	GameObject* Scene::AddOverlay(std::string path)
+	{
+		GameObject* go = new GameObject(path, false);
+		overlays.push_back(go);
+
+		return go;
 	}
 
 	std::unordered_map<int, GameObject*>& Scene::getGameObjects() {
@@ -148,7 +161,7 @@ namespace ShyEditor {
 	{
 		for (auto pair : go->getChildren()) {
 			RenderChildGameObjects(pair.second);
-			pair.second->RenderTransform(renderer, camera);
+			pair.second->RenderTransform(renderer, sceneCamera);
 		}
 	}
 
@@ -163,7 +176,7 @@ namespace ShyEditor {
 		std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), CompareGameObjectsRenderOrder);
 
 		for (auto gO : sortedGameObjects) {
-			gO->RenderTransform(renderer, camera);
+			gO->RenderTransform(renderer, sceneCamera);
 			RenderChildGameObjects(gO);
 		}
 	}
@@ -175,18 +188,9 @@ namespace ShyEditor {
 		SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-		ImVec2 position = camera->GetPosition();
 
-		float gameSizeX = Preferences::GetData().width;
-		float gameSizeY = Preferences::GetData().height;
-
-		float width = gameSizeX * camera->GetScale();
-		float height = gameSizeY * camera->GetScale();
-
-
-		camera->CenterPosition(position.x, position.y);
-
-		SDL_Rect frameRect = { position.x, position.y, width, height };
+		SDL_Rect frameRect = { };
+		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
 
 		int lineThickness = 10;
 
@@ -195,10 +199,10 @@ namespace ShyEditor {
 
 			SDL_RenderDrawRect(renderer, &frameRect);
 
-			frameRect.x++;
-			frameRect.y++;
-			frameRect.w -= 2;
-			frameRect.h -= 2;
+			frameRect.x--;
+			frameRect.y--;
+			frameRect.w += 2;
+			frameRect.h += 2;
 		}
 
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -206,6 +210,35 @@ namespace ShyEditor {
 
 	void Scene::RenderUI() {
 
+		if (uiTexture == nullptr) return;
+
+		auto currentTarget = SDL_GetRenderTarget(renderer);
+		SDL_SetRenderTarget(renderer, uiTexture);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_RenderClear(renderer);
+
+		for (auto go : overlays) {
+
+			Overlay* overlay = go->GetOverlay();
+
+
+			//TODO: aplicar color y escala
+
+			SDL_Rect dest{};
+			overlay->CalculateRectangle(dest.x, dest.y, dest.w, dest.h);
+
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_RenderFillRect(renderer, &dest);
+		}
+
+		SDL_SetRenderTarget(renderer, currentTarget);
+
+
+		SDL_Rect frameRect = { };
+		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
+
+		SDL_RenderCopy(renderer, uiTexture, NULL, &frameRect);
 	}
 
 	void Scene::HandleInput(SDL_Event* event) {
@@ -231,15 +264,17 @@ namespace ShyEditor {
 		}
 
 		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-			camera->handleInput(event, insideWindow);
+			sceneCamera->handleInput(event, insideWindow);
 		}
 
 	}
 
 	void Scene::Behaviour() {
 
-		if (camera->ShouldResize(windowWidth, windowHeight))
-			camera->Resize(windowWidth, windowHeight);
+		ResizeOverlayIfNeccesary();
+
+		if (sceneCamera->ShouldResize(windowWidth, windowHeight))
+			sceneCamera->Resize(windowWidth, windowHeight);
 
 		auto it = gameObjects.begin();
 		while (it != gameObjects.end()) {
@@ -276,7 +311,7 @@ namespace ShyEditor {
 			}
 		}
 
-		camera->PrepareCameraRender();
+		sceneCamera->PrepareCameraRender();
 
 		switch (viewMode) {
 
@@ -288,7 +323,6 @@ namespace ShyEditor {
 			case 1:
 
 				RenderGameObjects();
-				RenderFrame();
 
 				break;
 			case 2:
@@ -301,26 +335,38 @@ namespace ShyEditor {
 				break;
 		}
 
-		camera->StopCameraRender();
+		RenderFrame();
+
+
+		sceneCamera->StopCameraRender();
 
 
 		// Cambiar las propiedades del grid dependiendo del orden de magnitud
 
-		float spacing = 50 * camera->GetScale();
+		float camScale = sceneCamera->GetScale();
+
+		float spacing = 50 * sceneCamera->GetScale();
 		int interval = 5;
 
 		int offset_x = windowWidth * 0.5f;
 		int offset_y = windowHeight * 0.5f;
 
 
+		if (camScale < 0.7f) {
+
+			spacing *= interval;
+		}
+
+		ScriptCreationUtilities::Grid::SetAlpha(0.5f);
+
 		ScriptCreationUtilities::Grid::SetSpacing(spacing);
 		ScriptCreationUtilities::Grid::SetInterval(interval);
-		ScriptCreationUtilities::Grid::SetOffset(offset_x + camera->GetPosition().x, offset_y + camera->GetPosition().y);
+		ScriptCreationUtilities::Grid::SetOffset(offset_x + sceneCamera->GetPosition().x, offset_y + sceneCamera->GetPosition().y);
 		ScriptCreationUtilities::Grid::Draw();
 
 
 		ImGui::SetCursorPos(ImVec2(0, 0));
-		ImGui::Image(camera->GetTexture(), ImVec2(windowWidth, windowHeight));
+		ImGui::Image(sceneCamera->GetTexture(), ImVec2(windowWidth, windowHeight));
 
 		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
 		ImGui::Text(name);
@@ -328,7 +374,7 @@ namespace ShyEditor {
 		ImGui::SameLine();
 
 		ImGui::SetCursorPos(ImVec2(100, ImGui::GetFrameHeight() + 10));
-		ImGui::SliderFloat("Zoom (-/+)", &camera->GetScale(), camera->GetMinScale(), camera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
+		ImGui::SliderFloat("Zoom (-/+)", &sceneCamera->GetScale(), sceneCamera->GetMinScale(), sceneCamera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
 
 		ImGui::SameLine();
 
@@ -347,14 +393,21 @@ namespace ShyEditor {
 		mousepos.x -= windowPosX;
 		mousepos.y -= windowPosY;
 
-		ImVec2 cameraPosition = camera->GetPosition();
-
-		mousepos.x -= cameraPosition.x;
-		mousepos.y -= cameraPosition.y;
+		float cameraScale = sceneCamera->GetScale();
 
 		//Trasladar el origen de coordenadas de la esquina superior al centro
 		mousepos.x -= windowWidth * 0.5f;
 		mousepos.y -= windowHeight * 0.5f;
+
+		mousepos.x /= cameraScale;
+		mousepos.y /= cameraScale;
+
+		//La posicion de la camara no debe escalarse (ya esta escalada por defecto)
+		ImVec2 cameraPosition = sceneCamera->GetPosition();
+
+		mousepos.x -= cameraPosition.x;
+		mousepos.y -= cameraPosition.y;
+
 
 		return mousepos;
 	}
@@ -376,6 +429,44 @@ namespace ShyEditor {
 	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b) {
 		return a->getRenderOrder() < b->getRenderOrder();
 	}
+
+	void Scene::ResizeOverlayIfNeccesary()
+	{
+		auto& prefData = Preferences::GetData();
+
+		if (uiTexture == nullptr || uiWidth != prefData.width || uiHeight != prefData.height) {
+
+			if (uiTexture != nullptr)
+				SDL_DestroyTexture(uiTexture);
+
+			uiWidth = prefData.width;
+			uiHeight = prefData.height;
+
+			uiTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, uiWidth, uiHeight);
+			SDL_SetTextureBlendMode(uiTexture, SDL_BLENDMODE_BLEND);
+		}
+	}
+
+	void Scene::CalculateFrameRect(int& x, int& y, int& w, int& h)
+	{
+		ImVec2 position = sceneCamera->GetPosition();
+
+		float gameSizeX = Preferences::GetData().width;
+		float gameSizeY = Preferences::GetData().height;
+
+		float width = gameSizeX * sceneCamera->GetScale();
+		float height = gameSizeY * sceneCamera->GetScale();
+
+
+		sceneCamera->CenterPosition(position.x, position.y);
+
+
+		x = position.x;
+		y = position.y;
+		w = width;
+		h = height;
+	}
+
 
 	std::string Scene::getPath() {
 		return scenePath;

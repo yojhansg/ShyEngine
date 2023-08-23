@@ -6,6 +6,7 @@
 struct SDL_Renderer;
 union SDL_Event;
 struct ImVec2;
+struct ImColor;
 class Editor;
 
 namespace Components {
@@ -87,6 +88,8 @@ namespace ShyEditor {
 
 		bool IsTransform();
 
+		Overlay* GetOverlay();
+
 	private:
 
 		// Static variable to store the last assigned id (Needed for ids assingment)
@@ -143,6 +146,8 @@ namespace ShyEditor {
 		void drawChar(std::string attrName, Components::Attribute* attr);
 		void drawGameobject(std::string attrName, Components::Attribute* attr);
 
+		void DrawArrowButton(ImVec2& value, const ImVec2& dir);
+
 		// Gameobject children settings (Transform and visibility)
 		void translateChildren(GameObject* go, ImVec2* previousPos);
 		void scaleChildren(GameObject* go, int scaleFactor);
@@ -182,6 +187,9 @@ namespace ShyEditor {
 
 	class Overlay {
 
+		GameObject* obj;
+
+
 		int placement;
 
 		ImVec2* position;
@@ -209,28 +217,26 @@ namespace ShyEditor {
 		Overlay(GameObject* obj);
 		~Overlay();
 
-		int GetPlacement();
+		int& GetPlacement();
 
-		//Positioned
-		void SetPosition(float x, float y);
-		void SetSize(float x, float y);
-		
-		ImVec2 GetPosition();
-		ImVec2 GetSize();
+		ImVec2& GetAnchor();
 
+		float& GetScale();
 
-		//Anchor
-		void SetAnchor(float x, float y);
+		bool& GetInteractable();
 
-		void SetTop(float x);
-		void SetLeft(float x);
-		void SetRight(float x);
-		void SetBottom(float x);
+		ImVec2& GetPosition();
+		ImVec2& GetSize();
 
 
-		int GetTop();
-		int GetLeft();
-		int GetRight();
-		int GetBottom();
+		int& GetLeft();
+		int& GetRight();
+		int& GetTop();
+		int& GetBottom();
+
+
+
+		void CalculateRectangle(int& x, int& y, int& w, int& h);
+		ImVec2 CalculateCenterPoint();
 	};
 }

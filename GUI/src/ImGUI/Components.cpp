@@ -22,9 +22,14 @@ namespace ShyEditor {
 	{
 		GameObject* gameObject = Editor::getInstance()->getScene()->GetSelectedGameObject();
 
+
 		if (gameObject != nullptr) {
 
-			gameObject->drawTransformInEditor();
+			if (gameObject->IsTransform())
+				gameObject->drawTransformInEditor();
+			else
+				gameObject->drawOverlayInEditor();
+
 			gameObject->drawComponentsInEditor();
 			gameObject->drawScriptsInEditor();
 
