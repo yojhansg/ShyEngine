@@ -23,6 +23,8 @@ namespace ShyEditor {
         editor = Editor::getInstance();
 
         shouldOpenRenamePopup = false;
+        shouldOpenSavePrefabPopup = false;
+        shouldOpenNewScenePopup = false;
     }
 
     void MenuBar::Update()
