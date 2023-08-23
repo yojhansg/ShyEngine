@@ -212,11 +212,11 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 
-				shouldUpdate = true;
-				currentPath = entry.path;
-
-				if (entry.name != "Assets")
+				if (currentPath != projectPath)
 					relativePath += entry.name + "\\";
+
+				currentPath = entry.path;
+				shouldUpdate = true;
 
 			}
 
