@@ -34,16 +34,17 @@ namespace ShyEditor {
 		FileExplorer* fileExplorer = editor->getFileExplorer();
 
 
-		if (ImGui::Button("Add transform")) {
-			scene->SetSelectedGameObject(scene->AddGameObject(""));
+		if (ImGui::Button("Create world entity")) {
+			scene->SetSelectedGameObject(scene->AddGameObject("Empty entity"));
 		}
 
-		if (ImGui::Button("Add overlay")) {
-			scene->SetSelectedGameObject(scene->AddOverlay(""));
+		ImGui::SameLine();
+		if (ImGui::Button("Create UI element")) {
+			scene->SetSelectedGameObject(scene->AddOverlay("Empty UI element"));
 		}
 
 
-		ImGui::SeparatorText("Transforms");
+		ImGui::SeparatorText("World");
 
 		int i = 0;
 		for (auto& pair : scene->getGameObjects())
@@ -55,7 +56,7 @@ namespace ShyEditor {
 			}
 		}
 
-		ImGui::SeparatorText("Overlays");
+		ImGui::SeparatorText("UI");
 
 		for (auto& overlay : scene->getOverlays()) {
 

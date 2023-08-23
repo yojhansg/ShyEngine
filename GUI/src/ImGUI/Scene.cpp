@@ -253,6 +253,8 @@ namespace ShyEditor {
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 
+			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
+
 			if (selectedOverlay.overlay == nullptr)
 			{
 

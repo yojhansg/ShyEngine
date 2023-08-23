@@ -27,7 +27,7 @@ namespace ShyEditor {
 
 		editor = Editor::getInstance();
 
-		name = "Empty Gameobject";
+		name = path;
 
 		// Transform attributes
 		transform = nullptr;
@@ -179,132 +179,49 @@ namespace ShyEditor {
 
 	void GameObject::update() {
 
-		auto image = components.find("Image");
+		if (isTransform) {
 
-		// If the gameobject has no image component
-		if (image == components.end()) {
-			texture = nullptr;
-			return;
+			auto image = components.find("Image");
+
+			// If the gameobject has no image component
+			if (image == components.end()) {
+				texture = nullptr;
+				return;
+			}
+
+			std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
+
+			// Checks if the current path exists in the filesystem
+			//if (!std::filesystem::exists(currentImagePath)) return;
+
+			// If the image path have changed, checks if the new path is valid
+			if (currentImagePath != imagePath) {
+
+				texture = ResourcesManager::GetInstance()->AddTexture(currentImagePath, false);
+
+				if (texture->getSDLTexture() != NULL) {
+					imagePath = currentImagePath;
+					*texture_size = ImVec2(texture->getWidth(), texture->getHeight());
+				}
+				else {
+					*texture_size = ImVec2(100, 100);
+					imagePath = "";
+				}
+			}
 		}
 
-		std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
+		else {
 
-		// Checks if the current path exists in the filesystem
-		//if (!std::filesystem::exists(currentImagePath)) return;
 
-		// If the image path have changed, checks if the new path is valid
-		if (currentImagePath != imagePath) {
+			overlay->Update();
 
-			texture = ResourcesManager::GetInstance()->AddTexture(currentImagePath, false);
-
-			if (texture->getSDLTexture() != NULL) {
-				imagePath = currentImagePath;
-				*texture_size = ImVec2(texture->getWidth(), texture->getHeight());
-			}
-			else {
-				*texture_size = ImVec2(100, 100);
-				imagePath = "Empty Gameobject";
-			}
 		}
-
-
 
 	}
 
 	bool GameObject::handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos) {
 
-		//showGizmo = false;
 
-		//if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_DELETE && editor->getScene()->GetSelectedGameObject() == this) {
-		//	toDelete();
-		//}
-
-		//if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-
-		//	if (!leftMouseButtonDown) 
-		//		leftMouseButtonDown = true;
-
-		//	if (visible && isMouseInsideGameObject) {
-		//		editor->getScene()->SetSelectedGameObject(this);
-		//		return true;
-		//	}
-		//}
-
-		//if (event->type == SDL_MOUSEBUTTONUP) {
-
-		//	if (leftMouseButtonDown && event->button.button == SDL_BUTTON_LEFT)
-		//		leftMouseButtonDown = false;
-
-		//	if (rightMouseButtonDown && event->button.button == SDL_BUTTON_RIGHT)
-		//		rightMouseButtonDown = false;
-		//}
-
-		//if (editor->getScene()->GetSelectedGameObject() == this) {
-
-		//	if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_RIGHT) {
-
-		//		if (!rightMouseButtonDown) {
-		//			rightMouseButtonDown = true;
-		//		}
-		//	}
-
-		//	if (SDL_GetModState() & KMOD_SHIFT) {
-		//		showGizmo = true;
-
-		//		if (event->type == SDL_MOUSEMOTION)
-		//		{
-		//			if (leftMouseButtonDown)
-		//			{
-
-		//				ImVec2* previousPos = new ImVec2{ pos->x, pos->y };
-
-		//				pos->x = mousePos.x - scale->x / 2;
-		//				pos->y = mousePos.y - scale->y / 2;
-
-		//				translateChildren(this, previousPos);
-
-		//				delete previousPos;
-		//			}
-
-		//			if (rightMouseButtonDown)
-		//			{
-		//				float rotationAngle = (previousMousePosX - mousePos.x) * 0.5f + (previousMousePosY - mousePos.y) * 0.5f;
-		//				rotation += rotationAngle;
-
-		//				rotateChildren(this, this, rotationAngle);
-
-		//			}
-		//		}
-
-		//		if (event->type == SDL_MOUSEWHEEL) {
-
-		//			int scaleFactor = 0;
-
-		//			if (event->wheel.y > 0) // scroll up
-		//			{
-		//				scale->x += 5;
-		//				scale->y += 5;
-
-		//				scaleFactor = 5;
-
-		//			}
-		//			else if (event->wheel.y < 0) // scroll down
-		//			{
-		//				scale->x -= 5;
-		//				scale->y -= 5;
-
-		//				scaleFactor = -5;
-		//			}
-
-		//			scaleChildren(this, scaleFactor);
-		//		}
-		//	}
-		//}
-
-		//previousMousePosX = mousePos.x;
-		//previousMousePosY = mousePos.y;
-
-		//return false;
 		return false;
 	}
 
@@ -1158,6 +1075,9 @@ namespace ShyEditor {
 		scale = 1;
 
 		left = top = right = bottom = 0;
+
+		image = new OverlayImage();
+		text = nullptr;
 	}
 
 	Overlay::~Overlay()
@@ -1165,6 +1085,7 @@ namespace ShyEditor {
 		delete anchor;
 		delete size;
 		delete position;
+		delete image;
 	}
 
 	int& Overlay::GetPlacement()
@@ -1298,6 +1219,80 @@ namespace ShyEditor {
 		return center;
 	}
 
+	void Overlay::Update()
+	{
+
+		auto components = obj->getComponents();
+
+		auto imgIt = components->find("OverlayImage");
+
+		if (imgIt != components->end()) {
+
+			auto& imgCmp = *imgIt;
+			
+			const auto& cmpPath = imgCmp.second.getAttribute("path").value.valueString;
+
+			if (cmpPath != image->GetPath()) {
+
+
+				Texture* texture = ResourcesManager::GetInstance()->AddTexture(cmpPath, false);
+
+				if (texture->getSDLTexture() == nullptr) {
+
+					texture = nullptr;
+				}
+
+				image->SetTexture(cmpPath, texture);
+			}
+
+		}
+		else {
+
+			image->SetTexture("", nullptr);
+		}
+
+
+
+
+
+		//TODO: text
+	}
+
+	void Overlay::Render(SDL_Renderer* renderer, int x, int y, int w, int h)
+	{
+
+		if (image != nullptr)
+			image->Render(renderer, x, y, w, h);
+
+		//TODO: render text
+	}
+
+
+
+	OverlayImage::OverlayImage()
+	{
+		texture = nullptr;
+		path = "";
+	}
+
+	void OverlayImage::Render(SDL_Renderer* renderer, int x, int y, int w, int h)
+	{
+
+		if (texture != nullptr) {
+
+			SDL_Rect dest{ x, y, w, h };
+			SDL_RenderCopy(renderer, texture->getSDLTexture(), NULL, &dest);
+		}
+	}
+	std::string OverlayImage::GetPath()
+	{
+		return path;
+	}
+	void OverlayImage::SetTexture(std::string path, Texture* texture)
+	{
+		this->path = path;
+		this->texture = texture;
+	}
 }
 
 
