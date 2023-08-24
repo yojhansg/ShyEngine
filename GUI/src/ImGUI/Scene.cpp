@@ -532,8 +532,9 @@ namespace ShyEditor {
 				float y = selectedGameObject->getScale_y();
 
 				float xspeed = std::log10(1 + x) * incrementSpeed;
-				float yspeed = -std::log10(1 + y) * incrementSpeed;
+				float yspeed = std::log10(1 + y) * incrementSpeed;
 
+				event->motion.yrel *= -1;
 
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
 
@@ -541,7 +542,7 @@ namespace ShyEditor {
 				}
 
 				x += event->motion.xrel * invCameraScale * xspeed;
-				y += -event->motion.yrel * invCameraScale * yspeed;
+				y += event->motion.yrel * invCameraScale * yspeed;
 
 				x = std::clamp(x, 0.f, FLT_MAX);
 				y = std::clamp(y, 0.f, FLT_MAX);

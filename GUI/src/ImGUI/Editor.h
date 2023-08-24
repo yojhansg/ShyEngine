@@ -24,6 +24,8 @@ namespace ShyEditor {
 	class Console;
 	class Window;
 	class Scene;
+
+	class WindowLayout;
 };
 
 class Editor {
@@ -63,8 +65,12 @@ public:
 	ShyEditor::FileExplorer* getFileExplorer();
 	ShyEditor::Console* getConsole();
 
+	ShyEditor::WindowLayout* GetWindowLayout();
+
 	int Example();
 	int Probando();
+
+	std::vector<ShyEditor::Window*>& GetAllWindows();
 
 private:
 
@@ -108,5 +114,5 @@ private:
 	ShyEditor::ComponentWindow* components;
 	ShyEditor::ScriptCreation* scriptCreation;
 	ShyEditor::Console* console;
-
+	ShyEditor::WindowLayout* layout;
 };

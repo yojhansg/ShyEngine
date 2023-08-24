@@ -121,6 +121,7 @@
     <ClInclude Include="..\..\src\ImGUI\ScriptCreationUtilities.h" />
     <ClInclude Include="..\..\src\ImGUI\Texture.h" />
     <ClInclude Include="..\..\src\ImGUI\Window.h" />
+    <ClInclude Include="..\..\src\ImGUI\WindowLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Texture.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Window.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\WindowLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Components\Components.vcxproj">

@@ -163,12 +163,22 @@ namespace ShyEditor {
 		visible = true;
 	}
 
+	bool Window::IsVisible()
+	{
+		return visible;
+	}
+
 	bool Window::IsMouseHoveringWindow()
 	{
 		auto mouse = ImGui::GetMousePos();
 
 		return mouse.x > windowPosX && mouse.x < windowPosX + windowWidth &&
 			mouse.y > windowPosY && mouse.y < windowPosY + windowHeight;
+	}
+
+	std::string Window::GetWindowName()
+	{
+		return windowName;
 	}
 
 
