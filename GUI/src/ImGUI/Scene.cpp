@@ -586,9 +586,9 @@ namespace ShyEditor {
 		}
 
 		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-
-
-			sceneCamera->handleInput(event, insideWindow);
+			if (focused) {
+				sceneCamera->handleInput(event, insideWindow);
+			}
 		}
 
 	}
