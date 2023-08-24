@@ -8,7 +8,7 @@
 #include "Texture.h"
 #include "ComponentManager.h";
 #include <string>
-
+#include <fstream>
 using nlohmann::json;
 using nlohmann::ordered_json;
 
@@ -19,6 +19,31 @@ namespace ShyEditor {
 	PrefabManager* PrefabManager::instance = nullptr;
 	int PrefabManager::lastPrefabId = -1;
 	std::vector<int> PrefabManager::unusedIds = std::vector<int>();
+
+	void PrefabManager::LoadPrefabs()
+	{
+		std::ifstream inputFile(editor->getProjectInfo().path + "\\prefabs.json");
+		if (inputFile.is_open()) {
+			json root;
+
+			inputFile >> root;
+
+			json prefabArray = root["prefabs"];
+
+			for (const json& prefabData : prefabArray) {
+				//TODO: wait for overlay serialisation to change boolean
+				GameObject* prefab = GameObject::fromJson(prefabData.dump(), true);
+
+				AddPrefab(prefab);
+			}
+
+			inputFile.close();
+		}
+		else {
+			// Handle error opening the file
+			std::cerr << "Error opening file: " << editor->getProjectInfo().path + "\\prefabs.json" << std::endl;
+		}
+	}
 
 	PrefabManager::PrefabManager() : Window("Prefab manager", 0)
 	{
@@ -39,14 +64,31 @@ namespace ShyEditor {
 
 		canBeDisplayedOnTop = true;
 
-		projectPath = editor->getProjectInfo().path;
+		LoadPrefabs();
 	}
 
-	nlohmann::ordered_json PrefabManager::SavePrefabs()
+	void PrefabManager::SavePrefabs(const std::string& path)
 	{
-		nlohmann::ordered_json root = nlohmann::ordered_json();
+		json root;
 
-		return root;
+		json prefabArray = json::array();
+
+		for (const auto& pair : instance->prefabs) {
+			json prefabData;
+
+			GameObject* prefab = pair.second;
+	
+			prefabArray.push_back(prefabArray.parse(prefab->toJson()));
+		}
+
+		// Add the array to the root object
+		root["prefabs"] = prefabArray;
+
+		std::ofstream outputFile(path + "\\prefabs.json");
+		if (outputFile.is_open()) {
+			outputFile << root.dump(4) << std::endl;
+			outputFile.close();
+		}
 	}
 
 	void PrefabManager::DrawList()
@@ -63,20 +105,8 @@ namespace ShyEditor {
 			if (ImGui::Selectable(std::string("##" + prefab->getName()).c_str(), currentlySelected == prefab->getId(), ImGuiSelectableFlags_AllowDoubleClick)) {
 
 				currentlySelected = prefab->getId();
-				//OnItemSelected(entry);
 
 			}
-			else {
-
-				/*if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-					ItemDrag(entry);*/
-			}
-
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
-				ImGui::OpenPopup("Prefab Menu##" + prefab->getId());
-			}
-
-			ShowPrefabMenuPopup(prefab);
 
 			ImGui::SameLine();
 
@@ -90,10 +120,6 @@ namespace ShyEditor {
 		}
 
 		ImGui::Unindent();
-	}
-
-	void PrefabManager::DrawIcons()
-	{
 	}
 
 	void PrefabManager::DrawComponents()
@@ -177,25 +203,19 @@ namespace ShyEditor {
 		}
 	}
 
-	void PrefabManager::ShowPrefabMenuPopup(GameObject* prefab)
-	{
-		if (ImGui::BeginPopup("Prefab Menu##" + prefab->getId()))
-		{
-
-			if (ImGui::Button("Delete prefab"))
-			{
-				prefab->toDelete();
-
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-
 	void PrefabManager::Open()
 	{
 		instance->visible = true;
+	}
+
+	PrefabManager::~PrefabManager()
+	{
+		PrefabManager::SavePrefabs(editor->getProjectInfo().path);
+
+		for (auto it = prefabs.begin(); it !=prefabs.end(); it++)
+			delete it->second;
+
+		prefabs.clear();
 	}
 
 	void PrefabManager::AddPrefab(GameObject* prefab)

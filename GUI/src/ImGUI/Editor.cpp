@@ -227,9 +227,6 @@ void Editor::CreateWindows() {
 	// Preferences
 	addWindow(new ShyEditor::Preferences());
 
-	// Prefab manager
-	addWindow(new ShyEditor::PrefabManager());
-
 	// Menu bar
 	menuBar = new ShyEditor::MenuBar();
 
@@ -256,6 +253,9 @@ void Editor::CreateWindows() {
 	// Console
 	console = new ShyEditor::Console();
 	addWindow(console);
+
+	// Prefab manager
+	addWindow(new ShyEditor::PrefabManager());
 
 }
 
