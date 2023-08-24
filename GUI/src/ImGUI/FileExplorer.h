@@ -2,7 +2,7 @@
 
 #include "Window.h"
 
-#include <vector>
+#include <deque>
 #include <string>
 
 #define FILEEXPLORER_WIN_HEIGHT_RATIO 0.3f
@@ -42,15 +42,18 @@ namespace ShyEditor {
 			std::string path;
 			std::string extension;
 			Texture* texture;
+
+			bool operator<(const Entry& otro) const {
+				return name < otro.name;
+			}
+
 		};
 
 
 		int currentlySelected;
-		std::vector<Entry> entries;
-
+		std::deque<Entry> entries;
 
 		void ProcessPath();
-		std::string GetParentPath(const std::string& path);
 
 		int viewMode;
 

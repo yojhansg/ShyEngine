@@ -8,6 +8,7 @@
 #include "RendererManager.h"
 #include "ResourcesManager.h"
 
+
 ECS::SplashScene::SplashScene()
 {
 	timer = 0;
@@ -81,8 +82,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 void ECS::SplashScene::LoadResources()
 {
 	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
+
 	Resources::ResourcesManager::instance()->addFont("Default.ttf", size / 10);
 	Resources::ResourcesManager::instance()->addFont("Cute Notes.ttf", size / 4);
-
 	Resources::ResourcesManager::instance()->addTexture("fondoWindows.jpg");
 }

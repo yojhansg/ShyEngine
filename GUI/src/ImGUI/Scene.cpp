@@ -6,6 +6,7 @@
 #include "FileExplorer.h"
 #include "Preferences.h"
 #include "Components.h"
+#include "LogManager.h"
 #include "GameObject.h"
 #include "Hierarchy.h"
 #include "Window.h"
@@ -31,7 +32,7 @@ namespace ShyEditor {
 		renderer = editor->getRenderer();
 
 		// Scene path and name
-		scenePath = ResourcesManager::ASSETSFOLDER + "Scenes\\" + Preferences::GetData().initialScene + ".scene";
+		scenePath = ResourcesManager::EDITORASSETSFOLDER + "\\Scenes\\" + Preferences::GetData().initialScene + ".scene";
 		sceneName = "Scene";
 		name = sceneName.c_str();
 
@@ -42,12 +43,13 @@ namespace ShyEditor {
 		uiWidth = 0; uiHeight = 0;
 		ResizeOverlayIfNeccesary();
 
-
 		// Pointer to the selected gameobject in the scene
 		selectedGameObject = nullptr;
 
 		docked = true;
 		viewMode = 0;
+
+		acceptAssetDrop = true;
 
 		// Load the default scene or the last opene scene
 		loadScene(sceneName);
@@ -131,14 +133,12 @@ namespace ShyEditor {
 
 		j = j.parse(toJson());
 
-		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + scenePath);
+		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 		if (outputFile.is_open()) {
 			outputFile << j.dump(4);
 			outputFile.close();
 		}
-		else {
-
-		}
+		else LogManager::LogError("Could not open the file to save the scene.");
 
 	}
 
@@ -161,16 +161,22 @@ namespace ShyEditor {
 		this->sceneName = sceneName;
 		name = this->sceneName.c_str();
 
-		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + ResourcesManager::ASSETSFOLDER + scenePath);
+		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 
 		if (!inputFile.is_open()) {
-
+			LogManager::LogError("Could not open the file to load the scene.");
 			return;
 		}
 
 		nlohmann::ordered_json jsonData;
 		inputFile >> jsonData;
 		inputFile.close();
+
+
+		if (!jsonData.contains("objects")) {
+			LogManager::LogError("The scene file has not the expected format.");
+			return;
+		}
 
 		nlohmann::json gameObjectsJson = jsonData["objects"];
 
@@ -179,6 +185,11 @@ namespace ShyEditor {
 			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump(), true);
 			gameObjects.insert({ gameObject->getId(), gameObject });
 			AddChildsToScene(gameObject);
+		}
+
+		if (!jsonData.contains("overlays")) {
+			LogManager::LogError("The scene file has not the expected format.");
+			return;
 		}
 
 		nlohmann::json overlaysJson = jsonData["overlays"];
@@ -507,9 +518,67 @@ namespace ShyEditor {
 
 					anyGoSelected = true;
 					selectedGameObject = pair.second;
+					dragging = true;
 				}
+
 			}
 		}
+
+		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
+		{
+			dragging = false;
+		}
+
+		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
+			
+			float invCameraScale = 1.f / sceneCamera->GetScale();
+
+			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
+
+				const float incrementSpeed = .3f;
+
+				float r = selectedGameObject->getRotation();
+
+				r += event->motion.xrel * incrementSpeed;
+				r += event->motion.yrel * incrementSpeed;
+
+				selectedGameObject->SetRotation(r);
+			}
+			else if (ImGui::IsKeyDown(ImGuiKey_LeftAlt)) {
+
+				const float incrementSpeed = .03f;
+
+				float x = selectedGameObject->getScale_x();
+				float y = selectedGameObject->getScale_y();
+
+				float xspeed = std::log10(1 + x) * incrementSpeed;
+				float yspeed = -std::log10(1 + y) * incrementSpeed;
+
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+
+					event->motion.yrel = event->motion.xrel;
+				}
+
+				x += event->motion.xrel * invCameraScale * xspeed;
+				y += -event->motion.yrel * invCameraScale * yspeed;
+
+				x = std::clamp(x, 0.f, FLT_MAX);
+				y = std::clamp(y, 0.f, FLT_MAX);
+
+				selectedGameObject->SetScale(x, y);
+			}
+			else {
+
+				auto pos = selectedGameObject->getPosition();
+				pos.x += event->motion.xrel * invCameraScale;
+				pos.y += event->motion.yrel * invCameraScale;
+
+
+				selectedGameObject->setPosition(pos);
+			}
+		}
+
 
 		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 			SetSelectedGameObject(nullptr);
@@ -568,23 +637,6 @@ namespace ShyEditor {
 		}
 
 
-		if (ResourcesManager::IsAnyAssetSelected() && ImGui::IsMouseReleased(0)) {
-
-			if (IsMouseHoveringWindow()) {
-				auto& asset = ResourcesManager::SelectedAsset();
-
-				if (asset.extension == ".png" || asset.extension == ".jpg") {
-
-					GameObject* go = AddGameObject(asset.relativePath);
-					go->setName(asset.name);
-
-					ImVec2 position = MousePositionInScene();
-
-					go->setPosition(position);
-					selectedGameObject = go;
-				}
-			}
-		}
 
 		sceneCamera->PrepareCameraRender();
 
@@ -658,6 +710,24 @@ namespace ShyEditor {
 		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
 		ImGui::SameLine();
 		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
+
+	}
+
+	void Scene::ReceiveAssetDrop(Asset& asset)
+	{
+		std::string extension = asset.extension;
+
+		if (extension == ".png" || extension == ".jpg") {
+
+
+			GameObject* go = AddGameObject(asset.relativePath);
+			go->setName(asset.name);
+
+			ImVec2 position = MousePositionInScene();
+
+			go->setPosition(position);
+			selectedGameObject = go;
+		}
 
 	}
 
@@ -832,6 +902,15 @@ namespace ShyEditor {
 		}
 
 		j["objects"] = gameObjectsJson;
+
+		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
+		for (const auto& o : overlays) {
+			if (o->getParent() == nullptr)
+				gameObjectsJson.push_back(j.parse(o->toJson()));
+		}
+
+		j["overlays"] = overlayObjectsJson;
+
 
 		return j.dump(2);
 	}

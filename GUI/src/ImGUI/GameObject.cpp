@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentInfo.h"
 #include "Preferences.h"
+#include "LogManager.h"
 #include "Texture.h"
 #include "Editor.h"
 #include "Camera.h"
@@ -351,25 +352,25 @@ namespace ShyEditor {
 
 	// ----------------------------------- Components and Scripts logic --------------------------------------
 
-	void GameObject::addComponent(::Components::Component comp) {
+	void GameObject::addComponent(Components::Component comp) {
 
 		if (components.find(comp.GetName()) == components.end())
 			components.insert({ comp.GetName(), comp });
 
 	}
 
-	void GameObject::addScript(::Components::Script script) {
+	void GameObject::addScript(Components::Script script) {
 
 		if (scripts.contains(script.GetName())) return;
 
 		scripts.emplace(script.GetName(), script);
 	}
 
-	std::unordered_map<std::string, ::Components::Component>* GameObject::getComponents() {
+	std::unordered_map<std::string, Components::Component>* GameObject::getComponents() {
 		return &components;
 	}
 
-	std::unordered_map<std::string, ::Components::Script>* GameObject::getScripts() {
+	std::unordered_map<std::string, Components::Script>* GameObject::getScripts() {
 		return &scripts;
 	}
 
@@ -390,6 +391,11 @@ namespace ShyEditor {
 
 	float GameObject::getRotation() {
 		return transform->GetRotation();
+	}
+
+	void GameObject::SetRotation(float r)
+	{
+		transform->SetRotation(r);
 	}
 
 	ImVec2 GameObject::getAdjustedPosition() {
@@ -416,6 +422,11 @@ namespace ShyEditor {
 
 	float GameObject::getScale_y() {
 		return transform->GetScale().y;
+	}
+
+	void GameObject::SetScale(float x, float y)
+	{
+		transform->SetScale(x, y);
 	}
 
 
@@ -977,11 +988,12 @@ namespace ShyEditor {
 	GameObject* GameObject::fromJson(std::string json, bool isTransform = true) {
 
 		nlohmann::ordered_json jsonData;
-		try {
-			jsonData = nlohmann::json::parse(json);
-		}
-		catch (const nlohmann::json::parse_error& e) {
-			std::cerr << "JSON parse error: " << e.what() << std::endl;
+		jsonData = nlohmann::json::parse(json);
+
+		std::string errorMsg = "The JSON gameobject has not the correct format.";
+
+		if (!jsonData.contains("name")) {
+			LogManager::LogError(errorMsg);
 			return nullptr;
 		}
 
@@ -992,6 +1004,16 @@ namespace ShyEditor {
 		GameObject* gameObject = new GameObject(goName, isTransform);
 		gameObject->name = goName;
 
+		if (!jsonData.contains("id")) {
+			LogManager::LogError(errorMsg);
+			return nullptr;
+		}
+
+		if (!jsonData.contains("childs")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		for (const auto& childJson : jsonData["childs"]) {
 			GameObject* child = GameObject::fromJson(childJson.dump());
 
@@ -999,7 +1021,30 @@ namespace ShyEditor {
 			child->setParent(gameObject);
 		}
 
+
+		if (!jsonData.contains("order")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		gameObject->renderOrder = jsonData["order"];
+
+
+
+		if (!jsonData.contains("localPosition")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localScale")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localRotation")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		// Deserialize localPosition, localScale, and localRotation
 		std::string localPositionStr = jsonData["localPosition"];
@@ -1013,11 +1058,22 @@ namespace ShyEditor {
 		gameObject->transform->SetRotation(std::stof(localRotation));
 
 
+		// Components
+		if (!jsonData.contains("components")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		for (const auto& compJson : jsonData["components"]) {
 			Components::Component component = Components::Component::fromJson(compJson.dump());
 			gameObject->addComponent(component);
 		}
 
+		// Scripts
+		if (!jsonData.contains("scripts")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		for (const auto& scriptJson : jsonData["scripts"].items()) {
 			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());

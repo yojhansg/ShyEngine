@@ -17,14 +17,14 @@ namespace ShyEditor {
 
 		std::string windowTitle;
 
-		//Window
+		// Window
 		int width;
 		int height;
 
 		bool splashScreen;
 		bool vsync;
 
-		//Physics
+		// Physics
 		bool fullScreen;
 		bool closeWithEscape;
 
@@ -34,8 +34,8 @@ namespace ShyEditor {
 		float timeToDoubleClick;
 		float timeToHoldClick;
 
-		//Internal
-		std::string path;
+		// Internal
+		std::string buildPath;
 
 		bool debugPhysics;
 		bool debugFramerate;

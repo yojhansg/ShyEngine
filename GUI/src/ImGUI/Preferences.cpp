@@ -31,12 +31,11 @@ namespace ShyEditor {
 
 		data.width = 1920;
 		data.height = 1080;
-		data.initialScene = "scene";
+		data.initialScene = "\\Scene";
 		data.name = Editor::getInstance()->getProjectInfo().name;
-		data.windowTitle = "ShyIcon.png";
-		data.icon = "ShyIcon.png";
-		data.creator = "Yojhan";
-		data.windowTitle = "La casa de los espiritus";
+		data.windowTitle = Editor::getInstance()->getProjectInfo().name;
+		data.icon = "\\Images\\ShyIcon.png";
+		data.creator = "Yojhan, Pablo e Ivan";
 		data.gravity_x = 0;
 		data.gravity_y = 9.81f;
 		data.vsync = true;
@@ -56,7 +55,6 @@ namespace ShyEditor {
 	{
 		ImGui::TextWrapped("Hola! Estas son las preferencias. Aqui es donde estaran disponibles a modificar los "
 			"distintos valores del editor. Vuelve pronto!");
-
 
 		if (ImGui::CollapsingHeader("General")) {
 
@@ -93,13 +91,17 @@ namespace ShyEditor {
 			ImGui::Unindent();
 		}
 
+
 		char buffer[256];
+
 		memcpy(buffer, data.name.c_str(), 256);
 		if (ImGui::InputText("Game name", buffer, 256)) {
 
 			data.name = buffer;
 		}
+
 		memcpy(buffer, data.icon.c_str(), 256);
+
 		//TODO: seleccionar un fichero en vez de poner la ruta
 		if (ImGui::InputText("Game icon", buffer, 256)) {
 
@@ -114,11 +116,16 @@ namespace ShyEditor {
 		}
 
 		memcpy(buffer, data.initialScene.c_str(), 256);
+
 		//TODO: seleccionar un fichero en vez de poner la ruta
 		if (ImGui::InputText("Initial Scene", buffer, 256)) {
 
 			data.initialScene = buffer;
 		}
+
+		// BUILD PATH
+
+
 	}
 
 	ProjectData& Preferences::GetData()
@@ -135,9 +142,9 @@ namespace ShyEditor {
 		root["debugPhysics"] = true;
 		root["debugFrameRate"] = true;
 
-		root["path"] = Editor::getInstance()->getProjectInfo().path;
+		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
 
-		std::ofstream file("config.json");
+		std::ofstream file("Engine\\config.json");
 
 		file << root.dump(4);
 
@@ -152,9 +159,9 @@ namespace ShyEditor {
 		root["debugPhysics"] = false;
 		root["debugFrameRate"] = false;
 
-		root["path"] = Editor::getInstance()->getProjectInfo().path;
+		root["path"] = instance->data.buildPath;
 
-		std::ofstream file("config.json");
+		std::ofstream file(instance->data.buildPath);
 
 		file << root.dump(4);
 

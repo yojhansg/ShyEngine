@@ -19,6 +19,10 @@ namespace ECS {
 	class PrefabManager;
 }
 
+namespace Resources {
+	class ResourcesManager;
+}
+
 namespace Utilities {
 	class Time;
 }
@@ -35,6 +39,7 @@ public:
 
 private:
 
+	Resources::ResourcesManager* resourcesManager;
 	Renderer::RendererManager* rendererManager;
 	Physics::PhysicsManager* physicsManager;
 	ECS::OverlayManager* overlayManager;

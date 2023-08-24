@@ -52,7 +52,7 @@ namespace ShyEditor {
 					const std::string overlayStr = "Overlay";
 					const std::string transformStr = "Transform";
 					
-					std::string compName = comp.first;
+					const std::string compName = comp.first;
 
 					if (compName == transformStr || compName == overlayStr)
 						continue;

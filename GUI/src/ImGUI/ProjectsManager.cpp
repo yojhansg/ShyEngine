@@ -1,18 +1,20 @@
-#include "imgui_impl_sdlrenderer2.h"
 #include "ProjectsManager.h"
+
+#include "imgui_impl_sdlrenderer2.h"
 #include "imgui_impl_sdl2.h"
+#include "LogManager.h"
 #include "Editor.h"
 #include "Window.h"
 #include "imgui.h"
 #include "SDL.h"
 
 #include <nlohmann/json.hpp>
+#include <filesystem>
 #include <shlwapi.h>
 #include <Windows.h>
 #include <Shlobj.h>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <ctime>
 
 #include "CheckML.h"
@@ -28,10 +30,10 @@ namespace ShyEditor {
     char ProjectsManager::open_project_path[256] = "";
 
     std::wstring ProjectsManager::projectfileExtension = L"" ProjectExtension;
-    std::wstring ProjectsManager::projectsfileFolder = L"ShyEngine\\RecentProjects\\";
-    std::wstring ProjectsManager::projectsfileName = L"recentprojects.json";
+    std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
+    std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
-    const std::vector<std::string> ProjectsManager::assetsFolders = { "Scripts\\" };
+    const std::vector<std::string> ProjectsManager::assetsFolders = { "\\Scripts" };
 
     ProjectsManager::ProjectsManager() {
 
@@ -229,9 +231,7 @@ namespace ShyEditor {
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
             if (GetOpenFileNameA(&ofn))
-            {
                 strncpy_s(open_project_path, sizeof(open_project_path), fileName, _TRUNCATE);
-            }
 
         }
 
@@ -244,9 +244,7 @@ namespace ShyEditor {
 
         // Open project logic button
         ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.3f));
-        if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f)))
-        {
-            std::cout << std::filesystem::current_path() << std::endl;
+        if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f))) {
 
             // Input validation
             bool valid = ValidateInputOnOpenProject();
@@ -258,7 +256,7 @@ namespace ShyEditor {
                 else {
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
+                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                     windowClosed = true;
                     ImGui::End();
@@ -299,7 +297,7 @@ namespace ShyEditor {
             else {
 
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
+                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                 windowClosed = true;
                 ImGui::End();
@@ -339,7 +337,7 @@ namespace ShyEditor {
             std::wstring appDataDir(appDataPath);
             CoTaskMemFree(appDataPath);
 
-            std::wstring projectsDir = appDataDir + L"\\" + projectsfileFolder;
+            std::wstring projectsDir = appDataDir + projectsfileFolder;
 
             recentProjectsFile = projectsDir + projectsfileName;
 
@@ -349,22 +347,16 @@ namespace ShyEditor {
 
                 // Error handling for checking if the directory exists or not.
                 if (ec) {
-                    std::cout << "PROJECTS MANAGER: Error when checking if the directory to be created already exists in your AppData path." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: Error when checking if the directory to be created already exists in your AppData path.");
                     return false;
                 }
-
-                // Ask for user permission. If denied the folder wont be created.
-                //if (!AskForPermission()) {
-                //    std::cout << "PROJECTS MANAGER: Without user permission, the necessary files wont be created, and therefore, the editor wont be opened.." << std::endl;
-                //    return false;
-                //}
 
                 // The folder is created
                 std::filesystem::create_directories(projectsDir, ec);
 
                 // Error handling on folders creation
                 if (ec) {
-                    std::cout << "PROJECTS MANAGER: Error while creating the directory to host the necessary files for the proper functioning of the editor." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: Error while creating the directory to host the necessary files for the proper functioning of the editor.");
                     return false;
                 }
 
@@ -376,7 +368,7 @@ namespace ShyEditor {
                 std::ofstream jsonFile(recentProjectsFile);
 
                 if (!jsonFile.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file could not be opened to dump the content." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file could not be opened to dump the content.");
                     return false;
                 }
 
@@ -394,7 +386,7 @@ namespace ShyEditor {
                 std::ifstream fileStreamIn(recentProjectsFile);
 
                 if (!fileStreamIn.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file could not be opened to read its content." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file could not be opened to read its content.");
                     return false;
                 }
 
@@ -405,7 +397,7 @@ namespace ShyEditor {
 
                 // Check if the 'recentProjectsFile' contains the expected format
                 if (!jsonData.contains("Recent Projects Paths") || !jsonData.contains("Last Project Saved Path") || !jsonData["Recent Projects Paths"].is_array()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file does not contain the expected format." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file does not contain the expected format.");
                     return false;
                 }
 
@@ -449,7 +441,7 @@ namespace ShyEditor {
                 std::ofstream fileStreamOut(recentProjectsFile, std::ofstream::out | std::ofstream::trunc);
 
                 if (!fileStreamOut.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file cannot be opened for writing." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file cannot be opened for writing.");
                     return false;
                 }
 
@@ -464,7 +456,7 @@ namespace ShyEditor {
 
         }
         else {
-            std::cout << "PROJECTS MANAGER: Could not create the necessary directories in your AppData path! Restart the editor and try again." << std::endl;
+            LogManager::LogError("PROJECTS MANAGER: Could not create the necessary directories in your AppData path! Restart the editor and try again.");
             return false;
         }
 
@@ -474,7 +466,7 @@ namespace ShyEditor {
 
     bool ProjectsManager::SaveProject() {
 
-        std::string folder = std::string(create_project_path) + "\\";
+        std::string folder = std::string(create_project_path);
         std::string path = projectFilePath; // (Ends with .shyproject)
 
         // If the create path is an empty folder with the same name as the project
@@ -485,7 +477,7 @@ namespace ShyEditor {
                 errorMessage = L"The selected directory is not empty.";
                 return false;
             }
-            else path = folder + std::string(project_name) + ProjectExtension;
+            else path = folder + "\\" + std::string(project_name) + ProjectExtension;
         }
         else {
 
@@ -495,7 +487,7 @@ namespace ShyEditor {
             }
 
             // The folder which contains the project file is created
-            folder += std::string(project_name) + "\\";
+            folder += "\\" + std::string(project_name);
 
             std::error_code ec;
             std::filesystem::create_directories(folder, ec);
@@ -532,8 +524,7 @@ namespace ShyEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        std::string folderPath = std::filesystem::path(path).parent_path().string();
-        editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath + "\\"));
+        editor->setProjectInfo(new ProjectInfo(name, creationDate, folder));
 
         return true;
 
@@ -656,7 +647,7 @@ namespace ShyEditor {
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
         std::error_code ec;
-        std::filesystem::create_directories(root + "Assets\\", ec);
+        std::filesystem::create_directories(root + "\\Assets", ec);
 
         if (ec) {
             errorMessage = L"Error while creating the project assets folder.";
@@ -665,7 +656,7 @@ namespace ShyEditor {
 
         for (int i = 0; i < assetsFolders.size(); i++) {
 
-            std::filesystem::create_directories(root + "Assets\\" + assetsFolders[i], ec);
+            std::filesystem::create_directories(root + "\\Assets" + assetsFolders[i], ec);
 
             std::wstring folderName(assetsFolders[i].begin(), assetsFolders[i].end());
 
@@ -730,18 +721,6 @@ namespace ShyEditor {
         }
         return false;
 
-    }
-
-    bool ProjectsManager::AskForPermission() {
-
-        int result = MessageBox(
-            NULL,
-            L"The engine needs to create a folder in your AppData path. Do you want to continue?",
-            L"Permission confirmation",
-            MB_YESNO | MB_ICONQUESTION
-        );
-
-        return (result == IDYES);
     }
 
     void ProjectsManager::ShowErrorPopup(const std::wstring& errorMessage) {

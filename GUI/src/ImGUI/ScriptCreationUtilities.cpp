@@ -1046,6 +1046,8 @@ namespace ShyEditor {
 	ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
 	{
 		showClosePopup = false;
+		nameBuffer[0] = '\0';
+		nameSearch[0] = '\0';
 	}
 
 	void ScriptCreationUtilities::ScriptMenuBar::SetName(const std::string& name)

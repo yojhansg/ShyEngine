@@ -18,6 +18,7 @@
 #include <filesystem>
 #include <direct.h>
 #include <imgui.h>
+#include <vector>
 #include <fstream>
 #include <Windows.h>
 
@@ -66,6 +67,9 @@ namespace ShyEditor {
 			return;
 		}
 
+		std::vector<Entry> folders;
+		std::vector<Entry> files;
+
 		// Iterate through the current file explorer directory
 		for (auto& explorerFile : fs::directory_iterator(explorerFolder)) {
 
@@ -76,8 +80,10 @@ namespace ShyEditor {
 			entry.path = path.string();
 			entry.name = path.filename().string();
 
-			if (entry.isFolder)
+			if (entry.isFolder) {
 				entry.texture = folder;
+				folders.push_back(entry);
+			}
 			else {
 				entry.extension = path.extension().string();
 
@@ -87,34 +93,28 @@ namespace ShyEditor {
 				entry.name = entry.name.substr(0, entry.name.find_last_of('.'));
 
 				if (entry.extension == ".png" || entry.extension == ".jpg")
-					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
+					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + "\\" + entry.name + entry.extension, false);
 				else if (entry.extension == ".scene")
 					entry.texture = scene;
+				else if (entry.extension == ".script")
+					entry.texture = script;
 				else
 					entry.texture = file;
+
+				files.push_back(entry);
 			}
-
-			entries.push_back(entry);
-
 		}
+
+		std::sort(folders.begin(), folders.end());
+		std::sort(files.begin(), files.end());
+
+		for (auto f : folders)
+			entries.push_back(f);
+
+		for (auto f : files)
+			entries.push_back(f);
 
 		shouldUpdate = false;
-	}
-
-	std::string FileExplorer::GetParentPath(const std::string& path) {
-
-		std::string result = path.substr(0, path.size() - 1);
-
-		int cont = 0;
-		for (int i = result.size() - 1; i >= 0; i--) {
-			if (result[i] == '\\')
-				return result.substr(0, result.size() - cont);
-			else 
-				cont++;
-		}
-
-		return "";
-
 	}
 
 	void FileExplorer::Behaviour() {
@@ -133,9 +133,10 @@ namespace ShyEditor {
 			if (ImGui::Button("^"))
 			{
 				// Navigate to parent folder
-				currentPath = currentDirectory.parent_path().string() + "\\";
+				currentPath = currentDirectory.parent_path().string();
 
-				relativePath = GetParentPath(relativePath);
+				std::filesystem::path relativeDirectory(relativePath);
+				relativePath = relativeDirectory.parent_path().string();
 
 				shouldUpdate = true;
 			}
@@ -174,6 +175,7 @@ namespace ShyEditor {
 		for (auto& entry : entries) {
 
 			ImGui::SetNextItemAllowOverlap();
+
 			if (ImGui::Selectable(std::string("##" + entry.path).c_str(), currentlySelected == idx, ImGuiSelectableFlags_AllowDoubleClick)) {
 
 				currentlySelected = idx;
@@ -184,6 +186,29 @@ namespace ShyEditor {
 
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
+			}
+
+
+			if (ImGui::BeginDragDropSource()) {
+
+
+				std::string relativePath = "\\" + std::filesystem::path(entry.path).lexically_relative(projectPath + "\\Assets").generic_string();
+
+				Asset asset;
+				memcpy(asset.extension, entry.extension.c_str(), 256);
+				memcpy(asset.name, entry.name.c_str(), 256);
+				memcpy(asset.path, entry.path.c_str(), 256);
+				memcpy(asset.relativePath, relativePath.c_str(), 256);
+
+				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
+
+
+				ImGui::Image(entry.texture->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+				ImGui::SameLine();
+				ImGui::Text(asset.name);
+
+
+				ImGui::EndDragDropSource();
 			}
 
 			ImGui::SameLine();
@@ -213,7 +238,7 @@ namespace ShyEditor {
 			if (entry.isFolder) {
 
 				if (currentPath != projectPath)
-					relativePath += entry.name + "\\";
+					relativePath += "\\" + entry.name;
 
 				currentPath = entry.path;
 				shouldUpdate = true;
@@ -232,8 +257,15 @@ namespace ShyEditor {
 					editor->getScene()->loadScene(entry.name);
 				}
 
-				else
-					ShellExecuteA(NULL, "open", (LPCSTR) entry.path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+				else {
+					HINSTANCE hInstance = ShellExecuteA(NULL, "open", (LPCSTR) entry.path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+
+					// Check for ShellExecuteA() errors
+					if ((intptr_t)hInstance <= 32) {
+						DWORD errorCode = (DWORD)hInstance;
+						LogManager::LogError("ShellExecuteA() failed with error code: " + errorCode);
+					}
+				}
 			}
 
 		}
@@ -244,17 +276,13 @@ namespace ShyEditor {
 
 		if (entry.isFolder) return;
 
-
-		//TODO: guardar la ruta relativa
-		std::string relativePath = std::filesystem::path(entry.path).lexically_relative(projectPath + "/Images").string();
-
 		Asset asset;
 
-		asset.extension = entry.extension;
-		asset.name = entry.name;
-		asset.path = entry.path;
-		asset.relativePath = relativePath;
-		ResourcesManager::SelectAsset(asset);
+		//asset.extension = entry.extension;
+		//asset.name = entry.name;
+		//asset.path = entry.path;
+		//asset.relativePath = relativePath;
+		//ResourcesManager::SelectAsset(asset);
 
 	}
 
@@ -508,5 +536,3 @@ namespace ShyEditor {
 	//	}
 
 	//}
-
-

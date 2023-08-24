@@ -32,7 +32,7 @@ Renderer::Texture* Resources::ResourcesManager::addTexture(const std::string& ke
 	if (textures.contains(key))
 		return textures.at(key);
 
-	Renderer::Texture* t = new Renderer::Texture(resourcesPath + "Images/" + key);
+	Renderer::Texture* t = new Renderer::Texture(resourcesPath + key);
 
 	textures.insert(std::make_pair(key, t));
 
@@ -47,7 +47,7 @@ Renderer::Font* Resources::ResourcesManager::addFont(std::string const& key, int
 	if (fonts.contains(newkey))
 		return fonts.at(newkey);
 
-	Renderer::Font* t = new Renderer::Font(resourcesPath + "Fonts/" + key, pointSize);
+	Renderer::Font* t = new Renderer::Font(resourcesPath + key, pointSize);
 
 	fonts.insert(std::make_pair(newkey, t));
 
@@ -59,7 +59,7 @@ Sound::SoundEffect* Resources::ResourcesManager::addSound(std::string const& key
 	if (sounds.contains(key))
 		return sounds.at(key);
 
-	Sound::SoundEffect* s = new Sound::SoundEffect(resourcesPath + "Sounds/" + key);
+	Sound::SoundEffect* s = new Sound::SoundEffect(resourcesPath + key);
 
 	sounds.insert(std::make_pair(key, s));
 
@@ -72,7 +72,7 @@ Sound::Music* Resources::ResourcesManager::addMusic(std::string const& key) {
 	if (music.contains(key))
 		return music.at(key);
 
-	Sound::Music* m = new Sound::Music(resourcesPath + "Sounds/" + key);
+	Sound::Music* m = new Sound::Music(resourcesPath + key);
 
 	music.insert(std::make_pair(key, m));
 
@@ -87,9 +87,6 @@ std::string Resources::ResourcesManager::GetResourcesPath()
 
 void Resources::ResourcesManager::SetResourcesPath(const std::string& path)
 {
-	if (path == "")
-		instance()->resourcesPath = "";
-	else
-		instance()->resourcesPath = path + "/";;
+	instance()->resourcesPath = path;
 }
 

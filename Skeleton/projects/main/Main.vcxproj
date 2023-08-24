@@ -76,14 +76,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)exes\</OutDir>
+    <OutDir>$(SolutionDir)..\GUI\Editor\Engine</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>EngineDebug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)exes\</OutDir>
+    <OutDir>$(SolutionDir)..\GUI\Editor\Engine</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>EngineRelease</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

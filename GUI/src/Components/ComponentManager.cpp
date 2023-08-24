@@ -56,7 +56,6 @@ namespace Components {
 	}
 
 
-	//TODO: cambiar a la ruta del proyecto
 	void ComponentManager::ReadScripts(cstring path)
 	{
 		EnsureInitialised();

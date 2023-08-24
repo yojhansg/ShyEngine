@@ -66,7 +66,7 @@ namespace ShyEditor {
 
 	public:
 
-		ColorPalette(const std::string& path);
+		ColorPalette(const std::string& name);
 		~ColorPalette();
 
 		void SwapPalette(const std::string& palette);
@@ -93,7 +93,7 @@ namespace ShyEditor {
 
 		Palette current;
 
-		std::string path;
+		std::string name;
 		std::unordered_map<std::string, Palette> palettes;
 
 		bool open;
