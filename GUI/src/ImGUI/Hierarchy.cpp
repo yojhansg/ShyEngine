@@ -13,6 +13,8 @@
 
 #include "CheckML.h"
 
+#include "PrefabManager.h"
+
 
 namespace ShyEditor {
 
@@ -284,25 +286,10 @@ namespace ShyEditor {
 			if (ImGui::Button("Ok"))
 			{
 				if (strlen(nameBuffer) > 0) {
-					nlohmann::ordered_json j;
+					GameObject* prefab = new GameObject(*go);
+					prefab->setName(nameBuffer);
 
-					j = j.parse(go->toJson());
-
-
-					std::string filePath = "Prefabs/" + std::string(nameBuffer) + ".prefab";
-
-					if (!std::filesystem::exists(filePath)) {
-						std::filesystem::create_directories("Prefabs");
-					}
-
-					std::ofstream outputFile(filePath);
-					if (outputFile.is_open()) {
-						outputFile << j.dump(4);
-						outputFile.close();
-					}
-					else {
-						//ERROR HANDLING
-					}
+					PrefabManager::AddPrefab(prefab);
 				}
 
 				ImGui::CloseCurrentPopup();
@@ -311,5 +298,4 @@ namespace ShyEditor {
 			ImGui::EndPopup();
 		}
 	}
-
 }

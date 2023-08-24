@@ -83,6 +83,15 @@ namespace ShyEditor {
 		gameObjects.emplace(go->getId(), go);
 	}
 
+	void Scene::AddChildsToScene(GameObject* go)
+	{
+		for (auto pair : go->getChildren()) {
+			gameObjects.emplace(pair.second->getId(), pair.second);
+
+			AddChildsToScene(pair.second);
+		}
+	}
+
 	GameObject* Scene::AddOverlay(std::string path)
 	{
 		GameObject* go = new GameObject(path, false);
@@ -167,16 +176,18 @@ namespace ShyEditor {
 
 		// Iterate through the game objects JSON array
 		for (const auto& gameObjectJson : gameObjectsJson) {
-			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
+			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump(), true);
 			gameObjects.insert({ gameObject->getId(), gameObject });
+			AddChildsToScene(gameObject);
 		}
 
 		nlohmann::json overlaysJson = jsonData["overlays"];
 
 		// Iterate through the overlay objects JSON array
 		for (const auto& overlayJson : overlaysJson) {
-			GameObject* overlay = GameObject::fromJson(overlayJson.dump());
+			GameObject* overlay = GameObject::fromJson(overlayJson.dump(), false);
 			overlays.push_back(overlay);
+			AddChildsToScene(overlay);
 		}
 
 	}
@@ -526,6 +537,8 @@ namespace ShyEditor {
 			if (go->isWaitingToDelete()) {
 				selectedGameObject = nullptr;
 
+				GameObject::unusedIds.push_back(go->getId());
+
 				delete go;
 				it = gameObjects.erase(it);
 			}
@@ -543,6 +556,8 @@ namespace ShyEditor {
 
 			if (go->isWaitingToDelete()) {
 				selectedGameObject = nullptr;
+
+				GameObject::unusedIds.push_back(go->getId());
 
 				delete go;
 				it2 = overlays.erase(it2);

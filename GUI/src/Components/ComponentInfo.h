@@ -117,7 +117,7 @@ namespace Components {
 		Component(const Component& other);
 		Component(cstring name);
 
-		cstring getName();
+		cstring GetName();
 
 		Attribute& getAttribute(cstring name);
 		Method& getMethod(cstring name);

@@ -23,6 +23,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Game.h"
+#include "PrefabManager.h"
 
 #include <fstream>
 #include <iostream>
@@ -219,6 +220,9 @@ void Editor::SetUpWindows() {
 
 	// PREFERENCES
 	addWindow(new ShyEditor::Preferences());
+
+	// PREFAB MANAGER
+	addWindow(new ShyEditor::PrefabManager());
 
 	// MENU BAR
 	menuBar = new ShyEditor::MenuBar();

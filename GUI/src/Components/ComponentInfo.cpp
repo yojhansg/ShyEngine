@@ -25,7 +25,7 @@ namespace Components {
 		this->name = name;
 	}
 
-	cstring Component::getName()
+	cstring Component::GetName()
 	{
 		return name;
 	}
@@ -96,7 +96,7 @@ namespace Components {
 			type = AttributesType::CHAR;
 		}
 		else if (typeString == "Entity") {
-			value.value.entityIdx = -1;
+			value.value.entityIdx = 0;
 			type = AttributesType::GAMEOBJECT;
 		}
 		else {

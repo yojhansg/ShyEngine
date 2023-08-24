@@ -37,7 +37,7 @@ namespace Components {
 
 		for (auto& cmp : result) {
 
-			instance->components.emplace(cmp.getName(), cmp);
+			instance->components.emplace(cmp.GetName(), cmp);
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace Components {
 
 		for (auto& cmp : result) {
 
-			instance->managers.emplace(cmp.getName(), cmp);
+			instance->managers.emplace(cmp.GetName(), cmp);
 		}
 
 	}
