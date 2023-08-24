@@ -72,7 +72,7 @@ bool Engine::init() {
 
 	engineTime = Utilities::Time::init();
 
-	Resources::ResourcesManager::init();
+	resourcesManager = Resources::ResourcesManager::init();
 
 	//ECS::SplashScene::LoadResources();
 
@@ -185,6 +185,8 @@ void Engine::update() {
 
 void Engine::close() {
 
+	resourcesManager->close();
+	physicsManager->close();
 	rendererManager->close();
 	sceneManager->close();
 
