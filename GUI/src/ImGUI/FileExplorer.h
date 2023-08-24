@@ -42,15 +42,18 @@ namespace ShyEditor {
 			std::string path;
 			std::string extension;
 			Texture* texture;
+
+			bool operator<(const Entry& otro) const {
+				return name < otro.name;
+			}
+
 		};
 
 
 		int currentlySelected;
 		std::deque<Entry> entries;
 
-
 		void ProcessPath();
-		std::string GetParentPath(const std::string& path);
 
 		int viewMode;
 

@@ -1,9 +1,11 @@
 #include "Font.h"
-#include <SDL.h>
-#include <SDL_ttf.h>
 
+#include "LogManager.h"
 #include "Texture.h"
 #include "Editor.h"
+
+#include <SDL_ttf.h>
+#include <SDL.h>
 
 #include "CheckML.h"
 
@@ -13,8 +15,8 @@ namespace ShyEditor {
 	{
 		font = TTF_OpenFont(filepath.c_str(), pointSize);
 
-		//if (font == NULL)
-			// TODO Aviso por el log
+		if (font == NULL)
+			LogManager::LogError("Could not create font with path: " + filepath);
 	}
 
 	Font::~Font()
@@ -33,7 +35,7 @@ namespace ShyEditor {
 
 		// Check for errors on surface creation
 		if (surface == NULL) {
-			// TODO Aviso por el log
+			LogManager::LogError("The surface could not be created from the current text font.");
 			return nullptr;
 		}
 
@@ -41,7 +43,7 @@ namespace ShyEditor {
 
 		// Check for errors on texture creation
 		if (sdlText == NULL) {
-			// TODO Aviso por el log
+			LogManager::LogError("The texture could not be created from the current text font.");
 			SDL_FreeSurface(surface);
 			return nullptr;
 		}
@@ -59,7 +61,7 @@ namespace ShyEditor {
 
 		// Check for errors on surface creation
 		if (surface == NULL) {
-			// TODO Aviso por el log
+			LogManager::LogError("The surface could not be created from the current text font.");
 			return nullptr;
 		}
 
@@ -67,7 +69,7 @@ namespace ShyEditor {
 
 		// Check for errors on texture creation
 		if (sdlText == NULL) {
-			// TODO Aviso por el log
+			LogManager::LogError("The texture could not be created from the current text font.");
 			SDL_FreeSurface(surface);
 			return nullptr;
 		}

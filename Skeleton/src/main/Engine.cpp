@@ -31,7 +31,7 @@ Engine::Engine() {
 
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr;
 	sceneManager = nullptr; engineTime = nullptr; renderManager = nullptr;
-	overlayManager = nullptr;
+	overlayManager = nullptr; resourcesManager = nullptr;
 }
 
 bool Engine::init() {
@@ -92,7 +92,11 @@ bool Engine::init() {
 
 	// ------- Data configuration ---------
 
-	rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
+	if (data.windowIcon != "")
+		rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
+	else 
+		rendererManager->SetWindowIcon("Assets\\icon.png");
+
 	rendererManager->SetRenderTarget(false);
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
@@ -184,6 +188,8 @@ void Engine::update() {
 }
 
 void Engine::close() {
+
+	Console::Output::Print("Fin de ejecucion", "Bye!");
 
 	resourcesManager->close();
 	physicsManager->close();

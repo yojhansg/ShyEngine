@@ -4,15 +4,15 @@
     "debugFrameRate": true,
     "debugPhysics": true,
     "fullScreen": false,
-    "game": "ShitGame",
+    "game": "MyGame",
     "gravity": "0.000000, 9.810000",
-    "initialScene": "\\MyScene",
-    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\ShitGame\\Assets",
+    "initialScene": "\\Scene",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\Assets",
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
     "windowIcon": "\\Images\\ShyIcon.png",
     "windowSize": "1920, 1080",
-    "windowTitle": "ShitGame"
+    "windowTitle": "MyGame"
 }

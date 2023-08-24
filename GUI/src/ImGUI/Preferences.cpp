@@ -31,7 +31,7 @@ namespace ShyEditor {
 
 		data.width = 1920;
 		data.height = 1080;
-		data.initialScene = "\\MyScene";
+		data.initialScene = "\\Scene";
 		data.name = Editor::getInstance()->getProjectInfo().name;
 		data.windowTitle = Editor::getInstance()->getProjectInfo().name;
 		data.icon = "\\Images\\ShyIcon.png";

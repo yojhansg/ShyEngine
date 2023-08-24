@@ -53,6 +53,7 @@ namespace ShyEditor {
 		SDL_Texture* GetTexture();
 
 		void CenterPosition(float& x, float& y);
+
 	};
 
 }

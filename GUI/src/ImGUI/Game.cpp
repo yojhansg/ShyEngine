@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "Preferences.h"
+#include "LogManager.h"
 #include "Console.h"
 #include "Editor.h"
 
@@ -105,7 +106,7 @@ namespace ShyEditor {
 		saAttr.lpSecurityDescriptor = NULL;
 
 		if (!CreatePipe(&hChildStdoutRead, &hChildStdoutWrite, &saAttr, 0)) {
-			std::cerr << "Error creating pipe." << std::endl;
+			LogManager::LogError("Error creating pipe for the debug console.");
 			return;
 		}
 
@@ -122,7 +123,7 @@ namespace ShyEditor {
 		else newProcessWorkingDirectory = Preferences::GetData().buildPath.c_str();
 
 		if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, newProcessWorkingDirectory.c_str(), &si, &pi)) {
-			std::cerr << "Error creating process." << std::endl;
+			LogManager::LogError("Error creating the process to execute the engine.");
 			return;
 		}
 
@@ -156,15 +157,15 @@ namespace ShyEditor {
 		while (true) {
 
 			if (!ReadFile(hChildStdoutRead, buffer, sizeof(buffer), &bytesRead, NULL) || bytesRead == 0) {
+				DWORD errorCode = GetLastError();
+				LogManager::LogError("ReadFile() failed with error code: " + errorCode);
 				break;
 			}
 
 			std::string output(buffer, bytesRead);
 			this->output.push(output);
 
-			//std::cout << output << "jeje" << std::endl;
 		}
-
 
 		CloseHandle(hChildStdoutRead);
 

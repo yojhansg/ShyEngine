@@ -34,6 +34,8 @@ namespace ShyEditor {
 			return false;
 		}
 
+		instance->logFile << "In this file, you will find a list of the errors or warnings from the editor during its execution.\n " << std::endl;
+
 		return true;
 	}
 

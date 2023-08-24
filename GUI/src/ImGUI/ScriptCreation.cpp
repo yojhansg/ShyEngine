@@ -6,6 +6,7 @@
 #include "ProjectsManager.h"
 #include "nlohmann/json.hpp"
 #include "ColorPalette.h"
+#include "LogManager.h"
 #include "Editor.h"
 #include "imgui.h"
 
@@ -169,9 +170,11 @@ namespace ShyEditor {
 
 		std::ofstream file(editor->getProjectInfo().path + "\\Assets\\Scripts\\" + std::string(menuBar->GetName()) + ".script");
 
-		file << root.dump(4);
-
-		file.close();
+		if (file.is_open()) {
+			file << root.dump(4);
+			file.close();
+		}
+		else LogManager::LogError("Could not save the script with name: " + std::string(menuBar->GetName()));
 
 		ScriptCreation::ResetModified();
 		Components::ComponentManager::ReloadScripts();

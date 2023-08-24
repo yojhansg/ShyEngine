@@ -67,13 +67,13 @@ Editor* Editor::getInstance() {
 
 bool Editor::Init() {
 
+	if (!ShyEditor::LogManager::Init())
+		return false;
+
 	if (!instance->SplashScreen())
 		return false;
 
 	if (!instance->initImGUIAndSDL())
-		return false;
-
-	if (!ShyEditor::LogManager::Init())
 		return false;
 
 	// Components and managers reading
@@ -91,8 +91,7 @@ bool Editor::Init() {
 void Editor::Loop() {
 
 	// The projects management window
-	if (!instance->runProjectsWindow())
-		instance->exitEditor = true;
+	instance->exitEditor = !instance->runProjectsWindow();
 
 	if (!instance->exitEditor) {
 		// Configure the SDL window to start the editor
@@ -108,9 +107,9 @@ void Editor::Loop() {
 	while (!instance->exitEditor) {
 
 		ShyEditor::Game::CheckEnd();
-
 		instance->handleInput();
 		instance->UpdateAndRenderWindows();
+
 	}
 
 }
@@ -181,7 +180,7 @@ bool Editor::initSDL() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		// Avisar por el log
+		ShyEditor::LogManager::LogError("Could not initialise SDL!");
 		return false;
 	}
 
@@ -194,7 +193,7 @@ bool Editor::initSDL() {
 	// Make sure creating the window succeeded
 	if (window == NULL) {
 		SDL_Quit();
-		// Avisar por el log
+		ShyEditor::LogManager::LogError("Could not create the SDL Window!");
 		return false;
 	}
 
@@ -205,17 +204,21 @@ bool Editor::initSDL() {
 	if (renderer == NULL) {
 		SDL_DestroyWindow(window);
 		SDL_Quit();
-		// Avisar por el log
+		ShyEditor::LogManager::LogError("Could not create the SDL Renderer!");
 		return false;
 	}
 
 	std::string iconImage = ShyEditor::ResourcesManager::EDITORASSETSFOLDER + DefaultIconImage;
 	SDL_Surface* s = IMG_Load(iconImage.c_str());
-	SDL_SetWindowIcon(window, s);
+
+	if (s == NULL)
+		ShyEditor::LogManager::LogWarning("The window icon could not be loaded correctly.");
+	else
+		SDL_SetWindowIcon(window, s);
+
 	SDL_FreeSurface(s);
 
 	return true;
-
 }
 
 void Editor::CreateWindows() {
@@ -231,15 +234,15 @@ void Editor::CreateWindows() {
 	addWindow(scene);
 
 	// Hierarchy
-	hierarchy = new ShyEditor::Hierarchy();
+	hierarchy = new ShyEditor::Hierarchy(); 
 	addWindow(hierarchy);
 
 	// File explorer
-	fileExplorer = new ShyEditor::FileExplorer();
+	fileExplorer = new ShyEditor::FileExplorer(); 
 	addWindow(fileExplorer);
 
 	// Components
-	components = new ShyEditor::ComponentWindow();
+	components = new ShyEditor::ComponentWindow(); 
 	addWindow(components);
 
 	// Scripting
@@ -256,22 +259,43 @@ bool Editor::SplashScreen() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		// Avisar por el log
+		ShyEditor::LogManager::LogError("Could not initialise SDL for the SplashScreen!");
 		return false;
 	}
 
-	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540,
-		SDL_WINDOW_BORDERLESS
-	);
+	// Create Window
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540, SDL_WINDOW_BORDERLESS);
 
+	if (window == NULL) {
+		ShyEditor::LogManager::LogError("Could not create the SDL Window for the SplashScreen!");
+		return false;
+	}
+
+	// Create Renderer
 	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (renderer == NULL) {
+		ShyEditor::LogManager::LogError("Could not create the SDL Renderer for the SplashScreen!");
+		return false;
+	}
 
 	SDL_SetWindowBordered(window, SDL_FALSE);
 
 	std::string splashscreen = ShyEditor::ResourcesManager::EDITORASSETSFOLDER + SplashScreenImage;
 
 	auto surf = IMG_Load(splashscreen.c_str());
+
+	if (surf == NULL) {
+		ShyEditor::LogManager::LogError("Could not load the necessary images for the splashscreen.");
+		return false;
+	}
+
 	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
+
+	if (texture == NULL) {
+		ShyEditor::LogManager::LogError(SDL_GetError());
+		return false;
+	}
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Color transparente (RGBA)
 	SDL_RenderClear(renderer);
@@ -308,7 +332,7 @@ bool Editor::runProjectsWindow() {
 	if (result == ShyEditor::ProjectsManager::Result::CLOSED)
 		return false;
 
-	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "\\Assets" + "\\Scripts"); // A ver que hacer con esto
+	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "\\Assets" + "\\Scripts");
 	ShyEditor::ResourcesManager::GetInstance()->SetProjectPath(instance->projecInfo->path);
 
 	return true;
@@ -316,8 +340,8 @@ bool Editor::runProjectsWindow() {
 }
 
 
-void Editor::UpdateAndRenderWindows()
-{
+void Editor::UpdateAndRenderWindows() {
+
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// Start the Dear ImGui frame

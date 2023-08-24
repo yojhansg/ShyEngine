@@ -18,7 +18,6 @@ namespace ShyEditor {
 		SDL_Texture* getSDLTexture();
 
 		int getWidth();
-
 		int getHeight();
 
 	private:

@@ -236,18 +236,14 @@ namespace Renderer {
 	}
 
 
-	void RendererManager::SetWindowIcon(const std::string& path) {
-
-		if (path == "") {
-			SetWindowIcon("icon.png");
-			return;
-		}
+	bool RendererManager::SetWindowIcon(const std::string& path) {
 
 		icon = IMG_Load(path.c_str());
 
 		if (icon == NULL) {
 			Console::Output::PrintError("Window icon", "Could not change window icon. Error loading file <" + path + ">");
-			return;
+			SetWindowIcon("Assets\\icon.png");
+			return false;
 		}
 
 		SDL_SetWindowIcon(window, icon);

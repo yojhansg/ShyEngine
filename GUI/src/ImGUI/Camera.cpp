@@ -1,6 +1,8 @@
 #include "Camera.h"
-#include "imgui.h"
+
+#include "LogManager.h"
 #include "GameObject.h"
+#include "imgui.h"
 #include "SDL.h"
 
 #include "CheckML.h"
@@ -27,8 +29,7 @@ namespace ShyEditor {
 
 	Camera::~Camera()
 	{
-		if (targetTexture != nullptr)
-		{
+		if (targetTexture != nullptr) {
 			SDL_DestroyTexture(targetTexture);
 			targetTexture = nullptr;
 		}
@@ -38,7 +39,6 @@ namespace ShyEditor {
 	void Camera::GenerateTexture(int w, int h)
 	{
 		if (targetTexture != nullptr) {
-
 			SDL_DestroyTexture(targetTexture);
 			targetTexture = nullptr;
 		}
@@ -46,6 +46,12 @@ namespace ShyEditor {
 		texture_w = w;
 		texture_h = h;
 		targetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+
+		if (targetTexture == NULL) {
+			LogManager::LogError("Could not create the target texture for the camera.");
+			return;
+		}
+
 		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 
 	}
@@ -153,10 +159,12 @@ namespace ShyEditor {
 
 	void Camera::PrepareCameraRender()
 	{
-		SDL_SetRenderTarget(renderer, targetTexture);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_RenderClear(renderer);
+		if (targetTexture != NULL) {
+			SDL_SetRenderTarget(renderer, targetTexture);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+			SDL_RenderClear(renderer);
+		}
 	}
 
 	void Camera::StopCameraRender()

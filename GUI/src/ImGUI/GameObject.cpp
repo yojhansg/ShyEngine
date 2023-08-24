@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentInfo.h"
 #include "Preferences.h"
+#include "LogManager.h"
 #include "Texture.h"
 #include "Editor.h"
 #include "Camera.h"
@@ -957,11 +958,12 @@ namespace ShyEditor {
 	GameObject* GameObject::fromJson(std::string json, bool isPrefab) {
 
 		nlohmann::ordered_json jsonData;
-		try {
-			jsonData = nlohmann::json::parse(json);
-		}
-		catch (const nlohmann::json::parse_error& e) {
-			std::cerr << "JSON parse error: " << e.what() << std::endl;
+		jsonData = nlohmann::json::parse(json);
+
+		std::string errorMsg = "The JSON gameobject has not the correct format.";
+
+		if (!jsonData.contains("name")) {
+			LogManager::LogError(errorMsg);
 			return nullptr;
 		}
 
@@ -970,9 +972,20 @@ namespace ShyEditor {
 		GameObject* gameObject = new GameObject(goName, true);
 		gameObject->name = goName;
 
-		//if its prefab we leave the autoassigned id
-		if (!isPrefab) {
+
+		if (!jsonData.contains("id")) {
+			LogManager::LogError(errorMsg);
+			return nullptr;
+		}
+
+		// If its prefab we leave the autoassigned id
+		if (!isPrefab)
 			gameObject->id = jsonData["id"];
+
+
+		if (!jsonData.contains("childs")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
 		}
 
 		for (const auto& childJson : jsonData["childs"]) {
@@ -982,7 +995,30 @@ namespace ShyEditor {
 			child->setParent(gameObject);
 		}
 
+
+		if (!jsonData.contains("order")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		gameObject->renderOrder = jsonData["order"];
+
+
+
+		if (!jsonData.contains("localPosition")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localScale")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localRotation")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		// Deserialize localPosition, localScale, and localRotation
 		std::string localPositionStr = jsonData["localPosition"];
@@ -996,11 +1032,22 @@ namespace ShyEditor {
 		gameObject->transform->SetRotation(std::stof(localRotation));
 
 
+		// Components
+		if (!jsonData.contains("components")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		for (const auto& compJson : jsonData["components"]) {
 			Components::Component component = Components::Component::fromJson(compJson.dump());
 			gameObject->addComponent(component);
 		}
 
+		// Scripts
+		if (!jsonData.contains("scripts")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		for (const auto& scriptJson : jsonData["scripts"].items()) {
 			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
