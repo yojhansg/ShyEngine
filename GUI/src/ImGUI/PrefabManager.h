@@ -4,7 +4,6 @@
 
 #include <unordered_map>
 #include <vector>
-#include <nlohmann/json_fwd.hpp>
 
 class Editor;
 
@@ -29,12 +28,7 @@ namespace ShyEditor {
 
 		Texture* prefabText;
 
-		std::string projectPath;
-
-		nlohmann::ordered_json SavePrefabs();
-
 		void DrawList();
-		void DrawIcons();
 
 		void DrawComponents();
 
@@ -43,14 +37,18 @@ namespace ShyEditor {
 		int currentlySelected;
 
 		void ShowPrefabMenuPopup(GameObject* prefab);
+		void LoadPrefabs();
 
 	public:
 
 		PrefabManager();
+		~PrefabManager();
 
 		static void Open();
 
 		static void AddPrefab(GameObject* go);
+
+		static void SavePrefabs(const std::string& path);
 
 		void Behaviour() override;
 	};

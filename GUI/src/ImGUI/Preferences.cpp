@@ -5,6 +5,7 @@
 #include "Editor.h"
 #include "imgui.h"
 #include "Game.h"
+#include "PrefabManager.h"
 
 #include <fstream>
 
@@ -143,6 +144,8 @@ namespace ShyEditor {
 		root["debugFrameRate"] = true;
 
 		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
+		
+		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file("Engine\\config.json");
 
@@ -160,6 +163,7 @@ namespace ShyEditor {
 		root["debugFrameRate"] = false;
 
 		root["path"] = instance->data.buildPath;
+		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file(instance->data.buildPath);
 

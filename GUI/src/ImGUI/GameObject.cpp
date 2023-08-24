@@ -156,11 +156,9 @@ namespace ShyEditor {
 
 		imagePath = go.imagePath;
 
-		if(go.texture != nullptr && go.texture->getSDLTexture() != NULL)
-			texture = new Texture(go.texture->getSDLTexture());
+		texture = go.texture;
 
-		if (go.gizmo != nullptr && go.gizmo->getSDLTexture() != NULL)
-			gizmo = new Texture(go.gizmo->getSDLTexture());
+		gizmo = go.gizmo;
 
 		leftMouseButtonDown = go.leftMouseButtonDown;
 		rightMouseButtonDown = go.rightMouseButtonDown;
