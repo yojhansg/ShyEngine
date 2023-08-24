@@ -22,6 +22,7 @@
 #include "MenuBar.h"
 #include "Console.h"
 #include "Window.h"
+#include "Build.h"
 #include "Scene.h"
 #include "Game.h"
 #include "PrefabManager.h"
@@ -88,6 +89,7 @@ bool Editor::Init() {
 	ShyEditor::ResourcesManager::Init();
 
 	instance->layout = new ShyEditor::WindowLayout();
+	instance->build = new ShyEditor::Build();
 
 	return true;
 }
@@ -392,6 +394,9 @@ void Editor::UpdateAndRenderWindows() {
 	if (state == Editor::EDITOR_WINDOW)
 		menuBar->Update();
 
+
+	build->BuildProgression();
+
 	// Rendering
 	ImGui::Render();
 	SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
@@ -477,6 +482,11 @@ ShyEditor::Console* Editor::getConsole()
 ShyEditor::WindowLayout* Editor::GetWindowLayout()
 {
 	return layout;
+}
+
+ShyEditor::Build* Editor::GetBuildManager()
+{
+	return build;
 }
 
 void Editor::OpenScript(const std::string& script) {

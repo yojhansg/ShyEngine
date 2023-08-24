@@ -101,6 +101,7 @@
     <ClInclude Include="..\..\dependencies\imgui\imconfig.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="..\..\src\ImGUI\Build.h" />
     <ClInclude Include="..\..\src\ImGUI\Camera.h" />
     <ClInclude Include="..\..\src\ImGUI\ColorPalette.h" />
     <ClInclude Include="..\..\src\ImGUI\Components.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\..\src\ImGUI\Editor.h" />
     <ClInclude Include="..\..\src\ImGUI\LogManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
+    <ClInclude Include="..\..\src\ImGUI\PrefabManager.h" />
     <ClInclude Include="..\..\src\ImGUI\Preferences.h" />
     <ClInclude Include="..\..\src\ImGUI\ProjectsManager.h" />
     <ClInclude Include="..\..\src\ImGUI\ResourcesManager.h" />
@@ -131,6 +133,7 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Build.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ColorPalette.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
@@ -143,6 +146,7 @@
     <ClCompile Include="..\..\src\ImGUI\Editor.cpp" />
     <ClCompile Include="..\..\src\ImGUI\LogManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\PrefabManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Preferences.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ResourcesManager.cpp" />

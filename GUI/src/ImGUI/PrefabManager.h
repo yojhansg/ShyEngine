@@ -36,6 +36,7 @@ namespace ShyEditor {
 
 		int currentlySelected;
 
+		void ShowPrefabMenuPopup(GameObject* prefab);
 		void LoadPrefabs();
 
 	public:
