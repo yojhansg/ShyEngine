@@ -122,7 +122,6 @@ namespace ShyEditor {
 		void Behaviour() override;
 		void ReceiveAssetDrop(Asset& asset) override;
 
-
 		ImVec2 MousePositionInScene();
 		bool IsMouseHoveringGameObject(GameObject* gameObject);
 

@@ -112,7 +112,23 @@ namespace ShyEditor {
 
 		name = go.name;
 
-		id = go.id;
+		// Gets the list of gameobjects in the scene
+		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+
+
+		if (GameObject::unusedIds.size() != 0) {
+			id = GameObject::unusedIds.back();
+			GameObject::unusedIds.pop_back();
+		}
+		else {
+			//Ensure id is not being used already
+			while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+				GameObject::lastId++;
+			}
+
+			id = GameObject::lastId;
+			GameObject::lastId++;
+		}
 
 		for (auto& pair : go.components) {
 			Components::Component component = pair.second;

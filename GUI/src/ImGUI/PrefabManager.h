@@ -50,6 +50,8 @@ namespace ShyEditor {
 
 		static void SavePrefabs(const std::string& path);
 
+		static GameObject* GetPrefabById(int id);
+
 		void Behaviour() override;
 	};
 }
