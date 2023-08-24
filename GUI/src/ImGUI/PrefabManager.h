@@ -29,14 +29,13 @@ namespace ShyEditor {
 		Texture* prefabText;
 
 		void DrawList();
-
+		void DrawImage();
 		void DrawComponents();
 
 		bool shouldUpdate;
 
 		int currentlySelected;
 
-		void ShowPrefabMenuPopup(GameObject* prefab);
 		void LoadPrefabs();
 
 	public:
