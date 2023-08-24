@@ -10,11 +10,11 @@
 #include "Game.h"
 #include "WindowLayout.h"
 #include "PrefabManager.h"
+#include "Build.h"
 
 #include <Windows.h>
 #include <fstream>
 #include <tchar.h>
-
 #include "CheckML.h"
 
 
@@ -50,6 +50,16 @@ namespace ShyEditor {
 
                     editor->getScene()->saveScene(editor->getScene()->getSceneName());
                 }
+
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Build", NULL, false))
+                {
+
+                    Editor::getInstance()->GetBuildManager()->GenerateBuild();
+                };
+
 
                 ImGui::Separator();
 
@@ -132,7 +142,6 @@ namespace ShyEditor {
                 }
 
 
-
                 if (ImGui::BeginMenu("Layout")) {
 
                     auto windowLayout = Editor::getInstance()->GetWindowLayout();
@@ -150,7 +159,6 @@ namespace ShyEditor {
 
                         idx++;
                     }
-
 
                     ImGui::EndMenu();
                 }

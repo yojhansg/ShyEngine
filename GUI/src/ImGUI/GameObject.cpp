@@ -114,19 +114,19 @@ namespace ShyEditor {
 
 		id = go.id;
 
-		for (auto pair : go.components) {
+		for (auto& pair : go.components) {
 			Components::Component component = pair.second;
 
 			components.emplace(component.GetName(), component);
 		}
 
-		for (auto pair : go.scripts) {
+		for (auto& pair : go.scripts) {
 			Components::Script script = pair.second;
 
 			scripts.emplace(script.GetName(), script);
 		}
 
-		for (auto pair : go.children) {
+		for (auto& pair : go.children) {
 			GameObject* child = new GameObject(*pair.second);
 
 			children.emplace(child->getId(), child);

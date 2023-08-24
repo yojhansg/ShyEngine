@@ -26,6 +26,7 @@ namespace ShyEditor {
 	class Scene;
 
 	class WindowLayout;
+	class Build;
 };
 
 class Editor {
@@ -66,6 +67,7 @@ public:
 	ShyEditor::Console* getConsole();
 
 	ShyEditor::WindowLayout* GetWindowLayout();
+	ShyEditor::Build* GetBuildManager();
 
 	int Example();
 	int Probando();
@@ -115,4 +117,5 @@ private:
 	ShyEditor::ScriptCreation* scriptCreation;
 	ShyEditor::Console* console;
 	ShyEditor::WindowLayout* layout;
+	ShyEditor::Build* build;
 };
