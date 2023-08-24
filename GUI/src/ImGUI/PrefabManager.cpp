@@ -91,6 +91,15 @@ namespace ShyEditor {
 		}
 	}
 
+	GameObject* PrefabManager::GetPrefabById(int id)
+	{
+		if (instance->prefabs[id] != nullptr) {
+			return instance->prefabs[id];
+		}
+
+		return nullptr;
+	}
+
 	void PrefabManager::DrawList()
 	{
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
@@ -106,6 +115,22 @@ namespace ShyEditor {
 
 				currentlySelected = prefab->getId();
 
+			}
+
+			if (ImGui::BeginDragDropSource()) {
+
+				Asset asset;
+				asset.isPrefab = true;
+				asset.prefabId = prefab->getId();
+
+				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
+
+				ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+				ImGui::SameLine();
+				ImGui::Text(prefab->getName().c_str());
+
+
+				ImGui::EndDragDropSource();
 			}
 
 			ImGui::SameLine();
@@ -220,6 +245,10 @@ namespace ShyEditor {
 
 	void PrefabManager::AddPrefab(GameObject* prefab)
 	{
+		if (prefab->getId() > 0) {
+			GameObject::unusedIds.push_back(prefab->getId());
+		}
+
 		if (PrefabManager::unusedIds.size() != 0) {
 			prefab->setId(PrefabManager::unusedIds.back());
 			PrefabManager::unusedIds.pop_back();

@@ -66,6 +66,7 @@ namespace ShyEditor {
 		std::cout << asset.name << std::endl;
 	}
 
+
 	void Window::HandleInput(SDL_Event* event) {}
 
 	void Window::UpdateWindow()

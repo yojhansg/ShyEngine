@@ -13,6 +13,7 @@
 #include "Editor.h"
 #include "Camera.h"
 #include "imgui.h"
+#include "PrefabManager.h"
 #include "SDL.h"
 
 #include <nlohmann/json.hpp>
@@ -730,6 +731,20 @@ namespace ShyEditor {
 			selectedGameObject = go;
 		}
 
+		if (asset.isPrefab) {
+
+			GameObject* prefab = PrefabManager::GetPrefabById(asset.prefabId);
+
+			GameObject* go = new GameObject(*prefab);
+			AddGameObject(go);
+
+			AddChildsToScene(go);
+
+			ImVec2 position = MousePositionInScene();
+
+			go->setPosition(position);
+			selectedGameObject = go;
+		}
 	}
 
 	ImVec2 Scene::MousePositionInScene() {
