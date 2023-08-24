@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "imgui.h"
 #include "Game.h"
+#include "WindowLayout.h"
 #include "PrefabManager.h"
 
 #include <Windows.h>
@@ -115,6 +116,64 @@ namespace ShyEditor {
                 ImGui::EndMenu();
             }
 
+
+            //Close all floating windows
+
+            //Layouts
+
+            //
+
+            if (ImGui::BeginMenu("Window"))
+            {
+
+                if (ImGui::MenuItem("Close all floating windows", NULL, false)) {
+
+
+                }
+
+
+
+                if (ImGui::BeginMenu("Layout")) {
+
+                    auto windowLayout = Editor::getInstance()->GetWindowLayout();
+                    auto allLayouts = windowLayout->GetAllLayouts();
+
+
+                    int idx = 0;
+                    for (auto& layout : allLayouts) {
+
+
+                        if (ImGui::MenuItem(layout.c_str(), NULL, false)) {
+
+                            windowLayout->SetLayout((ShyEditor::WindowLayout::Layout)idx);
+                        }
+
+                        idx++;
+                    }
+
+
+                    ImGui::EndMenu();
+                }
+
+
+
+                ImGui::Separator();
+
+                auto& windows = Editor::getInstance()->GetAllWindows();
+
+                for (auto window : windows) {
+
+
+                    if (ImGui::MenuItem(window->GetWindowName().c_str(), NULL, window->IsVisible())) {
+
+                        window->Show();
+                    }
+                }
+
+                ImGui::EndMenu();
+            }
+
+
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Help"))
@@ -123,6 +182,7 @@ namespace ShyEditor {
                 ImGui::MenuItem("About us", NULL, false);
                 ImGui::EndMenu();
             }
+
 
 
             if (gameObject != nullptr)

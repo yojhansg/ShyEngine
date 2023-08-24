@@ -12,6 +12,7 @@
 #include "ProjectsManager.h"
 #include "ScriptCreation.h"
 #include "FileExplorer.h"
+#include "WindowLayout.h"
 #include "ColorPalette.h"
 #include "Preferences.h"
 #include "LogManager.h"
@@ -86,6 +87,8 @@ bool Editor::Init() {
 
 	ShyEditor::ResourcesManager::Init();
 
+	instance->layout = new ShyEditor::WindowLayout();
+
 	return true;
 }
 
@@ -138,6 +141,7 @@ void Editor::Close() {
 	for (auto window : instance->windows)
 		delete window;
 
+	delete instance->layout;
 	delete instance->menuBar;
 	delete instance->projecInfo;
 
@@ -353,39 +357,14 @@ void Editor::UpdateAndRenderWindows() {
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	auto static once = true;
 
-	if (once) {
+	bool layoutUpdated = layout->Update();
 
-		once = false;
-
-		auto id = ImGui::DockSpaceOverViewport();
-
-		auto rootNode = ImGui::DockBuilderGetNode(id);
-		if (rootNode->IsEmpty()) {
-
-			ImGui::DockBuilderRemoveNode(id);
-
-			ImGui::DockBuilderAddNode(id);
-			ImGui::DockBuilderSetNodeSize(id, getMainWindowSize());
-
-			auto abajo = ImGui::DockBuilderSplitNode(id, ImGuiDir_Down, 0.3f, nullptr, &id);
-			auto izquierda = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.2f, nullptr, &id);
-			auto centro = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.6f, nullptr, &id);
-
-			ImGui::DockBuilderDockWindow("Hierarchy", izquierda);
-			ImGui::DockBuilderDockWindow("File Explorer", abajo);
-			ImGui::DockBuilderDockWindow("Scene", centro);
-			ImGui::DockBuilderDockWindow("Components", id);
-
-			ImGui::DockBuilderFinish(id);
-		}
-	}
-	else
-	{
+	if (!layoutUpdated) {
 		if (state == Editor::EDITOR_WINDOW)
 			ImGui::DockSpaceOverViewport();
 	}
+
 
 
 	ShyEditor::ColorPalette::ApplyPalette();
@@ -493,6 +472,11 @@ ShyEditor::FileExplorer* Editor::getFileExplorer() {
 ShyEditor::Console* Editor::getConsole()
 {
 	return console;
+}
+
+ShyEditor::WindowLayout* Editor::GetWindowLayout()
+{
+	return layout;
 }
 
 void Editor::OpenScript(const std::string& script) {
@@ -637,6 +621,11 @@ int Editor::Probando()
 	return 0;
 
 	return 0;
+}
+
+std::vector<ShyEditor::Window*>& Editor::GetAllWindows()
+{
+	return windows;
 }
 
 

@@ -57,7 +57,11 @@ namespace ShyEditor {
 
         void Hide();
         void Show();
+        bool IsVisible();
+
 
         bool IsMouseHoveringWindow();
+
+        std::string GetWindowName();
     };
 }
