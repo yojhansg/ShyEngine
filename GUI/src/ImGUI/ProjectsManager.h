@@ -13,11 +13,13 @@ namespace ShyEditor {
 		ProjectInfo() { name = ""; date = ""; path = ""; };
 		ProjectInfo(const std::string& name, const std::string& date, const std::string& path) {
 			this->name = name; this->date = date; this->path = path;
+			assetPath = path + "/Assets";
 		};
 
 		std::string name;
 		std::string date;
 		std::string path;
+		std::string assetPath;
 	};
 
 	class ProjectsManager {

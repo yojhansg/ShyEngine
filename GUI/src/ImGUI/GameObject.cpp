@@ -35,7 +35,7 @@ namespace ShyEditor {
 		transform = nullptr;
 		overlay = nullptr;
 
-		texture_size = new ImVec2(0, 0);
+		texture_size = new ImVec2(100, 100);
 
 		if (isTransform) {
 
@@ -214,36 +214,34 @@ namespace ShyEditor {
 		if (visible && texture != NULL)
 			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, transform->GetRotation(), NULL, SDL_FLIP_NONE);
 
+		else
+
+			// Render outline
+			if (this == editor->getScene()->GetSelectedGameObject()) {
+
+				// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
+				Uint8 r, g, b, a;
+				SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+				int thickness = 3;
 
 
+				for (int i = 0; i < thickness; i++) {
+					SDL_Rect currentRect = { dst.x - i, dst.y - i, dst.w + i * 2, dst.h + i * 2 };
+					SDL_RenderDrawRect(renderer, &currentRect);
+				}
 
+				SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
+				//if (showGizmo) {
+				//	dst.x += dst.w / 2;
+				//	dst.y -= dst.h / 2;
 
-		// Render outline
-		if (this == editor->getScene()->GetSelectedGameObject()) {
-
-			return;
-			// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
-			Uint8 r, g, b, a;
-			SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
-
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-
-			SDL_Rect outlineRect = { worldPosition.x, worldPosition.y, width, height };
-			int thickness = 3;
-
-			for (int i = 0; i < thickness; i++) {
-				SDL_Rect currentRect = { outlineRect.x - i, outlineRect.y - i, outlineRect.w + i * 2, outlineRect.h + i * 2 };
-				SDL_RenderDrawRect(renderer, &currentRect);
+				//	SDL_RenderCopy(renderer, gizmo->getSDLTexture(), NULL, &dst);
+				//}
 			}
-
-			if (showGizmo) {
-				dst.x += dst.w / 2;
-				dst.y -= dst.h / 2;
-
-				SDL_RenderCopy(renderer, gizmo->getSDLTexture(), NULL, &dst);
-			}
-		}
 	}
 
 	void GameObject::update() {
@@ -947,7 +945,7 @@ namespace ShyEditor {
 		}
 
 		j["id"] = id;
-		
+
 		j["childs"] = childsJson;
 
 		j["order"] = renderOrder;
@@ -1342,7 +1340,7 @@ namespace ShyEditor {
 		if (imgIt != components->end()) {
 
 			auto& imgCmp = *imgIt;
-			
+
 			const auto& cmpPath = imgCmp.second.getAttribute("path").value.valueString;
 
 			if (cmpPath != image->GetPath()) {

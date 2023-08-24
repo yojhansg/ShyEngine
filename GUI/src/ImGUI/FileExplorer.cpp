@@ -18,7 +18,7 @@
 #include <filesystem>
 #include <direct.h>
 #include <imgui.h>
-#include <vector>
+#include <queue>
 #include <fstream>
 #include <Windows.h>
 
@@ -38,8 +38,8 @@ namespace ShyEditor {
 	FileExplorer::FileExplorer() : Window("File Explorer", ImGuiWindowFlags_NoCollapse) {
 
 		editor = Editor::getInstance();
-		projectPath = editor->getProjectInfo().path;
-		currentPath = projectPath;
+		assetPath = editor->getProjectInfo().assetPath;
+		currentPath = assetPath;
 		relativePath = "";
 
 		folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
@@ -67,8 +67,13 @@ namespace ShyEditor {
 			return;
 		}
 
-		std::vector<Entry> folders;
-		std::vector<Entry> files;
+		relativePath = explorerFolder.lexically_relative(assetPath).string();
+
+		if (relativePath == ".")
+			relativePath = "";
+		else relativePath += "\\";
+
+		std::queue<Entry> files;
 
 		// Iterate through the current file explorer directory
 		for (auto& explorerFile : fs::directory_iterator(explorerFolder)) {
@@ -82,7 +87,8 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 				entry.texture = folder;
-				folders.push_back(entry);
+				entry.extension = "";
+				entries.push_back(entry);
 			}
 			else {
 				entry.extension = path.extension().string();
@@ -93,7 +99,7 @@ namespace ShyEditor {
 				entry.name = entry.name.substr(0, entry.name.find_last_of('.'));
 
 				if (entry.extension == ".png" || entry.extension == ".jpg")
-					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + "\\" + entry.name + entry.extension, false);
+					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
 				else if (entry.extension == ".scene")
 					entry.texture = scene;
 				else if (entry.extension == ".script")
@@ -101,19 +107,17 @@ namespace ShyEditor {
 				else
 					entry.texture = file;
 
-				files.push_back(entry);
+				files.push(entry);
 			}
 		}
 
-		std::sort(folders.begin(), folders.end());
-		std::sort(files.begin(), files.end());
 
-		for (auto f : folders)
-			entries.push_back(f);
-
-		for (auto f : files)
-			entries.push_back(f);
-
+		while (!files.empty())
+		{
+			entries.push_back(files.front());
+			files.pop();
+		}
+		
 		shouldUpdate = false;
 	}
 
@@ -126,7 +130,7 @@ namespace ShyEditor {
 
 		ImGui::Text("Folder: %s", currentPath.c_str());
 
-		if (currentPath != projectPath) {
+		if (currentPath != assetPath) {
 
 			// Display buttons to navigate up and down the folder hierarchy
 			ImGui::SameLine();
@@ -134,10 +138,6 @@ namespace ShyEditor {
 			{
 				// Navigate to parent folder
 				currentPath = currentDirectory.parent_path().string();
-
-				std::filesystem::path relativeDirectory(relativePath);
-				relativePath = relativeDirectory.parent_path().string();
-
 				shouldUpdate = true;
 			}
 		}
@@ -192,13 +192,12 @@ namespace ShyEditor {
 			if (ImGui::BeginDragDropSource()) {
 
 
-				std::string relativePath = "\\" + std::filesystem::path(entry.path).lexically_relative(projectPath + "\\Assets").generic_string();
 
-				Asset asset;
+				Asset asset{};
 				memcpy(asset.extension, entry.extension.c_str(), 256);
 				memcpy(asset.name, entry.name.c_str(), 256);
 				memcpy(asset.path, entry.path.c_str(), 256);
-				memcpy(asset.relativePath, relativePath.c_str(), 256);
+				memcpy(asset.relativePath, (relativePath + asset.name + asset.extension).c_str(), 256);
 
 				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
 
@@ -219,7 +218,7 @@ namespace ShyEditor {
 			ImGui::SetCursorPosY(yCursor);
 
 			ImGui::SameLine();
-			ImGui::Text(entry.name.c_str());
+			ImGui::Text((entry.name + entry.extension).c_str());
 
 			idx++;
 		}
@@ -237,7 +236,7 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 
-				if (currentPath != projectPath)
+				if (currentPath != assetPath)
 					relativePath += "\\" + entry.name;
 
 				currentPath = entry.path;

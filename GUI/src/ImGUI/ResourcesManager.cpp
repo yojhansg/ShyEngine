@@ -46,7 +46,7 @@ namespace ShyEditor {
 			if (instance->engineTextures.contains(key))
 				return instance->engineTextures.at(key);
 
-			texture = new Texture(instance->engineProjectPath + "\\Assets" + key);
+			texture = new Texture(instance->engineProjectPath + "\\Assets\\" + key);
 
 			instance->engineTextures.insert(std::make_pair(key, texture));
 

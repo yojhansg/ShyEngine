@@ -205,7 +205,7 @@ namespace ShyEditor {
 
 	void Scene::RenderChildGameObjects(GameObject* go)
 	{
-		for (auto pair : go->getChildren()) {
+		for (auto& pair : go->getChildren()) {
 			RenderChildGameObjects(pair.second);
 			pair.second->RenderTransform(renderer, sceneCamera);
 		}
@@ -540,7 +540,6 @@ namespace ShyEditor {
 				float r = selectedGameObject->getRotation();
 
 				r += event->motion.xrel * incrementSpeed;
-				r += event->motion.yrel * incrementSpeed;
 
 				selectedGameObject->SetRotation(r);
 			}
@@ -586,6 +585,8 @@ namespace ShyEditor {
 		}
 
 		if (!(SDL_GetModState() & KMOD_SHIFT)) {
+
+
 			sceneCamera->handleInput(event, insideWindow);
 		}
 

@@ -60,7 +60,7 @@ void ShyEditor::Build::BuildProgression()
 	if (ImGui::BeginPopupModal("Build"), NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize) {
 
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(.2f, 0.2f, 0.2f, 1));
-		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1, 0, 0, 1));
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1, .2f, 0.2f, 1));
 		
 		ImGui::ProgressBar(progression, ImVec2(-FLT_MIN, 0));
 		ImGui::PopStyleColor(2);

@@ -31,7 +31,7 @@ namespace ShyEditor {
 		Texture* folder;
 		Texture* scene;
 
-		std::string projectPath;
+		std::string assetPath;
 		std::string currentPath;
 		std::string relativePath;
 

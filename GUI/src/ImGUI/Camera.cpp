@@ -66,9 +66,18 @@ namespace ShyEditor {
 				if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 				{
 					middleMouseButton = true;
+					std::cout << camera_position_x << std::endl;
 				}
 			}
 
+			if (event->type == SDL_MOUSEBUTTONUP)
+			{
+				if (middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
+				{
+					middleMouseButton = false;
+					std::cout << camera_position_x << std::endl;
+				}
+			}
 
 			if (event->type == SDL_MOUSEMOTION)
 			{
@@ -77,7 +86,6 @@ namespace ShyEditor {
 					camera_position_x -= event->motion.xrel;
 					camera_position_y -= event->motion.yrel;
 
-
 				}
 			}
 
@@ -85,6 +93,9 @@ namespace ShyEditor {
 #define ScrollSpeed 0.025f
 
 			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
+				
+				float pscale = scale;
+
 				if (event->wheel.y > 0) // scroll up
 				{
 					scale += ScrollSpeed;
@@ -104,16 +115,10 @@ namespace ShyEditor {
 						scale = minScale;
 					}
 				}
+
 			}
 		}
 
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
-			if (middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
-			{
-				middleMouseButton = false;
-			}
-		}
 	}
 
 	void Camera::SetConstrains(float min, float max)

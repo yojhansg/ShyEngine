@@ -55,8 +55,8 @@ namespace ShyEditor {
 		std::string sceneName;
 		const char* name;
 
-		Camera* sceneCamera;
 		int viewMode;
+		Camera* sceneCamera;
 
 		std::unordered_map<int, GameObject*> gameObjects;
 
