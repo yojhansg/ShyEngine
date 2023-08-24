@@ -97,6 +97,7 @@ namespace ShyEditor {
 
 		GameObject* AddGameObject(std::string path);
 		void AddGameObject(GameObject* go);
+		void AddChildsToScene(GameObject* go);
 
 		GameObject* AddOverlay(std::string path);
 

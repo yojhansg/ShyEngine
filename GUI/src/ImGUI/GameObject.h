@@ -28,7 +28,11 @@ namespace ShyEditor {
 
 	public:
 
+		static std::vector<int> unusedIds;
+
 		GameObject(std::string& path, bool isTransform);
+		GameObject(const GameObject& go);
+
 		~GameObject();
 
 		// Render, update and input
@@ -41,6 +45,7 @@ namespace ShyEditor {
 		void setName(const std::string& newName);
 		Texture* getTexture();
 		int getId();
+		void setId(int id);
 
 		// Visibility getters/setters
 		int getRenderOrder();
@@ -83,8 +88,8 @@ namespace ShyEditor {
 		void drawScriptsInEditor();
 
 		// Serialization and deseralization logic
-		std::string toJson(bool isPrefab = false);
-		static GameObject* fromJson(std::string json, bool isPrefab = false);
+		std::string toJson();
+		static GameObject* fromJson(std::string json, bool isTransform);
 
 		bool IsTransform();
 
@@ -173,6 +178,7 @@ namespace ShyEditor {
 
 	public:
 		Transform(GameObject* obj);
+		Transform(const Transform& tr, GameObject* obj);
 		~Transform();
 		
 		ImVec2 &GetPosition();
@@ -223,6 +229,7 @@ namespace ShyEditor {
 		};
 
 		Overlay(GameObject* obj);
+		Overlay(const Overlay& ov, GameObject* obj);
 		~Overlay();
 
 		int& GetPlacement();

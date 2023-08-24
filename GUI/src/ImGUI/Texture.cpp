@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include <SDL_image.h>
 
+#include "LogManager.h"
 #include "Editor.h"
 
 #include "CheckML.h"
@@ -15,18 +16,16 @@ namespace ShyEditor {
 		// Surface and texture
 		SDL_Surface* surface = IMG_Load(filepath.c_str());
 
-		if (surface == nullptr)
-		{
-			// TODO Aviso por el log
+		if (surface == nullptr) {
+			LogManager::LogError("Could not create the surface from the image with path: " + filepath);
 			return;
 		}
 
 		texture = SDL_CreateTextureFromSurface(Editor::getInstance()->getRenderer(), surface);
 
-		if (texture == nullptr)
-		{
+		if (texture == nullptr) {
 			SDL_FreeSurface(surface);
-			// TODO Aviso por el log
+			LogManager::LogError("Could not create the texture from the image with path: " + filepath);
 			return;
 		}
 
@@ -35,16 +34,14 @@ namespace ShyEditor {
 		SDL_FreeSurface(surface);
 	}
 
-	Texture::Texture(SDL_Texture* text)
-	{
+	Texture::Texture(SDL_Texture* text) {
 		texture = text;
 
 		if (SDL_QueryTexture(texture, NULL, NULL, &width, &height) < 0) {
-			// TODO Aviso por el log
+			LogManager::LogError(SDL_GetError());
 			return;
 		}
 	}
-
 
 	Texture::~Texture() {
 		if (texture != nullptr) {

@@ -18,6 +18,7 @@
 #include <filesystem>
 #include <direct.h>
 #include <imgui.h>
+#include <vector>
 #include <fstream>
 #include <Windows.h>
 
@@ -66,6 +67,9 @@ namespace ShyEditor {
 			return;
 		}
 
+		std::vector<Entry> folders;
+		std::vector<Entry> files;
+
 		// Iterate through the current file explorer directory
 		for (auto& explorerFile : fs::directory_iterator(explorerFolder)) {
 
@@ -78,7 +82,7 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 				entry.texture = folder;
-				entries.push_front(entry);
+				folders.push_back(entry);
 			}
 			else {
 				entry.extension = path.extension().string();
@@ -97,25 +101,20 @@ namespace ShyEditor {
 				else
 					entry.texture = file;
 
-				entries.push_back(entry);
+				files.push_back(entry);
 			}
-
 		}
+
+		std::sort(folders.begin(), folders.end());
+		std::sort(files.begin(), files.end());
+
+		for (auto f : folders)
+			entries.push_back(f);
+
+		for (auto f : files)
+			entries.push_back(f);
 
 		shouldUpdate = false;
-	}
-
-	std::string FileExplorer::GetParentPath(const std::string& path) {
-
-		int cont = 1;
-		for (int i = path.size() - 1; i >= 0; i--) {
-			if (path[i] == '\\') break;
-
-			cont++;
-		}
-
-		return path.substr(0, path.size() - cont);
-
 	}
 
 	void FileExplorer::Behaviour() {
@@ -136,7 +135,8 @@ namespace ShyEditor {
 				// Navigate to parent folder
 				currentPath = currentDirectory.parent_path().string();
 
-				relativePath = GetParentPath(relativePath);
+				std::filesystem::path relativeDirectory(relativePath);
+				relativePath = relativeDirectory.parent_path().string();
 
 				shouldUpdate = true;
 			}
@@ -192,7 +192,7 @@ namespace ShyEditor {
 			if (ImGui::BeginDragDropSource()) {
 
 
-				std::string relativePath = std::filesystem::path(entry.path).lexically_relative(projectPath + "/Assets").generic_string();
+				std::string relativePath = "\\" + std::filesystem::path(entry.path).lexically_relative(projectPath + "\\Assets").generic_string();
 
 				Asset asset;
 				memcpy(asset.extension, entry.extension.c_str(), 256);
@@ -257,8 +257,15 @@ namespace ShyEditor {
 					editor->getScene()->loadScene(entry.name);
 				}
 
-				else
-					ShellExecuteA(NULL, "open", (LPCSTR) entry.path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+				else {
+					HINSTANCE hInstance = ShellExecuteA(NULL, "open", (LPCSTR) entry.path.c_str(), NULL, NULL, SW_SHOWNORMAL);
+
+					// Check for ShellExecuteA() errors
+					if ((intptr_t)hInstance <= 32) {
+						DWORD errorCode = (DWORD)hInstance;
+						LogManager::LogError("ShellExecuteA() failed with error code: " + errorCode);
+					}
+				}
 			}
 
 		}

@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 #include "ComponentInfo.h"
 #include "Preferences.h"
+#include "LogManager.h"
 #include "Texture.h"
 #include "Editor.h"
 #include "Camera.h"
@@ -21,7 +22,8 @@
 
 namespace ShyEditor {
 
-	int GameObject::lastId = 0;
+	int GameObject::lastId = 1;
+	std::vector<int> GameObject::unusedIds = std::vector<int>();
 
 	GameObject::GameObject(std::string& path, bool isTransform) : isTransform(isTransform) {
 
@@ -62,15 +64,19 @@ namespace ShyEditor {
 		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
 
 
+		if (GameObject::unusedIds.size() != 0) {
+			id = GameObject::unusedIds.back();
+			GameObject::unusedIds.pop_back();
+		}
+		else {
+			//Ensure id is not being used already
+			while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+				GameObject::lastId++;
+			}
 
-		// Advance id if it already exists, can happen when we load a scene BECAUSE the gameObjects saved have an id
-		while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
+			id = GameObject::lastId;
 			GameObject::lastId++;
 		}
-
-		id = GameObject::lastId;
-
-		GameObject::lastId++;
 
 
 
@@ -100,10 +106,75 @@ namespace ShyEditor {
 
 	}
 
+	GameObject::GameObject(const GameObject& go)
+	{
+		editor = go.editor;
+
+		name = go.name;
+
+		id = go.id;
+
+		for (auto pair : go.components) {
+			Components::Component component = pair.second;
+
+			components.emplace(component.GetName(), component);
+		}
+
+		for (auto pair : go.scripts) {
+			Components::Script script = pair.second;
+
+			scripts.emplace(script.GetName(), script);
+		}
+
+		for (auto pair : go.children) {
+			GameObject* child = new GameObject(*pair.second);
+
+			children.emplace(child->getId(), child);
+		}
+
+		if (go.parent != nullptr) {
+			parent = new GameObject(*go.parent);
+		}
+		else {
+			parent = nullptr;
+		}
+
+		visible = go.visible;
+		showGizmo = go.showGizmo;
+		renderOrder = go.renderOrder;
+
+		isTransform = go.isTransform;
+
+		if (isTransform) {
+			transform = new Transform(*go.transform, this);
+		}
+		else {
+			overlay = new Overlay(*go.overlay, this);
+		}
+
+		texture_size = new ImVec2(*go.texture_size);
+
+		imagePath = go.imagePath;
+
+		if(go.texture != nullptr && go.texture->getSDLTexture() != NULL)
+			texture = new Texture(go.texture->getSDLTexture());
+
+		if (go.gizmo != nullptr && go.gizmo->getSDLTexture() != NULL)
+			gizmo = new Texture(go.gizmo->getSDLTexture());
+
+		leftMouseButtonDown = go.leftMouseButtonDown;
+		rightMouseButtonDown = go.rightMouseButtonDown;
+		previousMousePosX = go.previousMousePosX;
+		previousMousePosY = go.previousMousePosY;
+		waitingToDelete = go.waitingToDelete;
+	}
+
 	GameObject::~GameObject() {
 
 		if (parent != nullptr)
 			parent->removeChild(this);
+
+		parent = nullptr;
 
 		for (auto child : children)
 			child.second->setParent(nullptr);
@@ -247,6 +318,11 @@ namespace ShyEditor {
 		return id;
 	}
 
+	void GameObject::setId(int id)
+	{
+		this->id = id;
+	}
+
 
 
 
@@ -278,8 +354,8 @@ namespace ShyEditor {
 
 	void GameObject::addComponent(Components::Component comp) {
 
-		if (components.find(comp.getName()) == components.end())
-			components.insert({ comp.getName(), comp });
+		if (components.find(comp.GetName()) == components.end())
+			components.insert({ comp.GetName(), comp });
 
 	}
 
@@ -366,6 +442,8 @@ namespace ShyEditor {
 
 	void GameObject::toDelete() {
 		waitingToDelete = true;
+
+		GameObject::unusedIds.push_back(id);
 
 		for (auto& child : children) {
 			child.second->toDelete();
@@ -498,7 +576,7 @@ namespace ShyEditor {
 	void GameObject::drawComponentsInEditor() {
 
 		for (auto it = components.begin(); it != components.end();) {
-			std::string componentName = (*it).second.getName();
+			std::string componentName = (*it).second.GetName();
 
 
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
@@ -540,7 +618,7 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
 
-				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
+				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
 					it = components.erase(it);
 				else
 					++it;
@@ -596,10 +674,10 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
 
-				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
+				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
 					editor->OpenScript(scriptName);
 
-				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetWindowSize().x, 40)))
+				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
 					it = scripts.erase(it);
 				else
 					++it;
@@ -653,46 +731,13 @@ namespace ShyEditor {
 
 		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
 
-		GameObject* go = gameObjects.find((int)attr->value.value.valueFloat) != gameObjects.end() ? gameObjects.find((int)attr->value.value.valueFloat)->second : nullptr;
+		GameObject* go = gameObjects.find((int)attr->value.value.entityIdx) != gameObjects.end() ? gameObjects.find((int)attr->value.value.entityIdx)->second : nullptr;
 
-		std::string name = "";
-		if (attr->value.valueString != "")
-			name = attr->value.valueString;
-
-		if (go != nullptr) {
-			name = go->getName().c_str();
-		}
-
-		if (ImGui::BeginCombo(("##" + attrName).c_str(), name != "" ? name.c_str() : nullptr)) {
+		if (ImGui::BeginCombo(("##" + attrName).c_str(), go != nullptr ? go->getName().c_str() : "")) {
 			for (auto go : gameObjects) {
 				if (ImGui::Selectable(go.second->getName().c_str()))
-					attr->value.value.valueFloat = go.second->getId();
+					attr->value.value.entityIdx = go.second->getId();
 			}
-
-			if (std::filesystem::is_directory("Prefabs"))
-				for (const auto& entry : std::filesystem::directory_iterator("Prefabs")) {
-					if (entry.path().extension() == ".prefab") {
-						std::string prefabFileName = entry.path().filename().string();
-						if (ImGui::Selectable(prefabFileName.c_str())) {
-
-							std::ifstream inputFile("Prefabs/" + prefabFileName);
-
-							nlohmann::ordered_json jsonData;
-							try {
-								inputFile >> jsonData;
-							}
-							catch (const nlohmann::json::parse_error& e) {
-								std::cerr << "JSON parse error: " << e.what() << std::endl;
-								return;
-							}
-							inputFile.close();
-
-							attr->value.value.valueFloat = jsonData["id"];
-							attr->value.valueString = prefabFileName;
-
-						}
-					}
-				}
 
 			ImGui::EndCombo();
 		}
@@ -700,8 +745,7 @@ namespace ShyEditor {
 		ImGui::SameLine();
 
 		if (ImGui::Button(("X##" + attrName).c_str())) {
-			attr->value.value.valueFloat = -1;
-			attr->value.valueString = "";
+			attr->value.value.entityIdx = 0;
 		}
 	}
 
@@ -892,7 +936,7 @@ namespace ShyEditor {
 
 	// ------------------------ Serialization and deseralization logic -------------------------
 
-	std::string GameObject::toJson(bool isPrefab) {
+	std::string GameObject::toJson() {
 
 		nlohmann::ordered_json j;
 		j["name"] = name;
@@ -904,21 +948,8 @@ namespace ShyEditor {
 			childsJson.push_back(child);
 		}
 
-		if (isPrefab) {
-			//if its a prefab it needs a new Id
-			std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
-			while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
-				GameObject::lastId++;
-			}
-
-			j["id"] = GameObject::lastId;
-
-			GameObject::lastId++;
-		}
-		else {
-			j["id"] = id;
-		}
-
+		j["id"] = id;
+		
 		j["childs"] = childsJson;
 
 		j["order"] = renderOrder;
@@ -954,25 +985,33 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
-	GameObject* GameObject::fromJson(std::string json, bool isPrefab) {
+	GameObject* GameObject::fromJson(std::string json, bool isTransform = true) {
 
 		nlohmann::ordered_json jsonData;
-		try {
-			jsonData = nlohmann::json::parse(json);
-		}
-		catch (const nlohmann::json::parse_error& e) {
-			std::cerr << "JSON parse error: " << e.what() << std::endl;
+		jsonData = nlohmann::json::parse(json);
+
+		std::string errorMsg = "The JSON gameobject has not the correct format.";
+
+		if (!jsonData.contains("name")) {
+			LogManager::LogError(errorMsg);
 			return nullptr;
 		}
 
 		std::string goName = jsonData["name"];
 
-		GameObject* gameObject = new GameObject(goName, true);
+		GameObject::unusedIds.push_back(jsonData["id"]);
+
+		GameObject* gameObject = new GameObject(goName, isTransform);
 		gameObject->name = goName;
 
-		//if its prefab we leave the autoassigned id
-		if (!isPrefab) {
-			gameObject->id = jsonData["id"];
+		if (!jsonData.contains("id")) {
+			LogManager::LogError(errorMsg);
+			return nullptr;
+		}
+
+		if (!jsonData.contains("childs")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
 		}
 
 		for (const auto& childJson : jsonData["childs"]) {
@@ -982,7 +1021,30 @@ namespace ShyEditor {
 			child->setParent(gameObject);
 		}
 
+
+		if (!jsonData.contains("order")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		gameObject->renderOrder = jsonData["order"];
+
+
+
+		if (!jsonData.contains("localPosition")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localScale")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
+		if (!jsonData.contains("localRotation")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		// Deserialize localPosition, localScale, and localRotation
 		std::string localPositionStr = jsonData["localPosition"];
@@ -996,11 +1058,22 @@ namespace ShyEditor {
 		gameObject->transform->SetRotation(std::stof(localRotation));
 
 
+		// Components
+		if (!jsonData.contains("components")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
+
 		for (const auto& compJson : jsonData["components"]) {
 			Components::Component component = Components::Component::fromJson(compJson.dump());
 			gameObject->addComponent(component);
 		}
 
+		// Scripts
+		if (!jsonData.contains("scripts")) {
+			LogManager::LogError(errorMsg);
+			return gameObject;
+		}
 
 		for (const auto& scriptJson : jsonData["scripts"].items()) {
 			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
@@ -1029,6 +1102,15 @@ namespace ShyEditor {
 		scale = new ImVec2(1, 1);
 		position = new ImVec2(0, 0);
 		rotation = 0;
+	}
+
+	Transform::Transform(const Transform& tr, GameObject* obj)
+	{
+		this->obj = obj;
+
+		scale = new ImVec2(*tr.scale);
+		position = new ImVec2(*tr.position);
+		rotation = tr.rotation;
 	}
 
 	Transform::~Transform()
@@ -1086,6 +1168,28 @@ namespace ShyEditor {
 		scale = 1;
 
 		left = top = right = bottom = 0;
+
+		image = new OverlayImage();
+		text = nullptr;
+	}
+
+	Overlay::Overlay(const Overlay& ov, GameObject* obj)
+	{
+		this->obj = obj;
+
+		placement = ov.placement;
+		position = new ImVec2(*ov.position);
+		size = new ImVec2(*ov.size);
+
+		anchor = new ImVec2(*ov.anchor);
+
+		left = ov.left;
+		top = ov.top;
+		right = ov.right;
+		bottom = ov.bottom;
+
+		scale = ov.scale;
+		interactable = ov.interactable;
 
 		image = new OverlayImage();
 		text = nullptr;

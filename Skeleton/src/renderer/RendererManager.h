@@ -58,7 +58,7 @@ namespace Renderer {
 		void resizeWindow(int w, int h);
 		void renameWindow(const std::string& name);
 		void repositionWindow(int x, int y);
-		void SetWindowIcon(const std::string& path);
+		bool SetWindowIcon(const std::string& path);
 
 	private:
 

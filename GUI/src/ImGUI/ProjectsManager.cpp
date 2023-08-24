@@ -1,18 +1,20 @@
-#include "imgui_impl_sdlrenderer2.h"
 #include "ProjectsManager.h"
+
+#include "imgui_impl_sdlrenderer2.h"
 #include "imgui_impl_sdl2.h"
+#include "LogManager.h"
 #include "Editor.h"
 #include "Window.h"
 #include "imgui.h"
 #include "SDL.h"
 
 #include <nlohmann/json.hpp>
+#include <filesystem>
 #include <shlwapi.h>
 #include <Windows.h>
 #include <Shlobj.h>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <ctime>
 
 #include "CheckML.h"
@@ -345,7 +347,7 @@ namespace ShyEditor {
 
                 // Error handling for checking if the directory exists or not.
                 if (ec) {
-                    std::cout << "PROJECTS MANAGER: Error when checking if the directory to be created already exists in your AppData path." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: Error when checking if the directory to be created already exists in your AppData path.");
                     return false;
                 }
 
@@ -354,7 +356,7 @@ namespace ShyEditor {
 
                 // Error handling on folders creation
                 if (ec) {
-                    std::cout << "PROJECTS MANAGER: Error while creating the directory to host the necessary files for the proper functioning of the editor." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: Error while creating the directory to host the necessary files for the proper functioning of the editor.");
                     return false;
                 }
 
@@ -366,7 +368,7 @@ namespace ShyEditor {
                 std::ofstream jsonFile(recentProjectsFile);
 
                 if (!jsonFile.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file could not be opened to dump the content." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file could not be opened to dump the content.");
                     return false;
                 }
 
@@ -384,7 +386,7 @@ namespace ShyEditor {
                 std::ifstream fileStreamIn(recentProjectsFile);
 
                 if (!fileStreamIn.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file could not be opened to read its content." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file could not be opened to read its content.");
                     return false;
                 }
 
@@ -395,7 +397,7 @@ namespace ShyEditor {
 
                 // Check if the 'recentProjectsFile' contains the expected format
                 if (!jsonData.contains("Recent Projects Paths") || !jsonData.contains("Last Project Saved Path") || !jsonData["Recent Projects Paths"].is_array()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file does not contain the expected format." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file does not contain the expected format.");
                     return false;
                 }
 
@@ -439,7 +441,7 @@ namespace ShyEditor {
                 std::ofstream fileStreamOut(recentProjectsFile, std::ofstream::out | std::ofstream::trunc);
 
                 if (!fileStreamOut.is_open()) {
-                    std::cout << "PROJECTS MANAGER: The recent projects file cannot be opened for writing." << std::endl;
+                    LogManager::LogError("PROJECTS MANAGER: The recent projects file cannot be opened for writing.");
                     return false;
                 }
 
@@ -454,7 +456,7 @@ namespace ShyEditor {
 
         }
         else {
-            std::cout << "PROJECTS MANAGER: Could not create the necessary directories in your AppData path! Restart the editor and try again." << std::endl;
+            LogManager::LogError("PROJECTS MANAGER: Could not create the necessary directories in your AppData path! Restart the editor and try again.");
             return false;
         }
 

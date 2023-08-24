@@ -6,6 +6,7 @@
 #include "FileExplorer.h"
 #include "Preferences.h"
 #include "Components.h"
+#include "LogManager.h"
 #include "GameObject.h"
 #include "Hierarchy.h"
 #include "Window.h"
@@ -41,7 +42,6 @@ namespace ShyEditor {
 		uiTexture = nullptr;
 		uiWidth = 0; uiHeight = 0;
 		ResizeOverlayIfNeccesary();
-
 
 		// Pointer to the selected gameobject in the scene
 		selectedGameObject = nullptr;
@@ -83,6 +83,15 @@ namespace ShyEditor {
 
 	void Scene::AddGameObject(GameObject* go) {
 		gameObjects.emplace(go->getId(), go);
+	}
+
+	void Scene::AddChildsToScene(GameObject* go)
+	{
+		for (auto pair : go->getChildren()) {
+			gameObjects.emplace(pair.second->getId(), pair.second);
+
+			AddChildsToScene(pair.second);
+		}
 	}
 
 	GameObject* Scene::AddOverlay(std::string path)
@@ -129,9 +138,7 @@ namespace ShyEditor {
 			outputFile << j.dump(4);
 			outputFile.close();
 		}
-		else {
-
-		}
+		else LogManager::LogError("Could not open the file to save the scene.");
 
 	}
 
@@ -157,7 +164,7 @@ namespace ShyEditor {
 		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 
 		if (!inputFile.is_open()) {
-
+			LogManager::LogError("Could not open the file to load the scene.");
 			return;
 		}
 
@@ -165,20 +172,33 @@ namespace ShyEditor {
 		inputFile >> jsonData;
 		inputFile.close();
 
+
+		if (!jsonData.contains("objects")) {
+			LogManager::LogError("The scene file has not the expected format.");
+			return;
+		}
+
 		nlohmann::json gameObjectsJson = jsonData["objects"];
 
 		// Iterate through the game objects JSON array
 		for (const auto& gameObjectJson : gameObjectsJson) {
-			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
+			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump(), true);
 			gameObjects.insert({ gameObject->getId(), gameObject });
+			AddChildsToScene(gameObject);
+		}
+
+		if (!jsonData.contains("overlays")) {
+			LogManager::LogError("The scene file has not the expected format.");
+			return;
 		}
 
 		nlohmann::json overlaysJson = jsonData["overlays"];
 
 		// Iterate through the overlay objects JSON array
 		for (const auto& overlayJson : overlaysJson) {
-			GameObject* overlay = GameObject::fromJson(overlayJson.dump());
+			GameObject* overlay = GameObject::fromJson(overlayJson.dump(), false);
 			overlays.push_back(overlay);
+			AddChildsToScene(overlay);
 		}
 
 	}
@@ -587,6 +607,8 @@ namespace ShyEditor {
 			if (go->isWaitingToDelete()) {
 				selectedGameObject = nullptr;
 
+				GameObject::unusedIds.push_back(go->getId());
+
 				delete go;
 				it = gameObjects.erase(it);
 			}
@@ -604,6 +626,8 @@ namespace ShyEditor {
 
 			if (go->isWaitingToDelete()) {
 				selectedGameObject = nullptr;
+
+				GameObject::unusedIds.push_back(go->getId());
 
 				delete go;
 				it2 = overlays.erase(it2);

@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "Game.h"
 #include "WindowLayout.h"
+#include "PrefabManager.h"
 
 #include <Windows.h>
 #include <fstream>
@@ -70,6 +71,11 @@ namespace ShyEditor {
                 if (ImGui::MenuItem("Preferences")) {
 
                     Preferences::Open();
+                }
+
+                if (ImGui::MenuItem("Prefab manager")) {
+
+                    PrefabManager::Open();
                 }
 
                 if (ImGui::MenuItem("Theme selector")) {
@@ -257,11 +263,11 @@ namespace ShyEditor {
     {
         if (shouldOpenNewScenePopup)
         {
-            ImGui::OpenPopup("Save scene");
+            ImGui::OpenPopup("New scene");
             shouldOpenNewScenePopup = false;
         }
 
-        if (ImGui::BeginPopup("Save scene"))
+        if (ImGui::BeginPopup("New scene"))
         {
             ImGui::Text(("Insert name for the scene:"));
 
@@ -277,7 +283,14 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    editor->getScene()->saveScene(std::string(nameBuffer));
+                    //Save current scene
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+
+                    //Create new scene
+                    editor->getScene()->loadScene(nameBuffer);
+
+                    //Save empty new scene
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -312,25 +325,10 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    nlohmann::ordered_json j;
-
-                    j = j.parse(go->toJson());
-
-
-                    std::string filePath = "Prefabs/" + std::string(nameBuffer) + ".prefab";
-
-                    if (!std::filesystem::exists(filePath)) {
-                        std::filesystem::create_directories("Prefabs");
-                    }
-
-                    std::ofstream outputFile(filePath);
-                    if (outputFile.is_open()) {
-                        outputFile << j.dump(4);
-                        outputFile.close();
-                    }
-                    else {
-                        //ERROR HANDLING
-                    }
+                    GameObject* prefab = new GameObject(*go);
+                    prefab->setName(nameBuffer);
+                    
+                    PrefabManager::AddPrefab(prefab);
                 }
 
                 ImGui::CloseCurrentPopup();
