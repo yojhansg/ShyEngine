@@ -188,10 +188,10 @@ namespace ShyEditor {
 			}
 
 			if (event->key.keysym.mod & KMOD_CTRL) {
-				if (event->key.keysym.scancode == SDL_SCANCODE_C) {
-					Scene* scene = Editor::getInstance()->getScene();
-					auto selectedGo = scene->GetSelectedGameObject();
+				Scene* scene = Editor::getInstance()->getScene();
+				auto selectedGo = scene->GetSelectedGameObject();
 
+				if (event->key.keysym.scancode == SDL_SCANCODE_C) {
 					if (selectedGo == nullptr) return;
 
 					if (copiedObject != nullptr) {
@@ -204,7 +204,6 @@ namespace ShyEditor {
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_V) {
-					Scene* scene = Editor::getInstance()->getScene();
 
 					if (copiedObject == nullptr) return;
 
@@ -217,6 +216,38 @@ namespace ShyEditor {
 
 					copiedObject = new GameObject(*copiedObject);
 				}
+
+				if (event->key.keysym.scancode == SDL_SCANCODE_D) {
+					if (selectedGo == nullptr) return;
+
+					GameObject* goToDuplicate = new GameObject(*selectedGo);
+
+					if (goToDuplicate->IsTransform()) {
+						scene->AddGameObject(goToDuplicate);
+					}
+					else {
+						scene->AddOverlay(goToDuplicate);
+					}
+				}
+
+				if (event->key.keysym.scancode == SDL_SCANCODE_X) {
+					if (selectedGo == nullptr) return;
+
+					if (copiedObject != nullptr) {
+						GameObject::unusedIds.push_back(copiedObject->getId());
+						delete copiedObject;
+					}
+
+					copiedObject = new GameObject(*selectedGo);
+
+					if (selectedGo->IsTransform()) {
+						scene->getGameObjects()[selectedGo->getId()]->toDelete();
+					}
+					else {
+						scene->getOverlays()[selectedGo->getId()]->toDelete();
+					}
+				}
+
 			}
 
 		}
