@@ -151,6 +151,11 @@ namespace ShyEditor {
 		if (ImGui::Button("Refresh"))
 			shouldUpdate = true;
 
+		ImGui::SameLine();
+
+		if (ImGui::Button("Open file explorer"))
+			ShellExecuteA(NULL, "explore", currentPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+
 		ImGui::Separator();
 
 		if (viewMode == 0)
