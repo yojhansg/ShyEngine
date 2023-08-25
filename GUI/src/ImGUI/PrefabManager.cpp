@@ -60,7 +60,7 @@ namespace ShyEditor {
 		currentlySelected = 0;
 
 		windowWidth = 1080;
-		windowHeight = 720;
+		windowHeight = 1080;
 
 		canBeDisplayedOnTop = true;
 
@@ -147,16 +147,39 @@ namespace ShyEditor {
 		ImGui::Unindent();
 	}
 
+	void PrefabManager::DrawImage()
+	{
+		if (currentlySelected != 0) {
+			GameObject* prefab = prefabs[currentlySelected];
+			if (prefab->getTexture() != nullptr) {
+				Texture* text = prefabs[currentlySelected]->getTexture();
+
+				float sizeX = text->getWidth() * prefab->getScale_x();
+				float sizeY = text->getHeight() * prefab->getScale_y();
+				float textAspectRatio = sizeX / sizeY;
+
+				//Fixed size so big gameObjects doesnt fill the whole window
+				if (sizeX > sizeY) {
+					sizeX = 150;
+					sizeY = sizeX / textAspectRatio;
+				}
+				else {
+					sizeY = 150;
+					sizeX = sizeY * textAspectRatio;
+				}
+
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() / 2 - sizeX / 2);
+
+				ImGui::Image(text->getSDLTexture(), ImVec2(sizeX, sizeY));
+			}
+		}
+	}
+
 	void PrefabManager::DrawComponents()
 	{
 		if (currentlySelected != 0) {
 
 			GameObject* prefab = prefabs[currentlySelected];
-
-			if (prefab->IsTransform())
-				prefab->drawTransformInEditor();
-			else
-				prefab->drawOverlayInEditor();
 
 			prefab->drawComponentsInEditor();
 			prefab->drawScriptsInEditor();
@@ -306,13 +329,7 @@ namespace ShyEditor {
 			
 			ImGui::SeparatorText("Image");
 
-			if (currentlySelected != 0 && prefabs[currentlySelected]->getTexture() != nullptr) {
-				Texture* text = prefabs[currentlySelected]->getTexture();
-
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() / 2 - text->getWidth() / 2);
-
-				ImGui::Image(text->getSDLTexture(), ImVec2(text->getWidth(), text->getHeight()));
-			}
+			DrawImage();
 
 			ImGui::SeparatorText("Components");
 
