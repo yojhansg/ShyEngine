@@ -88,7 +88,7 @@ namespace ShyEditor {
 
 	void Scene::AddChildsToScene(GameObject* go)
 	{
-		for (auto pair : go->getChildren()) {
+		for (auto& pair : go->getChildren()) {
 			gameObjects.emplace(pair.second->getId(), pair.second);
 
 			AddChildsToScene(pair.second);
@@ -514,7 +514,7 @@ namespace ShyEditor {
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyGoSelected = false;
 
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
 			for (const auto& pair : gameObjects) {
 
@@ -526,6 +526,11 @@ namespace ShyEditor {
 				}
 
 			}
+		}
+
+
+		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			SetSelectedGameObject(nullptr);
 		}
 
 		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
@@ -583,10 +588,6 @@ namespace ShyEditor {
 			}
 		}
 
-
-		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			SetSelectedGameObject(nullptr);
-		}
 
 		sceneCamera->handleInput(event, insideWindow, focused);
 
@@ -943,7 +944,7 @@ namespace ShyEditor {
 		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
 		for (const auto& o : overlays) {
 			if (o->getParent() == nullptr)
-				gameObjectsJson.push_back(j.parse(o->toJson()));
+				overlayObjectsJson.push_back(j.parse(o->toJson()));
 		}
 
 		j["overlays"] = overlayObjectsJson;
