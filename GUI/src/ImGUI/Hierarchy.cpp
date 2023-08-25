@@ -24,7 +24,7 @@ namespace ShyEditor {
 		shouldOpenSavePrefabPopup = false;
 
 		docked = true;
-		
+
 		acceptAssetDrop = true;
 	}
 
@@ -68,6 +68,84 @@ namespace ShyEditor {
 
 				RenderGameObject(overlay, "Overlay");
 			}
+		}
+
+	}
+
+	void Hierarchy::HandleInput(SDL_Event* event)
+	{
+
+		if (event->type == SDL_KEYDOWN) {
+
+			int dir = 0;
+			if (event->key.keysym.scancode == SDL_SCANCODE_UP)
+			{
+				dir = -1;
+
+			}
+			else if (event->key.keysym.scancode == SDL_SCANCODE_DOWN)
+			{
+				dir = 1;
+			}
+
+			if (dir != 0) {
+
+
+				Scene* scene = Editor::getInstance()->getScene();
+
+				auto& objects = scene->getGameObjects();
+				auto& overlays = scene->getOverlays();
+
+				if (objects.size() == 0 && overlays.size() == 0) return;
+
+
+				auto selectedGo = scene->GetSelectedGameObject();
+
+				if (selectedGo == nullptr) return;
+
+				if (selectedGo->IsTransform()) {
+					auto goIt = objects.find(selectedGo->getId());
+
+					if (dir < 0) {
+
+						if (goIt == objects.begin())
+							scene->SetSelectedGameObject(*overlays.rbegin());
+						else
+							scene->SetSelectedGameObject(std::prev(goIt)->second);
+					}
+
+					else {
+
+						if (std::next(goIt) == objects.end())
+							scene->SetSelectedGameObject(*overlays.begin());
+						else
+							scene->SetSelectedGameObject(std::next(goIt)->second);
+					}
+				}
+				else {
+
+					auto goIt = std::find(overlays.begin(), overlays.end(), selectedGo);
+
+					if (dir < 0) {
+
+						if (goIt == overlays.begin())
+							scene->SetSelectedGameObject(objects.rbegin()->second);
+						else
+							scene->SetSelectedGameObject(*std::prev(goIt));
+					}
+
+					else {
+
+						if (std::next(goIt) == overlays.end())
+							scene->SetSelectedGameObject(objects.begin()->second);
+						else
+							scene->SetSelectedGameObject(*std::next(goIt));
+					}
+
+				}
+
+			}
+
 		}
 
 	}

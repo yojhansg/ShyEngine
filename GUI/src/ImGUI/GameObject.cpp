@@ -63,7 +63,7 @@ namespace ShyEditor {
 		previousMousePosY = 0;
 
 		// Gets the list of gameobjects in the scene
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
 
 
 		if (GameObject::unusedIds.size() != 0) {
@@ -115,7 +115,7 @@ namespace ShyEditor {
 		name = go.name;
 
 		// Gets the list of gameobjects in the scene
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
 
 
 		if (GameObject::unusedIds.size() != 0) {
@@ -540,8 +540,11 @@ namespace ShyEditor {
 
 	void GameObject::drawTransformInEditor() {
 
+		transform->GetPosition().y *= -1;
 		ImGui::Text("Position");
 		ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
+		transform->GetPosition().y *= -1;
+
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
@@ -770,7 +773,7 @@ namespace ShyEditor {
 
 	void GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr) {
 
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
 
 		GameObject* go = gameObjects.find((int)attr->value.value.entityIdx) != gameObjects.end() ? gameObjects.find((int)attr->value.value.entityIdx)->second : nullptr;
 
@@ -983,7 +986,7 @@ namespace ShyEditor {
 		j["name"] = name;
 
 		nlohmann::ordered_json childsJson = nlohmann::json::array();
-		for (auto childPair : children) {
+		for (auto& childPair : children) {
 			auto child = j.parse(childPair.second->toJson());
 
 			childsJson.push_back(child);
@@ -997,10 +1000,27 @@ namespace ShyEditor {
 
 		j["prefabId"] = prefabId;
 
-		j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(transform->GetPosition().y);
-		j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
-		j["localRotation"] = std::to_string(transform->GetRotation());
+		if (isTransform) {
 
+			j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(-transform->GetPosition().y);
+			j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
+			j["localRotation"] = std::to_string(transform->GetRotation());
+		}
+		else {
+			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
+
+			j["placement"] = std::to_string(overlay->GetPlacement());
+			j["anchor"] = std::to_string(overlay->GetAnchor().x) + "," + std::to_string(overlay->GetAnchor().y);
+			j["top"] = std::to_string(overlay->GetTop());
+			j["left"] = std::to_string(overlay->GetLeft());
+			j["right"] = std::to_string(overlay->GetRight());
+			j["bottom"] = std::to_string(overlay->GetBottom());
+			j["position"] = std::to_string(overlay->GetPosition().x) + ", " + std::to_string(overlay->GetPosition().y);
+			j["size"] = std::to_string(overlay->GetSize().x) + ", " + std::to_string(overlay->GetSize().y);
+
+
+			//TODO: color e interactable
+		}
 		nlohmann::ordered_json componentsJson = nlohmann::json::array();
 		for (auto it = components.begin(); it != components.end(); it++) {
 
@@ -1075,34 +1095,64 @@ namespace ShyEditor {
 
 		gameObject->renderOrder = jsonData["order"];
 
+		if (isTransform)
+		{
+			if (!jsonData.contains("localPosition")) {
+				LogManager::LogError(errorMsg);
+				return gameObject;
+			}
 
+			if (!jsonData.contains("localScale")) {
+				LogManager::LogError(errorMsg);
+				return gameObject;
+			}
 
-		if (!jsonData.contains("localPosition")) {
-			LogManager::LogError(errorMsg);
-			return gameObject;
+			if (!jsonData.contains("localRotation")) {
+				LogManager::LogError(errorMsg);
+				return gameObject;
+			}
+
+			// Deserialize localPosition, localScale, and localRotation
+			std::string localPositionStr = jsonData["localPosition"];
+			std::string localScaleStr = jsonData["localScale"];
+			std::string localRotation = jsonData["localRotation"];
+
+			// Parse localPosition and localScale
+			sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
+			sscanf_s(localScaleStr.c_str(), "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
+
+			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
+			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
+
+			gameObject->transform->GetPosition().y *= -1;
+
+			gameObject->transform->SetRotation(std::stof(localRotation));
 		}
+		else {
 
-		if (!jsonData.contains("localScale")) {
-			LogManager::LogError(errorMsg);
-			return gameObject;
+			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
+
+			gameObject->overlay->GetPlacement() = jsonData.contains("placement") ? std::stoi(jsonData["placement"].get<std::string>()) : 0;
+			gameObject->overlay->GetTop() = jsonData.contains("top") ? std::stoi(jsonData["top"].get<std::string>()) : 0;
+			gameObject->overlay->GetBottom() = jsonData.contains("bottom") ? std::stoi(jsonData["bottom"].get<std::string>()) : 0;
+			gameObject->overlay->GetLeft() = jsonData.contains("left") ? std::stoi(jsonData["left"].get<std::string>()) : 0;
+			gameObject->overlay->GetRight() = jsonData.contains("right") ? std::stoi(jsonData["right"].get<std::string>()) : 0;
+
+			if (jsonData.contains("position")) {
+
+				std::string position = jsonData["position"];
+				sscanf_s(position.c_str(), "%f, %f", &gameObject->overlay->GetPosition().x, &gameObject->overlay->GetPosition().y);
+			}
+
+			if (jsonData.contains("size")) {
+
+				std::string size = jsonData["size"];
+				sscanf_s(size.c_str(), "%f, %f", &gameObject->overlay->GetSize().x, &gameObject->overlay->GetSize().y);
+			}
+
+			//TODO: color y interactable
+
 		}
-
-		if (!jsonData.contains("localRotation")) {
-			LogManager::LogError(errorMsg);
-			return gameObject;
-		}
-
-		// Deserialize localPosition, localScale, and localRotation
-		std::string localPositionStr = jsonData["localPosition"];
-		std::string localScaleStr = jsonData["localScale"];
-		std::string localRotation = jsonData["localRotation"];
-
-		// Parse localPosition and localScale
-		sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
-		sscanf_s(localScaleStr.c_str(), "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
-
-		gameObject->transform->SetRotation(std::stof(localRotation));
-
 
 		// Components
 		if (!jsonData.contains("components")) {

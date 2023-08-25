@@ -24,7 +24,6 @@
 #include <filesystem>
 #include <Scene.h>
 #include <chrono>
-
 using namespace std::chrono;
 
 Engine::Engine() {
@@ -74,7 +73,9 @@ bool Engine::init() {
 
 	resourcesManager = Resources::ResourcesManager::init();
 
-	//ECS::SplashScene::LoadResources();
+	resourcesManager->SetResourcesPath("Assets\\");
+
+	ECS::SplashScene::LoadResources();
 
 	ECS::ContactListener::init();
 
@@ -94,8 +95,8 @@ bool Engine::init() {
 
 	if (data.windowIcon != "")
 		rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
-	else 
-		rendererManager->SetWindowIcon("Assets\\icon.png");
+	else
+		rendererManager->SetWindowIcon("Assets/icon.png");
 
 	rendererManager->SetRenderTarget(false);
 
@@ -104,6 +105,11 @@ bool Engine::init() {
 	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
 
 	sceneManager->ChangeScene(data.resourcesPath + data.initialScene, (int)ECS::SceneManager::PUSH);
+
+
+	resourcesManager->SetResourcesPath(data.resourcesPath);
+
+
 	sceneManager->manageScenes();
 
 	if (sceneManager->getNumberOfScenes() == 0) {
@@ -111,8 +117,8 @@ bool Engine::init() {
 		return false;
 	}
 
-	/*if (data.useSplashScreen)
-		sceneManager->SplashScreen();*/
+	if (data.useSplashScreen)
+		sceneManager->SplashScreen();
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
 	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);

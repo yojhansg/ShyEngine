@@ -17,7 +17,7 @@ namespace ShyEditor {
 
 			Color color;
 
-			std::string date;
+			std::string time;
 			std::string type;
 			std::string message;
 		};
@@ -30,6 +30,7 @@ namespace ShyEditor {
 
 		Console();
 		void Behaviour() override;
+		void Print(const std::string& str);
 	};
 
 }

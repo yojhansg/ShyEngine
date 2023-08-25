@@ -32,13 +32,14 @@ namespace ShyEditor {
 		Camera(ImVec2 position, float scale, SDL_Renderer* renderer);
 		~Camera();
 
-		void handleInput(SDL_Event* event, bool isMouseInsideWindow);
+		void handleInput(SDL_Event* event, bool isMouseInsideWindow, bool isFocused);
 
 		void SetConstrains(float min, float max);
 
 		ImVec2 GetPosition();
 		float& GetScale();
 
+		void SetPosition(float x, float y);
 		void AddPosition(float x, float y);
 
 		float GetMinScale();

@@ -5,6 +5,10 @@
 #include "Texture.h"
 #include "ConsoleManager.h"
 
+#include <filesystem>
+#include <iostream>
+#include <fstream>
+
 Renderer::Font::Font(const std::string& filepath, int pointSize) : pointSize(pointSize), path(filepath)
 {
 	font = TTF_OpenFont(filepath.c_str(), pointSize);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 #include <iostream>
 #include <vector>
 
@@ -58,7 +58,7 @@ namespace ShyEditor {
 		int viewMode;
 		Camera* sceneCamera;
 
-		std::unordered_map<int, GameObject*> gameObjects;
+		std::map<int, GameObject*> gameObjects;
 
 
 
@@ -102,7 +102,7 @@ namespace ShyEditor {
 		GameObject* AddOverlay(std::string path);
 
 
-		std::unordered_map<int, GameObject*>& getGameObjects();
+		std::map<int, GameObject*>& getGameObjects();
 		std::vector<GameObject*>& getOverlays();
 
 		std::string getSceneName();

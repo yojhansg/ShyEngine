@@ -88,7 +88,7 @@ namespace ShyEditor {
 
 	void Scene::AddChildsToScene(GameObject* go)
 	{
-		for (auto pair : go->getChildren()) {
+		for (auto& pair : go->getChildren()) {
 			gameObjects.emplace(pair.second->getId(), pair.second);
 
 			AddChildsToScene(pair.second);
@@ -103,7 +103,7 @@ namespace ShyEditor {
 		return go;
 	}
 
-	std::unordered_map<int, GameObject*>& Scene::getGameObjects() {
+	std::map<int, GameObject*>& Scene::getGameObjects() {
 		return gameObjects;
 	}
 
@@ -253,6 +253,7 @@ namespace ShyEditor {
 		SDL_RenderClear(renderer);
 
 
+		bool inScene = IsMouseHoveringWindow();
 		auto mouse = MousePositionInScene();
 
 		float cameraScale = sceneCamera->GetScale();
@@ -277,6 +278,8 @@ namespace ShyEditor {
 			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 
 			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
+
+			if (!inScene) continue;
 
 			if (selectedOverlay.overlay == nullptr)
 			{
@@ -511,7 +514,7 @@ namespace ShyEditor {
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyGoSelected = false;
 
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
 			for (const auto& pair : gameObjects) {
 
@@ -525,13 +528,18 @@ namespace ShyEditor {
 			}
 		}
 
+
+		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			SetSelectedGameObject(nullptr);
+		}
+
 		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
 		{
 			dragging = false;
 		}
 
 		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
-			
+
 			float invCameraScale = 1.f / sceneCamera->GetScale();
 
 			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
@@ -581,15 +589,28 @@ namespace ShyEditor {
 		}
 
 
-		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			SetSelectedGameObject(nullptr);
-		}
+		sceneCamera->handleInput(event, insideWindow, focused);
 
-		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-			if (focused) {
-				sceneCamera->handleInput(event, insideWindow);
+		if (event->type == SDL_KEYUP && event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
+
+
+			if (selectedGameObject != nullptr) {
+
+				if (selectedGameObject->IsTransform()) {
+
+					auto pos = selectedGameObject->getPosition();
+					sceneCamera->SetPosition(pos.x, pos.y);
+				}
+				else {
+
+					float camScale = sceneCamera->GetScale();
+					auto pos = selectedGameObject->GetOverlay()->CalculateCenterPoint();
+					sceneCamera->SetPosition(pos.x * camScale, pos.y * camScale);
+
+				}
 			}
 		}
+
 
 	}
 
@@ -925,7 +946,7 @@ namespace ShyEditor {
 		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
 		for (const auto& o : overlays) {
 			if (o->getParent() == nullptr)
-				gameObjectsJson.push_back(j.parse(o->toJson()));
+				overlayObjectsJson.push_back(j.parse(o->toJson()));
 		}
 
 		j["overlays"] = overlayObjectsJson;
