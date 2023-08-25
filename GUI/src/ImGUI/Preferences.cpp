@@ -48,7 +48,8 @@ namespace ShyEditor {
 
 	void Preferences::Open()
 	{
-		instance->visible = true;
+		instance->Show();
+
 	}
 
 

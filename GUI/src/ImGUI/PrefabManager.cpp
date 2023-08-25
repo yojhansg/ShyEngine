@@ -150,8 +150,8 @@ namespace ShyEditor {
 
 		currentlySelected = 0;
 
-		windowWidth = 1080;
-		windowHeight = 1080;
+		windowWidth = 700;
+		windowHeight = 700;
 
 		canBeDisplayedOnTop = true;
 
@@ -365,7 +365,7 @@ namespace ShyEditor {
 
 	void PrefabManager::Open()
 	{
-		instance->visible = true;
+		instance->Show();
 	}
 
 	PrefabManager::~PrefabManager()

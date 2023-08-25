@@ -310,8 +310,13 @@ namespace ShyEditor {
 
 
 		ImGui::SameLine();
-		ImGui::Text(gameObject->getName().c_str());
 
+		if (gameObject->getPrefabId() != 0) {
+			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , gameObject->getName().c_str());
+		}
+		else {
+			ImGui::Text(gameObject->getName().c_str());
+		}
 
 		showGameObjectMenu(gameObject);
 		showRenamePopup(gameObject);

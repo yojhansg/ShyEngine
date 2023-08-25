@@ -75,9 +75,8 @@ namespace ShyEditor {
 
 			if (!docked)
 			{
-
-				ImGui::SetNextWindowPos(ImVec2(windowPosX, windowPosY), ImGuiCond_Once);
-				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
+				ImGui::SetNextWindowPos(ImVec2(windowPosX, windowPosY), ImGuiCond_Appearing);
+				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Appearing);
 			}
 
 			ImGui::Begin(windowName.c_str(), &visible, (ImGuiWindowFlags_)flags);
@@ -162,6 +161,9 @@ namespace ShyEditor {
 	void Window::Show()
 	{
 		visible = true;
+
+		windowPosX = Editor::getInstance()->getMainWindowSize().x / 2 - windowWidth / 2;
+		windowPosY = Editor::getInstance()->getMainWindowSize().y / 2 - windowHeight / 2;
 	}
 
 	bool Window::IsVisible()

@@ -331,10 +331,10 @@ namespace ShyEditor {
 	{
 		if (shouldOpenFileMenu) {
 			shouldOpenFileMenu = false;
-			ImGui::OpenPopup("File Menu");
+			ImGui::OpenPopup(("File Menu##" + entryToDelete.path).c_str());
 		}
 
-		if (ImGui::BeginPopup("File Menu")) {
+		if (ImGui::BeginPopup(("File Menu##" + entryToDelete.path).c_str())) {
 			if (ImGui::Button("Delete", ImVec2(70, 40))) {
 				entryToDelete = entries[currentlySelected];
 				shouldOpenDeleteFilePopup = true;
