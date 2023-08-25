@@ -44,7 +44,7 @@ namespace ShyEditor {
 
 			for (const auto& item : prefabInstancesArray.items()) {
 				int prefabId = std::stoi(item.key());
-					
+
 				std::vector<int> prefabInstances;
 				for (const auto& instanceId : item.value()) {
 					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
@@ -103,7 +103,7 @@ namespace ShyEditor {
 		if (currentlySelected != 0) {
 			GameObject* prefab = prefabs[currentlySelected];
 			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
-		
+
 			if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
 				std::vector<int> instances = prefabInstances.find(prefab->getId())->second;
 
@@ -113,7 +113,7 @@ namespace ShyEditor {
 					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
 						instance = sceneGameObjects.find(instanceId)->second;
 					}
-					else if (IdIsInOverlays(instanceId) != nullptr){
+					else if (IdIsInOverlays(instanceId) != nullptr) {
 						instance = IdIsInOverlays(instanceId);
 					}
 
@@ -168,8 +168,9 @@ namespace ShyEditor {
 			json prefabData;
 
 			GameObject* prefab = pair.second;
-	
-			prefabArray.push_back(prefabArray.parse(prefab->toJson()));
+
+			if (prefab->getParent() == nullptr)
+				prefabArray.push_back(prefabArray.parse(prefab->toJson()));
 		}
 
 		json prefabInstancesArray;
@@ -205,7 +206,6 @@ namespace ShyEditor {
 
 	void PrefabManager::DrawList()
 	{
-		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
 		// TODO: cambiar el color para las carpetas
 		// ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
@@ -213,13 +213,38 @@ namespace ShyEditor {
 		for (auto& pair : prefabs) {
 			GameObject* prefab = pair.second;
 
-			ImGui::SetNextItemAllowOverlap();
-			if (ImGui::Selectable(std::string("##" + prefab->getName()).c_str(), currentlySelected == prefab->getId(), ImGuiSelectableFlags_AllowDoubleClick)) {
+			if (prefab->getParent() == nullptr)
+				DrawPrefab(prefab);
+		}
 
-				currentlySelected = prefab->getId();
+		ImGui::Unindent();
+	}
 
-			}
+	void PrefabManager::DrawPrefab(GameObject* prefab)
+	{
+		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
+		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+		if (prefab->getChildren().size() == 0)
+		{
+			flags |= ImGuiTreeNodeFlags_Leaf;
+		}
+
+		if (currentlySelected != 0 && prefabs[currentlySelected] == prefab)
+			flags |= ImGuiTreeNodeFlags_Selected;
+
+		ImGui::PushID(prefab);
+		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
+
+		ImGui::SameLine();
+
+		ImGui::SetNextItemAllowOverlap();
+		if (ImGui::Selectable(std::string("##" + prefab->getName()).c_str(), currentlySelected == prefab->getId())) {
+			currentlySelected = prefab->getId();
+		}
+
+		if(prefab->getParent() == nullptr){
 			if (ImGui::BeginDragDropSource()) {
 
 				Asset asset;
@@ -235,19 +260,28 @@ namespace ShyEditor {
 
 				ImGui::EndDragDropSource();
 			}
+		}
+		
+		ImGui::SameLine();
 
-			ImGui::SameLine();
+		int yCursor = ImGui::GetCursorPosY();
+		ImGui::SetCursorPosY(yCursor - 5);
+		ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+		ImGui::SetCursorPosY(yCursor);
 
-			int yCursor = ImGui::GetCursorPosY();
-			ImGui::SetCursorPosY(yCursor - 5);
-			ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
-			ImGui::SetCursorPosY(yCursor);
+		ImGui::SameLine();
+		ImGui::Text(prefab->getName().c_str());
 
-			ImGui::SameLine();
-			ImGui::Text(prefab->getName().c_str());
+		if (isOpen) {
+
+			for (auto& child : prefab->getChildren()) {
+				DrawPrefab(child.second);
+			}
+
+			ImGui::TreePop();
 		}
 
-		ImGui::Unindent();
+		ImGui::PopID();
 	}
 
 	void PrefabManager::DrawImage()
@@ -255,7 +289,7 @@ namespace ShyEditor {
 		if (currentlySelected != 0) {
 			GameObject* prefab = prefabs[currentlySelected];
 			if ((prefab->IsTransform() && prefab->getTexture() != nullptr) ||
-				(!prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr)) 
+				(!prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr))
 			{
 				Texture* text = prefab->IsTransform() ? prefab->getTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
 
@@ -293,7 +327,9 @@ namespace ShyEditor {
 				UpdatePrefabInstances();
 			}
 
-			prefab->drawScriptsInEditor();
+			if (prefab->drawScriptsInEditor()) {
+				UpdatePrefabInstances();
+			}
 
 			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.2f, 0.65f, 0.2f, 1.0f)); // change header hover color
@@ -326,6 +362,7 @@ namespace ShyEditor {
 						if (ImGui::Button(compName.c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
 
 							prefab->addComponent(comp.second);
+							UpdatePrefabInstances();
 						};
 				}
 			}
@@ -349,6 +386,7 @@ namespace ShyEditor {
 					if (!prefab->getScripts()->contains(script.GetName()))
 						if (ImGui::Button(script.GetName().c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
 							prefab->addScript(script);
+							UpdatePrefabInstances();
 						};
 				}
 			}
@@ -372,7 +410,7 @@ namespace ShyEditor {
 	{
 		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
 
-		for (auto it = prefabs.begin(); it !=prefabs.end(); it++)
+		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
 			delete it->second;
 
 		prefabs.clear();
@@ -393,12 +431,17 @@ namespace ShyEditor {
 			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
 				PrefabManager::lastPrefabId--;
 			}
-			
+
 			prefab->setId(PrefabManager::lastPrefabId);
 			PrefabManager::lastPrefabId--;
 		}
 
 		instance->prefabs.emplace(prefab->getId(), prefab);
+
+		for (auto child : prefab->getChildren()) {
+			child.second->setPrefabId(prefab->getId());
+			AddPrefab(child.second);
+		}
 	}
 
 	void PrefabManager::AddInstance(GameObject* prefab, GameObject* prefabInstance)
@@ -431,13 +474,18 @@ namespace ShyEditor {
 	{
 		if (instance->prefabInstances.find(prefabId) != instance->prefabInstances.end()) {
 			std::vector<int>* instances = &instance->prefabInstances.find(prefabId)->second;
-			
+
 			auto it = std::find(instances->begin(), instances->end(), prefabInstanceId);
 
 			// If the element is found, erase it
 			if (it != instances->end()) {
 				instances->erase(it);
 			}
+		}
+
+		for (auto child : instance->prefabs[prefabId]->getChildren())
+		{
+			RemoveInstance(child.second->getId(), prefabInstanceId);
 		}
 	}
 
@@ -458,10 +506,10 @@ namespace ShyEditor {
 
 			ImGui::TableSetColumnIndex(0);
 
-			DrawList();  
+			DrawList();
 
 			ImGui::TableSetColumnIndex(1);
-			
+
 			ImGui::SeparatorText("Image");
 
 			DrawImage();

@@ -96,7 +96,7 @@ namespace ShyEditor {
 		void drawTransformInEditor();
 		void drawOverlayInEditor();
 		bool drawComponentsInEditor();
-		void drawScriptsInEditor();
+		bool drawScriptsInEditor();
 
 		// Serialization and deseralization logic
 		std::string toJson();

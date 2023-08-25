@@ -95,7 +95,7 @@ namespace ShyEditor {
 
 			ImGui::PopStyleColor(6); // reset colors
 
-			if (gameObject->getPrefabId() != 0) {
+			if (gameObject->getPrefabId() != 0 && (gameObject->getParent() == nullptr || gameObject->getParent()->getPrefabId() != gameObject->getPrefabId()) ) {
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 

@@ -133,6 +133,11 @@ namespace ShyEditor {
 			GameObject::lastId++;
 		}
 
+		if (go.id < 0) {
+			prefabId = go.id;
+			PrefabManager::AddInstance(go.id, id);
+		}
+
 		for (auto& pair : go.components) {
 			Components::Component component = pair.second;
 
@@ -702,7 +707,8 @@ namespace ShyEditor {
 		return changes;
 	}
 
-	void GameObject::drawScriptsInEditor() {
+	bool GameObject::drawScriptsInEditor() {
+		bool changes = false;
 
 		for (auto it = scripts.begin(); it != scripts.end();) {
 
@@ -718,25 +724,25 @@ namespace ShyEditor {
 					switch (attr->getType()) {
 
 					case Components::AttributesType::FLOAT:
-						drawFloat(attributeName + it->first, attr);
+						changes = drawFloat(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::VECTOR2:
-						drawVector2(attributeName + it->first, attr);
+						changes = drawVector2(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::STRING:
-						drawString(attributeName + it->first, attr);
+						changes = drawString(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::BOOL:
-						drawBool(attributeName + it->first, attr);
+						changes = drawBool(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::COLOR:
-						drawColor(attributeName + it->first, attr);
+						changes = drawColor(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::CHAR:
-						drawChar(attributeName + it->first, attr);
+						changes = drawChar(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::GAMEOBJECT:
-						drawGameobject(attributeName + it->first, attr);
+						changes = drawGameobject(attributeName + it->first, attr);
 						break;
 					default:
 						break;
@@ -746,11 +752,16 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
 
-				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
-					editor->OpenScript(scriptName);
+				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
+					editor->OpenScript(scriptName); 
+					changes = true;
+				}
 
 				if (ImGui::Button(("Delete script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
+				{
 					it = scripts.erase(it);
+					changes = true;
+				}
 				else
 					++it;
 
@@ -759,7 +770,7 @@ namespace ShyEditor {
 			}
 			else ++it;
 		}
-
+		return changes;
 	}
 
 	bool GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr) {

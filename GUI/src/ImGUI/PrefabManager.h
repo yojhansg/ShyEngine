@@ -30,6 +30,7 @@ namespace ShyEditor {
 		Texture* prefabText;
 
 		void DrawList();
+		void DrawPrefab(GameObject* prefab);
 		void DrawImage();
 		void DrawComponents();
 

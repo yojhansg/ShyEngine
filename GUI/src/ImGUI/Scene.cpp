@@ -796,7 +796,6 @@ namespace ShyEditor {
 			}
 			
 			go->setPrefabId(prefab->getId());
-			PrefabManager::AddInstance(prefab, go);
 			selectedGameObject = go;
 		}
 	}
