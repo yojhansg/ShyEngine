@@ -357,19 +357,23 @@ namespace ShyEditor {
 				std::filesystem::path src = fs::path(sourcePath);
 				std::filesystem::path dst = fs::path(currentPath + "\\" + src.filename().string());
 
-				bool ret = std::filesystem::copy_file(src, dst);
+				if (!std::filesystem::exists(dst)) {
+					bool ret = std::filesystem::copy_file(src, dst);
 
-				if (ret) {
+					if (ret) {
 
-					shouldUpdate = true;
+						shouldUpdate = true;
+					}
+					else {
+
+						std::cout << "Error al copiar el fichero: " << std::endl;
+						std::cout << "Origen: " << src.string() << std::endl;
+						std::cout << "Destino: " << dst.string() << std::endl;
+					}
 				}
 				else {
-
-					std::cout << "Error al copiar el fichero: " << std::endl;
-					std::cout << "Origen: "  << src.string() << std::endl;
-					std::cout << "Destino: " << dst.string() << std::endl;
+					std::cout << "File already exists in the destination." << std::endl;
 				}
-
 			}
 
 			SDL_free(event->drop.file);
