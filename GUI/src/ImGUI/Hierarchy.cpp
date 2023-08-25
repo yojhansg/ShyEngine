@@ -108,18 +108,32 @@ namespace ShyEditor {
 
 					if (dir < 0) {
 
-						if (goIt == objects.begin())
-							scene->SetSelectedGameObject(*overlays.rbegin());
-						else
+						if (goIt == objects.begin()) {
+							if (overlays.rbegin() != overlays.rend()) {
+								scene->SetSelectedGameObject(*overlays.rbegin());
+							}
+							else {
+								scene->SetSelectedGameObject(objects.rbegin()->second);
+							}
+						}				
+						else {
 							scene->SetSelectedGameObject(std::prev(goIt)->second);
+						}
 					}
 
 					else {
 
-						if (std::next(goIt) == objects.end())
-							scene->SetSelectedGameObject(*overlays.begin());
-						else
+						if (std::next(goIt) == objects.end()) {
+							if (overlays.rbegin() != overlays.rend()) {
+								scene->SetSelectedGameObject(*overlays.begin());
+							}
+							else {
+								scene->SetSelectedGameObject(objects.begin()->second);
+							}
+						}
+						else {
 							scene->SetSelectedGameObject(std::next(goIt)->second);
+						}
 					}
 				}
 				else {
@@ -128,18 +142,34 @@ namespace ShyEditor {
 
 					if (dir < 0) {
 
-						if (goIt == overlays.begin())
-							scene->SetSelectedGameObject(objects.rbegin()->second);
-						else
+						if (goIt == overlays.begin()) {
+							if (objects.rbegin() != objects.rend()) {
+								scene->SetSelectedGameObject(objects.rbegin()->second);
+							}
+							else {
+								scene->SetSelectedGameObject(*overlays.rbegin());
+							}
+						}
+						else {
 							scene->SetSelectedGameObject(*std::prev(goIt));
+
+						}
 					}
 
 					else {
 
-						if (std::next(goIt) == overlays.end())
-							scene->SetSelectedGameObject(objects.begin()->second);
-						else
+						if (std::next(goIt) == overlays.end()) {
+							if (objects.rbegin() != objects.rend()) {
+								scene->SetSelectedGameObject(objects.begin()->second);
+							}
+							else {
+								scene->SetSelectedGameObject(*overlays.begin());
+							}
+						}
+						else {
 							scene->SetSelectedGameObject(*std::next(goIt));
+						}
+
 					}
 
 				}
