@@ -50,6 +50,9 @@ namespace ShyEditor {
 		docked = true;
 		viewMode = 0;
 
+		shouldOpenDeleteFilePopup = false;
+		shouldOpenFileMenu = false;
+
 		ProcessPath();
 	}
 
@@ -162,14 +165,15 @@ namespace ShyEditor {
 			DrawList();
 		else
 			DrawIcons();
+
+		ShowDeleteFilePopup();
+		ShowFileMenuPopup();
 	}
 
 
 	void FileExplorer::DrawList() {
 
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
-
-		ImGui::SetWindowFontScale(1.5f);
 
 		// TODO: cambiar el color para las carpetas
 		// ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
@@ -191,6 +195,10 @@ namespace ShyEditor {
 
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
+
+				if (ImGui::IsMouseClicked(1) && currentlySelected != -1) {
+					shouldOpenFileMenu = true;
+				}
 			}
 
 
@@ -271,9 +279,8 @@ namespace ShyEditor {
 					}
 				}
 			}
-
 		}
-
+	
 	}
 
 	void FileExplorer::ItemDrag(Entry& entry) {
@@ -288,6 +295,53 @@ namespace ShyEditor {
 		//asset.relativePath = relativePath;
 		//ResourcesManager::SelectAsset(asset);
 
+	}
+
+	void FileExplorer::ShowDeleteFilePopup()
+	{
+		if (shouldOpenDeleteFilePopup) {
+			shouldOpenDeleteFilePopup = false;
+			ImGui::OpenPopup("Delete file");
+		}
+
+		if (ImGui::BeginPopup("Delete file")) {
+
+			ImGui::Text(("Are you sure you want to delete \"" + entryToDelete.name + "\"").c_str());
+
+			if (ImGui::Button("YES", ImVec2(300, 40))){
+
+				fs::remove_all(entryToDelete.path.c_str());
+				entries.erase(entries.begin() + currentlySelected);
+
+				shouldUpdate = true;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("NO", ImVec2(300, 40))) {
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void FileExplorer::ShowFileMenuPopup()
+	{
+		if (shouldOpenFileMenu) {
+			shouldOpenFileMenu = false;
+			ImGui::OpenPopup("File Menu");
+		}
+
+		if (ImGui::BeginPopup("File Menu")) {
+			if (ImGui::Button("Delete", ImVec2(70, 40))) {
+				entryToDelete = entries[currentlySelected];
+				shouldOpenDeleteFilePopup = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 	}
 
 
@@ -321,7 +375,14 @@ namespace ShyEditor {
 			SDL_free(event->drop.file);
 
 		}
-
+		else if (event->type == SDL_KEYDOWN) {
+			if (event->key.keysym.sym == SDLK_DELETE) {
+				if (focused && !entries.empty() && currentlySelected >= 0 && currentlySelected < entries.size()) {
+					entryToDelete = entries[currentlySelected];
+					shouldOpenDeleteFilePopup = true;
+				}
+			}
+		}
 	}
 
 }

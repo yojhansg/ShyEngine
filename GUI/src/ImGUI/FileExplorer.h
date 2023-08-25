@@ -63,8 +63,13 @@ namespace ShyEditor {
 		void OnItemSelected(Entry& entry);
 		void ItemDrag(Entry& entry);
 
+		void ShowDeleteFilePopup();
+		void ShowFileMenuPopup();
+
+		Entry entryToDelete;
 
 		bool shouldUpdate;
-
+		bool shouldOpenDeleteFilePopup;
+		bool shouldOpenFileMenu;
 	};
 }
