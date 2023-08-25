@@ -82,16 +82,25 @@ namespace ShyEditor {
 		return go;
 	}
 
+	void Scene::AddOverlayChildsToScene(GameObject* go)
+	{
+		for (auto& pair : go->getChildren()) {
+			overlays.push_back(pair.second);
+
+			AddOverlayChildsToScene(pair.second);
+		}
+	}
+
 	void Scene::AddGameObject(GameObject* go) {
 		gameObjects.emplace(go->getId(), go);
 	}
 
-	void Scene::AddChildsToScene(GameObject* go)
+	void Scene::AddGameObjectChildsToScene(GameObject* go)
 	{
 		for (auto& pair : go->getChildren()) {
 			gameObjects.emplace(pair.second->getId(), pair.second);
 
-			AddChildsToScene(pair.second);
+			AddGameObjectChildsToScene(pair.second);
 		}
 	}
 
@@ -101,6 +110,10 @@ namespace ShyEditor {
 		overlays.push_back(go);
 
 		return go;
+	}
+
+	void Scene::AddOverlay(GameObject* overlay) {
+		overlays.push_back(overlay);
 	}
 
 	std::map<int, GameObject*>& Scene::getGameObjects() {
@@ -183,9 +196,9 @@ namespace ShyEditor {
 
 		// Iterate through the game objects JSON array
 		for (const auto& gameObjectJson : gameObjectsJson) {
-			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump(), true);
+			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
 			gameObjects.insert({ gameObject->getId(), gameObject });
-			AddChildsToScene(gameObject);
+			AddGameObjectChildsToScene(gameObject);
 		}
 
 		if (!jsonData.contains("overlays")) {
@@ -197,9 +210,9 @@ namespace ShyEditor {
 
 		// Iterate through the overlay objects JSON array
 		for (const auto& overlayJson : overlaysJson) {
-			GameObject* overlay = GameObject::fromJson(overlayJson.dump(), false);
+			GameObject* overlay = GameObject::fromJson(overlayJson.dump());
 			overlays.push_back(overlay);
-			AddChildsToScene(overlay);
+			AddGameObjectChildsToScene(overlay);
 		}
 
 	}
@@ -758,13 +771,20 @@ namespace ShyEditor {
 			GameObject* prefab = PrefabManager::GetPrefabById(asset.prefabId);
 
 			GameObject* go = new GameObject(*prefab);
-			AddGameObject(go);
+			if (go->IsTransform()) {
+				AddGameObject(go);
 
-			AddChildsToScene(go);
+				AddGameObjectChildsToScene(go);
 
-			ImVec2 position = MousePositionInScene();
+				ImVec2 position = MousePositionInScene();
 
-			go->setPosition(position);
+				go->setPosition(position);
+			}
+			else {
+				AddOverlay(go);
+				AddOverlayChildsToScene(go);
+			}
+			
 			selectedGameObject = go;
 
 			PrefabManager::AddInstance(prefab, go);

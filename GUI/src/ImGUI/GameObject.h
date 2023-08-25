@@ -43,11 +43,14 @@ namespace ShyEditor {
 		// Name, ID and texture getters/setters
 		std::string getName();
 		void setName(const std::string& newName);
-		void setPrefabId(int prefabId);
 		Texture* getTexture();
 		int getId();
 		void setId(int id);
-		void setComponents(std::unordered_map<std::string, ::Components::Component> components);
+
+
+		// Prefab related getters/setters
+		void setPrefabId(int prefabId);
+		int getPrefabId();
 
 		// Visibility getters/setters
 		int getRenderOrder();
@@ -60,6 +63,10 @@ namespace ShyEditor {
 		std::unordered_map<std::string, Components::Component>* getComponents();
 		std::unordered_map<std::string, Components::Component> getComponentsCopy();
 		std::unordered_map<std::string, Components::Script>* getScripts();
+		std::unordered_map<std::string, Components::Script> getScriptsCopy();
+
+		void setComponents(std::unordered_map<std::string, ::Components::Component> components);
+		void setScripts(std::unordered_map<std::string, Components::Script> scripts);
 
 		// Tranform attributes getters/setters
 		void setPosition(ImVec2 newPos);
@@ -87,12 +94,12 @@ namespace ShyEditor {
 		// Gameobject transform, components and scripts drawing
 		void drawTransformInEditor();
 		void drawOverlayInEditor();
-		void drawComponentsInEditor();
+		bool drawComponentsInEditor();
 		void drawScriptsInEditor();
 
 		// Serialization and deseralization logic
 		std::string toJson();
-		static GameObject* fromJson(std::string json, bool isTransform);
+		static GameObject* fromJson(std::string json);
 
 		bool IsTransform();
 
@@ -148,13 +155,13 @@ namespace ShyEditor {
 		bool waitingToDelete;
 
 		// Gameobject draw methods
-		void drawFloat(std::string attrName, Components::Attribute* attr);
-		void drawVector2(std::string attrName, Components::Attribute* attr);
-		void drawString(std::string attrName, Components::Attribute* attr);
-		void drawBool(std::string attrName, Components::Attribute* attr);
-		void drawColor(std::string attrName, Components::Attribute* attr);
-		void drawChar(std::string attrName, Components::Attribute* attr);
-		void drawGameobject(std::string attrName, Components::Attribute* attr);
+		bool drawFloat(std::string attrName, Components::Attribute* attr);
+		bool drawVector2(std::string attrName, Components::Attribute* attr);
+		bool drawString(std::string attrName, Components::Attribute* attr);
+		bool drawBool(std::string attrName, Components::Attribute* attr);
+		bool drawColor(std::string attrName, Components::Attribute* attr);
+		bool drawChar(std::string attrName, Components::Attribute* attr);
+		bool drawGameobject(std::string attrName, Components::Attribute* attr);
 
 		void DrawArrowButton(ImVec2& value, const ImVec2& dir);
 
@@ -244,7 +251,11 @@ namespace ShyEditor {
 
 		bool& GetInteractable();
 
+		OverlayImage* GetImage();
+
 		ImVec2& GetPosition();
+		void SetPosition(ImVec2* pos);
+
 		ImVec2& GetSize();
 
 
@@ -279,6 +290,7 @@ namespace ShyEditor {
 		void Render(SDL_Renderer* renderer, int x, int y, int w, int h);
 
 		std::string GetPath();
+		Texture* GetTexture();
 
 		void SetTexture(std::string path, Texture* texture);
 	};

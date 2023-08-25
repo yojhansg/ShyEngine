@@ -33,13 +33,13 @@ namespace ShyEditor {
 			json prefabArray = root["prefabs"];
 
 			for (const json& prefabData : prefabArray) {
-				//TODO: wait for overlay serialisation to change boolean
-				GameObject* prefab = GameObject::fromJson(prefabData.dump(), true);
+				GameObject* prefab = GameObject::fromJson(prefabData.dump());
 
 				AddPrefab(prefab);
 			}
 
 			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -47,7 +47,7 @@ namespace ShyEditor {
 					
 				std::vector<int> prefabInstances;
 				for (const auto& instanceId : item.value()) {
-					if (sceneGameObjects[instanceId] != nullptr) {
+					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
 						prefabInstances.push_back(instanceId);
 					}
 				}
@@ -76,11 +76,18 @@ namespace ShyEditor {
 				PrefabManager::unusedIds.push_back(prefab->getId());
 
 				//Stop the instances being referenced
-				for (auto instance : prefabInstances.find(prefab->getId())->second) {
-					editor->getScene()->getGameObjects()[instance]->setPrefabId(0);
-				}
+				if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
+					for (auto instanceId : prefabInstances.find(prefab->getId())->second) {
+						if (prefab->IsTransform()) {
+							editor->getScene()->getGameObjects()[instanceId]->setPrefabId(0);
+						}
+						else {
+							IdIsInOverlays(instanceId)->setPrefabId(0);
+						}
+					}
 
-				prefabInstances.erase(prefab->getId());
+					prefabInstances.erase(prefab->getId());
+				}
 
 				delete prefab;
 				it = prefabs.erase(it);
@@ -101,12 +108,32 @@ namespace ShyEditor {
 				std::vector<int> instances = prefabInstances.find(prefab->getId())->second;
 
 				for (auto instanceId : instances) {
-					GameObject* instance = sceneGameObjects.find(instanceId)->second;
+					GameObject* instance = nullptr;
+
+					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
+						instance = sceneGameObjects.find(instanceId)->second;
+					}
+					else if (IdIsInOverlays(instanceId) != nullptr){
+						instance = IdIsInOverlays(instanceId);
+					}
 
 					instance->setComponents(prefab->getComponentsCopy());
+					instance->setScripts(prefab->getScriptsCopy());
 				}
 			}
 		}
+	}
+
+	GameObject* PrefabManager::IdIsInOverlays(int id)
+	{
+		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
+
+		for (GameObject* overlay : sceneOverlays) {
+			if (overlay->getId() == id) {
+				return overlay;
+			}
+		}
+		return nullptr;
 	}
 
 	PrefabManager::PrefabManager() : Window("Prefab manager", 0)
@@ -227,11 +254,16 @@ namespace ShyEditor {
 	{
 		if (currentlySelected != 0) {
 			GameObject* prefab = prefabs[currentlySelected];
-			if (prefab->getTexture() != nullptr) {
-				Texture* text = prefabs[currentlySelected]->getTexture();
+			if ((prefab->IsTransform() && prefab->getTexture() != nullptr) ||
+				(!prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr)) 
+			{
+				Texture* text = prefab->IsTransform() ? prefab->getTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
 
-				float sizeX = text->getWidth() * prefab->getScale_x();
-				float sizeY = text->getHeight() * prefab->getScale_y();
+				float scaleX = prefab->IsTransform() ? prefab->getScale_x() : prefab->GetOverlay()->GetSize().x;
+				float scaleY = prefab->IsTransform() ? prefab->getScale_y() : prefab->GetOverlay()->GetSize().y;
+
+				float sizeX = text->getWidth() * scaleX;
+				float sizeY = text->getHeight() * scaleY;
 				float textAspectRatio = sizeX / sizeY;
 
 				//Fixed size so big gameObjects doesnt fill the whole window
@@ -257,7 +289,10 @@ namespace ShyEditor {
 
 			GameObject* prefab = prefabs[currentlySelected];
 
-			prefab->drawComponentsInEditor();
+			if (prefab->drawComponentsInEditor()) {
+				UpdatePrefabInstances();
+			}
+
 			prefab->drawScriptsInEditor();
 
 			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
@@ -318,23 +353,7 @@ namespace ShyEditor {
 				}
 			}
 
-			ImGui::PopStyleColor(6); // reset colors
-
 			ImGui::Separator();
-
-
-			if (ImGui::Button("Update prefab Instances", ImVec2(ImGui::GetColumnWidth(), 40))) {
-				UpdatePrefabInstances();
-			};
-
-
-			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.45f, 0.2f, 0.2f, 1.0f)); // change header color
-			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.65f, 0.2f, 0.2f, 1.0f)); // change header hover color
-			ImGui::PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0.75f, 0.2f, 0.2f, 1.0f)); // change header active color
-
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.45f, 0.2f, 0.2f, 1.0f)); // change header color
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.65f, 0.2f, 0.2f, 1.0f)); // change header hover color
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.75f, 0.2f, 0.2f, 1.0f)); // change header active color
 
 			if (ImGui::Button("Delete prefab", ImVec2(ImGui::GetColumnWidth(), 40))) {
 				prefab->toDelete();
@@ -393,6 +412,19 @@ namespace ShyEditor {
 		}
 		else {
 			instance->prefabInstances[prefab->getId()].push_back(prefabInstance->getId());
+		}
+	}
+
+	void PrefabManager::AddInstance(int prefabId, int prefabInstanceId)
+	{
+		if (instance->prefabInstances.find(prefabId) == instance->prefabInstances.end()) {
+			std::vector<int> instances;
+			instances.push_back(prefabInstanceId);
+
+			instance->prefabInstances.emplace(prefabId, instances);
+		}
+		else {
+			instance->prefabInstances[prefabId].push_back(prefabInstanceId);
 		}
 	}
 

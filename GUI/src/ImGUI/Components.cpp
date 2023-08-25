@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "ComponentManager.h"
 #include "FileExplorer.h"
+#include "PrefabManager.h"
 
 #include "CheckML.h"
 
@@ -94,6 +95,19 @@ namespace ShyEditor {
 
 			ImGui::PopStyleColor(6); // reset colors
 
+			if (gameObject->getPrefabId() != 0) {
+			
+				ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(gameObject->getPrefabId())->getName()).c_str());
+
+				ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+				if (ImGui::Button("Unlink prefab", ImVec2(windowWidth, 40))) {
+					PrefabManager::RemoveInstance(gameObject->getPrefabId(), gameObject->getId());
+					gameObject->setPrefabId(0);
+				}
+			}
 		}
 
 

@@ -41,6 +41,8 @@ namespace ShyEditor {
 		void HandleDeletion();
 		void UpdatePrefabInstances();
 
+		GameObject* IdIsInOverlays(int id);
+
 	public:
 
 		static std::vector<int> unusedIds;
@@ -52,6 +54,7 @@ namespace ShyEditor {
 
 		static void AddPrefab(GameObject* go);
 		static void AddInstance(GameObject* prefab, GameObject* prefabInstance);
+		static void AddInstance(int prefabId, int prefabInstanceId);
 		static void RemoveInstance(int prefabId, int prefabInstanceId);
 
 		static void SavePrefabs(const std::string& path);

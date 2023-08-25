@@ -163,6 +163,10 @@ namespace ShyEditor {
 
 		prefabId = go.prefabId;
 
+		if (prefabId != 0) {
+			PrefabManager::AddInstance(prefabId, id);
+		}
+
 		isTransform = go.isTransform;
 
 		if (isTransform) {
@@ -331,6 +335,11 @@ namespace ShyEditor {
 		this->prefabId = prefabId;
 	}
 
+	int GameObject::getPrefabId()
+	{
+		return prefabId;
+	}
+
 	Texture* GameObject::getTexture() {
 		return texture;
 	}
@@ -347,6 +356,11 @@ namespace ShyEditor {
 	void GameObject::setComponents(std::unordered_map<std::string, ::Components::Component> components)
 	{
 		this->components = components;
+	}
+
+	void GameObject::setScripts(std::unordered_map<std::string, Components::Script> scripts)
+	{
+		this->scripts = scripts;
 	}
 
 
@@ -403,6 +417,11 @@ namespace ShyEditor {
 
 	std::unordered_map<std::string, Components::Script>* GameObject::getScripts() {
 		return &scripts;
+	}
+
+	std::unordered_map<std::string, Components::Script> GameObject::getScriptsCopy()
+	{
+		return scripts;
 	}
 
 
@@ -617,8 +636,10 @@ namespace ShyEditor {
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
 	}
 
-	void GameObject::drawComponentsInEditor() {
+	//Returns true if there has been a change in a component
+	bool GameObject::drawComponentsInEditor() {
 
+		bool changes = false;
 		for (auto it = components.begin(); it != components.end();) {
 			std::string componentName = (*it).second.GetName();
 
@@ -634,25 +655,25 @@ namespace ShyEditor {
 					switch (attr->getType()) {
 
 					case Components::AttributesType::FLOAT:
-						drawFloat(attributeName + it->first, attr);
+						changes = drawFloat(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::VECTOR2:
-						drawVector2(attributeName + it->first, attr);
+						changes = drawVector2(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::STRING:
-						drawString(attributeName + it->first, attr);
+						changes = drawString(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::BOOL:
-						drawBool(attributeName + it->first, attr);
+						changes = drawBool(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::COLOR:
-						drawColor(attributeName + it->first, attr);
+						changes = drawColor(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::CHAR:
-						drawChar(attributeName + it->first, attr);
+						changes = drawChar(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::GAMEOBJECT:
-						drawGameobject(attributeName + it->first, attr);
+						changes = drawGameobject(attributeName + it->first, attr);
 						break;
 					default:
 						break;
@@ -662,16 +683,21 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1.0f));
 
-				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40)))
+				if (ImGui::Button(("Delete component##" + componentName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
 					it = components.erase(it);
-				else
+					changes = true;
+				}
+				else {
 					++it;
+				}
 
 				ImGui::PopStyleColor(2);
 
 			}
 			else ++it;
 		}
+
+		return changes;
 	}
 
 	void GameObject::drawScriptsInEditor() {
@@ -734,44 +760,45 @@ namespace ShyEditor {
 
 	}
 
-	void GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr) {
+	bool GameObject::drawFloat(std::string attrName, ::Components::Attribute* attr) {
 
-		ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
+		return ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	void GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr) {
+	bool GameObject::drawVector2(std::string attrName, ::Components::Attribute* attr) {
 
-		ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
+		return ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	void GameObject::drawString(std::string attrName, ::Components::Attribute* attr) {
+	bool GameObject::drawString(std::string attrName, ::Components::Attribute* attr) {
 
 		char inputBuffer[256];
 		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
 
-		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer)))
+		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
 			attr->value.valueString = inputBuffer;
-
-	}
-
-	void GameObject::drawBool(std::string attrName, ::Components::Attribute* attr) {
-
-		ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
-	}
-
-	void GameObject::drawColor(std::string attrName, ::Components::Attribute* attr) {
-
-		ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
-	}
-
-	void GameObject::drawChar(std::string attrName, ::Components::Attribute* attr) {
-
-		if (ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank)) {
-
+			return true;
 		}
+
+		return false;
 	}
 
-	void GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr) {
+	bool GameObject::drawBool(std::string attrName, ::Components::Attribute* attr) {
+
+		return ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
+	}
+
+	bool GameObject::drawColor(std::string attrName, ::Components::Attribute* attr) {
+
+		return ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
+	}
+
+	bool GameObject::drawChar(std::string attrName, ::Components::Attribute* attr) {
+
+		return ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank);
+	}
+
+	bool GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr) {
 
 		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
 
@@ -779,8 +806,10 @@ namespace ShyEditor {
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), go != nullptr ? go->getName().c_str() : "")) {
 			for (auto go : gameObjects) {
-				if (ImGui::Selectable(go.second->getName().c_str()))
+				if (ImGui::Selectable(go.second->getName().c_str())) {
 					attr->value.value.entityIdx = go.second->getId();
+					return true;
+				}
 			}
 
 			ImGui::EndCombo();
@@ -790,7 +819,10 @@ namespace ShyEditor {
 
 		if (ImGui::Button(("X##" + attrName).c_str())) {
 			attr->value.value.entityIdx = 0;
+			return true;
 		}
+
+		return false;
 	}
 
 	void GameObject::DrawArrowButton(ImVec2& value, const ImVec2& dir)
@@ -1000,6 +1032,8 @@ namespace ShyEditor {
 
 		j["prefabId"] = prefabId;
 
+		j["isTransform"] = isTransform;
+
 		if (isTransform) {
 
 			j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(-transform->GetPosition().y);
@@ -1048,7 +1082,7 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
-	GameObject* GameObject::fromJson(std::string json, bool isTransform = true) {
+	GameObject* GameObject::fromJson(std::string json) {
 
 		nlohmann::ordered_json jsonData;
 		jsonData = nlohmann::json::parse(json);
@@ -1064,6 +1098,8 @@ namespace ShyEditor {
 
 
 		GameObject::unusedIds.push_back(jsonData["id"]);
+
+		bool isTransform = jsonData["isTransform"];
 
 		GameObject* gameObject = new GameObject(goName, isTransform);
 		gameObject->name = goName;
@@ -1319,9 +1355,21 @@ namespace ShyEditor {
 		return interactable;
 	}
 
+	OverlayImage* Overlay::GetImage()
+	{
+		return image;
+	}
+
 	ImVec2& Overlay::GetPosition()
 	{
 		return *position;
+	}
+
+	void Overlay::SetPosition(ImVec2* pos)
+	{
+		delete position;
+
+		position = pos;
 	}
 
 	ImVec2& Overlay::GetSize()
@@ -1498,6 +1546,10 @@ namespace ShyEditor {
 	std::string OverlayImage::GetPath()
 	{
 		return path;
+	}
+	Texture* OverlayImage::GetTexture()
+	{
+		return texture;
 	}
 	void OverlayImage::SetTexture(std::string path, Texture* texture)
 	{
