@@ -8,6 +8,10 @@
 #include "RendererManager.h"
 #include "ResourcesManager.h"
 
+#define Main_Font "Cute Notes.ttf"
+#define Secondary_Font "Default.ttf"
+#define Background "fondoWindows.jpg"
+
 
 ECS::SplashScene::SplashScene()
 {
@@ -43,7 +47,7 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 
 	overlay->SetStreched(0, 0, 0, 0);
 	auto img = manager->addComponent<ECS::OverlayImage>();
-	img->path = "fondoWindows.jpg";
+	img->path = Background;
 
 
 	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
@@ -56,10 +60,10 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	textOverlay->SetPositioned({ 0, 0 }, { size, sizey });
 	textOverlay->SetParent(overlay);
 	auto text = center->addComponent<ECS::OverlayText>();
-	text->SetText("Phoshorus");
+	text->SetText("shy");
 	text->SetFit(fit);
 	text->SetPointSize(size / 4);
-	text->SetFont("Cute Notes.ttf");
+	text->SetFont(Main_Font);
 	text->SetHorizontalAlignment(1);
 	text->SetVerticalAlignment(1);
 
@@ -72,7 +76,7 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	text->SetText("game engine");
 	text->SetFit(fit);
 	text->SetPointSize(size / 10);
-	text->SetFont("Default.ttf");
+	text->SetFont(Secondary_Font);
 	text->SetHorizontalAlignment(1);
 	text->SetVerticalAlignment(1);
 }
@@ -82,8 +86,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 void ECS::SplashScene::LoadResources()
 {
 	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
-
-	Resources::ResourcesManager::instance()->addFont("Default.ttf", size / 10);
-	Resources::ResourcesManager::instance()->addFont("Cute Notes.ttf", size / 4);
-	Resources::ResourcesManager::instance()->addTexture("fondoWindows.jpg");
+	
+	Resources::ResourcesManager::instance()->addFont(Main_Font, size / 4);
+	Resources::ResourcesManager::instance()->addFont(Secondary_Font, size / 10);
+	Resources::ResourcesManager::instance()->addTexture(Background);
 }

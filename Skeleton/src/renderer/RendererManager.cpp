@@ -242,7 +242,6 @@ namespace Renderer {
 
 		if (icon == NULL) {
 			Console::Output::PrintError("Window icon", "Could not change window icon. Error loading file <" + path + ">");
-			SetWindowIcon("Assets\\icon.png");
 			return false;
 		}
 

@@ -253,6 +253,7 @@ namespace ShyEditor {
 		SDL_RenderClear(renderer);
 
 
+		bool inScene = IsMouseHoveringWindow();
 		auto mouse = MousePositionInScene();
 
 		float cameraScale = sceneCamera->GetScale();
@@ -277,6 +278,8 @@ namespace ShyEditor {
 			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 
 			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
+
+			if (!inScene) continue;
 
 			if (selectedOverlay.overlay == nullptr)
 			{

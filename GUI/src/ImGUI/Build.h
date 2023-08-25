@@ -19,10 +19,13 @@ namespace ShyEditor {
 		std::thread thread;
 		std::atomic<float> progression;
 
+		std::string buildPath;
+
+		void Copy(std::string file, std::string path, int size);
 
 
-		void CopyFile(std::string file, std::string path, int size);
 		void BuildThread();
+		bool SelectFolder();
 
 	public:
 

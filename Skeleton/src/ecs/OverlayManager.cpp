@@ -37,7 +37,7 @@ ECS::OverlayManager::OverlayManager(bool debugFrameRate, float timeToDoubleClick
 
 		frameRateText->SetFit(1);
 		frameRateText->SetText("Frame rate: 60");
-
+		frameRateText->SetFont("Default.ttf");
 		frameRateEntity->init();
 		frameRateEntity->start();
 	}

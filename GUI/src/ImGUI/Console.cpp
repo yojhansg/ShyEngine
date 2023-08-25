@@ -21,8 +21,6 @@ namespace ShyEditor {
 
 	void Console::Behaviour()
 	{
-		//ImGui::SetNextWindowFocus();
-
 		while (Game::PendingOutput()) {
 
 			std::string str = Game::FlushOutput();
@@ -50,8 +48,10 @@ namespace ShyEditor {
 		}
 
 
-		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
-		ImGui::Begin(windowName.c_str(), &visible, flags);
+		if (ImGui::Button("Clear")) {
+
+			messages.clear();
+		}
 
 		int messageIdx = 0;
 		for (auto& message : messages) {
@@ -59,12 +59,12 @@ namespace ShyEditor {
 			const int padding = 30;
 
 			auto contentSize = ImGui::CalcTextSize(
-				(message.date + message.type + message.message).c_str(), nullptr, false, windowWidth);
+				(message.time + message.type + message.message).c_str(), nullptr, false, windowWidth);
 
 			ImGui::BeginChild(std::to_string(messageIdx).c_str(), ImVec2(windowWidth, contentSize.y));
 
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(message.color.r, message.color.g, message.color.b, 255));
-			ImGui::TextWrapped(message.date.c_str());
+			ImGui::TextWrapped(message.time.c_str());
 			ImGui::SameLine();
 
 			ImGui::TextWrapped(message.type.c_str());
@@ -88,12 +88,14 @@ namespace ShyEditor {
 			ImGui::EndChild();
 			messageIdx++;
 		}
+	}
 
+	void Console::Print(const std::string& str)
+	{
+		Message mssg{};
+		mssg.message = str;
 
-		auto winSize = ImGui::GetWindowSize();
-		windowWidth = winSize.x;
-		windowHeight = winSize.y;
-		ImGui::End();
+		messages.push_back(mssg);
 	}
 
 }

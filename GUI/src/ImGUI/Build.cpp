@@ -4,22 +4,86 @@
 
 #include <iostream>
 
+//Para convertir de PWSTR a string
+#include "atlstr.h"
+
+#include <Shlobj.h>
+#include <shellapi.h>
+#include <Windows.h>
+#include <shlwapi.h>
+
+#include <filesystem>
+
 ShyEditor::Build::Build()
 {
 	inProgress = false;
 	progression = 0;
 	popUpOpen = false;
+	buildPath = "";
 }
 
 
-void ShyEditor::Build::CopyFile(std::string file, std::string path, int size)
+bool ShyEditor::Build::SelectFolder()
+{
+	bool ret = false;
+
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	if (FAILED(hr)) {
+		return false;
+	}
+	IFileDialog* pFileDialog;
+	hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog));
+	if (SUCCEEDED(hr)) {
+		// Configura el cuadro de diálogo para seleccionar carpetas.
+		DWORD dwOptions;
+		pFileDialog->GetOptions(&dwOptions);
+		pFileDialog->SetOptions(dwOptions | FOS_PICKFOLDERS);
+
+		// Muestra el cuadro de diálogo de selección de carpeta.
+		hr = pFileDialog->Show(NULL);
+		if (SUCCEEDED(hr)) {
+			// Obtiene el resultado (la carpeta seleccionada).
+			IShellItem* pItem;
+			hr = pFileDialog->GetResult(&pItem);
+			if (SUCCEEDED(hr)) {
+				PWSTR pszFolderPath;
+				hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFolderPath);
+				if (SUCCEEDED(hr)) {
+
+					buildPath = CW2A(pszFolderPath);
+					CoTaskMemFree(pszFolderPath);
+
+					ret = true;
+				}
+
+				pItem->Release();
+			}
+		}
+		pFileDialog->Release();
+	}
+
+	return ret;
+}
+
+
+
+void ShyEditor::Build::Copy(std::string file, std::string path, int size)
 {
 
 
+
+
+
 }
+
+
+
 
 void ShyEditor::Build::BuildThread()
 {
+
+
+
 
 	std::cout << "Empezando hilo" << std::endl;
 
@@ -61,7 +125,7 @@ void ShyEditor::Build::BuildProgression()
 
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(.2f, 0.2f, 0.2f, 1));
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1, .2f, 0.2f, 1));
-		
+
 		ImGui::ProgressBar(progression, ImVec2(-FLT_MIN, 0));
 		ImGui::PopStyleColor(2);
 
@@ -85,8 +149,14 @@ void ShyEditor::Build::GenerateBuild()
 	if (inProgress)
 		return;
 
+	if (!SelectFolder())
+		return;
+
 	if (thread.joinable())
 		thread.join();
+
+
+	std::cout << buildPath << std::endl;
 
 	popUpOpen = true;
 	inProgress = true;

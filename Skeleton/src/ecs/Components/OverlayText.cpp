@@ -75,6 +75,8 @@ void ECS::OverlayText::createTexture()
 
 void ECS::OverlayText::render()
 {
+	if (texture == nullptr)
+		return;
 
 	SDL_Rect destination = { 0, 0, 0, 0 };
 

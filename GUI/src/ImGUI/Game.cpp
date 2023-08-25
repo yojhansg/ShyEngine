@@ -75,6 +75,7 @@ namespace ShyEditor {
 		return instance->isRunning;
 	}
 
+
 	bool Game::PendingOutput()
 	{
 		return !instance->output.empty();

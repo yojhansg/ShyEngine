@@ -511,8 +511,11 @@ namespace ShyEditor {
 
 	void GameObject::drawTransformInEditor() {
 
+		transform->GetPosition().y *= -1;
 		ImGui::Text("Position");
 		ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
+		transform->GetPosition().y *= -1;
+
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
@@ -966,7 +969,7 @@ namespace ShyEditor {
 
 		j["order"] = renderOrder;
 
-		j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(transform->GetPosition().y);
+		j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(-transform->GetPosition().y);
 		j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
 		j["localRotation"] = std::to_string(transform->GetRotation());
 
@@ -1066,6 +1069,8 @@ namespace ShyEditor {
 		// Parse localPosition and localScale
 		sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
 		sscanf_s(localScaleStr.c_str(), "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
+
+		gameObject->transform->GetPosition().y *= -1;
 
 		gameObject->transform->SetRotation(std::stof(localRotation));
 
