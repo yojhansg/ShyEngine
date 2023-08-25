@@ -13,6 +13,9 @@ class b2World;
 class b2Body;
 class b2ContactListener;
 
+
+using cString = std::string const&;
+
 namespace Physics {
 
 	class DebugDraw;
@@ -49,17 +52,17 @@ namespace Physics {
 
 		Utilities::Vector2D getGravity();
 
-		void setGravity(const Utilities::Vector2D& gravity);
+		void setGravity(cVector2D gravity);
 
-		void addCollisionLayer(const std::string& layerName);
+		void addCollisionLayer(cString layerName);
 
-		void removeCollisionLayer(const std::string& layerName);
+		void removeCollisionLayer(cString layerName);
 
-		void setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide);
+		void setCollisionBetweenLayers(cString layerNameA, cString layerNameB, bool collide);
 
-		bool layersCollide(const std::string& layerNameA, const std::string& layerNameB);
+		bool layersCollide(cString layerNameA, cString layerNameB);
 
-		bool layersExists(const std::string& layerName);
+		bool layersExists(cString layerName);
 
 	private:
 

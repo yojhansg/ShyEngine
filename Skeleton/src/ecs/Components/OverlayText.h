@@ -20,7 +20,6 @@ namespace ECS {
 		//TODO: color del texto
 		//TODO: poner outline
 		//TODO: opciones de calidad del texto
-		//TODO: ver si hacer el texto en unicode
 
 		enum class Fit {
 			Clamp, Overflow, WrapClamp, WrapOverflow, Expand
@@ -41,12 +40,12 @@ namespace ECS {
 
 		Overlay* overlay;
 
-		Renderer::Font* font;
+		Renderer::Font* fontPtr;
 		Renderer::Texture* texture;
 
-		reflect int pointSize;
-		reflect std::string path;
 		reflect std::string text;
+		reflect std::string font;
+		reflect int fontSize;
 
 		//TODO: text alignment
 		reflect int horizontalAlignment;

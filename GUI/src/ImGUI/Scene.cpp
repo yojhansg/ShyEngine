@@ -626,11 +626,15 @@ namespace ShyEditor {
 			}
 		}
 
-		if (event->key.keysym.mod & KMOD_CTRL) {
+		if (event->type = SDL_KEYDOWN) {
+
 			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
-				saveScene(name);
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+					saveScene(name);
 			}
 		}
+
 	}
 
 	void Scene::Behaviour() {
@@ -790,7 +794,7 @@ namespace ShyEditor {
 				AddOverlay(go);
 				AddOverlayChildsToScene(go);
 			}
-			
+
 			selectedGameObject = go;
 
 			PrefabManager::AddInstance(prefab, go);

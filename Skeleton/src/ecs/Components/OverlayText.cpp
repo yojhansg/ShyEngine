@@ -14,10 +14,10 @@
 
 ECS::OverlayText::OverlayText()
 {
-	pointSize = 32;
-	path = "Assets\\Default.ttf";
+	fontSize = 32;
+	font = "Assets\\Default.ttf";
 
-	font = nullptr;
+	fontPtr = nullptr;
 	texture = nullptr;
 
 	fit = 0;
@@ -44,7 +44,7 @@ void ECS::OverlayText::init()
 		return;
 	}
 
-	if (font == nullptr)
+	if (fontPtr == nullptr)
 		createFont();
 	if (texture == nullptr)
 		createTexture();
@@ -52,7 +52,7 @@ void ECS::OverlayText::init()
 
 void ECS::OverlayText::createFont()
 {
-	font = Resources::ResourcesManager::instance()->addFont(path, pointSize);
+	fontPtr = Resources::ResourcesManager::instance()->addFont(font, fontSize);
 }
 
 void ECS::OverlayText::freeTexture()
@@ -68,9 +68,9 @@ void ECS::OverlayText::createTexture()
 	freeTexture();
 
 	if ((Fit)fit == Fit::WrapClamp || (Fit)fit == Fit::WrapOverflow)
-		texture = font->CreateWrappedText(text, overlay->GetSize().getX());
+		texture = fontPtr->CreateWrappedText(text, overlay->GetSize().getX());
 	else
-		texture = font->CreateText(text);
+		texture = fontPtr->CreateText(text);
 }
 
 void ECS::OverlayText::render()
@@ -147,7 +147,7 @@ int ECS::OverlayText::GetFit()
 
 void ECS::OverlayText::SetFit(int fit)
 {
-	if (font != nullptr && this->fit / 2 != fit / 2)
+	if (fontPtr != nullptr && this->fit / 2 != fit / 2)
 	{
 		this->fit = fit;
 		createTexture();
@@ -178,8 +178,8 @@ void ECS::OverlayText::SetHorizontalAlignment(int align)
 
 void ECS::OverlayText::SetFont(std::string font)
 {
-	path = font;
-	if (this->font != nullptr) {
+	font = font;
+	if (this->fontPtr != nullptr) {
 		createFont();
 		createTexture();
 	}
@@ -187,7 +187,7 @@ void ECS::OverlayText::SetFont(std::string font)
 
 std::string ECS::OverlayText::GetFont()
 {
-	return path;
+	return font;
 }
 
 std::string ECS::OverlayText::GetText()
@@ -199,20 +199,20 @@ void ECS::OverlayText::SetText(std::string text)
 {
 	this->text = text;
 
-	if (font != nullptr) {
+	if (fontPtr != nullptr) {
 		createTexture();
 	}
 }
 
 int ECS::OverlayText::GetPointSize()
 {
-	return pointSize;
+	return fontSize;
 }
 
 void ECS::OverlayText::SetPointSize(int size)
 {
-	pointSize = size;
-	if (font != nullptr) {
+	fontSize = size;
+	if (fontPtr != nullptr) {
 		createFont();
 		createTexture();
 	}

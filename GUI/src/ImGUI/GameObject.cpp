@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "PrefabManager.h"
 #include "SDL.h"
+#include "Font.h"
 
 #include <fstream>
 
@@ -646,9 +647,9 @@ namespace ShyEditor {
 
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
 
-				for (auto& attribute : (*it).second.getAllAttributes()) {
-					std::string attributeName = attribute.first;
-					Components::Attribute* attr = &attribute.second;
+				for (auto& attribute : (*it).second.GetAttributesOrdered()) {
+					std::string attributeName = attribute->getName();
+					Components::Attribute* attr = attribute;
 
 					ImGui::Text(attributeName.c_str());
 
@@ -1302,7 +1303,7 @@ namespace ShyEditor {
 		left = top = right = bottom = 0;
 
 		image = new OverlayImage();
-		text = nullptr;
+		text = new OverlayText();
 	}
 
 	Overlay::Overlay(const Overlay& ov, GameObject* obj)
@@ -1513,6 +1514,38 @@ namespace ShyEditor {
 
 
 
+		auto textIt = components->find("OverlayText");
+
+		if (textIt != components->end()) {
+
+			auto& textCmp = *textIt;
+
+			//const auto& cmpPath = textCmp.second.getAttribute("path").value.valueString;
+			//const auto& cmpText = textCmp.second.getAttribute("path").value.valueString;
+			//const auto& cmpSize = textCmp.second.getAttribute("path").value.valueString;
+			//const auto& cmpWrappedSize = textCmp.second.getAttribute("path").value.valueString;
+
+			//if (cmpPath != image->GetPath()) {
+
+
+			//	Texture* texture = ResourcesManager::GetInstance()->AddTexture(cmpPath, false);
+
+			//	if (texture->getSDLTexture() == nullptr) {
+
+			//		texture = nullptr;
+			//	}
+
+			//	image->SetTexture(cmpPath, texture);
+			//}
+
+		}
+		else {
+
+			text->Clear();
+		}
+
+
+
 
 		//TODO: text
 	}
@@ -1523,6 +1556,8 @@ namespace ShyEditor {
 		if (image != nullptr)
 			image->Render(renderer, x, y, w, h);
 
+		if (text != nullptr)
+			text->Render(renderer, x, y, w, h);
 		//TODO: render text
 	}
 
@@ -1555,6 +1590,96 @@ namespace ShyEditor {
 	{
 		this->path = path;
 		this->texture = texture;
+	}
+
+
+
+
+
+	OverlayText::OverlayText()
+	{
+		path = "";
+		text = "";
+
+
+		font = nullptr;
+		texture = nullptr;
+	}
+
+	OverlayText::~OverlayText()
+	{
+		if (texture != nullptr) {
+
+			delete texture;
+			texture = nullptr;
+		}
+
+	}
+
+	std::string OverlayText::GetPath()
+	{
+		return path;
+	}
+	std::string OverlayText::GetText()
+	{
+		return text;
+	}
+	void OverlayText::Clear()
+	{
+		if (texture != nullptr) {
+
+			delete texture;
+			texture = nullptr;
+		}
+
+		text = "";
+		path = "";
+		fontSize = 0;
+		maxWidth = -1;
+	}
+	void OverlayText::SetText(const std::string text, const std::string path, int size, int width)
+	{
+		if (texture != nullptr) {
+
+			delete texture;
+			texture = nullptr;
+		}
+
+		if (this->path != path || this->fontSize != size) {
+
+			font = ResourcesManager::GetInstance()->AddFont(path, fontSize);
+			this->path = path;
+			this->fontSize = size;
+		}
+
+		if (font->getSDLFont() == nullptr)
+			return;
+
+		this->text = text;
+		this->maxWidth = width;
+
+		if (maxWidth > 0) {
+
+			texture = font->CreateWrappedText(text, maxWidth);
+		}
+		else {
+
+			texture = font->CreateText(text);
+		}
+	}
+
+	Texture* OverlayText::GetTexture()
+	{
+		return texture;
+	}
+
+	void OverlayText::Render(SDL_Renderer* renderer, int x, int y, int w, int h)
+	{
+		if (texture != nullptr) {
+
+			SDL_Rect dest{ x, y, w, h };
+			SDL_RenderCopy(renderer, texture->getSDLTexture(), NULL, &dest);
+		}
 	}
 }
 

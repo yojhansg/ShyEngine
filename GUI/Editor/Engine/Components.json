@@ -155,32 +155,7 @@
             }
         ]
     },
-    "BallComponent": null,
     "BoxBody": {
-        "attributes": [
-            {
-                "name": "bodyType",
-                "type": "float"
-            },
-            {
-                "name": "mass",
-                "type": "float"
-            },
-            {
-                "name": "bounciness",
-                "type": "float"
-            },
-            {
-                "name": "trigger",
-                "type": "bool"
-            },
-            {
-                "name": "freezeRotation",
-                "type": "bool"
-            }
-        ]
-    },
-    "ChainBody": {
         "attributes": [
             {
                 "name": "bodyType",
@@ -349,7 +324,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "ChangeTexture",
+                "name": "loadTexture",
                 "return": "void"
             },
             {
@@ -368,7 +343,6 @@
             }
         ]
     },
-    "LinkComponent": null,
     "MusicEmitter": {
         "attributes": [
             {
@@ -400,7 +374,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "changeMusic",
+                "name": "loadMusic",
                 "return": "void"
             },
             {
@@ -608,7 +582,7 @@
                 "type": "color"
             },
             {
-                "name": "renderScale",
+                "name": "scale",
                 "type": "float"
             },
             {
@@ -1044,16 +1018,16 @@
     "OverlayText": {
         "attributes": [
             {
-                "name": "pointSize",
-                "type": "float"
-            },
-            {
-                "name": "path",
-                "type": "string"
-            },
-            {
                 "name": "text",
                 "type": "string"
+            },
+            {
+                "name": "font",
+                "type": "string"
+            },
+            {
+                "name": "fontSize",
+                "type": "float"
             },
             {
                 "name": "horizontalAlignment",
@@ -1526,7 +1500,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "changeTexture",
+                "name": "loadTexture",
                 "return": "void"
             },
             {
@@ -1731,7 +1705,7 @@
                         "type": "string"
                     }
                 ],
-                "name": "changeSound",
+                "name": "loadSound",
                 "return": "void"
             },
             {
@@ -1962,6 +1936,7 @@
             }
         ]
     },
+    "SplashScene": null,
     "Transform": {
         "attributes": [
             {

@@ -15,6 +15,8 @@ namespace Scripting {
 	class ScriptFunctionality;
 }
 
+using cString = std::string const&;
+
 namespace Renderer {
 
 	EditorManager RendererManager : public Utilities::Singleton<RendererManager> {
@@ -56,14 +58,14 @@ namespace Renderer {
 		void toggleFullScreen();
 		void showCursor(bool show);
 		void resizeWindow(int w, int h);
-		void renameWindow(const std::string& name);
+		void renameWindow(cString name); 
 		void repositionWindow(int x, int y);
-		bool SetWindowIcon(const std::string& path);
+		bool SetWindowIcon(cString path);
 
 	private:
 
 		RendererManager();
-		RendererManager(const std::string& windowTitle, int width, int height, bool vsync);
+		RendererManager(cString windowTitle, int width, int height, bool vsync);
 
 		bool initSDL(bool vsync);
 		void closeSDL();

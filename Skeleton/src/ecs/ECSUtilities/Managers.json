@@ -494,8 +494,8 @@
             {
                 "input": [
                     {
-                        "name": "Utilities::Vector2D&gravity",
-                        "type": ""
+                        "name": "gravity",
+                        "type": "Vector2D"
                     }
                 ],
                 "name": "setGravity",
@@ -504,8 +504,8 @@
             {
                 "input": [
                     {
-                        "name": "std::string&layerName",
-                        "type": ""
+                        "name": "layerName",
+                        "type": "string"
                     }
                 ],
                 "name": "addCollisionLayer",
@@ -514,8 +514,8 @@
             {
                 "input": [
                     {
-                        "name": "std::string&layerName",
-                        "type": ""
+                        "name": "layerName",
+                        "type": "string"
                     }
                 ],
                 "name": "removeCollisionLayer",
@@ -524,12 +524,12 @@
             {
                 "input": [
                     {
-                        "name": "std::string&layerNameA",
-                        "type": ""
+                        "name": "layerNameA",
+                        "type": "string"
                     },
                     {
-                        "name": "std::string&layerNameB",
-                        "type": ""
+                        "name": "layerNameB",
+                        "type": "string"
                     },
                     {
                         "name": "collide",
@@ -542,12 +542,12 @@
             {
                 "input": [
                     {
-                        "name": "std::string&layerNameA",
-                        "type": ""
+                        "name": "layerNameA",
+                        "type": "string"
                     },
                     {
-                        "name": "std::string&layerNameB",
-                        "type": ""
+                        "name": "layerNameB",
+                        "type": "string"
                     }
                 ],
                 "name": "layersCollide",
@@ -556,8 +556,8 @@
             {
                 "input": [
                     {
-                        "name": "std::string&layerName",
-                        "type": ""
+                        "name": "layerName",
+                        "type": "string"
                     }
                 ],
                 "name": "layersExists",
@@ -855,6 +855,84 @@
             }
         ],
         "name": "RealTime"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "getWidth",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "getHeight",
+                "return": "float"
+            },
+            {
+                "input": [],
+                "name": "toggleFullScreen",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "show",
+                        "type": "bool"
+                    }
+                ],
+                "name": "showCursor",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "w",
+                        "type": "float"
+                    },
+                    {
+                        "name": "h",
+                        "type": "float"
+                    }
+                ],
+                "name": "resizeWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "string"
+                    }
+                ],
+                "name": "renameWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "x",
+                        "type": "float"
+                    },
+                    {
+                        "name": "y",
+                        "type": "float"
+                    }
+                ],
+                "name": "repositionWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "path",
+                        "type": "string"
+                    }
+                ],
+                "name": "SetWindowIcon",
+                "return": "bool"
+            }
+        ],
+        "name": "RendererManager"
     },
     {
         "methods": [
