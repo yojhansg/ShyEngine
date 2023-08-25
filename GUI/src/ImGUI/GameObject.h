@@ -171,7 +171,6 @@ namespace ShyEditor {
 		void scaleChildren(GameObject* go, int scaleFactor);
 		void setChildrenVisible(GameObject* go, bool visible);
 		void rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
-
 	};
 
 

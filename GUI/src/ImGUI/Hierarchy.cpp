@@ -310,6 +310,16 @@ namespace ShyEditor {
 		return false;
 	}
 
+	bool Hierarchy::isParentFromPrefab(GameObject* go)
+	{
+		if (go->getParent() != nullptr) {
+			if (go->getParent()->getPrefabId() != 0) return true;
+			
+			return isParentFromPrefab(go->getParent());
+		}
+		return false;
+	}
+
 
 	void Hierarchy::RenderGameObject(GameObject* gameObject, const char* type)
 	{
@@ -340,20 +350,6 @@ namespace ShyEditor {
 		}
 
 
-		ImGui::SameLine();
-
-		if (gameObject->getPrefabId() != 0) {
-			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , gameObject->getName().c_str());
-		}
-		else {
-			ImGui::Text(gameObject->getName().c_str());
-		}
-
-		showGameObjectMenu(gameObject);
-		showRenamePopup(gameObject);
-		showSavePrefabPopup(gameObject);
-
-
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 
 			ImGui::SetDragDropPayload(type, &gameObject, sizeof(GameObject*));
@@ -371,6 +367,20 @@ namespace ShyEditor {
 			}
 			ImGui::EndDragDropTarget();
 		}
+
+		ImGui::SameLine();
+
+		if (gameObject->getPrefabId() != 0 || isParentFromPrefab(gameObject)) {
+			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , gameObject->getName().c_str());
+		}
+		else {
+			ImGui::Text(gameObject->getName().c_str());
+		}
+
+		showGameObjectMenu(gameObject);
+		showRenamePopup(gameObject);
+		showSavePrefabPopup(gameObject);
+
 		if (isOpen) {
 
 
