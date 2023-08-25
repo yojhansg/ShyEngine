@@ -39,7 +39,7 @@ namespace ShyEditor {
 				AddPrefab(prefab);
 			}
 
-			std::unordered_map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -95,7 +95,7 @@ namespace ShyEditor {
 	{
 		if (currentlySelected != 0) {
 			GameObject* prefab = prefabs[currentlySelected];
-			std::unordered_map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 		
 			if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
 				std::vector<int> instances = prefabInstances.find(prefab->getId())->second;
