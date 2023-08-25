@@ -395,7 +395,7 @@ namespace ShyEditor {
 						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
 						position += increment * anchor;
 
-						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaï¿½o y viceversa
 						size += increment;
 					}
 					else
@@ -425,7 +425,7 @@ namespace ShyEditor {
 						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
 						position += increment * anchor;
 
-						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaï¿½o y viceversa
 						size += increment;
 					}
 					else
@@ -450,7 +450,7 @@ namespace ShyEditor {
 
 						float increment = psize - size;
 
-						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//Lo que haya incrementado de tamaï¿½o hay que compensarlo con la posicion, para de esta forma
 						//dar la sensacion de que estamos arrastrando desde un lado
 						position -= anchor * increment;
 					}
@@ -476,7 +476,7 @@ namespace ShyEditor {
 
 						float increment = psize - size;
 
-						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//Lo que haya incrementado de tamaï¿½o hay que compensarlo con la posicion, para de esta forma
 						//dar la sensacion de que estamos arrastrando desde un lado
 						position -= anchor * increment;
 					}
@@ -626,11 +626,15 @@ namespace ShyEditor {
 			}
 		}
 
-		if (event->key.keysym.mod & KMOD_CTRL) {
+		if (event->type = SDL_KEYDOWN) {
+
 			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
-				saveScene(name);
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+					saveScene(name);
 			}
 		}
+
 	}
 
 	void Scene::Behaviour() {

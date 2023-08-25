@@ -2,6 +2,7 @@
 #include <iostream>
 #include <list>
 #include <unordered_map>
+#include "Texture.h"
 
 struct SDL_Renderer;
 union SDL_Event;
@@ -19,7 +20,7 @@ namespace ShyEditor {
 
 	class Camera;
 	class Texture;
-
+	class Font;
 
 	class Transform;
 	class Overlay;
@@ -298,8 +299,30 @@ namespace ShyEditor {
 
 	class OverlayText {
 
-
+	private:
 		std::string path;
+		std::string text;
+
+
+		Font* font;
+		Texture* texture;
+
+		int fontSize;
+		int maxWidth;
+
+	public:
+
+		OverlayText();
+		~OverlayText();
+
+		std::string GetPath();
+		std::string GetText();
+
+		void Clear();
+		void SetText(const std::string text, const std::string path, int size, int maxWidth);
+		Texture* GetTexture();
+
+		void Render(SDL_Renderer* renderer, int x, int y, int w, int h);
 
 	};
 

@@ -1079,7 +1079,7 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 
 std::string ECSReader::ProcessType(std::string const& input)
 {
-	if (input == "std::string" || input == "string" || input == "cstring")
+	if (input == "std::string" || input == "string" || input == "cstring" || input == "cString")
 		return "string";
 
 	if (input == "float" || input == "int" || input == "double")
@@ -1107,7 +1107,7 @@ std::string ECSReader::ProcessType(std::string const& input)
 		return "any";
 
 	std::cout << "Error con el tipo: " << input << std::endl;
-	return "";
+	return input;
 }
 
 
@@ -1117,7 +1117,7 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 	for (auto& component : allComponents) {
 
-		json cmp = json::basic_json();
+		json cmp = nlohmann::ordered_json();
 
 		if (attributes.contains(component)) {
 

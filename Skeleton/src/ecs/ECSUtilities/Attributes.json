@@ -51,28 +51,6 @@
             "type": "bool"
         }
     ],
-    "ChainBody": [
-        {
-            "name": "bodyType",
-            "type": "int"
-        },
-        {
-            "name": "mass",
-            "type": "float"
-        },
-        {
-            "name": "bounciness",
-            "type": "float"
-        },
-        {
-            "name": "trigger",
-            "type": "bool"
-        },
-        {
-            "name": "freezeRotation",
-            "type": "bool"
-        }
-    ],
     "CircleBody": [
         {
             "name": "radius",
@@ -183,7 +161,7 @@
             "type": "Utilities::Color"
         },
         {
-            "name": "renderScale",
+            "name": "scale",
             "type": "float"
         },
         {
@@ -217,16 +195,16 @@
     ],
     "OverlayText": [
         {
-            "name": "pointSize",
-            "type": "int"
-        },
-        {
-            "name": "path",
-            "type": "std::string"
-        },
-        {
             "name": "text",
             "type": "std::string"
+        },
+        {
+            "name": "font",
+            "type": "std::string"
+        },
+        {
+            "name": "fontSize",
+            "type": "int"
         },
         {
             "name": "horizontalAlignment",

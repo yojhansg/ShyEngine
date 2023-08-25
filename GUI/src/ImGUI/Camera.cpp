@@ -90,7 +90,7 @@ namespace ShyEditor {
 
 #define ScrollSpeed 0.025f
 
-		if (isFocused) {
+		if (isFocused && isMouseInsideWindow) {
 			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
 
 				float pscale = scale;

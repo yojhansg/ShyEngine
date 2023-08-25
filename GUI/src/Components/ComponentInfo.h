@@ -3,7 +3,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <unordered_map>
 
 namespace Components {
 
@@ -64,8 +63,8 @@ namespace Components {
 		void SetValue(const AttributeValue& value);
 		AttributesType getType() const;
 
-		std::string getName() const;
-		std::string getTypeStr() const;
+		const std::string& getName() const;
+		const std::string& getTypeStr() const;
 		std::string toJson();
 
 		static Attribute fromJson(std::string name, std::string json);
@@ -111,6 +110,16 @@ namespace Components {
 		std::unordered_map<std::string, Method> methods;
 
 
+		/*
+			Guardamos los atributos y metodos en dos estructuras diferentes
+			Los mapas los usamos para busar un elemento en concreto de forma rapida
+			Por otro lado, los vectores los usamos para mantener el orden de insercion
+			ya que en algunos componentes interesa dibujar esta informacion en ese orden
+		*/
+
+		std::vector<Attribute*> orderedAttributes;
+		std::vector<Method*> orderedMethods;
+
 	public:
 
 		Component();
@@ -124,6 +133,9 @@ namespace Components {
 
 		std::unordered_map<std::string, Attribute>& getAllAttributes();
 		std::unordered_map<std::string, Method>& getAllMethods();
+
+		std::vector<Attribute*>& GetAttributesOrdered();
+		std::vector<Method*>& GetMethodsOrdered();
 
 		void addAttribute(const Attribute& attribute);
 		void addMethod(const Method& method);

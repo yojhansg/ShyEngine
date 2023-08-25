@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Fri Aug 18 04:40:40 2023
+//Creation time : Fri Aug 25 20:36:23 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -34,9 +34,9 @@ Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setRotaionPoint(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Image_loadTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable MusicEmitter_loadMusic(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_play(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_pause(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable MusicEmitter_stop(std::vector<Scripting::Variable>const& vec);
@@ -97,7 +97,7 @@ Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>con
 Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_startEmitting(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable ParticleSystem_changeTexture(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_loadTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec);
@@ -107,7 +107,7 @@ Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>con
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable SoundEmitter_loadSound(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_pause(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_stop(std::vector<Scripting::Variable>const& vec);
@@ -150,9 +150,21 @@ Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable PhysicsManager_handleBodies(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_getGravity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_setGravity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_addCollisionLayer(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_removeCollisionLayer(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_setCollisionBetweenLayers(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_layersCollide(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicsManager_layersExists(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_getWidth(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_getHeight(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_toggleFullScreen(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_showCursor(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_resizeWindow(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_renameWindow(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_SetWindowIcon(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_Save(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_Load(std::vector<Scripting::Variable>const& vec);
