@@ -324,7 +324,7 @@ namespace ShyEditor {
 	void Hierarchy::RenderGameObject(GameObject* gameObject, const char* type)
 	{
 		Scene* scene = Editor::getInstance()->getScene();
-
+		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
 		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
 
@@ -353,6 +353,11 @@ namespace ShyEditor {
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 
 			ImGui::SetDragDropPayload(type, &gameObject, sizeof(GameObject*));
+
+			ImGui::Image(gameObject->getTexture()->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+			ImGui::SameLine();
+			ImGui::Text(gameObject->getName().c_str());
+
 			ImGui::EndDragDropSource();
 		}
 
@@ -365,6 +370,7 @@ namespace ShyEditor {
 
 				handleDragAndDrop(sourceObject, gameObject);
 			}
+
 			ImGui::EndDragDropTarget();
 		}
 

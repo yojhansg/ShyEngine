@@ -1548,7 +1548,7 @@ namespace ShyEditor {
 			//}
 
 		}
-		else {
+		else if(text != nullptr) {
 
 			text->Clear();
 		}

@@ -483,10 +483,13 @@ namespace ShyEditor {
 			}
 		}
 
-		for (auto child : instance->prefabs[prefabId]->getChildren())
-		{
-			RemoveInstance(child.second->getId(), prefabInstanceId);
+		if (instance->prefabs.find(prefabId) != instance->prefabs.end()) {
+			for (auto child : instance->prefabs[prefabId]->getChildren())
+			{
+				RemoveInstance(child.second->getId(), prefabInstanceId);
+			}
 		}
+
 	}
 
 	void PrefabManager::Behaviour()
