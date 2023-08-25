@@ -26,6 +26,17 @@ namespace ShyEditor {
 		docked = true;
 
 		acceptAssetDrop = true;
+
+		copiedObject = nullptr;
+	}
+
+	Hierarchy::~Hierarchy()
+	{
+		if (copiedObject != nullptr) {
+			delete copiedObject;
+		}
+
+		Window::~Window();
 	}
 
 	void Hierarchy::Behaviour()
@@ -174,6 +185,38 @@ namespace ShyEditor {
 
 				}
 
+			}
+
+			if (event->key.keysym.mod & KMOD_CTRL) {
+				if (event->key.keysym.scancode == SDL_SCANCODE_C) {
+					Scene* scene = Editor::getInstance()->getScene();
+					auto selectedGo = scene->GetSelectedGameObject();
+
+					if (selectedGo == nullptr) return;
+
+					if (copiedObject != nullptr) {
+						GameObject::unusedIds.push_back(copiedObject->getId());
+						delete copiedObject;
+					}
+		
+					copiedObject = new GameObject(*selectedGo);
+
+				}
+
+				if (event->key.keysym.scancode == SDL_SCANCODE_V) {
+					Scene* scene = Editor::getInstance()->getScene();
+
+					if (copiedObject == nullptr) return;
+
+					if (copiedObject->IsTransform()) {
+						scene->AddGameObject(copiedObject);
+					}
+					else {
+						scene->AddOverlay(copiedObject);
+					}
+
+					copiedObject = new GameObject(*copiedObject);
+				}
 			}
 
 		}

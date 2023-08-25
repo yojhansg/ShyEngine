@@ -17,7 +17,7 @@ namespace ShyEditor {
 	public:
 		
 		Hierarchy();
-
+		~Hierarchy();
 
 	protected:
 
@@ -40,5 +40,7 @@ namespace ShyEditor {
 		bool shouldOpenRenamePopup;
 		bool shouldOpenSavePrefabPopup;
 
+	private:
+		GameObject* copiedObject;
 	};
 }
