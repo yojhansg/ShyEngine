@@ -28,6 +28,7 @@ namespace ShyEditor {
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
 
 		bool isChildrenTheSelectedObject(GameObject* go);
+		bool isParentFromPrefab(GameObject* go);
 
 		void RenderGameObject(GameObject* gameObject, const char* type);
 

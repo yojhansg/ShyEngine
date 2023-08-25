@@ -144,19 +144,6 @@ namespace ShyEditor {
 			scripts.emplace(script.GetName(), script);
 		}
 
-		for (auto& pair : go.children) {
-			GameObject* child = new GameObject(*pair.second);
-
-			children.emplace(child->getId(), child);
-		}
-
-		if (go.parent != nullptr) {
-			parent = new GameObject(*go.parent);
-		}
-		else {
-			parent = nullptr;
-		}
-
 		visible = go.visible;
 		showGizmo = go.showGizmo;
 		renderOrder = go.renderOrder;
@@ -189,6 +176,19 @@ namespace ShyEditor {
 		previousMousePosX = go.previousMousePosX;
 		previousMousePosY = go.previousMousePosY;
 		waitingToDelete = go.waitingToDelete;
+
+		if (go.parent == nullptr) {
+			parent = nullptr;
+		}
+
+		for (auto& pair : go.children) {
+			GameObject* child = new GameObject(*pair.second);
+
+			child->setParent(this);
+
+			children.emplace(child->getId(), child);
+		}
+
 	}
 
 	GameObject::~GameObject() {
@@ -333,6 +333,7 @@ namespace ShyEditor {
 	void GameObject::setPrefabId(int prefabId)
 	{
 		this->prefabId = prefabId;
+
 	}
 
 	int GameObject::getPrefabId()
@@ -1006,9 +1007,6 @@ namespace ShyEditor {
 			rotateChildren(child.second, goCenter, rotationAngle);
 		}
 	}
-
-
-
 
 	// ------------------------ Serialization and deseralization logic -------------------------
 
