@@ -103,7 +103,7 @@ namespace ShyEditor {
 		return go;
 	}
 
-	std::unordered_map<int, GameObject*>& Scene::getGameObjects() {
+	std::map<int, GameObject*>& Scene::getGameObjects() {
 		return gameObjects;
 	}
 

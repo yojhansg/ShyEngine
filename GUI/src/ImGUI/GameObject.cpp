@@ -61,7 +61,7 @@ namespace ShyEditor {
 		previousMousePosY = 0;
 
 		// Gets the list of gameobjects in the scene
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
 
 
 		if (GameObject::unusedIds.size() != 0) {
@@ -113,7 +113,7 @@ namespace ShyEditor {
 		name = go.name;
 
 		// Gets the list of gameobjects in the scene
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
 
 
 		if (GameObject::unusedIds.size() != 0) {
@@ -744,7 +744,7 @@ namespace ShyEditor {
 
 	void GameObject::drawGameobject(std::string attrName, ::Components::Attribute* attr) {
 
-		std::unordered_map<int, GameObject*> gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
 
 		GameObject* go = gameObjects.find((int)attr->value.value.entityIdx) != gameObjects.end() ? gameObjects.find((int)attr->value.value.entityIdx)->second : nullptr;
 

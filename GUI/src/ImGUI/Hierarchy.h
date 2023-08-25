@@ -22,6 +22,7 @@ namespace ShyEditor {
 	protected:
 
 		void Behaviour() override;
+		void HandleInput(SDL_Event* event) override;
 		void ReceiveAssetDrop(Asset& asset) override;
 
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
