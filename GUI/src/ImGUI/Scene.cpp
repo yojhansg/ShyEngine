@@ -534,7 +534,7 @@ namespace ShyEditor {
 		}
 
 		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
-			
+
 			float invCameraScale = 1.f / sceneCamera->GetScale();
 
 			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
@@ -588,11 +588,28 @@ namespace ShyEditor {
 			SetSelectedGameObject(nullptr);
 		}
 
-		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-			if (focused) {
-				sceneCamera->handleInput(event, insideWindow);
+		sceneCamera->handleInput(event, insideWindow, focused);
+
+		if (event->type == SDL_KEYUP && event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
+
+
+			if (selectedGameObject != nullptr) {
+
+				if (selectedGameObject->IsTransform()) {
+
+					auto pos = selectedGameObject->getPosition();
+					sceneCamera->SetPosition(pos.x, pos.y);
+				}
+				else {
+
+					float camScale = sceneCamera->GetScale();
+					auto pos = selectedGameObject->GetOverlay()->CalculateCenterPoint();
+					sceneCamera->SetPosition(pos.x * camScale, pos.y * camScale);
+
+				}
 			}
 		}
+
 
 	}
 
