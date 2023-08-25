@@ -385,6 +385,11 @@ namespace ShyEditor {
 		}
 	}
 
+	void FileExplorer::Refresh()
+	{
+		shouldUpdate = true;
+	}
+
 }
 
 

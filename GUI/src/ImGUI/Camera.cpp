@@ -60,6 +60,7 @@ namespace ShyEditor {
 
 	void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow, bool isFocused)
 	{
+
 		if (isMouseInsideWindow && event->type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)

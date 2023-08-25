@@ -139,6 +139,8 @@ namespace ShyEditor {
 
 	void Scene::saveScene(const std::string& sceneName) {
 
+		Editor::getInstance()->getFileExplorer()->Refresh();
+
 		nlohmann::ordered_json j;
 
 		this->scenePath = sceneName + ".scene";
@@ -624,7 +626,11 @@ namespace ShyEditor {
 			}
 		}
 
-
+		if (event->key.keysym.mod & KMOD_CTRL) {
+			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
+				saveScene(name);
+			}
+		}
 	}
 
 	void Scene::Behaviour() {

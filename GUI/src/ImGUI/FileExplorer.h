@@ -21,6 +21,7 @@ namespace ShyEditor {
 
 		void Behaviour() override;
 		void HandleInput(SDL_Event* event) override;
+		void Refresh();
 
 	private:
 
