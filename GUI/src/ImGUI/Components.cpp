@@ -96,7 +96,7 @@ namespace ShyEditor {
 			ImGui::PopStyleColor(6); // reset colors
 
 			if (gameObject->getPrefabId() != 0) {
-			
+
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(gameObject->getPrefabId())->getName()).c_str());

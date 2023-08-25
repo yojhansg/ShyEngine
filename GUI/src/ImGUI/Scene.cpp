@@ -791,9 +791,9 @@ namespace ShyEditor {
 				AddOverlayChildsToScene(go);
 			}
 			
-			selectedGameObject = go;
-
+			go->setPrefabId(prefab->getId());
 			PrefabManager::AddInstance(prefab, go);
+			selectedGameObject = go;
 		}
 	}
 

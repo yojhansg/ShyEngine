@@ -150,10 +150,6 @@ namespace ShyEditor {
 
 		prefabId = go.prefabId;
 
-		if (prefabId != 0) {
-			PrefabManager::AddInstance(prefabId, id);
-		}
-
 		isTransform = go.isTransform;
 
 		if (isTransform) {
@@ -269,6 +265,10 @@ namespace ShyEditor {
 	}
 
 	void GameObject::update() {
+
+		if (PrefabManager::GetPrefabById(getPrefabId()) == nullptr) {
+			setPrefabId(0);
+		}
 
 		if (isTransform) {
 

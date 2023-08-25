@@ -196,7 +196,7 @@ namespace ShyEditor {
 
 	GameObject* PrefabManager::GetPrefabById(int id)
 	{
-		if (instance->prefabs[id] != nullptr) {
+		if (instance->prefabs.find(id) != instance->prefabs.end()) {
 			return instance->prefabs[id];
 		}
 
@@ -398,7 +398,6 @@ namespace ShyEditor {
 			PrefabManager::lastPrefabId--;
 		}
 
-		prefab->setPrefabId(prefab->getId());
 		instance->prefabs.emplace(prefab->getId(), prefab);
 	}
 

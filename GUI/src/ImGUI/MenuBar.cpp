@@ -337,9 +337,6 @@ namespace ShyEditor {
                     prefab->setName(nameBuffer);
                     
                     PrefabManager::AddPrefab(prefab);
-
-                    go->setPrefabId(prefab->getId());
-                    PrefabManager::AddInstance(prefab, go);
                 }
 
                 ImGui::CloseCurrentPopup();
