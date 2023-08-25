@@ -43,9 +43,11 @@ namespace ShyEditor {
 		// Name, ID and texture getters/setters
 		std::string getName();
 		void setName(const std::string& newName);
+		void setPrefabId(int prefabId);
 		Texture* getTexture();
 		int getId();
 		void setId(int id);
+		void setComponents(std::unordered_map<std::string, ::Components::Component> components);
 
 		// Visibility getters/setters
 		int getRenderOrder();
@@ -56,6 +58,7 @@ namespace ShyEditor {
 		void addComponent(Components::Component comp);
 		void addScript(Components::Script script);
 		std::unordered_map<std::string, Components::Component>* getComponents();
+		std::unordered_map<std::string, Components::Component> getComponentsCopy();
 		std::unordered_map<std::string, Components::Script>* getScripts();
 
 		// Tranform attributes getters/setters
@@ -120,6 +123,7 @@ namespace ShyEditor {
 		bool showGizmo;
 		int renderOrder;
 
+		int prefabId;
 
 		//Positional components
 		bool isTransform;

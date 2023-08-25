@@ -745,6 +745,8 @@ namespace ShyEditor {
 
 			go->setPosition(position);
 			selectedGameObject = go;
+
+			PrefabManager::AddInstance(prefab, go);
 		}
 	}
 

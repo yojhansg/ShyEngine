@@ -144,6 +144,7 @@ void Editor::Close() {
 		delete window;
 
 	delete instance->layout;
+	delete instance->build;
 	delete instance->menuBar;
 	delete instance->projecInfo;
 

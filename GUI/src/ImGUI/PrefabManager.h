@@ -19,12 +19,13 @@ namespace ShyEditor {
 		static PrefabManager* instance;
 		static int lastPrefabId;
 
-		static std::vector<int> unusedIds;
-
 		bool open;
 
 		Editor* editor;
 		std::unordered_map<int, GameObject*> prefabs;
+
+		//Key = prefab Id, Value = all its instances
+		std::unordered_map<int, std::vector<int>> prefabInstances;
 
 		Texture* prefabText;
 
@@ -37,8 +38,12 @@ namespace ShyEditor {
 		int currentlySelected;
 
 		void LoadPrefabs();
+		void HandleDeletion();
+		void UpdatePrefabInstances();
 
 	public:
+
+		static std::vector<int> unusedIds;
 
 		PrefabManager();
 		~PrefabManager();
@@ -46,6 +51,8 @@ namespace ShyEditor {
 		static void Open();
 
 		static void AddPrefab(GameObject* go);
+		static void AddInstance(GameObject* prefab, GameObject* prefabInstance);
+		static void RemoveInstance(int prefabId, int prefabInstanceId);
 
 		static void SavePrefabs(const std::string& path);
 

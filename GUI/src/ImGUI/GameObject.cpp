@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "imgui.h"
+#include "PrefabManager.h"
 #include "SDL.h"
 
 #include <fstream>
@@ -54,6 +55,7 @@ namespace ShyEditor {
 		showGizmo = false;
 		visible = true;
 		renderOrder = 0;
+		prefabId = 0;
 
 		waitingToDelete = false;
 
@@ -158,6 +160,8 @@ namespace ShyEditor {
 		visible = go.visible;
 		showGizmo = go.showGizmo;
 		renderOrder = go.renderOrder;
+
+		prefabId = go.prefabId;
 
 		isTransform = go.isTransform;
 
@@ -322,6 +326,11 @@ namespace ShyEditor {
 		name = newName;
 	}
 
+	void GameObject::setPrefabId(int prefabId)
+	{
+		this->prefabId = prefabId;
+	}
+
 	Texture* GameObject::getTexture() {
 		return texture;
 	}
@@ -333,6 +342,11 @@ namespace ShyEditor {
 	void GameObject::setId(int id)
 	{
 		this->id = id;
+	}
+
+	void GameObject::setComponents(std::unordered_map<std::string, ::Components::Component> components)
+	{
+		this->components = components;
 	}
 
 
@@ -380,6 +394,11 @@ namespace ShyEditor {
 
 	std::unordered_map<std::string, Components::Component>* GameObject::getComponents() {
 		return &components;
+	}
+
+	std::unordered_map<std::string, Components::Component> GameObject::getComponentsCopy()
+	{
+		return components;
 	}
 
 	std::unordered_map<std::string, Components::Script>* GameObject::getScripts() {
@@ -455,7 +474,17 @@ namespace ShyEditor {
 	void GameObject::toDelete() {
 		waitingToDelete = true;
 
-		GameObject::unusedIds.push_back(id);
+		//If its a prefab instance we remove it from the manager
+		if (prefabId != 0) {
+			PrefabManager::RemoveInstance(prefabId, id);
+		}
+
+		if (id > 0) {
+			GameObject::unusedIds.push_back(id);
+		}
+		else {
+			PrefabManager::unusedIds.push_back(id);
+		}
 
 		for (auto& child : children) {
 			child.second->toDelete();
@@ -966,6 +995,8 @@ namespace ShyEditor {
 
 		j["order"] = renderOrder;
 
+		j["prefabId"] = prefabId;
+
 		j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(transform->GetPosition().y);
 		j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
 		j["localRotation"] = std::to_string(transform->GetRotation());
@@ -1011,10 +1042,13 @@ namespace ShyEditor {
 
 		std::string goName = jsonData["name"];
 
+
 		GameObject::unusedIds.push_back(jsonData["id"]);
 
 		GameObject* gameObject = new GameObject(goName, isTransform);
 		gameObject->name = goName;
+
+		gameObject->prefabId = jsonData["prefabId"];
 
 		if (!jsonData.contains("id")) {
 			LogManager::LogError(errorMsg);
