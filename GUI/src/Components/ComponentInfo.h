@@ -19,7 +19,7 @@ namespace Components {
 		BOOL,
 		COLOR,
 		CHAR,
-		GAMEOBJECT
+		ENTITY
 	};
 
 
@@ -55,6 +55,8 @@ namespace Components {
 
 		static std::unordered_map<std::string, AttributesType> attributeTypes;
 
+		void SetDefaultValues();
+
 	public:
 
 		Attribute();
@@ -63,20 +65,23 @@ namespace Components {
 
 		void SetType(const std::string& str, const AttributesType& type);
 		void SetValue(const AttributeValue& value);
-		AttributesType getType() const;
+		AttributesType GetType() const;
 
-		const std::string& getName() const;
-		const std::string& getTypeStr() const;
-		std::string toJson();
+		const std::string& GetName() const;
+		const std::string& GetTypeStr() const;
 
-		static Attribute fromJson(std::string name, std::string json);
+		static AttributesType GetAttributeTypeFromTypeStr(const std::string& typeStr);
+		static std::string GetTypeStrFromAttributeType(AttributesType type);
+
+		std::string ToJson();
+		static Attribute FromJson(std::string name, std::string json);
 
 		AttributeValue value;
 	};
 
 	using Variable = Attribute;
 
-	class Method {
+	class Function {
 
 	private:
 
@@ -87,9 +92,9 @@ namespace Components {
 		std::vector<Variable> input;
 	public:
 
-		Method();
-		Method(Method const& other);
-		Method(const std::string& name, const std::string& className);
+		Function();
+		Function(Function const& other);
+		Function(const std::string& name, const std::string& className);
 
 		void SetReturn(const Variable& ret);
 		void AddInput(const Variable& input);
@@ -109,7 +114,7 @@ namespace Components {
 		std::string name;
 
 		std::unordered_map<std::string, Attribute> attributes;
-		std::unordered_map<std::string, Method> methods;
+		std::unordered_map<std::string, Function> functions;
 
 
 		/*
@@ -120,7 +125,7 @@ namespace Components {
 		*/
 
 		std::vector<Attribute*> orderedAttributes;
-		std::vector<Method*> orderedMethods;
+		std::vector<Function*> orderedFunctions;
 
 	public:
 
@@ -130,21 +135,21 @@ namespace Components {
 
 		cstring GetName();
 
-		Attribute& getAttribute(cstring name);
-		Method& getMethod(cstring name);
+		Attribute& GetAttribute(cstring name);
+		Function& GetFunction(cstring name);
 
-		std::unordered_map<std::string, Attribute>& getAllAttributes();
-		std::unordered_map<std::string, Method>& getAllMethods();
+		std::unordered_map<std::string, Attribute>& GetAllAttributes();
+		std::unordered_map<std::string, Function>& GetAllFunctions();
 
 		std::vector<Attribute*>& GetAttributesOrdered();
-		std::vector<Method*>& GetMethodsOrdered();
+		std::vector<Function*>& GetFunctionsOrdered();
 
-		void addAttribute(const Attribute& attribute);
-		void addMethod(const Method& method);
+		void AddAttribute(const Attribute& attribute);
+		void AddFunction(const Function& function);
 
-		nlohmann::ordered_json toJson();
+		nlohmann::ordered_json ToJson();
 
-		static Component fromJson(std::string json);
+		static Component FromJson(std::string json);
 	};
 
 

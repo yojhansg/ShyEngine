@@ -123,6 +123,8 @@ public:
 	*/
 	ECSReader& GenerateManagersJSON();
 
+
+
 	/*
 		TODO: Comentario descriptivo
 	*/

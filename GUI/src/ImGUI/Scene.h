@@ -16,7 +16,7 @@ struct ImVec2;
 
 namespace ShyEditor {
 
-	class GameObject;
+	class Entity;
 	class Camera;
 	class Overlay;
 
@@ -55,14 +55,14 @@ namespace ShyEditor {
 		int viewMode;
 		Camera* sceneCamera;
 
-		std::map<int, GameObject*> gameObjects;
-		std::vector<GameObject*> overlays;
+		std::map<int, Entity*> entities;
+		std::vector<Entity*> overlays;
 
 		bool dragging;
-		GameObject* selectedGameObject;
+		Entity* selectedEntity;
 
 
-		static bool CompareGameObjectsRenderOrder(GameObject* a, GameObject* b);
+		static bool CompareEntitiesRenderOrder(Entity* a, Entity* b);
 
 		void ResizeOverlayIfNeccesary();
 
@@ -81,27 +81,27 @@ namespace ShyEditor {
 		Scene();
 		~Scene();
 
-		GameObject* AddGameObject(std::string path);
-		void AddGameObject(GameObject* go);
-		void AddGameObjectChildsToScene(GameObject* go);
+		Entity* AddEntity(std::string path);
+		void AddEntity(Entity* entity);
+		void AddEntityChildsToScene(Entity* entity);
 
-		GameObject* AddOverlay(std::string path);
-		void AddOverlay(GameObject* overlay);
-		void AddOverlayChildsToScene(GameObject* go);
+		Entity* AddOverlay(std::string path);
+		void AddOverlay(Entity* overlay);
+		void AddOverlayChildsToScene(Entity* entity);
 
-		std::map<int, GameObject*>& GetGameObjects();
-		std::vector<GameObject*>& GetOverlays();
+		std::map<int, Entity*>& GetEntities();
+		std::vector<Entity*>& GetOverlays();
 
 		std::string GetSceneName();
-		GameObject* GetSelectedGameObject();
-		void SetSelectedGameObject(GameObject* go);
+		Entity* GetSelectedEntity();
+		void SetSelectedEntity(Entity* entity);
 
 		void NewScene(const std::string& name);
 		void SaveScene();
 		bool LoadScene();
 
-		void RenderChildGameObjects(GameObject* go);
-		void RenderGameObjects();
+		void RenderChildEntities(Entity* entity);
+		void RenderEntities();
 		void RenderFrame();
 		void RenderUI();
 
@@ -110,7 +110,7 @@ namespace ShyEditor {
 		void ReceiveAssetDrop(Asset& asset) override;
 
 		ImVec2 MousePositionInScene();
-		bool IsMouseHoveringGameObject(GameObject* gameObject);
+		bool IsMouseHoveringEntity(Entity* entity);
 
 		std::string GetPath();
 		std::string ToJson();

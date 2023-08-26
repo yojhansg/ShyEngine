@@ -77,7 +77,7 @@ namespace ShyEditor {
 
 			ImGui::Begin(GetStringId().c_str(), NULL, flag);
 
-			updateAndRender();
+			UpdateAndRender();
 			ManageOutputNode();
 
 			bool close = ManageCloseNode();
@@ -355,7 +355,7 @@ namespace ShyEditor {
 		return nullptr;
 	}
 
-	void ScriptCreationUtilities::ScriptNode::updateAndRender() {}
+	void ScriptCreationUtilities::ScriptNode::UpdateAndRender() {}
 
 	ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator) : creator(creator)
 	{
@@ -375,8 +375,6 @@ namespace ShyEditor {
 
 			bool endMenu = false;
 
-			ImGui::SetWindowFontScale(2);
-
 			AddValuesFromVector(Components::ComponentManager::GetAllComponents());
 			AddValuesFromVector(Components::ComponentManager::GetAllManagers());
 
@@ -388,16 +386,16 @@ namespace ShyEditor {
 	{
 		for (auto& comp : v) {
 
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0)
+			auto& functions = comp.second.GetAllFunctions();
+			if (functions.size() > 0)
 				if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
-					for (auto& method : methods) {
+					for (auto& function : functions) {
 
-						std::string name = method.first;
+						std::string name = function.first;
 						if (ImGui::MenuItem(name.c_str())) {
 
-							ScriptNode* node = new ScriptMethod(method.second);
+							ScriptNode* node = new ScriptFunction(function.second);
 
 							node->SetPosition(mousex, mousey);
 
@@ -562,12 +560,12 @@ namespace ShyEditor {
 	}
 
 
-	ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
+	ScriptCreationUtilities::ScriptFunction::ScriptFunction(::Components::Function& function) : function(function)
 	{
-		input = std::vector<ScriptNode*>(method.getInput().size());
-		type = Node::Method;
+		input = std::vector<ScriptNode*>(function.getInput().size());
+		type = Node::Function;
 
-		outputStr = method.getReturn().getTypeStr();
+		outputStr = function.getReturn().GetTypeStr();
 
 		if (outputStr == "void") {
 			ignoreOutput = true;
@@ -576,7 +574,7 @@ namespace ShyEditor {
 		flow = new ScriptFlow(this);
 	}
 
-	ScriptCreationUtilities::ScriptMethod::~ScriptMethod()
+	ScriptCreationUtilities::ScriptFunction::~ScriptFunction()
 	{
 		if (flow != nullptr)
 		{
@@ -586,7 +584,7 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptMethod::updateAndRender()
+	void ScriptCreationUtilities::ScriptFunction::UpdateAndRender()
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 
@@ -597,10 +595,10 @@ namespace ShyEditor {
 		ImGui::Indent();
 
 		int idx = 0;
-		for (auto& in : method.getInput()) {
+		for (auto& in : function.getInput()) {
 
 			auto relpos = ImGui::GetCursorPos();
-			ImGui::Text(in.getName().c_str());
+			ImGui::Text(in.GetName().c_str());
 
 			auto min = ImGui::GetItemRectMin();
 			auto max = ImGui::GetItemRectMax();
@@ -608,7 +606,7 @@ namespace ShyEditor {
 
 			if (ImGui::IsMouseHoveringRect(min, max)) {
 
-				ImGui::SetTooltip(in.getTypeStr().c_str());
+				ImGui::SetTooltip(in.GetTypeStr().c_str());
 			}
 
 
@@ -626,8 +624,8 @@ namespace ShyEditor {
 				ScriptNode::currentlySelectedOutput != this &&
 				ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 				(
-					in.getTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-					in.getTypeStr() == "any"
+					in.GetTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
+					in.GetTypeStr() == "any"
 					)
 
 				) {
@@ -668,9 +666,9 @@ namespace ShyEditor {
 		flow->ManageNextNode(x, y);
 	}
 
-	std::string ScriptCreationUtilities::ScriptMethod::GetStringId()
+	std::string ScriptCreationUtilities::ScriptFunction::GetStringId()
 	{
-		return method.getName() + " - " + method.getComponent() + " (" + std::to_string(id) + ")";
+		return function.getName() + " - " + function.getComponent() + " (" + std::to_string(id) + ")";
 	}
 
 
@@ -922,8 +920,9 @@ namespace ShyEditor {
 		serialized = false;
 		alwaysSerialize = false;
 
-		attrValue = ::Components::AttributeValue();
+		serializedName[0] = '\0';
 
+		attrValue = ::Components::AttributeValue();
 		attrValue.value.valueFloat = 0;
 
 		this->type = Node::Input;
@@ -934,21 +933,24 @@ namespace ShyEditor {
 			outputStr = "";
 			break;
 		case ::Components::AttributesType::FLOAT:
-			outputStr = "float";
+			outputStr = "Number";
 			break;
 		case ::Components::AttributesType::VECTOR2:
-			outputStr = "Vector2D";
+			outputStr = "Pair";
 			break;
 		case ::Components::AttributesType::STRING:
-			outputStr = "string";
+			outputStr = "Text";
 			break;
 		case ::Components::AttributesType::BOOL:
-			outputStr = "bool";
+			outputStr = "Toggle";
 			break;
 		case ::Components::AttributesType::COLOR:
-			outputStr = "color";
+			outputStr = "Color";
 			break;
-		case ::Components::AttributesType::GAMEOBJECT:
+		case ::Components::AttributesType::CHAR:
+			outputStr = "Letter";
+			break;
+		case ::Components::AttributesType::ENTITY:
 			outputStr = "Entity";
 			alwaysSerialize = true;
 			break;
@@ -965,15 +967,20 @@ namespace ShyEditor {
 
 namespace ShyEditor {
 
-	void ScriptCreationUtilities::ScriptInput::updateAndRender()
+	void ScriptCreationUtilities::ScriptInput::UpdateAndRender()
 	{
+
+		const char* valueFieldName = "Value";
 
 		switch (attrType) {
 
 		case ::Components::AttributesType::NONE:
 			break;
+		case ::Components::AttributesType::CHAR:
+			ImGui::InputText(valueFieldName, &attrValue.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank);
+			break;
 		case ::Components::AttributesType::FLOAT:
-			ImGui::InputFloat("Value", &attrValue.value.valueFloat);
+			ImGui::InputFloat(valueFieldName, &attrValue.value.valueFloat);
 			break;
 		case ::Components::AttributesType::VECTOR2:
 		{
@@ -981,7 +988,7 @@ namespace ShyEditor {
 			float values[2]{};
 			values[0] = attrValue.value.valueVector2.x;
 			values[1] = attrValue.value.valueVector2.y;
-			ImGui::InputFloat2("Value", values);
+			ImGui::InputFloat2(valueFieldName, values);
 
 			attrValue.value.valueVector2.x = values[0];
 			attrValue.value.valueVector2.y = values[1];
@@ -989,7 +996,7 @@ namespace ShyEditor {
 		}
 		case ::Components::AttributesType::BOOL:
 
-			ImGui::Checkbox("Value", &attrValue.value.valueBool);
+			ImGui::Checkbox(valueFieldName, &attrValue.value.valueBool);
 			break;
 		case ::Components::AttributesType::COLOR:
 		{
@@ -997,7 +1004,7 @@ namespace ShyEditor {
 			values[0] = attrValue.value.valueColor.r;
 			values[1] = attrValue.value.valueColor.g;
 			values[2] = attrValue.value.valueColor.b;
-			ImGui::ColorEdit3("Value", values, ImGuiColorEditFlags_DisplayRGB);
+			ImGui::ColorEdit3(valueFieldName, values, ImGuiColorEditFlags_DisplayRGB);
 
 			attrValue.value.valueColor.r = values[0];
 			attrValue.value.valueColor.g = values[1];
@@ -1010,7 +1017,7 @@ namespace ShyEditor {
 			char values[64]{};
 			std::memcpy(values, attrValue.valueString.c_str(), 64);
 
-			ImGui::InputText("Value", values, 64);
+			ImGui::InputText(valueFieldName, values, 64);
 
 			attrValue.valueString = values;
 			break;
@@ -1087,16 +1094,14 @@ namespace ShyEditor {
 
 					type = ::Components::AttributesType::FLOAT;
 				}
-				if (ImGui::MenuItem("Vector")) {
+				if (ImGui::MenuItem("Pair")) {
 
 					type = ::Components::AttributesType::VECTOR2;
 				}
 				if (ImGui::MenuItem("Letter")) {
-
-					//TODO: hacer chars
-					//type = ::Components::AttributesType::CHAR;
+					type = ::Components::AttributesType::CHAR;
 				}
-				if (ImGui::MenuItem("Word")) {
+				if (ImGui::MenuItem("Text")) {
 
 					type = ::Components::AttributesType::STRING;
 				}
@@ -1106,7 +1111,11 @@ namespace ShyEditor {
 				}
 				if (ImGui::MenuItem("Entity")) {
 
-					type = ::Components::AttributesType::GAMEOBJECT;
+					type = ::Components::AttributesType::ENTITY;
+				}
+				if (ImGui::MenuItem("Toggle")) {
+
+					type = ::Components::AttributesType::BOOL;
 				}
 
 				if (type != ::Components::AttributesType::NONE)
@@ -1143,7 +1152,7 @@ namespace ShyEditor {
 					change = true;
 				}
 
-				if (ImGui::MenuItem("Loop")) {
+				if (ImGui::MenuItem("Repeat")) {
 
 					type = ScriptFork::Fork::For;
 					change = true;
@@ -1223,8 +1232,8 @@ namespace ShyEditor {
 
 				if (ImGui::BeginMenu("Node search result")) {
 
-					ShowFoundMethods(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
-					ShowFoundMethods(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
+					ShowFoundFunctions(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
+					ShowFoundFunctions(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
 
 					ImGui::EndMenu();
 				}
@@ -1310,19 +1319,19 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
+	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundFunctions(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
 	{
 
 		for (auto& comp : v) {
 
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0) {
+			auto& functions = comp.second.GetAllFunctions();
+			if (functions.size() > 0) {
 
-				std::vector<std::string> methodsToAdd;
+				std::vector<std::string> functionsToAdd;
 
-				for (auto& method : methods) {
+				for (auto& function : functions) {
 
-					std::string name = method.first;
+					std::string name = function.first;
 					std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
 					std::string search = nameSearch;
@@ -1330,23 +1339,23 @@ namespace ShyEditor {
 
 					if (name.find(search) != name.npos) {
 
-						methodsToAdd.push_back(method.first);
+						functionsToAdd.push_back(function.first);
 					}
 
 				}
 
-				if (methodsToAdd.size() > 0)
+				if (functionsToAdd.size() > 0)
 					if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
-						for (auto& method : methodsToAdd) {
+						for (auto& function : functionsToAdd) {
 
-							if (ImGui::MenuItem(method.c_str())) {
+							if (ImGui::MenuItem(function.c_str())) {
 
 
 								int scrollx, scrolly;
 								ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
 
-								ScriptNode* node = new ScriptMethod(comp.second.getAllMethods()[method]);
+								ScriptNode* node = new ScriptFunction(comp.second.GetAllFunctions()[function]);
 
 
 								node->SetPosition((windowW - node->GetW()) * 0.5f - scrollx, (windowH - node->GetH()) * 0.5f - scrolly);
@@ -1364,10 +1373,10 @@ namespace ShyEditor {
 
 	}
 
-	Components::Method& ScriptCreationUtilities::ScriptMenuBar::GetMethodReference(const std::string& name)
+	Components::Function& ScriptCreationUtilities::ScriptMenuBar::GetFunctionReference(const std::string& name)
 	{
 
-		return Components::ComponentManager::GetAllComponents()["a"].getMethod("a");
+		return Components::ComponentManager::GetAllComponents()["a"].GetFunction("a");
 
 	}
 
@@ -1400,14 +1409,14 @@ namespace ShyEditor {
 
 
 
-	nlohmann::json ScriptCreationUtilities::ScriptMethod::ToJson()
+	nlohmann::json ScriptCreationUtilities::ScriptFunction::ToJson()
 	{
 		json root = ScriptNode::ToJson();
 
-		if (method.getComponent() != method.getName())
-			root["function"] = method.getComponent() + "_" + method.getName();
+		if (function.getComponent() != function.getName())
+			root["function"] = function.getComponent() + "_" + function.getName();
 		else
-			root["function"] = method.getComponent();
+			root["function"] = function.getComponent();
 
 		root["input"] = json::array();
 
@@ -1424,19 +1433,19 @@ namespace ShyEditor {
 		return root;
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNode* node)
+	void ScriptCreationUtilities::ScriptFunction::SetInput(int idx, ScriptNode* node)
 	{
 		input[idx] = node;
 		node->AddOutput(this);
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::SetNext(ScriptFlow* flow)
+	void ScriptCreationUtilities::ScriptFunction::SetNext(ScriptFlow* flow)
 	{
 		this->flow->SetNext(flow);
 	}
 
 
-	void ScriptCreationUtilities::ScriptMethod::OnRemoved()
+	void ScriptCreationUtilities::ScriptFunction::OnRemoved()
 	{
 		ScriptNode::OnRemoved();
 		flow->OnRemoved();
@@ -1452,7 +1461,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::RemoveInput(ScriptNode* node)
+	void ScriptCreationUtilities::ScriptFunction::RemoveInput(ScriptNode* node)
 	{
 		for (int i = 0; i < input.size(); i++) {
 
@@ -1462,7 +1471,7 @@ namespace ShyEditor {
 
 	}
 
-	ScriptCreationUtilities::ScriptFlow* ScriptCreationUtilities::ScriptMethod::GetScriptFlow()
+	ScriptCreationUtilities::ScriptFlow* ScriptCreationUtilities::ScriptFunction::GetScriptFlow()
 	{
 		return flow;
 	}
@@ -1478,34 +1487,31 @@ namespace ShyEditor {
 		if (serialized)
 			root["name"] = serializedName;
 
+		root["type"] = Components::Attribute::GetTypeStrFromAttributeType(attrType);
 
 		if (attrType == Components::AttributesType::NONE) {
-			root["type"] = "null";
-			root["value"] = nullptr;
+			root["value"] = "null";
 		}
 		else if (attrType == Components::AttributesType::FLOAT) {
-			root["type"] = "float";
 			root["value"] = attrValue.value.valueFloat;
 		}
 		else if (attrType == Components::AttributesType::VECTOR2) {
-			root["type"] = "Vector2D";
 			root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
 		}
 		else if (attrType == Components::AttributesType::STRING) {
-			root["type"] = "string";
 			root["value"] = attrValue.valueString;
 		}
 		else if (attrType == Components::AttributesType::BOOL) {
-			root["type"] = "bool";
 			root["value"] = attrValue.value.valueBool;
 		}
 		else if (attrType == Components::AttributesType::COLOR) {
-			root["type"] = "color";
 			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
 		}
-		else if (attrType == Components::AttributesType::GAMEOBJECT) {
-			root["type"] = "Entity";
+		else if (attrType == Components::AttributesType::ENTITY) {
 			root["value"] = attrValue.value.entityIdx;
+		}
+		else if (attrType == Components::AttributesType::CHAR) {
+			root["value"] = attrValue.value.valueChar;
 		}
 
 		return root;
@@ -1518,7 +1524,7 @@ namespace ShyEditor {
 
 	bool ScriptCreationUtilities::ScriptInput::IsSerialized()
 	{
-		return serialized || alwaysSerialize;
+		return (serialized || alwaysSerialize) && serializedName[0] != '\0';
 	}
 
 	std::string ScriptCreationUtilities::ScriptInput::GetName()
@@ -1530,6 +1536,11 @@ namespace ShyEditor {
 	{
 		serialized = value;
 		std::memcpy(serializedName, str.c_str(), 256);
+	}
+
+	::Components::AttributesType ScriptCreationUtilities::ScriptInput::GetAttrType()
+	{
+		return attrType;
 	}
 
 	ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)
@@ -1562,7 +1573,7 @@ namespace ShyEditor {
 			b_tooltip = "On Completed";
 			break;
 		case ScriptCreationUtilities::ScriptFork::Fork::For:
-			outputStr = "Loop";
+			outputStr = "Repeat";
 			a_tooltip = "Node to loop";
 			b_tooltip = "On Completed";
 			break;
@@ -1644,7 +1655,7 @@ namespace ShyEditor {
 		return B;
 	}
 
-	void ScriptCreationUtilities::ScriptFork::updateAndRender()
+	void ScriptCreationUtilities::ScriptFork::UpdateAndRender()
 	{
 		float x, y;
 		B->GetNextNodePosition(&x, &y);
@@ -1741,7 +1752,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptEvent::updateAndRender()
+	void ScriptCreationUtilities::ScriptEvent::UpdateAndRender()
 	{
 		float x, y;
 		flow->GetNextNodePosition(&x, &y);
@@ -1811,7 +1822,7 @@ namespace ShyEditor {
 		return "Comment";
 	}
 
-	void ScriptCreationUtilities::ScriptComment::updateAndRender()
+	void ScriptCreationUtilities::ScriptComment::UpdateAndRender()
 	{
 		const int margin = 10;
 

@@ -30,6 +30,27 @@ int ECS::OverlayText::ConvertFit(cString str)
 	return 0;
 }
 
+std::string ECS::OverlayText::ConvertFit(int idx)
+{
+	Fit fitIdx = (Fit)idx;
+
+	switch (fitIdx)
+	{
+	case ECS::OverlayText::Fit::Clamp:
+		return "Clamp";
+	case ECS::OverlayText::Fit::Overflow:
+		return "Overflow";
+	case ECS::OverlayText::Fit::WrapClamp:
+		return "WrapClamp";
+	case ECS::OverlayText::Fit::WrapOverflow:
+		return "WrapOverflow";
+	case ECS::OverlayText::Fit::Expand:
+		return "Expand";
+	}
+
+	return "Clamp";
+}
+
 int ECS::OverlayText::ConvertVerticalAlignment(cString str)
 {
 	std::string lower = Utilities::tolower(str);
@@ -43,6 +64,26 @@ int ECS::OverlayText::ConvertVerticalAlignment(cString str)
 
 
 	return 0;
+}
+
+
+std::string ECS::OverlayText::ConvertVerticalAlignment(int idx)
+{
+	VerticalAlignment align = (VerticalAlignment)idx;
+
+	switch (align)
+	{
+	case ECS::OverlayText::VerticalAlignment::Top:
+		return "Top";
+	case ECS::OverlayText::VerticalAlignment::Center:
+		return "Center";
+	case ECS::OverlayText::VerticalAlignment::Bottom:
+		return "Bottom";
+	default:
+		break;
+	}
+
+	return "Top";
 }
 
 int ECS::OverlayText::ConvertHorizontalAlignment(cString str)
@@ -60,6 +101,26 @@ int ECS::OverlayText::ConvertHorizontalAlignment(cString str)
 	return 0;
 }
 
+std::string ECS::OverlayText::ConvertHorizontalAlignment(int idx)
+{
+	HorizontalAlignment align = (HorizontalAlignment)idx;
+
+	switch (align)
+	{
+	case ECS::OverlayText::HorizontalAlignment::Left:
+		return "Left";
+	case ECS::OverlayText::HorizontalAlignment::Center:
+		return "Center";
+	case ECS::OverlayText::HorizontalAlignment::Right:
+		return "Right";
+	default:
+		break;
+	}
+
+	return "Left";
+}
+
+
 ECS::OverlayText::OverlayText()
 {
 	fontSize = 32;
@@ -68,13 +129,9 @@ ECS::OverlayText::OverlayText()
 	fontPtr = nullptr;
 	texture = nullptr;
 
-	fit_internal = 0;
-	horizontalAlignment_internal = 0;
-	verticalAlignment_internal = 0;
-
-	fit = "";
-	horizontalAlignment = "";
-	verticalAlignment = "";
+	fit = 0;
+	horizontalAlignment = 0;
+	verticalAlignment = 0;
 
 
 	lineSpacing = 50;
@@ -89,10 +146,6 @@ ECS::OverlayText::~OverlayText()
 
 void ECS::OverlayText::init()
 {
-	fit_internal = ConvertFit(fit);
-	horizontalAlignment_internal = ConvertHorizontalAlignment(horizontalAlignment);
-	verticalAlignment_internal = ConvertVerticalAlignment(verticalAlignment);
-
 	overlay = entity->getComponent<ECS::Overlay>();
 
 	if (overlay == nullptr) {
@@ -124,7 +177,7 @@ void ECS::OverlayText::createTexture()
 {
 	freeTexture();
 
-	if ((Fit)fit_internal == Fit::WrapClamp || (Fit)fit_internal == Fit::WrapOverflow)
+	if ((Fit)fit == Fit::WrapClamp || (Fit)fit == Fit::WrapOverflow)
 		texture = fontPtr->CreateWrappedText(text, overlay->GetSize().getX());
 	else
 		texture = fontPtr->CreateText(text);
@@ -141,7 +194,7 @@ void ECS::OverlayText::render()
 
 	SDL_Rect source = { 0, 0, texture->getWidth(), texture->getHeight() };
 
-	switch ((Fit)fit_internal) {
+	switch ((Fit)fit) {
 
 	case Fit::WrapClamp:
 	case Fit::Clamp: {
@@ -149,17 +202,17 @@ void ECS::OverlayText::render()
 		int w = std::min(source.w, destination.w);
 		int h = std::min(source.h, destination.h);
 
-		if (horizontalAlignment_internal != (int)HorizontalAlignment::Left) {
+		if (horizontalAlignment != (int)HorizontalAlignment::Left) {
 
-			float mult = horizontalAlignment_internal == (int)HorizontalAlignment::Center ? 0.5f : 1;
+			float mult = horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
 
 			source.x = std::max(0, source.w - w) * mult;
 			destination.x += std::max(0, destination.w - w) * mult;
 		}
 
-		if (verticalAlignment_internal != (int)VerticalAlignment::Top) {
+		if (verticalAlignment != (int)VerticalAlignment::Top) {
 
-			float mult = verticalAlignment_internal == (int)VerticalAlignment::Center ? 0.5f : 1;
+			float mult = verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
 
 			source.y = std::max(0, source.h - h) * mult;
 			destination.y += std::max(0, destination.h - h) * mult;
@@ -176,8 +229,8 @@ void ECS::OverlayText::render()
 	case Fit::WrapOverflow:
 	case Fit::Overflow: {
 
-		float multx = horizontalAlignment_internal == (int)HorizontalAlignment::Left ? 0 : horizontalAlignment_internal == (int)HorizontalAlignment::Center ? 0.5f : 1;
-		float multy = verticalAlignment_internal == (int)VerticalAlignment::Top ? 0 : verticalAlignment_internal == (int)VerticalAlignment::Center ? 0.5f : 1;
+		float multx = horizontalAlignment == (int)HorizontalAlignment::Left ? 0 : horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
+		float multy = verticalAlignment == (int)VerticalAlignment::Top ? 0 : verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
 
 		destination.x += (destination.w - source.w) * multx;
 		destination.y += (destination.h - source.h) * multy;
@@ -199,7 +252,7 @@ void ECS::OverlayText::render()
 
 std::string ECS::OverlayText::GetFit()
 {
-	return fit;
+	return ConvertFit(fit);
 }
 
 void ECS::OverlayText::SetFit(cString fit)
@@ -207,41 +260,33 @@ void ECS::OverlayText::SetFit(cString fit)
 	int newFit = ConvertFit(fit);
 
 
-	if (fontPtr != nullptr && this->fit_internal / 2 != newFit / 2)
+	if (fontPtr != nullptr && this->fit / 2 != newFit / 2)
 	{
-		this->fit = fit;
-		fit_internal = newFit;
+		this->fit = newFit;
 		createTexture();
 	}
-	else {
-
-		this->fit = fit;
-		fit_internal = newFit;
-	}
-
-
+	else
+		this->fit = newFit;
 }
 
 std::string ECS::OverlayText::GetVerticalAlignment()
 {
-	return verticalAlignment;
+	return ConvertVerticalAlignment(verticalAlignment);
 }
 
 std::string ECS::OverlayText::GetHorizontalAlignment()
 {
-	return horizontalAlignment;
+	return ConvertHorizontalAlignment(horizontalAlignment);
 }
 
 void ECS::OverlayText::SetVerticalAlignment(cString align)
 {
-	verticalAlignment_internal = ConvertVerticalAlignment(align);
-	verticalAlignment = align;
+	verticalAlignment = ConvertVerticalAlignment(align);
 }
 
 void ECS::OverlayText::SetHorizontalAlignment(cString align)
 {
-	horizontalAlignment_internal = ConvertHorizontalAlignment(align);
-	horizontalAlignment = align;
+	horizontalAlignment = ConvertHorizontalAlignment(align);
 }
 
 void ECS::OverlayText::SetFont(std::string font)

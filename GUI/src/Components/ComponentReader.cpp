@@ -23,7 +23,7 @@ namespace Components {
 
 				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>());
 
-				cmp.addAttribute(attributeInfo);
+				cmp.AddAttribute(attributeInfo);
 			}
 		}
 
@@ -31,29 +31,61 @@ namespace Components {
 
 		if (data.contains("methods") && !data["methods"].is_null())
 		{
-			auto& methods = data["methods"];
+			auto& functions = data["methods"];
 
-			for (auto& method : methods) {
+			for (auto& function : functions) {
 
-				Method methodInfo(method["name"].get<std::string>(), name);
+				Function functionInfo(function["name"].get<std::string>(), name);
 
-				if (method.contains("input") && method["input"].is_array()) {
+				if (function.contains("input") && function["input"].is_array()) {
 
-					for (const auto& in : method["input"]) {
+					for (const auto& in : function["input"]) {
 
 						if (!in.is_null())
-							methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+							functionInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
 					}
 
 				}
 
-				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
+				functionInfo.SetReturn(Variable("", function["return"].get<std::string>()));
 
-				cmp.addMethod(methodInfo);
+				cmp.AddFunction(functionInfo);
 			}
 		}
 
 		return cmp;
+	}
+
+	Components::AttributeValue ComponentReader::SetScriptDefaultValuesFromJson(Components::AttributesType attrType, nlohmann::json& json)
+	{
+		Components::AttributeValue value;
+
+		if (attrType == Components::AttributesType::NONE) {
+			value.value.valueFloat = 0;
+		}
+		else if (attrType == Components::AttributesType::FLOAT) {
+			value.value.valueFloat = json["defaultValue"].get<float>();
+		}
+		else if (attrType == Components::AttributesType::VECTOR2) {
+			sscanf_s(json["defaultValue"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
+		}
+		else if (attrType == Components::AttributesType::STRING) {
+			value.valueString = json["defaultValue"].get<std::string>();
+		}
+		else if (attrType == Components::AttributesType::BOOL) {
+			value.value.valueBool = json["defaultValue"].get<bool>();
+		}
+		else if (attrType == Components::AttributesType::COLOR) {
+			sscanf_s(json["defaultValue"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
+		}
+		else if (attrType == Components::AttributesType::ENTITY) {
+			value.value.entityIdx = json["defaultValue"].get<int>();
+		}
+		else if (attrType == Components::AttributesType::CHAR) {
+			value.value.valueChar = json["defaultValue"].get<char>();
+		}
+
+		return value;
 	}
 
 
@@ -103,18 +135,18 @@ namespace Components {
 			std::string name = manager["name"].get<std::string>();
 			Component comp(name);
 
-			for (auto& method : manager["methods"]) {
+			for (auto& function : manager["methods"]) {
 
-				Method methodInfo(method["name"].get<std::string>(), name);
+				Function functionInfo(function["name"].get<std::string>(), name);
 
-				for (const auto& in : method["input"]) {
+				for (const auto& in : function["input"]) {
 
 					if (!in.is_null())
-						methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+						functionInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
 				}
 
-				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
-				comp.addMethod(methodInfo);
+				functionInfo.SetReturn(Variable("", function["return"].get<std::string>()));
+				comp.AddFunction(functionInfo);
 			}
 
 			components.push_back(comp);
@@ -161,38 +193,8 @@ namespace Components {
 						std::string typeString = sv["type"].get<std::string>();
 
 
-						AttributesType type = AttributesType::FLOAT;
-						AttributeValue value;
-
-
-						if (typeString == "float") {
-							type = AttributesType::FLOAT;
-							value.value.valueFloat = sv["defaultValue"].get<float>();
-						}
-						else if (typeString == "Vector2D") {
-							type = AttributesType::VECTOR2;
-							//value.value.valueFloat = sv["value"].get<float>();
-						}
-						else if (typeString == "string") {
-							type = AttributesType::STRING;
-							value.valueString = sv["defaultValue"].get<std::string>();
-						}
-						else if (typeString == "bool") {
-							type = AttributesType::BOOL;
-							value.value.valueBool = sv["defaultValue"].get<bool>();
-						}
-						else if (typeString == "color") {
-							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
-							type = AttributesType::COLOR;
-						}
-						else if (typeString == "Entity") {
-							type = AttributesType::GAMEOBJECT;
-							value.value.entityIdx = -1;
-						}
-						else {
-							type = AttributesType::NONE;
-						}
-
+						AttributesType type = Attribute::GetAttributeTypeFromTypeStr(typeString);
+						AttributeValue value = SetScriptDefaultValuesFromJson(type, sv);
 
 						Attribute attribute(name);
 

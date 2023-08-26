@@ -18,7 +18,7 @@
 #include "Preferences.h"
 #include "LogManager.h"
 #include "Components.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Hierarchy.h"
 #include "MenuBar.h"
 #include "Console.h"
@@ -85,8 +85,9 @@ bool Editor::Init() {
 
 	// Components and managers reading
 	Components::ComponentManager::Initialise();
-	Components::ComponentManager::ReadComponentInfo(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Components.json");
-	Components::ComponentManager::ReadManagerInfo(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Managers.json");
+	Components::ComponentManager::ReadComponents(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Components.json");
+	Components::ComponentManager::ReadManagers(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Managers.json");
+	Components::ComponentManager::ReadInfo(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Info.json");
 
 	ShyEditor::Game::Init(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineDebug.exe", ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineRelease.exe");
 

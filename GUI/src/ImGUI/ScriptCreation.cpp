@@ -114,7 +114,7 @@ namespace ShyEditor {
 			switch (node->GetType())
 			{
 
-			case ScriptCreationUtilities::ScriptNode::Node::Method:
+			case ScriptCreationUtilities::ScriptNode::Node::Function:
 				functions.push_back(node->ToJson());
 				break;
 			case ScriptCreationUtilities::ScriptNode::Node::Input:
@@ -127,7 +127,7 @@ namespace ShyEditor {
 				if (input->IsSerialized())
 					serializedValues.push_back({
 
-						{"type", input->GetOutputTypeString()},
+						{"type", ::Components::Attribute::GetTypeStrFromAttributeType(input->GetAttrType())},
 						{"name", input->GetName()},
 						{"defaultValue", jsonNode["value"]}
 						});
@@ -218,14 +218,14 @@ namespace ShyEditor {
 
 		SetNodeCount(file["nodeCount"].get<int>());
 
-		struct MethodInput {
-			class ScriptCreationUtilities::ScriptMethod* node;
+		struct FunctionInput {
+			class ScriptCreationUtilities::ScriptFunction* node;
 			std::vector<int> input;
 
 			int next;
 		};
 
-		std::vector<MethodInput> methodInfo;
+		std::vector<FunctionInput> functionInfo;
 
 
 		for (auto& funcNode : functions) {
@@ -235,14 +235,14 @@ namespace ShyEditor {
 			std::string className = completeName.substr(0, separator);
 			std::string functionName = completeName.substr(separator + 1);
 
-			ScriptCreationUtilities::ScriptMethod* method;
+			ScriptCreationUtilities::ScriptFunction* function;
 
 			if (Components::ComponentManager::GetAllComponents().contains(className)) {
 
-				method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
+				function = new ScriptCreationUtilities::ScriptFunction(Components::ComponentManager::GetAllComponents()[className].GetFunction(functionName));
 			}
 			else {
-				method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
+				function = new ScriptCreationUtilities::ScriptFunction(Components::ComponentManager::GetAllManagers()[className].GetFunction(functionName));
 			}
 
 
@@ -258,12 +258,12 @@ namespace ShyEditor {
 			if (funcNode.contains("next"))
 				next = funcNode["next"].get<int>();
 
-			methodInfo.push_back({ method, input, next });
+			functionInfo.push_back({ function, input, next });
 
 
-			method->FromJson(funcNode);
+			function->FromJson(funcNode);
 
-			SetNode(method->GetId(), method);
+			SetNode(function->GetId(), function);
 		}
 
 		for (auto& constNode : consts) {
@@ -273,35 +273,9 @@ namespace ShyEditor {
 
 			std::string typeStr = constNode["type"].get<std::string>();
 
-			if (typeStr == "null") {
-				type = ::Components::AttributesType::NONE;
-				value.value.valueFloat = 0;
-			}
-			else if (typeStr == "float") {
-				type = ::Components::AttributesType::FLOAT;
-				value.value.valueFloat = constNode["value"].get<float>();
-			}
-			else if (typeStr == "Vector2D") {
-				//TODO: despues de la serializacion
-			}
-			else if (typeStr == "string") {
-				type = ::Components::AttributesType::STRING;
-				value.valueString = constNode["value"].get<std::string>();
-			}
-			else if (typeStr == "bool") {
-				type = ::Components::AttributesType::BOOL;
-				value.value.valueBool = constNode["value"].get<bool>();
-			}
-			else if (typeStr == "color") {
+			type = Components::Attribute::GetAttributeTypeFromTypeStr(typeStr);
 
-				//TODO: despues de la serializacion
-			}
-			else if (typeStr == "Entity") {
-				type = ::Components::AttributesType::GAMEOBJECT;
-				value.value.entityIdx = -1;
-			}
-
-
+			value = SetScriptValuesFromJson(type, constNode);
 
 			ScriptCreationUtilities::ScriptInput* input = new ScriptCreationUtilities::ScriptInput(type);
 			input->SetValue(value);
@@ -380,7 +354,7 @@ namespace ShyEditor {
 		}
 
 
-		for (auto& mi : methodInfo) {
+		for (auto& mi : functionInfo) {
 
 			int idx = 0;
 			for (int i : mi.input) {
@@ -405,6 +379,38 @@ namespace ShyEditor {
 			if (fd.B >= 0)
 				fd.fork->SetB(GetNodes()[fd.B]->GetScriptFlow());
 		}
+	}
+
+	Components::AttributeValue ScriptCreation::SetScriptValuesFromJson(Components::AttributesType attrType, nlohmann::json& json)
+	{
+		Components::AttributeValue value;
+
+		if (attrType == Components::AttributesType::NONE) {
+			value.value.valueFloat = 0;
+		}
+		else if (attrType == Components::AttributesType::FLOAT) {
+			value.value.valueFloat = json["value"].get<float>();
+		}
+		else if(attrType == Components::AttributesType::VECTOR2) {
+			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
+		}
+		else if (attrType == Components::AttributesType::STRING) {
+			value.valueString = json["value"].get<std::string>();
+		}
+		else if (attrType == Components::AttributesType::BOOL) {
+			value.value.valueBool = json["value"].get<bool>();
+		}
+		else if (attrType == Components::AttributesType::COLOR) {
+			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
+		}
+		else if(attrType == Components::AttributesType::ENTITY) {
+			value.value.entityIdx = -1;
+		}
+		else if(attrType == Components::AttributesType::CHAR) {
+			value.value.valueChar = '\0';
+		}
+
+		return value;
 	}
 
 	void ScriptCreation::GetScrollPosition(int* x, int* y)
@@ -542,7 +548,7 @@ namespace ShyEditor {
 
 
 		if (ImGui::IsMouseReleased(0)) {
-			ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
+			ScriptCreationUtilities::ScriptFunction::currentlySelectedOutput = nullptr;
 			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 		}
 

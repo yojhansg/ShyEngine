@@ -1146,7 +1146,7 @@ ECSReader& ECSReader::GenerateComponentsJSON()
 
 				inputJson += {
 					{"type", "Entity"},
-					{ "name", "entity"}
+					{ "name", "entity" }
 				};
 
 				for (auto& input : method.input) {

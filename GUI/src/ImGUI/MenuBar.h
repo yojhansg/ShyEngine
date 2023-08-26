@@ -6,7 +6,7 @@ class Editor;
 
 namespace ShyEditor {
 
-    class GameObject;
+    class Entity;
 
     class MenuBar {
 
@@ -16,11 +16,9 @@ namespace ShyEditor {
 
          bool shouldOpenRenamePopup;
          bool shouldOpenNewScenePopup;
-         bool shouldOpenSavePrefabPopup;
 
-         void showRenamePopup(GameObject* gameObject);
-         void showNewScenePopup();
-         void showSavePrefabPopup(GameObject* gameObject);
+         void ShowRenamePopup(Entity* entity);
+         void ShowNewScenePopup();
 
      public:
 

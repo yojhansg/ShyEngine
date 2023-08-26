@@ -16,17 +16,17 @@ namespace Components {
 	{
 		name = other.name;
 
-		methods = other.methods;
+		functions = other.functions;
 		attributes = other.attributes;
 
-		for (auto& m : other.orderedMethods) {
+		for (auto& m : other.orderedFunctions) {
 
-			orderedMethods.push_back(&methods.at(m->getName()));
+			orderedFunctions.push_back(&functions.at(m->getName()));
 		}
 
 		for (auto& attr : other.orderedAttributes) {
 
-			orderedAttributes.push_back(&attributes.at(attr->getName()));
+			orderedAttributes.push_back(&attributes.at(attr->GetName()));
 		}
 	}
 
@@ -40,24 +40,24 @@ namespace Components {
 		return name;
 	}
 
-	Attribute& Component::getAttribute(cstring name)
+	Attribute& Component::GetAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	Method& Component::getMethod(cstring name)
+	Function& Component::GetFunction(cstring name)
 	{
-		return methods[name];
+		return functions[name];
 	}
 
-	std::unordered_map<std::string, Attribute>& Component::getAllAttributes()
+	std::unordered_map<std::string, Attribute>& Component::GetAllAttributes()
 	{
 		return attributes;
 	}
 
-	std::unordered_map<std::string, Method>& Component::getAllMethods()
+	std::unordered_map<std::string, Function>& Component::GetAllFunctions()
 	{
-		return methods;
+		return functions;
 	}
 
 	std::vector<Attribute*>& Component::GetAttributesOrdered()
@@ -65,14 +65,14 @@ namespace Components {
 		return orderedAttributes;
 	}
 
-	std::vector<Method*>& Component::GetMethodsOrdered()
+	std::vector<Function*>& Component::GetFunctionsOrdered()
 	{
-		return orderedMethods;
+		return orderedFunctions;
 	}
 
-	void Component::addAttribute(const Attribute& attribute)
+	void Component::AddAttribute(const Attribute& attribute)
 	{
-		const auto& name = attribute.getName();
+		const auto& name = attribute.GetName();
 
 		attributes.emplace(name, attribute);
 
@@ -81,15 +81,40 @@ namespace Components {
 		orderedAttributes.push_back(&ref);
 	}
 
-	void Component::addMethod(const Method& method)
+	void Component::AddFunction(const Function& function)
 	{
-		const auto& name = method.getName();
+		const auto& name = function.getName();
 
 
-		methods.emplace(name, method);
+		functions.emplace(name, function);
 
-		auto& ref = methods.at(name);
-		orderedMethods.push_back(&ref);
+		auto& ref = functions.at(name);
+		orderedFunctions.push_back(&ref);
+	}
+
+	void Attribute::SetDefaultValues()
+	{
+		if (type == AttributesType::FLOAT) {
+			value.value.valueFloat = 0.0f;
+		}
+		else if (type == AttributesType::VECTOR2) {
+			value.value.valueVector2 = { 0.0f, 0.0f };
+		}
+		else if (type == AttributesType::STRING) {
+			value.valueString = "";
+		}
+		else if (type == AttributesType::BOOL) {
+			value.value.valueBool = false;
+		}
+		else if (type == AttributesType::COLOR) {
+			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+		}
+		else if (type == AttributesType::CHAR) {
+			value.value.valueChar = ' ';
+		}
+		else if (type == AttributesType::ENTITY) {
+			value.value.entityIdx = 0;
+		}
 	}
 
 	Attribute::Attribute()
@@ -103,37 +128,9 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "float") {
-			value.value.valueFloat = 0.0f;
-			type = AttributesType::FLOAT;
-		}
-		else if (typeString == "Vector2D") {
-			value.value.valueVector2 = { 0.0f, 0.0f };
-			type = AttributesType::VECTOR2;
-		}
-		else if (typeString == "string") {
-			value.valueString = "";
-			type = AttributesType::STRING;
-		}
-		else if (typeString == "bool") {
-			value.value.valueBool = false;
-			type = AttributesType::BOOL;
-		}
-		else if (typeString == "color") {
-			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
-			type = AttributesType::COLOR;
-		}
-		else if (typeString == "char") {
-			value.value.valueChar = ' ';
-			type = AttributesType::CHAR;
-		}
-		else if (typeString == "Entity") {
-			value.value.entityIdx = 0;
-			type = AttributesType::GAMEOBJECT;
-		}
-		else {
-			type = AttributesType::NONE;
-		}
+		type = Attribute::GetAttributeTypeFromTypeStr(typeString);
+
+		SetDefaultValues();
 
 		Attribute::attributeTypes[this->name] = this->type;
 	}
@@ -154,21 +151,80 @@ namespace Components {
 		this->value = value;
 	}
 
-	AttributesType Attribute::getType() const
+	AttributesType Attribute::GetType() const
 	{
 		return type;
 	}
 
-	const std::string& Attribute::getName() const {
+	const std::string& Attribute::GetName() const {
 		return name;
 	}
 
-	const std::string& Attribute::getTypeStr() const
+	const std::string& Attribute::GetTypeStr() const
 	{
 		return typeStr;
 	}
 
-	std::string Attribute::toJson()
+	std::string Attribute::GetTypeStrFromAttributeType(AttributesType type) {
+		std::string returnValue = "";
+
+		if (type == AttributesType::FLOAT) {
+			returnValue = "float";
+		}
+		else if (type == AttributesType::VECTOR2) {
+			returnValue = "Vector2D";
+		}
+		else if (type == AttributesType::STRING) {
+			returnValue = "string";
+		}
+		else if (type == AttributesType::BOOL) {
+			returnValue = "bool";
+		}
+		else if (type == AttributesType::COLOR) {
+			returnValue = "color";
+		}
+		else if (type == AttributesType::CHAR) {
+			returnValue = "char";
+		}
+		else if (type == AttributesType::ENTITY) {
+			returnValue = "Entity";
+		}
+		else if (type == AttributesType::NONE) {
+			returnValue = "null";
+		}
+		
+		return returnValue;
+	}
+
+	AttributesType Attribute::GetAttributeTypeFromTypeStr(const std::string& typeStr) {
+
+		if (typeStr == "float") {
+			return AttributesType::FLOAT;
+		}
+		else if (typeStr == "Vector2D") {
+			return AttributesType::VECTOR2;
+		}
+		else if (typeStr == "string") {
+			return AttributesType::STRING;
+		}
+		else if (typeStr == "bool") {
+			return AttributesType::BOOL;
+		}
+		else if (typeStr == "color") {
+			return AttributesType::COLOR;
+		}
+		else if (typeStr == "char") {
+			return AttributesType::CHAR;
+		}
+		else if (typeStr == "Entity") {
+			return AttributesType::ENTITY;
+		}
+		else {
+			return AttributesType::NONE;
+		}
+	}
+
+	std::string Attribute::ToJson()
 	{
 		std::string stringValue;
 
@@ -194,7 +250,7 @@ namespace Components {
 		case AttributesType::CHAR:
 			if (value.value.valueChar == '\0') return "";
 			return std::string(1, value.value.valueChar);
-		case AttributesType::GAMEOBJECT:
+		case AttributesType::ENTITY:
 			return std::to_string(value.value.entityIdx);
 		default:
 			return "";
@@ -202,7 +258,7 @@ namespace Components {
 		}
 	}
 
-	Attribute Attribute::fromJson(std::string name, std::string json)
+	Attribute Attribute::FromJson(std::string name, std::string json)
 	{
 		Attribute attribute;
 
@@ -230,7 +286,7 @@ namespace Components {
 		case AttributesType::CHAR:
 			attribute.value.value.valueChar = jsonData.get<std::string>()[0];
 			break;
-		case AttributesType::GAMEOBJECT:
+		case AttributesType::ENTITY:
 			attribute.value.value.entityIdx = std::stoi(jsonData.get<std::string>());
 			break;
 		default:
@@ -240,7 +296,7 @@ namespace Components {
 		return attribute;
 	}
 
-	nlohmann::ordered_json Component::toJson() {
+	nlohmann::ordered_json Component::ToJson() {
 		nlohmann::ordered_json j;
 
 		j["component"] = name;
@@ -248,7 +304,7 @@ namespace Components {
 		nlohmann::ordered_json attributesJson;
 		for (auto& attr : orderedAttributes) {
 
-			attributesJson[attr->getName()] = attr->toJson();
+			attributesJson[attr->GetName()] = attr->ToJson();
 		}
 
 
@@ -257,7 +313,7 @@ namespace Components {
 		return j;
 	}
 
-	Component Component::fromJson(std::string json) {
+	Component Component::FromJson(std::string json) {
 
 		Component component;
 
@@ -267,19 +323,19 @@ namespace Components {
 
 		nlohmann::json attributesJson = jsonData["attributes"];
 		for (const auto& attrJson : attributesJson.items()) {
-			::Components::Attribute attr = ::Components::Attribute::fromJson(attrJson.key(), attrJson.value().dump());
-			component.attributes[attr.getName()] = attr;
+			::Components::Attribute attr = ::Components::Attribute::FromJson(attrJson.key(), attrJson.value().dump());
+			component.attributes[attr.GetName()] = attr;
 
 			//Se hace un at para obtener una referencia al valor guardado dentro del mapa
-			component.orderedAttributes.push_back(&component.attributes.at(attr.getName()));
+			component.orderedAttributes.push_back(&component.attributes.at(attr.GetName()));
 		}
 
 		return component;
 	}
 
-	Method::Method() {}
+	Function::Function() {}
 
-	Method::Method(Method const& other)
+	Function::Function(Function const& other)
 	{
 		name = other.name;
 		component = other.component;
@@ -287,38 +343,38 @@ namespace Components {
 		input = other.input;
 	}
 
-	Method::Method(const std::string& name, const std::string& className)
+	Function::Function(const std::string& name, const std::string& className)
 	{
 		this->name = name;
 		this->component = className;
 	}
 
-	void Method::SetReturn(const Variable& ret)
+	void Function::SetReturn(const Variable& ret)
 	{
 		returnType = ret;
 	}
 
-	void Method::AddInput(const Variable& input)
+	void Function::AddInput(const Variable& input)
 	{
 		this->input.push_back(input);
 	}
 
-	std::string Method::getName() const
+	std::string Function::getName() const
 	{
 		return name;
 	}
 
-	std::string Method::getComponent() const
+	std::string Function::getComponent() const
 	{
 		return component;
 	}
 
-	Variable Method::getReturn() const
+	Variable Function::getReturn() const
 	{
 		return returnType;
 	}
 
-	const std::vector<Variable>& Method::getInput() const {
+	const std::vector<Variable>& Function::getInput() const {
 
 		return input;
 	}
@@ -348,9 +404,9 @@ namespace Components {
 			nlohmann::json value;
 
 
-			value["type"] = attr.second.getTypeStr();
+			value["type"] = attr.second.GetTypeStr();
 
-			switch (attr.second.getType())
+			switch (attr.second.GetType())
 			{
 			case Components::AttributesType::BOOL:
 				value["value"] = attr.second.value.value.valueBool;
@@ -365,15 +421,17 @@ namespace Components {
 				value["value"] = attr.second.value.valueString;
 				break;
 			case Components::AttributesType::VECTOR2:
-				//value["value"] = attr.second.value.value.valueBool;
+				value["value"] = std::to_string(attr.second.value.value.valueVector2.x) + ", " + std::to_string(attr.second.value.value.valueVector2.y);
 				break;
 			case Components::AttributesType::COLOR:
-				//value["value"] = attr.second.value.value.valueBool;
+				value["value"] = std::to_string(attr.second.value.value.valueColor.r) + ", " + std::to_string(attr.second.value.value.valueColor.g) + ", " + std::to_string(attr.second.value.value.valueColor.b);
 				break;
-			case Components::AttributesType::GAMEOBJECT:
+			case Components::AttributesType::ENTITY:
 				value["value"] = attr.second.value.value.entityIdx;
 				break;
-
+			case Components::AttributesType::NONE:
+				value["value"] = "null";
+				break;
 			default:
 				break;
 			}
@@ -399,9 +457,8 @@ namespace Components {
 
 			Attribute attribute(attributeName, attributeType);
 
-			switch (attribute.getType()) {
+			switch (attribute.GetType()) {
 			case Components::AttributesType::BOOL:
-
 				attribute.value.value.valueBool = attributeJson["value"].get<bool>();
 				break;
 			case Components::AttributesType::FLOAT:
@@ -414,33 +471,15 @@ namespace Components {
 				attribute.value.valueString = attributeJson["value"].get<std::string>();
 				break;
 			case Components::AttributesType::VECTOR2:
-				//value["value"] = attr.second.value.value.valueBool;
+				sscanf_s(attributeJson["value"].get<std::string>().c_str(), "%f, %f", &attribute.value.value.valueVector2.x, &attribute.value.value.valueVector2.y);
 				break;
 			case Components::AttributesType::COLOR:
-				//value["value"] = attr.second.value.value.valueBool;
+				sscanf_s(attributeJson["value"].get<std::string>().c_str(), "%f, %f, %f", &attribute.value.value.valueColor.r, &attribute.value.value.valueColor.g, &attribute.value.value.valueColor.b);
 				break;
-			case Components::AttributesType::GAMEOBJECT:
+			case Components::AttributesType::ENTITY:
 				attribute.value.value.entityIdx = attributeJson["value"].get<int>();
 				break;
 			}
-
-			//if (attributeJson["value"].is_boolean()) {
-			//	attribute.value.value.valueBool = attributeJson["value"];
-			//}
-			//else if (attributeJson["value"].is_number_float()) {
-			//	attribute.value.value.valueFloat = attributeJson["value"];
-			//}
-			//else if (attributeJson["value"].is_string()) {
-			//	std::string valueStr = attributeJson["value"];
-			//	if (valueStr.size() == 1) {
-			//		attribute.value.value.valueChar = valueStr[0];
-			//	}
-			//	else {
-			//		attribute.value.valueString = valueStr;
-			//	}
-			//}
-
-			//ADD REMAINING TYPES
 
 			script.AddAttribute(attributeName, attribute);
 		}

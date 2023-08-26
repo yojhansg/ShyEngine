@@ -10,7 +10,7 @@ class Editor;
 
 namespace ShyEditor {
 
-	class GameObject;
+	class Entity;
 
 	class Hierarchy: public Window {
 
@@ -25,24 +25,22 @@ namespace ShyEditor {
 		void HandleInput(SDL_Event* event) override;
 		void ReceiveAssetDrop(Asset& asset) override;
 
-		void handleDragAndDrop(GameObject* source, GameObject* destination);
+		void handleDragAndDrop(Entity* source, Entity* destination);
 
-		bool isChildrenTheSelectedObject(GameObject* go);
-		bool isParentFromPrefab(GameObject* go);
+		bool isChildrenTheSelectedEntity(Entity* entity);
+		bool isParentFromPrefab(Entity* entity);
 
-		void RenderGameObject(GameObject* gameObject, const char* type);
+		void RenderEntity(Entity* entity, const char* type);
 
 
 
-		void showRenamePopup(GameObject* gameObject);
-		void showGameObjectMenu(GameObject* gameObject);
-		void showSavePrefabPopup(GameObject* gameObject);
+		void ShowRenamePopup(Entity* entity);
+		void ShowEntityMenu(Entity* entity);
 
 		bool shouldOpenRenamePopup;
-		bool shouldOpenSavePrefabPopup;
 
 	private:
 
-		GameObject* copiedObject;
+		Entity* copiedEntity;
 	};
 }
