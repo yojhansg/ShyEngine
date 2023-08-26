@@ -1302,7 +1302,7 @@ namespace ShyEditor {
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
 			
-			if(entities.find(Entity::unusedIds.back()) == entities.end())
+			if(entities.find(Entity::unusedIds.back()) != entities.end())
 				entity->SetId(Entity::unusedIds.back());
 			else {
 				Entity::unusedIds.pop_back();

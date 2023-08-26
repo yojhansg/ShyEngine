@@ -21,7 +21,6 @@ namespace ShyEditor {
 	Hierarchy::Hierarchy() : Window("Hierarchy", ImGuiWindowFlags_NoCollapse)
 	{
 		shouldOpenRenamePopup = false;
-		shouldOpenSavePrefabPopup = false;
 
 		docked = true;
 
@@ -384,7 +383,6 @@ namespace ShyEditor {
 
 		ShowEntityMenu(entity);
 		ShowRenamePopup(entity);
-		ShowSavePrefabPopup(entity);
 
 		if (isOpen) {
 
@@ -441,7 +439,9 @@ namespace ShyEditor {
 		if (ImGui::BeginPopup("Entity Menu##" + entity->GetId()))
 		{
 			if (ImGui::MenuItem("Create prefab", NULL, false)) {
-				shouldOpenSavePrefabPopup = true;
+				Entity* prefab = new Entity(*entity);
+
+				PrefabManager::AddPrefab(prefab);
 			}
 
 			if (ImGui::MenuItem("Add script", NULL, false)) {
@@ -464,43 +464,6 @@ namespace ShyEditor {
 
 			ImGui::EndMenu();
 
-		}
-	}
-
-	void Hierarchy::ShowSavePrefabPopup(Entity* entity)
-	{
-		if (shouldOpenSavePrefabPopup)
-		{
-			ImGui::OpenPopup("Save prefab##" + entity->GetId());
-			shouldOpenSavePrefabPopup = false;
-		}
-
-		if (ImGui::BeginPopup("Save prefab##" + entity->GetId()))
-		{
-			ImGui::Text(("Insert name for the prefab:"));
-
-			ImGui::Separator();
-
-			static char nameBuffer[256];
-
-			if (ImGui::InputText("Prefab name", nameBuffer, sizeof(nameBuffer)))
-			{
-
-			}
-
-			if (ImGui::Button("Ok"))
-			{
-				if (strlen(nameBuffer) > 0) {
-					Entity* prefab = new Entity(*entity);
-					prefab->SetName(nameBuffer);
-
-					PrefabManager::AddPrefab(prefab);
-				}
-
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
 		}
 	}
 }

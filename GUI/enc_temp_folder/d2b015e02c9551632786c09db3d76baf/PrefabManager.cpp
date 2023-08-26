@@ -199,6 +199,7 @@ namespace ShyEditor {
 
 		for (auto child : prefab->GetChildren()) {
 			AddPrefab(child.second);
+			child.second->SetName(prefab->GetName());
 		}
 	}
 
