@@ -92,6 +92,31 @@ namespace Components {
 		orderedFunctions.push_back(&ref);
 	}
 
+	void Attribute::SetDefaultValues()
+	{
+		if (type == AttributesType::FLOAT) {
+			value.value.valueFloat = 0.0f;
+		}
+		else if (type == AttributesType::VECTOR2) {
+			value.value.valueVector2 = { 0.0f, 0.0f };
+		}
+		else if (type == AttributesType::STRING) {
+			value.valueString = "";
+		}
+		else if (type == AttributesType::BOOL) {
+			value.value.valueBool = false;
+		}
+		else if (type == AttributesType::COLOR) {
+			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+		}
+		else if (type == AttributesType::CHAR) {
+			value.value.valueChar = ' ';
+		}
+		else if (type == AttributesType::ENTITY) {
+			value.value.entityIdx = 0;
+		}
+	}
+
 	Attribute::Attribute()
 	{
 		name = "";
@@ -103,37 +128,9 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "float" || typeString == "Number") {
-			value.value.valueFloat = 0.0f;
-			type = AttributesType::FLOAT;
-		}
-		else if (typeString == "Vector2D" || typeString == "Pair") {
-			value.value.valueVector2 = { 0.0f, 0.0f };
-			type = AttributesType::VECTOR2;
-		}
-		else if (typeString == "string" || typeString == "Text") {
-			value.valueString = "";
-			type = AttributesType::STRING;
-		}
-		else if (typeString == "bool" || typeString == "Toggle") {
-			value.value.valueBool = false;
-			type = AttributesType::BOOL;
-		}
-		else if (typeString == "color" || typeString == "Color") {
-			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
-			type = AttributesType::COLOR;
-		}
-		else if (typeString == "char" || typeString == "Letter") {
-			value.value.valueChar = ' ';
-			type = AttributesType::CHAR;
-		}
-		else if (typeString == "Entity") {
-			value.value.entityIdx = 0;
-			type = AttributesType::ENTITY;
-		}
-		else {
-			type = AttributesType::NONE;
-		}
+		type = Attribute::GetAttributeTypeFromTypeStr(typeString);
+
+		SetDefaultValues();
 
 		Attribute::attributeTypes[this->name] = this->type;
 	}
@@ -166,6 +163,65 @@ namespace Components {
 	const std::string& Attribute::GetTypeStr() const
 	{
 		return typeStr;
+	}
+
+	std::string Attribute::GetTypeStrFromAttributeType(AttributesType type) {
+		std::string returnValue = "";
+
+		if (type == AttributesType::FLOAT) {
+			returnValue = "float";
+		}
+		else if (type == AttributesType::VECTOR2) {
+			returnValue = "Vector2D";
+		}
+		else if (type == AttributesType::STRING) {
+			returnValue = "string";
+		}
+		else if (type == AttributesType::BOOL) {
+			returnValue = "bool";
+		}
+		else if (type == AttributesType::COLOR) {
+			returnValue = "color";
+		}
+		else if (type == AttributesType::CHAR) {
+			returnValue = "char";
+		}
+		else if (type == AttributesType::ENTITY) {
+			returnValue = "Entity";
+		}
+		else if (type == AttributesType::NONE) {
+			returnValue = "null";
+		}
+		
+		return returnValue;
+	}
+
+	AttributesType Attribute::GetAttributeTypeFromTypeStr(const std::string& typeStr) {
+
+		if (typeStr == "float") {
+			return AttributesType::FLOAT;
+		}
+		else if (typeStr == "Vector2D") {
+			return AttributesType::VECTOR2;
+		}
+		else if (typeStr == "string") {
+			return AttributesType::STRING;
+		}
+		else if (typeStr == "bool") {
+			return AttributesType::BOOL;
+		}
+		else if (typeStr == "color") {
+			return AttributesType::COLOR;
+		}
+		else if (typeStr == "char") {
+			return AttributesType::CHAR;
+		}
+		else if (typeStr == "Entity") {
+			return AttributesType::ENTITY;
+		}
+		else {
+			return AttributesType::NONE;
+		}
 	}
 
 	std::string Attribute::ToJson()
@@ -373,7 +429,9 @@ namespace Components {
 			case Components::AttributesType::ENTITY:
 				value["value"] = attr.second.value.value.entityIdx;
 				break;
-
+			case Components::AttributesType::NONE:
+				value["value"] = "null";
+				break;
 			default:
 				break;
 			}

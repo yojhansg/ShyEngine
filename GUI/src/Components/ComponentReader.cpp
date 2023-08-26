@@ -56,6 +56,38 @@ namespace Components {
 		return cmp;
 	}
 
+	Components::AttributeValue ComponentReader::SetScriptDefaultValuesFromJson(Components::AttributesType attrType, nlohmann::json& json)
+	{
+		Components::AttributeValue value;
+
+		if (attrType == Components::AttributesType::NONE) {
+			value.value.valueFloat = 0;
+		}
+		else if (attrType == Components::AttributesType::FLOAT) {
+			value.value.valueFloat = json["defaultValue"].get<float>();
+		}
+		else if (attrType == Components::AttributesType::VECTOR2) {
+			sscanf_s(json["defaultValue"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
+		}
+		else if (attrType == Components::AttributesType::STRING) {
+			value.valueString = json["defaultValue"].get<std::string>();
+		}
+		else if (attrType == Components::AttributesType::BOOL) {
+			value.value.valueBool = json["defaultValue"].get<bool>();
+		}
+		else if (attrType == Components::AttributesType::COLOR) {
+			sscanf_s(json["defaultValue"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
+		}
+		else if (attrType == Components::AttributesType::ENTITY) {
+			value.value.entityIdx = json["defaultValue"].get<int>();
+		}
+		else if (attrType == Components::AttributesType::CHAR) {
+			value.value.valueChar = json["defaultValue"].get<char>();
+		}
+
+		return value;
+	}
+
 
 	std::vector<Component> ComponentReader::ReadComponents(cstring filePath)
 	{
@@ -161,42 +193,8 @@ namespace Components {
 						std::string typeString = sv["type"].get<std::string>();
 
 
-						AttributesType type = AttributesType::FLOAT;
-						AttributeValue value;
-
-
-						if (typeString == "Number") {
-							type = AttributesType::FLOAT;
-							value.value.valueFloat = sv["defaultValue"].get<float>();
-						}
-						else if (typeString == "Pair") {
-							type = AttributesType::VECTOR2;
-							sscanf_s(sv["defaultValue"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
-						}
-						else if (typeString == "Text") {
-							type = AttributesType::STRING;
-							value.valueString = sv["defaultValue"].get<std::string>();
-						}
-						else if (typeString == "Toggle") {
-							type = AttributesType::BOOL;
-							value.value.valueBool = sv["defaultValue"].get<bool>();
-						}
-						else if (typeString == "Color") {
-							type = AttributesType::COLOR;
-							sscanf_s(sv["defaultValue"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
-						}
-						else if (typeString == "Entity") {
-							type = AttributesType::ENTITY;
-							value.value.entityIdx = sv["defaultValue"].get<int>();
-						}
-						else if (typeString == "Letter") {
-							type = AttributesType::CHAR;
-							value.value.valueChar = sv["defaultValue"].get<char>();;
-						}
-						else {
-							type = AttributesType::NONE;
-						}
-
+						AttributesType type = Attribute::GetAttributeTypeFromTypeStr(typeString);
+						AttributeValue value = SetScriptDefaultValuesFromJson(type, sv);
 
 						Attribute attribute(name);
 

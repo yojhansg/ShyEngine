@@ -50,6 +50,7 @@ namespace ShyEditor {
 
         void ManageLerp();
 
+        Components::AttributeValue SetScriptValuesFromJson(Components::AttributesType attrType, nlohmann::json& json);
 
     public:
 

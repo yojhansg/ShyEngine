@@ -377,6 +377,11 @@ namespace ShyEditor {
 			*/
 			void SetSerialized(bool value, const std::string& str);
 
+			/*
+				Devuelve el tipo de atributo del nodo
+			*/
+			::Components::AttributesType GetAttrType();
+
 		private:
 
 			bool alwaysSerialize;

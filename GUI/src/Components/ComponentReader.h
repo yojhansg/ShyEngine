@@ -14,6 +14,8 @@ namespace Components {
 
 		static Component ReadComponent(cstring name, json data);
 
+		static Components::AttributeValue SetScriptDefaultValuesFromJson(Components::AttributesType attrType, nlohmann::json& json);
+
 	public:
 
 		static std::vector<Component> ReadComponents(cstring filePath);

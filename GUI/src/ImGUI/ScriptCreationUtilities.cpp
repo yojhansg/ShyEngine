@@ -925,7 +925,6 @@ namespace ShyEditor {
 		serializedName[0] = '\0';
 
 		attrValue = ::Components::AttributeValue();
-
 		attrValue.value.valueFloat = 0;
 
 		this->type = Node::Input;
@@ -1490,37 +1489,30 @@ namespace ShyEditor {
 		if (serialized)
 			root["name"] = serializedName;
 
+		root["type"] = Components::Attribute::GetTypeStrFromAttributeType(attrType);
 
 		if (attrType == Components::AttributesType::NONE) {
-			root["type"] = "null";
-			root["value"] = nullptr;
+			root["value"] = "null";
 		}
 		else if (attrType == Components::AttributesType::FLOAT) {
-			root["type"] = "float";
 			root["value"] = attrValue.value.valueFloat;
 		}
 		else if (attrType == Components::AttributesType::VECTOR2) {
-			root["type"] = "Vector2D";
 			root["value"] = std::to_string(attrValue.value.valueVector2.x) + "," + std::to_string(attrValue.value.valueVector2.y);
 		}
 		else if (attrType == Components::AttributesType::STRING) {
-			root["type"] = "string";
 			root["value"] = attrValue.valueString;
 		}
 		else if (attrType == Components::AttributesType::BOOL) {
-			root["type"] = "bool";
 			root["value"] = attrValue.value.valueBool;
 		}
 		else if (attrType == Components::AttributesType::COLOR) {
-			root["type"] = "color";
 			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
 		}
 		else if (attrType == Components::AttributesType::ENTITY) {
-			root["type"] = "Entity";
 			root["value"] = attrValue.value.entityIdx;
 		}
 		else if (attrType == Components::AttributesType::CHAR) {
-			root["type"] = "char";
 			root["value"] = attrValue.value.valueChar;
 		}
 
@@ -1546,6 +1538,11 @@ namespace ShyEditor {
 	{
 		serialized = value;
 		std::memcpy(serializedName, str.c_str(), 256);
+	}
+
+	::Components::AttributesType ScriptCreationUtilities::ScriptInput::GetAttrType()
+	{
+		return attrType;
 	}
 
 	ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)

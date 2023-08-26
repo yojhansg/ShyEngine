@@ -127,7 +127,7 @@ namespace ShyEditor {
 				if (input->IsSerialized())
 					serializedValues.push_back({
 
-						{"type", input->GetOutputTypeString()},
+						{"type", ::Components::Attribute::GetTypeStrFromAttributeType(input->GetAttrType())},
 						{"name", input->GetName()},
 						{"defaultValue", jsonNode["value"]}
 						});
@@ -273,40 +273,9 @@ namespace ShyEditor {
 
 			std::string typeStr = constNode["type"].get<std::string>();
 
-			if (typeStr == "null") {
-				type = ::Components::AttributesType::NONE;
-				value.value.valueFloat = 0;
-			}
-			else if (typeStr == "float") {
-				type = ::Components::AttributesType::FLOAT;
-				value.value.valueFloat = constNode["value"].get<float>();
-			}
-			else if (typeStr == "Vector2D") {
-				type = ::Components::AttributesType::VECTOR2;
-				sscanf_s(constNode["value"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
-			}
-			else if (typeStr == "string") {
-				type = ::Components::AttributesType::STRING;
-				value.valueString = constNode["value"].get<std::string>();
-			}
-			else if (typeStr == "bool") {
-				type = ::Components::AttributesType::BOOL;
-				value.value.valueBool = constNode["value"].get<bool>();
-			}
-			else if (typeStr == "color") {
-				type = ::Components::AttributesType::COLOR;
-				sscanf_s(constNode["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
-			}
-			else if (typeStr == "Entity") {
-				type = ::Components::AttributesType::ENTITY;
-				value.value.entityIdx = -1;
-			}
-			else if (typeStr == "char") {
-				type = ::Components::AttributesType::CHAR;
-				value.value.valueChar = '\0';
-			}
+			type = Components::Attribute::GetAttributeTypeFromTypeStr(typeStr);
 
-
+			value = SetScriptValuesFromJson(type, constNode);
 
 			ScriptCreationUtilities::ScriptInput* input = new ScriptCreationUtilities::ScriptInput(type);
 			input->SetValue(value);
@@ -410,6 +379,38 @@ namespace ShyEditor {
 			if (fd.B >= 0)
 				fd.fork->SetB(GetNodes()[fd.B]->GetScriptFlow());
 		}
+	}
+
+	Components::AttributeValue ScriptCreation::SetScriptValuesFromJson(Components::AttributesType attrType, nlohmann::json& json)
+	{
+		Components::AttributeValue value;
+
+		if (attrType == Components::AttributesType::NONE) {
+			value.value.valueFloat = 0;
+		}
+		else if (attrType == Components::AttributesType::FLOAT) {
+			value.value.valueFloat = json["value"].get<float>();
+		}
+		else if(attrType == Components::AttributesType::VECTOR2) {
+			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
+		}
+		else if (attrType == Components::AttributesType::STRING) {
+			value.valueString = json["value"].get<std::string>();
+		}
+		else if (attrType == Components::AttributesType::BOOL) {
+			value.value.valueBool = json["value"].get<bool>();
+		}
+		else if (attrType == Components::AttributesType::COLOR) {
+			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
+		}
+		else if(attrType == Components::AttributesType::ENTITY) {
+			value.value.entityIdx = -1;
+		}
+		else if(attrType == Components::AttributesType::CHAR) {
+			value.value.valueChar = '\0';
+		}
+
+		return value;
 	}
 
 	void ScriptCreation::GetScrollPosition(int* x, int* y)
