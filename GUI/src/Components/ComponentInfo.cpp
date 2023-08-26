@@ -18,6 +18,16 @@ namespace Components {
 
 		methods = other.methods;
 		attributes = other.attributes;
+
+		for (auto& m : other.orderedMethods) {
+
+			orderedMethods.push_back(&methods.at(m->getName()));
+		}
+
+		for (auto& attr : other.orderedAttributes) {
+
+			orderedAttributes.push_back(&attributes.at(attr->getName()));
+		}
 	}
 
 	Component::Component(cstring name)
@@ -25,7 +35,7 @@ namespace Components {
 		this->name = name;
 	}
 
-	cstring Component::getName()
+	cstring Component::GetName()
 	{
 		return name;
 	}
@@ -50,14 +60,36 @@ namespace Components {
 		return methods;
 	}
 
+	std::vector<Attribute*>& Component::GetAttributesOrdered()
+	{
+		return orderedAttributes;
+	}
+
+	std::vector<Method*>& Component::GetMethodsOrdered()
+	{
+		return orderedMethods;
+	}
+
 	void Component::addAttribute(const Attribute& attribute)
 	{
-		attributes.emplace(attribute.getName(), attribute);
+		const auto& name = attribute.getName();
+
+		attributes.emplace(name, attribute);
+
+
+		auto& ref = attributes.at(name);
+		orderedAttributes.push_back(&ref);
 	}
 
 	void Component::addMethod(const Method& method)
 	{
-		methods.emplace(method.getName(), method);
+		const auto& name = method.getName();
+
+
+		methods.emplace(name, method);
+
+		auto& ref = methods.at(name);
+		orderedMethods.push_back(&ref);
 	}
 
 	Attribute::Attribute()
@@ -96,7 +128,7 @@ namespace Components {
 			type = AttributesType::CHAR;
 		}
 		else if (typeString == "Entity") {
-			value.value.entityIdx = -1;
+			value.value.entityIdx = 0;
 			type = AttributesType::GAMEOBJECT;
 		}
 		else {
@@ -127,11 +159,11 @@ namespace Components {
 		return type;
 	}
 
-	std::string Attribute::getName() const {
+	const std::string& Attribute::getName() const {
 		return name;
 	}
 
-	std::string Attribute::getTypeStr() const
+	const std::string& Attribute::getTypeStr() const
 	{
 		return typeStr;
 	}
@@ -364,7 +396,7 @@ namespace Components {
 
 			switch (attribute.getType()) {
 			case Components::AttributesType::BOOL:
-				
+
 				attribute.value.value.valueBool = attributeJson["value"].get<bool>();
 				break;
 			case Components::AttributesType::FLOAT:

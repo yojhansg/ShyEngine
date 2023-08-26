@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Fri Aug 18 04:40:40 2023
+//Creation time: Fri Aug 25 20:36:23 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -37,6 +37,7 @@
 #include <ScriptFunctionality.h>
 #include <InputManager.h>
 #include <PhysicsManager.h>
+#include <RendererManager.h>
 #include <SoundManager.h>
 #include <EngineTime.h>
 
@@ -64,9 +65,9 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Image_setSrcRect",Image_setSrcRect);
 	map.emplace("Image_setRotaionPoint",Image_setRotaionPoint);
 	map.emplace("Image_scaledSize",Image_scaledSize);
-	map.emplace("Image_ChangeTexture",Image_ChangeTexture);
+	map.emplace("Image_loadTexture",Image_loadTexture);
 	map.emplace("Image_setFlipMode",Image_setFlipMode);
-	map.emplace("MusicEmitter_changeMusic",MusicEmitter_changeMusic);
+	map.emplace("MusicEmitter_loadMusic",MusicEmitter_loadMusic);
 	map.emplace("MusicEmitter_play",MusicEmitter_play);
 	map.emplace("MusicEmitter_pause",MusicEmitter_pause);
 	map.emplace("MusicEmitter_stop",MusicEmitter_stop);
@@ -127,7 +128,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("OverlayText_SetPointSize",OverlayText_SetPointSize);
 	map.emplace("ParticleSystem_startEmitting",ParticleSystem_startEmitting);
 	map.emplace("ParticleSystem_isEmitting",ParticleSystem_isEmitting);
-	map.emplace("ParticleSystem_changeTexture",ParticleSystem_changeTexture);
+	map.emplace("ParticleSystem_loadTexture",ParticleSystem_loadTexture);
 	map.emplace("ParticleSystem_addBurst",ParticleSystem_addBurst);
 	map.emplace("PhysicBody_setTrigger",PhysicBody_setTrigger);
 	map.emplace("PhysicBody_isTrigger",PhysicBody_isTrigger);
@@ -137,7 +138,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getBounciness",PhysicBody_getBounciness);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
-	map.emplace("SoundEmitter_changeSound",SoundEmitter_changeSound);
+	map.emplace("SoundEmitter_loadSound",SoundEmitter_loadSound);
 	map.emplace("SoundEmitter_play",SoundEmitter_play);
 	map.emplace("SoundEmitter_pause",SoundEmitter_pause);
 	map.emplace("SoundEmitter_stop",SoundEmitter_stop);
@@ -180,9 +181,21 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Transform_Scale",Transform_Scale);
 	map.emplace("InputManager_keyDownEvent",InputManager_keyDownEvent);
 	map.emplace("InputManager_keyUpEvent",InputManager_keyUpEvent);
-	map.emplace("PhysicsManager_debugDraw",PhysicsManager_debugDraw);
-	map.emplace("PhysicsManager_enableDebugDraw",PhysicsManager_enableDebugDraw);
-	map.emplace("PhysicsManager_handleBodies",PhysicsManager_handleBodies);
+	map.emplace("PhysicsManager_getGravity",PhysicsManager_getGravity);
+	map.emplace("PhysicsManager_setGravity",PhysicsManager_setGravity);
+	map.emplace("PhysicsManager_addCollisionLayer",PhysicsManager_addCollisionLayer);
+	map.emplace("PhysicsManager_removeCollisionLayer",PhysicsManager_removeCollisionLayer);
+	map.emplace("PhysicsManager_setCollisionBetweenLayers",PhysicsManager_setCollisionBetweenLayers);
+	map.emplace("PhysicsManager_layersCollide",PhysicsManager_layersCollide);
+	map.emplace("PhysicsManager_layersExists",PhysicsManager_layersExists);
+	map.emplace("RendererManager_getWidth",RendererManager_getWidth);
+	map.emplace("RendererManager_getHeight",RendererManager_getHeight);
+	map.emplace("RendererManager_toggleFullScreen",RendererManager_toggleFullScreen);
+	map.emplace("RendererManager_showCursor",RendererManager_showCursor);
+	map.emplace("RendererManager_resizeWindow",RendererManager_resizeWindow);
+	map.emplace("RendererManager_renameWindow",RendererManager_renameWindow);
+	map.emplace("RendererManager_repositionWindow",RendererManager_repositionWindow);
+	map.emplace("RendererManager_SetWindowIcon",RendererManager_SetWindowIcon);
 	map.emplace("SaveManager_SaveAll",SaveManager_SaveAll);
 	map.emplace("SaveManager_Save",SaveManager_Save);
 	map.emplace("SaveManager_Load",SaveManager_Load);
@@ -584,21 +597,21 @@ Scripting::Variable Image_scaledSize(std::vector<Scripting::Variable>const& vec)
 	Utilities::Vector2D ret = self->scaledSize();
 	return ret;
 }
-Scripting::Variable Image_ChangeTexture(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable Image_loadTexture(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_ChangeTexture", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_loadTexture", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_ChangeTexture", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_loadTexture", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	Image* self = vec[0].value.entity->getComponent<Image>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_ChangeTexture", vec[0].value.entity->getEntityName(), Image);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Image_loadTexture", vec[0].value.entity->getEntityName(), Image);
 		return Scripting::Variable::Null();
 	}
 	self->loadTexture(vec[1].str);
@@ -624,21 +637,21 @@ Scripting::Variable Image_setFlipMode(std::vector<Scripting::Variable>const& vec
 	self->setFlipMode(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable MusicEmitter_changeMusic(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable MusicEmitter_loadMusic(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_loadMusic", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_loadMusic", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	MusicEmitter* self = vec[0].value.entity->getComponent<MusicEmitter>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_changeMusic", vec[0].value.entity->getEntityName(), MusicEmitter);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "MusicEmitter_loadMusic", vec[0].value.entity->getEntityName(), MusicEmitter);
 		return Scripting::Variable::Null();
 	}
 	self->loadMusic(vec[1].str);
@@ -1694,21 +1707,21 @@ Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>co
 	bool ret = self->isEmitting();
 	return ret;
 }
-Scripting::Variable ParticleSystem_changeTexture(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable ParticleSystem_loadTexture(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_loadTexture", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_loadTexture", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_changeTexture", vec[0].value.entity->getEntityName(), ParticleSystem);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_loadTexture", vec[0].value.entity->getEntityName(), ParticleSystem);
 		return Scripting::Variable::Null();
 	}
 	self->loadTexture(vec[1].str);
@@ -1899,21 +1912,21 @@ Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable
 	Vector2D ret = self->getLinearVelocity();
 	return ret;
 }
-Scripting::Variable SoundEmitter_changeSound(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable SoundEmitter_loadSound(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", std::to_string(0), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_loadSound", std::to_string(0), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	if(vec[1].type != Scripting::Variable::Type::String){
-		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", std::to_string(1), std::string(""),  ""); 
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_loadSound", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
 
 	SoundEmitter* self = vec[0].value.entity->getComponent<SoundEmitter>();
 	if(self == nullptr){
-		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_changeSound", vec[0].value.entity->getEntityName(), SoundEmitter);
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "SoundEmitter_loadSound", vec[0].value.entity->getEntityName(), SoundEmitter);
 		return Scripting::Variable::Null();
 	}
 	self->loadSound(vec[1].str);
@@ -2649,20 +2662,80 @@ Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>cons
 	bool ret = manager->keyUpEvent();
 	return ret;
 }
-Scripting::Variable PhysicsManager_debugDraw(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicsManager_getGravity(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->debugDraw();
+	Utilities::Vector2D ret = manager->getGravity();
+	return ret;
+}
+Scripting::Variable PhysicsManager_setGravity(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager* manager = PhysicsManager::instance();
+	manager->setGravity(vec[0].vector);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsManager_enableDebugDraw(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicsManager_addCollisionLayer(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->enableDebugDraw(vec[0].value.Bool);
+	manager->addCollisionLayer(vec[0].value.cString);
 	return Scripting::Variable::Null();
 }
-Scripting::Variable PhysicsManager_handleBodies(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable PhysicsManager_removeCollisionLayer(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->handleBodies();
+	manager->removeCollisionLayer(vec[0].value.cString);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsManager_setCollisionBetweenLayers(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager* manager = PhysicsManager::instance();
+	manager->setCollisionBetweenLayers(vec[0].value.cString, vec[1].value.cString, vec[2].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicsManager_layersCollide(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager* manager = PhysicsManager::instance();
+	bool ret = manager->layersCollide(vec[0].value.cString, vec[1].value.cString);
+	return ret;
+}
+Scripting::Variable PhysicsManager_layersExists(std::vector<Scripting::Variable>const& vec){
+	PhysicsManager* manager = PhysicsManager::instance();
+	bool ret = manager->layersExists(vec[0].value.cString);
+	return ret;
+}
+Scripting::Variable RendererManager_getWidth(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	int ret = manager->getWidth();
+	return ret;
+}
+Scripting::Variable RendererManager_getHeight(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	int ret = manager->getHeight();
+	return ret;
+}
+Scripting::Variable RendererManager_toggleFullScreen(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->toggleFullScreen();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_showCursor(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->showCursor(vec[0].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_resizeWindow(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->resizeWindow(vec[0].value.Float, vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_renameWindow(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->renameWindow(vec[0].value.cString);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->repositionWindow(vec[0].value.Float, vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_SetWindowIcon(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	bool ret = manager->SetWindowIcon(vec[0].value.cString);
+	return ret;
 }
 Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec){
 	SaveManager* manager = SaveManager::instance();

@@ -82,15 +82,15 @@ namespace ShyEditor {
 
 			-Quitar los singleton del editor
 			-Crear escenas
-			-Mostrar el icono de la imagen al lado de su fichero
+			Mostrar el icono de la imagen al lado de su fichero
 			-Boton para abrir carpetas en el explorador de archivos
-			-Boton para refrescar
-			-Error al crear un proyecto y leer la carpeta
-			-En la escena, renderizar el rectangulo de la camara lo ultimo para evitar que cambie de grosor
-			-Resource manager editor
+			Boton para refrescar
+			Error al crear un proyecto y leer la carpeta
+			En la escena, renderizar el rectangulo de la camara lo ultimo para evitar que cambie de grosor
+			Resource manager editor
 			-Motor: Guardar los valores serializados para cada script, no 
 			para cada entidad
-			-Color de la escena
+			Color de la escena
 			-Highlight color
 
 			-La creacion de un nodo no tiene en cuenta el scroll
@@ -125,8 +125,13 @@ namespace ShyEditor {
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
 			-Cambiar las llamadas de windowpos y windowsize por 'x y w z'
+
 			-Simplificar el uso del flow a un unico metodo y que los parametros sean propiedades
+			
+			Este creo que ya no funciona asi
 			-Hacer que el id no tenga en cuenta el tamaño del array ya que puede haber elementos sin id
+			
+			
 			-Establecer correctamente los tamaños de los nodos para que no queden feotes
 			-En algun momento cambiar la serializacion de los eventos en el motor
 			-Empezar sin cambios aunque esten los dos nodos creados

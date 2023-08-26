@@ -69,7 +69,13 @@
         }
     },
     "Image": {
-        "ChangeTexture": {
+        "getTextureHeight": {
+            "return": "int"
+        },
+        "getTextureWidth": {
+            "return": "int"
+        },
+        "loadTexture": {
             "input": [
                 {
                     "name": "texturePath",
@@ -77,12 +83,6 @@
                 }
             ],
             "return": "void"
-        },
-        "getTextureHeight": {
-            "return": "int"
-        },
-        "getTextureWidth": {
-            "return": "int"
         },
         "scaledSize": {
             "return": "Utilities::Vector2D"
@@ -132,15 +132,6 @@
         }
     },
     "MusicEmitter": {
-        "changeMusic": {
-            "input": [
-                {
-                    "name": "musicPath",
-                    "type": "cstring"
-                }
-            ],
-            "return": "void"
-        },
         "fadeOut": {
             "input": [
                 {
@@ -161,6 +152,15 @@
         },
         "isPlaying": {
             "return": "bool"
+        },
+        "loadMusic": {
+            "input": [
+                {
+                    "name": "musicPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
         },
         "pause": {
             "return": "void"
@@ -518,7 +518,10 @@
             ],
             "return": "void"
         },
-        "changeTexture": {
+        "isEmitting": {
+            "return": "bool"
+        },
+        "loadTexture": {
             "input": [
                 {
                     "name": "texturePath",
@@ -526,9 +529,6 @@
                 }
             ],
             "return": "void"
-        },
-        "isEmitting": {
-            "return": "bool"
         },
         "startEmitting": {
             "return": "void"
@@ -589,15 +589,6 @@
         }
     },
     "SoundEmitter": {
-        "changeSound": {
-            "input": [
-                {
-                    "name": "soundPath",
-                    "type": "cstring"
-                }
-            ],
-            "return": "void"
-        },
         "enableSpatialSound": {
             "input": [
                 {
@@ -636,6 +627,15 @@
         },
         "isSpatialSoundEnabled": {
             "return": "bool"
+        },
+        "loadSound": {
+            "input": [
+                {
+                    "name": "soundPath",
+                    "type": "cstring"
+                }
+            ],
+            "return": "void"
         },
         "pause": {
             "return": "void"

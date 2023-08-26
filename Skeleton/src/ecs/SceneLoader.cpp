@@ -22,12 +22,16 @@ using namespace nlohmann;
 const std::string ECS::SceneLoader::extension = ".scene";
 
 
-
+#include <filesystem>
+#include <iostream>
 // ------------------------- LOAD SCENE ----------------------------
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
+
+
 	std::string completePath = scenePath + extension;
+	std::cout << std::filesystem::current_path() << completePath << std::endl;
 
 	std::ifstream fileStream(completePath);
 
@@ -224,12 +228,12 @@ void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::jso
 
 	for (auto& attr : overlayAttributes) {
 
-		if (!overlay.contains(attr)) {
-			Console::Output::PrintError("Load transform error", "The transform component doesn't have a valid format.");
-			return;
-		}
 
-		map[attr] = overlay[attr].get<std::string>();
+		//No es necesario que los overlays contengan todas las propiedades por lo que no se necesita señalar un error
+		if (overlay.contains(attr)) {
+
+			map[attr] = overlay[attr].get<std::string>();
+		}
 	}
 
 	ClassReflection::instance()->ReflectOverlay(overlayElement, map);

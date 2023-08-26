@@ -158,7 +158,7 @@ namespace Renderer {
 		SDL_SetWindowSize(window, w, h);
 	}
 
-	void RendererManager::renameWindow(const std::string& name) {
+	void RendererManager::renameWindow(cString name) {
 		SDL_SetWindowTitle(window, name.c_str());
 	}
 
@@ -238,13 +238,12 @@ namespace Renderer {
 	}
 
 
-	bool RendererManager::SetWindowIcon(const std::string& path) {
+	bool RendererManager::SetWindowIcon(cString path) {
 
 		icon = IMG_Load(path.c_str());
 
 		if (icon == NULL) {
 			Console::Output::PrintError("Window icon", "Could not change window icon. Error loading file <" + path + ">");
-			SetWindowIcon("Assets\\icon.png");
 			return false;
 		}
 

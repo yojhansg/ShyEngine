@@ -17,16 +17,18 @@ namespace ShyEditor {
 	public:
 		
 		Hierarchy();
-
+		~Hierarchy();
 
 	protected:
 
 		void Behaviour() override;
+		void HandleInput(SDL_Event* event) override;
 		void ReceiveAssetDrop(Asset& asset) override;
 
 		void handleDragAndDrop(GameObject* source, GameObject* destination);
 
 		bool isChildrenTheSelectedObject(GameObject* go);
+		bool isParentFromPrefab(GameObject* go);
 
 		void RenderGameObject(GameObject* gameObject, const char* type);
 
@@ -39,5 +41,7 @@ namespace ShyEditor {
 		bool shouldOpenRenamePopup;
 		bool shouldOpenSavePrefabPopup;
 
+	private:
+		GameObject* copiedObject;
 	};
 }

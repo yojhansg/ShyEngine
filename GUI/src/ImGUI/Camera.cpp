@@ -58,33 +58,43 @@ namespace ShyEditor {
 
 
 
-	void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow)
+	void Camera::handleInput(SDL_Event* event, bool isMouseInsideWindow, bool isFocused)
 	{
-		if (isMouseInsideWindow) {
-			if (event->type == SDL_MOUSEBUTTONDOWN)
+
+		if (isMouseInsideWindow && event->type == SDL_MOUSEBUTTONDOWN)
+		{
+			if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 			{
-				if (!middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
-				{
-					middleMouseButton = true;
-				}
+				middleMouseButton = true;
 			}
+		}
 
-
-			if (event->type == SDL_MOUSEMOTION)
+		if (event->type == SDL_MOUSEBUTTONUP)
+		{
+			if (middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
 			{
-				if (middleMouseButton)
-				{
-					camera_position_x -= event->motion.xrel;
-					camera_position_y -= event->motion.yrel;
-
-
-				}
+				middleMouseButton = false;
 			}
+		}
+
+		if (event->type == SDL_MOUSEMOTION)
+		{
+			if (middleMouseButton)
+			{
+				camera_position_x -= event->motion.xrel;
+				camera_position_y -= event->motion.yrel;
+
+			}
+		}
 
 
 #define ScrollSpeed 0.025f
 
+		if (isFocused && isMouseInsideWindow) {
 			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
+
+				float pscale = scale;
+
 				if (event->wheel.y > 0) // scroll up
 				{
 					scale += ScrollSpeed;
@@ -106,14 +116,6 @@ namespace ShyEditor {
 				}
 			}
 		}
-
-		if (event->type == SDL_MOUSEBUTTONUP)
-		{
-			if (middleMouseButton && event->button.button == SDL_BUTTON_MIDDLE)
-			{
-				middleMouseButton = false;
-			}
-		}
 	}
 
 	void Camera::SetConstrains(float min, float max)
@@ -129,6 +131,12 @@ namespace ShyEditor {
 
 	float& Camera::GetScale() {
 		return scale;
+	}
+
+	void Camera::SetPosition(float x, float y)
+	{
+		camera_position_x = x;
+		camera_position_y = y;
 	}
 
 	void Camera::AddPosition(float x, float y)

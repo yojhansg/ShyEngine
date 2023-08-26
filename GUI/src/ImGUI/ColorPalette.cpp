@@ -8,8 +8,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "CheckML.h"
-
 using nlohmann::json;
 
 namespace ShyEditor {
@@ -221,7 +219,7 @@ namespace ShyEditor {
 	void ColorPalette::Open()
 	{
 		instance->Show();
-		//instance->open = true;
+
 	}
 
 	void ColorPalette::Behaviour()

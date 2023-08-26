@@ -14,6 +14,7 @@
 #include "Components/SoundEmitter.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
+#include "Components/SplashScene.h"
 
 
 
@@ -33,6 +34,7 @@ ComponentFactory::ComponentFactory(){
 	components["SoundEmitter"] = &ComponentFactory::CreateSoundEmitter;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
+	components["SplashScene"] = &ComponentFactory::CreateSplashScene;
 
 }ComponentFactory::~ComponentFactory(){
 
@@ -93,6 +95,10 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateScript(){
 		return new ECS::Script();
+
+}
+	ECS::Component* ComponentFactory::CreateSplashScene(){
+		return new ECS::SplashScene();
 
 }
 	ECS::Component* ComponentFactory::CreateComponent(std::string const& comp){

@@ -13,6 +13,7 @@
 #include "Editor.h"
 #include "Camera.h"
 #include "imgui.h"
+#include "PrefabManager.h"
 #include "SDL.h"
 
 #include <nlohmann/json.hpp>
@@ -76,13 +77,31 @@ namespace ShyEditor {
 	GameObject* Scene::AddGameObject(std::string path) {
 
 		GameObject* go = new GameObject(path, true);
-		gameObjects.emplace(go->getId(), go);
+		gameObjects.emplace(go->GetId(), go);
 
 		return go;
 	}
 
+	void Scene::AddOverlayChildsToScene(GameObject* go)
+	{
+		for (auto& pair : go->GetChildren()) {
+			overlays.push_back(pair.second);
+
+			AddOverlayChildsToScene(pair.second);
+		}
+	}
+
 	void Scene::AddGameObject(GameObject* go) {
-		gameObjects.emplace(go->getId(), go);
+		gameObjects.emplace(go->GetId(), go);
+	}
+
+	void Scene::AddGameObjectChildsToScene(GameObject* go)
+	{
+		for (auto& pair : go->GetChildren()) {
+			gameObjects.emplace(pair.second->GetId(), pair.second);
+
+			AddGameObjectChildsToScene(pair.second);
+		}
 	}
 
 	GameObject* Scene::AddOverlay(std::string path)
@@ -93,7 +112,11 @@ namespace ShyEditor {
 		return go;
 	}
 
-	std::unordered_map<int, GameObject*>& Scene::getGameObjects() {
+	void Scene::AddOverlay(GameObject* overlay) {
+		overlays.push_back(overlay);
+	}
+
+	std::map<int, GameObject*>& Scene::getGameObjects() {
 		return gameObjects;
 	}
 
@@ -115,6 +138,8 @@ namespace ShyEditor {
 	}
 
 	void Scene::saveScene(const std::string& sceneName) {
+
+		Editor::getInstance()->getFileExplorer()->Refresh();
 
 		nlohmann::ordered_json j;
 
@@ -173,8 +198,9 @@ namespace ShyEditor {
 
 		// Iterate through the game objects JSON array
 		for (const auto& gameObjectJson : gameObjectsJson) {
-			GameObject* gameObject = GameObject::fromJson(gameObjectJson.dump());
-			gameObjects.insert({ gameObject->getId(), gameObject });
+			GameObject* gameObject = GameObject::FromJson(gameObjectJson.dump());
+			gameObjects.insert({ gameObject->GetId(), gameObject });
+			AddGameObjectChildsToScene(gameObject);
 		}
 
 		if (!jsonData.contains("overlays")) {
@@ -186,15 +212,16 @@ namespace ShyEditor {
 
 		// Iterate through the overlay objects JSON array
 		for (const auto& overlayJson : overlaysJson) {
-			GameObject* overlay = GameObject::fromJson(overlayJson.dump());
+			GameObject* overlay = GameObject::FromJson(overlayJson.dump());
 			overlays.push_back(overlay);
+			AddGameObjectChildsToScene(overlay);
 		}
 
 	}
 
 	void Scene::RenderChildGameObjects(GameObject* go)
 	{
-		for (auto pair : go->getChildren()) {
+		for (auto& pair : go->GetChildren()) {
 			RenderChildGameObjects(pair.second);
 			pair.second->RenderTransform(renderer, sceneCamera);
 		}
@@ -204,7 +231,7 @@ namespace ShyEditor {
 	{
 		std::vector<GameObject*> sortedGameObjects;
 		for (const auto& pair : gameObjects) {
-			if (pair.second->getParent() == nullptr)
+			if (pair.second->GetParent() == nullptr)
 				sortedGameObjects.push_back(pair.second);
 		}
 
@@ -241,6 +268,7 @@ namespace ShyEditor {
 		SDL_RenderClear(renderer);
 
 
+		bool inScene = IsMouseHoveringWindow();
 		auto mouse = MousePositionInScene();
 
 		float cameraScale = sceneCamera->GetScale();
@@ -265,6 +293,8 @@ namespace ShyEditor {
 			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
 
 			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
+
+			if (!inScene) continue;
 
 			if (selectedOverlay.overlay == nullptr)
 			{
@@ -365,7 +395,7 @@ namespace ShyEditor {
 						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
 						position += increment * anchor;
 
-						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaï¿½o y viceversa
 						size += increment;
 					}
 					else
@@ -395,7 +425,7 @@ namespace ShyEditor {
 						//Para que parezca que se esta moviendo arrastrandolo de un lado, el incremento hay que multiplicarlo por la posicion de anclaje
 						position += increment * anchor;
 
-						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaño y viceversa
+						//Lo que hayamos aumentado de posicion hay que reducirlo de tamaï¿½o y viceversa
 						size += increment;
 					}
 					else
@@ -420,7 +450,7 @@ namespace ShyEditor {
 
 						float increment = psize - size;
 
-						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//Lo que haya incrementado de tamaï¿½o hay que compensarlo con la posicion, para de esta forma
 						//dar la sensacion de que estamos arrastrando desde un lado
 						position -= anchor * increment;
 					}
@@ -446,7 +476,7 @@ namespace ShyEditor {
 
 						float increment = psize - size;
 
-						//Lo que haya incrementado de tamaño hay que compensarlo con la posicion, para de esta forma
+						//Lo que haya incrementado de tamaï¿½o hay que compensarlo con la posicion, para de esta forma
 						//dar la sensacion de que estamos arrastrando desde un lado
 						position -= anchor * increment;
 					}
@@ -499,7 +529,7 @@ namespace ShyEditor {
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyGoSelected = false;
 
-		if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
+		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
 			for (const auto& pair : gameObjects) {
 
@@ -513,23 +543,27 @@ namespace ShyEditor {
 			}
 		}
 
+
+		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			SetSelectedGameObject(nullptr);
+		}
+
 		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
 		{
 			dragging = false;
 		}
 
 		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
-			
+
 			float invCameraScale = 1.f / sceneCamera->GetScale();
 
 			if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
 
 				const float incrementSpeed = .3f;
 
-				float r = selectedGameObject->getRotation();
+				float r = selectedGameObject->GetRotation();
 
 				r += event->motion.xrel * incrementSpeed;
-				r += event->motion.yrel * incrementSpeed;
 
 				selectedGameObject->SetRotation(r);
 			}
@@ -537,12 +571,13 @@ namespace ShyEditor {
 
 				const float incrementSpeed = .03f;
 
-				float x = selectedGameObject->getScale_x();
-				float y = selectedGameObject->getScale_y();
+				float x = selectedGameObject->GetScaleX();
+				float y = selectedGameObject->GetScaleY();
 
 				float xspeed = std::log10(1 + x) * incrementSpeed;
-				float yspeed = -std::log10(1 + y) * incrementSpeed;
+				float yspeed = std::log10(1 + y) * incrementSpeed;
 
+				event->motion.yrel *= -1;
 
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
 
@@ -550,7 +585,7 @@ namespace ShyEditor {
 				}
 
 				x += event->motion.xrel * invCameraScale * xspeed;
-				y += -event->motion.yrel * invCameraScale * yspeed;
+				y += event->motion.yrel * invCameraScale * yspeed;
 
 				x = std::clamp(x, 0.f, FLT_MAX);
 				y = std::clamp(y, 0.f, FLT_MAX);
@@ -559,22 +594,45 @@ namespace ShyEditor {
 			}
 			else {
 
-				auto pos = selectedGameObject->getPosition();
+				auto pos = selectedGameObject->GetPosition();
 				pos.x += event->motion.xrel * invCameraScale;
 				pos.y += event->motion.yrel * invCameraScale;
 
 
-				selectedGameObject->setPosition(pos);
+				selectedGameObject->SetPosition(pos);
 			}
 		}
 
 
-		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			SetSelectedGameObject(nullptr);
+		sceneCamera->handleInput(event, insideWindow, focused);
+
+		if (event->type == SDL_KEYUP && event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
+
+
+			if (selectedGameObject != nullptr) {
+
+				if (selectedGameObject->IsTransform()) {
+
+					auto pos = selectedGameObject->GetPosition();
+					sceneCamera->SetPosition(pos.x, pos.y);
+				}
+				else {
+
+					float camScale = sceneCamera->GetScale();
+					auto pos = selectedGameObject->GetOverlay()->CalculateCenterPoint();
+					sceneCamera->SetPosition(pos.x * camScale, pos.y * camScale);
+
+				}
+			}
 		}
 
-		if (!(SDL_GetModState() & KMOD_SHIFT)) {
-			sceneCamera->handleInput(event, insideWindow);
+		if (event->type = SDL_KEYDOWN) {
+
+			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
+
+				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+					saveScene(name);
+			}
 		}
 
 	}
@@ -590,10 +648,12 @@ namespace ShyEditor {
 		while (it != gameObjects.end()) {
 			GameObject* go = it->second;
 
-			go->update();
+			go->Update();
 
-			if (go->isWaitingToDelete()) {
+			if (go->IsWaitingToDelete()) {
 				selectedGameObject = nullptr;
+
+				GameObject::unusedIds.push_back(go->GetId());
 
 				delete go;
 				it = gameObjects.erase(it);
@@ -608,10 +668,12 @@ namespace ShyEditor {
 		while (it2 != overlays.end()) {
 			GameObject* go = *it2;
 
-			go->update();
+			go->Update();
 
-			if (go->isWaitingToDelete()) {
+			if (go->IsWaitingToDelete()) {
 				selectedGameObject = nullptr;
+
+				GameObject::unusedIds.push_back(go->GetId());
 
 				delete go;
 				it2 = overlays.erase(it2);
@@ -706,14 +768,36 @@ namespace ShyEditor {
 
 
 			GameObject* go = AddGameObject(asset.relativePath);
-			go->setName(asset.name);
+			go->SetName(asset.name);
 
 			ImVec2 position = MousePositionInScene();
 
-			go->setPosition(position);
+			go->SetPosition(position);
 			selectedGameObject = go;
 		}
 
+		if (asset.isPrefab) {
+
+			GameObject* prefab = PrefabManager::GetPrefabById(asset.prefabId);
+
+			//Create a copy of the prefab
+			GameObject* go = new GameObject(*prefab);
+			if (go->IsTransform()) {
+				AddGameObject(go);
+
+				AddGameObjectChildsToScene(go);
+
+				ImVec2 position = MousePositionInScene();
+
+				go->SetPosition(position);
+			}
+			else {
+				AddOverlay(go);
+				AddOverlayChildsToScene(go);
+			}
+			
+			selectedGameObject = go;
+		}
 	}
 
 	ImVec2 Scene::MousePositionInScene() {
@@ -747,18 +831,18 @@ namespace ShyEditor {
 
 		auto mousePos = MousePositionInScene();
 
-		auto goPos = gameObject->getAdjustedPosition();
-		auto goSize = gameObject->getSize();
+		auto goPos = gameObject->GetAdjustedPosition();
+		auto goSize = gameObject->GetSize();
 
-		goSize.x *= gameObject->getScale_x();
-		goSize.y *= gameObject->getScale_y();
+		goSize.x *= gameObject->GetScaleX();
+		goSize.y *= gameObject->GetScaleY();
 
 		return mousePos.x > goPos.x && mousePos.x < goPos.x + goSize.x &&
 			mousePos.y > goPos.y && mousePos.y < goPos.y + goSize.y;
 	}
 
 	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b) {
-		return a->getRenderOrder() < b->getRenderOrder();
+		return a->GetRenderOrder() < b->GetRenderOrder();
 	}
 
 	void Scene::ResizeOverlayIfNeccesary()
@@ -882,16 +966,16 @@ namespace ShyEditor {
 
 		nlohmann::ordered_json gameObjectsJson = nlohmann::json::array();
 		for (const auto& pair : gameObjects) {
-			if (pair.second->getParent() == nullptr)
-				gameObjectsJson.push_back(j.parse(pair.second->toJson()));
+			if (pair.second->GetParent() == nullptr)
+				gameObjectsJson.push_back(j.parse(pair.second->ToJson()));
 		}
 
 		j["objects"] = gameObjectsJson;
 
 		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
 		for (const auto& o : overlays) {
-			if (o->getParent() == nullptr)
-				gameObjectsJson.push_back(j.parse(o->toJson()));
+			if (o->GetParent() == nullptr)
+				overlayObjectsJson.push_back(j.parse(o->ToJson()));
 		}
 
 		j["overlays"] = overlayObjectsJson;

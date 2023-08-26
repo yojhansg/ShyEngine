@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Sat Aug 19 17:34:31 2023
+//Creation time : Fri Aug 25 20:36:23 2023
 
 #define ECSreflection_Version 1.0
 
@@ -25,8 +25,6 @@ public:
 	void ReflectAnimation(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
-
-	void ReflectChainBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 

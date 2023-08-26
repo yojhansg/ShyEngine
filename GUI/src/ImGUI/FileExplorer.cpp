@@ -18,7 +18,7 @@
 #include <filesystem>
 #include <direct.h>
 #include <imgui.h>
-#include <vector>
+#include <queue>
 #include <fstream>
 #include <Windows.h>
 
@@ -38,8 +38,8 @@ namespace ShyEditor {
 	FileExplorer::FileExplorer() : Window("File Explorer", ImGuiWindowFlags_NoCollapse) {
 
 		editor = Editor::getInstance();
-		projectPath = editor->getProjectInfo().path;
-		currentPath = projectPath;
+		assetPath = editor->getProjectInfo().assetPath;
+		currentPath = assetPath;
 		relativePath = "";
 
 		folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
@@ -49,6 +49,9 @@ namespace ShyEditor {
 
 		docked = true;
 		viewMode = 0;
+
+		shouldOpenDeleteFilePopup = false;
+		shouldOpenFileMenu = false;
 
 		ProcessPath();
 	}
@@ -67,8 +70,13 @@ namespace ShyEditor {
 			return;
 		}
 
-		std::vector<Entry> folders;
-		std::vector<Entry> files;
+		relativePath = explorerFolder.lexically_relative(assetPath).string();
+
+		if (relativePath == ".")
+			relativePath = "";
+		else relativePath += "\\";
+
+		std::queue<Entry> files;
 
 		// Iterate through the current file explorer directory
 		for (auto& explorerFile : fs::directory_iterator(explorerFolder)) {
@@ -82,7 +90,8 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 				entry.texture = folder;
-				folders.push_back(entry);
+				entry.extension = "";
+				entries.push_back(entry);
 			}
 			else {
 				entry.extension = path.extension().string();
@@ -93,7 +102,7 @@ namespace ShyEditor {
 				entry.name = entry.name.substr(0, entry.name.find_last_of('.'));
 
 				if (entry.extension == ".png" || entry.extension == ".jpg")
-					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + "\\" + entry.name + entry.extension, false);
+					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
 				else if (entry.extension == ".scene")
 					entry.texture = scene;
 				else if (entry.extension == ".script")
@@ -101,19 +110,17 @@ namespace ShyEditor {
 				else
 					entry.texture = file;
 
-				files.push_back(entry);
+				files.push(entry);
 			}
 		}
 
-		std::sort(folders.begin(), folders.end());
-		std::sort(files.begin(), files.end());
 
-		for (auto f : folders)
-			entries.push_back(f);
-
-		for (auto f : files)
-			entries.push_back(f);
-
+		while (!files.empty())
+		{
+			entries.push_back(files.front());
+			files.pop();
+		}
+		
 		shouldUpdate = false;
 	}
 
@@ -126,7 +133,7 @@ namespace ShyEditor {
 
 		ImGui::Text("Folder: %s", currentPath.c_str());
 
-		if (currentPath != projectPath) {
+		if (currentPath != assetPath) {
 
 			// Display buttons to navigate up and down the folder hierarchy
 			ImGui::SameLine();
@@ -134,10 +141,6 @@ namespace ShyEditor {
 			{
 				// Navigate to parent folder
 				currentPath = currentDirectory.parent_path().string();
-
-				std::filesystem::path relativeDirectory(relativePath);
-				relativePath = relativeDirectory.parent_path().string();
-
 				shouldUpdate = true;
 			}
 		}
@@ -151,20 +154,26 @@ namespace ShyEditor {
 		if (ImGui::Button("Refresh"))
 			shouldUpdate = true;
 
+		ImGui::SameLine();
+
+		if (ImGui::Button("Open file explorer"))
+			ShellExecuteA(NULL, "explore", currentPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+
 		ImGui::Separator();
 
 		if (viewMode == 0)
 			DrawList();
 		else
 			DrawIcons();
+
+		ShowDeleteFilePopup();
+		ShowFileMenuPopup();
 	}
 
 
 	void FileExplorer::DrawList() {
 
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
-
-		ImGui::SetWindowFontScale(1.5f);
 
 		// TODO: cambiar el color para las carpetas
 		// ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
@@ -186,19 +195,22 @@ namespace ShyEditor {
 
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
+
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1) && currentlySelected != -1) {
+					shouldOpenFileMenu = true;
+				}
 			}
 
 
 			if (ImGui::BeginDragDropSource()) {
 
 
-				std::string relativePath = "\\" + std::filesystem::path(entry.path).lexically_relative(projectPath + "\\Assets").generic_string();
 
-				Asset asset;
+				Asset asset{};
 				memcpy(asset.extension, entry.extension.c_str(), 256);
 				memcpy(asset.name, entry.name.c_str(), 256);
 				memcpy(asset.path, entry.path.c_str(), 256);
-				memcpy(asset.relativePath, relativePath.c_str(), 256);
+				memcpy(asset.relativePath, (relativePath + asset.name + asset.extension).c_str(), 256);
 
 				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
 
@@ -219,7 +231,7 @@ namespace ShyEditor {
 			ImGui::SetCursorPosY(yCursor);
 
 			ImGui::SameLine();
-			ImGui::Text(entry.name.c_str());
+			ImGui::Text((entry.name + entry.extension).c_str());
 
 			idx++;
 		}
@@ -237,7 +249,7 @@ namespace ShyEditor {
 
 			if (entry.isFolder) {
 
-				if (currentPath != projectPath)
+				if (currentPath != assetPath)
 					relativePath += "\\" + entry.name;
 
 				currentPath = entry.path;
@@ -267,9 +279,8 @@ namespace ShyEditor {
 					}
 				}
 			}
-
 		}
-
+	
 	}
 
 	void FileExplorer::ItemDrag(Entry& entry) {
@@ -286,6 +297,54 @@ namespace ShyEditor {
 
 	}
 
+	void FileExplorer::ShowDeleteFilePopup()
+	{
+		if (shouldOpenDeleteFilePopup) {
+			shouldOpenDeleteFilePopup = false;
+			ImGui::OpenPopup(("Delete file" + entryToDelete.path).c_str());
+		}
+
+		if (ImGui::BeginPopup(("Delete file" + entryToDelete.path).c_str())) {
+
+			ImGui::Text(("Are you sure you want to delete \"" + entryToDelete.name + "\"").c_str());
+
+			if (ImGui::Button("YES", ImVec2(300, 40))){
+
+				fs::remove_all(entryToDelete.path.c_str());
+				entries.erase(entries.begin() + currentlySelected);
+
+				shouldUpdate = true;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("NO", ImVec2(300, 40))) {
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	void FileExplorer::ShowFileMenuPopup()
+	{
+		if (shouldOpenFileMenu) {
+			shouldOpenFileMenu = false;
+			ImGui::OpenPopup(("File Menu##" + entryToDelete.path).c_str());
+		}
+
+		if (ImGui::BeginPopup(("File Menu##" + entryToDelete.path).c_str())) {
+
+			if (ImGui::Button(("Delete##" + entryToDelete.path).c_str(), ImVec2(70, 40))) {
+				entryToDelete = entries[currentlySelected];
+				shouldOpenDeleteFilePopup = true;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+	}
+
 
 
 	void FileExplorer::HandleInput(SDL_Event* event) {
@@ -299,25 +358,41 @@ namespace ShyEditor {
 				std::filesystem::path src = fs::path(sourcePath);
 				std::filesystem::path dst = fs::path(currentPath + "\\" + src.filename().string());
 
-				bool ret = std::filesystem::copy_file(src, dst);
+				if (!std::filesystem::exists(dst)) {
+					bool ret = std::filesystem::copy_file(src, dst);
 
-				if (ret) {
+					if (ret) {
 
-					shouldUpdate = true;
+						shouldUpdate = true;
+					}
+					else {
+
+						std::cout << "Error al copiar el fichero: " << std::endl;
+						std::cout << "Origen: " << src.string() << std::endl;
+						std::cout << "Destino: " << dst.string() << std::endl;
+					}
 				}
 				else {
-
-					std::cout << "Error al copiar el fichero: " << std::endl;
-					std::cout << "Origen: "  << src.string() << std::endl;
-					std::cout << "Destino: " << dst.string() << std::endl;
+					std::cout << "File already exists in the destination." << std::endl;
 				}
-
 			}
 
 			SDL_free(event->drop.file);
 
 		}
+		else if (event->type == SDL_KEYDOWN) {
+			if (event->key.keysym.sym == SDLK_DELETE) {
+				if (focused && !entries.empty() && currentlySelected >= 0 && currentlySelected < entries.size()) {
+					entryToDelete = entries[currentlySelected];
+					shouldOpenDeleteFilePopup = true;
+				}
+			}
+		}
+	}
 
+	void FileExplorer::Refresh()
+	{
+		shouldUpdate = true;
 	}
 
 }

@@ -65,9 +65,12 @@ DataLoader DataLoader::Load(std::string const& path) {
 	data.frequency = LoadValue("frequency", int, 44100);
 	data.channels = LoadValue("channels", int, 2);
 	data.chunksize = LoadValue("chunksize", int, 2048);
-	
+
 	// Internal
 	data.resourcesPath = LoadValue("path", std::string, "");
+
+	if (data.resourcesPath != "")
+		data.resourcesPath += "/";
 
 	data.valid = true;
 

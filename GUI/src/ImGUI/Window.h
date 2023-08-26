@@ -8,12 +8,16 @@ struct ImVec2;
 
 namespace ShyEditor {
 
+    class GameObject;
+
     struct Asset {
 
         char name[256];
         char extension[256];
         char path[256];
         char relativePath[256];
+        bool isPrefab = false;
+        int prefabId;
     };
 
     class Window {
@@ -57,7 +61,11 @@ namespace ShyEditor {
 
         void Hide();
         void Show();
+        bool IsVisible();
+
 
         bool IsMouseHoveringWindow();
+
+        std::string GetWindowName();
     };
 }

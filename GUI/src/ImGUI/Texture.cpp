@@ -43,7 +43,6 @@ namespace ShyEditor {
 		}
 	}
 
-
 	Texture::~Texture() {
 		if (texture != nullptr) {
 			SDL_DestroyTexture(texture);

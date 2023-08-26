@@ -144,8 +144,8 @@ ClassReflection::ClassReflection(){
 			self->bottom = std::stoi(map.at("bottom"));
 		if(map.contains("color"))
 			self->color = Utilities::Color::CreateColor(map.at("color"));
-		if(map.contains("renderScale"))
-			self->scale = std::stof(map.at("renderScale"));
+		if(map.contains("scale"))
+			self->scale = std::stof(map.at("scale"));
 		if(map.contains("interactable"))
 			self->interactable = map.at("interactable") == "true" ? true : false;
 
@@ -170,12 +170,12 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectOverlayText(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		OverlayText* self = static_cast<OverlayText*>(selfComp);
-		if(map.contains("pointSize"))
-			self->pointSize = std::stoi(map.at("pointSize"));
-		if(map.contains("path"))
-			self->path = map.at("path");
 		if(map.contains("text"))
 			self->text = map.at("text");
+		if(map.contains("font"))
+			self->font = map.at("font");
+		if(map.contains("fontSize"))
+			self->fontSize = std::stoi(map.at("fontSize"));
 		if(map.contains("horizontalAlignment"))
 			self->horizontalAlignment = std::stoi(map.at("horizontalAlignment"));
 		if(map.contains("verticalAlignment"))

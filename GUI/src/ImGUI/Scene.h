@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 #include <iostream>
 #include <vector>
 
@@ -55,10 +55,10 @@ namespace ShyEditor {
 		std::string sceneName;
 		const char* name;
 
-		Camera* sceneCamera;
 		int viewMode;
+		Camera* sceneCamera;
 
-		std::unordered_map<int, GameObject*> gameObjects;
+		std::map<int, GameObject*> gameObjects;
 
 
 
@@ -97,11 +97,13 @@ namespace ShyEditor {
 
 		GameObject* AddGameObject(std::string path);
 		void AddGameObject(GameObject* go);
+		void AddGameObjectChildsToScene(GameObject* go);
 
 		GameObject* AddOverlay(std::string path);
+		void AddOverlay(GameObject* overlay);
+		void AddOverlayChildsToScene(GameObject* overlay);
 
-
-		std::unordered_map<int, GameObject*>& getGameObjects();
+		std::map<int, GameObject*>& getGameObjects();
 		std::vector<GameObject*>& getOverlays();
 
 		std::string getSceneName();
@@ -120,7 +122,6 @@ namespace ShyEditor {
 		void HandleInput(SDL_Event* event) override;
 		void Behaviour() override;
 		void ReceiveAssetDrop(Asset& asset) override;
-
 
 		ImVec2 MousePositionInScene();
 		bool IsMouseHoveringGameObject(GameObject* gameObject);

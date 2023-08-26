@@ -21,6 +21,7 @@ namespace ShyEditor {
 
 		void Behaviour() override;
 		void HandleInput(SDL_Event* event) override;
+		void Refresh();
 
 	private:
 
@@ -31,7 +32,7 @@ namespace ShyEditor {
 		Texture* folder;
 		Texture* scene;
 
-		std::string projectPath;
+		std::string assetPath;
 		std::string currentPath;
 		std::string relativePath;
 
@@ -63,8 +64,13 @@ namespace ShyEditor {
 		void OnItemSelected(Entry& entry);
 		void ItemDrag(Entry& entry);
 
+		void ShowDeleteFilePopup();
+		void ShowFileMenuPopup();
+
+		Entry entryToDelete;
 
 		bool shouldUpdate;
-
+		bool shouldOpenDeleteFilePopup;
+		bool shouldOpenFileMenu;
 	};
 }

@@ -8,11 +8,13 @@
 #include "Scene.h"
 #include "imgui.h"
 #include "Game.h"
+#include "WindowLayout.h"
+#include "PrefabManager.h"
+#include "Build.h"
 
 #include <Windows.h>
 #include <fstream>
 #include <tchar.h>
-
 #include "CheckML.h"
 
 
@@ -49,6 +51,16 @@ namespace ShyEditor {
                     editor->getScene()->saveScene(editor->getScene()->getSceneName());
                 }
 
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Build", NULL, false))
+                {
+
+                    Editor::getInstance()->GetBuildManager()->GenerateBuild();
+                };
+
+
                 ImGui::Separator();
 
                 if (ImGui::MenuItem("Exit", NULL, false))
@@ -69,6 +81,11 @@ namespace ShyEditor {
                 if (ImGui::MenuItem("Preferences")) {
 
                     Preferences::Open();
+                }
+
+                if (ImGui::MenuItem("Prefab manager")) {
+
+                    PrefabManager::Open();
                 }
 
                 if (ImGui::MenuItem("Theme selector")) {
@@ -109,6 +126,62 @@ namespace ShyEditor {
                 ImGui::EndMenu();
             }
 
+
+            //Close all floating windows
+
+            //Layouts
+
+            //
+
+            if (ImGui::BeginMenu("Window"))
+            {
+
+                if (ImGui::MenuItem("Close all floating windows", NULL, false)) {
+
+
+                }
+
+
+                if (ImGui::BeginMenu("Layout")) {
+
+                    auto windowLayout = Editor::getInstance()->GetWindowLayout();
+                    auto allLayouts = windowLayout->GetAllLayouts();
+
+
+                    int idx = 0;
+                    for (auto& layout : allLayouts) {
+
+
+                        if (ImGui::MenuItem(layout.c_str(), NULL, false)) {
+
+                            windowLayout->SetLayout((ShyEditor::WindowLayout::Layout)idx);
+                        }
+
+                        idx++;
+                    }
+
+                    ImGui::EndMenu();
+                }
+
+
+
+                ImGui::Separator();
+
+                auto& windows = Editor::getInstance()->GetAllWindows();
+
+                for (auto window : windows) {
+
+
+                    if (ImGui::MenuItem(window->GetWindowName().c_str(), NULL, window->IsVisible())) {
+
+                        window->Show();
+                    }
+                }
+
+                ImGui::EndMenu();
+            }
+
+
             ImGui::Separator();
 
             if (ImGui::BeginMenu("Help"))
@@ -117,6 +190,7 @@ namespace ShyEditor {
                 ImGui::MenuItem("About us", NULL, false);
                 ImGui::EndMenu();
             }
+
 
 
             if (gameObject != nullptr)
@@ -142,7 +216,7 @@ namespace ShyEditor {
                     ImGui::Separator();
 
                     if (ImGui::MenuItem("Delete", NULL, false)) {
-                        gameObject->toDelete();
+                        gameObject->ToDelete();
                     }
 
                     ImGui::EndMenu();
@@ -163,13 +237,13 @@ namespace ShyEditor {
 
         if (shouldOpenRenamePopup)
         {
-            ImGui::OpenPopup("Rename Object##" + gameObject->getId());
+            ImGui::OpenPopup("Rename Object##" + gameObject->GetId());
             shouldOpenRenamePopup = false;
         }
 
-        if (ImGui::BeginPopup("Rename Object##" + gameObject->getId()))
+        if (ImGui::BeginPopup("Rename Object##" + gameObject->GetId()))
         {
-            ImGui::Text(("Insert new name for GameObject: " + gameObject->getName()).c_str());
+            ImGui::Text(("Insert new name for GameObject: " + gameObject->GetName()).c_str());
 
             ImGui::Separator();
 
@@ -183,7 +257,7 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    gameObject->setName(nameBuffer);
+                    gameObject->SetName(nameBuffer);
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -197,11 +271,11 @@ namespace ShyEditor {
     {
         if (shouldOpenNewScenePopup)
         {
-            ImGui::OpenPopup("Save scene");
+            ImGui::OpenPopup("New scene");
             shouldOpenNewScenePopup = false;
         }
 
-        if (ImGui::BeginPopup("Save scene"))
+        if (ImGui::BeginPopup("New scene"))
         {
             ImGui::Text(("Insert name for the scene:"));
 
@@ -217,7 +291,14 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    editor->getScene()->saveScene(std::string(nameBuffer));
+                    //Save current scene
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+
+                    //Create new scene
+                    editor->getScene()->loadScene(nameBuffer);
+
+                    //Save empty new scene
+                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -233,11 +314,11 @@ namespace ShyEditor {
 
         if (shouldOpenSavePrefabPopup)
         {
-            ImGui::OpenPopup("Save prefab" + go->getId());
+            ImGui::OpenPopup("Save prefab" + go->GetId());
             shouldOpenSavePrefabPopup = false;
         }
 
-        if (ImGui::BeginPopup("Save prefab" + go->getId()))
+        if (ImGui::BeginPopup("Save prefab" + go->GetId()))
         {
             ImGui::Text(("Insert name for the prefab:"));
 
@@ -252,25 +333,10 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    nlohmann::ordered_json j;
-
-                    j = j.parse(go->toJson());
-
-
-                    std::string filePath = "Prefabs/" + std::string(nameBuffer) + ".prefab";
-
-                    if (!std::filesystem::exists(filePath)) {
-                        std::filesystem::create_directories("Prefabs");
-                    }
-
-                    std::ofstream outputFile(filePath);
-                    if (outputFile.is_open()) {
-                        outputFile << j.dump(4);
-                        outputFile.close();
-                    }
-                    else {
-                        //ERROR HANDLING
-                    }
+                    GameObject* prefab = new GameObject(*go);
+                    prefab->SetName(nameBuffer);
+                    
+                    PrefabManager::AddPrefab(prefab);
                 }
 
                 ImGui::CloseCurrentPopup();

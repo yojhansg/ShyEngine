@@ -12,6 +12,7 @@
 #include "ProjectsManager.h"
 #include "ScriptCreation.h"
 #include "FileExplorer.h"
+#include "WindowLayout.h"
 #include "ColorPalette.h"
 #include "Preferences.h"
 #include "LogManager.h"
@@ -21,8 +22,10 @@
 #include "MenuBar.h"
 #include "Console.h"
 #include "Window.h"
+#include "Build.h"
 #include "Scene.h"
 #include "Game.h"
+#include "PrefabManager.h"
 
 #include <filesystem>
 #include <iostream>
@@ -85,6 +88,9 @@ bool Editor::Init() {
 
 	ShyEditor::ResourcesManager::Init();
 
+	instance->layout = new ShyEditor::WindowLayout();
+	instance->build = new ShyEditor::Build();
+
 	return true;
 }
 
@@ -137,6 +143,8 @@ void Editor::Close() {
 	for (auto window : instance->windows)
 		delete window;
 
+	delete instance->layout;
+	delete instance->build;
 	delete instance->menuBar;
 	delete instance->projecInfo;
 
@@ -253,6 +261,9 @@ void Editor::CreateWindows() {
 	console = new ShyEditor::Console();
 	addWindow(console);
 
+	// Prefab manager
+	addWindow(new ShyEditor::PrefabManager());
+
 }
 
 bool Editor::SplashScreen() {
@@ -349,39 +360,14 @@ void Editor::UpdateAndRenderWindows() {
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	auto static once = true;
 
-	if (once) {
+	bool layoutUpdated = layout->Update();
 
-		once = false;
-
-		auto id = ImGui::DockSpaceOverViewport();
-
-		auto rootNode = ImGui::DockBuilderGetNode(id);
-		if (rootNode->IsEmpty()) {
-
-			ImGui::DockBuilderRemoveNode(id);
-
-			ImGui::DockBuilderAddNode(id);
-			ImGui::DockBuilderSetNodeSize(id, getMainWindowSize());
-
-			auto abajo = ImGui::DockBuilderSplitNode(id, ImGuiDir_Down, 0.3f, nullptr, &id);
-			auto izquierda = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.2f, nullptr, &id);
-			auto centro = ImGui::DockBuilderSplitNode(id, ImGuiDir_Left, 0.6f, nullptr, &id);
-
-			ImGui::DockBuilderDockWindow("Hierarchy", izquierda);
-			ImGui::DockBuilderDockWindow("File Explorer", abajo);
-			ImGui::DockBuilderDockWindow("Scene", centro);
-			ImGui::DockBuilderDockWindow("Components", id);
-
-			ImGui::DockBuilderFinish(id);
-		}
-	}
-	else
-	{
+	if (!layoutUpdated) {
 		if (state == Editor::EDITOR_WINDOW)
 			ImGui::DockSpaceOverViewport();
 	}
+
 
 
 	ShyEditor::ColorPalette::ApplyPalette();
@@ -408,6 +394,9 @@ void Editor::UpdateAndRenderWindows() {
 
 	if (state == Editor::EDITOR_WINDOW)
 		menuBar->Update();
+
+
+	build->BuildProgression();
 
 	// Rendering
 	ImGui::Render();
@@ -489,6 +478,16 @@ ShyEditor::FileExplorer* Editor::getFileExplorer() {
 ShyEditor::Console* Editor::getConsole()
 {
 	return console;
+}
+
+ShyEditor::WindowLayout* Editor::GetWindowLayout()
+{
+	return layout;
+}
+
+ShyEditor::Build* Editor::GetBuildManager()
+{
+	return build;
 }
 
 void Editor::OpenScript(const std::string& script) {
@@ -633,6 +632,11 @@ int Editor::Probando()
 	return 0;
 
 	return 0;
+}
+
+std::vector<ShyEditor::Window*>& Editor::GetAllWindows()
+{
+	return windows;
 }
 
 

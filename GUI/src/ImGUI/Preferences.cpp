@@ -5,6 +5,7 @@
 #include "Editor.h"
 #include "imgui.h"
 #include "Game.h"
+#include "PrefabManager.h"
 
 #include <fstream>
 
@@ -60,7 +61,7 @@ namespace ShyEditor {
 		// Overlay
 		data.timeToDoubleClick = 0.5f;
 		data.timeToHoldClick = 0.1f;
-		
+
 		// Audio
 		data.frequency = 44100;
 		data.channels = 1;
@@ -71,7 +72,8 @@ namespace ShyEditor {
 
 	void Preferences::Open()
 	{
-		instance->visible = true;
+		instance->Show();
+
 	}
 
 
@@ -254,7 +256,7 @@ namespace ShyEditor {
 				updateMatrix = true;
 			}
 			else
-				++it; 
+				++it;
 
 			index++;
 		}
@@ -360,6 +362,8 @@ namespace ShyEditor {
 
 		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
 
+		PrefabManager::SavePrefabs(root["path"]);
+
 		std::ofstream file("Engine\\config.json");
 
 		file << root.dump(4);
@@ -376,7 +380,8 @@ namespace ShyEditor {
 		root["debugPhysics"] = false;
 		root["debugFrameRate"] = false;
 
-		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
+		root["path"] = instance->data.buildPath;
+		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file("Engine\\config.json");
 

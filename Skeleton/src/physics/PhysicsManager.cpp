@@ -236,7 +236,7 @@ namespace Physics {
 		return world;
 	}
 
-	void PhysicsManager::setGravity(const Utilities::Vector2D& g) {
+	void PhysicsManager::setGravity(cVector2D g) {
 		gravity->Set(g.getX(), g.getY());
 		world->SetGravity(*gravity);
 	}
