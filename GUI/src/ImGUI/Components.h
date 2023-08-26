@@ -6,7 +6,7 @@
 #define COMPONENTS_WIN_HEIGHT_RATIO 0.7f
 
 namespace ShyEditor {
-	class GameObject;
+	class Entity;
 
 	class ComponentWindow : public Window {
 

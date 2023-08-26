@@ -94,7 +94,7 @@ namespace ShyEditor {
 		json prefabArray = json::array();
 
 		for (const auto& pair : instance->prefabs) {
-			GameObject* prefab = pair.second;
+			Entity* prefab = pair.second;
 
 			if (prefab->GetParent() == nullptr)
 				prefabArray.push_back(prefabArray.parse(prefab->ToJson()));
@@ -108,8 +108,8 @@ namespace ShyEditor {
 
 			json prefabInstances;
 
-			for (int gameObjectId : pair.second) {
-				prefabInstances.push_back(gameObjectId);
+			for (int entityId : pair.second) {
+				prefabInstances.push_back(entityId);
 			}
 
 			prefabInstancesArray[std::to_string(pair.first)] = prefabInstances;
@@ -138,14 +138,14 @@ namespace ShyEditor {
 
 			// Read the prefabs
 			for (const json& prefabData : prefabArray) {
-				GameObject* prefab = GameObject::FromJson(prefabData.dump());
+				Entity* prefab = Entity::FromJson(prefabData.dump());
 
 				AddPrefab(prefab);
 			}
 
 
 			// Read the prefabs instances
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->GetGameObjects();
+			std::map<int, Entity*> sceneEntities = editor->getScene()->GetEntities();
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -155,7 +155,7 @@ namespace ShyEditor {
 				for (const auto& instanceId : item.value()) {
 					
 					//We check if its reference is still in the scene cause it could have been deleted
-					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
+					if (sceneEntities[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
 						prefabInstances.push_back(instanceId);
 					}
 				}
@@ -170,10 +170,10 @@ namespace ShyEditor {
 		}
 	}
 
-	void PrefabManager::AssignId(GameObject* prefab)
+	void PrefabManager::AssignId(Entity* prefab)
 	{
 		if (prefab->GetId() > 0) {
-			GameObject::unusedIds.push_back(prefab->GetId());
+			Entity::unusedIds.push_back(prefab->GetId());
 		}
 
 		if (PrefabManager::unusedIds.size() != 0) {
@@ -191,7 +191,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void PrefabManager::AddPrefab(GameObject* prefab)
+	void PrefabManager::AddPrefab(Entity* prefab)
 	{
 		AssignId(prefab);
 
@@ -215,12 +215,12 @@ namespace ShyEditor {
 		}
 	}
 
-	void PrefabManager::RemoveInstance(GameObject* instanceObject)
+	void PrefabManager::RemoveInstance(Entity* instanceEntity)
 	{
-		PrefabManager::RemoveInstance(instanceObject->GetPrefabId(), instanceObject->GetId());
-		instanceObject->SetPrefabId(0);
+		PrefabManager::RemoveInstance(instanceEntity->GetPrefabId(), instanceEntity->GetId());
+		instanceEntity->SetPrefabId(0);
 
-		for (auto child : instanceObject->GetChildren()) {
+		for (auto child : instanceEntity->GetChildren()) {
 			RemoveInstance(child.second);
 		}
 	}
@@ -241,7 +241,7 @@ namespace ShyEditor {
 		}
 	}
 
-	GameObject* PrefabManager::GetPrefabById(int id)
+	Entity* PrefabManager::GetPrefabById(int id)
 	{
 		auto it = instance->prefabs.find(id);
 		if (it != instance->prefabs.end()) {
@@ -255,7 +255,7 @@ namespace ShyEditor {
 	{
 
 		for (auto& pair : prefabs) {
-			GameObject* prefab = pair.second;
+			Entity* prefab = pair.second;
 
 			if (prefab->GetParent() == nullptr)
 				DrawPrefab(prefab);
@@ -264,7 +264,7 @@ namespace ShyEditor {
 
 	}
 
-	void PrefabManager::DrawPrefab(GameObject* prefab)
+	void PrefabManager::DrawPrefab(Entity* prefab)
 	{
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
@@ -331,7 +331,7 @@ namespace ShyEditor {
 	{
 		if (currentlySelected != 0) {
 
-			GameObject* prefab = prefabs[currentlySelected];
+			Entity* prefab = prefabs[currentlySelected];
 
 			bool isTransformWithTexture = prefab->IsTransform() && prefab->GetTexture() != nullptr;
 			bool isOverlayWithTexture = !prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr;
@@ -347,7 +347,7 @@ namespace ShyEditor {
 				float sizeY = text->getHeight() * scaleY;
 				float textAspectRatio = sizeX / sizeY;
 
-				//Fixed size so big gameObjects doesnt fill the whole window
+				//Fixed size so big entities doesnt fill the whole window
 				if (sizeX > sizeY) {
 					sizeX = 150;
 					sizeY = sizeX / textAspectRatio;
@@ -368,7 +368,7 @@ namespace ShyEditor {
 	{
 		if (currentlySelected != 0) {
 
-			GameObject* prefab = prefabs[currentlySelected];
+			Entity* prefab = prefabs[currentlySelected];
 
 			// If a change is made we update the prefab instances
 			if (prefab->DrawComponentsInEditor()) {
@@ -461,7 +461,7 @@ namespace ShyEditor {
 		auto it = prefabs.begin();
 
 		while (it != prefabs.end()) {
-			GameObject* prefab = it->second;
+			Entity* prefab = it->second;
 
 			prefab->Update();
 
@@ -476,7 +476,7 @@ namespace ShyEditor {
 				if (prefabIt != prefabInstances.end()) {
 					for (auto instanceId : prefabIt->second) {
 						if (prefab->IsTransform()) {
-							editor->getScene()->GetGameObjects()[instanceId]->SetPrefabId(0);
+							editor->getScene()->GetEntities()[instanceId]->SetPrefabId(0);
 						}
 						else {
 							IdIsInOverlays(instanceId)->SetPrefabId(0);
@@ -498,19 +498,19 @@ namespace ShyEditor {
 	void PrefabManager::UpdatePrefabInstances()
 	{
 		if (currentlySelected != 0) {
-			GameObject* prefab = prefabs[currentlySelected];
+			Entity* prefab = prefabs[currentlySelected];
 
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->GetGameObjects();
+			std::map<int, Entity*> sceneEntities = editor->getScene()->GetEntities();
 
 			auto prefabIt = prefabInstances.find(prefab->GetId());
 			if (prefabIt != prefabInstances.end()) {
 				std::vector<int> instances = prefabIt->second;
 
 				for (auto instanceId : instances) {
-					GameObject* instance = nullptr;
+					Entity* instance = nullptr;
 
-					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
-						instance = sceneGameObjects.find(instanceId)->second;
+					if (sceneEntities.find(instanceId) != sceneEntities.end()) {
+						instance = sceneEntities.find(instanceId)->second;
 					}
 					else if (IdIsInOverlays(instanceId) != nullptr) {
 						instance = IdIsInOverlays(instanceId);
@@ -523,11 +523,11 @@ namespace ShyEditor {
 		}
 	}
 
-	GameObject* PrefabManager::IdIsInOverlays(int id)
+	Entity* PrefabManager::IdIsInOverlays(int id)
 	{
-		std::vector<GameObject*> sceneOverlays = editor->getScene()->GetOverlays();
+		std::vector<Entity*> sceneOverlays = editor->getScene()->GetOverlays();
 
-		for (GameObject* overlay : sceneOverlays) {
+		for (Entity* overlay : sceneOverlays) {
 			if (overlay->GetId() == id) {
 				return overlay;
 			}

@@ -129,7 +129,7 @@ namespace Components {
 		}
 		else if (typeString == "Entity") {
 			value.value.entityIdx = 0;
-			type = AttributesType::GAMEOBJECT;
+			type = AttributesType::ENTITY;
 		}
 		else {
 			type = AttributesType::NONE;
@@ -194,7 +194,7 @@ namespace Components {
 		case AttributesType::CHAR:
 			if (value.value.valueChar == '\0') return "";
 			return std::string(1, value.value.valueChar);
-		case AttributesType::GAMEOBJECT:
+		case AttributesType::ENTITY:
 			return std::to_string(value.value.entityIdx);
 		default:
 			return "";
@@ -230,7 +230,7 @@ namespace Components {
 		case AttributesType::CHAR:
 			attribute.value.value.valueChar = jsonData.get<std::string>()[0];
 			break;
-		case AttributesType::GAMEOBJECT:
+		case AttributesType::ENTITY:
 			attribute.value.value.entityIdx = std::stoi(jsonData.get<std::string>());
 			break;
 		default:
@@ -370,7 +370,7 @@ namespace Components {
 			case Components::AttributesType::COLOR:
 				//value["value"] = attr.second.value.value.valueBool;
 				break;
-			case Components::AttributesType::GAMEOBJECT:
+			case Components::AttributesType::ENTITY:
 				value["value"] = attr.second.value.value.entityIdx;
 				break;
 
@@ -419,7 +419,7 @@ namespace Components {
 			case Components::AttributesType::COLOR:
 				//value["value"] = attr.second.value.value.valueBool;
 				break;
-			case Components::AttributesType::GAMEOBJECT:
+			case Components::AttributesType::ENTITY:
 				attribute.value.value.entityIdx = attributeJson["value"].get<int>();
 				break;
 			}

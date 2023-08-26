@@ -8,7 +8,7 @@ struct ImVec2;
 
 namespace ShyEditor {
 
-    class GameObject;
+    class Entity;
 
     struct Asset {
 

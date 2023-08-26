@@ -27,13 +27,13 @@ namespace ShyEditor {
 
 		acceptAssetDrop = true;
 
-		copiedObject = nullptr;
+		copiedEntity = nullptr;
 	}
 
 	Hierarchy::~Hierarchy()
 	{
-		if (copiedObject != nullptr) {
-			delete copiedObject;
+		if (copiedEntity != nullptr) {
+			delete copiedEntity;
 		}
 
 		Window::~Window();
@@ -50,24 +50,24 @@ namespace ShyEditor {
 
 
 		if (ImGui::Button("Create world entity")) {
-			scene->SetSelectedGameObject(scene->AddGameObject("Empty entity"));
+			scene->SetSelectedEntity(scene->AddEntity("Empty entity"));
 		}
 
 		ImGui::SameLine();
 		if (ImGui::Button("Create UI element")) {
-			scene->SetSelectedGameObject(scene->AddOverlay("Empty UI element"));
+			scene->SetSelectedEntity(scene->AddOverlay("Empty UI element"));
 		}
 
 
 		ImGui::SeparatorText("World");
 
 		int i = 0;
-		for (auto& pair : scene->GetGameObjects())
+		for (auto& pair : scene->GetEntities())
 		{
 			if (pair.second->GetParent() == nullptr) {
 
 
-				RenderGameObject(pair.second, "Transform");
+				RenderEntity(pair.second, "Transform");
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace ShyEditor {
 
 			if (overlay->GetParent() == nullptr) {
 
-				RenderGameObject(overlay, "Overlay");
+				RenderEntity(overlay, "Overlay");
 			}
 		}
 
@@ -103,81 +103,81 @@ namespace ShyEditor {
 
 				Scene* scene = Editor::getInstance()->getScene();
 
-				auto& objects = scene->GetGameObjects();
+				auto& entities = scene->GetEntities();
 				auto& overlays = scene->GetOverlays();
 
-				if (objects.size() == 0 && overlays.size() == 0) return;
+				if (entities.size() == 0 && overlays.size() == 0) return;
 
 
-				auto selectedGo = scene->GetSelectedGameObject();
+				auto selectedEntity = scene->GetSelectedEntity();
 
-				if (selectedGo == nullptr) return;
+				if (selectedEntity == nullptr) return;
 
-				if (selectedGo->IsTransform()) {
-					auto goIt = objects.find(selectedGo->GetId());
+				if (selectedEntity->IsTransform()) {
+					auto entityIt = entities.find(selectedEntity->GetId());
 
 					if (dir < 0) {
 
-						if (goIt == objects.begin()) {
+						if (entityIt == entities.begin()) {
 							if (overlays.size() > 0) {
-								scene->SetSelectedGameObject(*overlays.rbegin());
+								scene->SetSelectedEntity(*overlays.rbegin());
 							}
 							else {
-								scene->SetSelectedGameObject(objects.rbegin()->second);
+								scene->SetSelectedEntity(entities.rbegin()->second);
 							}
 						}				
 						else {
-							scene->SetSelectedGameObject(std::prev(goIt)->second);
+							scene->SetSelectedEntity(std::prev(entityIt)->second);
 						}
 					}
 
 					else {
 
-						if (std::next(goIt) == objects.end()) {
+						if (std::next(entityIt) == entities.end()) {
 							if (overlays.size() > 0) {
-								scene->SetSelectedGameObject(*overlays.begin());
+								scene->SetSelectedEntity(*overlays.begin());
 							}
 							else {
-								scene->SetSelectedGameObject(objects.begin()->second);
+								scene->SetSelectedEntity(entities.begin()->second);
 							}
 						}
 						else {
-							scene->SetSelectedGameObject(std::next(goIt)->second);
+							scene->SetSelectedEntity(std::next(entityIt)->second);
 						}
 					}
 				}
 				else {
 
-					auto goIt = std::find(overlays.begin(), overlays.end(), selectedGo);
+					auto entityIt = std::find(overlays.begin(), overlays.end(), selectedEntity);
 
 					if (dir < 0) {
 
-						if (goIt == overlays.begin()) {
-							if (objects.size() > 0) {
-								scene->SetSelectedGameObject(objects.rbegin()->second);
+						if (entityIt == overlays.begin()) {
+							if (entities.size() > 0) {
+								scene->SetSelectedEntity(entities.rbegin()->second);
 							}
 							else {
-								scene->SetSelectedGameObject(*overlays.rbegin());
+								scene->SetSelectedEntity(*overlays.rbegin());
 							}
 						}
 						else {
-							scene->SetSelectedGameObject(*std::prev(goIt));
+							scene->SetSelectedEntity(*std::prev(entityIt));
 
 						}
 					}
 
 					else {
 
-						if (std::next(goIt) == overlays.end()) {
-							if (objects.size() > 0) {
-								scene->SetSelectedGameObject(objects.begin()->second);
+						if (std::next(entityIt) == overlays.end()) {
+							if (entities.size() > 0) {
+								scene->SetSelectedEntity(entities.begin()->second);
 							}
 							else {
-								scene->SetSelectedGameObject(*overlays.begin());
+								scene->SetSelectedEntity(*overlays.begin());
 							}
 						}
 						else {
-							scene->SetSelectedGameObject(*std::next(goIt));
+							scene->SetSelectedEntity(*std::next(entityIt));
 						}
 
 					}
@@ -188,62 +188,62 @@ namespace ShyEditor {
 
 			if (event->key.keysym.mod & KMOD_CTRL) {
 				Scene* scene = Editor::getInstance()->getScene();
-				auto selectedGo = scene->GetSelectedGameObject();
+				auto selectedEntity = scene->GetSelectedEntity();
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_C) {
-					if (selectedGo == nullptr) return;
+					if (selectedEntity == nullptr) return;
 
-					if (copiedObject != nullptr) {
-						GameObject::unusedIds.push_back(copiedObject->GetId());
-						delete copiedObject;
+					if (copiedEntity != nullptr) {
+						Entity::unusedIds.push_back(copiedEntity->GetId());
+						delete copiedEntity;
 					}
 		
-					copiedObject = new GameObject(*selectedGo);
+					copiedEntity = new Entity(*selectedEntity);
 
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_V) {
 
-					if (copiedObject == nullptr) return;
+					if (copiedEntity == nullptr) return;
 
-					if (copiedObject->IsTransform()) {
-						scene->AddGameObject(copiedObject);
+					if (copiedEntity->IsTransform()) {
+						scene->AddEntity(copiedEntity);
 					}
 					else {
-						scene->AddOverlay(copiedObject);
+						scene->AddOverlay(copiedEntity);
 					}
 
-					copiedObject = new GameObject(*copiedObject);
+					copiedEntity = new Entity(*copiedEntity);
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_D) {
-					if (selectedGo == nullptr) return;
+					if (selectedEntity == nullptr) return;
 
-					GameObject* goToDuplicate = new GameObject(*selectedGo);
+					Entity* entityToDuplicate = new Entity(*selectedEntity);
 
-					if (goToDuplicate->IsTransform()) {
-						scene->AddGameObject(goToDuplicate);
+					if (entityToDuplicate->IsTransform()) {
+						scene->AddEntity(entityToDuplicate);
 					}
 					else {
-						scene->AddOverlay(goToDuplicate);
+						scene->AddOverlay(entityToDuplicate);
 					}
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_X) {
-					if (selectedGo == nullptr) return;
+					if (selectedEntity == nullptr) return;
 
-					if (copiedObject != nullptr) {
-						GameObject::unusedIds.push_back(copiedObject->GetId());
-						delete copiedObject;
+					if (copiedEntity != nullptr) {
+						Entity::unusedIds.push_back(copiedEntity->GetId());
+						delete copiedEntity;
 					}
 
-					copiedObject = new GameObject(*selectedGo);
+					copiedEntity = new Entity(*selectedEntity);
 
-					if (selectedGo->IsTransform()) {
-						scene->GetGameObjects()[selectedGo->GetId()]->ToDelete();
+					if (selectedEntity->IsTransform()) {
+						scene->GetEntities()[selectedEntity->GetId()]->ToDelete();
 					}
 					else {
-						scene->GetOverlays()[selectedGo->GetId()]->ToDelete();
+						scene->GetOverlays()[selectedEntity->GetId()]->ToDelete();
 					}
 				}
 
@@ -261,14 +261,14 @@ namespace ShyEditor {
 
 			auto scene = Editor::getInstance()->getScene();
 
-			GameObject* go = scene->AddGameObject(asset.relativePath);
-			go->SetName(asset.name);
+			Entity* entity = scene->AddEntity(asset.relativePath);
+			entity->SetName(asset.name);
 
-			scene->SetSelectedGameObject(go);
+			scene->SetSelectedEntity(entity);
 		}
 	}
 
-	void Hierarchy::handleDragAndDrop(GameObject* source, GameObject* destination)
+	void Hierarchy::handleDragAndDrop(Entity* source, Entity* destination)
 	{
 		if (destination == source->GetParent()) {
 			destination->RemoveChild(source);
@@ -282,7 +282,7 @@ namespace ShyEditor {
 		else if (source->GetId() != destination->GetId() && !source->IsAscendant(destination) && destination != source->GetParent())
 		{
 			// Remove source from its current parent
-			GameObject* parent = source->GetParent();
+			Entity* parent = source->GetParent();
 			if (parent)
 			{
 				parent->RemoveChild(source);
@@ -294,68 +294,68 @@ namespace ShyEditor {
 	}
 
 
-	bool Hierarchy::isChildrenTheSelectedObject(GameObject* go)
+	bool Hierarchy::isChildrenTheSelectedEntity(Entity* entity)
 	{
 		Scene* scene = Editor::getInstance()->getScene();
 
-		for (auto child : go->GetChildren()) {
-			if (child.second == scene->GetSelectedGameObject()) {
+		for (auto child : entity->GetChildren()) {
+			if (child.second == scene->GetSelectedEntity()) {
 				return true;
 			}
 
-			return isChildrenTheSelectedObject(child.second);
+			return isChildrenTheSelectedEntity(child.second);
 		}
 
 		return false;
 	}
 
-	bool Hierarchy::isParentFromPrefab(GameObject* go)
+	bool Hierarchy::isParentFromPrefab(Entity* entity)
 	{
-		if (go->GetParent() != nullptr) {
-			if (go->GetParent()->IsPrefabInstance() != 0) return true;
+		if (entity->GetParent() != nullptr) {
+			if (entity->GetParent()->IsPrefabInstance() != 0) return true;
 			
-			return isParentFromPrefab(go->GetParent());
+			return isParentFromPrefab(entity->GetParent());
 		}
 		return false;
 	}
 
 
-	void Hierarchy::RenderGameObject(GameObject* gameObject, const char* type)
+	void Hierarchy::RenderEntity(Entity* entity, const char* type)
 	{
 		Scene* scene = Editor::getInstance()->getScene();
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
 		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-		if (gameObject->GetChildren().size() == 0)
+		if (entity->GetChildren().size() == 0)
 		{
 			flags |= ImGuiTreeNodeFlags_Leaf;
 		}
 
-		if (scene->GetSelectedGameObject() == gameObject)
+		if (scene->GetSelectedEntity() == entity)
 			flags |= ImGuiTreeNodeFlags_Selected;
 
-		ImGui::PushID(gameObject);
+		ImGui::PushID(entity);
 		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
 
 
 		if (ImGui::IsItemClicked()) {
 
-			scene->SetSelectedGameObject(gameObject);
+			scene->SetSelectedEntity(entity);
 		}
 
 		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1)) {
-			ImGui::OpenPopup("Gameobject Menu##" + gameObject->GetId());
+			ImGui::OpenPopup("Entity Menu##" + entity->GetId());
 		}
 
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
 
-			ImGui::SetDragDropPayload(type, &gameObject, sizeof(GameObject*));
+			ImGui::SetDragDropPayload(type, &entity, sizeof(Entity*));
 
-			ImGui::Image(gameObject->GetTexture()->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+			ImGui::Image(entity->GetTexture()->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
 			ImGui::SameLine();
-			ImGui::Text(gameObject->GetName().c_str());
+			ImGui::Text(entity->GetName().c_str());
 
 			ImGui::EndDragDropSource();
 		}
@@ -365,9 +365,9 @@ namespace ShyEditor {
 
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(type))
 			{
-				GameObject* sourceObject = *(GameObject**)payload->Data;
+				Entity* sourceEntity = *(Entity**)payload->Data;
 
-				handleDragAndDrop(sourceObject, gameObject);
+				handleDragAndDrop(sourceEntity, entity);
 			}
 
 			ImGui::EndDragDropTarget();
@@ -375,24 +375,24 @@ namespace ShyEditor {
 
 		ImGui::SameLine();
 
-		if (gameObject->IsPrefabInstance() || isParentFromPrefab(gameObject)) {
-			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , gameObject->GetName().c_str());
+		if (entity->IsPrefabInstance() || isParentFromPrefab(entity)) {
+			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , entity->GetName().c_str());
 		}
 		else {
-			ImGui::Text(gameObject->GetName().c_str());
+			ImGui::Text(entity->GetName().c_str());
 		}
 
-		showGameObjectMenu(gameObject);
-		showRenamePopup(gameObject);
-		showSavePrefabPopup(gameObject);
+		ShowEntityMenu(entity);
+		ShowRenamePopup(entity);
+		ShowSavePrefabPopup(entity);
 
 		if (isOpen) {
 
 
-			for (auto& child : gameObject->GetChildren()) {
+			for (auto& child : entity->GetChildren()) {
 
 
-				RenderGameObject(child.second, type);
+				RenderEntity(child.second, type);
 			}
 
 
@@ -402,16 +402,16 @@ namespace ShyEditor {
 		ImGui::PopID();
 	}
 
-	void Hierarchy::showRenamePopup(GameObject* gameObject)
+	void Hierarchy::ShowRenamePopup(Entity* entity)
 	{
 		if (shouldOpenRenamePopup) {
-			ImGui::OpenPopup("Rename Object##" + gameObject->GetId());
+			ImGui::OpenPopup("Rename entity##" + entity->GetId());
 			shouldOpenRenamePopup = false;
 		}
 
-		if (ImGui::BeginPopup("Rename Object##" + gameObject->GetId()))
+		if (ImGui::BeginPopup("Rename entity##" + entity->GetId()))
 		{
-			ImGui::Text(("Insert new name for GameObject: " + gameObject->GetName()).c_str());
+			ImGui::Text(("Insert new name for Entity: " + entity->GetName()).c_str());
 
 			ImGui::Separator();
 
@@ -426,7 +426,7 @@ namespace ShyEditor {
 			if (ImGui::Button("Ok"))
 			{
 				if (strlen(nameBuffer) > 0) {
-					gameObject->SetName(nameBuffer);
+					entity->SetName(nameBuffer);
 				}
 
 				ImGui::CloseCurrentPopup();
@@ -436,9 +436,9 @@ namespace ShyEditor {
 		}
 	}
 
-	void Hierarchy::showGameObjectMenu(GameObject* gameObject)
+	void Hierarchy::ShowEntityMenu(Entity* entity)
 	{
-		if (ImGui::BeginPopup("Gameobject Menu##" + gameObject->GetId()))
+		if (ImGui::BeginPopup("Entity Menu##" + entity->GetId()))
 		{
 			if (ImGui::MenuItem("Create prefab", NULL, false)) {
 				shouldOpenSavePrefabPopup = true;
@@ -459,7 +459,7 @@ namespace ShyEditor {
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Delete", NULL, false)) {
-				gameObject->ToDelete();
+				entity->ToDelete();
 			}
 
 			ImGui::EndMenu();
@@ -467,15 +467,15 @@ namespace ShyEditor {
 		}
 	}
 
-	void Hierarchy::showSavePrefabPopup(GameObject* go)
+	void Hierarchy::ShowSavePrefabPopup(Entity* entity)
 	{
 		if (shouldOpenSavePrefabPopup)
 		{
-			ImGui::OpenPopup("Save prefab##" + go->GetId());
+			ImGui::OpenPopup("Save prefab##" + entity->GetId());
 			shouldOpenSavePrefabPopup = false;
 		}
 
-		if (ImGui::BeginPopup("Save prefab##" + go->GetId()))
+		if (ImGui::BeginPopup("Save prefab##" + entity->GetId()))
 		{
 			ImGui::Text(("Insert name for the prefab:"));
 
@@ -491,7 +491,7 @@ namespace ShyEditor {
 			if (ImGui::Button("Ok"))
 			{
 				if (strlen(nameBuffer) > 0) {
-					GameObject* prefab = new GameObject(*go);
+					Entity* prefab = new Entity(*entity);
 					prefab->SetName(nameBuffer);
 
 					PrefabManager::AddPrefab(prefab);

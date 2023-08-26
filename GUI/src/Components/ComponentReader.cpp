@@ -186,7 +186,7 @@ namespace Components {
 							type = AttributesType::COLOR;
 						}
 						else if (typeString == "Entity") {
-							type = AttributesType::GAMEOBJECT;
+							type = AttributesType::ENTITY;
 							value.value.entityIdx = -1;
 						}
 						else {

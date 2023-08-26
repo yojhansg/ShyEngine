@@ -948,7 +948,7 @@ namespace ShyEditor {
 		case ::Components::AttributesType::COLOR:
 			outputStr = "color";
 			break;
-		case ::Components::AttributesType::GAMEOBJECT:
+		case ::Components::AttributesType::ENTITY:
 			outputStr = "Entity";
 			alwaysSerialize = true;
 			break;
@@ -1106,7 +1106,7 @@ namespace ShyEditor {
 				}
 				if (ImGui::MenuItem("Entity")) {
 
-					type = ::Components::AttributesType::GAMEOBJECT;
+					type = ::Components::AttributesType::ENTITY;
 				}
 
 				if (type != ::Components::AttributesType::NONE)
@@ -1503,7 +1503,7 @@ namespace ShyEditor {
 			root["type"] = "color";
 			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
 		}
-		else if (attrType == Components::AttributesType::GAMEOBJECT) {
+		else if (attrType == Components::AttributesType::ENTITY) {
 			root["type"] = "Entity";
 			root["value"] = attrValue.value.entityIdx;
 		}

@@ -297,7 +297,7 @@ namespace ShyEditor {
 				//TODO: despues de la serializacion
 			}
 			else if (typeStr == "Entity") {
-				type = ::Components::AttributesType::GAMEOBJECT;
+				type = ::Components::AttributesType::ENTITY;
 				value.value.entityIdx = -1;
 			}
 
