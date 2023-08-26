@@ -199,7 +199,8 @@ namespace ShyEditor {
                 if (ImGui::BeginMenu("Entity"))
                 {
                     if (ImGui::MenuItem("Create prefab", NULL, false)) {
-                        shouldOpenSavePrefabPopup = true;
+                        Entity* prefab = new Entity(*entity);
+                        PrefabManager::AddPrefab(prefab);
                     }
 
                     if (ImGui::MenuItem("Add script", NULL, false)) {
@@ -314,11 +315,17 @@ namespace ShyEditor {
 
         if (shouldOpenSavePrefabPopup)
         {
-            ImGui::OpenPopup("Save prefab" + entity->GetId());
+            Entity* prefab = new Entity(*entity);
+            //prefab->SetName(nameBuffer);
+
+            PrefabManager::AddPrefab(prefab);
+
+
+           /* ImGui::OpenPopup("Save prefab" + entity->GetId());*/
             shouldOpenSavePrefabPopup = false;
         }
 
-        if (ImGui::BeginPopup("Save prefab" + entity->GetId()))
+       /* if (ImGui::BeginPopup("Save prefab" + entity->GetId()))
         {
             ImGui::Text(("Insert name for the prefab:"));
 
@@ -343,7 +350,7 @@ namespace ShyEditor {
             }
 
             ImGui::EndPopup();
-        }
+        }*/
     }
 
 }
