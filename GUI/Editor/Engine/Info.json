@@ -1,0 +1,24 @@
+{
+    "OverlayText" : {
+
+        "info": {
+
+            "info" : "Display a text in the game UI"
+        },
+
+        "horizontalAlignment" : {
+
+            "enum" : "Left/Center/Right"
+
+        },
+
+        "fontSize": {
+
+            "integer": "1",
+            
+            "min" : "0"
+        }
+    }
+
+
+}

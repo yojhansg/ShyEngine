@@ -3,7 +3,11 @@
 
 #include <iostream>
 
+#include <fstream>
+#include "nlohmann/json.hpp"
+
 #include "CheckML.h"
+
 
 namespace Components {
 
@@ -28,7 +32,7 @@ namespace Components {
 		instance = nullptr;
 	}
 
-	void ComponentManager::ReadComponentInfo(cstring path)
+	void ComponentManager::ReadComponents(cstring path)
 	{
 		EnsureInitialised();
 
@@ -41,7 +45,7 @@ namespace Components {
 		}
 	}
 
-	void ComponentManager::ReadManagerInfo(cstring path)
+	void ComponentManager::ReadManagers(cstring path)
 	{
 		EnsureInitialised();
 
@@ -85,5 +89,66 @@ namespace Components {
 	{
 		return instance->scripts;
 	}
+
+
+	void ComponentManager::ReadInfo(cstring path)
+	{
+		EnsureInitialised();
+
+		std::ifstream fileStream(path);
+
+		if (!fileStream.good() || !json::accept(fileStream))
+		{
+			return;
+		}
+
+		fileStream.clear();
+		fileStream.seekg(0);
+
+		json file = json::parse(fileStream);
+		fileStream.close();
+
+
+		for (auto& component : file.items()) {
+
+			for (auto& attr : component.value().items()) {
+
+				for (auto& info : attr.value().items()) {
+
+
+					instance->info[component.key() + "_" + attr.key() + "_" + info.key()] = info.value().get<std::string>();
+				}
+
+			}
+
+		}
+
+	}
+
+	bool ComponentManager::GetComponentInfo(std::string& value, cstring component)
+	{
+		std::string key = component + "_info_info";
+		if (instance->info.contains(key)) {
+
+			value = instance->info[key];
+			return true;
+		}
+
+		return false;
+	}
+
+	bool ComponentManager::GetComponentElementInfo(std::string* value, cstring component, cstring element, cstring info)
+	{
+		std::string key = component + "_" + element + "_" + info;
+		if (instance->info.contains(key)) {
+			if (value != NULL)
+				*value = instance->info[key];
+			return true;
+		}
+
+		return false;
+	}
+
+
 
 }
