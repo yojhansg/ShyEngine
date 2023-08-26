@@ -299,7 +299,7 @@ namespace ShyEditor {
 			/*
 				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
 			*/
-			virtual void updateAndRender();
+			virtual void UpdateAndRender();
 
 		public:
 
@@ -397,7 +397,7 @@ namespace ShyEditor {
 			/*
 				Implementar la logica junto con el dibujado de la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 
@@ -584,7 +584,7 @@ namespace ShyEditor {
 			/*
 				Actualiza la logica y renderiza la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 			/*
@@ -666,7 +666,7 @@ namespace ShyEditor {
 			/*
 				Actualiza la logica y renderiza la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 			/*
@@ -692,7 +692,7 @@ namespace ShyEditor {
 			ScriptFlow* flow;
 
 
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 		public:
 
@@ -754,7 +754,7 @@ namespace ShyEditor {
 			virtual std::string GetStringId() override;
 
 
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 			void SetSize(float w, float h);
 

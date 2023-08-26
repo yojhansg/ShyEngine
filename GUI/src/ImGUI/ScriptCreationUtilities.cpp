@@ -77,7 +77,7 @@ namespace ShyEditor {
 
 			ImGui::Begin(GetStringId().c_str(), NULL, flag);
 
-			updateAndRender();
+			UpdateAndRender();
 			ManageOutputNode();
 
 			bool close = ManageCloseNode();
@@ -355,7 +355,7 @@ namespace ShyEditor {
 		return nullptr;
 	}
 
-	void ScriptCreationUtilities::ScriptNode::updateAndRender() {}
+	void ScriptCreationUtilities::ScriptNode::UpdateAndRender() {}
 
 	ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator) : creator(creator)
 	{
@@ -586,7 +586,7 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptFunction::updateAndRender()
+	void ScriptCreationUtilities::ScriptFunction::UpdateAndRender()
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 
@@ -965,7 +965,7 @@ namespace ShyEditor {
 
 namespace ShyEditor {
 
-	void ScriptCreationUtilities::ScriptInput::updateAndRender()
+	void ScriptCreationUtilities::ScriptInput::UpdateAndRender()
 	{
 
 		switch (attrType) {
@@ -1644,7 +1644,7 @@ namespace ShyEditor {
 		return B;
 	}
 
-	void ScriptCreationUtilities::ScriptFork::updateAndRender()
+	void ScriptCreationUtilities::ScriptFork::UpdateAndRender()
 	{
 		float x, y;
 		B->GetNextNodePosition(&x, &y);
@@ -1741,7 +1741,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptEvent::updateAndRender()
+	void ScriptCreationUtilities::ScriptEvent::UpdateAndRender()
 	{
 		float x, y;
 		flow->GetNextNodePosition(&x, &y);
@@ -1811,7 +1811,7 @@ namespace ShyEditor {
 		return "Comment";
 	}
 
-	void ScriptCreationUtilities::ScriptComment::updateAndRender()
+	void ScriptCreationUtilities::ScriptComment::UpdateAndRender()
 	{
 		const int margin = 10;
 
