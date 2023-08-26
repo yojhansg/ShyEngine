@@ -32,10 +32,9 @@ namespace ShyEditor {
 
 		renderer = editor->getRenderer();
 
-		// Scene path and name
-		scenePath = ResourcesManager::EDITORASSETSFOLDER + "\\Scenes\\" + Preferences::GetData().initialScene + ".scene";
-		sceneName = "Scene";
-		name = sceneName.c_str();
+		// Load the default scene or the last opene scene
+		bool load = LoadScene();
+		editor->SetAnySceneOpened(load);
 
 		sceneCamera = new Camera(ImVec2(0, 0), 1, renderer);
 		sceneCamera->SetConstrains(.1, 10.0);
@@ -52,8 +51,7 @@ namespace ShyEditor {
 
 		acceptAssetDrop = true;
 
-		// Load the default scene or the last opene scene
-		LoadScene(sceneName);
+		editor->getFileExplorer()->Refresh();
 
 	}
 
@@ -137,19 +135,33 @@ namespace ShyEditor {
 		selectedGameObject = go;
 	}
 
-	void Scene::SaveScene(const std::string& sceneName) {
+	void Scene::NewScene(const std::string& name) {
 
 		Editor::getInstance()->getFileExplorer()->Refresh();
 
 		nlohmann::ordered_json j;
 
-		this->scenePath = sceneName + ".scene";
-		this->sceneName = sceneName;
-		name = this->sceneName.c_str();
+		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + name + ".scene";
+		sceneName = name;
+		this->name = sceneName.c_str();
 
 		j = j.parse(ToJson());
 
-		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
+		std::ofstream outputFile(scenePath);
+		if (outputFile.is_open()) {
+			outputFile << j.dump(4);
+			outputFile.close();
+		}
+		else LogManager::LogError("Could not open the file to create the scene.");
+
+	}
+
+	void Scene::SaveScene() {
+
+		nlohmann::ordered_json j;
+		j = j.parse(ToJson());
+
+		std::ofstream outputFile(scenePath);
 		if (outputFile.is_open()) {
 			outputFile << j.dump(4);
 			outputFile.close();
@@ -158,7 +170,12 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::LoadScene(const std::string& sceneName) {
+	bool Scene::LoadScene() {
+
+		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + Editor::getInstance()->GetLastOpenedScene() + ".scene";
+		std::filesystem::path p(scenePath);
+		sceneName = p.filename().stem().string();
+		name = sceneName.c_str();
 
 		// Delete info of previous scene
 		selectedGameObject = nullptr;
@@ -173,15 +190,11 @@ namespace ShyEditor {
 
 		overlays.clear();
 
-		this->scenePath = sceneName + ".scene";
-		this->sceneName = sceneName;
-		name = this->sceneName.c_str();
-
-		std::ifstream inputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
+		std::ifstream inputFile(scenePath);
 
 		if (!inputFile.is_open()) {
 			LogManager::LogError("Could not open the file to load the scene.");
-			return;
+			return false;
 		}
 
 		nlohmann::ordered_json jsonData;
@@ -191,7 +204,7 @@ namespace ShyEditor {
 
 		if (!jsonData.contains("objects")) {
 			LogManager::LogError("The scene file has not the expected format.");
-			return;
+			return false;
 		}
 
 		nlohmann::json gameObjectsJson = jsonData["objects"];
@@ -205,7 +218,7 @@ namespace ShyEditor {
 
 		if (!jsonData.contains("overlays")) {
 			LogManager::LogError("The scene file has not the expected format.");
-			return;
+			return false;
 		}
 
 		nlohmann::json overlaysJson = jsonData["overlays"];
@@ -216,6 +229,8 @@ namespace ShyEditor {
 			overlays.push_back(overlay);
 			AddOverlayChildsToScene(overlay);
 		}
+
+		return true;
 
 	}
 
@@ -627,7 +642,7 @@ namespace ShyEditor {
 			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
 
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
-					SaveScene(name);
+					SaveScene();
 			}
 		}
 
@@ -975,7 +990,6 @@ namespace ShyEditor {
 		}
 
 		j["overlays"] = overlayObjectsJson;
-
 
 		return j.dump(2);
 	}

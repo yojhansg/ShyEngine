@@ -25,6 +25,8 @@ using namespace nlohmann;
 
 namespace ShyEditor {
 
+    ProjectsManager* ProjectsManager::instance = nullptr;
+
     char ProjectsManager::project_name[128] = "";
     char ProjectsManager::create_project_path[256] = "";
     char ProjectsManager::open_project_path[256] = "";
@@ -44,10 +46,23 @@ namespace ShyEditor {
         showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
 
         creationDate = name = projectFilePath = openPath = lastSavedProjectPath = "";
+        lastOpenedScenePath = "Scene";
 
         errorMessage = L"Default error message. No one knows what went wrong :(";
 
         w = h = 0.0f;
+    }
+
+    ProjectsManager* ProjectsManager::GetInstance() {
+        if (instance == nullptr)
+            instance = new ProjectsManager();
+
+        return instance;
+    }
+
+    void ProjectsManager::Release() {
+        delete instance;
+        instance = nullptr;
     }
 
     void ProjectsManager::StartImGuiFrame() {
@@ -255,8 +270,11 @@ namespace ShyEditor {
                     showPopUpWindowOpenProject = true;
                 else {
 
+                    projectFilePath = openPath;
+
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
                     editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                    editor->SetLastOpenedScene(lastOpenedScenePath);
 
                     windowClosed = true;
                     ImGui::End();
@@ -296,8 +314,11 @@ namespace ShyEditor {
                 showPopUpWindowOpenProject = true;
             else {
 
+                projectFilePath = recentProjectOpenedPath;
+
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
                 editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                editor->SetLastOpenedScene(lastOpenedScenePath);
 
                 windowClosed = true;
                 ImGui::End();
@@ -498,7 +519,9 @@ namespace ShyEditor {
             }
         }
 
-        if (!StoreProjectPath(path))
+        projectFilePath = path;
+
+        if (!StoreProjectPath(projectFilePath))
             return false;
 
         if (!CreateAssetsFolders(folder))
@@ -510,11 +533,12 @@ namespace ShyEditor {
         creationDate = getCurrentDate();
 
         j["Project Name"] = name;
-        j["Project Path"] = path;
+        j["Project Path"] = projectFilePath;
         j["Creation Date"] = creationDate;
+        j["Last Opened Scene"] = lastOpenedScenePath;
 
         // Create the project file in the specified folder
-        std::ofstream outputFile(path);
+        std::ofstream outputFile(projectFilePath);
 
         if (!outputFile.is_open()) {
             errorMessage = L"Error while creating the project file in the selected directory.";
@@ -525,6 +549,7 @@ namespace ShyEditor {
         outputFile.close();
 
         editor->setProjectInfo(new ProjectInfo(name, creationDate, folder));
+        editor->SetLastOpenedScene(lastOpenedScenePath);
 
         return true;
 
@@ -644,6 +669,31 @@ namespace ShyEditor {
 
     }
 
+    void ProjectsManager::StoreLastOpenedScene(const std::string& scenePath) {
+
+        std::ifstream fileStreamIn(instance->projectFilePath);
+
+        if (!fileStreamIn.is_open()) {
+            LogManager::LogError("PROJECTS MANAGER: Could not store the last opened scene path");
+            return;
+        }
+
+        json json = json::parse(fileStreamIn);
+        fileStreamIn.close();
+
+        json["Last Opened Scene"] = scenePath;
+
+        std::ofstream fileStreamOut(instance->projectFilePath);
+
+        if (!fileStreamOut.is_open()) {
+            LogManager::LogError("PROJECTS MANAGER: Could not store the last opened scene path");
+            return;
+        }
+
+        fileStreamOut << json.dump(4);
+        fileStreamOut.close();
+    }
+
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
         std::error_code ec;
@@ -665,6 +715,20 @@ namespace ShyEditor {
                 return false;
             }
         }
+
+        // Create default scene file
+        nlohmann::ordered_json j;
+
+        j["name"] = lastOpenedScenePath;
+        j["objects"] = nlohmann::json::array();
+        j["overlays"] = nlohmann::json::array();
+
+        std::ofstream outputFile(root + "\\Assets\\Scene.scene" );
+        if (outputFile.is_open()) {
+            outputFile << j.dump(4);
+            outputFile.close();
+        }
+        else LogManager::LogError("Could not create the default scene file.");
 
         return true;
     }
@@ -706,6 +770,7 @@ namespace ShyEditor {
         name = json["Project Name"];
         openPath = json["Project Path"];
         creationDate = json["Creation Date"];
+        lastOpenedScenePath = json["Last Opened Scene"];
 
         return true;
 

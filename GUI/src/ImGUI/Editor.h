@@ -57,6 +57,12 @@ public:
 	void setProjectInfo(ShyEditor::ProjectInfo* pInfo);
 	ShyEditor::ProjectInfo& getProjectInfo();
 
+	void SetLastOpenedScene(const std::string& scene);
+	std::string GetLastOpenedScene();
+
+	void SetAnySceneOpened(bool opened);
+	bool IsAnySceneOpened();
+
 	SDL_Renderer* getRenderer();
 	ImVec2 getMainWindowSize();
 
@@ -107,6 +113,10 @@ private:
 
 	// All editor windows
 	std::vector<ShyEditor::Window*> windows;
+
+	// Path to the last opene scene
+	std::string lastOpenedScene;
+	bool anySceneOpened;
 
 	// References to the ImGUI windows
 	ShyEditor::Scene* scene;

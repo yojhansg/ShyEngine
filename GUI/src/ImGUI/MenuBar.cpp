@@ -1,6 +1,7 @@
 #include "MenuBar.h"
 
 #include "nlohmann/json.hpp"
+#include "ProjectsManager.h"
 #include "ColorPalette.h"
 #include "Preferences.h"
 #include "GameObject.h"
@@ -48,7 +49,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                 }
 
 
@@ -56,7 +57,6 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Build", NULL, false))
                 {
-
                     Editor::getInstance()->GetBuildManager()->GenerateBuild();
                 };
 
@@ -65,7 +65,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
-
+                    ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::getInstance()->GetLastOpenedScene());
                     Editor::getInstance()->End();
                 };
 
@@ -103,7 +103,7 @@ namespace ShyEditor {
                     Preferences::GenerateDebug();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                     Game::Play(true);
                 };
 
@@ -112,7 +112,7 @@ namespace ShyEditor {
                     Preferences::GenerateRelease();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                     Game::Play(false);
                 };
 
@@ -285,20 +285,24 @@ namespace ShyEditor {
 
             // Display an input text field for renaming
             if (ImGui::InputText("Scene name", nameBuffer, sizeof(nameBuffer))) {
-
+                
             }
 
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
+
                     //Save current scene
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
 
                     //Create new scene
-                    editor->getScene()->LoadScene(nameBuffer);
+                    editor->getScene()->NewScene(nameBuffer);
+
+                    // Store the scene as the last opened one
+                    editor->SetLastOpenedScene(nameBuffer);
 
                     //Save empty new scene
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                 }
 
                 ImGui::CloseCurrentPopup();

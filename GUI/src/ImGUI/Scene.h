@@ -96,8 +96,9 @@ namespace ShyEditor {
 		GameObject* GetSelectedGameObject();
 		void SetSelectedGameObject(GameObject* go);
 
-		void SaveScene(const std::string& sceneName);
-		void LoadScene(const std::string& sceneName);
+		void NewScene(const std::string& name);
+		void SaveScene();
+		bool LoadScene();
 
 		void RenderChildGameObjects(GameObject* go);
 		void RenderGameObjects();
