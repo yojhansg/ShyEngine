@@ -46,6 +46,9 @@ namespace ShyEditor {
 		//Check if prefab is an overlay from the scene
 		Entity* IdIsInOverlays(int id);
 
+		//If the prefab contains a scirpt that references an entity, we remove that reference
+		static void RemoveScriptReferences(Entity* prefab);
+
 	public:
 
 		// Vector with Ids than can be reutilised
@@ -65,6 +68,7 @@ namespace ShyEditor {
 		static void AddInstance(int prefabId, int instanceId);
 		static void RemoveInstance(Entity* instance);
 		static void RemoveInstance(int prefabId, int instanceId);
+		static std::unordered_map<int, Entity*>& GetPrefabs();
 
 		// Returns a prefab given its id
 		static Entity* GetPrefabById(int id);

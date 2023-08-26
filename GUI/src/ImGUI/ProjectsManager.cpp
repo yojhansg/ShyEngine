@@ -37,7 +37,7 @@ namespace ShyEditor {
 
     ProjectsManager::ProjectsManager() {
 
-        editor = Editor::getInstance();
+        editor = Editor::GetInstance();
 
         windowClosed = invalidProjectName = false;
         invalidNewProjectPath = invalidOpenProjectPath = false;
@@ -256,7 +256,7 @@ namespace ShyEditor {
                 else {
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-                    editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                    editor->SetProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                     windowClosed = true;
                     ImGui::End();
@@ -297,7 +297,7 @@ namespace ShyEditor {
             else {
 
                 std::string folderPath = std::filesystem::path(openPath).parent_path().string();
-                editor->setProjectInfo(new ProjectInfo(name, creationDate, folderPath));
+                editor->SetProjectInfo(new ProjectInfo(name, creationDate, folderPath));
 
                 windowClosed = true;
                 ImGui::End();
@@ -524,7 +524,7 @@ namespace ShyEditor {
         outputFile << j.dump(4);
         outputFile.close();
 
-        editor->setProjectInfo(new ProjectInfo(name, creationDate, folder));
+        editor->SetProjectInfo(new ProjectInfo(name, creationDate, folder));
 
         return true;
 

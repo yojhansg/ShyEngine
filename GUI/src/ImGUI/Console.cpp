@@ -73,7 +73,7 @@ namespace ShyEditor {
 			{
 				if (ImGui::IsMouseDoubleClicked(0))
 				{
-					Editor::getInstance()->OpenScript(message.type.substr(1, message.type.size() - 2));
+					Editor::GetInstance()->OpenScript(message.type.substr(1, message.type.size() - 2));
 				}
 			}
 

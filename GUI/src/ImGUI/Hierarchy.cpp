@@ -40,12 +40,12 @@ namespace ShyEditor {
 
 	void Hierarchy::Behaviour()
 	{
-		Editor* editor = Editor::getInstance();
+		Editor* editor = Editor::GetInstance();
 
-		ImVec2 mainWindowSize = editor->getMainWindowSize();
+		ImVec2 mainWindowSize = editor->GetMainWindowSize();
 
-		Scene* scene = editor->getScene();
-		FileExplorer* fileExplorer = editor->getFileExplorer();
+		Scene* scene = editor->GetScene();
+		FileExplorer* fileExplorer = editor->GetFileExplorer();
 
 
 		if (ImGui::Button("Create world entity")) {
@@ -100,7 +100,7 @@ namespace ShyEditor {
 
 			if (dir != 0) {
 
-				Scene* scene = Editor::getInstance()->getScene();
+				Scene* scene = Editor::GetInstance()->GetScene();
 
 				auto& entities = scene->GetEntities();
 				auto& overlays = scene->GetOverlays();
@@ -186,7 +186,7 @@ namespace ShyEditor {
 			}
 
 			if (event->key.keysym.mod & KMOD_CTRL) {
-				Scene* scene = Editor::getInstance()->getScene();
+				Scene* scene = Editor::GetInstance()->GetScene();
 				auto selectedEntity = scene->GetSelectedEntity();
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_C) {
@@ -258,7 +258,7 @@ namespace ShyEditor {
 
 		if (extension == ".png" || extension == ".jpg") {
 
-			auto scene = Editor::getInstance()->getScene();
+			auto scene = Editor::GetInstance()->GetScene();
 
 			Entity* entity = scene->AddEntity(asset.relativePath);
 			entity->SetName(asset.name);
@@ -295,7 +295,7 @@ namespace ShyEditor {
 
 	bool Hierarchy::isChildrenTheSelectedEntity(Entity* entity)
 	{
-		Scene* scene = Editor::getInstance()->getScene();
+		Scene* scene = Editor::GetInstance()->GetScene();
 
 		for (auto child : entity->GetChildren()) {
 			if (child.second == scene->GetSelectedEntity()) {
@@ -321,7 +321,7 @@ namespace ShyEditor {
 
 	void Hierarchy::RenderEntity(Entity* entity, const char* type)
 	{
-		Scene* scene = Editor::getInstance()->getScene();
+		Scene* scene = Editor::GetInstance()->GetScene();
 		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
 		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -446,7 +446,7 @@ namespace ShyEditor {
 
 			if (ImGui::MenuItem("Add script", NULL, false)) {
 
-				Editor::getInstance()->OpenScript("");
+				Editor::GetInstance()->OpenScript("");
 			}
 
 			ImGui::Separator();

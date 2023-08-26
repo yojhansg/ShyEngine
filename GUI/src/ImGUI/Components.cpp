@@ -20,7 +20,7 @@ namespace ShyEditor {
 
 	void ComponentWindow::Behaviour()
 	{
-		Entity* entity = Editor::getInstance()->getScene()->GetSelectedEntity();
+		Entity* entity = Editor::GetInstance()->GetScene()->GetSelectedEntity();
 
 
 		if (entity != nullptr) {

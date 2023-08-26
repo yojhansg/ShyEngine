@@ -35,7 +35,7 @@ public:
 
 	enum EDITOR_STATE { EDITOR_WINDOW, SCRIPTING_WINDOW };
 
-	static Editor* getInstance();
+	static Editor* GetInstance();
 
 	// Inits ImGUI and SDL
 	static bool Init();
@@ -50,21 +50,21 @@ public:
 	static void Close();
 
 
-	void addWindow(ShyEditor::Window* window);
-	void setScene(ShyEditor::Scene* scene);
+	void AddWindow(ShyEditor::Window* window);
+	void SetScene(ShyEditor::Scene* scene);
 
-	void changeEditorState(const EDITOR_STATE& state);
-	void setProjectInfo(ShyEditor::ProjectInfo* pInfo);
-	ShyEditor::ProjectInfo& getProjectInfo();
+	void ChangeEditorState(const EDITOR_STATE& state);
+	void SetProjectInfo(ShyEditor::ProjectInfo* pInfo);
+	ShyEditor::ProjectInfo& GetProjectInfo();
 
-	SDL_Renderer* getRenderer();
-	ImVec2 getMainWindowSize();
+	SDL_Renderer* GetRenderer();
+	ImVec2 GetMainWindowSize();
 
 	void OpenScript(const std::string& script);
 
-	ShyEditor::Scene* getScene();
-	ShyEditor::FileExplorer* getFileExplorer();
-	ShyEditor::Console* getConsole();
+	ShyEditor::Scene* GetScene();
+	ShyEditor::FileExplorer* GetFileExplorer();
+	ShyEditor::Console* GetConsole();
 
 	ShyEditor::WindowLayout* GetWindowLayout();
 	ShyEditor::Build* GetBuildManager();
@@ -81,14 +81,14 @@ private:
 
 	// Loop methods
 	void UpdateAndRenderWindows();
-	void handleInput();
+	void HandleInput();
 
 	// Logic for running the projects management window
-	bool runProjectsWindow();
+	bool RunProjectsWindow();
 
 	// Initialisation 
-	bool initImGUIAndSDL();
-	bool initSDL();
+	bool InitImGUIAndSDL();
+	bool InitSDL();
 
 	void CreateWindows();
 	bool SplashScreen();

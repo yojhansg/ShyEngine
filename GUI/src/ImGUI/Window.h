@@ -46,18 +46,18 @@ namespace ShyEditor {
         Window(std::string windowName, int flags);
         virtual ~Window();
 
-        void setPosition(ImVec2 position);
-        void setSize(ImVec2 size);
+        void SetPosition(ImVec2 position);
+        void SetSize(ImVec2 size);
 
-        ImVec2 getSize();
-        ImVec2 getPosition();
+        ImVec2 GetSize();
+        ImVec2 GetPosition();
 
         void UpdateWindow();
         virtual void HandleInput(SDL_Event* event);
 
-        bool isFocused();
+        bool IsFocused();
         bool CanBeDrawnOnTop();
-        bool isDocked();
+        bool IsDocked();
 
         void Hide();
         void Show();

@@ -28,8 +28,10 @@ namespace ShyEditor {
 	class Entity {
 
 	public:
-
+		
+		// Static variable to store the last assigned id (Needed for ids assingment)
 		static std::vector<int> unusedIds;
+		static int lastId;
 
 		Entity(std::string& path, bool isTransform);
 		Entity(const Entity& entity);
@@ -103,6 +105,8 @@ namespace ShyEditor {
 		bool DrawComponentsInEditor();
 		bool DrawScriptsInEditor();
 
+		//Add an attribute that references this object
+		void AddReferenceToEntity(Components::Attribute* attr);
 
 		// Serialization and deseralization logic
 		std::string ToJson();
@@ -110,9 +114,6 @@ namespace ShyEditor {
 
 	private:
 
-		// Static variable to store the last assigned id (Needed for ids assingment)
-		static int lastId;
-		
 		// Entity name
 		std::string name;
 
@@ -120,6 +121,7 @@ namespace ShyEditor {
 		int id;
 
 		static void AssignId(Entity* entity);
+		static bool IsIdAlreadyUsed(int id);
 
 		// Entity components, scripts, children and parent
 		std::unordered_map<std::string, ::Components::Component> components;
@@ -129,6 +131,9 @@ namespace ShyEditor {
 
 		// A reference to the editor singleton
 		Editor* editor;
+
+		// References to attributes of type entity that reference this entity
+		std::list<Components::Attribute*> referencesToEntity;
 
 		// Entity visibility
 		bool visible;

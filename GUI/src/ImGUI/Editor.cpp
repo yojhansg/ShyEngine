@@ -64,7 +64,7 @@ Editor::Editor() {
 
 Editor::~Editor() {}
 
-Editor* Editor::getInstance() {
+Editor* Editor::GetInstance() {
 	if (instance == nullptr)
 		instance = new Editor();
 
@@ -79,7 +79,7 @@ bool Editor::Init() {
 	if (!instance->SplashScreen())
 		return false;
 
-	if (!instance->initImGUIAndSDL())
+	if (!instance->InitImGUIAndSDL())
 		return false;
 
 	// Components and managers reading
@@ -101,7 +101,7 @@ bool Editor::Init() {
 void Editor::Loop() {
 
 	// The projects management window
-	instance->exitEditor = !instance->runProjectsWindow();
+	instance->exitEditor = !instance->RunProjectsWindow();
 
 	if (!instance->exitEditor) {
 		// Configure the SDL window to start the editor
@@ -111,15 +111,18 @@ void Editor::Loop() {
 
 		// Init the ImGUI windows in the editor
 		instance->CreateWindows();
+
+		//Load the scene after creating windows
+		std::string sceneName = instance->scene->GetSceneName();
+		instance->scene->LoadScene(sceneName);
 	}
 
 	// Editor main loop
 	while (!instance->exitEditor) {
 
 		ShyEditor::Game::CheckEnd();
-		instance->handleInput();
+		instance->HandleInput();
 		instance->UpdateAndRenderWindows();
-
 	}
 
 }
@@ -157,11 +160,11 @@ void Editor::Close() {
 }
 
 
-bool Editor::initImGUIAndSDL() {
+bool Editor::InitImGUIAndSDL() {
 
 	// ImGUI
 
-	if (!initSDL())
+	if (!InitSDL())
 		return false;
 
 	// Setup Dear ImGui context
@@ -188,7 +191,7 @@ bool Editor::initImGUIAndSDL() {
 	return true;
 }
 
-bool Editor::initSDL() {
+bool Editor::InitSDL() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -258,37 +261,37 @@ bool Editor::initSDL() {
 void Editor::CreateWindows() {
 
 	// Preferences
-	addWindow(new ShyEditor::Preferences());
+	AddWindow(new ShyEditor::Preferences());
 
 	// Menu bar
 	menuBar = new ShyEditor::MenuBar();
 
 	// Game scene
 	scene = new ShyEditor::Scene();
-	addWindow(scene);
+	AddWindow(scene);
 
 	// Hierarchy
 	hierarchy = new ShyEditor::Hierarchy(); 
-	addWindow(hierarchy);
+	AddWindow(hierarchy);
 
 	// File explorer
 	fileExplorer = new ShyEditor::FileExplorer(); 
-	addWindow(fileExplorer);
+	AddWindow(fileExplorer);
 
 	// Components
 	components = new ShyEditor::ComponentWindow(); 
-	addWindow(components);
+	AddWindow(components);
 
 	// Scripting
 	scriptCreation = new ShyEditor::ScriptCreation();
-	addWindow(scriptCreation);
+	AddWindow(scriptCreation);
 
 	// Console
 	console = new ShyEditor::Console();
-	addWindow(console);
+	AddWindow(console);
 
 	// Prefab manager
-	addWindow(new ShyEditor::PrefabManager());
+	AddWindow(new ShyEditor::PrefabManager());
 
 }
 
@@ -361,10 +364,10 @@ bool Editor::SplashScreen() {
 }
 
 
-bool Editor::runProjectsWindow() {
+bool Editor::RunProjectsWindow() {
 
 	// Palettes window
-	instance->addWindow(new ShyEditor::ColorPalette("theme"));
+	instance->AddWindow(new ShyEditor::ColorPalette("theme"));
 
 	SDL_SetWindowPosition(instance->window, _Centered);
 
@@ -409,7 +412,7 @@ void Editor::UpdateAndRenderWindows() {
 
 	for (auto window : windows)
 	{
-		if (window->CanBeDrawnOnTop() && !window->isDocked())
+		if (window->CanBeDrawnOnTop() && !window->IsDocked())
 			window->UpdateWindow();
 		else
 			switch (state)
@@ -442,7 +445,7 @@ void Editor::UpdateAndRenderWindows() {
 
 }
 
-void Editor::handleInput()
+void Editor::HandleInput()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -460,7 +463,7 @@ void Editor::handleInput()
 	}
 }
 
-void Editor::changeEditorState(const EDITOR_STATE& state) {
+void Editor::ChangeEditorState(const EDITOR_STATE& state) {
 
 	switch (state) {
 	case Editor::EDITOR_WINDOW:
@@ -475,42 +478,42 @@ void Editor::changeEditorState(const EDITOR_STATE& state) {
 	this->state = state;
 }
 
-void Editor::setProjectInfo(ShyEditor::ProjectInfo* pInfo) {
+void Editor::SetProjectInfo(ShyEditor::ProjectInfo* pInfo) {
 	this->projecInfo = pInfo;
 }
 
-ShyEditor::ProjectInfo& Editor::getProjectInfo() {
+ShyEditor::ProjectInfo& Editor::GetProjectInfo() {
 	return *projecInfo;
 }
 
-void Editor::addWindow(ShyEditor::Window* window) {
+void Editor::AddWindow(ShyEditor::Window* window) {
 	windows.push_back(window);
 }
 
-void Editor::setScene(ShyEditor::Scene* scene) {
+void Editor::SetScene(ShyEditor::Scene* scene) {
 	this->scene = scene;
 }
 
-SDL_Renderer* Editor::getRenderer() {
+SDL_Renderer* Editor::GetRenderer() {
 	return renderer;
 }
 
-ImVec2 Editor::getMainWindowSize() {
+ImVec2 Editor::GetMainWindowSize() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
 	return ImVec2(w, h);
 }
 
-ShyEditor::Scene* Editor::getScene() {
+ShyEditor::Scene* Editor::GetScene() {
 	return scene;
 }
 
-ShyEditor::FileExplorer* Editor::getFileExplorer() {
+ShyEditor::FileExplorer* Editor::GetFileExplorer() {
 	return fileExplorer;
 }
 
-ShyEditor::Console* Editor::getConsole()
+ShyEditor::Console* Editor::GetConsole()
 {
 	return console;
 }
@@ -527,7 +530,7 @@ ShyEditor::Build* Editor::GetBuildManager()
 
 void Editor::OpenScript(const std::string& script) {
 	scriptCreation->SetName(script);
-	changeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
+	ChangeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
 }
 
 

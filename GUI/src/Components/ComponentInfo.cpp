@@ -391,7 +391,7 @@ namespace Components {
 		attributes.emplace(name, attr);
 	}
 
-	std::unordered_map<std::string, Attribute>& Script::getAllAttributes() {
+	std::unordered_map<std::string, Attribute>& Script::GetAllAttributes() {
 		return attributes;
 	}
 

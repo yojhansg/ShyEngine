@@ -34,24 +34,24 @@ namespace ShyEditor {
 		acceptAssetDrop = false;
 	}
 
-	void Window::setSize(ImVec2 size)
+	void Window::SetSize(ImVec2 size)
 	{
 		windowWidth = size.x;
 		windowHeight = size.y;
 	}
-	void Window::setPosition(ImVec2 position)
+	void Window::SetPosition(ImVec2 position)
 	{
 		windowPosX = position.x;
 		windowPosY = position.y;
 	}
 
 
-	ImVec2 Window::getSize()
+	ImVec2 Window::GetSize()
 	{
 		return ImVec2(windowWidth, windowHeight);
 	}
 
-	ImVec2 Window::getPosition()
+	ImVec2 Window::GetPosition()
 	{
 		return ImVec2(windowPosX, windowPosY);
 	}
@@ -136,7 +136,7 @@ namespace ShyEditor {
 
 	}
 
-	bool Window::isFocused()
+	bool Window::IsFocused()
 	{
 		return focused;
 	}
@@ -148,7 +148,7 @@ namespace ShyEditor {
 		return canBeDisplayedOnTop;
 	}
 
-	bool Window::isDocked()
+	bool Window::IsDocked()
 	{
 		return docked;
 	}
@@ -162,8 +162,8 @@ namespace ShyEditor {
 	{
 		visible = true;
 
-		windowPosX = Editor::getInstance()->getMainWindowSize().x / 2 - windowWidth / 2;
-		windowPosY = Editor::getInstance()->getMainWindowSize().y / 2 - windowHeight / 2;
+		windowPosX = Editor::GetInstance()->GetMainWindowSize().x / 2 - windowWidth / 2;
+		windowPosY = Editor::GetInstance()->GetMainWindowSize().y / 2 - windowHeight / 2;
 	}
 
 	bool Window::IsVisible()

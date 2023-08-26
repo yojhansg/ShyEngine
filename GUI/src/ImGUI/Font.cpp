@@ -45,7 +45,7 @@ namespace ShyEditor {
 			return nullptr;
 		}
 
-		auto sdlText = SDL_CreateTextureFromSurface(Editor::getInstance()->getRenderer(), surface);
+		auto sdlText = SDL_CreateTextureFromSurface(Editor::GetInstance()->GetRenderer(), surface);
 
 		// Check for errors on texture creation
 		if (sdlText == NULL) {
@@ -71,7 +71,7 @@ namespace ShyEditor {
 			return nullptr;
 		}
 
-		auto sdlText = SDL_CreateTextureFromSurface(Editor::getInstance()->getRenderer(), surface);
+		auto sdlText = SDL_CreateTextureFromSurface(Editor::GetInstance()->GetRenderer(), surface);
 
 		// Check for errors on texture creation
 		if (sdlText == NULL) {
