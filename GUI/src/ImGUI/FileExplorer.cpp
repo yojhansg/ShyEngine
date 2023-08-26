@@ -196,7 +196,7 @@ namespace ShyEditor {
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
 
-				if (focused && ImGui::IsMouseClicked(1) && currentlySelected != -1) {
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1) && currentlySelected != -1) {
 					shouldOpenFileMenu = true;
 				}
 			}
