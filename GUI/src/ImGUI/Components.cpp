@@ -117,13 +117,16 @@ namespace ShyEditor {
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(entity->GetPrefabId())->GetName()).c_str());
+				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(entity->GetPrefabId())->GetTopParentPrefab()->GetName()).c_str());
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-				if (ImGui::Button("Unlink prefab", ImVec2(windowWidth, 40))) {
-					PrefabManager::RemoveInstance(entity);
+				if (entity->GetParent() == nullptr || !entity->GetParent()->IsPrefabInstance()) {
+					if (ImGui::Button("Unlink prefab", ImVec2(windowWidth, 40))) {
+						PrefabManager::RemoveInstance(entity);
+					}
 				}
+
 			}
 		}
 

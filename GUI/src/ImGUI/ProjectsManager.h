@@ -13,7 +13,7 @@ namespace ShyEditor {
 		ProjectInfo() { name = ""; date = ""; path = ""; };
 		ProjectInfo(const std::string& name, const std::string& date, const std::string& path) {
 			this->name = name; this->date = date; this->path = path;
-			assetPath = path + "/Assets";
+			assetPath = path + "\\Assets";
 		};
 
 		std::string name;
@@ -28,14 +28,23 @@ namespace ShyEditor {
 
 		enum Result { ENTERED, CLOSED };
 
-		ProjectsManager();
+		static ProjectsManager* GetInstance();
+
+		static void Release();
+
+		Result ManageProjectSelection(SDL_Renderer* renderer);
 
 		// Create the folder in AppData to contain the recent projects file
 		bool MakeFolderToStoreRecentProjects();
 
-		Result ManageProjectSelection(SDL_Renderer* renderer);
+		// Stores the last opened scene path in the project file
+		static void StoreLastOpenedScene(const std::string& scenePath);
 
 	private:
+
+		static ProjectsManager* instance;
+
+		ProjectsManager();
 
 		Editor* editor;
 
@@ -60,6 +69,9 @@ namespace ShyEditor {
 
 		// Needed assets folders
 		static const std::vector<std::string> assetsFolders;
+
+		// Default scene path
+		std::string lastOpenedScenePath;
 
 		// Project information values
 		std::string name;
@@ -92,6 +104,7 @@ namespace ShyEditor {
 		// Gets the current date to store it in the project file
 		std::string getCurrentDate();
 
+		// Reads the data from the project file
 		bool ReadInfoFromProjectFile(const std::string& filepath);
 
 		// Main windows

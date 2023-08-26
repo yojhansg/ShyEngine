@@ -36,10 +36,8 @@ namespace ShyEditor {
 
 		void ShowRenamePopup(Entity* entity);
 		void ShowEntityMenu(Entity* entity);
-		void ShowSavePrefabPopup(Entity* entity);
 
 		bool shouldOpenRenamePopup;
-		bool shouldOpenSavePrefabPopup;
 
 	private:
 

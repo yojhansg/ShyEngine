@@ -29,7 +29,8 @@
 #define FolderImage "folder.png"
 #define FileImage "file.png"
 #define ScriptImage "script.png"
-#define SceneImage "scene3.png"
+#define SceneImage "scene.png"
+#define AudioImage "sound.png"
 
 namespace fs = std::filesystem;
 
@@ -46,6 +47,7 @@ namespace ShyEditor {
 		file = ResourcesManager::GetInstance()->AddTexture(FileImage, true);
 		script = ResourcesManager::GetInstance()->AddTexture(ScriptImage, true);
 		scene = ResourcesManager::GetInstance()->AddTexture(SceneImage, true);
+		audio = ResourcesManager::GetInstance()->AddTexture(AudioImage, true);
 
 		docked = true;
 		viewMode = 0;
@@ -101,14 +103,7 @@ namespace ShyEditor {
 				// Remove the file extension to keep only the name
 				entry.name = entry.name.substr(0, entry.name.find_last_of('.'));
 
-				if (entry.extension == ".png" || entry.extension == ".jpg")
-					entry.texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
-				else if (entry.extension == ".scene")
-					entry.texture = scene;
-				else if (entry.extension == ".script")
-					entry.texture = script;
-				else
-					entry.texture = file;
+				entry.texture = SetTextureToFile(entry);
 
 				files.push(entry);
 			}
@@ -122,6 +117,27 @@ namespace ShyEditor {
 		}
 		
 		shouldUpdate = false;
+	}
+
+	Texture* FileExplorer::SetTextureToFile(Entry& entry) {
+
+		Texture* texture = file;
+
+		if (entry.extension == ".png" || entry.extension == ".jpg") // Images
+			texture = ResourcesManager::GetInstance()->AddTexture(relativePath + entry.name + entry.extension, false);
+
+		else if (entry.extension == ".mp3" || entry.extension == ".wav" || entry.extension == ".ogg" || entry.extension == ".mid") // Audio
+			texture = audio;
+
+		else if (entry.extension == ".scene") // Scenes
+			texture = scene;
+
+		else if(entry.extension == ".script") // Scripts
+			texture = script;
+
+
+		return texture;
+
 	}
 
 	void FileExplorer::Behaviour() {
@@ -204,8 +220,6 @@ namespace ShyEditor {
 
 			if (ImGui::BeginDragDropSource()) {
 
-
-
 				Asset asset{};
 				memcpy(asset.extension, entry.extension.c_str(), 256);
 				memcpy(asset.name, entry.name.c_str(), 256);
@@ -240,7 +254,7 @@ namespace ShyEditor {
 	}
 
 	void FileExplorer::DrawIcons() {
-
+		//TODO
 	}
 
 	void FileExplorer::OnItemSelected(Entry& entry) {
@@ -265,8 +279,11 @@ namespace ShyEditor {
 				}
 				else if (entry.extension == ".scene") {
 
-					/*std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();*/
-					editor->getScene()->LoadScene(entry.name);
+					std::filesystem::path currentDirectory(entry.path);
+					std::string relativePath = currentDirectory.lexically_relative(assetPath).stem().string();
+					editor->SetLastOpenedScene(relativePath);
+
+					editor->getScene()->LoadScene();
 				}
 
 				else {

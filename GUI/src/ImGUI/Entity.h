@@ -53,6 +53,7 @@ namespace ShyEditor {
 		int GetPrefabId();
 		bool IsPrefab() const;
 		bool IsPrefabInstance() const;
+		Entity* GetTopParentPrefab();
 
 		// Visibility getters/setters
 		int GetRenderOrder();

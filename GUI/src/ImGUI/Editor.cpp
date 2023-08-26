@@ -60,6 +60,7 @@ Editor::Editor() {
 	exitEditor = false;
 	build = nullptr;
 	layout = nullptr;
+	anySceneOpened = false;
 	state = EDITOR_WINDOW;
 }
 
@@ -135,6 +136,7 @@ void Editor::Close() {
 	ShyEditor::Game::Release();
 	Components::ComponentManager::Release();
 	ShyEditor::LogManager::Release();
+	ShyEditor::ProjectsManager::Release();
 
 	// Cleanup
 	ImGui_ImplSDLRenderer2_Shutdown();
@@ -264,6 +266,10 @@ void Editor::CreateWindows() {
 	// Menu bar
 	menuBar = new ShyEditor::MenuBar();
 
+	// File explorer
+	fileExplorer = new ShyEditor::FileExplorer();
+	addWindow(fileExplorer);
+
 	// Game scene
 	scene = new ShyEditor::Scene();
 	addWindow(scene);
@@ -271,10 +277,6 @@ void Editor::CreateWindows() {
 	// Hierarchy
 	hierarchy = new ShyEditor::Hierarchy(); 
 	addWindow(hierarchy);
-
-	// File explorer
-	fileExplorer = new ShyEditor::FileExplorer(); 
-	addWindow(fileExplorer);
 
 	// Components
 	components = new ShyEditor::ComponentWindow(); 
@@ -369,12 +371,12 @@ bool Editor::runProjectsWindow() {
 
 	SDL_SetWindowPosition(instance->window, _Centered);
 
-	ShyEditor::ProjectsManager dialog;
+	ShyEditor::ProjectsManager* dialog = ShyEditor::ProjectsManager::GetInstance();
 
-	if (!dialog.MakeFolderToStoreRecentProjects())
+	if (!dialog->MakeFolderToStoreRecentProjects())
 		return false;
 
-	auto result = dialog.ManageProjectSelection(instance->renderer);
+	auto result = dialog->ManageProjectSelection(instance->renderer);
 
 	if (result == ShyEditor::ProjectsManager::Result::CLOSED)
 		return false;
@@ -482,6 +484,22 @@ void Editor::setProjectInfo(ShyEditor::ProjectInfo* pInfo) {
 
 ShyEditor::ProjectInfo& Editor::getProjectInfo() {
 	return *projecInfo;
+}
+
+void Editor::SetLastOpenedScene(const std::string& scene) {
+	lastOpenedScene = scene;
+}
+
+std::string Editor::GetLastOpenedScene() {
+	return lastOpenedScene;
+}
+
+void Editor::SetAnySceneOpened(bool opened) {
+	anySceneOpened = opened;
+}
+
+bool Editor::IsAnySceneOpened() {
+	return anySceneOpened;
 }
 
 void Editor::addWindow(ShyEditor::Window* window) {

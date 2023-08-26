@@ -1,6 +1,7 @@
 #include "MenuBar.h"
 
 #include "nlohmann/json.hpp"
+#include "ProjectsManager.h"
 #include "ColorPalette.h"
 #include "Preferences.h"
 #include "Entity.h"
@@ -25,7 +26,6 @@ namespace ShyEditor {
         editor = Editor::getInstance();
 
         shouldOpenRenamePopup = false;
-        shouldOpenSavePrefabPopup = false;
         shouldOpenNewScenePopup = false;
     }
 
@@ -48,7 +48,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                 }
 
 
@@ -56,7 +56,6 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Build", NULL, false))
                 {
-
                     Editor::getInstance()->GetBuildManager()->GenerateBuild();
                 };
 
@@ -65,7 +64,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
-
+                    ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::getInstance()->GetLastOpenedScene());
                     Editor::getInstance()->End();
                 };
 
@@ -103,7 +102,7 @@ namespace ShyEditor {
                     Preferences::GenerateDebug();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                     Game::Play(true);
                 };
 
@@ -112,7 +111,7 @@ namespace ShyEditor {
                     Preferences::GenerateRelease();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                     Game::Play(false);
                 };
 
@@ -199,7 +198,8 @@ namespace ShyEditor {
                 if (ImGui::BeginMenu("Entity"))
                 {
                     if (ImGui::MenuItem("Create prefab", NULL, false)) {
-                        shouldOpenSavePrefabPopup = true;
+                        Entity* prefab = new Entity(*entity);
+                        PrefabManager::AddPrefab(prefab);
                     }
 
                     if (ImGui::MenuItem("Add script", NULL, false)) {
@@ -228,7 +228,6 @@ namespace ShyEditor {
 
         ShowRenamePopup(entity);
         ShowNewScenePopup();
-        ShowSavePrefabPopup(entity);
     }
 
     void MenuBar::ShowRenamePopup(Entity* entity)
@@ -285,20 +284,24 @@ namespace ShyEditor {
 
             // Display an input text field for renaming
             if (ImGui::InputText("Scene name", nameBuffer, sizeof(nameBuffer))) {
-
+                
             }
 
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
+
                     //Save current scene
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
 
                     //Create new scene
-                    editor->getScene()->LoadScene(nameBuffer);
+                    editor->getScene()->NewScene(nameBuffer);
+
+                    // Store the scene as the last opened one
+                    editor->SetLastOpenedScene(nameBuffer);
 
                     //Save empty new scene
-                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
+                    editor->getScene()->SaveScene();
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -307,43 +310,4 @@ namespace ShyEditor {
             ImGui::EndPopup();
         }
     }
-
-    void MenuBar::ShowSavePrefabPopup(Entity* entity)
-    {
-        if (entity == nullptr) return;
-
-        if (shouldOpenSavePrefabPopup)
-        {
-            ImGui::OpenPopup("Save prefab" + entity->GetId());
-            shouldOpenSavePrefabPopup = false;
-        }
-
-        if (ImGui::BeginPopup("Save prefab" + entity->GetId()))
-        {
-            ImGui::Text(("Insert name for the prefab:"));
-
-            ImGui::Separator();
-
-            static char nameBuffer[256];
-
-            if (ImGui::InputText("Prefab name", nameBuffer, sizeof(nameBuffer)))
-            {
-            }
-
-            if (ImGui::Button("Ok"))
-            {
-                if (strlen(nameBuffer) > 0) {
-                    Entity* prefab = new Entity(*entity);
-                    prefab->SetName(nameBuffer);
-                    
-                    PrefabManager::AddPrefab(prefab);
-                }
-
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
-    }
-
 }

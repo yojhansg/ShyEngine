@@ -131,7 +131,7 @@ namespace ShyEditor {
 			overlay = new Overlay(*entity.overlay, this);
 		}
 
-		textureSize = new ImVec2(*entity.textureSize);
+		textureSize = new ImVec2(entity.textureSize->x , entity.textureSize->y);
 
 		imagePath = entity.imagePath;
 
@@ -149,7 +149,7 @@ namespace ShyEditor {
 			parent = nullptr;
 		}
 
-		for (auto& pair : entity.children) {
+		for (auto pair : entity.children) {
 			Entity* child = new Entity(*pair.second);
 
 			child->SetParent(this);
@@ -321,6 +321,16 @@ namespace ShyEditor {
 	bool Entity::IsPrefabInstance() const
 	{
 		return prefabId != 0;
+	}
+
+	Entity* Entity::GetTopParentPrefab()
+	{
+		Entity* entity = this;
+		while (entity->parent != nullptr && entity->parent->IsPrefab()) {
+			entity = entity->parent;
+		}
+
+		return entity;
 	}
 
 	Texture* Entity::GetTexture() {
@@ -966,12 +976,16 @@ namespace ShyEditor {
 
 		std::map<int, Entity*>& entities = editor->getScene()->GetEntities();
 
-		Entity* entity = entities.find((int)attr->value.value.entityIdx) != entities.end() ? entities.find((int)attr->value.value.entityIdx)->second : nullptr;
+		auto entityIt = entities.find((int)attr->value.value.entityIdx);
+		Entity* entity = entityIt != entities.end() ? entityIt->second : nullptr;
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
 			for (auto entity : entities) {
 				if (ImGui::Selectable(entity.second->GetName().c_str())) {
 					attr->value.value.entityIdx = entity.second->GetId();
+			
+					ImGui::EndCombo();
+
 					return true;
 				}
 			}
@@ -1271,19 +1285,6 @@ namespace ShyEditor {
 			return nullptr;
 		}
 
-		if (!jsonData.contains("childs")) {
-			LogManager::LogError(errorMsg);
-			return entity;
-		}
-
-		for (const auto& childJson : jsonData["childs"]) {
-			Entity* child = Entity::FromJson(childJson.dump());
-
-			entity->AddChild(child);
-			child->SetParent(entity);
-		}
-
-
 		if (!jsonData.contains("order")) {
 			LogManager::LogError(errorMsg);
 			return entity;
@@ -1372,6 +1373,18 @@ namespace ShyEditor {
 			entity->AddScript(script);
 		}
 
+		if (!jsonData.contains("childs")) {
+			LogManager::LogError(errorMsg);
+			return entity;
+		}
+
+		for (const auto& childJson : jsonData["childs"]) {
+			Entity* child = Entity::FromJson(childJson.dump());
+
+			entity->AddChild(child);
+			child->SetParent(entity);
+		}
+
 		return entity;
 	}
 
@@ -1392,8 +1405,13 @@ namespace ShyEditor {
 
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
-			entity->SetId(Entity::unusedIds.back());
-			Entity::unusedIds.pop_back();
+			
+			if(entities.find(Entity::unusedIds.back()) == entities.end())
+				entity->SetId(Entity::unusedIds.back());
+			else {
+				Entity::unusedIds.pop_back();
+				AssignId(entity);
+			}
 		}
 		else {
 			//Ensure id is not being used already
@@ -1421,8 +1439,8 @@ namespace ShyEditor {
 	{
 		this->obj = obj;
 
-		scale = new ImVec2(*tr.scale);
-		position = new ImVec2(*tr.position);
+		scale = new ImVec2(tr.scale->x, tr.scale->y);
+		position = new ImVec2(tr.position->x, tr.position->y);
 		rotation = tr.rotation;
 	}
 
@@ -1491,10 +1509,10 @@ namespace ShyEditor {
 		this->obj = obj;
 
 		placement = ov.placement;
-		position = new ImVec2(*ov.position);
-		size = new ImVec2(*ov.size);
+		position = new ImVec2(ov.position->x, ov.position->y);
+		size = new ImVec2(ov.size->x, ov.size->y);
 
-		anchor = new ImVec2(*ov.anchor);
+		anchor = new ImVec2(ov.anchor->x, ov.anchor->y);
 
 		left = ov.left;
 		top = ov.top;
