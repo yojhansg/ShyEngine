@@ -12,7 +12,7 @@
 
 	Lista de clases:
 		ScriptNode
-		ScriptMethod
+		ScriptFunction
 		ScriptInput
 		ScriptFlow
 		ScriptFork
@@ -120,7 +120,6 @@ namespace ShyEditor {
 			===Mejoras de codigo e implementacion===
 
 			-Separar Utilities en varios ficheros
-			-Establecer formato de nombres para las cosas (llamar a todo o method o function)
 			-Comentar todo el codigo y ver que cosas se pueden mejorar
 			-Cambiar la serializacion de vector2 y color a array en vez de string
 			-Crear un metodo para la creacion centrada de nodos para evitar codigo repetido
@@ -154,7 +153,7 @@ namespace ShyEditor {
 		*/
 
 		class ScriptFlow;
-		class ScriptMethod;
+		class ScriptFunction;
 		/*
 			Clase que representa un nodo generico
 		*/
@@ -178,7 +177,7 @@ namespace ShyEditor {
 				Enumerado para distinguir entre los distintos tipos de nodos que puede haber
 			*/
 			enum class Node {
-				Method, Input, Fork, Event, Comment
+				Function, Input, Fork, Event, Comment
 			};
 
 
@@ -300,7 +299,7 @@ namespace ShyEditor {
 			/*
 				Metodo interno virtual para que cada clase que herede de nodo pueda implementar su propia logica
 			*/
-			virtual void updateAndRender();
+			virtual void UpdateAndRender();
 
 		public:
 
@@ -398,7 +397,7 @@ namespace ShyEditor {
 			/*
 				Implementar la logica junto con el dibujado de la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 
@@ -523,7 +522,7 @@ namespace ShyEditor {
 		/*
 			Nodo para representar una funcion
 		*/
-		class ScriptMethod : public ScriptNode {
+		class ScriptFunction : public ScriptNode {
 
 		public:
 
@@ -531,8 +530,8 @@ namespace ShyEditor {
 				Para construir el nodo se debe conocer el metodo a usar
 				El metodo se puede conseguir usando Components::ComponentManager
 			*/
-			ScriptMethod(::Components::Method&);
-			~ScriptMethod();
+			ScriptFunction(::Components::Function&);
+			~ScriptFunction();
 
 			/*
 				Serializar el nodo con la informacion del metodo y las entradas
@@ -572,7 +571,7 @@ namespace ShyEditor {
 			/*
 				Se guarda una referencia al contenido del metodo para evitar copias innecesarias
 			*/
-			::Components::Method& method;
+			::Components::Function& function;
 
 			/*
 				Vector de nodos de input
@@ -585,7 +584,7 @@ namespace ShyEditor {
 			/*
 				Actualiza la logica y renderiza la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 			/*
@@ -667,7 +666,7 @@ namespace ShyEditor {
 			/*
 				Actualiza la logica y renderiza la ventana
 			*/
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 
 			/*
@@ -693,7 +692,7 @@ namespace ShyEditor {
 			ScriptFlow* flow;
 
 
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 		public:
 
@@ -755,7 +754,7 @@ namespace ShyEditor {
 			virtual std::string GetStringId() override;
 
 
-			void updateAndRender() override;
+			void UpdateAndRender() override;
 
 			void SetSize(float w, float h);
 
@@ -801,12 +800,12 @@ namespace ShyEditor {
 				Muestra el desplegable con el resultado de la busqueda de nodos. Ademas procesa la creacion en caso
 				de que el usuaruo seleccione algun elemento del desplegable
 			*/
-			void ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
+			void ShowFoundFunctions(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
 
 			/*
 				Busca un metodo dado su nombre en la lista de componentes y en la lista de managers
 			*/
-			Components::Method& GetMethodReference(const std::string& name);
+			Components::Function& GetFunctionReference(const std::string& name);
 		public:
 
 			ScriptMenuBar(ScriptCreation* creator);

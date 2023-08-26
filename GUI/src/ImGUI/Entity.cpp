@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "Entity.h"
 
 #include "ResourcesManager.h"
 #include "ComponentManager.h"
@@ -24,10 +24,10 @@
 
 namespace ShyEditor {
 
-	int GameObject::lastId = 1;
-	std::vector<int> GameObject::unusedIds = std::vector<int>();
+	int Entity::lastId = 1;
+	std::vector<int> Entity::unusedIds = std::vector<int>();
 
-	GameObject::GameObject(std::string& path, bool isTransform) : isTransform(isTransform) {
+	Entity::Entity(std::string& path, bool isTransform) : isTransform(isTransform) {
 
 		editor = Editor::getInstance();
 
@@ -70,22 +70,22 @@ namespace ShyEditor {
 		// Gizmo texture
 		gizmo = ResourcesManager::GetInstance()->AddTexture(GizmoImage, true);
 
-		// Gameobject texture
+		// Enitity texture
 		texture = ResourcesManager::GetInstance()->AddTexture(path, false);
 
 		if (texture->getSDLTexture() != NULL) {
 
-			// Sets the size of the gameobject based on the texture width and height
+			// Sets the size of the entity based on the texture width and height
 			*textureSize = ImVec2(texture->getWidth(), texture->getHeight());
 
 			// Add component image
 			Components::Component imageComponent = Components::ComponentManager::GetAllComponents().find("Image")->second;
 			Components::AttributeValue attributeValue;
 			attributeValue.valueString = imagePath;
-			imageComponent.getAttribute("fileName").SetValue(attributeValue);
+			imageComponent.GetAttribute("fileName").SetValue(attributeValue);
 			this->AddComponent(imageComponent);
 
-			// Set the gameobject name as the image name
+			// Set the entity name as the image name
 			std::size_t extensionPos = path.find_last_of('.');
 			name = (extensionPos != std::string::npos) ? path.substr(0, extensionPos) : path;
 
@@ -94,64 +94,64 @@ namespace ShyEditor {
 	}
 
 	//Copy constructor
-	GameObject::GameObject(const GameObject& go)
+	Entity::Entity(const Entity& entity)
 	{
-		editor = go.editor;
+		editor = entity.editor;
 
-		name = go.name;
+		name = entity.name;
 
 		AssignId(this);
 
-		if (go.IsPrefab()) {
-			prefabId = go.id;
-			PrefabManager::AddInstance(go.id, id);
+		if (entity.IsPrefab()) {
+			prefabId = entity.id;
+			PrefabManager::AddInstance(entity.id, id);
 		}
 
-		for (auto& pair : go.components) {
+		for (auto& pair : entity.components) {
 			Components::Component component = pair.second;
 
 			components.emplace(component.GetName(), component);
 		}
 
-		for (auto& pair : go.scripts) {
+		for (auto& pair : entity.scripts) {
 			Components::Script script = pair.second;
 
 			scripts.emplace(script.GetName(), script);
 		}
 
-		visible = go.visible;
-		showGizmo = go.showGizmo;
-		renderOrder = go.renderOrder;
+		visible = entity.visible;
+		showGizmo = entity.showGizmo;
+		renderOrder = entity.renderOrder;
 
-		isTransform = go.isTransform;
+		isTransform = entity.isTransform;
 
 		if (isTransform) {
-			transform = new Transform(*go.transform, this);
+			transform = new Transform(*entity.transform, this);
 		}
 		else {
-			overlay = new Overlay(*go.overlay, this);
+			overlay = new Overlay(*entity.overlay, this);
 		}
 
-		textureSize = new ImVec2(*go.textureSize);
+		textureSize = new ImVec2(*entity.textureSize);
 
-		imagePath = go.imagePath;
+		imagePath = entity.imagePath;
 
-		texture = go.texture;
+		texture = entity.texture;
 
-		gizmo = go.gizmo;
+		gizmo = entity.gizmo;
 
-		leftMouseButtonDown = go.leftMouseButtonDown;
-		rightMouseButtonDown = go.rightMouseButtonDown;
-		previousMousePosX = go.previousMousePosX;
-		previousMousePosY = go.previousMousePosY;
-		waitingToDelete = go.waitingToDelete;
+		leftMouseButtonDown = entity.leftMouseButtonDown;
+		rightMouseButtonDown = entity.rightMouseButtonDown;
+		previousMousePosX = entity.previousMousePosX;
+		previousMousePosY = entity.previousMousePosY;
+		waitingToDelete = entity.waitingToDelete;
 
-		if (go.parent == nullptr) {
+		if (entity.parent == nullptr) {
 			parent = nullptr;
 		}
 
-		for (auto& pair : go.children) {
-			GameObject* child = new GameObject(*pair.second);
+		for (auto& pair : entity.children) {
+			Entity* child = new Entity(*pair.second);
 
 			child->SetParent(this);
 
@@ -160,7 +160,7 @@ namespace ShyEditor {
 
 	}
 
-	GameObject::~GameObject() {
+	Entity::~Entity() {
 
 		if (parent != nullptr)
 			parent->RemoveChild(this);
@@ -186,7 +186,7 @@ namespace ShyEditor {
 
 	// ------------------------------------- Render, update and input -----------------------------------
 
-	void GameObject::RenderTransform(SDL_Renderer* renderer, Camera* camera) {
+	void Entity::RenderTransform(SDL_Renderer* renderer, Camera* camera) {
 
 		ImVec2 position = GetAdjustedPosition();
 
@@ -210,7 +210,7 @@ namespace ShyEditor {
 		else
 
 			// Render outline
-			if (this == editor->getScene()->GetSelectedGameObject()) {
+			if (this == editor->getScene()->GetSelectedEntity()) {
 
 				// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
 				Uint8 r, g, b, a;
@@ -237,7 +237,7 @@ namespace ShyEditor {
 			}
 	}
 
-	void GameObject::Update() {
+	void Entity::Update() {
 
 		if (IsPrefabInstance() && PrefabManager::GetPrefabById(GetPrefabId()) == nullptr) {
 			SetPrefabId(0);
@@ -247,13 +247,13 @@ namespace ShyEditor {
 
 			auto image = components.find("Image");
 
-			// If the gameobject has no image component
+			// If the enitiyt has no image component
 			if (image == components.end()) {
 				texture = nullptr;
 				return;
 			}
 
-			std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
+			std::string currentImagePath = (image->second).GetAttribute("fileName").value.valueString;
 
 			// Checks if the current path exists in the filesystem
 			//if (!std::filesystem::exists(currentImagePath)) return;
@@ -283,7 +283,7 @@ namespace ShyEditor {
 
 	}
 
-	bool GameObject::HandleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos) {
+	bool Entity::HandleInput(SDL_Event* event, bool isMouseInsideEntity, ImVec2 mousePos) {
 
 
 		return false;
@@ -295,54 +295,54 @@ namespace ShyEditor {
 
 	// ----------------------------- Name, ID and texture getters/setters ---------------------------
 
-	std::string GameObject::GetName() {
+	std::string Entity::GetName() {
 		return name;
 	}
 
-	void GameObject::SetName(const std::string& newName) {
+	void Entity::SetName(const std::string& newName) {
 		name = newName;
 	}
 
-	void GameObject::SetPrefabId(int prefabId)
+	void Entity::SetPrefabId(int prefabId)
 	{
 		this->prefabId = prefabId;
 
 	}
 
-	int GameObject::GetPrefabId()
+	int Entity::GetPrefabId()
 	{
 		return prefabId;
 	}
 
-	bool GameObject::IsPrefab() const
+	bool Entity::IsPrefab() const
 	{
 		return id < 0;
 	}
 
-	bool GameObject::IsPrefabInstance() const
+	bool Entity::IsPrefabInstance() const
 	{
 		return prefabId != 0;
 	}
 
-	Texture* GameObject::GetTexture() {
+	Texture* Entity::GetTexture() {
 		return texture;
 	}
 
-	int GameObject::GetId() {
+	int Entity::GetId() {
 		return id;
 	}
 
-	void GameObject::SetId(int id)
+	void Entity::SetId(int id)
 	{
 		this->id = id;
 	}
 
-	void GameObject::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
+	void Entity::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
 	{
 		this->components = components;
 	}
 
-	void GameObject::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
+	void Entity::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
 	{
 		this->scripts = scripts;
 	}
@@ -354,15 +354,15 @@ namespace ShyEditor {
 
 	// ----------------------------------- Visibility getters/setters -----------------------------------
 
-	int GameObject::GetRenderOrder() {
+	int Entity::GetRenderOrder() {
 		return renderOrder;
 	}
 
-	bool GameObject::IsVisible() {
+	bool Entity::IsVisible() {
 		return visible;
 	}
 
-	void GameObject::SetVisible(bool visible) {
+	void Entity::SetVisible(bool visible) {
 		if (this->parent == nullptr) {
 			this->visible = visible;
 			SetChildrenVisible(this, visible);
@@ -376,34 +376,34 @@ namespace ShyEditor {
 
 	// ----------------------------------- Components and Scripts logic --------------------------------------
 
-	void GameObject::AddComponent(Components::Component comp) {
+	void Entity::AddComponent(Components::Component comp) {
 
 		if (components.find(comp.GetName()) == components.end())
 			components.insert({ comp.GetName(), comp });
 
 	}
 
-	void GameObject::AddScript(Components::Script script) {
+	void Entity::AddScript(Components::Script script) {
 
 		if (scripts.contains(script.GetName())) return;
 
 		scripts.emplace(script.GetName(), script);
 	}
 
-	std::unordered_map<std::string, Components::Component>* GameObject::GetComponents() {
+	std::unordered_map<std::string, Components::Component>* Entity::GetComponents() {
 		return &components;
 	}
 
-	std::unordered_map<std::string, Components::Component> GameObject::GetComponentsCopy()
+	std::unordered_map<std::string, Components::Component> Entity::GetComponentsCopy()
 	{
 		return components;
 	}
 
-	std::unordered_map<std::string, Components::Script>* GameObject::GetScripts() {
+	std::unordered_map<std::string, Components::Script>* Entity::GetScripts() {
 		return &scripts;
 	}
 
-	std::unordered_map<std::string, Components::Script> GameObject::GetScriptsCopy()
+	std::unordered_map<std::string, Components::Script> Entity::GetScriptsCopy()
 	{
 		return scripts;
 	}
@@ -414,51 +414,51 @@ namespace ShyEditor {
 
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
-	void GameObject::SetPosition(ImVec2 newPos) {
+	void Entity::SetPosition(ImVec2 newPos) {
 
 		transform->SetPosition(newPos.x, newPos.y);
 	}
 
-	ImVec2 GameObject::GetPosition() {
+	ImVec2 Entity::GetPosition() {
 		return transform->GetPosition();
 	}
 
-	float GameObject::GetRotation() {
+	float Entity::GetRotation() {
 		return transform->GetRotation();
 	}
 
-	void GameObject::SetRotation(float r)
+	void Entity::SetRotation(float r)
 	{
 		transform->SetRotation(r);
 	}
 
-	ImVec2 GameObject::GetAdjustedPosition() {
+	ImVec2 Entity::GetAdjustedPosition() {
 
 		ImVec2 position = transform->GetPosition();
 
 		float width = textureSize->x * GetScaleX();
 		float height = textureSize->y * GetScaleY();
 
-		// The game objects have their origin at the center
+		// The entities have their origin at the center
 		position.x -= width * 0.5f;
 		position.y -= height * 0.5f;
 
 		return position;
 	}
 
-	ImVec2 GameObject::GetSize() {
+	ImVec2 Entity::GetSize() {
 		return *textureSize;
 	}
 
-	float GameObject::GetScaleX() {
+	float Entity::GetScaleX() {
 		return transform->GetScale().x;
 	}
 
-	float GameObject::GetScaleY() {
+	float Entity::GetScaleY() {
 		return transform->GetScale().y;
 	}
 
-	void GameObject::SetScale(float x, float y)
+	void Entity::SetScale(float x, float y)
 	{
 		transform->SetScale(x, y);
 	}
@@ -468,13 +468,13 @@ namespace ShyEditor {
 
 
 
-	// --------------------------------------- Deleting gameobject logic ---------------------------------------
+	// --------------------------------------- Deleting entity logic ---------------------------------------
 
-	bool GameObject::IsWaitingToDelete() {
+	bool Entity::IsWaitingToDelete() {
 		return waitingToDelete;
 	}
 
-	void GameObject::ToDelete() {
+	void Entity::ToDelete() {
 		waitingToDelete = true;
 
 		//If its a prefab instance we remove it from the manager
@@ -483,7 +483,7 @@ namespace ShyEditor {
 		}
 
 		if (id > 0) {
-			GameObject::unusedIds.push_back(id);
+			Entity::unusedIds.push_back(id);
 		}
 		else {
 			PrefabManager::unusedIds.push_back(id);
@@ -498,36 +498,36 @@ namespace ShyEditor {
 
 
 
-	// --------------------------------- Gameobject children and parent logic ------------------------------------
+	// --------------------------------- Entity children and parent logic ------------------------------------
 
-	void GameObject::SetParent(GameObject* go) {
-		parent = go;
+	void Entity::SetParent(Entity* entity) {
+		parent = entity;
 	}
 
-	GameObject* GameObject::GetParent() {
+	Entity* Entity::GetParent() {
 		return parent;
 	}
 
-	void GameObject::RemoveChild(GameObject* go) {
-		go->SetParent(nullptr);
-		children.erase(go->GetId());
+	void Entity::RemoveChild(Entity* entity) {
+		entity->SetParent(nullptr);
+		children.erase(entity->GetId());
 	}
 
-	void GameObject::AddChild(GameObject* go) {
-		go->SetParent(this);
-		children.insert({ go->GetId(), go });
+	void Entity::AddChild(Entity* entity) {
+		entity->SetParent(this);
+		children.insert({ entity->GetId(), entity });
 	}
 
-	std::unordered_map<int, GameObject*> GameObject::GetChildren() {
+	std::unordered_map<int, Entity*> Entity::GetChildren() {
 		return children;
 	}
 
-	bool GameObject::IsAscendant(GameObject* go) {
+	bool Entity::IsAscendant(Entity* entity) {
 
 		for (auto childPair : children) {
-			GameObject* child = childPair.second;
+			Entity* child = childPair.second;
 
-			if (child == go || child->IsAscendant(go))
+			if (child == entity || child->IsAscendant(entity))
 				return true;
 		}
 
@@ -539,9 +539,9 @@ namespace ShyEditor {
 
 
 
-	// ---------------------------------------- Gameobject drawing logic ----------------------------------------------
+	// ---------------------------------------- Entity drawing logic ----------------------------------------------
 
-	void GameObject::DrawTransformInEditor() {
+	void Entity::DrawTransformInEditor() {
 
 		transform->GetPosition().y *= -1;
 		ImGui::Text("Position");
@@ -559,7 +559,7 @@ namespace ShyEditor {
 		ImGui::InputInt("##render_order", &renderOrder);
 	}
 
-	void GameObject::DrawOverlayInEditor()
+	void Entity::DrawOverlayInEditor()
 	{
 		int& placement = overlay->GetPlacement();
 		ImGui::Combo("Placement mode", &placement,
@@ -621,7 +621,7 @@ namespace ShyEditor {
 	}
 
 	//Returns true if there has been a change in a component
-	bool GameObject::DrawComponentsInEditor() {
+	bool Entity::DrawComponentsInEditor() {
 
 		bool changes = false;
 		for (auto it = components.begin(); it != components.end();) {
@@ -736,8 +736,8 @@ namespace ShyEditor {
 					case Components::AttributesType::CHAR:
 						changes = DrawChar(attributeName + it->first, attr);
 						break;
-					case Components::AttributesType::GAMEOBJECT:
-						changes = DrawGameobject(attributeName + it->first, attr);
+					case Components::AttributesType::ENTITY:
+						changes = DrawEntity(attributeName + it->first, attr);
 						break;
 					default:
 						break;
@@ -764,7 +764,7 @@ namespace ShyEditor {
 		return changes;
 	}
 
-	bool GameObject::DrawScriptsInEditor() {
+	bool Entity::DrawScriptsInEditor() {
 		bool changes = false;
 
 		for (auto it = scripts.begin(); it != scripts.end();) {
@@ -798,8 +798,8 @@ namespace ShyEditor {
 					case Components::AttributesType::CHAR:
 						changes = DrawChar(attributeName + it->first, attr);
 						break;
-					case Components::AttributesType::GAMEOBJECT:
-						changes = DrawGameobject(attributeName + it->first, attr);
+					case Components::AttributesType::ENTITY:
+						changes = DrawEntity(attributeName + it->first, attr);
 						break;
 					default:
 						break;
@@ -830,17 +830,17 @@ namespace ShyEditor {
 		return changes;
 	}
 
-	bool GameObject::DrawFloat(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawFloat(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	bool GameObject::DrawVector2(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawVector2(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	bool GameObject::DrawString(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawString(std::string attrName, ::Components::Attribute* attr) {
 
 		char inputBuffer[256];
 		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
@@ -853,31 +853,31 @@ namespace ShyEditor {
 		return false;
 	}
 
-	bool GameObject::DrawBool(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawBool(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::Checkbox(("##" + attrName).c_str(), &attr->value.value.valueBool);
 	}
 
-	bool GameObject::DrawColor(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawColor(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::ColorEdit3(("##" + attrName).c_str(), (float*)&attr->value.value.valueColor);
 	}
 
-	bool GameObject::DrawChar(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawChar(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::InputText(("##" + attrName).c_str(), &attr->value.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank);
 	}
 
-	bool GameObject::DrawGameobject(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawEntity(std::string attrName, ::Components::Attribute* attr) {
 
-		std::map<int, GameObject*>& gameObjects = editor->getScene()->GetGameObjects();
+		std::map<int, Entity*>& entities = editor->getScene()->GetEntities();
 
-		GameObject* go = gameObjects.find((int)attr->value.value.entityIdx) != gameObjects.end() ? gameObjects.find((int)attr->value.value.entityIdx)->second : nullptr;
+		Entity* entity = entities.find((int)attr->value.value.entityIdx) != entities.end() ? entities.find((int)attr->value.value.entityIdx)->second : nullptr;
 
-		if (ImGui::BeginCombo(("##" + attrName).c_str(), go != nullptr ? go->GetName().c_str() : "")) {
-			for (auto go : gameObjects) {
-				if (ImGui::Selectable(go.second->GetName().c_str())) {
-					attr->value.value.entityIdx = go.second->GetId();
+		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
+			for (auto entity : entities) {
+				if (ImGui::Selectable(entity.second->GetName().c_str())) {
+					attr->value.value.entityIdx = entity.second->GetId();
 					return true;
 				}
 			}
@@ -895,7 +895,7 @@ namespace ShyEditor {
 		return false;
 	}
 
-	void GameObject::DrawArrowButton(ImVec2& value, const ImVec2& dir)
+	void Entity::DrawArrowButton(ImVec2& value, const ImVec2& dir)
 	{
 
 		if (!(dir.x == dir.y && dir.x == 0))
@@ -1015,18 +1015,18 @@ namespace ShyEditor {
 
 
 
-	// ---------------------- Gameobject children settings (Transform and visibility) ----------------------
+	// ---------------------- Entity children settings (Transform and visibility) ----------------------
 
-	void GameObject::TranslateChildren(GameObject* go, ImVec2* previousPos) {
+	void Entity::TranslateChildren(Entity* entity, ImVec2* previousPos) {
 
 		ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
 
-		for (auto childPair : go->GetChildren()) {
+		for (auto childPair : entity->GetChildren()) {
 
 			ImVec2 childPos = childPair.second->GetPosition();
 
-			float xDiff = go->GetPosition().x - parentPreviousPos.x;
-			float yDiff = go->GetPosition().y - parentPreviousPos.y;
+			float xDiff = entity->GetPosition().x - parentPreviousPos.x;
+			float yDiff = entity->GetPosition().y - parentPreviousPos.y;
 
 			previousPos->x = childPos.x;
 			previousPos->y = childPos.y;
@@ -1037,9 +1037,9 @@ namespace ShyEditor {
 		}
 	}
 
-	void GameObject::ScaleChildren(GameObject* go, int scaleFactor) {
+	void Entity::ScaleChildren(Entity* entity, int scaleFactor) {
 
-		for (auto& childPair : go->GetChildren()) {
+		for (auto& childPair : entity->GetChildren()) {
 
 			childPair.second->transform->GetScale().x += scaleFactor;
 			childPair.second->transform->GetScale().y += scaleFactor;
@@ -1048,9 +1048,9 @@ namespace ShyEditor {
 		}
 	}
 
-	void GameObject::SetChildrenVisible(GameObject* go, bool visible) {
+	void Entity::SetChildrenVisible(Entity* entity, bool visible) {
 
-		for (auto childPair : go->GetChildren()) {
+		for (auto childPair : entity->GetChildren()) {
 
 			childPair.second->visible = visible;
 
@@ -1058,28 +1058,28 @@ namespace ShyEditor {
 		}
 	}
 
-	void GameObject::RotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle) {
+	void Entity::RotateChildren(Entity* entity, Entity* entityCenter, float rotationAngle) {
 
 		float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
 
-		for (auto& child : go->GetChildren())
+		for (auto& child : entity->GetChildren())
 		{
 			auto& childPos = child.second->transform->GetPosition();
 
-			float newX = cos(angleRadians) * (childPos.x - goCenter->transform->GetPosition().x) - sin(angleRadians) * (childPos.y - goCenter->transform->GetPosition().y) + goCenter->transform->GetPosition().x;
-			float newY = sin(angleRadians) * (childPos.x - goCenter->transform->GetPosition().x) + cos(angleRadians) * (childPos.y - goCenter->transform->GetPosition().y) + goCenter->transform->GetPosition().y;
+			float newX = cos(angleRadians) * (childPos.x - entityCenter->transform->GetPosition().x) - sin(angleRadians) * (childPos.y - entityCenter->transform->GetPosition().y) + entityCenter->transform->GetPosition().x;
+			float newY = sin(angleRadians) * (childPos.x - entityCenter->transform->GetPosition().x) + cos(angleRadians) * (childPos.y - entityCenter->transform->GetPosition().y) + entityCenter->transform->GetPosition().y;
 
 			child.second->transform->GetPosition().x = newX;
 			child.second->transform->GetPosition().y = newY;
 			child.second->transform->GetRotation() += rotationAngle;
 
-			RotateChildren(child.second, goCenter, rotationAngle);
+			RotateChildren(child.second, entityCenter, rotationAngle);
 		}
 	}
 
 	// ------------------------ Serialization and deseralization logic -------------------------
 
-	std::string GameObject::ToJson() {
+	std::string Entity::ToJson() {
 
 		nlohmann::ordered_json j;
 		j["name"] = name;
@@ -1126,7 +1126,7 @@ namespace ShyEditor {
 		for (auto it = components.begin(); it != components.end(); it++) {
 
 
-			componentsJson.push_back(it->second.toJson());
+			componentsJson.push_back(it->second.ToJson());
 		}
 
 		j["components"] = componentsJson;
@@ -1148,29 +1148,29 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
-	GameObject* GameObject::FromJson(std::string json) {
+	Entity* Entity::FromJson(std::string json) {
 
 		nlohmann::ordered_json jsonData;
 		jsonData = nlohmann::json::parse(json);
 
-		std::string errorMsg = "The JSON gameobject has not the correct format.";
+		std::string errorMsg = "The JSON entity has not the correct format.";
 
 		if (!jsonData.contains("name")) {
 			LogManager::LogError(errorMsg);
 			return nullptr;
 		}
 
-		std::string goName = jsonData["name"];
+		std::string entityName = jsonData["name"];
 
 
-		GameObject::unusedIds.push_back(jsonData["id"]);
+		Entity::unusedIds.push_back(jsonData["id"]);
 
 		bool isTransform = jsonData["isTransform"];
 
-		GameObject* gameObject = new GameObject(goName, isTransform);
-		gameObject->name = goName;
+		Entity* entity = new Entity(entityName, isTransform);
+		entity->name = entityName;
 
-		gameObject->prefabId = jsonData["prefabId"];
+		entity->prefabId = jsonData["prefabId"];
 
 		if (!jsonData.contains("id")) {
 			LogManager::LogError(errorMsg);
@@ -1179,39 +1179,39 @@ namespace ShyEditor {
 
 		if (!jsonData.contains("childs")) {
 			LogManager::LogError(errorMsg);
-			return gameObject;
+			return entity;
 		}
 
 		for (const auto& childJson : jsonData["childs"]) {
-			GameObject* child = GameObject::FromJson(childJson.dump());
+			Entity* child = Entity::FromJson(childJson.dump());
 
-			gameObject->AddChild(child);
-			child->SetParent(gameObject);
+			entity->AddChild(child);
+			child->SetParent(entity);
 		}
 
 
 		if (!jsonData.contains("order")) {
 			LogManager::LogError(errorMsg);
-			return gameObject;
+			return entity;
 		}
 
-		gameObject->renderOrder = jsonData["order"];
+		entity->renderOrder = jsonData["order"];
 
 		if (isTransform)
 		{
 			if (!jsonData.contains("localPosition")) {
 				LogManager::LogError(errorMsg);
-				return gameObject;
+				return entity;
 			}
 
 			if (!jsonData.contains("localScale")) {
 				LogManager::LogError(errorMsg);
-				return gameObject;
+				return entity;
 			}
 
 			if (!jsonData.contains("localRotation")) {
 				LogManager::LogError(errorMsg);
-				return gameObject;
+				return entity;
 			}
 
 			// Deserialize localPosition, localScale, and localRotation
@@ -1220,36 +1220,36 @@ namespace ShyEditor {
 			std::string localRotation = jsonData["localRotation"];
 
 			// Parse localPosition and localScale
-			sscanf_s(localPositionStr.c_str(), "%f, %f", &gameObject->transform->GetPosition().x, &gameObject->transform->GetPosition().y);
-			sscanf_s(localScaleStr.c_str(), "%f, %f", &gameObject->transform->GetScale().x, &gameObject->transform->GetScale().y);
+			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->transform->GetPosition().x, &entity->transform->GetPosition().y);
+			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->transform->GetScale().x, &entity->transform->GetScale().y);
 
 			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
 			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
 
-			gameObject->transform->GetPosition().y *= -1;
+			entity->transform->GetPosition().y *= -1;
 
-			gameObject->transform->SetRotation(std::stof(localRotation));
+			entity->transform->SetRotation(std::stof(localRotation));
 		}
 		else {
 
 			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
 
-			gameObject->overlay->GetPlacement() = jsonData.contains("placement") ? std::stoi(jsonData["placement"].get<std::string>()) : 0;
-			gameObject->overlay->GetTop() = jsonData.contains("top") ? std::stoi(jsonData["top"].get<std::string>()) : 0;
-			gameObject->overlay->GetBottom() = jsonData.contains("bottom") ? std::stoi(jsonData["bottom"].get<std::string>()) : 0;
-			gameObject->overlay->GetLeft() = jsonData.contains("left") ? std::stoi(jsonData["left"].get<std::string>()) : 0;
-			gameObject->overlay->GetRight() = jsonData.contains("right") ? std::stoi(jsonData["right"].get<std::string>()) : 0;
+			entity->overlay->GetPlacement() = jsonData.contains("placement") ? std::stoi(jsonData["placement"].get<std::string>()) : 0;
+			entity->overlay->GetTop() = jsonData.contains("top") ? std::stoi(jsonData["top"].get<std::string>()) : 0;
+			entity->overlay->GetBottom() = jsonData.contains("bottom") ? std::stoi(jsonData["bottom"].get<std::string>()) : 0;
+			entity->overlay->GetLeft() = jsonData.contains("left") ? std::stoi(jsonData["left"].get<std::string>()) : 0;
+			entity->overlay->GetRight() = jsonData.contains("right") ? std::stoi(jsonData["right"].get<std::string>()) : 0;
 
 			if (jsonData.contains("position")) {
 
 				std::string position = jsonData["position"];
-				sscanf_s(position.c_str(), "%f, %f", &gameObject->overlay->GetPosition().x, &gameObject->overlay->GetPosition().y);
+				sscanf_s(position.c_str(), "%f, %f", &entity->overlay->GetPosition().x, &entity->overlay->GetPosition().y);
 			}
 
 			if (jsonData.contains("size")) {
 
 				std::string size = jsonData["size"];
-				sscanf_s(size.c_str(), "%f, %f", &gameObject->overlay->GetSize().x, &gameObject->overlay->GetSize().y);
+				sscanf_s(size.c_str(), "%f, %f", &entity->overlay->GetSize().x, &entity->overlay->GetSize().y);
 			}
 
 			//TODO: color y interactable
@@ -1259,56 +1259,56 @@ namespace ShyEditor {
 		// Components
 		if (!jsonData.contains("components")) {
 			LogManager::LogError(errorMsg);
-			return gameObject;
+			return entity;
 		}
 
 		for (const auto& compJson : jsonData["components"]) {
-			Components::Component component = Components::Component::fromJson(compJson.dump());
-			gameObject->AddComponent(component);
+			Components::Component component = Components::Component::FromJson(compJson.dump());
+			entity->AddComponent(component);
 		}
 
 		// Scripts
 		if (!jsonData.contains("scripts")) {
 			LogManager::LogError(errorMsg);
-			return gameObject;
+			return entity;
 		}
 
 		for (const auto& scriptJson : jsonData["scripts"].items()) {
 			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
-			gameObject->AddScript(script);
+			entity->AddScript(script);
 		}
 
-		return gameObject;
+		return entity;
 	}
 
-	bool GameObject::IsTransform()
+	bool Entity::IsTransform()
 	{
 		return isTransform;
 	}
 
-	Overlay* GameObject::GetOverlay()
+	Overlay* Entity::GetOverlay()
 	{
 		return overlay;
 	}
 
-	void GameObject::AssignId(GameObject* go)
+	void Entity::AssignId(Entity* entity)
 	{
-		// Gets the list of gameobjects in the scene
-		std::map<int, GameObject*>& gameObjects = Editor::getInstance()->getScene()->GetGameObjects();
+		// Gets the list of entities in the scene
+		std::map<int, Entity*>& entities = Editor::getInstance()->getScene()->GetEntities();
 
 		// See if we can reutilize an id
-		if (GameObject::unusedIds.size() != 0) {
-			go->SetId(GameObject::unusedIds.back());
-			GameObject::unusedIds.pop_back();
+		if (Entity::unusedIds.size() != 0) {
+			entity->SetId(Entity::unusedIds.back());
+			Entity::unusedIds.pop_back();
 		}
 		else {
 			//Ensure id is not being used already
-			while (gameObjects.find(GameObject::lastId) != gameObjects.end()) {
-				GameObject::lastId++;
+			while (entities.find(Entity::lastId) != entities.end()) {
+				Entity::lastId++;
 			}
 
-			go->SetId(GameObject::lastId);
-			GameObject::lastId++;
+			entity->SetId(Entity::lastId);
+			Entity::lastId++;
 		}
 	}
 
@@ -1316,14 +1316,14 @@ namespace ShyEditor {
 
 	//============ COMPONENTS =================================================================================================================================================================
 
-	Transform::Transform(GameObject* obj) : obj(obj)
+	Transform::Transform(Entity* obj) : obj(obj)
 	{
 		scale = new ImVec2(1, 1);
 		position = new ImVec2(0, 0);
 		rotation = 0;
 	}
 
-	Transform::Transform(const Transform& tr, GameObject* obj)
+	Transform::Transform(const Transform& tr, Entity* obj)
 	{
 		this->obj = obj;
 
@@ -1377,7 +1377,7 @@ namespace ShyEditor {
 
 
 	//===== Overlays=====================================
-	Overlay::Overlay(GameObject* obj) : obj(obj)
+	Overlay::Overlay(Entity* obj) : obj(obj)
 	{
 		placement = 0;
 
@@ -1392,7 +1392,7 @@ namespace ShyEditor {
 		text = new OverlayText();
 	}
 
-	Overlay::Overlay(const Overlay& ov, GameObject* obj)
+	Overlay::Overlay(const Overlay& ov, Entity* obj)
 	{
 		this->obj = obj;
 
@@ -1577,7 +1577,7 @@ namespace ShyEditor {
 
 			auto& imgCmp = *imgIt;
 
-			const auto& cmpPath = imgCmp.second.getAttribute("path").value.valueString;
+			const auto& cmpPath = imgCmp.second.GetAttribute("path").value.valueString;
 
 			if (cmpPath != image->GetPath()) {
 
@@ -1607,9 +1607,9 @@ namespace ShyEditor {
 
 			auto& textCmp = *textIt;
 
-			const auto& fnt = textCmp.second.getAttribute("font").value.valueString;
-			const auto& txt = textCmp.second.getAttribute("text").value.valueString;
-			const auto& size = textCmp.second.getAttribute("fontSize").value.value.valueFloat;
+			const auto& fnt = textCmp.second.GetAttribute("font").value.valueString;
+			const auto& txt = textCmp.second.GetAttribute("text").value.valueString;
+			const auto& size = textCmp.second.GetAttribute("fontSize").value.value.valueFloat;
 
 			text->SetText(txt, fnt, size, -1);
 

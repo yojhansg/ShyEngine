@@ -19,7 +19,7 @@ namespace Components {
 		BOOL,
 		COLOR,
 		CHAR,
-		GAMEOBJECT
+		ENTITY
 	};
 
 
@@ -76,7 +76,7 @@ namespace Components {
 
 	using Variable = Attribute;
 
-	class Method {
+	class Function {
 
 	private:
 
@@ -87,9 +87,9 @@ namespace Components {
 		std::vector<Variable> input;
 	public:
 
-		Method();
-		Method(Method const& other);
-		Method(const std::string& name, const std::string& className);
+		Function();
+		Function(Function const& other);
+		Function(const std::string& name, const std::string& className);
 
 		void SetReturn(const Variable& ret);
 		void AddInput(const Variable& input);
@@ -109,7 +109,7 @@ namespace Components {
 		std::string name;
 
 		std::unordered_map<std::string, Attribute> attributes;
-		std::unordered_map<std::string, Method> methods;
+		std::unordered_map<std::string, Function> functions;
 
 
 		/*
@@ -120,7 +120,7 @@ namespace Components {
 		*/
 
 		std::vector<Attribute*> orderedAttributes;
-		std::vector<Method*> orderedMethods;
+		std::vector<Function*> orderedFunctions;
 
 	public:
 
@@ -130,21 +130,21 @@ namespace Components {
 
 		cstring GetName();
 
-		Attribute& getAttribute(cstring name);
-		Method& getMethod(cstring name);
+		Attribute& GetAttribute(cstring name);
+		Function& GetFunction(cstring name);
 
-		std::unordered_map<std::string, Attribute>& getAllAttributes();
-		std::unordered_map<std::string, Method>& getAllMethods();
+		std::unordered_map<std::string, Attribute>& GetAllAttributes();
+		std::unordered_map<std::string, Function>& GetAllFunctions();
 
 		std::vector<Attribute*>& GetAttributesOrdered();
-		std::vector<Method*>& GetMethodsOrdered();
+		std::vector<Function*>& GetFunctionsOrdered();
 
-		void addAttribute(const Attribute& attribute);
-		void addMethod(const Method& method);
+		void AddAttribute(const Attribute& attribute);
+		void AddFunction(const Function& function);
 
-		nlohmann::ordered_json toJson();
+		nlohmann::ordered_json ToJson();
 
-		static Component fromJson(std::string json);
+		static Component FromJson(std::string json);
 	};
 
 

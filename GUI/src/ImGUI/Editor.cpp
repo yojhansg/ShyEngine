@@ -18,7 +18,7 @@
 #include "Preferences.h"
 #include "LogManager.h"
 #include "Components.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Hierarchy.h"
 #include "MenuBar.h"
 #include "Console.h"

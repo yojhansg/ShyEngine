@@ -77,7 +77,7 @@ namespace ShyEditor {
 
 			ImGui::Begin(GetStringId().c_str(), NULL, flag);
 
-			updateAndRender();
+			UpdateAndRender();
 			ManageOutputNode();
 
 			bool close = ManageCloseNode();
@@ -355,7 +355,7 @@ namespace ShyEditor {
 		return nullptr;
 	}
 
-	void ScriptCreationUtilities::ScriptNode::updateAndRender() {}
+	void ScriptCreationUtilities::ScriptNode::UpdateAndRender() {}
 
 	ScriptCreationUtilities::ScriptDropdownSelection::ScriptDropdownSelection(ScriptCreation* creator) : creator(creator)
 	{
@@ -388,16 +388,16 @@ namespace ShyEditor {
 	{
 		for (auto& comp : v) {
 
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0)
+			auto& functions = comp.second.GetAllFunctions();
+			if (functions.size() > 0)
 				if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
-					for (auto& method : methods) {
+					for (auto& function : functions) {
 
-						std::string name = method.first;
+						std::string name = function.first;
 						if (ImGui::MenuItem(name.c_str())) {
 
-							ScriptNode* node = new ScriptMethod(method.second);
+							ScriptNode* node = new ScriptFunction(function.second);
 
 							node->SetPosition(mousex, mousey);
 
@@ -562,12 +562,12 @@ namespace ShyEditor {
 	}
 
 
-	ScriptCreationUtilities::ScriptMethod::ScriptMethod(::Components::Method& method) : method(method)
+	ScriptCreationUtilities::ScriptFunction::ScriptFunction(::Components::Function& function) : function(function)
 	{
-		input = std::vector<ScriptNode*>(method.getInput().size());
-		type = Node::Method;
+		input = std::vector<ScriptNode*>(function.getInput().size());
+		type = Node::Function;
 
-		outputStr = method.getReturn().getTypeStr();
+		outputStr = function.getReturn().getTypeStr();
 
 		if (outputStr == "void") {
 			ignoreOutput = true;
@@ -576,7 +576,7 @@ namespace ShyEditor {
 		flow = new ScriptFlow(this);
 	}
 
-	ScriptCreationUtilities::ScriptMethod::~ScriptMethod()
+	ScriptCreationUtilities::ScriptFunction::~ScriptFunction()
 	{
 		if (flow != nullptr)
 		{
@@ -586,7 +586,7 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptMethod::updateAndRender()
+	void ScriptCreationUtilities::ScriptFunction::UpdateAndRender()
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 
@@ -597,7 +597,7 @@ namespace ShyEditor {
 		ImGui::Indent();
 
 		int idx = 0;
-		for (auto& in : method.getInput()) {
+		for (auto& in : function.getInput()) {
 
 			auto relpos = ImGui::GetCursorPos();
 			ImGui::Text(in.getName().c_str());
@@ -668,9 +668,9 @@ namespace ShyEditor {
 		flow->ManageNextNode(x, y);
 	}
 
-	std::string ScriptCreationUtilities::ScriptMethod::GetStringId()
+	std::string ScriptCreationUtilities::ScriptFunction::GetStringId()
 	{
-		return method.getName() + " - " + method.getComponent() + " (" + std::to_string(id) + ")";
+		return function.getName() + " - " + function.getComponent() + " (" + std::to_string(id) + ")";
 	}
 
 
@@ -948,7 +948,7 @@ namespace ShyEditor {
 		case ::Components::AttributesType::COLOR:
 			outputStr = "color";
 			break;
-		case ::Components::AttributesType::GAMEOBJECT:
+		case ::Components::AttributesType::ENTITY:
 			outputStr = "Entity";
 			alwaysSerialize = true;
 			break;
@@ -965,7 +965,7 @@ namespace ShyEditor {
 
 namespace ShyEditor {
 
-	void ScriptCreationUtilities::ScriptInput::updateAndRender()
+	void ScriptCreationUtilities::ScriptInput::UpdateAndRender()
 	{
 
 		switch (attrType) {
@@ -1106,7 +1106,7 @@ namespace ShyEditor {
 				}
 				if (ImGui::MenuItem("Entity")) {
 
-					type = ::Components::AttributesType::GAMEOBJECT;
+					type = ::Components::AttributesType::ENTITY;
 				}
 
 				if (type != ::Components::AttributesType::NONE)
@@ -1223,8 +1223,8 @@ namespace ShyEditor {
 
 				if (ImGui::BeginMenu("Node search result")) {
 
-					ShowFoundMethods(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
-					ShowFoundMethods(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
+					ShowFoundFunctions(Components::ComponentManager::GetAllComponents(), windowSize.x, windowSize.y);
+					ShowFoundFunctions(Components::ComponentManager::GetAllManagers(), windowSize.x, windowSize.y);
 
 					ImGui::EndMenu();
 				}
@@ -1310,19 +1310,19 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundMethods(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
+	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundFunctions(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
 	{
 
 		for (auto& comp : v) {
 
-			auto& methods = comp.second.getAllMethods();
-			if (methods.size() > 0) {
+			auto& functions = comp.second.GetAllFunctions();
+			if (functions.size() > 0) {
 
-				std::vector<std::string> methodsToAdd;
+				std::vector<std::string> functionsToAdd;
 
-				for (auto& method : methods) {
+				for (auto& function : functions) {
 
-					std::string name = method.first;
+					std::string name = function.first;
 					std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
 					std::string search = nameSearch;
@@ -1330,23 +1330,23 @@ namespace ShyEditor {
 
 					if (name.find(search) != name.npos) {
 
-						methodsToAdd.push_back(method.first);
+						functionsToAdd.push_back(function.first);
 					}
 
 				}
 
-				if (methodsToAdd.size() > 0)
+				if (functionsToAdd.size() > 0)
 					if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
-						for (auto& method : methodsToAdd) {
+						for (auto& function : functionsToAdd) {
 
-							if (ImGui::MenuItem(method.c_str())) {
+							if (ImGui::MenuItem(function.c_str())) {
 
 
 								int scrollx, scrolly;
 								ScriptCreation::GetScrollPosition(&scrollx, &scrolly);
 
-								ScriptNode* node = new ScriptMethod(comp.second.getAllMethods()[method]);
+								ScriptNode* node = new ScriptFunction(comp.second.GetAllFunctions()[function]);
 
 
 								node->SetPosition((windowW - node->GetW()) * 0.5f - scrollx, (windowH - node->GetH()) * 0.5f - scrolly);
@@ -1364,10 +1364,10 @@ namespace ShyEditor {
 
 	}
 
-	Components::Method& ScriptCreationUtilities::ScriptMenuBar::GetMethodReference(const std::string& name)
+	Components::Function& ScriptCreationUtilities::ScriptMenuBar::GetFunctionReference(const std::string& name)
 	{
 
-		return Components::ComponentManager::GetAllComponents()["a"].getMethod("a");
+		return Components::ComponentManager::GetAllComponents()["a"].GetFunction("a");
 
 	}
 
@@ -1400,14 +1400,14 @@ namespace ShyEditor {
 
 
 
-	nlohmann::json ScriptCreationUtilities::ScriptMethod::ToJson()
+	nlohmann::json ScriptCreationUtilities::ScriptFunction::ToJson()
 	{
 		json root = ScriptNode::ToJson();
 
-		if (method.getComponent() != method.getName())
-			root["function"] = method.getComponent() + "_" + method.getName();
+		if (function.getComponent() != function.getName())
+			root["function"] = function.getComponent() + "_" + function.getName();
 		else
-			root["function"] = method.getComponent();
+			root["function"] = function.getComponent();
 
 		root["input"] = json::array();
 
@@ -1424,19 +1424,19 @@ namespace ShyEditor {
 		return root;
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::SetInput(int idx, ScriptNode* node)
+	void ScriptCreationUtilities::ScriptFunction::SetInput(int idx, ScriptNode* node)
 	{
 		input[idx] = node;
 		node->AddOutput(this);
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::SetNext(ScriptFlow* flow)
+	void ScriptCreationUtilities::ScriptFunction::SetNext(ScriptFlow* flow)
 	{
 		this->flow->SetNext(flow);
 	}
 
 
-	void ScriptCreationUtilities::ScriptMethod::OnRemoved()
+	void ScriptCreationUtilities::ScriptFunction::OnRemoved()
 	{
 		ScriptNode::OnRemoved();
 		flow->OnRemoved();
@@ -1452,7 +1452,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptMethod::RemoveInput(ScriptNode* node)
+	void ScriptCreationUtilities::ScriptFunction::RemoveInput(ScriptNode* node)
 	{
 		for (int i = 0; i < input.size(); i++) {
 
@@ -1462,7 +1462,7 @@ namespace ShyEditor {
 
 	}
 
-	ScriptCreationUtilities::ScriptFlow* ScriptCreationUtilities::ScriptMethod::GetScriptFlow()
+	ScriptCreationUtilities::ScriptFlow* ScriptCreationUtilities::ScriptFunction::GetScriptFlow()
 	{
 		return flow;
 	}
@@ -1503,7 +1503,7 @@ namespace ShyEditor {
 			root["type"] = "color";
 			root["value"] = std::to_string(attrValue.value.valueColor.r) + "," + std::to_string(attrValue.value.valueColor.g) + ", " + std::to_string(attrValue.value.valueColor.b);
 		}
-		else if (attrType == Components::AttributesType::GAMEOBJECT) {
+		else if (attrType == Components::AttributesType::ENTITY) {
 			root["type"] = "Entity";
 			root["value"] = attrValue.value.entityIdx;
 		}
@@ -1644,7 +1644,7 @@ namespace ShyEditor {
 		return B;
 	}
 
-	void ScriptCreationUtilities::ScriptFork::updateAndRender()
+	void ScriptCreationUtilities::ScriptFork::UpdateAndRender()
 	{
 		float x, y;
 		B->GetNextNodePosition(&x, &y);
@@ -1741,7 +1741,7 @@ namespace ShyEditor {
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptEvent::updateAndRender()
+	void ScriptCreationUtilities::ScriptEvent::UpdateAndRender()
 	{
 		float x, y;
 		flow->GetNextNodePosition(&x, &y);
@@ -1811,7 +1811,7 @@ namespace ShyEditor {
 		return "Comment";
 	}
 
-	void ScriptCreationUtilities::ScriptComment::updateAndRender()
+	void ScriptCreationUtilities::ScriptComment::UpdateAndRender()
 	{
 		const int margin = 10;
 

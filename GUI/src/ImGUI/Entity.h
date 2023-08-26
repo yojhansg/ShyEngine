@@ -25,21 +25,21 @@ namespace ShyEditor {
 	class Transform;
 	class Overlay;
 
-	class GameObject {
+	class Entity {
 
 	public:
 
 		static std::vector<int> unusedIds;
 
-		GameObject(std::string& path, bool isTransform);
-		GameObject(const GameObject& go);
+		Entity(std::string& path, bool isTransform);
+		Entity(const Entity& entity);
 
-		~GameObject();
+		~Entity();
 
 		// Render, update and input
 		void RenderTransform(SDL_Renderer* renderer, Camera* camera);
 		void Update();
-		bool HandleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
+		bool HandleInput(SDL_Event* event, bool isMouseInsideEntity, ImVec2 mousePos);
 
 		// Name, ID and texture getters/setters
 		std::string GetName();
@@ -84,19 +84,19 @@ namespace ShyEditor {
 
 		Overlay* GetOverlay();
 
-		// Deleting gameobject logic
+		// Deleting entity logic
 		bool IsWaitingToDelete();
 		void ToDelete();
 
-		// Gameobject children and parent logic
-		void SetParent(GameObject* go);
-		GameObject* GetParent();
-		void RemoveChild(GameObject* go);
-		void AddChild(GameObject* go);
-		std::unordered_map<int, GameObject*> GetChildren();
-		bool IsAscendant(GameObject* go);
+		// Entity children and parent logic
+		void SetParent(Entity* entity);
+		Entity* GetParent();
+		void RemoveChild(Entity* entity);
+		void AddChild(Entity* entity);
+		std::unordered_map<int, Entity*> GetChildren();
+		bool IsAscendant(Entity* entity);
 
-		// Gameobject transform, components and scripts drawing
+		// Entity transform, components and scripts drawing
 		void DrawTransformInEditor();
 		void DrawOverlayInEditor();
 		bool DrawComponentsInEditor();
@@ -105,31 +105,31 @@ namespace ShyEditor {
 
 		// Serialization and deseralization logic
 		std::string ToJson();
-		static GameObject* FromJson(std::string json);
+		static Entity* FromJson(std::string json);
 
 	private:
 
 		// Static variable to store the last assigned id (Needed for ids assingment)
 		static int lastId;
 		
-		// Gameobject name
+		// Entity name
 		std::string name;
 
-		// Gameobject id
+		// Entity id
 		int id;
 
-		static void AssignId(GameObject* go);
+		static void AssignId(Entity* entity);
 
-		// Gameobject components, scripts, children and parent
+		// Entity components, scripts, children and parent
 		std::unordered_map<std::string, ::Components::Component> components;
 		std::unordered_map<std::string, Components::Script> scripts;
-		std::unordered_map<int, GameObject*> children;
-		GameObject* parent;
+		std::unordered_map<int, Entity*> children;
+		Entity* parent;
 
 		// A reference to the editor singleton
 		Editor* editor;
 
-		// Gameobject visibility
+		// Entity visibility
 		bool visible;
 		bool showGizmo;
 		int renderOrder;
@@ -144,36 +144,36 @@ namespace ShyEditor {
 		ImVec2* textureSize;
 
 
-		// Gameobject texture and gizmo, path to the image and image component
+		// Entity texture and gizmo, path to the image and image component
 		Components::Component* imageComponent;
 		std::string imagePath;
 
 		Texture* texture;
 		Texture* gizmo;
 
-		// Some other needed information (Input and deleting gameobject logic)
+		// Some other needed information (Input and deleting entity logic)
 		bool leftMouseButtonDown;
 		bool rightMouseButtonDown;
 		float previousMousePosX;
 		float previousMousePosY;
 		bool waitingToDelete;
 
-		// Gameobject draw methods
+		// Entity draw methods
 		bool DrawFloat(std::string attrName, Components::Attribute* attr);
 		bool DrawVector2(std::string attrName, Components::Attribute* attr);
 		bool DrawString(std::string attrName, Components::Attribute* attr);
 		bool DrawBool(std::string attrName, Components::Attribute* attr);
 		bool DrawColor(std::string attrName, Components::Attribute* attr);
 		bool DrawChar(std::string attrName, Components::Attribute* attr);
-		bool DrawGameobject(std::string attrName, Components::Attribute* attr);
+		bool DrawEntity(std::string attrName, Components::Attribute* attr);
 
 		void DrawArrowButton(ImVec2& value, const ImVec2& dir);
 
-		// Gameobject children settings (Transform and visibility)
-		void TranslateChildren(GameObject* go, ImVec2* previousPos);
-		void ScaleChildren(GameObject* go, int scaleFactor);
-		void SetChildrenVisible(GameObject* go, bool visible);
-		void RotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
+		// Entity children settings (Transform and visibility)
+		void TranslateChildren(Entity* entity, ImVec2* previousPos);
+		void ScaleChildren(Entity* entity, int scaleFactor);
+		void SetChildrenVisible(Entity* entity, bool visible);
+		void RotateChildren(Entity* entity, Entity* entityCenter, float rotationAngle);
 	};
 
 
@@ -183,7 +183,7 @@ namespace ShyEditor {
 
 	class Transform {
 
-		GameObject* obj;
+		Entity* obj;
 
 		// Transform attributes
 		ImVec2* scale;
@@ -191,8 +191,8 @@ namespace ShyEditor {
 		float rotation;
 
 	public:
-		Transform(GameObject* obj);
-		Transform(const Transform& tr, GameObject* obj);
+		Transform(Entity* obj);
+		Transform(const Transform& tr, Entity* obj);
 		~Transform();
 		
 		ImVec2 &GetPosition();
@@ -211,7 +211,7 @@ namespace ShyEditor {
 
 	class Overlay {
 
-		GameObject* obj;
+		Entity* obj;
 
 
 		int placement;
@@ -242,8 +242,8 @@ namespace ShyEditor {
 			Positioned, Stretched
 		};
 
-		Overlay(GameObject* obj);
-		Overlay(const Overlay& ov, GameObject* obj);
+		Overlay(Entity* obj);
+		Overlay(const Overlay& ov, Entity* obj);
 		~Overlay();
 
 		int& GetPlacement();

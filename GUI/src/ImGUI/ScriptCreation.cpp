@@ -114,7 +114,7 @@ namespace ShyEditor {
 			switch (node->GetType())
 			{
 
-			case ScriptCreationUtilities::ScriptNode::Node::Method:
+			case ScriptCreationUtilities::ScriptNode::Node::Function:
 				functions.push_back(node->ToJson());
 				break;
 			case ScriptCreationUtilities::ScriptNode::Node::Input:
@@ -218,14 +218,14 @@ namespace ShyEditor {
 
 		SetNodeCount(file["nodeCount"].get<int>());
 
-		struct MethodInput {
-			class ScriptCreationUtilities::ScriptMethod* node;
+		struct FunctionInput {
+			class ScriptCreationUtilities::ScriptFunction* node;
 			std::vector<int> input;
 
 			int next;
 		};
 
-		std::vector<MethodInput> methodInfo;
+		std::vector<FunctionInput> functionInfo;
 
 
 		for (auto& funcNode : functions) {
@@ -235,14 +235,14 @@ namespace ShyEditor {
 			std::string className = completeName.substr(0, separator);
 			std::string functionName = completeName.substr(separator + 1);
 
-			ScriptCreationUtilities::ScriptMethod* method;
+			ScriptCreationUtilities::ScriptFunction* function;
 
 			if (Components::ComponentManager::GetAllComponents().contains(className)) {
 
-				method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllComponents()[className].getMethod(functionName));
+				function = new ScriptCreationUtilities::ScriptFunction(Components::ComponentManager::GetAllComponents()[className].GetFunction(functionName));
 			}
 			else {
-				method = new ScriptCreationUtilities::ScriptMethod(Components::ComponentManager::GetAllManagers()[className].getMethod(functionName));
+				function = new ScriptCreationUtilities::ScriptFunction(Components::ComponentManager::GetAllManagers()[className].GetFunction(functionName));
 			}
 
 
@@ -258,12 +258,12 @@ namespace ShyEditor {
 			if (funcNode.contains("next"))
 				next = funcNode["next"].get<int>();
 
-			methodInfo.push_back({ method, input, next });
+			functionInfo.push_back({ function, input, next });
 
 
-			method->FromJson(funcNode);
+			function->FromJson(funcNode);
 
-			SetNode(method->GetId(), method);
+			SetNode(function->GetId(), function);
 		}
 
 		for (auto& constNode : consts) {
@@ -297,7 +297,7 @@ namespace ShyEditor {
 				//TODO: despues de la serializacion
 			}
 			else if (typeStr == "Entity") {
-				type = ::Components::AttributesType::GAMEOBJECT;
+				type = ::Components::AttributesType::ENTITY;
 				value.value.entityIdx = -1;
 			}
 
@@ -380,7 +380,7 @@ namespace ShyEditor {
 		}
 
 
-		for (auto& mi : methodInfo) {
+		for (auto& mi : functionInfo) {
 
 			int idx = 0;
 			for (int i : mi.input) {
@@ -542,7 +542,7 @@ namespace ShyEditor {
 
 
 		if (ImGui::IsMouseReleased(0)) {
-			ScriptCreationUtilities::ScriptMethod::currentlySelectedOutput = nullptr;
+			ScriptCreationUtilities::ScriptFunction::currentlySelectedOutput = nullptr;
 			ScriptCreationUtilities::ScriptFlow::currentSelectedFlow = nullptr;
 		}
 

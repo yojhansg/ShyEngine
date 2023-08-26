@@ -1,7 +1,7 @@
 #include "Components.h"
 #include <imgui.h>
 #include "Editor.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Scene.h"
 #include "ComponentInfo.h"
 #include "Window.h"
@@ -20,18 +20,18 @@ namespace ShyEditor {
 
 	void ComponentWindow::Behaviour()
 	{
-		GameObject* gameObject = Editor::getInstance()->getScene()->GetSelectedGameObject();
+		Entity* entity = Editor::getInstance()->getScene()->GetSelectedEntity();
 
 
-		if (gameObject != nullptr) {
+		if (entity != nullptr) {
 
-			if (gameObject->IsTransform())
-				gameObject->DrawTransformInEditor();
+			if (entity->IsTransform())
+				entity->DrawTransformInEditor();
 			else
-				gameObject->DrawOverlayInEditor();
+				entity->DrawOverlayInEditor();
 
-			gameObject->DrawComponentsInEditor();
-			gameObject->DrawScriptsInEditor();
+			entity->DrawComponentsInEditor();
+			entity->DrawScriptsInEditor();
 
 			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.2f, 0.65f, 0.2f, 1.0f)); // change header hover color
@@ -43,7 +43,7 @@ namespace ShyEditor {
 
 
 
-			bool isOverlay = !gameObject->IsTransform();
+			bool isOverlay = !entity->IsTransform();
 
 			if (ImGui::CollapsingHeader("Add component"))
 			{
@@ -62,10 +62,10 @@ namespace ShyEditor {
 					if (isOverlay != constainsOverlay)
 						continue;
 
-					if (!gameObject->GetComponents()->contains(compName))
+					if (!entity->GetComponents()->contains(compName))
 						if (ImGui::Button(compName.c_str(), ImVec2(windowWidth, 40))) {
 
-							gameObject->AddComponent(comp.second);
+							entity->AddComponent(comp.second);
 						};
 				}
 			}
@@ -85,9 +85,9 @@ namespace ShyEditor {
 
 				for (auto& script : ::Components::ComponentManager::GetAllScripts()) {
 
-					if (!gameObject->GetScripts()->contains(script.GetName()))
+					if (!entity->GetScripts()->contains(script.GetName()))
 						if (ImGui::Button(script.GetName().c_str(), ImVec2(windowWidth, 40))) {
-							gameObject->AddScript(script);
+							entity->AddScript(script);
 						};
 				}
 			}
@@ -95,17 +95,17 @@ namespace ShyEditor {
 			ImGui::PopStyleColor(6); // reset colors
 
 
-			// If its a prefab instance we add a button to unlink the object from the prefab
-			if (gameObject->IsPrefabInstance()) {
+			// If its a prefab instance we add a button to unlink the entity from the prefab
+			if (entity->IsPrefabInstance()) {
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(gameObject->GetPrefabId())->GetName()).c_str());
+				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(entity->GetPrefabId())->GetName()).c_str());
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 				if (ImGui::Button("Unlink prefab", ImVec2(windowWidth, 40))) {
-					PrefabManager::RemoveInstance(gameObject);
+					PrefabManager::RemoveInstance(entity);
 				}
 			}
 		}

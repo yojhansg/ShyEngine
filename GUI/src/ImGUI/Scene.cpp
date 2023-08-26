@@ -7,7 +7,7 @@
 #include "Preferences.h"
 #include "Components.h"
 #include "LogManager.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Hierarchy.h"
 #include "Window.h"
 #include "Editor.h"
@@ -44,8 +44,8 @@ namespace ShyEditor {
 		uiWidth = 0; uiHeight = 0;
 		ResizeOverlayIfNeccesary();
 
-		// Pointer to the selected gameobject in the scene
-		selectedGameObject = nullptr;
+		// Pointer to the selected entity in the scene
+		selectedEntity = nullptr;
 
 		docked = true;
 		viewMode = 0;
@@ -59,11 +59,11 @@ namespace ShyEditor {
 
 	Scene::~Scene() {
 
-		// Delete gameobjects in the scene
-		for (const auto& pair : gameObjects)
+		// Delete entities in the scene
+		for (const auto& pair : entities)
 			delete pair.second;
 
-		gameObjects.clear();
+		entities.clear();
 
 		// Delete overlays in the scene
 		for (const auto& o : overlays)
@@ -74,53 +74,53 @@ namespace ShyEditor {
 		delete sceneCamera;
 	}
 
-	GameObject* Scene::AddGameObject(std::string path) {
+	Entity* Scene::AddEntity(std::string path) {
 
-		GameObject* go = new GameObject(path, true);
-		gameObjects.emplace(go->GetId(), go);
+		Entity* entity = new Entity(path, true);
+		entities.emplace(entity->GetId(), entity);
 
-		return go;
+		return entity;
 	}
 
-	void Scene::AddOverlayChildsToScene(GameObject* go)
+	void Scene::AddOverlayChildsToScene(Entity* entity)
 	{
-		for (auto& pair : go->GetChildren()) {
+		for (auto& pair : entity->GetChildren()) {
 			overlays.push_back(pair.second);
 
 			AddOverlayChildsToScene(pair.second);
 		}
 	}
 
-	void Scene::AddGameObject(GameObject* go) {
-		gameObjects.emplace(go->GetId(), go);
+	void Scene::AddEntity(Entity* entity) {
+		entities.emplace(entity->GetId(), entity);
 	}
 
-	void Scene::AddGameObjectChildsToScene(GameObject* go)
+	void Scene::AddEntityChildsToScene(Entity* entity)
 	{
-		for (auto& pair : go->GetChildren()) {
-			gameObjects.emplace(pair.second->GetId(), pair.second);
+		for (auto& pair : entity->GetChildren()) {
+			entities.emplace(pair.second->GetId(), pair.second);
 
-			AddGameObjectChildsToScene(pair.second);
+			AddEntityChildsToScene(pair.second);
 		}
 	}
 
-	GameObject* Scene::AddOverlay(std::string path)
+	Entity* Scene::AddOverlay(std::string path)
 	{
-		GameObject* go = new GameObject(path, false);
-		overlays.push_back(go);
+		Entity* entity = new Entity(path, false);
+		overlays.push_back(entity);
 
-		return go;
+		return entity;
 	}
 
-	void Scene::AddOverlay(GameObject* overlay) {
+	void Scene::AddOverlay(Entity* overlay) {
 		overlays.push_back(overlay);
 	}
 
-	std::map<int, GameObject*>& Scene::GetGameObjects() {
-		return gameObjects;
+	std::map<int, Entity*>& Scene::GetEntities() {
+		return entities;
 	}
 
-	std::vector<GameObject*>& Scene::GetOverlays()
+	std::vector<Entity*>& Scene::GetOverlays()
 	{
 		return overlays;
 	}
@@ -129,12 +129,12 @@ namespace ShyEditor {
 		return sceneName;
 	}
 
-	GameObject* Scene::GetSelectedGameObject() {
-		return selectedGameObject;
+	Entity* Scene::GetSelectedEntity() {
+		return selectedEntity;
 	}
 
-	void Scene::SetSelectedGameObject(GameObject* go) {
-		selectedGameObject = go;
+	void Scene::SetSelectedEntity(Entity* entity) {
+		selectedEntity = entity;
 	}
 
 	void Scene::SaveScene(const std::string& sceneName) {
@@ -161,12 +161,12 @@ namespace ShyEditor {
 	void Scene::LoadScene(const std::string& sceneName) {
 
 		// Delete info of previous scene
-		selectedGameObject = nullptr;
+		selectedEntity = nullptr;
 
-		for (const auto& pair : gameObjects)
+		for (const auto& pair : entities)
 			delete pair.second;
 
-		gameObjects.clear();
+		entities.clear();
 
 		for (const auto& o : overlays)
 			delete o;
@@ -194,13 +194,13 @@ namespace ShyEditor {
 			return;
 		}
 
-		nlohmann::json gameObjectsJson = jsonData["objects"];
+		nlohmann::json entitiesJson = jsonData["objects"];
 
-		// Iterate through the game objects JSON array
-		for (const auto& gameObjectJson : gameObjectsJson) {
-			GameObject* gameObject = GameObject::FromJson(gameObjectJson.dump());
-			gameObjects.insert({ gameObject->GetId(), gameObject });
-			AddGameObjectChildsToScene(gameObject);
+		// Iterate through the entities JSON array
+		for (const auto& entityJson : entitiesJson) {
+			Entity* entity = Entity::FromJson(entityJson.dump());
+			entities.insert({ entity->GetId(), entity });
+			AddEntityChildsToScene(entity);
 		}
 
 		if (!jsonData.contains("overlays")) {
@@ -210,36 +210,36 @@ namespace ShyEditor {
 
 		nlohmann::json overlaysJson = jsonData["overlays"];
 
-		// Iterate through the overlay objects JSON array
+		// Iterate through the overlay entities JSON array
 		for (const auto& overlayJson : overlaysJson) {
-			GameObject* overlay = GameObject::FromJson(overlayJson.dump());
+			Entity* overlay = Entity::FromJson(overlayJson.dump());
 			overlays.push_back(overlay);
 			AddOverlayChildsToScene(overlay);
 		}
 
 	}
 
-	void Scene::RenderChildGameObjects(GameObject* go)
+	void Scene::RenderChildEntities(Entity* entity)
 	{
-		for (auto& pair : go->GetChildren()) {
-			RenderChildGameObjects(pair.second);
+		for (auto& pair : entity->GetChildren()) {
+			RenderChildEntities(pair.second);
 			pair.second->RenderTransform(renderer, sceneCamera);
 		}
 	}
 
-	void Scene::RenderGameObjects()
+	void Scene::RenderEntities()
 	{
-		std::vector<GameObject*> sortedGameObjects;
-		for (const auto& pair : gameObjects) {
+		std::vector<Entity*> sortedEntities;
+		for (const auto& pair : entities) {
 			if (pair.second->GetParent() == nullptr)
-				sortedGameObjects.push_back(pair.second);
+				sortedEntities.push_back(pair.second);
 		}
 
-		std::sort(sortedGameObjects.begin(), sortedGameObjects.end(), CompareGameObjectsRenderOrder);
+		std::sort(sortedEntities.begin(), sortedEntities.end(), CompareEntitiesRenderOrder);
 
-		for (auto gO : sortedGameObjects) {
-			gO->RenderTransform(renderer, sceneCamera);
-			RenderChildGameObjects(gO);
+		for (auto entity : sortedEntities) {
+			entity->RenderTransform(renderer, sceneCamera);
+			RenderChildEntities(entity);
 		}
 	}
 
@@ -273,9 +273,9 @@ namespace ShyEditor {
 
 		float cameraScale = sceneCamera->GetScale();
 
-		for (auto go : overlays) {
+		for (auto overlayEntity : overlays) {
 
-			Overlay* overlay = go->GetOverlay();
+			Overlay* overlay = overlayEntity->GetOverlay();
 
 
 			//TODO: aplicar color y escala
@@ -334,7 +334,7 @@ namespace ShyEditor {
 
 
 
-					selectedGameObject = go;
+					selectedEntity = overlayEntity;
 					selectedOverlay.overlay = overlay;
 
 					selectedOverlay.offset_x = dest.x - mouse.x;
@@ -523,16 +523,16 @@ namespace ShyEditor {
 
 		ImVec2 mousePos = ImGui::GetMousePos();
 		bool insideWindow = IsMouseHoveringWindow();
-		bool anyGoSelected = false;
+		bool anyEntitySelected = false;
 
 		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
-			for (const auto& pair : gameObjects) {
+			for (const auto& pair : entities) {
 
-				if (IsMouseHoveringGameObject(pair.second)) {
+				if (IsMouseHoveringEntity(pair.second)) {
 
-					anyGoSelected = true;
-					selectedGameObject = pair.second;
+					anyEntitySelected = true;
+					selectedEntity = pair.second;
 					dragging = true;
 				}
 
@@ -540,8 +540,8 @@ namespace ShyEditor {
 		}
 
 
-		if (insideWindow && !anyGoSelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-			SetSelectedGameObject(nullptr);
+		if (insideWindow && !anyEntitySelected && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
+			SetSelectedEntity(nullptr);
 		}
 
 		if (event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT)
@@ -549,7 +549,7 @@ namespace ShyEditor {
 			dragging = false;
 		}
 
-		if (dragging && selectedGameObject != nullptr && selectedGameObject->IsTransform() && event->type == SDL_MOUSEMOTION) {
+		if (dragging && selectedEntity != nullptr && selectedEntity->IsTransform() && event->type == SDL_MOUSEMOTION) {
 
 			float invCameraScale = 1.f / sceneCamera->GetScale();
 
@@ -557,18 +557,18 @@ namespace ShyEditor {
 
 				const float incrementSpeed = .3f;
 
-				float r = selectedGameObject->GetRotation();
+				float r = selectedEntity->GetRotation();
 
 				r += event->motion.xrel * incrementSpeed;
 
-				selectedGameObject->SetRotation(r);
+				selectedEntity->SetRotation(r);
 			}
 			else if (ImGui::IsKeyDown(ImGuiKey_LeftAlt)) {
 
 				const float incrementSpeed = .03f;
 
-				float x = selectedGameObject->GetScaleX();
-				float y = selectedGameObject->GetScaleY();
+				float x = selectedEntity->GetScaleX();
+				float y = selectedEntity->GetScaleY();
 
 				float xspeed = std::log10(1 + x) * incrementSpeed;
 				float yspeed = std::log10(1 + y) * incrementSpeed;
@@ -586,16 +586,16 @@ namespace ShyEditor {
 				x = std::clamp(x, 0.f, FLT_MAX);
 				y = std::clamp(y, 0.f, FLT_MAX);
 
-				selectedGameObject->SetScale(x, y);
+				selectedEntity->SetScale(x, y);
 			}
 			else {
 
-				auto pos = selectedGameObject->GetPosition();
+				auto pos = selectedEntity->GetPosition();
 				pos.x += event->motion.xrel * invCameraScale;
 				pos.y += event->motion.yrel * invCameraScale;
 
 
-				selectedGameObject->SetPosition(pos);
+				selectedEntity->SetPosition(pos);
 			}
 		}
 
@@ -605,17 +605,17 @@ namespace ShyEditor {
 		if (event->type == SDL_KEYUP && event->key.keysym.scancode == SDL_SCANCODE_SPACE) {
 
 
-			if (selectedGameObject != nullptr) {
+			if (selectedEntity != nullptr) {
 
-				if (selectedGameObject->IsTransform()) {
+				if (selectedEntity->IsTransform()) {
 
-					auto pos = selectedGameObject->GetPosition();
+					auto pos = selectedEntity->GetPosition();
 					sceneCamera->SetPosition(pos.x, pos.y);
 				}
 				else {
 
 					float camScale = sceneCamera->GetScale();
-					auto pos = selectedGameObject->GetOverlay()->CalculateCenterPoint();
+					auto pos = selectedEntity->GetOverlay()->CalculateCenterPoint();
 					sceneCamera->SetPosition(pos.x * camScale, pos.y * camScale);
 
 				}
@@ -640,19 +640,19 @@ namespace ShyEditor {
 		if (sceneCamera->ShouldResize(windowWidth, windowHeight))
 			sceneCamera->Resize(windowWidth, windowHeight);
 
-		auto it = gameObjects.begin();
-		while (it != gameObjects.end()) {
-			GameObject* go = it->second;
+		auto it = entities.begin();
+		while (it != entities.end()) {
+			Entity* entity = it->second;
 
-			go->Update();
+			entity->Update();
 
-			if (go->IsWaitingToDelete()) {
-				selectedGameObject = nullptr;
+			if (entity->IsWaitingToDelete()) {
+				selectedEntity = nullptr;
 
-				GameObject::unusedIds.push_back(go->GetId());
+				Entity::unusedIds.push_back(entity->GetId());
 
-				delete go;
-				it = gameObjects.erase(it);
+				delete entity;
+				it = entities.erase(it);
 			}
 			else {
 				++it;
@@ -662,16 +662,16 @@ namespace ShyEditor {
 
 		auto it2 = overlays.begin();
 		while (it2 != overlays.end()) {
-			GameObject* go = *it2;
+			Entity* entity = *it2;
 
-			go->Update();
+			entity->Update();
 
-			if (go->IsWaitingToDelete()) {
-				selectedGameObject = nullptr;
+			if (entity->IsWaitingToDelete()) {
+				selectedEntity = nullptr;
 
-				GameObject::unusedIds.push_back(go->GetId());
+				Entity::unusedIds.push_back(entity->GetId());
 
-				delete go;
+				delete entity;
 				it2 = overlays.erase(it2);
 			}
 			else {
@@ -687,12 +687,12 @@ namespace ShyEditor {
 
 		case 0:
 
-			RenderGameObjects();
+			RenderEntities();
 			RenderUI();
 			break;
 		case 1:
 
-			RenderGameObjects();
+			RenderEntities();
 
 			break;
 		case 2:
@@ -763,36 +763,36 @@ namespace ShyEditor {
 		if (extension == ".png" || extension == ".jpg") {
 
 
-			GameObject* go = AddGameObject(asset.relativePath);
-			go->SetName(asset.name);
+			Entity* entity = AddEntity(asset.relativePath);
+			entity->SetName(asset.name);
 
 			ImVec2 position = MousePositionInScene();
 
-			go->SetPosition(position);
-			selectedGameObject = go;
+			entity->SetPosition(position);
+			selectedEntity = entity;
 		}
 
 		if (asset.isPrefab) {
 
-			GameObject* prefab = PrefabManager::GetPrefabById(asset.prefabId);
+			Entity* prefab = PrefabManager::GetPrefabById(asset.prefabId);
 
 			//Create a copy of the prefab
-			GameObject* go = new GameObject(*prefab);
-			if (go->IsTransform()) {
-				AddGameObject(go);
+			Entity* entity = new Entity(*prefab);
+			if (entity->IsTransform()) {
+				AddEntity(entity);
 
-				AddGameObjectChildsToScene(go);
+				AddEntityChildsToScene(entity);
 
 				ImVec2 position = MousePositionInScene();
 
-				go->SetPosition(position);
+				entity->SetPosition(position);
 			}
 			else {
-				AddOverlay(go);
-				AddOverlayChildsToScene(go);
+				AddOverlay(entity);
+				AddOverlayChildsToScene(entity);
 			}
 			
-			selectedGameObject = go;
+			selectedEntity = entity;
 		}
 	}
 
@@ -823,21 +823,21 @@ namespace ShyEditor {
 		return mousepos;
 	}
 
-	bool Scene::IsMouseHoveringGameObject(GameObject* gameObject) {
+	bool Scene::IsMouseHoveringEntity(Entity* entity) {
 
 		auto mousePos = MousePositionInScene();
 
-		auto goPos = gameObject->GetAdjustedPosition();
-		auto goSize = gameObject->GetSize();
+		auto entityPos = entity->GetAdjustedPosition();
+		auto entitySize = entity->GetSize();
 
-		goSize.x *= gameObject->GetScaleX();
-		goSize.y *= gameObject->GetScaleY();
+		entitySize.x *= entity->GetScaleX();
+		entitySize.y *= entity->GetScaleY();
 
-		return mousePos.x > goPos.x && mousePos.x < goPos.x + goSize.x &&
-			mousePos.y > goPos.y && mousePos.y < goPos.y + goSize.y;
+		return mousePos.x > entityPos.x && mousePos.x < entityPos.x + entitySize.x &&
+			mousePos.y > entityPos.y && mousePos.y < entityPos.y + entitySize.y;
 	}
 
-	bool Scene::CompareGameObjectsRenderOrder(GameObject* a, GameObject* b) {
+	bool Scene::CompareEntitiesRenderOrder(Entity* a, Entity* b) {
 		return a->GetRenderOrder() < b->GetRenderOrder();
 	}
 
@@ -960,21 +960,21 @@ namespace ShyEditor {
 
 		j["name"] = sceneName;
 
-		nlohmann::ordered_json gameObjectsJson = nlohmann::json::array();
-		for (const auto& pair : gameObjects) {
+		nlohmann::ordered_json entitiesJson = nlohmann::json::array();
+		for (const auto& pair : entities) {
 			if (pair.second->GetParent() == nullptr)
-				gameObjectsJson.push_back(j.parse(pair.second->ToJson()));
+				entitiesJson.push_back(j.parse(pair.second->ToJson()));
 		}
 
-		j["objects"] = gameObjectsJson;
+		j["objects"] = entitiesJson;
 
-		nlohmann::ordered_json overlayObjectsJson = nlohmann::json::array();
+		nlohmann::ordered_json overlayEntitiesJson = nlohmann::json::array();
 		for (const auto& o : overlays) {
 			if (o->GetParent() == nullptr)
-				overlayObjectsJson.push_back(j.parse(o->ToJson()));
+				overlayEntitiesJson.push_back(j.parse(o->ToJson()));
 		}
 
-		j["overlays"] = overlayObjectsJson;
+		j["overlays"] = overlayEntitiesJson;
 
 
 		return j.dump(2);

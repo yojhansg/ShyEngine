@@ -3,7 +3,7 @@
 #include "nlohmann/json.hpp"
 #include "ColorPalette.h"
 #include "Preferences.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Editor.h"
 #include "Scene.h"
 #include "imgui.h"
@@ -32,7 +32,7 @@ namespace ShyEditor {
     void MenuBar::Update()
     {
 
-        GameObject* gameObject = editor->getScene()->GetSelectedGameObject();
+        Entity* entity = editor->getScene()->GetSelectedEntity();
 
         if (ImGui::BeginMainMenuBar())
         {
@@ -193,10 +193,10 @@ namespace ShyEditor {
 
 
 
-            if (gameObject != nullptr)
+            if (entity != nullptr)
             {
                 ImGui::Separator();
-                if (ImGui::BeginMenu("GameObject"))
+                if (ImGui::BeginMenu("Entity"))
                 {
                     if (ImGui::MenuItem("Create prefab", NULL, false)) {
                         shouldOpenSavePrefabPopup = true;
@@ -216,7 +216,7 @@ namespace ShyEditor {
                     ImGui::Separator();
 
                     if (ImGui::MenuItem("Delete", NULL, false)) {
-                        gameObject->ToDelete();
+                        entity->ToDelete();
                     }
 
                     ImGui::EndMenu();
@@ -226,24 +226,24 @@ namespace ShyEditor {
             ImGui::EndMainMenuBar();
         }
 
-        showRenamePopup(gameObject);
-        showNewScenePopup();
-        showSavePrefabPopup(gameObject);
+        ShowRenamePopup(entity);
+        ShowNewScenePopup();
+        ShowSavePrefabPopup(entity);
     }
 
-    void MenuBar::showRenamePopup(GameObject* gameObject)
+    void MenuBar::ShowRenamePopup(Entity* entity)
     {
-        if (gameObject == nullptr) return;
+        if (entity == nullptr) return;
 
         if (shouldOpenRenamePopup)
         {
-            ImGui::OpenPopup("Rename Object##" + gameObject->GetId());
+            ImGui::OpenPopup("Rename Entity##" + entity->GetId());
             shouldOpenRenamePopup = false;
         }
 
-        if (ImGui::BeginPopup("Rename Object##" + gameObject->GetId()))
+        if (ImGui::BeginPopup("Rename Entity##" + entity->GetId()))
         {
-            ImGui::Text(("Insert new name for GameObject: " + gameObject->GetName()).c_str());
+            ImGui::Text(("Insert new name for Entity: " + entity->GetName()).c_str());
 
             ImGui::Separator();
 
@@ -257,7 +257,7 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    gameObject->SetName(nameBuffer);
+                    entity->SetName(nameBuffer);
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -267,7 +267,7 @@ namespace ShyEditor {
         }
     }
 
-    void MenuBar::showNewScenePopup()
+    void MenuBar::ShowNewScenePopup()
     {
         if (shouldOpenNewScenePopup)
         {
@@ -308,17 +308,17 @@ namespace ShyEditor {
         }
     }
 
-    void MenuBar::showSavePrefabPopup(GameObject* go)
+    void MenuBar::ShowSavePrefabPopup(Entity* entity)
     {
-        if (go == nullptr) return;
+        if (entity == nullptr) return;
 
         if (shouldOpenSavePrefabPopup)
         {
-            ImGui::OpenPopup("Save prefab" + go->GetId());
+            ImGui::OpenPopup("Save prefab" + entity->GetId());
             shouldOpenSavePrefabPopup = false;
         }
 
-        if (ImGui::BeginPopup("Save prefab" + go->GetId()))
+        if (ImGui::BeginPopup("Save prefab" + entity->GetId()))
         {
             ImGui::Text(("Insert name for the prefab:"));
 
@@ -333,7 +333,7 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    GameObject* prefab = new GameObject(*go);
+                    Entity* prefab = new Entity(*entity);
                     prefab->SetName(nameBuffer);
                     
                     PrefabManager::AddPrefab(prefab);

@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 #include "LogManager.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "imgui.h"
 #include "SDL.h"
 
