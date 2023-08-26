@@ -63,9 +63,9 @@ namespace Renderer {
 	private:
 
 		RendererManager();
-		RendererManager(const std::string& windowTitle, int width, int height, bool vsync);
+		RendererManager(const std::string& windowTitle, int width, int height, bool vsync, bool fullscreen, bool showcursor);
 
-		bool initSDL(bool vsync);
+		bool initSDL(bool vsync, bool fullscreen, bool showcursor);
 		void closeSDL();
 
 		int width; 

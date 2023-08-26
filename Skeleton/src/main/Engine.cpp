@@ -57,18 +57,18 @@ bool Engine::init() {
 	sceneManager = ECS::SceneManager::init();
 	if (!sceneManager->Valid()) return false;
 
-	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
+	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync, data.fullscreen, data.showCursor);
 	if (!rendererManager->Valid()) return false;
 
-	physicsManager = Physics::PhysicsManager::init(data.gravity);
+	physicsManager = Physics::PhysicsManager::init(data.gravity, data.layers, data.collisionMatrix);
 	if (!physicsManager->Valid()) return false;
 
 	inputManager = Input::InputManager::init(data.closeWithEscape);
 	if (!inputManager->Valid()) return false;
 
-	if (!Sound::SoundManager::init()->Valid()) return false;
+	if (!Sound::SoundManager::init(data.frequency, data.channels + 1, data.chunksize)->Valid()) return false;
 
-	renderManager = ECS::RenderManager::init();
+	renderManager = ECS::RenderManager::init();	
 
 	engineTime = Utilities::Time::init();
 
@@ -86,7 +86,7 @@ bool Engine::init() {
 
 	ComponentFactory::init();
 
-	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
+	overlayManager = ECS::OverlayManager::init(data.debugFramerate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
 
 
 

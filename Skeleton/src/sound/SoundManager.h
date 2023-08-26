@@ -109,8 +109,9 @@ namespace Sound {
 	private:
 
 		SoundManager();
+		SoundManager(int frequency, int channels, int chunksize);
 
-		bool initSDLMixer();
+		bool initSDLMixer(int frequency, int channels, int chunksize);
 		void closeSDLMixer();
 
 		int nChannels;

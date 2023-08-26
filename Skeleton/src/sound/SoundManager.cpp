@@ -8,8 +8,10 @@
 
 namespace Sound {
 
-	SoundManager::SoundManager() {
-		valid = initSDLMixer();
+	SoundManager::SoundManager() {}
+
+	SoundManager::SoundManager(int frequency, int channels, int chunksize) {
+		valid = initSDLMixer(frequency, channels, chunksize);
 	}
 
 	bool SoundManager::Valid() {
@@ -248,7 +250,7 @@ namespace Sound {
 		Mix_RewindMusic();
 	}
 
-	bool SoundManager::initSDLMixer() {
+	bool SoundManager::initSDLMixer(int frequency, int channels, int chunksize) {
 
 		int flags = MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID;
 
@@ -270,7 +272,13 @@ namespace Sound {
 			return false;
 		}
 
-		e = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+		if (channels < 1 || channels > 2) {
+			Console::Output::PrintError("Sound engine (SDL_Mixer)", "Channels parameter invalid format, must be 1 for mono or 2 for stereo");
+			Mix_Quit();
+			return false;
+		}
+
+		e = Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, chunksize);
 		if (e == -1) {
 			Console::Output::PrintError("Sound engine (SDL_Mixer)", "Could not initialise SDLMixer!");
 			Mix_Quit();

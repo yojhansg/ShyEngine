@@ -4,12 +4,13 @@
 #include "DebugDraw.h"
 
 #include <ConsoleManager.h>
+#include <iostream>
 
 const int MAX_COLLISION_LAYERS = 16;
 
 namespace Physics {
 
-	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
+	void PhysicsManager::initPhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations, int positionIterations) {
 
 		this->gravity = new b2Vec2(gravity.getX(), gravity.getY());
 		world = new b2World(*this->gravity);
@@ -32,22 +33,48 @@ namespace Physics {
 		// Collision Matrix
 		layersCount = 0;
 
-		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, true));
+		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, false));
 
 		freeLayers = std::stack<int>();
 
 		for (int i = MAX_COLLISION_LAYERS - 1; i >= 0; i--) freeLayers.push(i);
 
-		addCollisionLayer("Default");
+		LoadMatrixFromData(dataLayers, dataMatrix);
 
 	}
 
-	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations) {
-		initPhysicsManager(gravity, velocityIterations, positionIterations);
+	void PhysicsManager::showMatrix() {
+		for (int i = 0; i < layersCount; i++) {
+			for (int c = 0; c < layersCount; c++) {
+				std::cout << collision_matrix[i][c] << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+		std::cout << std::endl;
+	}
+
+	PhysicsManager::PhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations, int positionIterations) {
+		initPhysicsManager(gravity, dataLayers, dataMatrix, velocityIterations, positionIterations);
 	}
 
 	PhysicsManager::PhysicsManager() {
-		initPhysicsManager(Utilities::Vector2D(0, 9.8f), 6, 3);
+		initPhysicsManager(Utilities::Vector2D(0, 9.8f), std::vector < std::string>(), std::vector < std::vector<bool>>(), 6, 3);
+	}
+
+	void PhysicsManager::LoadMatrixFromData(std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix) {
+
+		for (auto& l : dataLayers)
+			addCollisionLayer(l);
+
+		for (int i = 0; i < MAX_COLLISION_LAYERS; i++) {
+			for (int c = 0; c < MAX_COLLISION_LAYERS; c++) {
+				if (i + c < dataLayers.size() && dataMatrix[i][c]) {
+					setCollisionBetweenLayers(dataLayers[i], dataLayers[dataLayers.size() - 1 - c], true);
+				}
+			}
+		}
+
 	}
 
 	void PhysicsManager::setBodyEnabled(b2Body* body, bool enabled) {
@@ -114,19 +141,31 @@ namespace Physics {
 				layers[par.first]--;
 		}
 
-		freeLayers.push(removedLayerIndex);
+		// Make false all the cells in the removed layer 
+		for (int i = 0; i < layersCount; i++) {
+			collision_matrix[removedLayerIndex][layersCount - 1 - i] = false;
+			collision_matrix[i][layersCount - 1 - removedLayerIndex] = false;
+		}
 
-		for (int i = removedLayerIndex; i < layersCount - 1; i++) {
-			collision_matrix[i] = collision_matrix[i + 1];
+		for (int i = removedLayerIndex + 1; i < layersCount; i++) {
+			collision_matrix[i - 1] = collision_matrix[i];
 		}
 
 		for (int i = 0; i < layersCount; i++) {
-			for (int c = removedLayerIndex; c < layersCount - 1; c++) {
-				collision_matrix[i][c] = collision_matrix[i][c + 1];
+			for (int c = layersCount - removedLayerIndex; c < layersCount; c++) {
+				collision_matrix[i][c - 1] = collision_matrix[i][c];
 			}
 		}
 
+		// Make false all celss in the last used layer
+		for (int i = 0; i < layersCount; i++) {
+			collision_matrix[layersCount - 1][i] = false;
+			collision_matrix[i][layersCount - 1] = false;
+		}
+
 		layersCount--;
+
+		freeLayers.push(layersCount);
 	}
 
 	int PhysicsManager::getMaskBits(const std::string& layerName) {
@@ -154,8 +193,8 @@ namespace Physics {
 		int layerA = layers.at(layerNameA);
 		int layerB = layers.at(layerNameB);
 
-		collision_matrix[layerA][layerB] = collide;
-		collision_matrix[layerB][layerA] = collide;
+		collision_matrix[layerA][layersCount - 1 - layerB] = collide;
+		collision_matrix[layerB][layersCount - 1 - layerA] = collide;
 
 	}
 
@@ -164,7 +203,7 @@ namespace Physics {
 		int layerA = layers.at(layerNameA);
 		int layerB = layers.at(layerNameB);
 
-		return collision_matrix[layerA][layerB];
+		return collision_matrix[layerA][layersCount - 1 - layerB];
 
 	}
 
@@ -181,10 +220,8 @@ namespace Physics {
 	}
 
 	void PhysicsManager::debugDraw() {
-	#ifdef _DEBUG
 		if (debugDrawEnabled)
 			 world->DebugDraw();
-	#endif
 	}
 
 	void PhysicsManager::enableDebugDraw(bool enable) {
