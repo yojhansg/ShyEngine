@@ -284,7 +284,7 @@ namespace ShyEditor {
 					std::filesystem::path currentDirectory(entry.path);
 					std::string relativePath = currentDirectory.lexically_relative(assetPath).stem().string();
 					editor->SetLastOpenedScene(relativePath);
-					editor->GetScene()->LoadScene(entry.name);
+					editor->GetScene()->LoadScene();
 				}
 
 				else {

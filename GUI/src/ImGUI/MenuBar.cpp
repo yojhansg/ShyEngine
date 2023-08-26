@@ -48,7 +48,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                    editor->GetScene()->SaveScene(editor->GetScene()->GetSceneName());
+                    editor->GetScene()->SaveScene();
                 }
 
 
@@ -65,7 +65,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
-                    ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::getInstance()->GetLastOpenedScene());
+                    ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
                     Editor::GetInstance()->End();
                 };
 
@@ -112,7 +112,7 @@ namespace ShyEditor {
                     Preferences::GenerateRelease();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->SaveScene();
+                    editor->GetScene()->SaveScene();
                     Game::Play(false);
                 };
 

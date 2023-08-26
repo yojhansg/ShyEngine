@@ -33,10 +33,6 @@ namespace ShyEditor {
 
 		renderer = editor->GetRenderer();
 
-		// Load the default scene or the last opene scene
-		bool load = LoadScene();
-		editor->SetAnySceneOpened(load);
-
 		sceneCamera = new Camera(ImVec2(0, 0), 1, renderer);
 		sceneCamera->SetConstrains(.1, 10.0);
 
@@ -142,7 +138,7 @@ namespace ShyEditor {
 
 		nlohmann::ordered_json j;
 
-		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + name + ".scene";
+		scenePath = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + name + ".scene";
 		sceneName = name;
 		this->name = sceneName.c_str();
 
@@ -173,7 +169,7 @@ namespace ShyEditor {
 
 	bool Scene::LoadScene() {
 
-		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + Editor::getInstance()->GetLastOpenedScene() + ".scene";
+		scenePath = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + Editor::GetInstance()->GetLastOpenedScene() + ".scene";
 		std::filesystem::path p(scenePath);
 		sceneName = p.filename().stem().string();
 		name = sceneName.c_str();

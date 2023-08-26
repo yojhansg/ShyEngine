@@ -114,9 +114,9 @@ void Editor::Loop() {
 		// Init the ImGUI windows in the editor
 		instance->CreateWindows();
 
-		//Load the scene after creating windows
-		std::string sceneName = instance->scene->GetSceneName();
-		instance->scene->LoadScene(sceneName);
+		// Load the default scene or the last opene scene after creating the windows
+		bool load = instance->scene->LoadScene();
+		instance->SetAnySceneOpened(load);
 	}
 
 	// Editor main loop
@@ -271,7 +271,7 @@ void Editor::CreateWindows() {
 
 	// File explorer
 	fileExplorer = new ShyEditor::FileExplorer();
-	addWindow(fileExplorer);
+	AddWindow(fileExplorer);
 
 	// Game scene
 	scene = new ShyEditor::Scene();
