@@ -98,8 +98,9 @@ namespace ShyEditor {
 		Entity* GetSelectedEntity();
 		void SetSelectedEntity(Entity* entity);
 
-		void SaveScene(const std::string& sceneName);
-		void LoadScene(const std::string& sceneName);
+		void NewScene(const std::string& name);
+		void SaveScene();
+		bool LoadScene();
 
 		void RenderChildEntities(Entity* entity);
 		void RenderEntities();

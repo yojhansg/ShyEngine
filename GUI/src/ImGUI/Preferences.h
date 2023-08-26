@@ -59,20 +59,19 @@ namespace ShyEditor {
 
 		ProjectData data;
 
-		void GeneralHeader();
-		void WindowHeader();
-		void AudioHeader();
-		void InputHeader();
-		void OverlayHeader();
-		void PhysicsHeader();
-
-
 		std::string newLayer;
 		std::string defaultLayer;
 		int nLayers;
 		bool updateMatrix;
 		bool showError;
 		std::wstring errorMsg;
+
+		void GeneralHeader();
+		void WindowHeader();
+		void AudioHeader();
+		void InputHeader();
+		void OverlayHeader();
+		void PhysicsHeader();
 
 		nlohmann::ordered_json BasicData();
 

@@ -167,7 +167,7 @@ namespace ShyEditor {
 		// Entity draw methods
 		bool DrawFloat(std::string attrName, Components::Attribute* attr);
 		bool DrawVector2(std::string attrName, Components::Attribute* attr);
-		bool DrawString(std::string attrName, Components::Attribute* attr);
+		bool DrawString(std::string attrName, Components::Attribute* attr, bool readOnly = false);
 		bool DrawBool(std::string attrName, Components::Attribute* attr);
 		bool DrawColor(std::string attrName, Components::Attribute* attr);
 		bool DrawChar(std::string attrName, Components::Attribute* attr);

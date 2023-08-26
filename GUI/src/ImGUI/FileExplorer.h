@@ -31,6 +31,7 @@ namespace ShyEditor {
 		Texture* script;
 		Texture* folder;
 		Texture* scene;
+		Texture* audio;
 
 		std::string assetPath;
 		std::string currentPath;
@@ -66,6 +67,8 @@ namespace ShyEditor {
 
 		void ShowDeleteFilePopup();
 		void ShowFileMenuPopup();
+
+		Texture* SetTextureToFile(Entry& entry);
 
 		Entry entryToDelete;
 

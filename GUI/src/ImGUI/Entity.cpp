@@ -16,7 +16,6 @@
 #include "Font.h"
 
 #include <fstream>
-
 #include "CheckML.h"
 
 #define GizmoImage "gizmo.png"
@@ -634,6 +633,9 @@ namespace ShyEditor {
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
 	}
 
+
+
+
 	//Returns true if there has been a change in a component
 	bool Entity::DrawComponentsInEditor() {
 
@@ -644,11 +646,26 @@ namespace ShyEditor {
 
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
 
+
+				std::string compDescription;
+				if (Components::ComponentManager::GetComponentInfo(compDescription, componentName)) {
+
+					Editor::HelpMarker(compDescription);
+				}
+
+
 				for (auto& attribute : (*it).second.GetAttributesOrdered()) {
 					std::string attributeName = attribute->GetName();
 					Components::Attribute* attr = attribute;
 
 					ImGui::Text(attributeName.c_str());
+
+					std::string attributeDescription;
+					if (Components::ComponentManager::GetComponentElementInfo(&attributeDescription, componentName, attributeName, "info")) {
+
+						Editor::HelpMarker(attributeDescription);
+					}
+
 
 					switch (attr->GetType()) {
 
@@ -739,8 +756,72 @@ namespace ShyEditor {
 						changes = DrawVector2(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::STRING:
-						changes = DrawString(attributeName + it->first, attr);
-						break;
+
+					{
+
+						std::string extension;
+						if (Components::ComponentManager::GetComponentElementInfo(&extension, componentName, attributeName, "asset")) {
+
+
+
+							std::string completePath = attr->value.valueString;
+
+							std::string output = (completePath == "" ? "None" : completePath);
+
+							int textheight = ImGui::GetTextLineHeight();
+							int textheightspacing = ImGui::GetTextLineHeightWithSpacing();
+
+							int width = ImGui::GetWindowWidth() * 0.65f;
+							int textWidth = ImGui::CalcTextSize(output.c_str()).x;
+
+							ImGui::BeginChild(("##" + attributeName + it->first).c_str(), ImVec2(width, textheightspacing));
+
+
+							ImGui::SetCursorPosX((width - textWidth) * 0.5f);
+							ImGui::SetCursorPosY((textheightspacing - textheight) * 0.5f);
+							ImGui::Text(output.c_str());
+
+
+							Editor::HelpMarker("You can drag your assets from the file explorer to use them.\nSupported extensions: " + extension);
+
+							ImGui::EndChild();
+
+
+
+							auto payload = ImGui::GetDragDropPayload();
+
+							if (payload != nullptr && std::strcmp(payload->DataType, "Asset") == 0) {
+
+								Asset* asset = (Asset*)payload->Data;
+
+								std::string assetExtension = asset->extension;
+
+								if (extension.find(assetExtension) != std::string::npos) {
+
+									if (ImGui::BeginDragDropTarget()) {
+
+										if (ImGui::AcceptDragDropPayload("Asset"))
+										{
+											attr->value.valueString = asset->relativePath;
+
+										}
+
+										ImGui::EndDragDropTarget();
+									}
+
+								}
+							}
+
+						}
+						else {
+
+							changes = DrawString(attributeName + it->first, attr);
+						}
+
+					}
+
+
+					break;
 					case Components::AttributesType::BOOL:
 						changes = DrawBool(attributeName + it->first, attr);
 						break;
@@ -772,7 +853,18 @@ namespace ShyEditor {
 				ImGui::PopStyleColor(2);
 
 			}
-			else ++it;
+			else
+			{
+
+				std::string compDescription;
+
+				if (Components::ComponentManager::GetComponentInfo(compDescription, componentName)) {
+
+					Editor::HelpMarker(compDescription);
+				}
+
+				++it;
+			}
 		}
 
 		return changes;
@@ -859,12 +951,14 @@ namespace ShyEditor {
 		return ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	bool Entity::DrawString(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawString(std::string attrName, ::Components::Attribute* attr, bool readOnly) {
 
 		char inputBuffer[256];
 		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
 
-		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
+		int flags = readOnly ? ImGuiInputTextFlags_ReadOnly : 0;
+
+		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer), flags)) {
 			attr->value.valueString = inputBuffer;
 			return true;
 		}
