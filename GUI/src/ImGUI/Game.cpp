@@ -119,11 +119,7 @@ namespace ShyEditor {
 		si.hStdOutput = hChildStdoutWrite;
 		si.dwFlags |= STARTF_USESTDHANDLES;
 
-		std::string newProcessWorkingDirectory = "";
-		if (debug) newProcessWorkingDirectory = "Engine";
-		else newProcessWorkingDirectory = Preferences::GetData().buildPath.c_str();
-
-		if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, newProcessWorkingDirectory.c_str(), &si, &pi)) {
+		if (!CreateProcessA(NULL, (LPSTR)(debug ? path : releasePath).c_str(), NULL, NULL, TRUE, 0, NULL, "Engine", &si, &pi)) {
 			LogManager::LogError("Error creating the process to execute the engine.");
 			return;
 		}

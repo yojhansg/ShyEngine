@@ -6,15 +6,15 @@
 
 namespace Renderer {
 
-	RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400, true) {}
+	RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400, true, false, true) {}
 
-	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync) {
+	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync, bool fullscreen, bool showcursor) {
 		windowTitle = title;
 		width = w;  height = h;
 		targetTexture = nullptr;
 		icon = nullptr;
 
-		valid = initSDL(vsync);
+		valid = initSDL(vsync, fullscreen, showcursor);
 	}
 
 	bool RendererManager::Valid() {
@@ -33,7 +33,7 @@ namespace Renderer {
 
 	}
 
-	bool RendererManager::initSDL(bool vsync) {
+	bool RendererManager::initSDL(bool vsync, bool fullscreen, bool showcursor) {
 		// Initialise SDL
 		int sdlInit_ret = SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -43,9 +43,10 @@ namespace Renderer {
 		}
 
 		// Create window
+		int fullscreenEnable = fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN;
 		window = SDL_CreateWindow(windowTitle.c_str(),
 			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+			SDL_WINDOWPOS_UNDEFINED, width, height, fullscreen | SDL_WINDOW_OPENGL);
 
 		if (window == NULL) {
 			SDL_Quit();
@@ -107,6 +108,7 @@ namespace Renderer {
 			return false;
 		}
 
+		showCursor(showcursor);
 
 		return true;
 	}

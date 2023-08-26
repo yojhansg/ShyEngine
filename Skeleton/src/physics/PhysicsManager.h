@@ -65,12 +65,16 @@ namespace Physics {
 		bool layersExists(cString layerName);
 
 	private:
+		
+		void showMatrix();
 
-		void initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations);
+		void initPhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations, int positionIterations);
 
 		PhysicsManager();
 
-		PhysicsManager(Utilities::Vector2D gravity, int velocityIterations = 6, int positionIterations = 3);
+		PhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations = 6, int positionIterations = 3);
+
+		void LoadMatrixFromData(std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix);
 
 		int velocityIterations;
 		int positionIterations;

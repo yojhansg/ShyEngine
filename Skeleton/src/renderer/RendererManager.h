@@ -58,19 +58,19 @@ namespace Renderer {
 		void toggleFullScreen();
 		void showCursor(bool show);
 		void resizeWindow(int w, int h);
-		void renameWindow(cString name); 
+		void renameWindow(cString name);
 		void repositionWindow(int x, int y);
 		bool SetWindowIcon(cString path);
 
 	private:
 
 		RendererManager();
-		RendererManager(cString windowTitle, int width, int height, bool vsync);
+		RendererManager(cString windowTitle, int width, int height, bool vsync, bool fullscreen, bool showcursor);
 
-		bool initSDL(bool vsync);
+		bool initSDL(bool vsync, bool fullscreen, bool showcursor);
 		void closeSDL();
 
-		int width; 
+		int width;
 		int height;
 
 		SDL_Window* window; // the window

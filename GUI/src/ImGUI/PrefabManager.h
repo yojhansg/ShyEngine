@@ -17,50 +17,56 @@ namespace ShyEditor {
 	private:
 
 		static PrefabManager* instance;
-		static int lastPrefabId;
+		static int lastPrefabId; // Starts at -1 and goes down
 
-		bool open;
+		static void AssignId(GameObject* prefab);
 
 		Editor* editor;
-		std::unordered_map<int, GameObject*> prefabs;
-
-		//Key = prefab Id, Value = all its instances
-		std::unordered_map<int, std::vector<int>> prefabInstances;
-
 		Texture* prefabText;
 
-		void DrawList();
+		bool open;
+		int currentlySelected; // Currently selected prefab
+
+		//Key = prefab Id, Value = all its instances in the scene
+		std::unordered_map<int, std::vector<int>> prefabInstances;
+
+		std::unordered_map<int, GameObject*> prefabs;
+
+		void DrawPrefabList();
+		void DrawPrefab(GameObject* prefab);
 		void DrawImage();
 		void DrawComponents();
 
-		bool shouldUpdate;
-
-		int currentlySelected;
-
+		//Loading prefabs from prefabs json
 		void LoadPrefabs();
-		void HandleDeletion();
+
+		void HandlePrefabDeletion();
 		void UpdatePrefabInstances();
 
+		//Check if prefab is an overlay from the scene
 		GameObject* IdIsInOverlays(int id);
 
 	public:
 
+		// Vector with Ids than can be reutilised
 		static std::vector<int> unusedIds;
 
 		PrefabManager();
 		~PrefabManager();
+		
+		void Behaviour() override;
 
 		static void Open();
 
-		static void AddPrefab(GameObject* go);
-		static void AddInstance(GameObject* prefab, GameObject* prefabInstance);
-		static void AddInstance(int prefabId, int prefabInstanceId);
-		static void RemoveInstance(int prefabId, int prefabInstanceId);
-
+		// Saves the prefabs info into a json
 		static void SavePrefabs(const std::string& path);
 
-		static GameObject* GetPrefabById(int id);
+		static void AddPrefab(GameObject* go);
+		static void AddInstance(int prefabId, int instanceId);
+		static void RemoveInstance(GameObject* instance);
+		static void RemoveInstance(int prefabId, int instanceId);
 
-		void Behaviour() override;
+		// Returns a prefab given its id
+		static GameObject* GetPrefabById(int id);
 	};
 }

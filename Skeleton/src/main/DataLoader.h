@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <Vector2D.h>
 
 
 class DataLoader {
-
 
 private: 
 
@@ -16,27 +16,45 @@ private:
 	DataLoader();
 	
 public:
+
 	static DataLoader Load(std::string const& path);
 
 	bool valid;
-	bool fullScreen; 
-	bool vsync; 
-	bool useSplashScreen; 
+
+	// General
+	std::string initialScene;
+	std::string creator;
+	std::string game;
+	bool useSplashScreen;
+
+	// Window
+	std::string windowTitle;
+	std::string windowIcon;
+	Utilities::Vector2D windowSize;
+	bool vsync;
+	bool fullscreen;
+	bool showCursor;
+
+	// Physics
 	bool debugPhysics;
-	bool debugFrameRate;
+	bool debugFramerate;
+	Utilities::Vector2D gravity;
+	std::vector<std::vector<bool>> collisionMatrix;
+	std::vector<std::string> layers;
+
+	// Input
 	bool closeWithEscape;
 
+	// Overlay
 	float timeToDoubleClick;
 	float timeToHoldClick;
 
-	std::string game; 
-	std::string creator;
-	std::string windowTitle;
-	std::string windowIcon; 
-	std::string initialScene; 
+	// Audio
+	int frequency;
+	int channels;
+	int chunksize;
 
+	// Internal
 	std::string resourcesPath;
 
-	Utilities::Vector2D windowSize;
-	Utilities::Vector2D gravity;
 };

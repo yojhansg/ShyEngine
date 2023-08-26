@@ -38,84 +38,85 @@ namespace ShyEditor {
 
 		// Render, update and input
 		void RenderTransform(SDL_Renderer* renderer, Camera* camera);
-		void update();
-		bool handleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
+		void Update();
+		bool HandleInput(SDL_Event* event, bool isMouseInsideGameObject, ImVec2 mousePos);
 
 		// Name, ID and texture getters/setters
-		std::string getName();
-		void setName(const std::string& newName);
-		Texture* getTexture();
-		int getId();
-		void setId(int id);
-
+		std::string GetName();
+		void SetName(const std::string& newName);
+		Texture* GetTexture();
+		int GetId();
+		void SetId(int id);
 
 		// Prefab related getters/setters
-		void setPrefabId(int prefabId);
-		int getPrefabId();
+		void SetPrefabId(int prefabId);
+		int GetPrefabId();
 
 		// Visibility getters/setters
-		int getRenderOrder();
-		bool isVisible();
-		void setVisible(bool visible);
-
-		// Components and Scripts logic
-		void addComponent(Components::Component comp);
-		void addScript(Components::Script script);
-		std::unordered_map<std::string, Components::Component>* getComponents();
-		std::unordered_map<std::string, Components::Component> getComponentsCopy();
-		std::unordered_map<std::string, Components::Script>* getScripts();
-		std::unordered_map<std::string, Components::Script> getScriptsCopy();
-
-		void setComponents(std::unordered_map<std::string, ::Components::Component> components);
-		void setScripts(std::unordered_map<std::string, Components::Script> scripts);
-
-		// Tranform attributes getters/setters
-		void setPosition(ImVec2 newPos);
-		ImVec2 getPosition();
-		float getRotation();
-		void SetRotation(float r);
-		ImVec2 getAdjustedPosition();
-		ImVec2 getSize();
-		float getScale_x();
-		float getScale_y();
-		void SetScale(float x, float y);
-
-		// Deleting gameobject logic
-		bool isWaitingToDelete();
-		void toDelete();
-
-		// Gameobject children and parent logic
-		void setParent(GameObject* go);
-		GameObject* getParent();
-		void removeChild(GameObject* go);
-		void addChild(GameObject* go);
-		std::unordered_map<int, GameObject*> getChildren();
-		bool isAscendant(GameObject* go);
-
-		// Gameobject transform, components and scripts drawing
-		void drawTransformInEditor();
-		void drawOverlayInEditor();
-		bool drawComponentsInEditor();
-		void drawScriptsInEditor();
-
-		// Serialization and deseralization logic
-		std::string toJson();
-		static GameObject* fromJson(std::string json);
-
+		int GetRenderOrder();
+		bool IsVisible();
+		void SetVisible(bool visible);
 		bool IsTransform();
 
+		// Components and Scripts logic
+		void AddComponent(Components::Component comp);
+		void AddScript(Components::Script script);
+		std::unordered_map<std::string, Components::Component>* GetComponents();
+		std::unordered_map<std::string, Components::Component> GetComponentsCopy();
+		std::unordered_map<std::string, Components::Script>* GetScripts();
+		std::unordered_map<std::string, Components::Script> GetScriptsCopy();
+
+		void SetComponents(std::unordered_map<std::string, ::Components::Component> components);
+		void SetScripts(std::unordered_map<std::string, Components::Script> scripts);
+
+		// Tranform attributes getters/setters
+		void SetPosition(ImVec2 newPos);
+		ImVec2 GetPosition();
+		float GetRotation();
+		void SetRotation(float r);
+		ImVec2 GetAdjustedPosition();
+		ImVec2 GetSize();
+		float GetScaleX();
+		float GetScaleY();
+		void SetScale(float x, float y);
+
 		Overlay* GetOverlay();
+
+		// Deleting gameobject logic
+		bool IsWaitingToDelete();
+		void ToDelete();
+
+		// Gameobject children and parent logic
+		void SetParent(GameObject* go);
+		GameObject* GetParent();
+		void RemoveChild(GameObject* go);
+		void AddChild(GameObject* go);
+		std::unordered_map<int, GameObject*> GetChildren();
+		bool IsAscendant(GameObject* go);
+
+		// Gameobject transform, components and scripts drawing
+		void DrawTransformInEditor();
+		void DrawOverlayInEditor();
+		bool DrawComponentsInEditor();
+		bool DrawScriptsInEditor();
+
+
+		// Serialization and deseralization logic
+		std::string ToJson();
+		static GameObject* FromJson(std::string json);
 
 	private:
 
 		// Static variable to store the last assigned id (Needed for ids assingment)
 		static int lastId;
-
+		
 		// Gameobject name
 		std::string name;
 
 		// Gameobject id
 		int id;
+
+		static void AssignId(GameObject* go);
 
 		// Gameobject components, scripts, children and parent
 		std::unordered_map<std::string, ::Components::Component> components;
@@ -138,7 +139,7 @@ namespace ShyEditor {
 		Transform* transform;
 		Overlay* overlay;
 
-		ImVec2* texture_size;
+		ImVec2* textureSize;
 
 
 		// Gameobject texture and gizmo, path to the image and image component
@@ -156,21 +157,21 @@ namespace ShyEditor {
 		bool waitingToDelete;
 
 		// Gameobject draw methods
-		bool drawFloat(std::string attrName, Components::Attribute* attr);
-		bool drawVector2(std::string attrName, Components::Attribute* attr);
-		bool drawString(std::string attrName, Components::Attribute* attr);
-		bool drawBool(std::string attrName, Components::Attribute* attr);
-		bool drawColor(std::string attrName, Components::Attribute* attr);
-		bool drawChar(std::string attrName, Components::Attribute* attr);
-		bool drawGameobject(std::string attrName, Components::Attribute* attr);
+		bool DrawFloat(std::string attrName, Components::Attribute* attr);
+		bool DrawVector2(std::string attrName, Components::Attribute* attr);
+		bool DrawString(std::string attrName, Components::Attribute* attr);
+		bool DrawBool(std::string attrName, Components::Attribute* attr);
+		bool DrawColor(std::string attrName, Components::Attribute* attr);
+		bool DrawChar(std::string attrName, Components::Attribute* attr);
+		bool DrawGameobject(std::string attrName, Components::Attribute* attr);
 
 		void DrawArrowButton(ImVec2& value, const ImVec2& dir);
 
 		// Gameobject children settings (Transform and visibility)
-		void translateChildren(GameObject* go, ImVec2* previousPos);
-		void scaleChildren(GameObject* go, int scaleFactor);
-		void setChildrenVisible(GameObject* go, bool visible);
-		void rotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
+		void TranslateChildren(GameObject* go, ImVec2* previousPos);
+		void ScaleChildren(GameObject* go, int scaleFactor);
+		void SetChildrenVisible(GameObject* go, bool visible);
+		void RotateChildren(GameObject* go, GameObject* goCenter, float rotationAngle);
 	};
 
 

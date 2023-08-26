@@ -22,245 +22,325 @@ namespace ShyEditor {
 	int PrefabManager::lastPrefabId = -1;
 	std::vector<int> PrefabManager::unusedIds = std::vector<int>();
 
-	void PrefabManager::LoadPrefabs()
-	{
-		std::ifstream inputFile(editor->getProjectInfo().path + "\\Assets\\prefabs.json");
-		if (inputFile.is_open()) {
-			json root;
-
-			inputFile >> root;
-
-			json prefabArray = root["prefabs"];
-
-			for (const json& prefabData : prefabArray) {
-				GameObject* prefab = GameObject::fromJson(prefabData.dump());
-
-				AddPrefab(prefab);
-			}
-
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
-
-			json prefabInstancesArray = root["prefabInstances"];
-
-			for (const auto& item : prefabInstancesArray.items()) {
-				int prefabId = std::stoi(item.key());
-					
-				std::vector<int> prefabInstances;
-				for (const auto& instanceId : item.value()) {
-					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
-						prefabInstances.push_back(instanceId);
-					}
-				}
-				this->prefabInstances.emplace(prefabId, prefabInstances);
-			}
-
-			inputFile.close();
-		}
-		else {
-			// Handle error opening the file
-			std::cerr << "Error opening file: " << editor->getProjectInfo().path + "\\prefabs.json" << std::endl;
-		}
-	}
-
-	void PrefabManager::HandleDeletion()
-	{
-		auto it = prefabs.begin();
-		while (it != prefabs.end()) {
-			GameObject* prefab = it->second;
-
-			prefab->update();
-
-			if (prefab->isWaitingToDelete()) {
-				currentlySelected = 0;
-
-				PrefabManager::unusedIds.push_back(prefab->getId());
-
-				//Stop the instances being referenced
-				if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
-					for (auto instanceId : prefabInstances.find(prefab->getId())->second) {
-						if (prefab->IsTransform()) {
-							editor->getScene()->getGameObjects()[instanceId]->setPrefabId(0);
-						}
-						else {
-							IdIsInOverlays(instanceId)->setPrefabId(0);
-						}
-					}
-
-					prefabInstances.erase(prefab->getId());
-				}
-
-				delete prefab;
-				it = prefabs.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-	}
-
-	void PrefabManager::UpdatePrefabInstances()
-	{
-		if (currentlySelected != 0) {
-			GameObject* prefab = prefabs[currentlySelected];
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
-		
-			if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
-				std::vector<int> instances = prefabInstances.find(prefab->getId())->second;
-
-				for (auto instanceId : instances) {
-					GameObject* instance = nullptr;
-
-					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
-						instance = sceneGameObjects.find(instanceId)->second;
-					}
-					else if (IdIsInOverlays(instanceId) != nullptr){
-						instance = IdIsInOverlays(instanceId);
-					}
-
-					instance->setComponents(prefab->getComponentsCopy());
-					instance->setScripts(prefab->getScriptsCopy());
-				}
-			}
-		}
-	}
-
-	GameObject* PrefabManager::IdIsInOverlays(int id)
-	{
-		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
-
-		for (GameObject* overlay : sceneOverlays) {
-			if (overlay->getId() == id) {
-				return overlay;
-			}
-		}
-		return nullptr;
-	}
-
 	PrefabManager::PrefabManager() : Window("Prefab manager", 0)
 	{
-		editor = Editor::getInstance();
-
-		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
-
-		Hide();
 		instance = this;
 
-		open = false;
-		shouldUpdate = false;
+		editor = Editor::getInstance();
+		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
+
+		open = false;	
+		canBeDisplayedOnTop = true;
 
 		currentlySelected = 0;
 
 		windowWidth = 700;
 		windowHeight = 700;
 
-		canBeDisplayedOnTop = true;
-
 		LoadPrefabs();
+		Hide();
+	}
+
+	PrefabManager::~PrefabManager()
+	{
+		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
+
+		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
+			delete it->second;
+
+		prefabs.clear();
+	}
+	
+	void PrefabManager::Behaviour()
+	{
+		HandlePrefabDeletion();
+
+		ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX;
+
+		if (ImGui::BeginTable("Prefabs", 2, flags))
+		{
+			ImGui::TableSetupColumn("Prefab list", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Edit", ImGuiTableColumnFlags_WidthFixed);
+
+			ImGui::TableHeadersRow();
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+
+			DrawPrefabList();
+
+			ImGui::TableSetColumnIndex(1);
+
+
+			ImGui::SeparatorText("Image");
+			DrawImage();
+
+			ImGui::SeparatorText("Components");
+			DrawComponents();
+
+			ImGui::EndTable();
+		}
+	}
+
+	void PrefabManager::Open()
+	{
+		instance->Show();
 	}
 
 	void PrefabManager::SavePrefabs(const std::string& path)
 	{
 		json root;
-
+		
+		// Save prefabs
 		json prefabArray = json::array();
 
 		for (const auto& pair : instance->prefabs) {
-			json prefabData;
-
 			GameObject* prefab = pair.second;
-	
-			prefabArray.push_back(prefabArray.parse(prefab->toJson()));
+
+			if (prefab->GetParent() == nullptr)
+				prefabArray.push_back(prefabArray.parse(prefab->ToJson()));
 		}
 
+
+		// Save prefabs instances references
 		json prefabInstancesArray;
 
 		for (auto pair : instance->prefabInstances) {
+
 			json prefabInstances;
+
 			for (int gameObjectId : pair.second) {
 				prefabInstances.push_back(gameObjectId);
 			}
+
 			prefabInstancesArray[std::to_string(pair.first)] = prefabInstances;
 		}
 
-		// Add the array to the root object
 		root["prefabs"] = prefabArray;
-
 		root["prefabInstances"] = prefabInstancesArray;
 
 		std::ofstream outputFile(path + "\\prefabs.json");
+
 		if (outputFile.is_open()) {
 			outputFile << root.dump(4) << std::endl;
 			outputFile.close();
 		}
 	}
 
+	void PrefabManager::LoadPrefabs()
+	{
+		std::ifstream inputFile(editor->getProjectInfo().path + "\\Assets\\prefabs.json");
+
+		if (inputFile.is_open()) {
+			json root;
+			inputFile >> root;
+
+			json prefabArray = root["prefabs"];
+
+			// Read the prefabs
+			for (const json& prefabData : prefabArray) {
+				GameObject* prefab = GameObject::FromJson(prefabData.dump());
+
+				AddPrefab(prefab);
+			}
+
+
+			// Read the prefabs instances
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+			json prefabInstancesArray = root["prefabInstances"];
+
+			for (const auto& item : prefabInstancesArray.items()) {
+				int prefabId = std::stoi(item.key());
+
+				std::vector<int> prefabInstances;
+				for (const auto& instanceId : item.value()) {
+					
+					//We check if its reference is still in the scene cause it could have been deleted
+					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
+						prefabInstances.push_back(instanceId);
+					}
+				}
+
+				this->prefabInstances.emplace(prefabId, prefabInstances);
+			}
+
+			inputFile.close();
+		}
+		else {
+			std::cerr << "Error opening file: " << editor->getProjectInfo().path + "\\prefabs.json" << std::endl;
+		}
+	}
+
+	void PrefabManager::AssignId(GameObject* prefab)
+	{
+		if (prefab->GetId() > 0) {
+			GameObject::unusedIds.push_back(prefab->GetId());
+		}
+
+		if (PrefabManager::unusedIds.size() != 0) {
+			prefab->SetId(PrefabManager::unusedIds.back());
+			PrefabManager::unusedIds.pop_back();
+		}
+		else {
+			//Ensure id is not being used already
+			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
+				PrefabManager::lastPrefabId--;
+			}
+
+			prefab->SetId(PrefabManager::lastPrefabId);
+			PrefabManager::lastPrefabId--;
+		}
+	}
+
+	void PrefabManager::AddPrefab(GameObject* prefab)
+	{
+		AssignId(prefab);
+
+		instance->prefabs.emplace(prefab->GetId(), prefab);
+
+		for (auto child : prefab->GetChildren()) {
+			AddPrefab(child.second);
+		}
+	}
+
+	void PrefabManager::AddInstance(int prefabId, int prefabInstanceId)
+	{
+		if (instance->prefabInstances.find(prefabId) == instance->prefabInstances.end()) {
+			std::vector<int> instances;
+			instances.push_back(prefabInstanceId);
+
+			instance->prefabInstances.emplace(prefabId, instances);
+		}
+		else {
+			instance->prefabInstances[prefabId].push_back(prefabInstanceId);
+		}
+	}
+
+	void PrefabManager::RemoveInstance(GameObject* instanceObject)
+	{
+		PrefabManager::RemoveInstance(instanceObject->GetPrefabId(), instanceObject->GetId());
+		instanceObject->SetPrefabId(0);
+
+		for (auto child : instanceObject->GetChildren()) {
+			RemoveInstance(child.second);
+		}
+	}
+
+	void PrefabManager::RemoveInstance(int prefabId, int prefabInstanceId)
+	{
+		//Remove the element from the instances vector of that prefab
+		auto it = instance->prefabInstances.find(prefabId);
+		if (it != instance->prefabInstances.end()) {
+
+			std::vector<int>* instances = &it->second;
+
+			auto it2 = std::find(instances->begin(), instances->end(), prefabInstanceId);
+
+			if (it2 != instances->end()) {
+				instances->erase(it2);
+			}
+		}
+	}
+
 	GameObject* PrefabManager::GetPrefabById(int id)
 	{
-		if (instance->prefabs[id] != nullptr) {
-			return instance->prefabs[id];
+		auto it = instance->prefabs.find(id);
+		if (it != instance->prefabs.end()) {
+			return it->second;
 		}
 
 		return nullptr;
 	}
 
-	void PrefabManager::DrawList()
+	void PrefabManager::DrawPrefabList()
 	{
-		const float iconSize = ImGui::GetTextLineHeight() + 8;
-
-		// TODO: cambiar el color para las carpetas
-		// ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
 
 		for (auto& pair : prefabs) {
 			GameObject* prefab = pair.second;
 
-			ImGui::SetNextItemAllowOverlap();
-			if (ImGui::Selectable(std::string("##" + prefab->getName()).c_str(), currentlySelected == prefab->getId(), ImGuiSelectableFlags_AllowDoubleClick)) {
+			if (prefab->GetParent() == nullptr)
+				DrawPrefab(prefab);
+		}
 
-				currentlySelected = prefab->getId();
+	}
 
-			}
+	void PrefabManager::DrawPrefab(GameObject* prefab)
+	{
+		const float iconSize = ImGui::GetTextLineHeight() + 8;
 
+		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+		if (prefab->GetChildren().size() == 0)
+		{
+			flags |= ImGuiTreeNodeFlags_Leaf;
+		}
+
+		if (currentlySelected != 0 && prefabs[currentlySelected] == prefab)
+			flags |= ImGuiTreeNodeFlags_Selected;
+
+		ImGui::PushID(prefab);
+		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
+
+		ImGui::SameLine();
+		ImGui::SetNextItemAllowOverlap();
+
+
+		if (ImGui::Selectable(std::string("##" + prefab->GetName()).c_str(), currentlySelected == prefab->GetId())) {
+			currentlySelected = prefab->GetId();
+		}
+
+		if(prefab->GetParent() == nullptr){
 			if (ImGui::BeginDragDropSource()) {
 
 				Asset asset;
 				asset.isPrefab = true;
-				asset.prefabId = prefab->getId();
+				asset.prefabId = prefab->GetId();
 
 				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
 
 				ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
 				ImGui::SameLine();
-				ImGui::Text(prefab->getName().c_str());
+				ImGui::Text(prefab->GetName().c_str());
 
 
 				ImGui::EndDragDropSource();
 			}
+		}
+		
+		ImGui::SameLine();
 
-			ImGui::SameLine();
+		ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
 
-			int yCursor = ImGui::GetCursorPosY();
-			ImGui::SetCursorPosY(yCursor - 5);
-			ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
-			ImGui::SetCursorPosY(yCursor);
+		ImGui::SameLine();
 
-			ImGui::SameLine();
-			ImGui::Text(prefab->getName().c_str());
+		ImGui::Text(prefab->GetName().c_str());
+
+		if (isOpen) {
+
+			for (auto& child : prefab->GetChildren()) {
+				DrawPrefab(child.second);
+			}
+
+			ImGui::TreePop();
 		}
 
-		ImGui::Unindent();
+		ImGui::PopID();
 	}
 
 	void PrefabManager::DrawImage()
 	{
 		if (currentlySelected != 0) {
-			GameObject* prefab = prefabs[currentlySelected];
-			if ((prefab->IsTransform() && prefab->getTexture() != nullptr) ||
-				(!prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr)) 
-			{
-				Texture* text = prefab->IsTransform() ? prefab->getTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
 
-				float scaleX = prefab->IsTransform() ? prefab->getScale_x() : prefab->GetOverlay()->GetSize().x;
-				float scaleY = prefab->IsTransform() ? prefab->getScale_y() : prefab->GetOverlay()->GetSize().y;
+			GameObject* prefab = prefabs[currentlySelected];
+
+			bool isTransformWithTexture = prefab->IsTransform() && prefab->GetTexture() != nullptr;
+			bool isOverlayWithTexture = !prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr;
+
+			if (isTransformWithTexture || isOverlayWithTexture)
+			{
+				Texture* text = prefab->IsTransform() ? prefab->GetTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
+
+				float scaleX = prefab->IsTransform() ? prefab->GetScaleX() : prefab->GetOverlay()->GetSize().x;
+				float scaleY = prefab->IsTransform() ? prefab->GetScaleY() : prefab->GetOverlay()->GetSize().y;
 
 				float sizeX = text->getWidth() * scaleX;
 				float sizeY = text->getHeight() * scaleY;
@@ -289,11 +369,14 @@ namespace ShyEditor {
 
 			GameObject* prefab = prefabs[currentlySelected];
 
-			if (prefab->drawComponentsInEditor()) {
+			// If a change is made we update the prefab instances
+			if (prefab->DrawComponentsInEditor()) {
 				UpdatePrefabInstances();
 			}
 
-			prefab->drawScriptsInEditor();
+			if (prefab->DrawScriptsInEditor()) {
+				UpdatePrefabInstances();
+			}
 
 			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.2f, 0.65f, 0.2f, 1.0f)); // change header hover color
@@ -322,10 +405,13 @@ namespace ShyEditor {
 					if (isOverlay != constainsOverlay)
 						continue;
 
-					if (!prefab->getComponents()->contains(compName))
+					if (!prefab->GetComponents()->contains(compName))
 						if (ImGui::Button(compName.c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
 
-							prefab->addComponent(comp.second);
+							prefab->AddComponent(comp.second);
+
+							// If a component is added we update the prefab instances
+							UpdatePrefabInstances();
 						};
 				}
 			}
@@ -346,132 +432,105 @@ namespace ShyEditor {
 
 				for (auto& script : ::Components::ComponentManager::GetAllScripts()) {
 
-					if (!prefab->getScripts()->contains(script.GetName()))
+					if (!prefab->GetScripts()->contains(script.GetName()))
 						if (ImGui::Button(script.GetName().c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
-							prefab->addScript(script);
+							
+							prefab->AddScript(script);
+
+
+							// If a script is added we update the prefab instances
+							UpdatePrefabInstances();
 						};
 				}
 			}
 
 			ImGui::Separator();
 
-			if (ImGui::Button("Delete prefab", ImVec2(ImGui::GetColumnWidth(), 40))) {
-				prefab->toDelete();
-			};
-
+			if (prefab->GetParent() == nullptr) {
+				if (ImGui::Button("Delete prefab", ImVec2(ImGui::GetColumnWidth(), 40))) {
+					prefab->ToDelete();
+				};
+			}
 			ImGui::PopStyleColor(6); // reset colors
 		}
 	}
 
-	void PrefabManager::Open()
+	void PrefabManager::HandlePrefabDeletion()
 	{
-		instance->Show();
-	}
+		auto it = prefabs.begin();
 
-	PrefabManager::~PrefabManager()
-	{
-		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
+		while (it != prefabs.end()) {
+			GameObject* prefab = it->second;
 
-		for (auto it = prefabs.begin(); it !=prefabs.end(); it++)
-			delete it->second;
+			prefab->Update();
 
-		prefabs.clear();
-	}
+			if (prefab->IsWaitingToDelete()) {
+				currentlySelected = 0;
 
-	void PrefabManager::AddPrefab(GameObject* prefab)
-	{
-		if (prefab->getId() > 0) {
-			GameObject::unusedIds.push_back(prefab->getId());
-		}
+				// Add the id to unusedIds to reutilize it later
+				PrefabManager::unusedIds.push_back(prefab->GetId());
 
-		if (PrefabManager::unusedIds.size() != 0) {
-			prefab->setId(PrefabManager::unusedIds.back());
-			PrefabManager::unusedIds.pop_back();
-		}
-		else {
-			//Ensure id is not being used already
-			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
-				PrefabManager::lastPrefabId--;
+				//Stop the instances being referenced
+				auto prefabIt = prefabInstances.find(prefab->GetId());
+				if (prefabIt != prefabInstances.end()) {
+					for (auto instanceId : prefabIt->second) {
+						if (prefab->IsTransform()) {
+							editor->getScene()->getGameObjects()[instanceId]->SetPrefabId(0);
+						}
+						else {
+							IdIsInOverlays(instanceId)->SetPrefabId(0);
+						}
+					}
+
+					prefabInstances.erase(prefab->GetId());
+				}
+
+				delete prefab;
+				it = prefabs.erase(it);
 			}
-			
-			prefab->setId(PrefabManager::lastPrefabId);
-			PrefabManager::lastPrefabId--;
-		}
-
-		prefab->setPrefabId(prefab->getId());
-		instance->prefabs.emplace(prefab->getId(), prefab);
-	}
-
-	void PrefabManager::AddInstance(GameObject* prefab, GameObject* prefabInstance)
-	{
-		if (instance->prefabInstances.find(prefab->getId()) == instance->prefabInstances.end()) {
-			std::vector<int> instances;
-			instances.push_back(prefabInstance->getId());
-
-			instance->prefabInstances.emplace(prefab->getId(), instances);
-		}
-		else {
-			instance->prefabInstances[prefab->getId()].push_back(prefabInstance->getId());
-		}
-	}
-
-	void PrefabManager::AddInstance(int prefabId, int prefabInstanceId)
-	{
-		if (instance->prefabInstances.find(prefabId) == instance->prefabInstances.end()) {
-			std::vector<int> instances;
-			instances.push_back(prefabInstanceId);
-
-			instance->prefabInstances.emplace(prefabId, instances);
-		}
-		else {
-			instance->prefabInstances[prefabId].push_back(prefabInstanceId);
-		}
-	}
-
-	void PrefabManager::RemoveInstance(int prefabId, int prefabInstanceId)
-	{
-		if (instance->prefabInstances.find(prefabId) != instance->prefabInstances.end()) {
-			std::vector<int>* instances = &instance->prefabInstances.find(prefabId)->second;
-			
-			auto it = std::find(instances->begin(), instances->end(), prefabInstanceId);
-
-			// If the element is found, erase it
-			if (it != instances->end()) {
-				instances->erase(it);
+			else {
+				++it;
 			}
 		}
 	}
 
-	void PrefabManager::Behaviour()
+	void PrefabManager::UpdatePrefabInstances()
 	{
-		HandleDeletion();
+		if (currentlySelected != 0) {
+			GameObject* prefab = prefabs[currentlySelected];
 
-		ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX;
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 
-		if (ImGui::BeginTable("Prefabs", 2, flags))
-		{
-			ImGui::TableSetupColumn("Prefab list", ImGuiTableColumnFlags_WidthFixed);
-			ImGui::TableSetupColumn("Edit", ImGuiTableColumnFlags_WidthFixed);
+			auto prefabIt = prefabInstances.find(prefab->GetId());
+			if (prefabIt != prefabInstances.end()) {
+				std::vector<int> instances = prefabIt->second;
 
-			ImGui::TableHeadersRow();
+				for (auto instanceId : instances) {
+					GameObject* instance = nullptr;
 
-			ImGui::TableNextRow();
+					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
+						instance = sceneGameObjects.find(instanceId)->second;
+					}
+					else if (IdIsInOverlays(instanceId) != nullptr) {
+						instance = IdIsInOverlays(instanceId);
+					}
 
-			ImGui::TableSetColumnIndex(0);
-
-			DrawList();  
-
-			ImGui::TableSetColumnIndex(1);
-			
-			ImGui::SeparatorText("Image");
-
-			DrawImage();
-
-			ImGui::SeparatorText("Components");
-
-			DrawComponents();
-
-			ImGui::EndTable();
+					instance->SetComponents(prefab->GetComponentsCopy());
+					instance->SetScripts(prefab->GetScriptsCopy());
+				}
+			}
 		}
+	}
+
+	GameObject* PrefabManager::IdIsInOverlays(int id)
+	{
+		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
+
+		for (GameObject* overlay : sceneOverlays) {
+			if (overlay->GetId() == id) {
+				return overlay;
+			}
+		}
+		return nullptr;
 	}
 }

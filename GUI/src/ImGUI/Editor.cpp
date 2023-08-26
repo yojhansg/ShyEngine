@@ -346,7 +346,7 @@ bool Editor::SplashScreen() {
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 
 	SDL_RenderPresent(renderer);
-	SDL_Delay(2000);
+	SDL_Delay(1000);
 
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(texture);
