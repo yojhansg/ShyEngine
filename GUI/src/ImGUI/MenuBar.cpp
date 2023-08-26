@@ -25,7 +25,6 @@ namespace ShyEditor {
         editor = Editor::getInstance();
 
         shouldOpenRenamePopup = false;
-        shouldOpenSavePrefabPopup = false;
         shouldOpenNewScenePopup = false;
     }
 
@@ -229,7 +228,6 @@ namespace ShyEditor {
 
         ShowRenamePopup(entity);
         ShowNewScenePopup();
-        ShowSavePrefabPopup(entity);
     }
 
     void MenuBar::ShowRenamePopup(Entity* entity)
@@ -308,49 +306,4 @@ namespace ShyEditor {
             ImGui::EndPopup();
         }
     }
-
-    void MenuBar::ShowSavePrefabPopup(Entity* entity)
-    {
-        if (entity == nullptr) return;
-
-        if (shouldOpenSavePrefabPopup)
-        {
-            Entity* prefab = new Entity(*entity);
-            //prefab->SetName(nameBuffer);
-
-            PrefabManager::AddPrefab(prefab);
-
-
-           /* ImGui::OpenPopup("Save prefab" + entity->GetId());*/
-            shouldOpenSavePrefabPopup = false;
-        }
-
-       /* if (ImGui::BeginPopup("Save prefab" + entity->GetId()))
-        {
-            ImGui::Text(("Insert name for the prefab:"));
-
-            ImGui::Separator();
-
-            static char nameBuffer[256];
-
-            if (ImGui::InputText("Prefab name", nameBuffer, sizeof(nameBuffer)))
-            {
-            }
-
-            if (ImGui::Button("Ok"))
-            {
-                if (strlen(nameBuffer) > 0) {
-                    Entity* prefab = new Entity(*entity);
-                    prefab->SetName(nameBuffer);
-                    
-                    PrefabManager::AddPrefab(prefab);
-                }
-
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }*/
-    }
-
 }
