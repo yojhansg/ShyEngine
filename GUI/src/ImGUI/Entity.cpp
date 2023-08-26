@@ -16,7 +16,6 @@
 #include "Font.h"
 
 #include <fstream>
-
 #include "CheckML.h"
 
 #define GizmoImage "gizmo.png"
@@ -29,7 +28,7 @@ namespace ShyEditor {
 
 	Entity::Entity(std::string& path, bool isTransform) : isTransform(isTransform) {
 
-		editor = Editor::getInstance();
+		editor = Editor::GetInstance();
 
 		name = path;
 
@@ -210,9 +209,9 @@ namespace ShyEditor {
 		else
 
 			// Render outline
-			if (this == editor->getScene()->GetSelectedEntity()) {
+			if (this == editor->GetScene()->GetSelectedEntity()) {
 
-				// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
+				// Save the previous color to restart it later
 				Uint8 r, g, b, a;
 				SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 
@@ -487,6 +486,10 @@ namespace ShyEditor {
 	void Entity::ToDelete() {
 		waitingToDelete = true;
 
+		for (auto& attr : referencesToEntity) {
+			attr->value.value.entityIdx = 0;
+		}
+
 		//If its a prefab instance we remove it from the manager
 		if (IsPrefabInstance()) {
 			PrefabManager::RemoveInstance(prefabId, id);
@@ -630,6 +633,9 @@ namespace ShyEditor {
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
 	}
 
+
+
+
 	//Returns true if there has been a change in a component
 	bool Entity::DrawComponentsInEditor() {
 
@@ -640,11 +646,26 @@ namespace ShyEditor {
 
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
 
+
+				std::string compDescription;
+				if (Components::ComponentManager::GetComponentInfo(compDescription, componentName)) {
+
+					Editor::HelpMarker(compDescription);
+				}
+
+
 				for (auto& attribute : (*it).second.GetAttributesOrdered()) {
 					std::string attributeName = attribute->GetName();
 					Components::Attribute* attr = attribute;
 
 					ImGui::Text(attributeName.c_str());
+
+					std::string attributeDescription;
+					if (Components::ComponentManager::GetComponentElementInfo(&attributeDescription, componentName, attributeName, "info")) {
+
+						Editor::HelpMarker(attributeDescription);
+					}
+
 
 					switch (attr->GetType()) {
 
@@ -735,8 +756,72 @@ namespace ShyEditor {
 						changes = DrawVector2(attributeName + it->first, attr);
 						break;
 					case Components::AttributesType::STRING:
-						changes = DrawString(attributeName + it->first, attr);
-						break;
+
+					{
+
+						std::string extension;
+						if (Components::ComponentManager::GetComponentElementInfo(&extension, componentName, attributeName, "asset")) {
+
+
+
+							std::string completePath = attr->value.valueString;
+
+							std::string output = (completePath == "" ? "None" : completePath);
+
+							int textheight = ImGui::GetTextLineHeight();
+							int textheightspacing = ImGui::GetTextLineHeightWithSpacing();
+
+							int width = ImGui::GetWindowWidth() * 0.65f;
+							int textWidth = ImGui::CalcTextSize(output.c_str()).x;
+
+							ImGui::BeginChild(("##" + attributeName + it->first).c_str(), ImVec2(width, textheightspacing));
+
+
+							ImGui::SetCursorPosX((width - textWidth) * 0.5f);
+							ImGui::SetCursorPosY((textheightspacing - textheight) * 0.5f);
+							ImGui::Text(output.c_str());
+
+
+							Editor::HelpMarker("You can drag your assets from the file explorer to use them.\nSupported extensions: " + extension);
+
+							ImGui::EndChild();
+
+
+
+							auto payload = ImGui::GetDragDropPayload();
+
+							if (payload != nullptr && std::strcmp(payload->DataType, "Asset") == 0) {
+
+								Asset* asset = (Asset*)payload->Data;
+
+								std::string assetExtension = asset->extension;
+
+								if (extension.find(assetExtension) != std::string::npos) {
+
+									if (ImGui::BeginDragDropTarget()) {
+
+										if (ImGui::AcceptDragDropPayload("Asset"))
+										{
+											attr->value.valueString = asset->relativePath;
+
+										}
+
+										ImGui::EndDragDropTarget();
+									}
+
+								}
+							}
+
+						}
+						else {
+
+							changes = DrawString(attributeName + it->first, attr);
+						}
+
+					}
+
+
+					break;
 					case Components::AttributesType::BOOL:
 						changes = DrawBool(attributeName + it->first, attr);
 						break;
@@ -768,7 +853,18 @@ namespace ShyEditor {
 				ImGui::PopStyleColor(2);
 
 			}
-			else ++it;
+			else
+			{
+
+				std::string compDescription;
+
+				if (Components::ComponentManager::GetComponentInfo(compDescription, componentName)) {
+
+					Editor::HelpMarker(compDescription);
+				}
+
+				++it;
+			}
 		}
 
 		return changes;
@@ -782,7 +878,7 @@ namespace ShyEditor {
 			std::string scriptName = (*it).first;
 			if (ImGui::CollapsingHeader(scriptName.c_str())) {
 
-				for (auto& attribute : (*it).second.getAllAttributes()) {
+				for (auto& attribute : (*it).second.GetAllAttributes()) {
 					std::string attributeName = attribute.first;
 					Components::Attribute* attr = &attribute.second;
 
@@ -840,6 +936,11 @@ namespace ShyEditor {
 		return changes;
 	}
 
+	void Entity::AddReferenceToEntity(Components::Attribute* attr)
+	{
+		referencesToEntity.push_back(attr);
+	}
+
 	bool Entity::DrawFloat(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
@@ -850,12 +951,14 @@ namespace ShyEditor {
 		return ImGui::DragFloat2(("##" + attrName).c_str(), (float*)&attr->value.value.valueVector2, 0.3f, 0.0f, 0.0f, "%.2f");
 	}
 
-	bool Entity::DrawString(std::string attrName, ::Components::Attribute* attr) {
+	bool Entity::DrawString(std::string attrName, ::Components::Attribute* attr, bool readOnly) {
 
 		char inputBuffer[256];
 		strncpy_s(inputBuffer, attr->value.valueString.c_str(), sizeof(inputBuffer));
 
-		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer))) {
+		int flags = readOnly ? ImGuiInputTextFlags_ReadOnly : 0;
+
+		if (ImGui::InputText(("##" + attrName).c_str(), inputBuffer, sizeof(inputBuffer), flags)) {
 			attr->value.valueString = inputBuffer;
 			return true;
 		}
@@ -880,24 +983,98 @@ namespace ShyEditor {
 
 	bool Entity::DrawEntity(std::string attrName, ::Components::Attribute* attr) {
 
-		std::map<int, Entity*>& entities = editor->getScene()->GetEntities();
+		std::map<int, Entity*>& entities = editor->GetScene()->GetEntities();
+		std::vector<Entity*>& overlays = editor->GetScene()->GetOverlays();
+		std::unordered_map<int, Entity*>& prefabs = PrefabManager::GetPrefabs();
 
-		auto entityIt = entities.find((int)attr->value.value.entityIdx);
-		Entity* entity = entityIt != entities.end() ? entityIt->second : nullptr;
+		Entity* entity = nullptr;
+
+		auto entityIt = entities.find(attr->value.value.entityIdx);
+		auto prefab = PrefabManager::GetPrefabById(attr->value.value.entityIdx);
+
+		if (prefab != nullptr) {
+			entity = prefab;
+		}
+		else if(entityIt != entities.end()) {
+			entity = entityIt->second;
+		}
+		else {
+			for (auto overlay : overlays) {
+				if (overlay->GetId() == attr->value.value.entityIdx) {
+					entity = overlay;
+				}
+			}
+		}
+		
+		if (entity != nullptr && entity->IsPrefab()) {
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
+		}
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
+			
+			if (entity != nullptr && entity->IsPrefab()) {
+				ImGui::PopStyleColor();
+			}
+
+			//Prefabs cant reference entities
+			if (IsPrefab()) {
+				ImGui::EndCombo();
+				return false;
+			}
+
 			for (auto entity : entities) {
-				if (ImGui::Selectable(entity.second->GetName().c_str())) {
+				std::string selectableId = entity.second->GetName() + "##" + std::to_string(entity.second->id);
+				if (ImGui::Selectable(selectableId.c_str())) {
 					attr->value.value.entityIdx = entity.second->GetId();
 			
+					entity.second->AddReferenceToEntity(attr);
+
 					ImGui::EndCombo();
 
 					return true;
 				}
 			}
 
+			for (auto overlay : overlays) {
+				std::string selectableId = overlay->GetName() + "##" + std::to_string(overlay->id);
+				if (ImGui::Selectable(selectableId.c_str())) {
+					attr->value.value.entityIdx = overlay->GetId();
+
+					overlay->AddReferenceToEntity(attr);
+
+					ImGui::EndCombo();
+
+					return true;
+				}
+			}
+
+			for (auto prefab : prefabs) {
+
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f)); 
+
+				std::string selectableId = prefab.second->GetName() + "##" + std::to_string(prefab.second->id);
+
+				if (ImGui::Selectable(selectableId.c_str())) {
+					attr->value.value.entityIdx = prefab.second->GetId();
+
+					prefab.second->AddReferenceToEntity(attr);
+
+					ImGui::PopStyleColor();
+
+					ImGui::EndCombo();
+
+					return true;
+				}
+
+				ImGui::PopStyleColor();
+			}
+
 			ImGui::EndCombo();
 		}
+		else if (entity != nullptr && entity->IsPrefab()) {
+			ImGui::PopStyleColor();
+		}
+
 
 		ImGui::SameLine();
 
@@ -1266,6 +1443,7 @@ namespace ShyEditor {
 		for (const auto& compJson : jsonData["components"]) {
 			Components::Component component = Components::Component::FromJson(compJson.dump());
 			entity->AddComponent(component);
+
 		}
 
 		// Scripts
@@ -1307,27 +1485,47 @@ namespace ShyEditor {
 	void Entity::AssignId(Entity* entity)
 	{
 		// Gets the list of entities in the scene
-		std::map<int, Entity*>& entities = Editor::getInstance()->getScene()->GetEntities();
+		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
 
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
 			
-			if(entities.find(Entity::unusedIds.back()) == entities.end())
-				entity->SetId(Entity::unusedIds.back());
-			else {
+			if (IsIdAlreadyUsed(Entity::unusedIds.back())) {
+
 				Entity::unusedIds.pop_back();
 				AssignId(entity);
+			}
+			else {
+				entity->SetId(Entity::unusedIds.back());
 			}
 		}
 		else {
 			//Ensure id is not being used already
-			while (entities.find(Entity::lastId) != entities.end()) {
+			while (IsIdAlreadyUsed(Entity::lastId)) {
 				Entity::lastId++;
 			}
 
 			entity->SetId(Entity::lastId);
 			Entity::lastId++;
 		}
+	}
+
+	bool Entity::IsIdAlreadyUsed(int id)
+	{
+		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
+		std::vector<Entity*>& overlays = Editor::GetInstance()->GetScene()->GetOverlays();
+
+		if (entities.find(id) != entities.end()) {
+			return true;
+		}
+
+		for (auto overlay : overlays) {
+			if (overlay->GetId() == id) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 

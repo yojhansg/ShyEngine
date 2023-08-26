@@ -20,7 +20,7 @@ namespace ShyEditor {
 
 	void ComponentWindow::Behaviour()
 	{
-		Entity* entity = Editor::getInstance()->getScene()->GetSelectedEntity();
+		Entity* entity = Editor::GetInstance()->GetScene()->GetSelectedEntity();
 
 
 		if (entity != nullptr) {
@@ -51,7 +51,7 @@ namespace ShyEditor {
 
 					const std::string overlayStr = "Overlay";
 					const std::string transformStr = "Transform";
-					
+
 					const std::string compName = comp.first;
 
 					if (compName == transformStr || compName == overlayStr)
@@ -62,11 +62,28 @@ namespace ShyEditor {
 					if (isOverlay != constainsOverlay)
 						continue;
 
-					if (!entity->GetComponents()->contains(compName))
-						if (ImGui::Button(compName.c_str(), ImVec2(windowWidth, 40))) {
+					if (!entity->GetComponents()->contains(compName)) {
+
+
+						std::string modifiedName = constainsOverlay ? compName.substr(overlayStr.length()) : compName;
+
+
+						if (ImGui::Button(modifiedName.c_str(), ImVec2(windowWidth, 40))) {
 
 							entity->AddComponent(comp.second);
 						};
+
+
+
+
+						std::string componentDescription;
+						if (Components::ComponentManager::GetComponentInfo(componentDescription, compName))
+						{
+							ImGui::SetItemTooltip(componentDescription.c_str());
+						}
+
+
+					}
 				}
 			}
 

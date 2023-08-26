@@ -42,6 +42,7 @@
 
 Editor* Editor::instance = nullptr;
 
+
 Editor::Editor() {
 
 	window = nullptr;
@@ -65,7 +66,7 @@ Editor::Editor() {
 
 Editor::~Editor() {}
 
-Editor* Editor::getInstance() {
+Editor* Editor::GetInstance() {
 	if (instance == nullptr)
 		instance = new Editor();
 
@@ -80,7 +81,7 @@ bool Editor::Init() {
 	if (!instance->SplashScreen())
 		return false;
 
-	if (!instance->initImGUIAndSDL())
+	if (!instance->InitImGUIAndSDL())
 		return false;
 
 	// Components and managers reading
@@ -102,7 +103,7 @@ bool Editor::Init() {
 void Editor::Loop() {
 
 	// The projects management window
-	instance->exitEditor = !instance->runProjectsWindow();
+	instance->exitEditor = !instance->RunProjectsWindow();
 
 	if (!instance->exitEditor) {
 		// Configure the SDL window to start the editor
@@ -112,15 +113,18 @@ void Editor::Loop() {
 
 		// Init the ImGUI windows in the editor
 		instance->CreateWindows();
+
+		// Load the default scene or the last opene scene after creating the windows
+		bool load = instance->scene->LoadScene();
+		instance->SetAnySceneOpened(load);
 	}
 
 	// Editor main loop
 	while (!instance->exitEditor) {
 
 		ShyEditor::Game::CheckEnd();
-		instance->handleInput();
+		instance->HandleInput();
 		instance->UpdateAndRenderWindows();
-
 	}
 
 }
@@ -159,11 +163,11 @@ void Editor::Close() {
 }
 
 
-bool Editor::initImGUIAndSDL() {
+bool Editor::InitImGUIAndSDL() {
 
 	// ImGUI
 
-	if (!initSDL())
+	if (!InitSDL())
 		return false;
 
 	// Setup Dear ImGui context
@@ -190,7 +194,7 @@ bool Editor::initImGUIAndSDL() {
 	return true;
 }
 
-bool Editor::initSDL() {
+bool Editor::InitSDL() {
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -260,37 +264,37 @@ bool Editor::initSDL() {
 void Editor::CreateWindows() {
 
 	// Preferences
-	addWindow(new ShyEditor::Preferences());
+	AddWindow(new ShyEditor::Preferences());
 
 	// Menu bar
 	menuBar = new ShyEditor::MenuBar();
 
 	// File explorer
 	fileExplorer = new ShyEditor::FileExplorer();
-	addWindow(fileExplorer);
+	AddWindow(fileExplorer);
 
 	// Game scene
 	scene = new ShyEditor::Scene();
-	addWindow(scene);
+	AddWindow(scene);
 
 	// Hierarchy
 	hierarchy = new ShyEditor::Hierarchy(); 
-	addWindow(hierarchy);
+	AddWindow(hierarchy);
 
 	// Components
 	components = new ShyEditor::ComponentWindow(); 
-	addWindow(components);
+	AddWindow(components);
 
 	// Scripting
 	scriptCreation = new ShyEditor::ScriptCreation();
-	addWindow(scriptCreation);
+	AddWindow(scriptCreation);
 
 	// Console
 	console = new ShyEditor::Console();
-	addWindow(console);
+	AddWindow(console);
 
 	// Prefab manager
-	addWindow(new ShyEditor::PrefabManager());
+	AddWindow(new ShyEditor::PrefabManager());
 
 }
 
@@ -363,10 +367,10 @@ bool Editor::SplashScreen() {
 }
 
 
-bool Editor::runProjectsWindow() {
+bool Editor::RunProjectsWindow() {
 
 	// Palettes window
-	instance->addWindow(new ShyEditor::ColorPalette("theme"));
+	instance->AddWindow(new ShyEditor::ColorPalette("theme"));
 
 	SDL_SetWindowPosition(instance->window, _Centered);
 
@@ -411,7 +415,7 @@ void Editor::UpdateAndRenderWindows() {
 
 	for (auto window : windows)
 	{
-		if (window->CanBeDrawnOnTop() && !window->isDocked())
+		if (window->CanBeDrawnOnTop() && !window->IsDocked())
 			window->UpdateWindow();
 		else
 			switch (state)
@@ -444,7 +448,7 @@ void Editor::UpdateAndRenderWindows() {
 
 }
 
-void Editor::handleInput()
+void Editor::HandleInput()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -462,7 +466,7 @@ void Editor::handleInput()
 	}
 }
 
-void Editor::changeEditorState(const EDITOR_STATE& state) {
+void Editor::ChangeEditorState(const EDITOR_STATE& state) {
 
 	switch (state) {
 	case Editor::EDITOR_WINDOW:
@@ -477,11 +481,11 @@ void Editor::changeEditorState(const EDITOR_STATE& state) {
 	this->state = state;
 }
 
-void Editor::setProjectInfo(ShyEditor::ProjectInfo* pInfo) {
+void Editor::SetProjectInfo(ShyEditor::ProjectInfo* pInfo) {
 	this->projecInfo = pInfo;
 }
 
-ShyEditor::ProjectInfo& Editor::getProjectInfo() {
+ShyEditor::ProjectInfo& Editor::GetProjectInfo() {
 	return *projecInfo;
 }
 
@@ -501,34 +505,34 @@ bool Editor::IsAnySceneOpened() {
 	return anySceneOpened;
 }
 
-void Editor::addWindow(ShyEditor::Window* window) {
+void Editor::AddWindow(ShyEditor::Window* window) {
 	windows.push_back(window);
 }
 
-void Editor::setScene(ShyEditor::Scene* scene) {
+void Editor::SetScene(ShyEditor::Scene* scene) {
 	this->scene = scene;
 }
 
-SDL_Renderer* Editor::getRenderer() {
+SDL_Renderer* Editor::GetRenderer() {
 	return renderer;
 }
 
-ImVec2 Editor::getMainWindowSize() {
+ImVec2 Editor::GetMainWindowSize() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
 	return ImVec2(w, h);
 }
 
-ShyEditor::Scene* Editor::getScene() {
+ShyEditor::Scene* Editor::GetScene() {
 	return scene;
 }
 
-ShyEditor::FileExplorer* Editor::getFileExplorer() {
+ShyEditor::FileExplorer* Editor::GetFileExplorer() {
 	return fileExplorer;
 }
 
-ShyEditor::Console* Editor::getConsole()
+ShyEditor::Console* Editor::GetConsole()
 {
 	return console;
 }
@@ -545,146 +549,21 @@ ShyEditor::Build* Editor::GetBuildManager()
 
 void Editor::OpenScript(const std::string& script) {
 	scriptCreation->SetName(script);
-	changeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
+	ChangeEditorState(EDITOR_STATE::SCRIPTING_WINDOW);
 }
 
 
-
-int Editor::Probando()
+void Editor::HelpMarker(const std::string& str)
 {
-
-	// Setup SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+	ImGui::SameLine();
+	ImGui::TextDisabled("(?)");
+	if (ImGui::BeginItemTooltip())
 	{
-		printf("Error: %s\n", SDL_GetError());
-		return -1;
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(str.c_str());
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
 	}
-
-	// From 2.0.18: Enable native IME.
-#ifdef SDL_HINT_IME_SHOW_UI
-	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
-#endif
-
-	// Create window with SDL_Renderer graphics context
-	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-	SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL2+SDL_Renderer example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr)
-	{
-		SDL_Log("Error creating SDL_Renderer!");
-		return 0;
-	}
-	//SDL_RendererInfo info;
-	//SDL_GetRendererInfo(renderer, &info);
-	//SDL_Log("Current SDL_Renderer: %s", info.name);
-
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
-
-	// Setup Platform/Renderer backends
-	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
-	ImGui_ImplSDLRenderer2_Init(renderer);
-
-	// Load Fonts
-	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-	// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-	// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-	// - Read 'docs/FONTS.md' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-	//io.Fonts->AddFontDefault();
-	//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-	//IM_ASSERT(font != nullptr);
-
-	// Our state
-	bool show_demo_window = false;
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-	// Main loop
-	bool done = false;
-	while (!done)
-	{
-		// Poll and handle events (inputs, window resize, etc.)
-		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-		// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-		// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-		// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			ImGui_ImplSDL2_ProcessEvent(&event);
-			if (event.type == SDL_QUIT)
-				done = true;
-			if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-				done = true;
-		}
-
-		// Start the Dear ImGui frame
-		ImGui_ImplSDLRenderer2_NewFrame();
-		ImGui_ImplSDL2_NewFrame();
-		ImGui::NewFrame();
-		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-
-
-		ImGui::Begin("File system");
-		ImGui::Text("heyy");
-		ImGui::End();
-
-
-		ImGui::Begin("Jerarquia");
-		ImGui::Text("Noooo");
-		ImGui::End();
-
-
-
-		ImGui::Begin("Scene");
-		ImGui::Text("Noooo");
-		ImGui::End();
-
-
-
-		ImGui::Begin("Componentes");
-		ImGui::Text("Noooo");
-		ImGui::End();
-
-
-
-		// Rendering
-		ImGui::Render();
-		SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
-		SDL_SetRenderDrawColor(renderer, (Uint8)(clear_color.x * 255), (Uint8)(clear_color.y * 255), (Uint8)(clear_color.z * 255), (Uint8)(clear_color.w * 255));
-		SDL_RenderClear(renderer);
-		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
-		SDL_RenderPresent(renderer);
-	}
-
-	// Cleanup
-	ImGui_ImplSDLRenderer2_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
-
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-
-	return 0;
-
-	return 0;
 }
 
 std::vector<ShyEditor::Window*>& Editor::GetAllWindows()

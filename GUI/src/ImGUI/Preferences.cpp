@@ -38,10 +38,10 @@ namespace ShyEditor {
 		// General
 		data.initialScene = "Scene";
 		data.creator = "Yojhan, Pablo e Ivan";
-		data.name = Editor::getInstance()->getProjectInfo().name;
+		data.name = Editor::GetInstance()->GetProjectInfo().name;
 
 		// Window
-		data.windowTitle = Editor::getInstance()->getProjectInfo().name;
+		data.windowTitle = Editor::GetInstance()->GetProjectInfo().name;
 		data.icon = "";
 		data.width = 1920;
 		data.height = 1080;
@@ -358,7 +358,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = true;
 		root["debugFrameRate"] = true;
 
-		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
 
 		PrefabManager::SavePrefabs(root["path"]);
 
@@ -378,7 +378,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = false;
 		root["debugFrameRate"] = false;
 
-		root["path"] = Editor::getInstance()->getProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
 		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file("Engine\\config.json");
