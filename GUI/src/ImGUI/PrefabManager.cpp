@@ -259,6 +259,7 @@ namespace ShyEditor {
 
 			if (prefab->GetParent() == nullptr)
 				DrawPrefab(prefab);
+
 		}
 
 	}

@@ -51,6 +51,8 @@ namespace ShyEditor {
 		// Prefab related getters/setters
 		void SetPrefabId(int prefabId);
 		int GetPrefabId();
+		bool IsPrefab() const;
+		bool IsPrefabInstance() const;
 
 		// Visibility getters/setters
 		int GetRenderOrder();

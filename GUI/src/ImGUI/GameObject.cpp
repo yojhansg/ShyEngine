@@ -100,8 +100,7 @@ namespace ShyEditor {
 
 		AssignId(this);
 
-		// If id < 0 then we are adding an instance from a prefab
-		if (go.id < 0) {
+		if (go.IsPrefab()) {
 			prefabId = go.id;
 			PrefabManager::AddInstance(go.id, id);
 		}
@@ -238,9 +237,9 @@ namespace ShyEditor {
 
 	void GameObject::Update() {
 
-		/*if (PrefabManager::GetPrefabById(getPrefabId()) == nullptr) {
-			setPrefabId(0);
-		}*/
+		if (IsPrefabInstance() && PrefabManager::GetPrefabById(GetPrefabId()) == nullptr) {
+			SetPrefabId(0);
+		}
 
 		if (isTransform) {
 
@@ -311,6 +310,16 @@ namespace ShyEditor {
 	int GameObject::GetPrefabId()
 	{
 		return prefabId;
+	}
+
+	bool GameObject::IsPrefab() const
+	{
+		return id < 0;
+	}
+
+	bool GameObject::IsPrefabInstance() const
+	{
+		return prefabId != 0;
 	}
 
 	Texture* GameObject::GetTexture() {
@@ -467,7 +476,7 @@ namespace ShyEditor {
 		waitingToDelete = true;
 
 		//If its a prefab instance we remove it from the manager
-		if (prefabId != 0) {
+		if (IsPrefabInstance()) {
 			PrefabManager::RemoveInstance(prefabId, id);
 		}
 

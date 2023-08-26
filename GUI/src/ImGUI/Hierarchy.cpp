@@ -312,7 +312,7 @@ namespace ShyEditor {
 	bool Hierarchy::isParentFromPrefab(GameObject* go)
 	{
 		if (go->GetParent() != nullptr) {
-			if (go->GetParent()->GetPrefabId() != 0) return true;
+			if (go->GetParent()->IsPrefabInstance() != 0) return true;
 			
 			return isParentFromPrefab(go->GetParent());
 		}
@@ -375,7 +375,7 @@ namespace ShyEditor {
 
 		ImGui::SameLine();
 
-		if (gameObject->GetPrefabId() != 0 || isParentFromPrefab(gameObject)) {
+		if (gameObject->IsPrefabInstance() || isParentFromPrefab(gameObject)) {
 			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , gameObject->GetName().c_str());
 		}
 		else {

@@ -94,7 +94,9 @@ namespace ShyEditor {
 
 			ImGui::PopStyleColor(6); // reset colors
 
-			if (gameObject->GetPrefabId() != 0) {
+
+			// If its a prefab instance we add a button to unlink the object from the prefab
+			if (GameObject::IsPrefabInstance(*gameObject)) {
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
