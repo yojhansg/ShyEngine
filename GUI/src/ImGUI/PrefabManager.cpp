@@ -1,6 +1,6 @@
 #include "PrefabManager.h"
 #include "nlohmann/json.hpp"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Editor.h"
 #include "ProjectsManager.h"
 #include "ResourcesManager.h"

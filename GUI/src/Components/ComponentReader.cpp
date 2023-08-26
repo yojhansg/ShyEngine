@@ -23,7 +23,7 @@ namespace Components {
 
 				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>());
 
-				cmp.addAttribute(attributeInfo);
+				cmp.AddAttribute(attributeInfo);
 			}
 		}
 
@@ -31,25 +31,25 @@ namespace Components {
 
 		if (data.contains("methods") && !data["methods"].is_null())
 		{
-			auto& methods = data["methods"];
+			auto& functions = data["methods"];
 
-			for (auto& method : methods) {
+			for (auto& function : functions) {
 
-				Method methodInfo(method["name"].get<std::string>(), name);
+				Function functionInfo(function["name"].get<std::string>(), name);
 
-				if (method.contains("input") && method["input"].is_array()) {
+				if (function.contains("input") && function["input"].is_array()) {
 
-					for (const auto& in : method["input"]) {
+					for (const auto& in : function["input"]) {
 
 						if (!in.is_null())
-							methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+							functionInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
 					}
 
 				}
 
-				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
+				functionInfo.SetReturn(Variable("", function["return"].get<std::string>()));
 
-				cmp.addMethod(methodInfo);
+				cmp.AddFunction(functionInfo);
 			}
 		}
 
@@ -103,18 +103,18 @@ namespace Components {
 			std::string name = manager["name"].get<std::string>();
 			Component comp(name);
 
-			for (auto& method : manager["methods"]) {
+			for (auto& function : manager["methods"]) {
 
-				Method methodInfo(method["name"].get<std::string>(), name);
+				Function functionInfo(function["name"].get<std::string>(), name);
 
-				for (const auto& in : method["input"]) {
+				for (const auto& in : function["input"]) {
 
 					if (!in.is_null())
-						methodInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
+						functionInfo.AddInput(Variable(in["name"].get<std::string>(), in["type"].get<std::string>()));
 				}
 
-				methodInfo.SetReturn(Variable("", method["return"].get<std::string>()));
-				comp.addMethod(methodInfo);
+				functionInfo.SetReturn(Variable("", function["return"].get<std::string>()));
+				comp.AddFunction(functionInfo);
 			}
 
 			components.push_back(comp);

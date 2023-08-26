@@ -16,12 +16,12 @@ namespace Components {
 	{
 		name = other.name;
 
-		methods = other.methods;
+		functions = other.functions;
 		attributes = other.attributes;
 
-		for (auto& m : other.orderedMethods) {
+		for (auto& m : other.orderedFunctions) {
 
-			orderedMethods.push_back(&methods.at(m->getName()));
+			orderedFunctions.push_back(&functions.at(m->getName()));
 		}
 
 		for (auto& attr : other.orderedAttributes) {
@@ -40,24 +40,24 @@ namespace Components {
 		return name;
 	}
 
-	Attribute& Component::getAttribute(cstring name)
+	Attribute& Component::GetAttribute(cstring name)
 	{
 		return attributes[name];
 	}
 
-	Method& Component::getMethod(cstring name)
+	Function& Component::GetFunction(cstring name)
 	{
-		return methods[name];
+		return functions[name];
 	}
 
-	std::unordered_map<std::string, Attribute>& Component::getAllAttributes()
+	std::unordered_map<std::string, Attribute>& Component::GetAllAttributes()
 	{
 		return attributes;
 	}
 
-	std::unordered_map<std::string, Method>& Component::getAllMethods()
+	std::unordered_map<std::string, Function>& Component::GetAllFunctions()
 	{
-		return methods;
+		return functions;
 	}
 
 	std::vector<Attribute*>& Component::GetAttributesOrdered()
@@ -65,12 +65,12 @@ namespace Components {
 		return orderedAttributes;
 	}
 
-	std::vector<Method*>& Component::GetMethodsOrdered()
+	std::vector<Function*>& Component::GetFunctionsOrdered()
 	{
-		return orderedMethods;
+		return orderedFunctions;
 	}
 
-	void Component::addAttribute(const Attribute& attribute)
+	void Component::AddAttribute(const Attribute& attribute)
 	{
 		const auto& name = attribute.getName();
 
@@ -81,15 +81,15 @@ namespace Components {
 		orderedAttributes.push_back(&ref);
 	}
 
-	void Component::addMethod(const Method& method)
+	void Component::AddFunction(const Function& function)
 	{
-		const auto& name = method.getName();
+		const auto& name = function.getName();
 
 
-		methods.emplace(name, method);
+		functions.emplace(name, function);
 
-		auto& ref = methods.at(name);
-		orderedMethods.push_back(&ref);
+		auto& ref = functions.at(name);
+		orderedFunctions.push_back(&ref);
 	}
 
 	Attribute::Attribute()
@@ -240,7 +240,7 @@ namespace Components {
 		return attribute;
 	}
 
-	nlohmann::ordered_json Component::toJson() {
+	nlohmann::ordered_json Component::ToJson() {
 		nlohmann::ordered_json j;
 
 		j["component"] = name;
@@ -257,7 +257,7 @@ namespace Components {
 		return j;
 	}
 
-	Component Component::fromJson(std::string json) {
+	Component Component::FromJson(std::string json) {
 
 		Component component;
 
@@ -277,9 +277,9 @@ namespace Components {
 		return component;
 	}
 
-	Method::Method() {}
+	Function::Function() {}
 
-	Method::Method(Method const& other)
+	Function::Function(Function const& other)
 	{
 		name = other.name;
 		component = other.component;
@@ -287,38 +287,38 @@ namespace Components {
 		input = other.input;
 	}
 
-	Method::Method(const std::string& name, const std::string& className)
+	Function::Function(const std::string& name, const std::string& className)
 	{
 		this->name = name;
 		this->component = className;
 	}
 
-	void Method::SetReturn(const Variable& ret)
+	void Function::SetReturn(const Variable& ret)
 	{
 		returnType = ret;
 	}
 
-	void Method::AddInput(const Variable& input)
+	void Function::AddInput(const Variable& input)
 	{
 		this->input.push_back(input);
 	}
 
-	std::string Method::getName() const
+	std::string Function::getName() const
 	{
 		return name;
 	}
 
-	std::string Method::getComponent() const
+	std::string Function::getComponent() const
 	{
 		return component;
 	}
 
-	Variable Method::getReturn() const
+	Variable Function::getReturn() const
 	{
 		return returnType;
 	}
 
-	const std::vector<Variable>& Method::getInput() const {
+	const std::vector<Variable>& Function::getInput() const {
 
 		return input;
 	}

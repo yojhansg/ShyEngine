@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "Entity.h"
 
 #include "ResourcesManager.h"
 #include "ComponentManager.h"
@@ -82,7 +82,7 @@ namespace ShyEditor {
 			Components::Component imageComponent = Components::ComponentManager::GetAllComponents().find("Image")->second;
 			Components::AttributeValue attributeValue;
 			attributeValue.valueString = imagePath;
-			imageComponent.getAttribute("fileName").SetValue(attributeValue);
+			imageComponent.GetAttribute("fileName").SetValue(attributeValue);
 			this->AddComponent(imageComponent);
 
 			// Set the entity name as the image name
@@ -253,7 +253,7 @@ namespace ShyEditor {
 				return;
 			}
 
-			std::string currentImagePath = (image->second).getAttribute("fileName").value.valueString;
+			std::string currentImagePath = (image->second).GetAttribute("fileName").value.valueString;
 
 			// Checks if the current path exists in the filesystem
 			//if (!std::filesystem::exists(currentImagePath)) return;
@@ -1046,7 +1046,7 @@ namespace ShyEditor {
 		for (auto it = components.begin(); it != components.end(); it++) {
 
 
-			componentsJson.push_back(it->second.toJson());
+			componentsJson.push_back(it->second.ToJson());
 		}
 
 		j["components"] = componentsJson;
@@ -1183,7 +1183,7 @@ namespace ShyEditor {
 		}
 
 		for (const auto& compJson : jsonData["components"]) {
-			Components::Component component = Components::Component::fromJson(compJson.dump());
+			Components::Component component = Components::Component::FromJson(compJson.dump());
 			entity->AddComponent(component);
 		}
 
@@ -1497,7 +1497,7 @@ namespace ShyEditor {
 
 			auto& imgCmp = *imgIt;
 
-			const auto& cmpPath = imgCmp.second.getAttribute("path").value.valueString;
+			const auto& cmpPath = imgCmp.second.GetAttribute("path").value.valueString;
 
 			if (cmpPath != image->GetPath()) {
 
@@ -1527,9 +1527,9 @@ namespace ShyEditor {
 
 			auto& textCmp = *textIt;
 
-			const auto& fnt = textCmp.second.getAttribute("font").value.valueString;
-			const auto& txt = textCmp.second.getAttribute("text").value.valueString;
-			const auto& size = textCmp.second.getAttribute("fontSize").value.value.valueFloat;
+			const auto& fnt = textCmp.second.GetAttribute("font").value.valueString;
+			const auto& txt = textCmp.second.GetAttribute("text").value.valueString;
+			const auto& size = textCmp.second.GetAttribute("fontSize").value.value.valueFloat;
 
 			text->SetText(txt, fnt, size, -1);
 

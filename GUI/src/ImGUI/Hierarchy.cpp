@@ -2,7 +2,7 @@
 
 #include "nlohmann/json.hpp"
 #include "FileExplorer.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Editor.h"
 #include "Scene.h"
 #include "SDL.h"

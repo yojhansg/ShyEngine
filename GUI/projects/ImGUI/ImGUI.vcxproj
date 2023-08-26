@@ -110,7 +110,7 @@
     <ClInclude Include="..\..\src\ImGUI\Font.h" />
     <ClInclude Include="..\..\src\ImGUI\Game.h" />
     <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
-    <ClInclude Include="..\..\src\ImGUI\GameObject.h" />
+    <ClInclude Include="..\..\src\ImGUI\Entity.h" />
     <ClInclude Include="..\..\src\ImGUI\Editor.h" />
     <ClInclude Include="..\..\src\ImGUI\LogManager.h" />
     <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
@@ -142,7 +142,7 @@
     <ClCompile Include="..\..\src\ImGUI\Font.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Game.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\GameObject.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Entity.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Editor.cpp" />
     <ClCompile Include="..\..\src\ImGUI\LogManager.cpp" />
     <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />

@@ -7,7 +7,7 @@
 #include "Preferences.h"
 #include "Components.h"
 #include "LogManager.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Hierarchy.h"
 #include "Window.h"
 #include "Editor.h"

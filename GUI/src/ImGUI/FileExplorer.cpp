@@ -3,7 +3,7 @@
 #include "ProjectsManager.h"
 #include "nlohmann/json.hpp"
 #include "ScriptCreation.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Components.h"
 
 #include "ResourcesManager.h"

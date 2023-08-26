@@ -1,7 +1,7 @@
 #include "Components.h"
 #include <imgui.h>
 #include "Editor.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Scene.h"
 #include "ComponentInfo.h"
 #include "Window.h"
