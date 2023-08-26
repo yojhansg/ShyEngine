@@ -216,7 +216,7 @@ namespace ShyEditor {
                     ImGui::Separator();
 
                     if (ImGui::MenuItem("Delete", NULL, false)) {
-                        gameObject->toDelete();
+                        gameObject->ToDelete();
                     }
 
                     ImGui::EndMenu();
@@ -237,13 +237,13 @@ namespace ShyEditor {
 
         if (shouldOpenRenamePopup)
         {
-            ImGui::OpenPopup("Rename Object##" + gameObject->getId());
+            ImGui::OpenPopup("Rename Object##" + gameObject->GetId());
             shouldOpenRenamePopup = false;
         }
 
-        if (ImGui::BeginPopup("Rename Object##" + gameObject->getId()))
+        if (ImGui::BeginPopup("Rename Object##" + gameObject->GetId()))
         {
-            ImGui::Text(("Insert new name for GameObject: " + gameObject->getName()).c_str());
+            ImGui::Text(("Insert new name for GameObject: " + gameObject->GetName()).c_str());
 
             ImGui::Separator();
 
@@ -257,7 +257,7 @@ namespace ShyEditor {
             if (ImGui::Button("Ok"))
             {
                 if (strlen(nameBuffer) > 0) {
-                    gameObject->setName(nameBuffer);
+                    gameObject->SetName(nameBuffer);
                 }
 
                 ImGui::CloseCurrentPopup();
@@ -314,11 +314,11 @@ namespace ShyEditor {
 
         if (shouldOpenSavePrefabPopup)
         {
-            ImGui::OpenPopup("Save prefab" + go->getId());
+            ImGui::OpenPopup("Save prefab" + go->GetId());
             shouldOpenSavePrefabPopup = false;
         }
 
-        if (ImGui::BeginPopup("Save prefab" + go->getId()))
+        if (ImGui::BeginPopup("Save prefab" + go->GetId()))
         {
             ImGui::Text(("Insert name for the prefab:"));
 
@@ -334,7 +334,7 @@ namespace ShyEditor {
             {
                 if (strlen(nameBuffer) > 0) {
                     GameObject* prefab = new GameObject(*go);
-                    prefab->setName(nameBuffer);
+                    prefab->SetName(nameBuffer);
                     
                     PrefabManager::AddPrefab(prefab);
                 }

@@ -196,7 +196,7 @@ namespace ShyEditor {
 				if (ImGui::IsMouseClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 					ItemDrag(entry);
 
-				if (ImGui::IsMouseClicked(1) && currentlySelected != -1) {
+				if (focused && ImGui::IsMouseClicked(1) && currentlySelected != -1) {
 					shouldOpenFileMenu = true;
 				}
 			}
@@ -301,10 +301,10 @@ namespace ShyEditor {
 	{
 		if (shouldOpenDeleteFilePopup) {
 			shouldOpenDeleteFilePopup = false;
-			ImGui::OpenPopup("Delete file");
+			ImGui::OpenPopup(("Delete file" + entryToDelete.path).c_str());
 		}
 
-		if (ImGui::BeginPopup("Delete file")) {
+		if (ImGui::BeginPopup(("Delete file" + entryToDelete.path).c_str())) {
 
 			ImGui::Text(("Are you sure you want to delete \"" + entryToDelete.name + "\"").c_str());
 
@@ -335,7 +335,8 @@ namespace ShyEditor {
 		}
 
 		if (ImGui::BeginPopup(("File Menu##" + entryToDelete.path).c_str())) {
-			if (ImGui::Button("Delete", ImVec2(70, 40))) {
+
+			if (ImGui::Button(("Delete##" + entryToDelete.path).c_str(), ImVec2(70, 40))) {
 				entryToDelete = entries[currentlySelected];
 				shouldOpenDeleteFilePopup = true;
 				ImGui::CloseCurrentPopup();

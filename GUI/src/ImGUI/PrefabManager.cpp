@@ -22,24 +22,130 @@ namespace ShyEditor {
 	int PrefabManager::lastPrefabId = -1;
 	std::vector<int> PrefabManager::unusedIds = std::vector<int>();
 
+	PrefabManager::PrefabManager() : Window("Prefab manager", 0)
+	{
+		instance = this;
+
+		editor = Editor::getInstance();
+		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
+
+		open = false;	
+		canBeDisplayedOnTop = true;
+
+		currentlySelected = 0;
+
+		windowWidth = 700;
+		windowHeight = 700;
+
+		LoadPrefabs();
+		Hide();
+	}
+
+	PrefabManager::~PrefabManager()
+	{
+		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
+
+		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
+			delete it->second;
+
+		prefabs.clear();
+	}
+	
+	void PrefabManager::Behaviour()
+	{
+		HandlePrefabDeletion();
+
+		ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX;
+
+		if (ImGui::BeginTable("Prefabs", 2, flags))
+		{
+			ImGui::TableSetupColumn("Prefab list", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Edit", ImGuiTableColumnFlags_WidthFixed);
+
+			ImGui::TableHeadersRow();
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+
+			DrawPrefabList();
+
+			ImGui::TableSetColumnIndex(1);
+
+
+			ImGui::SeparatorText("Image");
+			DrawImage();
+
+			ImGui::SeparatorText("Components");
+			DrawComponents();
+
+			ImGui::EndTable();
+		}
+	}
+
+	void PrefabManager::Open()
+	{
+		instance->Show();
+	}
+
+	void PrefabManager::SavePrefabs(const std::string& path)
+	{
+		json root;
+		
+		// Save prefabs
+		json prefabArray = json::array();
+
+		for (const auto& pair : instance->prefabs) {
+			GameObject* prefab = pair.second;
+
+			if (prefab->GetParent() == nullptr)
+				prefabArray.push_back(prefabArray.parse(prefab->ToJson()));
+		}
+
+
+		// Save prefabs instances references
+		json prefabInstancesArray;
+
+		for (auto pair : instance->prefabInstances) {
+
+			json prefabInstances;
+
+			for (int gameObjectId : pair.second) {
+				prefabInstances.push_back(gameObjectId);
+			}
+
+			prefabInstancesArray[std::to_string(pair.first)] = prefabInstances;
+		}
+
+		root["prefabs"] = prefabArray;
+		root["prefabInstances"] = prefabInstancesArray;
+
+		std::ofstream outputFile(path + "\\prefabs.json");
+
+		if (outputFile.is_open()) {
+			outputFile << root.dump(4) << std::endl;
+			outputFile.close();
+		}
+	}
+
 	void PrefabManager::LoadPrefabs()
 	{
 		std::ifstream inputFile(editor->getProjectInfo().path + "\\Assets\\prefabs.json");
+
 		if (inputFile.is_open()) {
 			json root;
-
 			inputFile >> root;
 
 			json prefabArray = root["prefabs"];
 
+			// Read the prefabs
 			for (const json& prefabData : prefabArray) {
-				GameObject* prefab = GameObject::fromJson(prefabData.dump());
+				GameObject* prefab = GameObject::FromJson(prefabData.dump());
 
 				AddPrefab(prefab);
 			}
 
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 
+			// Read the prefabs instances
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -47,177 +153,114 @@ namespace ShyEditor {
 
 				std::vector<int> prefabInstances;
 				for (const auto& instanceId : item.value()) {
+					
+					//We check if its reference is still in the scene cause it could have been deleted
 					if (sceneGameObjects[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
 						prefabInstances.push_back(instanceId);
 					}
 				}
+
 				this->prefabInstances.emplace(prefabId, prefabInstances);
 			}
 
 			inputFile.close();
 		}
 		else {
-			// Handle error opening the file
 			std::cerr << "Error opening file: " << editor->getProjectInfo().path + "\\prefabs.json" << std::endl;
 		}
 	}
 
-	void PrefabManager::HandleDeletion()
+	void PrefabManager::AssignId(GameObject* prefab)
 	{
-		auto it = prefabs.begin();
-		while (it != prefabs.end()) {
-			GameObject* prefab = it->second;
+		if (prefab->GetId() > 0) {
+			GameObject::unusedIds.push_back(prefab->GetId());
+		}
 
-			prefab->update();
-
-			if (prefab->isWaitingToDelete()) {
-				currentlySelected = 0;
-
-				PrefabManager::unusedIds.push_back(prefab->getId());
-
-				//Stop the instances being referenced
-				if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
-					for (auto instanceId : prefabInstances.find(prefab->getId())->second) {
-						if (prefab->IsTransform()) {
-							editor->getScene()->getGameObjects()[instanceId]->setPrefabId(0);
-						}
-						else {
-							IdIsInOverlays(instanceId)->setPrefabId(0);
-						}
-					}
-
-					prefabInstances.erase(prefab->getId());
-				}
-
-				delete prefab;
-				it = prefabs.erase(it);
+		if (PrefabManager::unusedIds.size() != 0) {
+			prefab->SetId(PrefabManager::unusedIds.back());
+			PrefabManager::unusedIds.pop_back();
+		}
+		else {
+			//Ensure id is not being used already
+			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
+				PrefabManager::lastPrefabId--;
 			}
-			else {
-				++it;
-			}
+
+			prefab->SetId(PrefabManager::lastPrefabId);
+			PrefabManager::lastPrefabId--;
 		}
 	}
 
-	void PrefabManager::UpdatePrefabInstances()
+	void PrefabManager::AddPrefab(GameObject* prefab)
 	{
-		if (currentlySelected != 0) {
-			GameObject* prefab = prefabs[currentlySelected];
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+		AssignId(prefab);
 
-			if (prefabInstances.find(prefab->getId()) != prefabInstances.end()) {
-				std::vector<int> instances = prefabInstances.find(prefab->getId())->second;
+		instance->prefabs.emplace(prefab->GetId(), prefab);
 
-				for (auto instanceId : instances) {
-					GameObject* instance = nullptr;
-
-					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
-						instance = sceneGameObjects.find(instanceId)->second;
-					}
-					else if (IdIsInOverlays(instanceId) != nullptr) {
-						instance = IdIsInOverlays(instanceId);
-					}
-
-					instance->setComponents(prefab->getComponentsCopy());
-					instance->setScripts(prefab->getScriptsCopy());
-				}
-			}
+		for (auto child : prefab->GetChildren()) {
+			AddPrefab(child.second);
 		}
 	}
 
-	GameObject* PrefabManager::IdIsInOverlays(int id)
+	void PrefabManager::AddInstance(int prefabId, int prefabInstanceId)
 	{
-		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
+		if (instance->prefabInstances.find(prefabId) == instance->prefabInstances.end()) {
+			std::vector<int> instances;
+			instances.push_back(prefabInstanceId);
 
-		for (GameObject* overlay : sceneOverlays) {
-			if (overlay->getId() == id) {
-				return overlay;
-			}
+			instance->prefabInstances.emplace(prefabId, instances);
 		}
-		return nullptr;
+		else {
+			instance->prefabInstances[prefabId].push_back(prefabInstanceId);
+		}
 	}
 
-	PrefabManager::PrefabManager() : Window("Prefab manager", 0)
+	void PrefabManager::RemoveInstance(GameObject* instanceObject)
 	{
-		editor = Editor::getInstance();
+		PrefabManager::RemoveInstance(instanceObject->GetPrefabId(), instanceObject->GetId());
+		instanceObject->SetPrefabId(0);
 
-		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
-
-		Hide();
-		instance = this;
-
-		open = false;
-		shouldUpdate = false;
-
-		currentlySelected = 0;
-
-		windowWidth = 700;
-		windowHeight = 700;
-
-		canBeDisplayedOnTop = true;
-
-		LoadPrefabs();
+		for (auto child : instanceObject->GetChildren()) {
+			RemoveInstance(child.second);
+		}
 	}
 
-	void PrefabManager::SavePrefabs(const std::string& path)
+	void PrefabManager::RemoveInstance(int prefabId, int prefabInstanceId)
 	{
-		json root;
+		//Remove the element from the instances vector of that prefab
+		auto it = instance->prefabInstances.find(prefabId);
+		if (it != instance->prefabInstances.end()) {
 
-		json prefabArray = json::array();
+			std::vector<int>* instances = &it->second;
 
-		for (const auto& pair : instance->prefabs) {
-			json prefabData;
+			auto it2 = std::find(instances->begin(), instances->end(), prefabInstanceId);
 
-			GameObject* prefab = pair.second;
-
-			if (prefab->getParent() == nullptr)
-				prefabArray.push_back(prefabArray.parse(prefab->toJson()));
-		}
-
-		json prefabInstancesArray;
-
-		for (auto pair : instance->prefabInstances) {
-			json prefabInstances;
-			for (int gameObjectId : pair.second) {
-				prefabInstances.push_back(gameObjectId);
+			if (it2 != instances->end()) {
+				instances->erase(it2);
 			}
-			prefabInstancesArray[std::to_string(pair.first)] = prefabInstances;
-		}
-
-		// Add the array to the root object
-		root["prefabs"] = prefabArray;
-
-		root["prefabInstances"] = prefabInstancesArray;
-
-		std::ofstream outputFile(path + "\\prefabs.json");
-		if (outputFile.is_open()) {
-			outputFile << root.dump(4) << std::endl;
-			outputFile.close();
 		}
 	}
 
 	GameObject* PrefabManager::GetPrefabById(int id)
 	{
-		if (instance->prefabs.find(id) != instance->prefabs.end()) {
-			return instance->prefabs[id];
+		auto it = instance->prefabs.find(id);
+		if (it != instance->prefabs.end()) {
+			return it->second;
 		}
 
 		return nullptr;
 	}
 
-	void PrefabManager::DrawList()
+	void PrefabManager::DrawPrefabList()
 	{
-
-		// TODO: cambiar el color para las carpetas
-		// ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.0f, 1.0f));
 
 		for (auto& pair : prefabs) {
 			GameObject* prefab = pair.second;
 
-			if (prefab->getParent() == nullptr)
+			if (prefab->GetParent() == nullptr)
 				DrawPrefab(prefab);
 		}
 
-		ImGui::Unindent();
 	}
 
 	void PrefabManager::DrawPrefab(GameObject* prefab)
@@ -226,7 +269,7 @@ namespace ShyEditor {
 
 		int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-		if (prefab->getChildren().size() == 0)
+		if (prefab->GetChildren().size() == 0)
 		{
 			flags |= ImGuiTreeNodeFlags_Leaf;
 		}
@@ -238,24 +281,25 @@ namespace ShyEditor {
 		bool isOpen = ImGui::TreeNodeEx("##Root", flags);
 
 		ImGui::SameLine();
-
 		ImGui::SetNextItemAllowOverlap();
-		if (ImGui::Selectable(std::string("##" + prefab->getName()).c_str(), currentlySelected == prefab->getId())) {
-			currentlySelected = prefab->getId();
+
+
+		if (ImGui::Selectable(std::string("##" + prefab->GetName()).c_str(), currentlySelected == prefab->GetId())) {
+			currentlySelected = prefab->GetId();
 		}
 
-		if(prefab->getParent() == nullptr){
+		if(prefab->GetParent() == nullptr){
 			if (ImGui::BeginDragDropSource()) {
 
 				Asset asset;
 				asset.isPrefab = true;
-				asset.prefabId = prefab->getId();
+				asset.prefabId = prefab->GetId();
 
 				ImGui::SetDragDropPayload("Asset", &asset, sizeof(asset));
 
 				ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
 				ImGui::SameLine();
-				ImGui::Text(prefab->getName().c_str());
+				ImGui::Text(prefab->GetName().c_str());
 
 
 				ImGui::EndDragDropSource();
@@ -264,17 +308,15 @@ namespace ShyEditor {
 		
 		ImGui::SameLine();
 
-		int yCursor = ImGui::GetCursorPosY();
-		ImGui::SetCursorPosY(yCursor - 5);
 		ImGui::Image(prefabText->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
-		ImGui::SetCursorPosY(yCursor);
 
 		ImGui::SameLine();
-		ImGui::Text(prefab->getName().c_str());
+
+		ImGui::Text(prefab->GetName().c_str());
 
 		if (isOpen) {
 
-			for (auto& child : prefab->getChildren()) {
+			for (auto& child : prefab->GetChildren()) {
 				DrawPrefab(child.second);
 			}
 
@@ -287,14 +329,18 @@ namespace ShyEditor {
 	void PrefabManager::DrawImage()
 	{
 		if (currentlySelected != 0) {
-			GameObject* prefab = prefabs[currentlySelected];
-			if ((prefab->IsTransform() && prefab->getTexture() != nullptr) ||
-				(!prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr))
-			{
-				Texture* text = prefab->IsTransform() ? prefab->getTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
 
-				float scaleX = prefab->IsTransform() ? prefab->getScale_x() : prefab->GetOverlay()->GetSize().x;
-				float scaleY = prefab->IsTransform() ? prefab->getScale_y() : prefab->GetOverlay()->GetSize().y;
+			GameObject* prefab = prefabs[currentlySelected];
+
+			bool isTransformWithTexture = prefab->IsTransform() && prefab->GetTexture() != nullptr;
+			bool isOverlayWithTexture = !prefab->IsTransform() && prefab->GetOverlay()->GetImage()->GetTexture() != nullptr;
+
+			if (isTransformWithTexture || isOverlayWithTexture)
+			{
+				Texture* text = prefab->IsTransform() ? prefab->GetTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
+
+				float scaleX = prefab->IsTransform() ? prefab->GetScaleX() : prefab->GetOverlay()->GetSize().x;
+				float scaleY = prefab->IsTransform() ? prefab->GetScaleY() : prefab->GetOverlay()->GetSize().y;
 
 				float sizeX = text->getWidth() * scaleX;
 				float sizeY = text->getHeight() * scaleY;
@@ -323,11 +369,12 @@ namespace ShyEditor {
 
 			GameObject* prefab = prefabs[currentlySelected];
 
-			if (prefab->drawComponentsInEditor()) {
+			// If a change is made we update the prefab instances
+			if (prefab->DrawComponentsInEditor()) {
 				UpdatePrefabInstances();
 			}
 
-			if (prefab->drawScriptsInEditor()) {
+			if (prefab->DrawScriptsInEditor()) {
 				UpdatePrefabInstances();
 			}
 
@@ -358,10 +405,12 @@ namespace ShyEditor {
 					if (isOverlay != constainsOverlay)
 						continue;
 
-					if (!prefab->getComponents()->contains(compName))
+					if (!prefab->GetComponents()->contains(compName))
 						if (ImGui::Button(compName.c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
 
-							prefab->addComponent(comp.second);
+							prefab->AddComponent(comp.second);
+
+							// If a component is added we update the prefab instances
 							UpdatePrefabInstances();
 						};
 				}
@@ -383,9 +432,13 @@ namespace ShyEditor {
 
 				for (auto& script : ::Components::ComponentManager::GetAllScripts()) {
 
-					if (!prefab->getScripts()->contains(script.GetName()))
+					if (!prefab->GetScripts()->contains(script.GetName()))
 						if (ImGui::Button(script.GetName().c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
-							prefab->addScript(script);
+							
+							prefab->AddScript(script);
+
+
+							// If a script is added we update the prefab instances
 							UpdatePrefabInstances();
 						};
 				}
@@ -393,135 +446,91 @@ namespace ShyEditor {
 
 			ImGui::Separator();
 
-			if (ImGui::Button("Delete prefab", ImVec2(ImGui::GetColumnWidth(), 40))) {
-				prefab->toDelete();
-			};
-
+			if (prefab->GetParent() == nullptr) {
+				if (ImGui::Button("Delete prefab", ImVec2(ImGui::GetColumnWidth(), 40))) {
+					prefab->ToDelete();
+				};
+			}
 			ImGui::PopStyleColor(6); // reset colors
 		}
 	}
 
-	void PrefabManager::Open()
+	void PrefabManager::HandlePrefabDeletion()
 	{
-		instance->Show();
-	}
+		auto it = prefabs.begin();
 
-	PrefabManager::~PrefabManager()
-	{
-		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
+		while (it != prefabs.end()) {
+			GameObject* prefab = it->second;
 
-		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
-			delete it->second;
+			prefab->Update();
 
-		prefabs.clear();
-	}
+			if (prefab->IsWaitingToDelete()) {
+				currentlySelected = 0;
 
-	void PrefabManager::AddPrefab(GameObject* prefab)
-	{
-		if (prefab->getId() > 0) {
-			GameObject::unusedIds.push_back(prefab->getId());
-		}
+				// Add the id to unusedIds to reutilize it later
+				PrefabManager::unusedIds.push_back(prefab->GetId());
 
-		if (PrefabManager::unusedIds.size() != 0) {
-			prefab->setId(PrefabManager::unusedIds.back());
-			PrefabManager::unusedIds.pop_back();
-		}
-		else {
-			//Ensure id is not being used already
-			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
-				PrefabManager::lastPrefabId--;
+				//Stop the instances being referenced
+				auto prefabIt = prefabInstances.find(prefab->GetId());
+				if (prefabIt != prefabInstances.end()) {
+					for (auto instanceId : prefabIt->second) {
+						if (prefab->IsTransform()) {
+							editor->getScene()->getGameObjects()[instanceId]->SetPrefabId(0);
+						}
+						else {
+							IdIsInOverlays(instanceId)->SetPrefabId(0);
+						}
+					}
+
+					prefabInstances.erase(prefab->GetId());
+				}
+
+				delete prefab;
+				it = prefabs.erase(it);
 			}
-
-			prefab->setId(PrefabManager::lastPrefabId);
-			PrefabManager::lastPrefabId--;
-		}
-
-		instance->prefabs.emplace(prefab->getId(), prefab);
-
-		for (auto child : prefab->getChildren()) {
-			child.second->setPrefabId(prefab->getId());
-			AddPrefab(child.second);
-		}
-	}
-
-	void PrefabManager::AddInstance(GameObject* prefab, GameObject* prefabInstance)
-	{
-		if (instance->prefabInstances.find(prefab->getId()) == instance->prefabInstances.end()) {
-			std::vector<int> instances;
-			instances.push_back(prefabInstance->getId());
-
-			instance->prefabInstances.emplace(prefab->getId(), instances);
-		}
-		else {
-			instance->prefabInstances[prefab->getId()].push_back(prefabInstance->getId());
-		}
-	}
-
-	void PrefabManager::AddInstance(int prefabId, int prefabInstanceId)
-	{
-		if (instance->prefabInstances.find(prefabId) == instance->prefabInstances.end()) {
-			std::vector<int> instances;
-			instances.push_back(prefabInstanceId);
-
-			instance->prefabInstances.emplace(prefabId, instances);
-		}
-		else {
-			instance->prefabInstances[prefabId].push_back(prefabInstanceId);
-		}
-	}
-
-	void PrefabManager::RemoveInstance(int prefabId, int prefabInstanceId)
-	{
-		if (instance->prefabInstances.find(prefabId) != instance->prefabInstances.end()) {
-			std::vector<int>* instances = &instance->prefabInstances.find(prefabId)->second;
-
-			auto it = std::find(instances->begin(), instances->end(), prefabInstanceId);
-
-			// If the element is found, erase it
-			if (it != instances->end()) {
-				instances->erase(it);
+			else {
+				++it;
 			}
 		}
-
-		if (instance->prefabs.find(prefabId) != instance->prefabs.end()) {
-			for (auto child : instance->prefabs[prefabId]->getChildren())
-			{
-				RemoveInstance(child.second->getId(), prefabInstanceId);
-			}
-		}
-
 	}
 
-	void PrefabManager::Behaviour()
+	void PrefabManager::UpdatePrefabInstances()
 	{
-		HandleDeletion();
+		if (currentlySelected != 0) {
+			GameObject* prefab = prefabs[currentlySelected];
 
-		ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_ContextMenuInBody | ImGuiTableFlags_NoHostExtendX;
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
 
-		if (ImGui::BeginTable("Prefabs", 2, flags))
-		{
-			ImGui::TableSetupColumn("Prefab list", ImGuiTableColumnFlags_WidthFixed);
-			ImGui::TableSetupColumn("Edit", ImGuiTableColumnFlags_WidthFixed);
+			auto prefabIt = prefabInstances.find(prefab->GetId());
+			if (prefabIt != prefabInstances.end()) {
+				std::vector<int> instances = prefabIt->second;
 
-			ImGui::TableHeadersRow();
+				for (auto instanceId : instances) {
+					GameObject* instance = nullptr;
 
-			ImGui::TableNextRow();
+					if (sceneGameObjects.find(instanceId) != sceneGameObjects.end()) {
+						instance = sceneGameObjects.find(instanceId)->second;
+					}
+					else if (IdIsInOverlays(instanceId) != nullptr) {
+						instance = IdIsInOverlays(instanceId);
+					}
 
-			ImGui::TableSetColumnIndex(0);
-
-			DrawList();
-
-			ImGui::TableSetColumnIndex(1);
-
-			ImGui::SeparatorText("Image");
-
-			DrawImage();
-
-			ImGui::SeparatorText("Components");
-
-			DrawComponents();
-
-			ImGui::EndTable();
+					instance->SetComponents(prefab->GetComponentsCopy());
+					instance->SetScripts(prefab->GetScriptsCopy());
+				}
+			}
 		}
+	}
+
+	GameObject* PrefabManager::IdIsInOverlays(int id)
+	{
+		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
+
+		for (GameObject* overlay : sceneOverlays) {
+			if (overlay->GetId() == id) {
+				return overlay;
+			}
+		}
+		return nullptr;
 	}
 }

@@ -13,7 +13,6 @@
 
 
 namespace ShyEditor {
-
 	ComponentWindow::ComponentWindow() : Window("Components", ImGuiWindowFlags_NoCollapse)
 	{
 		docked = true;
@@ -27,12 +26,12 @@ namespace ShyEditor {
 		if (gameObject != nullptr) {
 
 			if (gameObject->IsTransform())
-				gameObject->drawTransformInEditor();
+				gameObject->DrawTransformInEditor();
 			else
-				gameObject->drawOverlayInEditor();
+				gameObject->DrawOverlayInEditor();
 
-			gameObject->drawComponentsInEditor();
-			gameObject->drawScriptsInEditor();
+			gameObject->DrawComponentsInEditor();
+			gameObject->DrawScriptsInEditor();
 
 			ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.45f, 0.2f, 1.0f)); // change header color
 			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.2f, 0.65f, 0.2f, 1.0f)); // change header hover color
@@ -63,10 +62,10 @@ namespace ShyEditor {
 					if (isOverlay != constainsOverlay)
 						continue;
 
-					if (!gameObject->getComponents()->contains(compName))
+					if (!gameObject->GetComponents()->contains(compName))
 						if (ImGui::Button(compName.c_str(), ImVec2(windowWidth, 40))) {
 
-							gameObject->addComponent(comp.second);
+							gameObject->AddComponent(comp.second);
 						};
 				}
 			}
@@ -86,26 +85,25 @@ namespace ShyEditor {
 
 				for (auto& script : ::Components::ComponentManager::GetAllScripts()) {
 
-					if (!gameObject->getScripts()->contains(script.GetName()))
+					if (!gameObject->GetScripts()->contains(script.GetName()))
 						if (ImGui::Button(script.GetName().c_str(), ImVec2(windowWidth, 40))) {
-							gameObject->addScript(script);
+							gameObject->AddScript(script);
 						};
 				}
 			}
 
 			ImGui::PopStyleColor(6); // reset colors
 
-			if (gameObject->getPrefabId() != 0 && (gameObject->getParent() == nullptr || gameObject->getParent()->getPrefabId() != gameObject->getPrefabId()) ) {
+			if (gameObject->GetPrefabId() != 0) {
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(gameObject->getPrefabId())->getName()).c_str());
+				ImGui::SeparatorText(("Prefab: " + PrefabManager::GetPrefabById(gameObject->GetPrefabId())->GetName()).c_str());
 
 				ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 				if (ImGui::Button("Unlink prefab", ImVec2(windowWidth, 40))) {
-					PrefabManager::RemoveInstance(gameObject->getPrefabId(), gameObject->getId());
-					gameObject->setPrefabId(0);
+					PrefabManager::RemoveInstance(gameObject);
 				}
 			}
 		}
