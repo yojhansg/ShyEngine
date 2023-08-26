@@ -324,6 +324,16 @@ namespace ShyEditor {
 		return prefabId != 0;
 	}
 
+	Entity* Entity::GetTopParentPrefab()
+	{
+		Entity* entity = this;
+		while (entity->parent != nullptr && entity->parent->IsPrefab()) {
+			entity = entity->parent;
+		}
+
+		return entity;
+	}
+
 	Texture* Entity::GetTexture() {
 		return texture;
 	}
