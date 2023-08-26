@@ -147,7 +147,7 @@ namespace ShyEditor {
 
 		j = j.parse(ToJson());
 
-		std::ofstream outputFile(scenePath);
+		std::ofstream outputFile(scenePath, std::ios::app);
 		if (outputFile.is_open()) {
 			outputFile << j.dump(4);
 			outputFile.close();
@@ -158,15 +158,14 @@ namespace ShyEditor {
 
 	void Scene::SaveScene() {
 
+		std::ofstream outputFile(scenePath, std::ios::app);
+		if (!outputFile.is_open()) LogManager::LogError("Could not open the file to save the scene."); 
+
 		nlohmann::ordered_json j;
 		j = j.parse(ToJson());
 
-		std::ofstream outputFile(scenePath);
-		if (outputFile.is_open()) {
-			outputFile << j.dump(4);
-			outputFile.close();
-		}
-		else LogManager::LogError("Could not open the file to save the scene.");
+		outputFile << j.dump(4);
+		outputFile.close();
 
 	}
 
@@ -176,6 +175,13 @@ namespace ShyEditor {
 		std::filesystem::path p(scenePath);
 		sceneName = p.filename().stem().string();
 		name = sceneName.c_str();
+
+		std::ifstream inputFile(scenePath);
+
+		if (!inputFile.is_open()) {
+			LogManager::LogError("Could not open the file to load the scene.");
+			return false;
+		}
 
 		// Delete info of previous scene
 		selectedEntity = nullptr;
@@ -189,13 +195,6 @@ namespace ShyEditor {
 			delete o;
 
 		overlays.clear();
-
-		std::ifstream inputFile(scenePath);
-
-		if (!inputFile.is_open()) {
-			LogManager::LogError("Could not open the file to load the scene.");
-			return false;
-		}
 
 		nlohmann::ordered_json jsonData;
 		inputFile >> jsonData;
@@ -754,7 +753,11 @@ namespace ShyEditor {
 		ImGui::Image(sceneCamera->GetTexture(), ImVec2(windowWidth, windowHeight));
 
 		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
-		ImGui::Text(name);
+
+		if (Editor::getInstance()->IsAnySceneOpened())
+			ImGui::Text(name);
+		else
+			ImGui::Text("None");
 
 		ImGui::SameLine();
 

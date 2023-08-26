@@ -280,7 +280,7 @@ namespace ShyEditor {
 				else if (entry.extension == ".scene") {
 
 					std::filesystem::path currentDirectory(entry.path);
-					std::string relativePath = currentDirectory.lexically_relative(assetPath).stem().string();
+					std::string relativePath = currentDirectory.lexically_relative(assetPath).string();
 					editor->SetLastOpenedScene(relativePath);
 
 					editor->getScene()->LoadScene();
