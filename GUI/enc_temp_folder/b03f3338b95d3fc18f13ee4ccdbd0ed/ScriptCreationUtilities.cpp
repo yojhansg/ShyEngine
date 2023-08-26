@@ -375,6 +375,8 @@ namespace ShyEditor {
 
 			bool endMenu = false;
 
+			/*ImGui::SetWindowFontScale(2);*/
+
 			AddValuesFromVector(Components::ComponentManager::GetAllComponents());
 			AddValuesFromVector(Components::ComponentManager::GetAllManagers());
 
