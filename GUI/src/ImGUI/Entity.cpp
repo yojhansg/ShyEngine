@@ -631,12 +631,12 @@ namespace ShyEditor {
 			if (ImGui::CollapsingHeader(componentName.c_str())) {
 
 				for (auto& attribute : (*it).second.GetAttributesOrdered()) {
-					std::string attributeName = attribute->getName();
+					std::string attributeName = attribute->GetName();
 					Components::Attribute* attr = attribute;
 
 					ImGui::Text(attributeName.c_str());
 
-					switch (attr->getType()) {
+					switch (attr->GetType()) {
 
 					case Components::AttributesType::FLOAT:
 						changes = DrawFloat(attributeName + it->first, attr);
@@ -698,7 +698,7 @@ namespace ShyEditor {
 
 					ImGui::Text(attributeName.c_str());
 
-					switch (attr->getType()) {
+					switch (attr->GetType()) {
 
 					case Components::AttributesType::FLOAT:
 						changes = DrawFloat(attributeName + it->first, attr);

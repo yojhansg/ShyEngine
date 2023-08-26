@@ -63,13 +63,13 @@ namespace Components {
 
 		void SetType(const std::string& str, const AttributesType& type);
 		void SetValue(const AttributeValue& value);
-		AttributesType getType() const;
+		AttributesType GetType() const;
 
-		const std::string& getName() const;
-		const std::string& getTypeStr() const;
-		std::string toJson();
+		const std::string& GetName() const;
+		const std::string& GetTypeStr() const;
 
-		static Attribute fromJson(std::string name, std::string json);
+		std::string ToJson();
+		static Attribute FromJson(std::string name, std::string json);
 
 		AttributeValue value;
 	};

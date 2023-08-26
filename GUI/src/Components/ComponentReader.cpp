@@ -165,29 +165,33 @@ namespace Components {
 						AttributeValue value;
 
 
-						if (typeString == "float") {
+						if (typeString == "Number") {
 							type = AttributesType::FLOAT;
 							value.value.valueFloat = sv["defaultValue"].get<float>();
 						}
-						else if (typeString == "Vector2D") {
+						else if (typeString == "Pair") {
 							type = AttributesType::VECTOR2;
-							//value.value.valueFloat = sv["value"].get<float>();
+							sscanf_s(sv["defaultValue"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
 						}
-						else if (typeString == "string") {
+						else if (typeString == "Text") {
 							type = AttributesType::STRING;
 							value.valueString = sv["defaultValue"].get<std::string>();
 						}
-						else if (typeString == "bool") {
+						else if (typeString == "Toggle") {
 							type = AttributesType::BOOL;
 							value.value.valueBool = sv["defaultValue"].get<bool>();
 						}
-						else if (typeString == "color") {
-							value.value.valueColor = { 0.0f, 0.0f, 0.0f };
+						else if (typeString == "Color") {
 							type = AttributesType::COLOR;
+							sscanf_s(sv["defaultValue"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
 						}
 						else if (typeString == "Entity") {
 							type = AttributesType::ENTITY;
-							value.value.entityIdx = -1;
+							value.value.entityIdx = sv["defaultValue"].get<int>();
+						}
+						else if (typeString == "Letter") {
+							type = AttributesType::CHAR;
+							value.value.valueChar = sv["defaultValue"].get<char>();;
 						}
 						else {
 							type = AttributesType::NONE;

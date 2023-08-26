@@ -26,7 +26,7 @@ namespace Components {
 
 		for (auto& attr : other.orderedAttributes) {
 
-			orderedAttributes.push_back(&attributes.at(attr->getName()));
+			orderedAttributes.push_back(&attributes.at(attr->GetName()));
 		}
 	}
 
@@ -72,7 +72,7 @@ namespace Components {
 
 	void Component::AddAttribute(const Attribute& attribute)
 	{
-		const auto& name = attribute.getName();
+		const auto& name = attribute.GetName();
 
 		attributes.emplace(name, attribute);
 
@@ -103,27 +103,27 @@ namespace Components {
 		typeStr = typeString;
 		this->name = name;
 
-		if (typeString == "float") {
+		if (typeString == "float" || typeString == "Number") {
 			value.value.valueFloat = 0.0f;
 			type = AttributesType::FLOAT;
 		}
-		else if (typeString == "Vector2D") {
+		else if (typeString == "Vector2D" || typeString == "Pair") {
 			value.value.valueVector2 = { 0.0f, 0.0f };
 			type = AttributesType::VECTOR2;
 		}
-		else if (typeString == "string") {
+		else if (typeString == "string" || typeString == "Text") {
 			value.valueString = "";
 			type = AttributesType::STRING;
 		}
-		else if (typeString == "bool") {
+		else if (typeString == "bool" || typeString == "Toggle") {
 			value.value.valueBool = false;
 			type = AttributesType::BOOL;
 		}
-		else if (typeString == "color") {
+		else if (typeString == "color" || typeString == "Color") {
 			value.value.valueColor = { 0.0f, 0.0f, 0.0f };
 			type = AttributesType::COLOR;
 		}
-		else if (typeString == "char") {
+		else if (typeString == "char" || typeString == "Letter") {
 			value.value.valueChar = ' ';
 			type = AttributesType::CHAR;
 		}
@@ -154,21 +154,21 @@ namespace Components {
 		this->value = value;
 	}
 
-	AttributesType Attribute::getType() const
+	AttributesType Attribute::GetType() const
 	{
 		return type;
 	}
 
-	const std::string& Attribute::getName() const {
+	const std::string& Attribute::GetName() const {
 		return name;
 	}
 
-	const std::string& Attribute::getTypeStr() const
+	const std::string& Attribute::GetTypeStr() const
 	{
 		return typeStr;
 	}
 
-	std::string Attribute::toJson()
+	std::string Attribute::ToJson()
 	{
 		std::string stringValue;
 
@@ -202,7 +202,7 @@ namespace Components {
 		}
 	}
 
-	Attribute Attribute::fromJson(std::string name, std::string json)
+	Attribute Attribute::FromJson(std::string name, std::string json)
 	{
 		Attribute attribute;
 
@@ -248,7 +248,7 @@ namespace Components {
 		nlohmann::ordered_json attributesJson;
 		for (auto& attr : orderedAttributes) {
 
-			attributesJson[attr->getName()] = attr->toJson();
+			attributesJson[attr->GetName()] = attr->ToJson();
 		}
 
 
@@ -267,11 +267,11 @@ namespace Components {
 
 		nlohmann::json attributesJson = jsonData["attributes"];
 		for (const auto& attrJson : attributesJson.items()) {
-			::Components::Attribute attr = ::Components::Attribute::fromJson(attrJson.key(), attrJson.value().dump());
-			component.attributes[attr.getName()] = attr;
+			::Components::Attribute attr = ::Components::Attribute::FromJson(attrJson.key(), attrJson.value().dump());
+			component.attributes[attr.GetName()] = attr;
 
 			//Se hace un at para obtener una referencia al valor guardado dentro del mapa
-			component.orderedAttributes.push_back(&component.attributes.at(attr.getName()));
+			component.orderedAttributes.push_back(&component.attributes.at(attr.GetName()));
 		}
 
 		return component;
@@ -348,9 +348,9 @@ namespace Components {
 			nlohmann::json value;
 
 
-			value["type"] = attr.second.getTypeStr();
+			value["type"] = attr.second.GetTypeStr();
 
-			switch (attr.second.getType())
+			switch (attr.second.GetType())
 			{
 			case Components::AttributesType::BOOL:
 				value["value"] = attr.second.value.value.valueBool;
@@ -365,10 +365,10 @@ namespace Components {
 				value["value"] = attr.second.value.valueString;
 				break;
 			case Components::AttributesType::VECTOR2:
-				//value["value"] = attr.second.value.value.valueBool;
+				value["value"] = std::to_string(attr.second.value.value.valueVector2.x) + ", " + std::to_string(attr.second.value.value.valueVector2.y);
 				break;
 			case Components::AttributesType::COLOR:
-				//value["value"] = attr.second.value.value.valueBool;
+				value["value"] = std::to_string(attr.second.value.value.valueColor.r) + ", " + std::to_string(attr.second.value.value.valueColor.g) + ", " + std::to_string(attr.second.value.value.valueColor.b);
 				break;
 			case Components::AttributesType::ENTITY:
 				value["value"] = attr.second.value.value.entityIdx;
@@ -399,9 +399,8 @@ namespace Components {
 
 			Attribute attribute(attributeName, attributeType);
 
-			switch (attribute.getType()) {
+			switch (attribute.GetType()) {
 			case Components::AttributesType::BOOL:
-
 				attribute.value.value.valueBool = attributeJson["value"].get<bool>();
 				break;
 			case Components::AttributesType::FLOAT:
@@ -414,33 +413,15 @@ namespace Components {
 				attribute.value.valueString = attributeJson["value"].get<std::string>();
 				break;
 			case Components::AttributesType::VECTOR2:
-				//value["value"] = attr.second.value.value.valueBool;
+				sscanf_s(attributeJson["value"].get<std::string>().c_str(), "%f, %f", &attribute.value.value.valueVector2.x, &attribute.value.value.valueVector2.y);
 				break;
 			case Components::AttributesType::COLOR:
-				//value["value"] = attr.second.value.value.valueBool;
+				sscanf_s(attributeJson["value"].get<std::string>().c_str(), "%f, %f, %f", &attribute.value.value.valueColor.r, &attribute.value.value.valueColor.g, &attribute.value.value.valueColor.b);
 				break;
 			case Components::AttributesType::ENTITY:
 				attribute.value.value.entityIdx = attributeJson["value"].get<int>();
 				break;
 			}
-
-			//if (attributeJson["value"].is_boolean()) {
-			//	attribute.value.value.valueBool = attributeJson["value"];
-			//}
-			//else if (attributeJson["value"].is_number_float()) {
-			//	attribute.value.value.valueFloat = attributeJson["value"];
-			//}
-			//else if (attributeJson["value"].is_string()) {
-			//	std::string valueStr = attributeJson["value"];
-			//	if (valueStr.size() == 1) {
-			//		attribute.value.value.valueChar = valueStr[0];
-			//	}
-			//	else {
-			//		attribute.value.valueString = valueStr;
-			//	}
-			//}
-
-			//ADD REMAINING TYPES
 
 			script.AddAttribute(attributeName, attribute);
 		}

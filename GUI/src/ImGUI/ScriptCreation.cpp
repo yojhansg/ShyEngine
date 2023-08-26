@@ -282,7 +282,8 @@ namespace ShyEditor {
 				value.value.valueFloat = constNode["value"].get<float>();
 			}
 			else if (typeStr == "Vector2D") {
-				//TODO: despues de la serializacion
+				type = ::Components::AttributesType::VECTOR2;
+				sscanf_s(constNode["value"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
 			}
 			else if (typeStr == "string") {
 				type = ::Components::AttributesType::STRING;
@@ -293,12 +294,16 @@ namespace ShyEditor {
 				value.value.valueBool = constNode["value"].get<bool>();
 			}
 			else if (typeStr == "color") {
-
-				//TODO: despues de la serializacion
+				type = ::Components::AttributesType::COLOR;
+				sscanf_s(constNode["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
 			}
 			else if (typeStr == "Entity") {
 				type = ::Components::AttributesType::ENTITY;
 				value.value.entityIdx = -1;
+			}
+			else if (typeStr == "char") {
+				type = ::Components::AttributesType::CHAR;
+				value.value.valueChar = '\0';
 			}
 
 
