@@ -70,9 +70,14 @@ public:
 	ShyEditor::Build* GetBuildManager();
 
 	int Example();
-	int Probando();
 
 	std::vector<ShyEditor::Window*>& GetAllWindows();
+
+
+	/*
+		Auixiliary function for the editor
+	*/
+	static void HelpMarker(const std::string& str);
 
 private:
 

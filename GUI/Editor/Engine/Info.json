@@ -9,16 +9,28 @@
         "horizontalAlignment" : {
 
             "enum" : "Left/Center/Right"
+        },
 
+        "font": {
+            "asset": ".ttf"            
         },
 
         "fontSize": {
 
+            "info": "Hey hola",
             "integer": "1",
-            
             "min" : "0"
         }
-    }
+    },
 
+    "OverlayImage": {
+
+
+        "path": {
+
+            "asset": ".png .jpg"
+
+        }
+    }
 
 }
