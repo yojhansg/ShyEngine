@@ -24,6 +24,7 @@ namespace Components {
 
 		static std::vector<Script> ReadScripts(cstring filePath);
 
+
 	};
 	
 }

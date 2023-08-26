@@ -27,16 +27,19 @@ namespace ECS {
 			Clamp, Overflow, WrapClamp, WrapOverflow, Expand
 		};
 		static int ConvertFit(cString str);
+		static std::string ConvertFit(int idx);
 
 		enum class VerticalAlignment {
 			Top, Center, Bottom
 		};
 		static int ConvertVerticalAlignment(cString str);
+		static std::string ConvertVerticalAlignment(int idx);
 
 		enum class HorizontalAlignment {
 			Left, Center, Right
 		};
 		static int ConvertHorizontalAlignment(cString str);
+		static std::string ConvertHorizontalAlignment(int idx);
 
 		OverlayText();
 		~OverlayText();
@@ -54,14 +57,11 @@ namespace ECS {
 		reflect std::string font;
 		reflect int fontSize;
 
-		int horizontalAlignment_internal;
-		int verticalAlignment_internal;
-		int fit_internal;
+		reflect int horizontalAlignment;
+		reflect int verticalAlignment;
 
-		reflect std::string horizontalAlignment;
-		reflect std::string verticalAlignment;
+		reflect int fit;
 
-		reflect std::string fit;
 
 		reflect int lineSpacing;
 

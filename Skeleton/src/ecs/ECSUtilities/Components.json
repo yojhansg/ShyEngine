@@ -1031,15 +1031,15 @@
             },
             {
                 "name": "horizontalAlignment",
-                "type": "string"
+                "type": "float"
             },
             {
                 "name": "verticalAlignment",
-                "type": "string"
+                "type": "float"
             },
             {
                 "name": "fit",
-                "type": "string"
+                "type": "float"
             },
             {
                 "name": "lineSpacing",

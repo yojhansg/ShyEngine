@@ -177,11 +177,11 @@ ClassReflection::ClassReflection(){
 		if(map.contains("fontSize"))
 			self->fontSize = std::stoi(map.at("fontSize"));
 		if(map.contains("horizontalAlignment"))
-			self->horizontalAlignment = map.at("horizontalAlignment");
+			self->horizontalAlignment = std::stoi(map.at("horizontalAlignment"));
 		if(map.contains("verticalAlignment"))
-			self->verticalAlignment = map.at("verticalAlignment");
+			self->verticalAlignment = std::stoi(map.at("verticalAlignment"));
 		if(map.contains("fit"))
-			self->fit = map.at("fit");
+			self->fit = std::stoi(map.at("fit"));
 		if(map.contains("lineSpacing"))
 			self->lineSpacing = std::stoi(map.at("lineSpacing"));
 

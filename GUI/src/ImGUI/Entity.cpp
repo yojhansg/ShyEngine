@@ -42,7 +42,7 @@ namespace ShyEditor {
 		textureSize = new ImVec2(100, 100);
 
 		if (isTransform) {
-			
+
 			transform = new Transform(this);
 		}
 		else {
@@ -639,8 +639,88 @@ namespace ShyEditor {
 					switch (attr->GetType()) {
 
 					case Components::AttributesType::FLOAT:
-						changes = DrawFloat(attributeName + it->first, attr);
-						break;
+
+					{
+						std::string enums = "";
+						if (Components::ComponentManager::GetComponentElementInfo(&enums, componentName, attributeName, "enum")) {
+
+
+							int currentSelected = attr->value.value.valueFloat;
+							std::vector<std::string> strs;
+
+							size_t ini = 0;
+							size_t pos = enums.find('/');
+							while (pos != enums.npos) {
+
+								strs.push_back(enums.substr(ini, pos - ini));
+
+								ini = pos + 1;
+								pos = enums.find('/', ini);
+							}
+							strs.push_back(enums.substr(ini));
+
+
+							if (ImGui::BeginCombo("##", strs[currentSelected].c_str())) {
+
+
+								for (int i = 0; i < strs.size(); i++) {
+
+									bool isSelected = i == currentSelected;
+
+									if (ImGui::Selectable(strs[i].c_str(), isSelected))
+									{
+										attr->value.value.valueFloat = i;
+									}
+								}
+
+
+								ImGui::EndCombo();
+							}
+
+						}
+						else
+						{
+							bool isInteger = Components::ComponentManager::GetComponentElementInfo(NULL, componentName, attributeName, "integer");
+
+							float min = 0;
+							float max = 0;
+
+							int minInt = 0;
+							int maxInt = 0;
+
+							std::string value;
+
+							if (Components::ComponentManager::GetComponentElementInfo(&value, componentName, attributeName, "min")) {
+
+								min = std::stof(value);
+								max = FLT_MAX;
+
+								minInt = min;
+								maxInt = INT_MAX;
+							}
+
+							if (Components::ComponentManager::GetComponentElementInfo(&value, componentName, attributeName, "max")) {
+
+								max = std::stof(value);
+								min = -FLT_MAX;
+
+
+								minInt = -INT_MAX;
+								maxInt = max;
+							}
+
+							if (isInteger)
+							{
+								int intValue = attr->value.value.valueFloat;
+								changes = ImGui::DragInt(("##" + attributeName + it->first).c_str(), &intValue, 0.3f, minInt, maxInt, "%d");
+								if (changes)
+									attr->value.value.valueFloat = intValue;
+							}
+							else
+								changes = ImGui::DragFloat(("##" + attributeName + it->first).c_str(), &attr->value.value.valueFloat, 0.3f, min, max, "%.2f");
+						}
+					}
+					break;
 					case Components::AttributesType::VECTOR2:
 						changes = DrawVector2(attributeName + it->first, attr);
 						break;
@@ -730,7 +810,7 @@ namespace ShyEditor {
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255.0f, 255.0f, 255.0f, 1.0f));
 
 				if (ImGui::Button(("Edit script##" + scriptName).c_str(), ImVec2(ImGui::GetColumnWidth(), 40))) {
-					editor->OpenScript(scriptName); 
+					editor->OpenScript(scriptName);
 					changes = true;
 				}
 
@@ -1534,7 +1614,7 @@ namespace ShyEditor {
 			text->SetText(txt, fnt, size, -1);
 
 		}
-		else if(text != nullptr) {
+		else if (text != nullptr) {
 
 			text->Clear();
 		}
