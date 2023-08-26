@@ -24,8 +24,6 @@ namespace ShyEditor {
 
 	private:
 
-
-
 		enum Dir {
 
 			DIR_TOP = 1,
@@ -47,7 +45,6 @@ namespace ShyEditor {
 
 		SDL_Renderer* renderer;
 
-
 		int uiWidth, uiHeight;
 		SDL_Texture* uiTexture;
 
@@ -59,34 +56,23 @@ namespace ShyEditor {
 		Camera* sceneCamera;
 
 		std::map<int, GameObject*> gameObjects;
-
-
+		std::vector<GameObject*> overlays;
 
 		bool dragging;
 		GameObject* selectedGameObject;
 
 
-
-
-		std::vector<GameObject*> overlays;
-
 		static bool CompareGameObjectsRenderOrder(GameObject* a, GameObject* b);
-
 
 		void ResizeOverlayIfNeccesary();
 
 		void CalculateFrameRect(int& x, int& y, int& w, int& h);
 
-
-
-
 		bool PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness);
 		bool PointInsideVerticalSegment(int x, int y, int sx, int sy, int h, int thickness);
-
 		bool PointInsideRect(int x, int y, int rx, int ry, int rw, int rh, int thickness = 0);
 
 		void RenderRectangle(int x, int y, int w, int h, int thickness = 1);
-
 		void RenderHorizontalSegment(int x, int y, int w, int thickness = 1);
 		void RenderVerticalSegment(int x, int y, int h, int thickness = 1);
 
@@ -101,18 +87,17 @@ namespace ShyEditor {
 
 		GameObject* AddOverlay(std::string path);
 		void AddOverlay(GameObject* overlay);
-		void AddOverlayChildsToScene(GameObject* overlay);
+		void AddOverlayChildsToScene(GameObject* go);
 
-		std::map<int, GameObject*>& getGameObjects();
-		std::vector<GameObject*>& getOverlays();
+		std::map<int, GameObject*>& GetGameObjects();
+		std::vector<GameObject*>& GetOverlays();
 
-		std::string getSceneName();
-
+		std::string GetSceneName();
 		GameObject* GetSelectedGameObject();
 		void SetSelectedGameObject(GameObject* go);
 
-		void saveScene(const std::string& sceneName);
-		void loadScene(const std::string& sceneName);
+		void SaveScene(const std::string& sceneName);
+		void LoadScene(const std::string& sceneName);
 
 		void RenderChildGameObjects(GameObject* go);
 		void RenderGameObjects();
@@ -126,8 +111,8 @@ namespace ShyEditor {
 		ImVec2 MousePositionInScene();
 		bool IsMouseHoveringGameObject(GameObject* gameObject);
 
-		std::string getPath();
-		std::string toJson();
+		std::string GetPath();
+		std::string ToJson();
 
 	};
 

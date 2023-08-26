@@ -53,7 +53,7 @@ namespace ShyEditor {
 		acceptAssetDrop = true;
 
 		// Load the default scene or the last opene scene
-		loadScene(sceneName);
+		LoadScene(sceneName);
 
 	}
 
@@ -116,16 +116,16 @@ namespace ShyEditor {
 		overlays.push_back(overlay);
 	}
 
-	std::map<int, GameObject*>& Scene::getGameObjects() {
+	std::map<int, GameObject*>& Scene::GetGameObjects() {
 		return gameObjects;
 	}
 
-	std::vector<GameObject*>& Scene::getOverlays()
+	std::vector<GameObject*>& Scene::GetOverlays()
 	{
 		return overlays;
 	}
 
-	std::string Scene::getSceneName() {
+	std::string Scene::GetSceneName() {
 		return sceneName;
 	}
 
@@ -137,7 +137,7 @@ namespace ShyEditor {
 		selectedGameObject = go;
 	}
 
-	void Scene::saveScene(const std::string& sceneName) {
+	void Scene::SaveScene(const std::string& sceneName) {
 
 		Editor::getInstance()->getFileExplorer()->Refresh();
 
@@ -147,7 +147,7 @@ namespace ShyEditor {
 		this->sceneName = sceneName;
 		name = this->sceneName.c_str();
 
-		j = j.parse(toJson());
+		j = j.parse(ToJson());
 
 		std::ofstream outputFile(Editor::getInstance()->getProjectInfo().path + "\\Assets\\" + scenePath);
 		if (outputFile.is_open()) {
@@ -158,7 +158,7 @@ namespace ShyEditor {
 
 	}
 
-	void Scene::loadScene(const std::string& sceneName) {
+	void Scene::LoadScene(const std::string& sceneName) {
 
 		// Delete info of previous scene
 		selectedGameObject = nullptr;
@@ -214,7 +214,7 @@ namespace ShyEditor {
 		for (const auto& overlayJson : overlaysJson) {
 			GameObject* overlay = GameObject::FromJson(overlayJson.dump());
 			overlays.push_back(overlay);
-			AddGameObjectChildsToScene(overlay);
+			AddOverlayChildsToScene(overlay);
 		}
 
 	}
@@ -351,10 +351,6 @@ namespace ShyEditor {
 		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
 
 		SDL_RenderCopy(renderer, uiTexture, NULL, &frameRect);
-
-
-
-
 
 
 		if (ImGui::IsMouseReleased(0))
@@ -631,7 +627,7 @@ namespace ShyEditor {
 			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
 
 				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
-					saveScene(name);
+					SaveScene(name);
 			}
 		}
 
@@ -954,11 +950,11 @@ namespace ShyEditor {
 	}
 
 
-	std::string Scene::getPath() {
+	std::string Scene::GetPath() {
 		return scenePath;
 	}
 
-	std::string Scene::toJson() {
+	std::string Scene::ToJson() {
 
 		nlohmann::ordered_json j;
 

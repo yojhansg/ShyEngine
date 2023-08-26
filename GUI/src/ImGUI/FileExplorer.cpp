@@ -266,7 +266,7 @@ namespace ShyEditor {
 				else if (entry.extension == ".scene") {
 
 					/*std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();*/
-					editor->getScene()->loadScene(entry.name);
+					editor->getScene()->LoadScene(entry.name);
 				}
 
 				else {

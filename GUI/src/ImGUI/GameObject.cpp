@@ -33,6 +33,8 @@ namespace ShyEditor {
 
 		name = path;
 
+		this->isTransform = isTransform;
+
 		// Transform attributes
 		transform = nullptr;
 		overlay = nullptr;
@@ -40,7 +42,7 @@ namespace ShyEditor {
 		textureSize = new ImVec2(100, 100);
 
 		if (isTransform) {
-
+			
 			transform = new Transform(this);
 		}
 		else {
@@ -788,7 +790,7 @@ namespace ShyEditor {
 
 	bool GameObject::DrawGameobject(std::string attrName, ::Components::Attribute* attr) {
 
-		std::map<int, GameObject*>& gameObjects = editor->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = editor->getScene()->GetGameObjects();
 
 		GameObject* go = gameObjects.find((int)attr->value.value.entityIdx) != gameObjects.end() ? gameObjects.find((int)attr->value.value.entityIdx)->second : nullptr;
 
@@ -1212,7 +1214,7 @@ namespace ShyEditor {
 	void GameObject::AssignId(GameObject* go)
 	{
 		// Gets the list of gameobjects in the scene
-		std::map<int, GameObject*>& gameObjects = Editor::getInstance()->getScene()->getGameObjects();
+		std::map<int, GameObject*>& gameObjects = Editor::getInstance()->getScene()->GetGameObjects();
 
 		// See if we can reutilize an id
 		if (GameObject::unusedIds.size() != 0) {

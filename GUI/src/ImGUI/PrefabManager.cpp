@@ -145,7 +145,7 @@ namespace ShyEditor {
 
 
 			// Read the prefabs instances
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->GetGameObjects();
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -476,7 +476,7 @@ namespace ShyEditor {
 				if (prefabIt != prefabInstances.end()) {
 					for (auto instanceId : prefabIt->second) {
 						if (prefab->IsTransform()) {
-							editor->getScene()->getGameObjects()[instanceId]->SetPrefabId(0);
+							editor->getScene()->GetGameObjects()[instanceId]->SetPrefabId(0);
 						}
 						else {
 							IdIsInOverlays(instanceId)->SetPrefabId(0);
@@ -500,7 +500,7 @@ namespace ShyEditor {
 		if (currentlySelected != 0) {
 			GameObject* prefab = prefabs[currentlySelected];
 
-			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->getGameObjects();
+			std::map<int, GameObject*> sceneGameObjects = editor->getScene()->GetGameObjects();
 
 			auto prefabIt = prefabInstances.find(prefab->GetId());
 			if (prefabIt != prefabInstances.end()) {
@@ -525,7 +525,7 @@ namespace ShyEditor {
 
 	GameObject* PrefabManager::IdIsInOverlays(int id)
 	{
-		std::vector<GameObject*> sceneOverlays = editor->getScene()->getOverlays();
+		std::vector<GameObject*> sceneOverlays = editor->getScene()->GetOverlays();
 
 		for (GameObject* overlay : sceneOverlays) {
 			if (overlay->GetId() == id) {

@@ -48,7 +48,7 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Save Scene", NULL, false)) {
 
-                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
                 }
 
 
@@ -103,7 +103,7 @@ namespace ShyEditor {
                     Preferences::GenerateDebug();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
                     Game::Play(true);
                 };
 
@@ -112,7 +112,7 @@ namespace ShyEditor {
                     Preferences::GenerateRelease();
 
                     //Todo: guardar escena actual
-                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
                     Game::Play(false);
                 };
 
@@ -292,13 +292,13 @@ namespace ShyEditor {
             {
                 if (strlen(nameBuffer) > 0) {
                     //Save current scene
-                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
 
                     //Create new scene
-                    editor->getScene()->loadScene(nameBuffer);
+                    editor->getScene()->LoadScene(nameBuffer);
 
                     //Save empty new scene
-                    editor->getScene()->saveScene(editor->getScene()->getSceneName());
+                    editor->getScene()->SaveScene(editor->getScene()->GetSceneName());
                 }
 
                 ImGui::CloseCurrentPopup();

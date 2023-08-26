@@ -62,7 +62,7 @@ namespace ShyEditor {
 		ImGui::SeparatorText("World");
 
 		int i = 0;
-		for (auto& pair : scene->getGameObjects())
+		for (auto& pair : scene->GetGameObjects())
 		{
 			if (pair.second->GetParent() == nullptr) {
 
@@ -73,7 +73,7 @@ namespace ShyEditor {
 
 		ImGui::SeparatorText("UI");
 
-		for (auto& overlay : scene->getOverlays()) {
+		for (auto& overlay : scene->GetOverlays()) {
 
 			if (overlay->GetParent() == nullptr) {
 
@@ -103,8 +103,8 @@ namespace ShyEditor {
 
 				Scene* scene = Editor::getInstance()->getScene();
 
-				auto& objects = scene->getGameObjects();
-				auto& overlays = scene->getOverlays();
+				auto& objects = scene->GetGameObjects();
+				auto& overlays = scene->GetOverlays();
 
 				if (objects.size() == 0 && overlays.size() == 0) return;
 
@@ -240,10 +240,10 @@ namespace ShyEditor {
 					copiedObject = new GameObject(*selectedGo);
 
 					if (selectedGo->IsTransform()) {
-						scene->getGameObjects()[selectedGo->GetId()]->ToDelete();
+						scene->GetGameObjects()[selectedGo->GetId()]->ToDelete();
 					}
 					else {
-						scene->getOverlays()[selectedGo->GetId()]->ToDelete();
+						scene->GetOverlays()[selectedGo->GetId()]->ToDelete();
 					}
 				}
 
