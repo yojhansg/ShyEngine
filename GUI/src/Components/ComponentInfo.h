@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <nlohmann/json_fwd.hpp>
+
 namespace Components {
 
 	using cstring = std::string const&;
@@ -140,7 +142,7 @@ namespace Components {
 		void addAttribute(const Attribute& attribute);
 		void addMethod(const Method& method);
 
-		std::string toJson();
+		nlohmann::ordered_json toJson();
 
 		static Component fromJson(std::string json);
 	};

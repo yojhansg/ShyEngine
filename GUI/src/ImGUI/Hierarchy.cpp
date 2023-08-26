@@ -101,7 +101,6 @@ namespace ShyEditor {
 
 			if (dir != 0) {
 
-
 				Scene* scene = Editor::getInstance()->getScene();
 
 				auto& objects = scene->getGameObjects();
@@ -120,7 +119,7 @@ namespace ShyEditor {
 					if (dir < 0) {
 
 						if (goIt == objects.begin()) {
-							if (overlays.rbegin() != overlays.rend()) {
+							if (overlays.size() > 0) {
 								scene->SetSelectedGameObject(*overlays.rbegin());
 							}
 							else {
@@ -135,7 +134,7 @@ namespace ShyEditor {
 					else {
 
 						if (std::next(goIt) == objects.end()) {
-							if (overlays.rbegin() != overlays.rend()) {
+							if (overlays.size() > 0) {
 								scene->SetSelectedGameObject(*overlays.begin());
 							}
 							else {
@@ -154,7 +153,7 @@ namespace ShyEditor {
 					if (dir < 0) {
 
 						if (goIt == overlays.begin()) {
-							if (objects.rbegin() != objects.rend()) {
+							if (objects.size() > 0) {
 								scene->SetSelectedGameObject(objects.rbegin()->second);
 							}
 							else {
@@ -170,7 +169,7 @@ namespace ShyEditor {
 					else {
 
 						if (std::next(goIt) == overlays.end()) {
-							if (objects.rbegin() != objects.rend()) {
+							if (objects.size() > 0) {
 								scene->SetSelectedGameObject(objects.begin()->second);
 							}
 							else {

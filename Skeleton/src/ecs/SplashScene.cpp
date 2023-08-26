@@ -53,7 +53,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
 	float sizey = size / 1.5f;
 
-	int fit = 1;
+	std::string fit = "Overflow";
+	std::string centerAlign = "CENTER";
 
 	Entity* center = scene->createEntityNoId("text");
 	auto textOverlay = center->addComponent<ECS::Overlay>();
@@ -64,8 +65,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	text->SetFit(fit);
 	text->SetPointSize(size / 4);
 	text->SetFont(Main_Font);
-	text->SetHorizontalAlignment(1);
-	text->SetVerticalAlignment(1);
+	text->SetHorizontalAlignment(centerAlign);
+	text->SetVerticalAlignment(centerAlign);
 
 
 	center = scene->createEntityNoId("text");
@@ -77,8 +78,8 @@ void ECS::SplashScene::CreateSplashScreen(Scene* scene)
 	text->SetFit(fit);
 	text->SetPointSize(size / 10);
 	text->SetFont(Secondary_Font);
-	text->SetHorizontalAlignment(1);
-	text->SetVerticalAlignment(1);
+	text->SetHorizontalAlignment(centerAlign);
+	text->SetVerticalAlignment(centerAlign);
 }
 
 

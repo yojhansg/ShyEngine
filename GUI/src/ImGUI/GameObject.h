@@ -309,7 +309,6 @@ namespace ShyEditor {
 
 		int fontSize;
 		int maxWidth;
-
 	public:
 
 		OverlayText();

@@ -42,6 +42,7 @@ namespace ShyEditor {
 		bool shouldOpenSavePrefabPopup;
 
 	private:
+
 		GameObject* copiedObject;
 	};
 }

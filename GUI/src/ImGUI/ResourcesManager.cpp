@@ -58,10 +58,12 @@ namespace ShyEditor {
 
 	Font* ResourcesManager::AddFont(const std::string& key, int pointSize) {
 
-		if (instance->engineFonts.contains(key))
-			return instance->engineFonts.at(key);
+		std::string newkey = key + std::to_string(pointSize);
 
-		Font* font = new Font(instance->engineProjectPath + "\\Assets" + key, pointSize);
+		if (instance->engineFonts.contains(newkey))
+			return instance->engineFonts.at(newkey);
+
+		Font* font = new Font(instance->engineProjectPath + "\\Assets\\" + key, pointSize);
 
 		instance->engineFonts.insert(std::make_pair(key, font));
 

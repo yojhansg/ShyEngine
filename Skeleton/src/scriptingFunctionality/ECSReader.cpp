@@ -561,7 +561,7 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string const& in)
 	if (in == "char")
 		return ".value.Char";
 
-	if (in == "std::string" || in == "string" || in == "cstring") {
+	if (in == "std::string" || in == "string" || in == "cstring" || in == "cString") {
 		return ".str";
 	}
 
@@ -594,7 +594,7 @@ std::string ECSReader::Method::String2ScriptingEnum(std::string const& in)
 		return "Bool";
 	if (in == "char")
 		return "Char";
-	if (in == "std::string" || in == "string" || in == "cstring") {
+	if (in == "std::string" || in == "string" || in == "cstring" || in == "cString") {
 		return "String";
 	}
 	if (in == "Utilities::Vector2D" || in == "Vector2D" || in == "cVector2D") {
@@ -635,7 +635,7 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 		return convertName + " == \"true\" ? true : false";
 	}
 
-	if (type == "string" || type == "std::string" || type == "cstring") {
+	if (type == "string" || type == "std::string" || type == "cstring" || type == "cString") {
 		return convertName;
 	}
 
@@ -749,6 +749,7 @@ using namespace Physics;
 using namespace Input;
 using namespace Scripting;
 using namespace Sound;
+using namespace Renderer;
 
 
 void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){

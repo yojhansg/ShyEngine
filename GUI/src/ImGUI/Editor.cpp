@@ -6,6 +6,7 @@
 #include "imgui_impl_sdl2.h"
 #include "SDL_image.h"
 #include "imgui_internal.h"
+#include "SDL_ttf.h"
 
 #include "ComponentManager.h"
 #include "ResourcesManager.h" 
@@ -56,6 +57,8 @@ Editor::Editor() {
 	console = nullptr;
 
 	exitEditor = false;
+	build = nullptr;
+	layout = nullptr;
 	state = EDITOR_WINDOW;
 }
 
@@ -192,6 +195,24 @@ bool Editor::initSDL() {
 		return false;
 	}
 
+	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+
+	int ret = IMG_Init(imgFlags);
+	if ((ret & imgFlags) != imgFlags) {
+		SDL_Quit();
+		ShyEditor::LogManager::LogError("Could not initialise SDL_image!");
+		return false;
+	}
+
+
+	if (TTF_Init() < 0) {
+
+		IMG_Quit();
+		SDL_Quit();
+		ShyEditor::LogManager::LogError("Could not initialise SDL_image!");
+		return false;
+	}
+
 	// WINDOW
 	//SDL_WindowFlags imguiWinFlags = SDL_WindowFlags(ImGui::ImGui_ImplSDL2_GetPlatformWindowFlags());
 		// Create our window
@@ -200,6 +221,8 @@ bool Editor::initSDL() {
 
 	// Make sure creating the window succeeded
 	if (window == NULL) {
+		TTF_Quit();
+		IMG_Quit();
 		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not create the SDL Window!");
 		return false;
@@ -211,6 +234,8 @@ bool Editor::initSDL() {
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (renderer == NULL) {
 		SDL_DestroyWindow(window);
+		TTF_Quit();
+		IMG_Quit();
 		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not create the SDL Renderer!");
 		return false;
@@ -274,6 +299,13 @@ bool Editor::SplashScreen() {
 		return false;
 	}
 
+
+	int ret = IMG_Init(IMG_INIT_PNG);
+	if ((ret & IMG_INIT_PNG) != IMG_INIT_PNG) {
+		ShyEditor::LogManager::LogError("Could not initialise SDL_image for the SplashScreen!");
+		return false;
+	}
+
 	// Create Window
 	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540, SDL_WINDOW_BORDERLESS);
 
@@ -322,6 +354,8 @@ bool Editor::SplashScreen() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 
+	IMG_Quit();
+	SDL_Quit();
 	return true;
 }
 

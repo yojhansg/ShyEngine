@@ -10,7 +10,10 @@ namespace ECS {
 	class Entity;
 	class Scene;
 
-	class SplashScene : public Component {
+	//Es importante que esten en lineas diferentes para que el ECS reader no lo reconozca como componente
+
+	class SplashScene
+		: public Component {
 
 	public:
 

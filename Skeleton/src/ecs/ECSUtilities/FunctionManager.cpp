@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Fri Aug 25 20:36:23 2023
+//Creation time: Sat Aug 26 03:27:13 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -47,6 +47,7 @@ using namespace Physics;
 using namespace Input;
 using namespace Scripting;
 using namespace Sound;
+using namespace Renderer;
 
 
 void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){
@@ -1479,7 +1480,7 @@ Scripting::Variable OverlayText_GetFit(std::vector<Scripting::Variable>const& ve
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_GetFit", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	int ret = self->GetFit();
+	std::string ret = self->GetFit();
 	return ret;
 }
 Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& vec){
@@ -1489,7 +1490,7 @@ Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& ve
 		return Scripting::Variable::Null();
 	}
 
-	if(vec[1].type != Scripting::Variable::Type::Float){
+	if(vec[1].type != Scripting::Variable::Type::String){
 		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetFit", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
@@ -1499,7 +1500,7 @@ Scripting::Variable OverlayText_SetFit(std::vector<Scripting::Variable>const& ve
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetFit", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	self->SetFit(vec[1].value.Float);
+	self->SetFit(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable OverlayText_GetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
@@ -1514,7 +1515,7 @@ Scripting::Variable OverlayText_GetVerticalAlignment(std::vector<Scripting::Vari
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_GetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	int ret = self->GetVerticalAlignment();
+	std::string ret = self->GetVerticalAlignment();
 	return ret;
 }
 Scripting::Variable OverlayText_GetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
@@ -1529,7 +1530,7 @@ Scripting::Variable OverlayText_GetHorizontalAlignment(std::vector<Scripting::Va
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_GetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	int ret = self->GetHorizontalAlignment();
+	std::string ret = self->GetHorizontalAlignment();
 	return ret;
 }
 Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Variable>const& vec){
@@ -1539,7 +1540,7 @@ Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Vari
 		return Scripting::Variable::Null();
 	}
 
-	if(vec[1].type != Scripting::Variable::Type::Float){
+	if(vec[1].type != Scripting::Variable::Type::String){
 		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetVerticalAlignment", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
@@ -1549,7 +1550,7 @@ Scripting::Variable OverlayText_SetVerticalAlignment(std::vector<Scripting::Vari
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetVerticalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	self->SetVerticalAlignment(vec[1].value.Float);
+	self->SetVerticalAlignment(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Variable>const& vec){
@@ -1559,7 +1560,7 @@ Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Va
 		return Scripting::Variable::Null();
 	}
 
-	if(vec[1].type != Scripting::Variable::Type::Float){
+	if(vec[1].type != Scripting::Variable::Type::String){
 		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetHorizontalAlignment", std::to_string(1), std::string(""),  ""); 
 		return Scripting::Variable::Null();
 	}
@@ -1569,7 +1570,7 @@ Scripting::Variable OverlayText_SetHorizontalAlignment(std::vector<Scripting::Va
 		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "OverlayText_SetHorizontalAlignment", vec[0].value.entity->getEntityName(), OverlayText);
 		return Scripting::Variable::Null();
 	}
-	self->SetHorizontalAlignment(vec[1].value.Float);
+	self->SetHorizontalAlignment(vec[1].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable OverlayText_GetFont(std::vector<Scripting::Variable>const& vec){
@@ -2674,27 +2675,27 @@ Scripting::Variable PhysicsManager_setGravity(std::vector<Scripting::Variable>co
 }
 Scripting::Variable PhysicsManager_addCollisionLayer(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->addCollisionLayer(vec[0].value.cString);
+	manager->addCollisionLayer(vec[0].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsManager_removeCollisionLayer(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->removeCollisionLayer(vec[0].value.cString);
+	manager->removeCollisionLayer(vec[0].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsManager_setCollisionBetweenLayers(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	manager->setCollisionBetweenLayers(vec[0].value.cString, vec[1].value.cString, vec[2].value.Bool);
+	manager->setCollisionBetweenLayers(vec[0].str, vec[1].str, vec[2].value.Bool);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicsManager_layersCollide(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	bool ret = manager->layersCollide(vec[0].value.cString, vec[1].value.cString);
+	bool ret = manager->layersCollide(vec[0].str, vec[1].str);
 	return ret;
 }
 Scripting::Variable PhysicsManager_layersExists(std::vector<Scripting::Variable>const& vec){
 	PhysicsManager* manager = PhysicsManager::instance();
-	bool ret = manager->layersExists(vec[0].value.cString);
+	bool ret = manager->layersExists(vec[0].str);
 	return ret;
 }
 Scripting::Variable RendererManager_getWidth(std::vector<Scripting::Variable>const& vec){
@@ -2724,7 +2725,7 @@ Scripting::Variable RendererManager_resizeWindow(std::vector<Scripting::Variable
 }
 Scripting::Variable RendererManager_renameWindow(std::vector<Scripting::Variable>const& vec){
 	RendererManager* manager = RendererManager::instance();
-	manager->renameWindow(vec[0].value.cString);
+	manager->renameWindow(vec[0].str);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Variable>const& vec){
@@ -2734,7 +2735,7 @@ Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Vari
 }
 Scripting::Variable RendererManager_SetWindowIcon(std::vector<Scripting::Variable>const& vec){
 	RendererManager* manager = RendererManager::instance();
-	bool ret = manager->SetWindowIcon(vec[0].value.cString);
+	bool ret = manager->SetWindowIcon(vec[0].str);
 	return ret;
 }
 Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec){

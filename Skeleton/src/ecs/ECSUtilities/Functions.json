@@ -420,13 +420,13 @@
     },
     "OverlayText": {
         "GetFit": {
-            "return": "int"
+            "return": "std::string"
         },
         "GetFont": {
             "return": "std::string"
         },
         "GetHorizontalAlignment": {
-            "return": "int"
+            "return": "std::string"
         },
         "GetPointSize": {
             "return": "int"
@@ -435,13 +435,13 @@
             "return": "std::string"
         },
         "GetVerticalAlignment": {
-            "return": "int"
+            "return": "std::string"
         },
         "SetFit": {
             "input": [
                 {
                     "name": "fit",
-                    "type": "int"
+                    "type": "cstring"
                 }
             ],
             "return": "void"
@@ -459,7 +459,7 @@
             "input": [
                 {
                     "name": "align",
-                    "type": "int"
+                    "type": "cString"
                 }
             ],
             "return": "void"
@@ -486,7 +486,7 @@
             "input": [
                 {
                     "name": "align",
-                    "type": "int"
+                    "type": "cString"
                 }
             ],
             "return": "void"

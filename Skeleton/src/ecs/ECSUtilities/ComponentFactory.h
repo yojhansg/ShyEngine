@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Fri Aug 25 20:36:23 2023
+//Creation time : Sat Aug 26 03:27:13 2023
 
 #define ECSreflection_Version 1.0
 
@@ -35,7 +35,6 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	ECS::Component* CreateSoundEmitter();
 	ECS::Component* CreateTransform();
 	ECS::Component* CreateScript();
-	ECS::Component* CreateSplashScene();
 public: 
 
 	ECS::Component* CreateComponent(std::string const& comp);

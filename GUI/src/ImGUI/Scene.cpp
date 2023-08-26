@@ -553,7 +553,7 @@ namespace ShyEditor {
 			dragging = false;
 		}
 
-		if (dragging && selectedGameObject != nullptr && event->type == SDL_MOUSEMOTION) {
+		if (dragging && selectedGameObject != nullptr && selectedGameObject->IsTransform() && event->type == SDL_MOUSEMOTION) {
 
 			float invCameraScale = 1.f / sceneCamera->GetScale();
 
@@ -626,7 +626,7 @@ namespace ShyEditor {
 			}
 		}
 
-		if (event->type = SDL_KEYDOWN) {
+		if (event->type == SDL_KEYDOWN) {
 
 			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
 

@@ -35,7 +35,7 @@ ECS::OverlayManager::OverlayManager(bool debugFrameRate, float timeToDoubleClick
 		frameRateEntity->addComponent<ECS::Overlay>()->SetPositioned({ 0, 0 }, { 100, 10 });
 		frameRateText = frameRateEntity->addComponent<ECS::OverlayText>();
 
-		frameRateText->SetFit(1);
+		frameRateText->SetFit("Overflow");
 		frameRateText->SetText("Frame rate: 60");
 		frameRateText->SetFont("Default.ttf");
 		frameRateEntity->init();

@@ -1057,9 +1057,8 @@ namespace ShyEditor {
 		nlohmann::ordered_json componentsJson = nlohmann::json::array();
 		for (auto it = components.begin(); it != components.end(); it++) {
 
-			auto comp = j.parse(it->second.toJson());
 
-			componentsJson.push_back(comp);
+			componentsJson.push_back(it->second.toJson());
 		}
 
 		j["components"] = componentsJson;
@@ -1332,6 +1331,7 @@ namespace ShyEditor {
 		delete size;
 		delete position;
 		delete image;
+		delete text;
 	}
 
 	int& Overlay::GetPlacement()
@@ -1518,23 +1518,11 @@ namespace ShyEditor {
 
 			auto& textCmp = *textIt;
 
-			//const auto& cmpPath = textCmp.second.getAttribute("path").value.valueString;
-			//const auto& cmpText = textCmp.second.getAttribute("path").value.valueString;
-			//const auto& cmpSize = textCmp.second.getAttribute("path").value.valueString;
-			//const auto& cmpWrappedSize = textCmp.second.getAttribute("path").value.valueString;
+			const auto& fnt = textCmp.second.getAttribute("font").value.valueString;
+			const auto& txt = textCmp.second.getAttribute("text").value.valueString;
+			const auto& size = textCmp.second.getAttribute("fontSize").value.value.valueFloat;
 
-			//if (cmpPath != image->GetPath()) {
-
-
-			//	Texture* texture = ResourcesManager::GetInstance()->AddTexture(cmpPath, false);
-
-			//	if (texture->getSDLTexture() == nullptr) {
-
-			//		texture = nullptr;
-			//	}
-
-			//	image->SetTexture(cmpPath, texture);
-			//}
+			text->SetText(txt, fnt, size, -1);
 
 		}
 		else {
@@ -1633,10 +1621,10 @@ namespace ShyEditor {
 		text = "";
 		path = "";
 		fontSize = 0;
-		maxWidth = -1;
 	}
 	void OverlayText::SetText(const std::string text, const std::string path, int size, int width)
 	{
+		//TODO: esto esta mal, se esta borrando y creando una textura en cada frame
 		if (texture != nullptr) {
 
 			delete texture;
@@ -1645,12 +1633,13 @@ namespace ShyEditor {
 
 		if (this->path != path || this->fontSize != size) {
 
-			font = ResourcesManager::GetInstance()->AddFont(path, fontSize);
 			this->path = path;
 			this->fontSize = size;
+
+			font = ResourcesManager::GetInstance()->AddFont(path, fontSize);
 		}
 
-		if (font->getSDLFont() == nullptr)
+		if (font == nullptr || font->getSDLFont() == nullptr)
 			return;
 
 		this->text = text;

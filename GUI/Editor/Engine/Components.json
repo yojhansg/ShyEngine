@@ -1031,15 +1031,15 @@
             },
             {
                 "name": "horizontalAlignment",
-                "type": "float"
+                "type": "string"
             },
             {
                 "name": "verticalAlignment",
-                "type": "float"
+                "type": "string"
             },
             {
                 "name": "fit",
-                "type": "float"
+                "type": "string"
             },
             {
                 "name": "lineSpacing",
@@ -1055,7 +1055,7 @@
                     }
                 ],
                 "name": "GetFit",
-                "return": "float"
+                "return": "string"
             },
             {
                 "input": [
@@ -1065,7 +1065,7 @@
                     },
                     {
                         "name": "fit",
-                        "type": "float"
+                        "type": "string"
                     }
                 ],
                 "name": "SetFit",
@@ -1079,7 +1079,7 @@
                     }
                 ],
                 "name": "GetVerticalAlignment",
-                "return": "float"
+                "return": "string"
             },
             {
                 "input": [
@@ -1089,7 +1089,7 @@
                     }
                 ],
                 "name": "GetHorizontalAlignment",
-                "return": "float"
+                "return": "string"
             },
             {
                 "input": [
@@ -1099,7 +1099,7 @@
                     },
                     {
                         "name": "align",
-                        "type": "float"
+                        "type": "string"
                     }
                 ],
                 "name": "SetVerticalAlignment",
@@ -1113,7 +1113,7 @@
                     },
                     {
                         "name": "align",
-                        "type": "float"
+                        "type": "string"
                     }
                 ],
                 "name": "SetHorizontalAlignment",

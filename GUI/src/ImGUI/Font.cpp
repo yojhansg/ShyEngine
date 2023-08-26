@@ -8,6 +8,7 @@
 #include <SDL.h>
 
 #include "CheckML.h"
+#include <iostream>
 
 namespace ShyEditor {
 
@@ -15,8 +16,13 @@ namespace ShyEditor {
 	{
 		font = TTF_OpenFont(filepath.c_str(), pointSize);
 
-		if (font == NULL)
+
+		std::cout << "nueva fuente" << std::endl;
+
+		if (font == NULL) {
+
 			LogManager::LogError("Could not create font with path: " + filepath);
+		}
 	}
 
 	Font::~Font()

@@ -4,6 +4,8 @@
 #include <string>
 #include <Component.h>
 
+using cString = std::string const&;
+
 namespace Renderer {
 	class Font;
 	class Texture;
@@ -24,17 +26,22 @@ namespace ECS {
 		enum class Fit {
 			Clamp, Overflow, WrapClamp, WrapOverflow, Expand
 		};
+		static int ConvertFit(cString str);
 
 		enum class VerticalAlignment {
 			Top, Center, Bottom
 		};
+		static int ConvertVerticalAlignment(cString str);
 
 		enum class HorizontalAlignment {
 			Left, Center, Right
 		};
+		static int ConvertHorizontalAlignment(cString str);
 
 		OverlayText();
 		~OverlayText();
+
+
 
 	private:
 
@@ -47,11 +54,14 @@ namespace ECS {
 		reflect std::string font;
 		reflect int fontSize;
 
-		//TODO: text alignment
-		reflect int horizontalAlignment;
-		reflect int verticalAlignment;
+		int horizontalAlignment_internal;
+		int verticalAlignment_internal;
+		int fit_internal;
 
-		reflect int fit;
+		reflect std::string horizontalAlignment;
+		reflect std::string verticalAlignment;
+
+		reflect std::string fit;
 
 		reflect int lineSpacing;
 
@@ -65,14 +75,15 @@ namespace ECS {
 	publish:
 
 
-		int GetFit();
-		void SetFit(int fit);
+		std::string GetFit();
+		void SetFit(cstring fit);
 
-		int GetVerticalAlignment();
-		int GetHorizontalAlignment();
+		std::string GetVerticalAlignment();
+		std::string GetHorizontalAlignment();
 
-		void SetVerticalAlignment(int align);
-		void SetHorizontalAlignment(int align);
+		void SetVerticalAlignment(cString align);
+		void SetHorizontalAlignment(cString align);
+
 
 		std::string GetFont();
 		void SetFont(std::string font);

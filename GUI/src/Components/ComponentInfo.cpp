@@ -240,19 +240,21 @@ namespace Components {
 		return attribute;
 	}
 
-	std::string Component::toJson() {
+	nlohmann::ordered_json Component::toJson() {
 		nlohmann::ordered_json j;
 
 		j["component"] = name;
 
 		nlohmann::ordered_json attributesJson;
-		for (auto it = attributes.begin(); it != attributes.end(); it++) {
-			attributesJson[it->first] = it->second.toJson();
+		for (auto& attr : orderedAttributes) {
+
+			attributesJson[attr->getName()] = attr->toJson();
 		}
+
 
 		j["attributes"] = attributesJson;
 
-		return j.dump(2);
+		return j;
 	}
 
 	Component Component::fromJson(std::string json) {
@@ -267,6 +269,9 @@ namespace Components {
 		for (const auto& attrJson : attributesJson.items()) {
 			::Components::Attribute attr = ::Components::Attribute::fromJson(attrJson.key(), attrJson.value().dump());
 			component.attributes[attr.getName()] = attr;
+
+			//Se hace un at para obtener una referencia al valor guardado dentro del mapa
+			component.orderedAttributes.push_back(&component.attributes.at(attr.getName()));
 		}
 
 		return component;

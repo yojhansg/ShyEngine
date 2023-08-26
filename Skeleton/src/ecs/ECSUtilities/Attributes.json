@@ -208,15 +208,15 @@
         },
         {
             "name": "horizontalAlignment",
-            "type": "int"
+            "type": "std::string"
         },
         {
             "name": "verticalAlignment",
-            "type": "int"
+            "type": "std::string"
         },
         {
             "name": "fit",
-            "type": "int"
+            "type": "std::string"
         },
         {
             "name": "lineSpacing",
