@@ -53,8 +53,6 @@ namespace Components {
 		std::string name;
 		std::string typeStr;
 
-		static std::unordered_map<std::string, AttributesType> attributeTypes;
-
 		void SetDefaultValues();
 
 	public:
@@ -65,6 +63,7 @@ namespace Components {
 
 		void SetType(const std::string& str, const AttributesType& type);
 		void SetValue(const AttributeValue& value);
+		void SetValueStr(const std::string& str);
 		AttributesType GetType() const;
 
 		const std::string& GetName() const;
@@ -74,7 +73,6 @@ namespace Components {
 		static std::string GetTypeStrFromAttributeType(AttributesType type);
 
 		std::string ToJson();
-		static Attribute FromJson(std::string name, std::string json);
 
 		AttributeValue value;
 	};

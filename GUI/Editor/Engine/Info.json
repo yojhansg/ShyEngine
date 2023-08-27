@@ -11,6 +11,11 @@
             "enum" : "Left/Center/Right"
         },
 
+        "verticalAlignment" : {
+
+            "enum" : "Top/Center/Bottom"
+        },
+
         "font": {
             "asset": ".ttf"            
         },
@@ -19,7 +24,12 @@
 
             "info": "Hey hola",
             "integer": "1",
-            "min" : "0"
+            "min" : "0",
+            "default": "32"
+        }, 
+
+        "fit": {
+            "enum": "Clamp/Overflow/WrapClamp/WrapOverflow/Expand"
         }
     },
 

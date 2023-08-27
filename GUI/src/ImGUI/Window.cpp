@@ -96,31 +96,36 @@ namespace ShyEditor {
 			focused = ImGui::IsWindowFocused();
 
 
-			if (acceptAssetDrop && ImGui::IsDragDropActive() && IsMouseHoveringWindow())
-			{
-				int frameHeight = ImGui::GetFrameHeight();
 
-				int margin = 8;
+			if (acceptAssetDrop) {
+				auto drop = ImGui::GetDragDropPayload();
 
-				ImGui::SetCursorPos(ImVec2(margin, frameHeight + margin));
-				ImGui::BeginChild("##End", ImVec2(windowWidth - margin * 2, windowHeight - frameHeight - margin * 2));
+				if (drop != nullptr && drop->DataType == "Asset" && IsMouseHoveringWindow())
+				{
+					int frameHeight = ImGui::GetFrameHeight();
 
-				ImGui::EndChild();
+					int margin = 8;
+
+					ImGui::SetCursorPos(ImVec2(margin, frameHeight + margin));
+					ImGui::BeginChild("##End", ImVec2(windowWidth - margin * 2, windowHeight - frameHeight - margin * 2));
+
+					ImGui::EndChild();
 
 
-				if (ImGui::BeginDragDropTarget()) {
+					if (ImGui::BeginDragDropTarget()) {
 
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Asset"))
-					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Asset"))
+						{
 
-						Asset* asset = (Asset*)payload->Data;
+							Asset* asset = (Asset*)payload->Data;
 
-						ReceiveAssetDrop(*asset);
+							ReceiveAssetDrop(*asset);
 
+						}
+						ImGui::EndDragDropTarget();
 					}
-					ImGui::EndDragDropTarget();
-				}
 
+				}
 			}
 
 

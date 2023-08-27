@@ -131,14 +131,14 @@ namespace ShyEditor {
 		std::ifstream inputFile(editor->getProjectInfo().path + "\\Assets\\prefabs.json");
 
 		if (inputFile.is_open()) {
-			json root;
+			ordered_json root;
 			inputFile >> root;
 
-			json prefabArray = root["prefabs"];
+			ordered_json prefabArray = root["prefabs"];
 
 			// Read the prefabs
-			for (const json& prefabData : prefabArray) {
-				Entity* prefab = Entity::FromJson(prefabData.dump());
+			for (ordered_json& prefabData : prefabArray) {
+				Entity* prefab = Entity::FromJson(prefabData);
 
 				AddPrefab(prefab);
 			}
@@ -146,7 +146,7 @@ namespace ShyEditor {
 
 			// Read the prefabs instances
 			std::map<int, Entity*> sceneEntities = editor->getScene()->GetEntities();
-			json prefabInstancesArray = root["prefabInstances"];
+			ordered_json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
 				int prefabId = std::stoi(item.key());
