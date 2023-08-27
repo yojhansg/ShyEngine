@@ -201,7 +201,8 @@ namespace ShyEditor {
 		Transform(const Transform& tr, Entity* obj);
 		~Transform();
 		
-		ImVec2 &GetPosition();
+		ImVec2& GetPosition();
+
 		ImVec2 &GetScale();
 		float &GetRotation();
 

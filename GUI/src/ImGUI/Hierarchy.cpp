@@ -352,8 +352,10 @@ namespace ShyEditor {
 
 			ImGui::SetDragDropPayload(type, &entity, sizeof(Entity*));
 
-			ImGui::Image(entity->GetTexture()->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
-			ImGui::SameLine();
+			if (entity->GetTexture() != nullptr) {
+				ImGui::Image(entity->GetTexture()->getSDLTexture(), ImVec2(iconSize, iconSize), ImVec2(0, 0), ImVec2(1, 1));
+				ImGui::SameLine();
+			}
 			ImGui::Text(entity->GetName().c_str());
 
 			ImGui::EndDragDropSource();

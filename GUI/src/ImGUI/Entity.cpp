@@ -424,8 +424,11 @@ namespace ShyEditor {
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
 	void Entity::SetPosition(ImVec2 newPos) {
+		ImVec2 previousPos = ImVec2(GetPosition());
 
 		transform->SetPosition(newPos.x, newPos.y);
+
+		TranslateChildren(this, &previousPos);
 	}
 
 	ImVec2 Entity::GetPosition() {
@@ -438,7 +441,11 @@ namespace ShyEditor {
 
 	void Entity::SetRotation(float r)
 	{
+		float previousRotation = GetRotation();
+
 		transform->SetRotation(r);
+
+		RotateChildren(this, this, r - previousRotation);
 	}
 
 	ImVec2 Entity::GetAdjustedPosition() {
@@ -471,9 +478,6 @@ namespace ShyEditor {
 	{
 		transform->SetScale(x, y);
 	}
-
-
-
 
 
 
@@ -549,24 +553,25 @@ namespace ShyEditor {
 
 
 
-
-
-
 	// ---------------------------------------- Entity drawing logic ----------------------------------------------
 
 	void Entity::DrawTransformInEditor() {
 
-		transform->GetPosition().y *= -1;
-		ImGui::Text("Position");
-		ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
-		transform->GetPosition().y *= -1;
+		ImVec2 previousPosition = ImVec2(transform->GetPosition());
 
+		ImGui::Text("Position");
+		if (ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f")) {
+			TranslateChildren(this, &previousPosition);
+		}
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
 
+		float previousRotation = transform->GetRotation();
 		ImGui::Text("Rotation");
-		ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f");
+		if (ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f")) {
+			RotateChildren(this, this, transform->GetRotation() - previousRotation);
+		}
 
 		ImGui::Text("Render order");
 		ImGui::InputInt("##render_order", &renderOrder);
