@@ -377,6 +377,12 @@ namespace ShyEditor {
 			*/
 			void SetSerialized(bool value, const std::string& str);
 
+
+			/*
+				Marca el nodo como tipo enumerado
+			*/
+			void SetEnum(const std::string& enumStr);
+
 			/*
 				Devuelve el tipo de atributo del nodo
 			*/
@@ -384,9 +390,19 @@ namespace ShyEditor {
 
 		private:
 
+			//Las entidades siempre deben estar serializadas
 			bool alwaysSerialize;
 			bool serialized;
 			char serializedName[256];
+
+			/*
+				Marcar si el valor es de tipo enumerado
+			*/
+			bool isEnum;
+			/*
+				Nombre del enum en caso en caso de ser enumerado
+			*/
+			std::string enumStr;
 
 			/*
 				Tipo de valor que se quiere guardar
@@ -403,8 +419,6 @@ namespace ShyEditor {
 				Implementar la logica junto con el dibujado de la ventana
 			*/
 			void UpdateAndRender() override;
-
-
 
 
 			/*

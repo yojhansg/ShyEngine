@@ -291,7 +291,7 @@ namespace ShyEditor {
 		yoffset = y;
 	}
 
-	ScriptCreationUtilities::ScriptNode*ScriptCreationUtilities::ScriptFlow::GetNext()
+	ScriptCreationUtilities::ScriptNode* ScriptCreationUtilities::ScriptFlow::GetNext()
 	{
 		if (next == nullptr) return nullptr;
 
@@ -917,6 +917,7 @@ namespace ShyEditor {
 
 	ScriptCreationUtilities::ScriptInput::ScriptInput(::Components::AttributesType type) : attrType(type)
 	{
+		isEnum = false;
 		serialized = false;
 		alwaysSerialize = false;
 
@@ -963,10 +964,6 @@ namespace ShyEditor {
 		return type;
 	}
 
-}
-
-namespace ShyEditor {
-
 	void ScriptCreationUtilities::ScriptInput::UpdateAndRender()
 	{
 
@@ -980,7 +977,64 @@ namespace ShyEditor {
 			ImGui::InputText(valueFieldName, &attrValue.value.valueChar, 2, ImGuiInputTextFlags_CharsNoBlank);
 			break;
 		case ::Components::AttributesType::FLOAT:
-			ImGui::InputFloat(valueFieldName, &attrValue.value.valueFloat);
+
+
+
+			if (isEnum) {
+
+				ImGui::PushID(this);
+
+				if (enumStr == "") {
+
+					if (ImGui::BeginCombo("##Category selector", "Select category"))
+					{
+
+						auto enums = Components::ComponentManager::GetEnumNames();
+
+						for (auto& e : enums) {
+
+							if (ImGui::Selectable(e.c_str(), false)) {
+
+								enumStr = e;
+							}
+						}
+
+
+						ImGui::EndCombo();
+					}
+
+				}
+				else {
+
+
+					int selected = (int)attrValue.value.valueFloat;
+					auto& enumValues = Components::ComponentManager::GetEnum(enumStr);
+
+					if (ImGui::BeginCombo("##Value selector", enumValues[selected].c_str())) {
+
+						int idx = 0;
+						for (auto& value : enumValues) {
+
+
+							if (ImGui::Selectable(value.c_str(), idx == selected)) {
+
+								attrValue.value.valueFloat = idx;
+							}
+							idx++;
+						}
+
+						ImGui::EndCombo();
+					}
+
+				}
+				ImGui::PopID();
+
+			}
+			else
+
+
+
+				ImGui::InputFloat(valueFieldName, &attrValue.value.valueFloat);
 			break;
 		case ::Components::AttributesType::VECTOR2:
 		{
@@ -1088,6 +1142,7 @@ namespace ShyEditor {
 
 			if (ImGui::BeginMenu("Values")) {
 
+				bool isEnum = false;
 				::Components::AttributesType type = ::Components::AttributesType::NONE;
 
 				if (ImGui::MenuItem("Number")) {
@@ -1118,13 +1173,19 @@ namespace ShyEditor {
 					type = ::Components::AttributesType::BOOL;
 				}
 
+				if (ImGui::MenuItem("Engine value")) {
+					type = ::Components::AttributesType::FLOAT;
+					isEnum = true;
+				}
+
 				if (type != ::Components::AttributesType::NONE)
 				{
 
 
-					ScriptNode* node = new ScriptInput(type);
+					ScriptInput* node = new ScriptInput(type);
 
 					node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
+					node->SetEnum("");
 
 					creator->AddNode(node);
 
@@ -1514,6 +1575,9 @@ namespace ShyEditor {
 			root["value"] = attrValue.value.valueChar;
 		}
 
+		root["enum"] = isEnum;
+		root["enumStr"] = enumStr;
+
 		return root;
 	}
 
@@ -1536,6 +1600,12 @@ namespace ShyEditor {
 	{
 		serialized = value;
 		std::memcpy(serializedName, str.c_str(), 256);
+	}
+
+	void ScriptCreationUtilities::ScriptInput::SetEnum(const std::string& enumStr)
+	{
+		isEnum = true;
+		this->enumStr = enumStr;
 	}
 
 	::Components::AttributesType ScriptCreationUtilities::ScriptInput::GetAttrType()
