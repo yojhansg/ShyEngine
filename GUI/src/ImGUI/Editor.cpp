@@ -123,7 +123,9 @@ void Editor::Loop() {
 		instance->UpdateAndRenderWindows();
 	}
 
+	// Save editor information between its executions
 	ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
+	ShyEditor::Preferences::StoreData();
 
 }
 

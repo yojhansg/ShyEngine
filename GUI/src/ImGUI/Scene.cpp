@@ -179,7 +179,7 @@ namespace ShyEditor {
 
 		// Check if scene file exists
 		std::ifstream fileExists(scenePath);
-		if (!fileExists.good()) {
+		if (!fileExists.good() || !nlohmann::json::accept(fileExists)) {
 			LogManager::LogError("Could not find the current scene file.");
 			return;
 		}

@@ -694,6 +694,10 @@ namespace ShyEditor {
         fileStreamOut.close();
     }
 
+    std::string ProjectsManager::GetProjectFilePath() {
+        return instance->projectFilePath;
+    }
+
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
         std::error_code ec;
