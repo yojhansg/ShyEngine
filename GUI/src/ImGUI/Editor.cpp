@@ -561,11 +561,27 @@ void Editor::HelpMarker(const std::string& str)
 	}
 }
 
+
 std::vector<ShyEditor::Window*>& Editor::GetAllWindows()
 {
 	return windows;
 }
 
+std::string Editor::Beautify(const std::string& str)
+{
+	std::string styled = std::string(1, (char)std::toupper(str[0]));
+
+	for (int i = 1; i < str.size(); i++) {
+
+		if (std::isupper(str[i])) {
+			styled.push_back(' ');
+		}
+
+		styled.push_back(std::tolower(str[i]));
+	}
+
+	return styled;
+}
 
 int Editor::Example() {
 

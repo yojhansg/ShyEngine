@@ -65,7 +65,7 @@ namespace ShyEditor {
 					if (!entity->GetComponents()->contains(compName)) {
 
 
-						std::string modifiedName = constainsOverlay ? compName.substr(overlayStr.length()) : compName;
+						std::string modifiedName = Editor::Beautify(constainsOverlay ? compName.substr(overlayStr.length()) : compName);
 
 
 						if (ImGui::Button(modifiedName.c_str(), ImVec2(windowWidth, 40))) {
@@ -103,7 +103,7 @@ namespace ShyEditor {
 				for (auto& script : ::Components::ComponentManager::GetAllScripts()) {
 
 					if (!entity->GetScripts()->contains(script.GetName()))
-						if (ImGui::Button(script.GetName().c_str(), ImVec2(windowWidth, 40))) {
+						if (ImGui::Button(Editor::Beautify(script.GetName()).c_str(), ImVec2(windowWidth, 40))) {
 							entity->AddScript(script);
 						};
 				}

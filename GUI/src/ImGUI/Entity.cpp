@@ -617,7 +617,14 @@ namespace ShyEditor {
 		ImGui::SeparatorText("Anchor");
 
 		ImGui::Text("Anchor");
-		ImGui::DragFloat2("##Anchor_drag", (float*)&overlay->GetAnchor(), 0.3f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat2("##Anchor_drag", (float*)&overlay->GetAnchor(), 0.001f, 0.0f, 0.0f, "%.2f");
+
+
+		int childWidth = 88;
+
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.65f * 0.5f - childWidth * 0.5f);
+		ImGui::BeginChild("##AnchoSelect", ImVec2(childWidth, 80));
+
 
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(-1, -1));
 		ImGui::SameLine();
@@ -636,6 +643,9 @@ namespace ShyEditor {
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(0, -1));
 		ImGui::SameLine();
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
+
+
+		ImGui::EndChild();
 	}
 
 
@@ -649,7 +659,7 @@ namespace ShyEditor {
 			std::string componentName = (*it).second.GetName();
 
 
-			if (ImGui::CollapsingHeader(componentName.c_str())) {
+			if (ImGui::CollapsingHeader(Editor::Beautify(componentName).c_str())) {
 
 
 				std::string compDescription;
@@ -880,7 +890,7 @@ namespace ShyEditor {
 
 		for (auto it = scripts.begin(); it != scripts.end();) {
 
-			std::string scriptName = (*it).first;
+			std::string scriptName = Editor::Beautify((*it).first);
 			if (ImGui::CollapsingHeader(scriptName.c_str())) {
 
 				for (auto& attribute : (*it).second.GetAllAttributes()) {
@@ -1000,7 +1010,7 @@ namespace ShyEditor {
 		if (prefab != nullptr) {
 			entity = prefab;
 		}
-		else if(entityIt != entities.end()) {
+		else if (entityIt != entities.end()) {
 			entity = entityIt->second;
 		}
 		else {
@@ -1010,13 +1020,13 @@ namespace ShyEditor {
 				}
 			}
 		}
-		
+
 		if (entity != nullptr && entity->IsPrefab()) {
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
 		}
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
-			
+
 			if (entity != nullptr && entity->IsPrefab()) {
 				ImGui::PopStyleColor();
 			}
@@ -1031,7 +1041,7 @@ namespace ShyEditor {
 				std::string selectableId = entity.second->GetName() + "##" + std::to_string(entity.second->id);
 				if (ImGui::Selectable(selectableId.c_str())) {
 					attr->value.value.entityIdx = entity.second->GetId();
-			
+
 					entity.second->AddReferenceToEntity(attr);
 
 					ImGui::EndCombo();
@@ -1055,7 +1065,7 @@ namespace ShyEditor {
 
 			for (auto prefab : prefabs) {
 
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f)); 
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
 
 				std::string selectableId = prefab.second->GetName() + "##" + std::to_string(prefab.second->id);
 
@@ -1491,7 +1501,7 @@ namespace ShyEditor {
 
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
-			
+
 			if (IsIdAlreadyUsed(Entity::unusedIds.back())) {
 
 				Entity::unusedIds.pop_back();

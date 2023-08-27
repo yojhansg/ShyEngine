@@ -100,7 +100,8 @@ namespace ShyEditor {
 			if (acceptAssetDrop) {
 				auto drop = ImGui::GetDragDropPayload();
 
-				if (drop != nullptr && drop->DataType == "Asset" && IsMouseHoveringWindow())
+
+				if (drop != nullptr && std::strcmp(drop->DataType, "Asset") == 0 && IsMouseHoveringWindow())
 				{
 					int frameHeight = ImGui::GetFrameHeight();
 
