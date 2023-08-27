@@ -113,10 +113,6 @@ void Editor::Loop() {
 
 		// Init the ImGUI windows in the editor
 		instance->CreateWindows();
-
-		// Load the default scene or the last opene scene after creating the windows
-		bool load = instance->scene->LoadScene();
-		instance->SetAnySceneOpened(load);
 	}
 
 	// Editor main loop
@@ -273,6 +269,9 @@ void Editor::CreateWindows() {
 	fileExplorer = new ShyEditor::FileExplorer();
 	AddWindow(fileExplorer);
 
+	// Prefab manager
+	AddWindow(new ShyEditor::PrefabManager());
+
 	// Game scene
 	scene = new ShyEditor::Scene();
 	AddWindow(scene);
@@ -292,10 +291,6 @@ void Editor::CreateWindows() {
 	// Console
 	console = new ShyEditor::Console();
 	AddWindow(console);
-
-	// Prefab manager
-	AddWindow(new ShyEditor::PrefabManager());
-
 }
 
 bool Editor::SplashScreen() {

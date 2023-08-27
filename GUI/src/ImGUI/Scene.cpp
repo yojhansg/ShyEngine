@@ -33,6 +33,13 @@ namespace ShyEditor {
 
 		renderer = editor->GetRenderer();
 
+		// Load prefabs before loading scene
+		PrefabManager::LoadPrefabs();
+
+		// Load the default scene or the last opene scene after creating the windows
+		bool load = LoadScene();
+		editor->SetAnySceneOpened(load);
+
 		sceneCamera = new Camera(ImVec2(0, 0), 1, renderer);
 		sceneCamera->SetConstrains(.1, 10.0);
 
