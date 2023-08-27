@@ -1,4 +1,22 @@
 {
+
+    "enums" : {
+
+        "VerticalAlignment": [
+
+            "Top", "Center", "Bottom"
+        ],
+
+        "HorizontalAlignment": [
+            "Left", "Center", "Right"
+
+        ],
+
+        "Fit": [
+            "Clamp", "Overflow","WrapClamp","WrapOverflow","Expand"
+        ]
+    },
+
     "OverlayText" : {
 
         "info": {
@@ -8,12 +26,12 @@
 
         "horizontalAlignment" : {
 
-            "enum" : "Left/Center/Right"
+            "enum" : "HorizontalAlignment"
         },
 
         "verticalAlignment" : {
 
-            "enum" : "Top/Center/Bottom"
+            "enum" : "VerticalAlignment"
         },
 
         "font": {
@@ -29,7 +47,7 @@
         }, 
 
         "fit": {
-            "enum": "Clamp/Overflow/WrapClamp/WrapOverflow/Expand"
+            "enum": "Fit"
         }
     },
 
