@@ -1,6 +1,8 @@
 #include "ComponentReader.h"
 #include "nlohmann/json.hpp"
 
+#include "ComponentManager.h"
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -22,6 +24,12 @@ namespace Components {
 			for (auto& attr : attributes) {
 
 				Attribute attributeInfo(attr["name"].get<std::string>(), attr["type"].get<std::string>());
+
+				std::string value;
+				if (Components::ComponentManager::GetComponentElementInfo(&value, name, attributeInfo.GetName(), "default"))
+				{
+					attributeInfo.SetValueStr(value);
+				}
 
 				cmp.AddAttribute(attributeInfo);
 			}

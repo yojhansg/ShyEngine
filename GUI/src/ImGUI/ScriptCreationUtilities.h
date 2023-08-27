@@ -705,12 +705,6 @@ namespace ShyEditor {
 			~ScriptEvent();
 
 			/*
-				Convierte un nombre dado de camelCase a uno 
-				mas legible separado por espacios
-			*/
-			static std::string StyleName(const std::string& str);
-
-			/*
 				Callback para cuando un nodo es eliminado
 			*/
 			virtual void OnRemoved() override;

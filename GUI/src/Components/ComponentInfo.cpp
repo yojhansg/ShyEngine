@@ -1,11 +1,12 @@
 #include "ComponentInfo.h"
+
+#include "ComponentManager.h"
+
 #include "nlohmann/json.hpp"
 
 #include "CheckML.h"
 
 namespace Components {
-
-	std::unordered_map<std::string, AttributesType> Attribute::attributeTypes;
 
 	Component::Component()
 	{
@@ -131,8 +132,6 @@ namespace Components {
 		type = Attribute::GetAttributeTypeFromTypeStr(typeString);
 
 		SetDefaultValues();
-
-		Attribute::attributeTypes[this->name] = this->type;
 	}
 
 	Attribute::Attribute(const std::string& name)
@@ -149,6 +148,33 @@ namespace Components {
 	void Attribute::SetValue(const AttributeValue& value)
 	{
 		this->value = value;
+	}
+
+	void Attribute::SetValueStr(const std::string& str)
+	{
+		switch (type) {
+		case Components::AttributesType::BOOL:
+			value.value.valueBool = str == "true" ? true : false;
+			break;
+		case Components::AttributesType::FLOAT:
+			value.value.valueFloat = std::stof(str);
+			break;
+		case Components::AttributesType::CHAR:
+			value.value.valueChar = str[0];
+			break;
+		case Components::AttributesType::STRING:
+			value.valueString = str;
+			break;
+		case Components::AttributesType::VECTOR2:
+			sscanf_s(str.c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
+			break;
+		case Components::AttributesType::COLOR:
+			sscanf_s(str.c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
+			break;
+		case Components::AttributesType::ENTITY:
+			value.value.entityIdx = std::stoi(str);
+			break;
+		}
 	}
 
 	AttributesType Attribute::GetType() const
@@ -258,43 +284,6 @@ namespace Components {
 		}
 	}
 
-	Attribute Attribute::FromJson(std::string name, std::string json)
-	{
-		Attribute attribute;
-
-		attribute.name = name;
-		attribute.type = Attribute::attributeTypes[name];
-
-		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);
-
-		switch (attribute.type) {
-		case AttributesType::FLOAT:
-			attribute.value.value.valueFloat = std::stof(jsonData.get<std::string>());
-			break;
-		case AttributesType::VECTOR2:
-			sscanf_s(jsonData.get<std::string>().c_str(), "%f, %f", &attribute.value.value.valueVector2.x, &attribute.value.value.valueVector2.y);
-			break;
-		case AttributesType::STRING:
-			attribute.value.valueString = jsonData.get<std::string>();
-			break;
-		case AttributesType::BOOL:
-			attribute.value.value.valueBool = jsonData.get<std::string>() == "true" ? true : false;
-			break;
-		case AttributesType::COLOR:
-			sscanf_s(jsonData.get<std::string>().c_str(), "%f, %f, %f", &attribute.value.value.valueColor.r, &attribute.value.value.valueColor.g, &attribute.value.value.valueColor.b);
-			break;
-		case AttributesType::CHAR:
-			attribute.value.value.valueChar = jsonData.get<std::string>()[0];
-			break;
-		case AttributesType::ENTITY:
-			attribute.value.value.entityIdx = std::stoi(jsonData.get<std::string>());
-			break;
-		default:
-			break;
-		}
-
-		return attribute;
-	}
 
 	nlohmann::ordered_json Component::ToJson() {
 		nlohmann::ordered_json j;
@@ -315,19 +304,19 @@ namespace Components {
 
 	Component Component::FromJson(std::string json) {
 
-		Component component;
 
 		nlohmann::ordered_json jsonData = nlohmann::json::parse(json);
 
-		component.name = jsonData["component"];
+		std::string name = jsonData["component"];
+		Component component = Components::ComponentManager::GetAllComponents()[name];
+
 
 		nlohmann::json attributesJson = jsonData["attributes"];
 		for (const auto& attrJson : attributesJson.items()) {
-			::Components::Attribute attr = ::Components::Attribute::FromJson(attrJson.key(), attrJson.value().dump());
-			component.attributes[attr.GetName()] = attr;
 
-			//Se hace un at para obtener una referencia al valor guardado dentro del mapa
-			component.orderedAttributes.push_back(&component.attributes.at(attr.GetName()));
+			auto& attr = component.attributes[attrJson.key()];
+
+			attr.SetValueStr(attrJson.value());
 		}
 
 		return component;

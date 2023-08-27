@@ -131,7 +131,7 @@ namespace ShyEditor {
 			overlay = new Overlay(*entity.overlay, this);
 		}
 
-		textureSize = new ImVec2(entity.textureSize->x , entity.textureSize->y);
+		textureSize = new ImVec2(entity.textureSize->x, entity.textureSize->y);
 
 		imagePath = entity.imagePath;
 
@@ -622,7 +622,14 @@ namespace ShyEditor {
 		ImGui::SeparatorText("Anchor");
 
 		ImGui::Text("Anchor");
-		ImGui::DragFloat2("##Anchor_drag", (float*)&overlay->GetAnchor(), 0.3f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat2("##Anchor_drag", (float*)&overlay->GetAnchor(), 0.001f, 0.0f, 0.0f, "%.2f");
+
+
+		int childWidth = 88;
+
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetWindowWidth() * 0.65f * 0.5f - childWidth * 0.5f);
+		ImGui::BeginChild("##AnchoSelect", ImVec2(childWidth, 80));
+
 
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(-1, -1));
 		ImGui::SameLine();
@@ -641,6 +648,9 @@ namespace ShyEditor {
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(0, -1));
 		ImGui::SameLine();
 		DrawArrowButton(overlay->GetAnchor(), ImVec2(1, 1));
+
+
+		ImGui::EndChild();
 	}
 
 
@@ -654,7 +664,7 @@ namespace ShyEditor {
 			std::string componentName = (*it).second.GetName();
 
 
-			if (ImGui::CollapsingHeader(componentName.c_str())) {
+			if (ImGui::CollapsingHeader(Editor::Beautify(componentName).c_str())) {
 
 
 				std::string compDescription;
@@ -701,7 +711,7 @@ namespace ShyEditor {
 							strs.push_back(enums.substr(ini));
 
 
-							if (ImGui::BeginCombo("##", strs[currentSelected].c_str())) {
+							if (ImGui::BeginCombo(("##" + attributeName + it->first).c_str(), strs[currentSelected].c_str())) {
 
 
 								for (int i = 0; i < strs.size(); i++) {
@@ -885,7 +895,7 @@ namespace ShyEditor {
 
 		for (auto it = scripts.begin(); it != scripts.end();) {
 
-			std::string scriptName = (*it).first;
+			std::string scriptName = Editor::Beautify((*it).first);
 			if (ImGui::CollapsingHeader(scriptName.c_str())) {
 
 				for (auto& attribute : (*it).second.GetAllAttributes()) {
@@ -1005,7 +1015,7 @@ namespace ShyEditor {
 		if (prefab != nullptr) {
 			entity = prefab;
 		}
-		else if(entityIt != entities.end()) {
+		else if (entityIt != entities.end()) {
 			entity = entityIt->second;
 		}
 		else {
@@ -1015,13 +1025,13 @@ namespace ShyEditor {
 				}
 			}
 		}
-		
+
 		if (entity != nullptr && entity->IsPrefab()) {
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
 		}
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
-			
+
 			if (entity != nullptr && entity->IsPrefab()) {
 				ImGui::PopStyleColor();
 			}
@@ -1036,7 +1046,7 @@ namespace ShyEditor {
 				std::string selectableId = entity.second->GetName() + "##" + std::to_string(entity.second->id);
 				if (ImGui::Selectable(selectableId.c_str())) {
 					attr->value.value.entityIdx = entity.second->GetId();
-			
+
 					entity.second->AddReferenceToEntity(attr);
 
 					ImGui::EndCombo();
@@ -1060,7 +1070,7 @@ namespace ShyEditor {
 
 			for (auto prefab : prefabs) {
 
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f)); 
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
 
 				std::string selectableId = prefab.second->GetName() + "##" + std::to_string(prefab.second->id);
 
@@ -1349,10 +1359,7 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
-	Entity* Entity::FromJson(std::string json) {
-
-		nlohmann::ordered_json jsonData;
-		jsonData = nlohmann::json::parse(json);
+	Entity* Entity::FromJson(nlohmann::ordered_json& jsonData) {
 
 		std::string errorMsg = "The JSON entity has not the correct format.";
 
@@ -1472,8 +1479,8 @@ namespace ShyEditor {
 			return entity;
 		}
 
-		for (const auto& childJson : jsonData["childs"]) {
-			Entity* child = Entity::FromJson(childJson.dump());
+		for (auto& childJson : jsonData["childs"]) {
+			Entity* child = Entity::FromJson(childJson);
 
 			entity->AddChild(child);
 			child->SetParent(entity);
@@ -1499,7 +1506,7 @@ namespace ShyEditor {
 
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
-			
+
 			if (IsIdAlreadyUsed(Entity::unusedIds.back())) {
 
 				Entity::unusedIds.pop_back();
@@ -1837,7 +1844,15 @@ namespace ShyEditor {
 			const auto& txt = textCmp.second.GetAttribute("text").value.valueString;
 			const auto& size = textCmp.second.GetAttribute("fontSize").value.value.valueFloat;
 
-			text->SetText(txt, fnt, size, -1);
+			const auto& fit = textCmp.second.GetAttribute("fit").value.value.valueFloat;
+			const auto& hAlign = textCmp.second.GetAttribute("horizontalAlignment").value.value.valueFloat;
+			const auto& vAlign = textCmp.second.GetAttribute("verticalAlignment").value.value.valueFloat;
+
+			int x, y, w, h;
+			CalculateRectangle(x, y, w, h);
+
+
+			text->SetText(txt, fnt, size, fit, hAlign, vAlign, w);
 
 		}
 		else if (text != nullptr) {
@@ -1845,10 +1860,6 @@ namespace ShyEditor {
 			text->Clear();
 		}
 
-
-
-
-		//TODO: text
 	}
 
 	void Overlay::Render(SDL_Renderer* renderer, int x, int y, int w, int h)
@@ -1905,6 +1916,9 @@ namespace ShyEditor {
 
 		font = nullptr;
 		texture = nullptr;
+
+		fit = horizontalAlignment = verticalAlignment = 0;
+		width = 0;
 	}
 
 	OverlayText::~OverlayText()
@@ -1936,15 +1950,19 @@ namespace ShyEditor {
 		text = "";
 		path = "";
 		fontSize = 0;
-	}
-	void OverlayText::SetText(const std::string text, const std::string path, int size, int width)
-	{
-		//TODO: esto esta mal, se esta borrando y creando una textura en cada frame
-		if (texture != nullptr) {
+		font = nullptr;
+		verticalAlignment = horizontalAlignment = 0;
+		fit = 0;
 
-			delete texture;
-			texture = nullptr;
-		}
+	}
+
+	void OverlayText::SetText(const std::string text, const std::string path, int size, int fit, int hAlign, int vAlign, int width)
+	{
+		bool updateText = false;
+
+		horizontalAlignment = hAlign;
+		verticalAlignment = vAlign;
+
 
 		if (this->path != path || this->fontSize != size) {
 
@@ -1952,21 +1970,59 @@ namespace ShyEditor {
 			this->fontSize = size;
 
 			font = ResourcesManager::GetInstance()->AddFont(path, fontSize);
+			updateText = true;
+
+			if (font->getSDLFont() == nullptr && texture != nullptr) {
+				delete texture;
+				texture = nullptr;
+			}
+
 		}
 
 		if (font == nullptr || font->getSDLFont() == nullptr)
 			return;
 
-		this->text = text;
-		this->maxWidth = width;
 
-		if (maxWidth > 0) {
+		if (this->text != text) {
 
-			texture = font->CreateWrappedText(text, maxWidth);
+			this->text = text;
+			updateText = true;
 		}
-		else {
 
-			texture = font->CreateText(text);
+		if (texture == nullptr)
+			updateText = true;
+
+		if (fit / 2 != this->fit / 2) {
+			updateText = true;
+		}
+		this->fit = fit;
+
+		if (width != this->width && (fit == (int)Fit::WrapClamp || fit == (int)Fit::WrapOverflow))
+		{
+			this->width == width;
+			updateText = true;
+		}
+
+		if (updateText) {
+
+			if (texture != nullptr) {
+
+				delete texture;
+				texture = nullptr;
+			}
+
+			if (fit == (int)Fit::WrapClamp || fit == (int)Fit::WrapOverflow)
+				texture = font->CreateWrappedText(text, width);
+			else
+				texture = font->CreateText(text);
+
+			if (texture != nullptr) {
+
+				texture_w = texture->getWidth();
+				texture_h = texture->getHeight();
+
+			}
+
 		}
 	}
 
@@ -1977,11 +2033,70 @@ namespace ShyEditor {
 
 	void OverlayText::Render(SDL_Renderer* renderer, int x, int y, int w, int h)
 	{
-		if (texture != nullptr) {
+		if (texture == nullptr)
+			return;
 
-			SDL_Rect dest{ x, y, w, h };
-			SDL_RenderCopy(renderer, texture->getSDLTexture(), NULL, &dest);
+
+		SDL_Rect source{ 0, 0, texture_w, texture_h };
+		SDL_Rect destination{ x, y, w, h };
+
+
+		switch ((Fit)fit) {
+
+		case Fit::WrapClamp:
+		case Fit::Clamp: {
+
+			int w = std::min(source.w, destination.w);
+			int h = std::min(source.h, destination.h);
+
+
+			if (horizontalAlignment != (int)HorizontalAlignment::Left) {
+
+				float mult = horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
+
+				source.x = std::max(0, source.w - w) * mult;
+				destination.x += std::max(0, destination.w - w) * mult;
+			}
+
+			if (verticalAlignment != (int)VerticalAlignment::Top) {
+
+				float mult = verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
+
+				source.y = std::max(0, source.h - h) * mult;
+				destination.y += std::max(0, destination.h - h) * mult;
+			}
+
+
+			source.w = w;
+			source.h = h;
+
+			destination.w = source.w;
+			destination.h = source.h;
+
 		}
+
+		case Fit::WrapOverflow:
+		case Fit::Overflow: {
+
+			float multx = horizontalAlignment == (int)HorizontalAlignment::Left ? 0 : horizontalAlignment == (int)HorizontalAlignment::Center ? 0.5f : 1;
+			float multy = verticalAlignment == (int)VerticalAlignment::Top ? 0 : verticalAlignment == (int)VerticalAlignment::Center ? 0.5f : 1;
+
+			destination.x += (destination.w - source.w) * multx;
+			destination.y += (destination.h - source.h) * multy;
+
+			destination.h = source.h;
+
+			destination.w = source.w;
+			break;
+		}
+
+		default:
+			break;
+		}
+
+
+		SDL_RenderCopy(renderer, texture->getSDLTexture(), &source, &destination);
+
 	}
 }
 

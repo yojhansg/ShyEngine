@@ -62,7 +62,7 @@ namespace ECS {
 
 		reflect int fit;
 
-
+		//TODO: quitar line spacing
 		reflect int lineSpacing;
 
 		void init() override;

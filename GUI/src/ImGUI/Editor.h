@@ -84,7 +84,7 @@ public:
 		Auixiliary function for the editor
 	*/
 	static void HelpMarker(const std::string& str);
-
+	static std::string Beautify(const std::string& str);
 private:
 
 	Editor();
