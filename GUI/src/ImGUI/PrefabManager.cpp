@@ -37,7 +37,6 @@ namespace ShyEditor {
 		windowWidth = 700;
 		windowHeight = 700;
 
-		LoadPrefabs();
 		Hide();
 	}
 
@@ -128,24 +127,24 @@ namespace ShyEditor {
 
 	void PrefabManager::LoadPrefabs()
 	{
-		std::ifstream inputFile(editor->GetProjectInfo().path + "\\Assets\\prefabs.json");
+		std::ifstream inputFile(instance->editor->GetProjectInfo().path + "\\Assets\\prefabs.json");
 
 		if (inputFile.is_open()) {
-			json root;
+			ordered_json root;
 			inputFile >> root;
 
-			json prefabArray = root["prefabs"];
+			ordered_json prefabArray = root["prefabs"];
 
 			// Read the prefabs
-			for (const json& prefabData : prefabArray) {
-				Entity* prefab = Entity::FromJson(prefabData.dump());
+			for (ordered_json& prefabData : prefabArray) {
+				Entity* prefab = Entity::FromJson(prefabData);
 
 				AddPrefab(prefab);
 			}
 
 
 			// Read the prefabs instances
-			std::map<int, Entity*> sceneEntities = editor->GetScene()->GetEntities();
+			std::map<int, Entity*> sceneEntities = instance->editor->GetScene()->GetEntities();
 			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
@@ -155,18 +154,18 @@ namespace ShyEditor {
 				for (const auto& instanceId : item.value()) {
 					
 					//We check if its reference is still in the scene cause it could have been deleted
-					if (sceneEntities[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
+					if (sceneEntities[instanceId] != nullptr || instance->IdIsInOverlays(instanceId) != nullptr) {
 						prefabInstances.push_back(instanceId);
 					}
 				}
 
-				this->prefabInstances.emplace(prefabId, prefabInstances);
+				instance->prefabInstances.emplace(prefabId, prefabInstances);
 			}
 
 			inputFile.close();
 		}
 		else {
-			std::cerr << "Error opening file: " << editor->GetProjectInfo().path + "\\prefabs.json" << std::endl;
+			std::cerr << "Error opening file: " << instance->editor->GetProjectInfo().path + "\\prefabs.json" << std::endl;
 		}
 	}
 

@@ -1181,7 +1181,7 @@ namespace ShyEditor {
 
 				for (auto& name : events) {
 
-					if (ImGui::MenuItem(ScriptEvent::StyleName(name).c_str())) {
+					if (ImGui::MenuItem(Editor::Beautify(name).c_str())) {
 
 						ScriptEvent* selectedEvent = creator->ContainsEvent(name);
 
@@ -1734,7 +1734,7 @@ namespace ShyEditor {
 
 		if (eventname.size() > 0)
 		{
-			stylisedName = ScriptEvent::StyleName(eventname);
+			stylisedName = Editor::Beautify(eventname);
 		}
 
 
@@ -1757,22 +1757,6 @@ namespace ShyEditor {
 		float x, y;
 		flow->GetNextNodePosition(&x, &y);
 		flow->ManageNextNode(x, y);
-	}
-
-	std::string ScriptCreationUtilities::ScriptEvent::StyleName(const std::string& str)
-	{
-		std::string styled = std::string(1, (char)std::toupper(str[0]));
-
-		for (int i = 1; i < str.size(); i++) {
-
-			if (std::isupper(str[i])) {
-				styled.push_back(' ');
-			}
-
-			styled.push_back(std::tolower(str[i]));
-		}
-
-		return styled;
 	}
 
 	void ScriptCreationUtilities::ScriptEvent::OnRemoved()

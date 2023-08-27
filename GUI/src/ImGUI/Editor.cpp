@@ -86,9 +86,9 @@ bool Editor::Init() {
 
 	// Components and managers reading
 	Components::ComponentManager::Initialise();
+	Components::ComponentManager::ReadInfo(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Info.json");
 	Components::ComponentManager::ReadComponents(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Components.json");
 	Components::ComponentManager::ReadManagers(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Managers.json");
-	Components::ComponentManager::ReadInfo(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Info.json");
 
 	ShyEditor::Game::Init(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineDebug.exe", ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineRelease.exe");
 
@@ -113,10 +113,6 @@ void Editor::Loop() {
 
 		// Init the ImGUI windows in the editor
 		instance->CreateWindows();
-
-		// Load the default scene or the last opene scene after creating the windows
-		bool load = instance->scene->LoadScene();
-		instance->SetAnySceneOpened(load);
 	}
 
 	// Editor main loop
@@ -275,6 +271,9 @@ void Editor::CreateWindows() {
 	fileExplorer = new ShyEditor::FileExplorer();
 	AddWindow(fileExplorer);
 
+	// Prefab manager
+	AddWindow(new ShyEditor::PrefabManager());
+
 	// Game scene
 	scene = new ShyEditor::Scene();
 	AddWindow(scene);
@@ -294,10 +293,6 @@ void Editor::CreateWindows() {
 	// Console
 	console = new ShyEditor::Console();
 	AddWindow(console);
-
-	// Prefab manager
-	AddWindow(new ShyEditor::PrefabManager());
-
 }
 
 bool Editor::SplashScreen() {
@@ -568,11 +563,27 @@ void Editor::HelpMarker(const std::string& str)
 	}
 }
 
+
 std::vector<ShyEditor::Window*>& Editor::GetAllWindows()
 {
 	return windows;
 }
 
+std::string Editor::Beautify(const std::string& str)
+{
+	std::string styled = std::string(1, (char)std::toupper(str[0]));
+
+	for (int i = 1; i < str.size(); i++) {
+
+		if (std::isupper(str[i])) {
+			styled.push_back(' ');
+		}
+
+		styled.push_back(std::tolower(str[i]));
+	}
+
+	return styled;
+}
 
 int Editor::Example() {
 

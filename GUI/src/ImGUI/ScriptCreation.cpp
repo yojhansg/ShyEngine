@@ -194,7 +194,7 @@ namespace ShyEditor {
 			AddEvent("start", start);
 			AddEvent("update", update);
 
-			modified = true;
+			modified = false;
 			return;
 		}
 

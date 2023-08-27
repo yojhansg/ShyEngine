@@ -34,6 +34,13 @@ namespace ShyEditor {
 
 		renderer = editor->GetRenderer();
 
+		// Load prefabs before loading scene
+		PrefabManager::LoadPrefabs();
+
+		// Load the default scene or the last opene scene after creating the windows
+		bool load = LoadScene();
+		editor->SetAnySceneOpened(load);
+
 		sceneCamera = new Camera(ImVec2(0, 0), 1, renderer);
 		sceneCamera->SetConstrains(.1, 10.0);
 
@@ -203,12 +210,18 @@ namespace ShyEditor {
 
 		std::ifstream inputFile(scenePath);
 
-		if (!inputFile.is_open()) {
+		if (!inputFile.good() || !nlohmann::ordered_json::accept(inputFile)) {
 			LogManager::LogError("Could not open the file to load the scene.");
 			Editor::GetInstance()->SetLastOpenedScene("");
-			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
+			Preferences::GetData().initialScene = "";
 			return false;
 		}
+
+		inputFile.clear();
+		inputFile.seekg(0);
+
+		nlohmann::ordered_json jsonData = nlohmann::ordered_json::parse(inputFile);
+		inputFile.close();
 
 		Entity::unusedIds.clear();
 		Entity::lastId = 1;
@@ -216,23 +229,18 @@ namespace ShyEditor {
 		// Delete info of previous scene
 		DeleteContentInScene();
 
-		nlohmann::ordered_json jsonData;
-		inputFile >> jsonData;
-		inputFile.close();
-
-
 		if (!jsonData.contains("objects")) {
 			LogManager::LogError("The scene file has not the expected format.");
 			Editor::GetInstance()->SetLastOpenedScene("");
-			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
+			Preferences::GetData().initialScene = "";
 			return false;
 		}
 
-		nlohmann::json entitiesJson = jsonData["objects"];
+		nlohmann::ordered_json& entitiesJson = jsonData["objects"];
 
 		// Iterate through the entities JSON array
-		for (const auto& entityJson : entitiesJson) {
-			Entity* entity = Entity::FromJson(entityJson.dump());
+		for (nlohmann::ordered_json& entityJson : entitiesJson) {
+			Entity* entity = Entity::FromJson(entityJson);
 			entities.insert({ entity->GetId(), entity });
 			AddEntityChildsToScene(entity);
 		}
@@ -240,15 +248,15 @@ namespace ShyEditor {
 		if (!jsonData.contains("overlays")) {
 			LogManager::LogError("The scene file has not the expected format.");
 			ProjectsManager::GetInstance()->StoreLastOpenedScene("");
-			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
+			Preferences::GetData().initialScene = "";
 			return false;
 		}
 
-		nlohmann::json overlaysJson = jsonData["overlays"];
+		nlohmann::ordered_json& overlaysJson = jsonData["overlays"];
 
 		// Iterate through the overlay entities JSON array
-		for (const auto& overlayJson : overlaysJson) {
-			Entity* overlay = Entity::FromJson(overlayJson.dump());
+		for (nlohmann::ordered_json& overlayJson : overlaysJson) {
+			Entity* overlay = Entity::FromJson(overlayJson);
 			overlays.push_back(overlay);
 			AddOverlayChildsToScene(overlay);
 		}

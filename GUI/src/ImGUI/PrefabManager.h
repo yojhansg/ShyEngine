@@ -37,9 +37,6 @@ namespace ShyEditor {
 		void DrawImage();
 		void DrawComponents();
 
-		//Loading prefabs from prefabs json
-		void LoadPrefabs();
-
 		void HandlePrefabDeletion();
 		void UpdatePrefabInstances();
 
@@ -63,6 +60,9 @@ namespace ShyEditor {
 
 		// Saves the prefabs info into a json
 		static void SavePrefabs(const std::string& path);
+
+		//Loading prefabs from prefabs json
+		static void LoadPrefabs();
 
 		static void AddPrefab(Entity* entity);
 		static void AddInstance(int prefabId, int instanceId);

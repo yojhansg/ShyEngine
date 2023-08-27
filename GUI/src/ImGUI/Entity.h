@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "Texture.h"
 
+#include "nlohmann/json_fwd.hpp"
+
 struct SDL_Renderer;
 union SDL_Event;
 struct ImVec2;
@@ -110,7 +112,7 @@ namespace ShyEditor {
 
 		// Serialization and deseralization logic
 		std::string ToJson();
-		static Entity* FromJson(std::string json);
+		static Entity* FromJson(nlohmann::ordered_json& json);
 
 	private:
 
@@ -201,7 +203,8 @@ namespace ShyEditor {
 		Transform(const Transform& tr, Entity* obj);
 		~Transform();
 		
-		ImVec2 &GetPosition();
+		ImVec2& GetPosition();
+
 		ImVec2 &GetScale();
 		float &GetRotation();
 
@@ -309,6 +312,21 @@ namespace ShyEditor {
 	class OverlayText {
 
 	private:
+
+
+		enum class Fit {
+			Clamp, Overflow, WrapClamp, WrapOverflow, Expand
+		};
+
+		enum class HorizontalAlignment {
+			Left, Center, Right
+		};
+
+		enum class VerticalAlignment {
+			Top, Center, Bottom
+		};
+
+
 		std::string path;
 		std::string text;
 
@@ -316,8 +334,20 @@ namespace ShyEditor {
 		Font* font;
 		Texture* texture;
 
+		int texture_w;
+		int texture_h;
+
 		int fontSize;
-		int maxWidth;
+
+		int horizontalAlignment;
+		int verticalAlignment;
+
+		float lineSpacing;
+
+		int width;
+
+		int fit;
+
 	public:
 
 		OverlayText();
@@ -327,7 +357,7 @@ namespace ShyEditor {
 		std::string GetText();
 
 		void Clear();
-		void SetText(const std::string text, const std::string path, int size, int maxWidth);
+		void SetText(const std::string text, const std::string path, int size, int fit, int hAlign, int vAlign, int width);
 		Texture* GetTexture();
 
 		void Render(SDL_Renderer* renderer, int x, int y, int w, int h);
