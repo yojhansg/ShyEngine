@@ -56,5 +56,6 @@ public:
 
 	// Internal
 	std::string resourcesPath;
+	std::string projectFilePath;
 
 };

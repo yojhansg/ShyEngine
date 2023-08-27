@@ -363,8 +363,9 @@ namespace ShyEditor {
 		root["debugFrameRate"] = true;
 
 		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
+		root["projectFilePath"] = ProjectsManager::GetProjectFilePath();
 
-		PrefabManager::SavePrefabs(root["path"]);
+		PrefabManager::SavePrefabs();
 
 		std::ofstream file("Engine\\config.json");
 
@@ -383,7 +384,9 @@ namespace ShyEditor {
 		root["debugFrameRate"] = false;
 
 		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
-		PrefabManager::SavePrefabs(root["path"]);
+		root["projectFilePath"] = ProjectsManager::GetProjectFilePath();
+
+		PrefabManager::SavePrefabs();
 
 		std::ofstream file("Engine\\config.json");
 
@@ -481,7 +484,7 @@ namespace ShyEditor {
 		std::ifstream projectFile(ProjectsManager::GetProjectFilePath());
 
 		if (!projectFile.good() || !json::accept(projectFile)) {
-			LogManager::LogError("Could not open project file to store preferences data.");
+			LogManager::LogError("Could not open project file to load preferences data.");
 			return;
 		}
 
@@ -489,6 +492,8 @@ namespace ShyEditor {
 		projectFile.seekg(0);
 
 		ordered_json project = ordered_json::parse(projectFile);
+
+		projectFile.close();
 
 		if (!project.contains("Preferences")) return;
 

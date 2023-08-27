@@ -48,7 +48,7 @@ DataLoader DataLoader::Load(std::string const& path) {
 	data.showCursor = LoadValue("showcursor", bool, true);
 
 	// Physics
-	data.gravity = LoadValue("gravity", std::string, "0, 9.81");
+	data.gravity = LoadValue("gravity", std::string, "0, -9.81");
 	data.debugPhysics = LoadValue("debugPhysics", bool, false);
 	data.debugFramerate = LoadValue("debugFrameRate", bool, false);
 	data.collisionMatrix = LoadValue("matrix", std::vector<std::vector<bool>>, std::vector<std::vector<bool>>());
@@ -68,6 +68,7 @@ DataLoader DataLoader::Load(std::string const& path) {
 
 	// Internal
 	data.resourcesPath = LoadValue("path", std::string, "");
+	data.projectFilePath = LoadValue("projectFilePath", std::string, "");
 
 	if (data.resourcesPath != "")
 		data.resourcesPath += "\\";

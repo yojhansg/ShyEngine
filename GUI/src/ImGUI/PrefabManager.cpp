@@ -1,15 +1,18 @@
 #include "PrefabManager.h"
+
+#include "ComponentManager.h";
 #include "nlohmann/json.hpp"
+#include "ResourcesManager.h"
+#include "ProjectsManager.h"
+#include "LogManager.h"
+#include "Texture.h"
 #include "Entity.h"
 #include "Editor.h"
-#include "ProjectsManager.h"
-#include "ResourcesManager.h"
 #include "imgui.h"
-#include "Texture.h"
-#include "ComponentManager.h";
+#include "Scene.h"
+
 #include <string>
 #include <fstream>
-#include "Scene.h"
 
 using nlohmann::json;
 using nlohmann::ordered_json;
@@ -42,8 +45,6 @@ namespace ShyEditor {
 
 	PrefabManager::~PrefabManager()
 	{
-		PrefabManager::SavePrefabs(editor->GetProjectInfo().path + "\\Assets");
-
 		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
 			delete it->second;
 
@@ -85,12 +86,12 @@ namespace ShyEditor {
 		instance->Show();
 	}
 
-	void PrefabManager::SavePrefabs(const std::string& path)
+	void PrefabManager::SavePrefabs()
 	{
-		json root;
+		ordered_json root; // Prefabs JSON
 		
 		// Save prefabs
-		json prefabArray = json::array();
+		ordered_json prefabArray = ordered_json::array();
 
 		for (const auto& pair : instance->prefabs) {
 			Entity* prefab = pair.second;
@@ -101,15 +102,14 @@ namespace ShyEditor {
 
 
 		// Save prefabs instances references
-		json prefabInstancesArray;
+		ordered_json prefabInstancesArray;
 
 		for (auto pair : instance->prefabInstances) {
 
-			json prefabInstances;
+			ordered_json prefabInstances;
 
-			for (int entityId : pair.second) {
+			for (int entityId : pair.second)
 				prefabInstances.push_back(entityId);
-			}
 
 			prefabInstancesArray[std::to_string(pair.first)] = prefabInstances;
 		}
@@ -117,56 +117,78 @@ namespace ShyEditor {
 		root["prefabs"] = prefabArray;
 		root["prefabInstances"] = prefabInstancesArray;
 
-		std::ofstream outputFile(path + "\\prefabs.json");
 
-		if (outputFile.is_open()) {
-			outputFile << root.dump(4) << std::endl;
-			outputFile.close();
+		// Obtain project file JSON
+		std::ifstream projectFile(ProjectsManager::GetProjectFilePath());
+
+		if (!projectFile.good() || !json::accept(projectFile)) {
+			LogManager::LogError("Could not open project file to store the prefabs data.");
+			return;
 		}
+
+		projectFile.clear();
+		projectFile.seekg(0);
+
+		ordered_json project = ordered_json::parse(projectFile);
+
+
+		// Add the prefabs JSON as a new attribute of the project file JSON
+		project["Prefabs"] = root;
+
+		std::ofstream output(ProjectsManager::GetProjectFilePath());
+		output << project.dump(4);
+		output.close();
+
 	}
 
-	void PrefabManager::LoadPrefabs()
-	{
-		std::ifstream inputFile(instance->editor->GetProjectInfo().path + "\\Assets\\prefabs.json");
+	void PrefabManager::LoadPrefabs() {
 
-		if (inputFile.is_open()) {
-			ordered_json root;
-			inputFile >> root;
+		std::ifstream projectFile(ProjectsManager::GetProjectFilePath());
 
-			ordered_json prefabArray = root["prefabs"];
+		if (!projectFile.good() || !json::accept(projectFile)) {
+			LogManager::LogError("Could not open project file to load the prefabs data.");
+			return;
+		}
 
-			// Read the prefabs
-			for (ordered_json& prefabData : prefabArray) {
-				Entity* prefab = Entity::FromJson(prefabData);
+		projectFile.clear();
+		projectFile.seekg(0);
 
-				AddPrefab(prefab);
-			}
+		ordered_json project = ordered_json::parse(projectFile);
 
+		projectFile.close();
 
-			// Read the prefabs instances
-			std::map<int, Entity*> sceneEntities = instance->editor->GetScene()->GetEntities();
-			json prefabInstancesArray = root["prefabInstances"];
+		if (!project.contains("Prefabs")) return;
 
-			for (const auto& item : prefabInstancesArray.items()) {
-				int prefabId = std::stoi(item.key());
+		ordered_json root = project["Prefabs"];
 
-				std::vector<int> prefabInstances;
-				for (const auto& instanceId : item.value()) {
-					
-					//We check if its reference is still in the scene cause it could have been deleted
-					if (sceneEntities[instanceId] != nullptr || instance->IdIsInOverlays(instanceId) != nullptr) {
-						prefabInstances.push_back(instanceId);
-					}
+		ordered_json prefabArray = root["prefabs"];
+
+		// Read the prefabs
+		for (ordered_json& prefabData : prefabArray) {
+			Entity* prefab = Entity::FromJson(prefabData);
+
+			AddPrefab(prefab);
+		}
+
+		// Read the prefabs instances
+		std::map<int, Entity*> sceneEntities = instance->editor->GetScene()->GetEntities();
+		json prefabInstancesArray = root["prefabInstances"];
+
+		for (const auto& item : prefabInstancesArray.items()) {
+			int prefabId = std::stoi(item.key());
+
+			std::vector<int> prefabInstances;
+			for (const auto& instanceId : item.value()) {
+
+				//We check if its reference is still in the scene cause it could have been deleted
+				if (sceneEntities[instanceId] != nullptr || instance->IdIsInOverlays(instanceId) != nullptr) {
+					prefabInstances.push_back(instanceId);
 				}
-
-				instance->prefabInstances.emplace(prefabId, prefabInstances);
 			}
 
-			inputFile.close();
+			instance->prefabInstances.emplace(prefabId, prefabInstances);
 		}
-		else {
-			std::cerr << "Error opening file: " << instance->editor->GetProjectInfo().path + "\\prefabs.json" << std::endl;
-		}
+
 	}
 
 	void PrefabManager::AssignId(Entity* prefab)

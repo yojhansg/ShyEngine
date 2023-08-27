@@ -45,6 +45,8 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 
 	json file = json::parse(fileStream);
 
+	fileStream.close();
+
 
 	if (!file.contains("name")) {
 		Console::Output::PrintError("Load scene error", "The scene file doesn't have a valid format.");
@@ -77,9 +79,6 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	for (auto& overlay : overlays) {
 		ProcessEntityWithOverlay(scene, overlay, nullptr);
 	}
-
-
-	fileStream.close();
 
 	return scene;
 }

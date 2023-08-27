@@ -79,7 +79,7 @@ bool Engine::init() {
 
 	ECS::ContactListener::init();
 
-	//ECS::PrefabManager::init("Prefabs/prefabs"); //TODO data.prefabs ¿?
+	ECS::PrefabManager::init(data.projectFilePath);
 
 	Scripting::ScriptManager::init();
 
