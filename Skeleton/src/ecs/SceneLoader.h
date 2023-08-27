@@ -24,8 +24,6 @@ namespace ECS {
 
 	public:
 
-		static const std::string extension;
-
 		SceneLoader() = delete;
 
 		static ECS::Scene* LoadScene(std::string const& scenePath);

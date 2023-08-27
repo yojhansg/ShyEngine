@@ -19,8 +19,6 @@
 
 using namespace nlohmann;
 
-const std::string ECS::SceneLoader::extension = ".scene";
-
 
 #include <filesystem>
 #include <iostream>
@@ -28,9 +26,7 @@ const std::string ECS::SceneLoader::extension = ".scene";
 
 ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 {
-	std::string completePath = scenePath + extension;
-
-	std::ifstream fileStream(completePath);
+	std::ifstream fileStream(scenePath);
 
 	if (!fileStream.good())
 	{

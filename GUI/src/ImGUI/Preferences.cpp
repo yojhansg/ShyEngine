@@ -358,7 +358,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = true;
 		root["debugFrameRate"] = true;
 
-		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
 
 		PrefabManager::SavePrefabs(root["path"]);
 
@@ -378,7 +378,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = false;
 		root["debugFrameRate"] = false;
 
-		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
 		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file("Engine\\config.json");

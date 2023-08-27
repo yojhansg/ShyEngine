@@ -70,7 +70,7 @@ DataLoader DataLoader::Load(std::string const& path) {
 	data.resourcesPath = LoadValue("path", std::string, "");
 
 	if (data.resourcesPath != "")
-		data.resourcesPath += "/";
+		data.resourcesPath += "\\";
 
 	data.valid = true;
 

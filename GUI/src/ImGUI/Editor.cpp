@@ -127,6 +127,8 @@ void Editor::Loop() {
 		instance->UpdateAndRenderWindows();
 	}
 
+	ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
+
 }
 
 void Editor::End() {

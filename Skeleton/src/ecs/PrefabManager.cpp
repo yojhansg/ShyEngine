@@ -28,7 +28,7 @@ namespace ECS {
 
 	void PrefabManager::LoadPrefabs(std::string const& prefabsPath) {
 
-		std::ifstream fileStream("Prefabs/" + prefabsPath + SceneLoader::extension);
+		std::ifstream fileStream("Prefabs/" + prefabsPath + ".json");
 
 		if (!fileStream.good()) {
 			return;

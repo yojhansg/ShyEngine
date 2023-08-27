@@ -23,6 +23,7 @@
 
 #include "CheckML.h"
 
+#define Foreground "black.png"
 
 namespace ShyEditor {
 
@@ -39,6 +40,8 @@ namespace ShyEditor {
 		uiTexture = nullptr;
 		uiWidth = 0; uiHeight = 0;
 		ResizeOverlayIfNeccesary();
+
+		foreground = ResourcesManager::GetInstance()->AddTexture(Foreground, true);
 
 		// Pointer to the selected entity in the scene
 		selectedEntity = nullptr;
@@ -142,12 +145,24 @@ namespace ShyEditor {
 		sceneName = name;
 		this->name = sceneName.c_str();
 
-		j = j.parse(ToJson());
+		// Can not create a scene with the same name in the same folder
+		std::ifstream file(scenePath);
+		if (file.good()) return;
 
-		std::ofstream outputFile(scenePath, std::ios::app);
+		std::ofstream outputFile(scenePath);
 		if (outputFile.is_open()) {
-			outputFile << j.dump(4);
+
+			nlohmann::ordered_json json;
+
+			json["name"] = sceneName;
+			json["objects"] = nlohmann::json::array();
+			json["overlays"] = nlohmann::json::array();
+
+			outputFile << json.dump(4);
 			outputFile.close();
+
+			// Delete info of previous scene
+			DeleteContentInScene();
 		}
 		else LogManager::LogError("Could not open the file to create the scene.");
 
@@ -155,11 +170,21 @@ namespace ShyEditor {
 
 	void Scene::SaveScene() {
 
-		std::ofstream outputFile(scenePath, std::ios::app);
-		if (!outputFile.is_open()) LogManager::LogError("Could not open the file to save the scene.");
+		// Check if scene file exists
+		std::ifstream fileExists(scenePath);
+		if (!fileExists.good()) {
+			LogManager::LogError("Could not find the current scene file.");
+			return;
+		}
 
-		nlohmann::ordered_json j;
-		j = j.parse(ToJson());
+		// Open the file to write the new scene data
+		std::ofstream outputFile(scenePath);
+		if (!outputFile.is_open()) {
+			LogManager::LogError("Could not open the file to save the scene.");
+			return;
+		}
+
+		nlohmann::ordered_json j = ToJson();
 
 		outputFile << j.dump(4);
 		outputFile.close();
@@ -168,7 +193,10 @@ namespace ShyEditor {
 
 	bool Scene::LoadScene() {
 
-		scenePath = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + Editor::GetInstance()->GetLastOpenedScene() + ".scene";
+		auto path = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + Editor::GetInstance()->GetLastOpenedScene();
+		if (scenePath == path) return true;
+
+		scenePath = path;
 		std::filesystem::path p(scenePath);
 		sceneName = p.filename().stem().string();
 		name = sceneName.c_str();
@@ -177,6 +205,8 @@ namespace ShyEditor {
 
 		if (!inputFile.is_open()) {
 			LogManager::LogError("Could not open the file to load the scene.");
+			Editor::GetInstance()->SetLastOpenedScene("");
+			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
 			return false;
 		}
 
@@ -184,17 +214,7 @@ namespace ShyEditor {
 		Entity::lastId = 1;
 
 		// Delete info of previous scene
-		selectedEntity = nullptr;
-
-		for (const auto& pair : entities)
-			delete pair.second;
-
-		entities.clear();
-
-		for (const auto& o : overlays)
-			delete o;
-
-		overlays.clear();
+		DeleteContentInScene();
 
 		nlohmann::ordered_json jsonData;
 		inputFile >> jsonData;
@@ -203,6 +223,8 @@ namespace ShyEditor {
 
 		if (!jsonData.contains("objects")) {
 			LogManager::LogError("The scene file has not the expected format.");
+			Editor::GetInstance()->SetLastOpenedScene("");
+			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
 			return false;
 		}
 
@@ -217,6 +239,8 @@ namespace ShyEditor {
 
 		if (!jsonData.contains("overlays")) {
 			LogManager::LogError("The scene file has not the expected format.");
+			ProjectsManager::GetInstance()->StoreLastOpenedScene("");
+			Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
 			return false;
 		}
 
@@ -237,7 +261,24 @@ namespace ShyEditor {
 			UpdateReferencesToEntity(overlay);
 		}
 
+		Preferences::GetData().initialScene = Editor::GetInstance()->GetLastOpenedScene();
+
 		return true;
+	}
+
+	void Scene::DeleteContentInScene() {
+		// Delete info of previous scene
+		selectedEntity = nullptr;
+
+		for (const auto& pair : entities)
+			delete pair.second;
+
+		entities.clear();
+
+		for (const auto& o : overlays)
+			delete o;
+
+		overlays.clear();
 	}
 
 	void Scene::UpdateReferencesToEntity(Entity* entity) {
@@ -696,128 +737,159 @@ namespace ShyEditor {
 
 	void Scene::Behaviour() {
 
-		ResizeOverlayIfNeccesary();
+		if (Editor::GetInstance()->IsAnySceneOpened()) {
 
-		if (sceneCamera->ShouldResize(windowWidth, windowHeight))
-			sceneCamera->Resize(windowWidth, windowHeight);
+			ResizeOverlayIfNeccesary();
 
-		auto it = entities.begin();
-		while (it != entities.end()) {
-			Entity* entity = it->second;
+			if (sceneCamera->ShouldResize(windowWidth, windowHeight))
+				sceneCamera->Resize(windowWidth, windowHeight);
 
-			entity->Update();
+			auto it = entities.begin();
+			while (it != entities.end()) {
+				Entity* entity = it->second;
 
-			if (entity->IsWaitingToDelete()) {
-				selectedEntity = nullptr;
+				entity->Update();
 
-				Entity::unusedIds.push_back(entity->GetId());
+				if (entity->IsWaitingToDelete()) {
+					selectedEntity = nullptr;
 
-				delete entity;
-				it = entities.erase(it);
+					Entity::unusedIds.push_back(entity->GetId());
+
+					delete entity;
+					it = entities.erase(it);
+				}
+				else {
+					++it;
+				}
 			}
-			else {
-				++it;
+
+
+			auto it2 = overlays.begin();
+			while (it2 != overlays.end()) {
+				Entity* entity = *it2;
+
+				entity->Update();
+
+				if (entity->IsWaitingToDelete()) {
+					selectedEntity = nullptr;
+
+					Entity::unusedIds.push_back(entity->GetId());
+
+					delete entity;
+					it2 = overlays.erase(it2);
+				}
+				else {
+					++it2;
+				}
 			}
-		}
 
 
-		auto it2 = overlays.begin();
-		while (it2 != overlays.end()) {
-			Entity* entity = *it2;
+			sceneCamera->PrepareCameraRender();
 
-			entity->Update();
+			switch (viewMode) {
 
-			if (entity->IsWaitingToDelete()) {
-				selectedEntity = nullptr;
+			case 0:
+				RenderEntities();
+				RenderUI();
+				break;
+			case 1:
+				RenderEntities();
+				break;
+			case 2:
+				RenderUI();
+				break;
 
-				Entity::unusedIds.push_back(entity->GetId());
-
-				delete entity;
-				it2 = overlays.erase(it2);
+			default:
+				break;
 			}
-			else {
-				++it2;
+
+			RenderFrame();
+
+
+			sceneCamera->StopCameraRender();
+
+			// Cambiar las propiedades del grid dependiendo del orden de magnitud
+
+			float camScale = sceneCamera->GetScale();
+
+			float spacing = 50 * sceneCamera->GetScale();
+			int interval = 5;
+
+			int offset_x = windowWidth * 0.5f;
+			int offset_y = windowHeight * 0.5f;
+
+
+			if (camScale < 0.7f) {
+
+				spacing *= interval;
 			}
-		}
+
+			ScriptCreationUtilities::Grid::SetAlpha(0.5f);
+
+			ScriptCreationUtilities::Grid::SetSpacing(spacing);
+			ScriptCreationUtilities::Grid::SetInterval(interval);
+			ScriptCreationUtilities::Grid::SetOffset(offset_x + sceneCamera->GetPosition().x, offset_y + sceneCamera->GetPosition().y);
+			ScriptCreationUtilities::Grid::Draw();
 
 
+			ImGui::SetCursorPos(ImVec2(0, 0));
+			ImGui::Image(sceneCamera->GetTexture(), ImVec2(windowWidth, windowHeight));
 
-		sceneCamera->PrepareCameraRender();
-
-		switch (viewMode) {
-
-		case 0:
-
-			RenderEntities();
-			RenderUI();
-			break;
-		case 1:
-
-			RenderEntities();
-
-			break;
-		case 2:
-
-			RenderUI();
-
-			break;
-
-		default:
-			break;
-		}
-
-		RenderFrame();
-
-
-		sceneCamera->StopCameraRender();
-
-
-		// Cambiar las propiedades del grid dependiendo del orden de magnitud
-
-		float camScale = sceneCamera->GetScale();
-
-		float spacing = 50 * sceneCamera->GetScale();
-		int interval = 5;
-
-		int offset_x = windowWidth * 0.5f;
-		int offset_y = windowHeight * 0.5f;
-
-
-		if (camScale < 0.7f) {
-
-			spacing *= interval;
-		}
-
-		ScriptCreationUtilities::Grid::SetAlpha(0.5f);
-
-		ScriptCreationUtilities::Grid::SetSpacing(spacing);
-		ScriptCreationUtilities::Grid::SetInterval(interval);
-		ScriptCreationUtilities::Grid::SetOffset(offset_x + sceneCamera->GetPosition().x, offset_y + sceneCamera->GetPosition().y);
-		ScriptCreationUtilities::Grid::Draw();
-
-
-		ImGui::SetCursorPos(ImVec2(0, 0));
-		ImGui::Image(sceneCamera->GetTexture(), ImVec2(windowWidth, windowHeight));
-
-		ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
-
-		if (Editor::getInstance()->IsAnySceneOpened())
+			ImGui::SetCursorPos(ImVec2(10, ImGui::GetFrameHeight() + 10));
 			ImGui::Text(name);
-		else
-			ImGui::Text("None");
+			ImGui::SameLine();
 
-		ImGui::SameLine();
+			ImGui::SetCursorPos(ImVec2(100, ImGui::GetFrameHeight() + 10));
+			ImGui::SliderFloat("Zoom (-/+)", &sceneCamera->GetScale(), sceneCamera->GetMinScale(), sceneCamera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
 
-		ImGui::SetCursorPos(ImVec2(100, ImGui::GetFrameHeight() + 10));
-		ImGui::SliderFloat("Zoom (-/+)", &sceneCamera->GetScale(), sceneCamera->GetMinScale(), sceneCamera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
+			ImGui::SameLine();
 
-		ImGui::SameLine();
+			ImGui::RadioButton("##Scene view - Both", &viewMode, 0);
+			ImGui::SameLine();
+			ImGui::RadioButton("##Scene view - World", &viewMode, 1);
+			ImGui::SameLine();
+			ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
 
-		ImGui::RadioButton("##Scene view - Both", &viewMode, 0);
-		ImGui::SameLine();
-		ImGui::RadioButton("##Scene view - World", &viewMode, 1);
-		ImGui::SameLine();
-		ImGui::RadioButton("##Scene view - UI", &viewMode, 2);
+		}
+		else {
+
+			// Dibujar la imagen de fondo
+			ImVec2 windowPos = ImGui::GetWindowPos();
+			ImVec2 windowSize = ImGui::GetWindowSize();
+			ImVec2 uv0 = ImVec2(0, 1);  // Coordenada UV superior izquierda (0,1)
+			ImVec2 uv1 = ImVec2(1, 0);  // Coordenada UV inferior derecha (1,0)
+			ImGui::GetWindowDrawList()->AddImage(
+				(void*)foreground->getSDLTexture(),  // Reemplaza esto con el identificador de la textura
+				windowPos,
+				ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y),
+				uv0,
+				uv1
+			);
+
+			std::string text = "No scene loaded";
+
+			// Cambiar el tamaño de la fuente para crear un texto grande
+			ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+			ImGui::SetWindowFontScale(1.2f);
+
+			// Calcular el centro de la ventana
+			ImVec2 center = ImVec2(windowSize.x * 0.5f, windowSize.y * 0.5f);
+
+			// Mover el cursor al centro de la ventana en el eje X
+			ImGui::SetCursorPosX(center.x - ImGui::CalcTextSize(text.c_str()).x * 0.5f);
+
+			// Mover el cursor al centro de la ventana en el eje Y
+			ImGui::SetCursorPosY(center.y - ImGui::GetTextLineHeightWithSpacing() * 0.5f);
+
+			// Mostrar el texto centrado
+			ImGui::TextUnformatted(text.c_str());
+
+			// Restaurar la fuente original después de terminar con esta ventana
+			ImGui::PopFont();
+			ImGui::SetWindowFontScale(1.0f);
+
+		}
+
 
 	}
 
@@ -1019,7 +1091,7 @@ namespace ShyEditor {
 		return scenePath;
 	}
 
-	std::string Scene::ToJson() {
+	nlohmann::ordered_json Scene::ToJson() {
 
 		nlohmann::ordered_json j;
 
@@ -1041,7 +1113,7 @@ namespace ShyEditor {
 
 		j["overlays"] = overlayEntitiesJson;
 
-		return j.dump(2);
+		return j;
 	}
 
 }

@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include <vector>
+#include <nlohmann/json_fwd.hpp>
 
 #include "Window.h"
 
@@ -19,6 +20,7 @@ namespace ShyEditor {
 	class Entity;
 	class Camera;
 	class Overlay;
+	class Texture;
 
 	class Scene : public Window {
 
@@ -47,6 +49,8 @@ namespace ShyEditor {
 
 		int uiWidth, uiHeight;
 		SDL_Texture* uiTexture;
+
+		Texture* foreground;
 
 		std::string scenePath;
 		std::string sceneName;
@@ -102,6 +106,8 @@ namespace ShyEditor {
 		void SaveScene();
 		bool LoadScene();
 
+		void DeleteContentInScene();
+
 		void RenderChildEntities(Entity* entity);
 		void RenderEntities();
 		void RenderFrame();
@@ -115,7 +121,7 @@ namespace ShyEditor {
 		bool IsMouseHoveringEntity(Entity* entity);
 
 		std::string GetPath();
-		std::string ToJson();
+		nlohmann::ordered_json ToJson();
 
 	};
 

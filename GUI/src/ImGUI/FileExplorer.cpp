@@ -15,7 +15,6 @@
 #include "Scene.h"
 #include "SDL.h"
 
-#include <filesystem>
 #include <direct.h>
 #include <imgui.h>
 #include <queue>
@@ -233,7 +232,6 @@ namespace ShyEditor {
 				ImGui::SameLine();
 				ImGui::Text(asset.name);
 
-
 				ImGui::EndDragDropSource();
 			}
 
@@ -279,12 +277,13 @@ namespace ShyEditor {
 				}
 				else if (entry.extension == ".scene") {
 
-					/*std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();*/
-					
-					std::filesystem::path currentDirectory(entry.path);
-					std::string relativePath = currentDirectory.lexically_relative(assetPath).string();
-					editor->SetLastOpenedScene(relativePath);
-					editor->GetScene()->LoadScene();
+					fs::path currentDirectory(entry.path);
+					fs::path assetsDirectory(assetPath);
+					fs::path relative = fs::relative(currentDirectory, assetsDirectory);
+
+					editor->SetLastOpenedScene(relative.string());
+					bool load = Editor::GetInstance()->GetScene()->LoadScene();
+					Editor::GetInstance()->SetAnySceneOpened(load);
 				}
 
 				else {

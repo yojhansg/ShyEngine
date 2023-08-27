@@ -2,8 +2,9 @@
 
 #include "Window.h"
 
-#include <deque>
+#include <filesystem>
 #include <string>
+#include <deque>
 
 #define FILEEXPLORER_WIN_HEIGHT_RATIO 0.3f
 
