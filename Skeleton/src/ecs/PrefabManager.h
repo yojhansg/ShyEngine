@@ -23,7 +23,7 @@ namespace ECS {
 
 		PrefabManager();
 
-		PrefabManager(std::string const& prefabsPath);
+		PrefabManager(std::string const& projectFilePath);
 
 		// Instancia una entidad con transform en la escena a partir un prefab
 		void InstantiatePrefabWithTransform(const std::string& prefabName, Scene* scene);

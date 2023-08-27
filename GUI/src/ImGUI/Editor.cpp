@@ -126,6 +126,7 @@ void Editor::Loop() {
 	// Save editor information between its executions
 	ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
 	ShyEditor::Preferences::StoreData();
+	ShyEditor::PrefabManager::SavePrefabs();
 
 }
 

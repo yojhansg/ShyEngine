@@ -20,36 +20,34 @@ namespace ECS {
 
 	PrefabManager::PrefabManager() {}
 
-	PrefabManager::PrefabManager(std::string const& prefabsPath) {
+	PrefabManager::PrefabManager(std::string const& projectFilePath) {
 
-		LoadPrefabs(prefabsPath);
+		LoadPrefabs(projectFilePath);
 
 	}
 
-	void PrefabManager::LoadPrefabs(std::string const& prefabsPath) {
+	void PrefabManager::LoadPrefabs(std::string const& projectFilePath) {
 
-		std::ifstream fileStream("Prefabs/" + prefabsPath + ".json");
+		std::ifstream fileStream(projectFilePath);
 
-		if (!fileStream.good()) {
-			return;
-		}
-
-		if (!json::accept(fileStream)) {
-			Console::Output::PrintError("Prefab Manager", "Trying to read an invalid prefabs file <" + prefabsPath + ">");
+		if (!fileStream.good() || !json::accept(fileStream)) {
+			Console::Output::PrintError("Prefab Manager", "Trying to read an invalid prefabs file <" + projectFilePath + ">");
 			return;
 		}
 
 		fileStream.clear();
 		fileStream.seekg(0);
 
-		json json = json::parse(fileStream);
+		ordered_json project = ordered_json::parse(fileStream);
 
-		if (!json.contains("prefabs")) {
+		if (!project.contains("Prefabs")) {
 			Console::Output::PrintError("Load prefabs error", "The prefabs file doesn't have a valid format.");
 			return;
 		}
 
-		jsonarray prefabsArray = json["prefabs"].get<jsonarray>();
+		json prefabs = project["Prefabs"];
+
+		jsonarray prefabsArray = prefabs["prefabs"].get<jsonarray>();
 
 		for (auto& pref : prefabsArray) {
 

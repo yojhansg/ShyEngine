@@ -59,7 +59,7 @@ namespace ShyEditor {
 		static void Open();
 
 		// Saves the prefabs info into a json
-		static void SavePrefabs(const std::string& path);
+		static void SavePrefabs();
 
 		//Loading prefabs from prefabs json
 		static void LoadPrefabs();
