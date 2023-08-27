@@ -695,18 +695,18 @@ namespace ShyEditor {
 
 
 							int currentSelected = attr->value.value.valueFloat;
-							std::vector<std::string> strs;
+							std::vector<std::string> strs = Components::ComponentManager::GetEnum(enums);
 
-							size_t ini = 0;
-							size_t pos = enums.find('/');
-							while (pos != enums.npos) {
+							//size_t ini = 0;
+							//size_t pos = enums.find('/');
+							//while (pos != enums.npos) {
 
-								strs.push_back(enums.substr(ini, pos - ini));
+							//	strs.push_back(enums.substr(ini, pos - ini));
 
-								ini = pos + 1;
-								pos = enums.find('/', ini);
-							}
-							strs.push_back(enums.substr(ini));
+							//	ini = pos + 1;
+							//	pos = enums.find('/', ini);
+							//}
+							//strs.push_back(enums.substr(ini));
 
 
 							if (ImGui::BeginCombo(("##" + attributeName + it->first).c_str(), strs[currentSelected].c_str())) {

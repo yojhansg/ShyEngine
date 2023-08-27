@@ -108,21 +108,25 @@ namespace Components {
 		json file = json::parse(fileStream);
 		fileStream.close();
 
-
 		for (auto& component : file.items()) {
+
+			bool isEnum = component.key() == "enums";
 
 			for (auto& attr : component.value().items()) {
 
+				std::vector<std::string> enums;
 				for (auto& info : attr.value().items()) {
 
-
-					instance->info[component.key() + "_" + attr.key() + "_" + info.key()] = info.value().get<std::string>();
+					if (isEnum)
+						enums.push_back(info.value());
+					else
+						instance->info[component.key() + "_" + attr.key() + "_" + info.key()] = info.value().get<std::string>();
 				}
 
+				if (isEnum)
+					instance->enums[attr.key()] = enums;
 			}
-
 		}
-
 	}
 
 	bool ComponentManager::GetComponentInfo(std::string& value, cstring component)
@@ -147,6 +151,25 @@ namespace Components {
 		}
 
 		return false;
+	}
+
+	const std::vector<std::string>& ComponentManager::GetEnum(cstring name)
+	{
+		/*auto v = std::vector<std::string>();
+
+
+		int size = std::stoi(instance->info["enums_" + name + "_Count"]);
+
+		for (int i = 0; i < size; i++) {
+
+			v.push_back(instance->info["enums_" + name + "_" + std::to_string(i)]);
+		}
+
+
+		return v;*/
+
+
+		return instance->enums[name];
 	}
 
 

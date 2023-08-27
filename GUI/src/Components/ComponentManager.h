@@ -26,7 +26,7 @@ namespace Components {
 		std::vector<Script> scripts;
 
 		string_map<std::string> info;
-
+		string_map<std::vector<std::string>> enums;
 	public:
 
 		static void Initialise();
@@ -44,6 +44,7 @@ namespace Components {
 
 		static bool GetComponentInfo(std::string& value, cstring component);
 		static bool GetComponentElementInfo(std::string* value, cstring component, cstring element, cstring info);
+		static const std::vector<std::string>& GetEnum(cstring name);
 
 		static std::vector<Script>& GetAllScripts();
 	};

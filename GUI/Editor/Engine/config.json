@@ -7,9 +7,9 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "ivan project",
+    "game": "FlappyBird",
     "gravity": "0.000000, 9.810000",
-    "initialScene": "\\Scene",
+    "initialScene": "Scene",
     "layers": [
         "Default"
     ],
@@ -303,7 +303,7 @@
             false
         ]
     ],
-    "path": "C:\\Users\\Ivanof18\\Desktop\\ivan project\\Assets",
+    "path": "C:\\Users\\sryoj\\Documents\\ShyEngine\\FlappyBird\\Assets",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
@@ -311,5 +311,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "ivan project"
+    "windowTitle": "FlappyBird"
 }
