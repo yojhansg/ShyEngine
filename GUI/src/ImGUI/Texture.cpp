@@ -21,7 +21,7 @@ namespace ShyEditor {
 			return;
 		}
 
-		texture = SDL_CreateTextureFromSurface(Editor::getInstance()->getRenderer(), surface);
+		texture = SDL_CreateTextureFromSurface(Editor::GetInstance()->GetRenderer(), surface);
 
 		if (texture == nullptr) {
 			SDL_FreeSurface(surface);

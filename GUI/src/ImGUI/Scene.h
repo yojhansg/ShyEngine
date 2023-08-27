@@ -75,6 +75,8 @@ namespace ShyEditor {
 		void RenderRectangle(int x, int y, int w, int h, int thickness = 1);
 		void RenderHorizontalSegment(int x, int y, int w, int thickness = 1);
 		void RenderVerticalSegment(int x, int y, int h, int thickness = 1);
+		
+		void UpdateReferencesToEntity(Entity* entity);
 
 	public:
 

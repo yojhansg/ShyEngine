@@ -95,7 +95,7 @@ namespace ShyEditor {
 
 	void Game::play(bool debug)
 	{
-		Editor::getInstance()->getConsole()->Show();
+		Editor::GetInstance()->GetConsole()->Show();
 
 		output.clear();
 

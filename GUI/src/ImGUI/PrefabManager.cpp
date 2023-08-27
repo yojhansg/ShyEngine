@@ -26,7 +26,7 @@ namespace ShyEditor {
 	{
 		instance = this;
 
-		editor = Editor::getInstance();
+		editor = Editor::GetInstance();
 		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
 
 		open = false;	
@@ -37,13 +37,12 @@ namespace ShyEditor {
 		windowWidth = 700;
 		windowHeight = 700;
 
-		LoadPrefabs();
 		Hide();
 	}
 
 	PrefabManager::~PrefabManager()
 	{
-		PrefabManager::SavePrefabs(editor->getProjectInfo().path + "\\Assets");
+		PrefabManager::SavePrefabs(editor->GetProjectInfo().path + "\\Assets");
 
 		for (auto it = prefabs.begin(); it != prefabs.end(); it++)
 			delete it->second;
@@ -128,7 +127,7 @@ namespace ShyEditor {
 
 	void PrefabManager::LoadPrefabs()
 	{
-		std::ifstream inputFile(editor->getProjectInfo().path + "\\Assets\\prefabs.json");
+		std::ifstream inputFile(instance->editor->GetProjectInfo().path + "\\Assets\\prefabs.json");
 
 		if (inputFile.is_open()) {
 			ordered_json root;
@@ -145,8 +144,8 @@ namespace ShyEditor {
 
 
 			// Read the prefabs instances
-			std::map<int, Entity*> sceneEntities = editor->getScene()->GetEntities();
-			ordered_json prefabInstancesArray = root["prefabInstances"];
+			std::map<int, Entity*> sceneEntities = instance->editor->GetScene()->GetEntities();
+			json prefabInstancesArray = root["prefabInstances"];
 
 			for (const auto& item : prefabInstancesArray.items()) {
 				int prefabId = std::stoi(item.key());
@@ -155,18 +154,18 @@ namespace ShyEditor {
 				for (const auto& instanceId : item.value()) {
 					
 					//We check if its reference is still in the scene cause it could have been deleted
-					if (sceneEntities[instanceId] != nullptr || IdIsInOverlays(instanceId) != nullptr) {
+					if (sceneEntities[instanceId] != nullptr || instance->IdIsInOverlays(instanceId) != nullptr) {
 						prefabInstances.push_back(instanceId);
 					}
 				}
 
-				this->prefabInstances.emplace(prefabId, prefabInstances);
+				instance->prefabInstances.emplace(prefabId, prefabInstances);
 			}
 
 			inputFile.close();
 		}
 		else {
-			std::cerr << "Error opening file: " << editor->getProjectInfo().path + "\\prefabs.json" << std::endl;
+			std::cerr << "Error opening file: " << instance->editor->GetProjectInfo().path + "\\prefabs.json" << std::endl;
 		}
 	}
 
@@ -196,6 +195,8 @@ namespace ShyEditor {
 		AssignId(prefab);
 
 		instance->prefabs.emplace(prefab->GetId(), prefab);
+
+		RemoveScriptReferences(prefab);
 
 		for (auto child : prefab->GetChildren()) {
 			AddPrefab(child.second);
@@ -239,6 +240,11 @@ namespace ShyEditor {
 				instances->erase(it2);
 			}
 		}
+	}
+
+	std::unordered_map<int, Entity*>& PrefabManager::GetPrefabs()
+	{
+		return instance->prefabs;
 	}
 
 	Entity* PrefabManager::GetPrefabById(int id)
@@ -476,7 +482,7 @@ namespace ShyEditor {
 				if (prefabIt != prefabInstances.end()) {
 					for (auto instanceId : prefabIt->second) {
 						if (prefab->IsTransform()) {
-							editor->getScene()->GetEntities()[instanceId]->SetPrefabId(0);
+							editor->GetScene()->GetEntities()[instanceId]->SetPrefabId(0);
 						}
 						else {
 							IdIsInOverlays(instanceId)->SetPrefabId(0);
@@ -500,7 +506,7 @@ namespace ShyEditor {
 		if (currentlySelected != 0) {
 			Entity* prefab = prefabs[currentlySelected];
 
-			std::map<int, Entity*> sceneEntities = editor->getScene()->GetEntities();
+			std::map<int, Entity*> sceneEntities = editor->GetScene()->GetEntities();
 
 			auto prefabIt = prefabInstances.find(prefab->GetId());
 			if (prefabIt != prefabInstances.end()) {
@@ -525,7 +531,7 @@ namespace ShyEditor {
 
 	Entity* PrefabManager::IdIsInOverlays(int id)
 	{
-		std::vector<Entity*> sceneOverlays = editor->getScene()->GetOverlays();
+		std::vector<Entity*> sceneOverlays = editor->GetScene()->GetOverlays();
 
 		for (Entity* overlay : sceneOverlays) {
 			if (overlay->GetId() == id) {
@@ -533,5 +539,19 @@ namespace ShyEditor {
 			}
 		}
 		return nullptr;
+	}
+	void PrefabManager::RemoveScriptReferences(Entity* prefab)
+	{
+		for (auto& script : *prefab->GetScripts()) {
+			for (auto& attr : script.second.GetAllAttributes()) {
+				if (attr.second.GetType() == Components::AttributesType::ENTITY) {
+					int idx = attr.second.value.value.entityIdx;
+
+					if (idx != 0) {
+						attr.second.value.value.entityIdx = 0;
+					}
+				}
+			}
+		}
 	}
 }

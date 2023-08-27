@@ -1047,7 +1047,7 @@ namespace ShyEditor {
 	{
 		nameBuffer[0] = '\0';
 		creator->ClearScript();
-		Editor::getInstance()->changeEditorState(Editor::EDITOR_STATE::EDITOR_WINDOW);;
+		Editor::GetInstance()->ChangeEditorState(Editor::EDITOR_STATE::EDITOR_WINDOW);;
 	}
 
 	ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
@@ -1263,7 +1263,7 @@ namespace ShyEditor {
 
 			if (ImGui::Button("Open console")) {
 
-				Editor::getInstance()->getConsole()->Show();
+				Editor::GetInstance()->GetConsole()->Show();
 			}
 
 

@@ -38,8 +38,8 @@ namespace ShyEditor {
 
 	FileExplorer::FileExplorer() : Window("File Explorer", ImGuiWindowFlags_NoCollapse) {
 
-		editor = Editor::getInstance();
-		assetPath = editor->getProjectInfo().assetPath;
+		editor = Editor::GetInstance();
+		assetPath = editor->GetProjectInfo().assetPath;
 		currentPath = assetPath;
 		relativePath = "";
 
@@ -279,11 +279,12 @@ namespace ShyEditor {
 				}
 				else if (entry.extension == ".scene") {
 
+					/*std::string relativePath = explorerFile.path().lexically_relative(projectPath).string();*/
+					
 					std::filesystem::path currentDirectory(entry.path);
 					std::string relativePath = currentDirectory.lexically_relative(assetPath).stem().string();
 					editor->SetLastOpenedScene(relativePath);
-
-					editor->getScene()->LoadScene();
+					editor->GetScene()->LoadScene();
 				}
 
 				else {

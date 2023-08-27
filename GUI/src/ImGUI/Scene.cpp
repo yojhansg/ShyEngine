@@ -15,6 +15,7 @@
 #include "imgui.h"
 #include "PrefabManager.h"
 #include "SDL.h"
+#include "ComponentInfo.h"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -27,12 +28,15 @@ namespace ShyEditor {
 
 	Scene::Scene() : Window("Scene", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse) {
 
-		Editor* editor = Editor::getInstance();
-		editor->setScene(this);
+		Editor* editor = Editor::GetInstance();
+		editor->SetScene(this);
 
-		renderer = editor->getRenderer();
+		renderer = editor->GetRenderer();
 
-		// Load the default scene or the last opene scene
+		// Load prefabs before loading scene
+		PrefabManager::LoadPrefabs();
+
+		// Load the default scene or the last opene scene after creating the windows
 		bool load = LoadScene();
 		editor->SetAnySceneOpened(load);
 
@@ -51,7 +55,7 @@ namespace ShyEditor {
 
 		acceptAssetDrop = true;
 
-		editor->getFileExplorer()->Refresh();
+		editor->GetFileExplorer()->Refresh();
 
 	}
 
@@ -137,11 +141,11 @@ namespace ShyEditor {
 
 	void Scene::NewScene(const std::string& name) {
 
-		Editor::getInstance()->getFileExplorer()->Refresh();
+		Editor::GetInstance()->GetFileExplorer()->Refresh();
 
 		nlohmann::ordered_json j;
 
-		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + name + ".scene";
+		scenePath = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + name + ".scene";
 		sceneName = name;
 		this->name = sceneName.c_str();
 
@@ -172,10 +176,13 @@ namespace ShyEditor {
 
 	bool Scene::LoadScene() {
 
-		scenePath = Editor::getInstance()->getProjectInfo().assetPath + "\\" + Editor::getInstance()->GetLastOpenedScene() + ".scene";
+		scenePath = Editor::GetInstance()->GetProjectInfo().assetPath + "\\" + Editor::GetInstance()->GetLastOpenedScene() + ".scene";
 		std::filesystem::path p(scenePath);
 		sceneName = p.filename().stem().string();
 		name = sceneName.c_str();
+
+		Entity::unusedIds.clear();
+		Entity::lastId = 1;
 
 		// Delete info of previous scene
 		selectedEntity = nullptr;
@@ -232,8 +239,55 @@ namespace ShyEditor {
 			AddOverlayChildsToScene(overlay);
 		}
 
-		return true;
+		for (auto& entity : entities) {
+			UpdateReferencesToEntity(entity.second);
+		}
 
+		for (auto& overlay : overlays) {
+			UpdateReferencesToEntity(overlay);
+		}
+
+		return true;
+	}
+
+	void Scene::UpdateReferencesToEntity(Entity* entity) {
+		for (auto& script : *entity->GetScripts()) {
+			for (auto& attr : script.second.GetAllAttributes()) {
+				if (attr.second.GetType() == Components::AttributesType::ENTITY) {
+					int idx = attr.second.value.value.entityIdx;
+
+					if (idx > 0) {
+						std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
+						std::vector<Entity*>& overlays = Editor::GetInstance()->GetScene()->GetOverlays();
+
+						auto entityIt = entities.find(idx);
+
+						if (entityIt != entities.end()) {
+							entityIt->second->AddReferenceToEntity(&attr.second);
+							continue;
+						}
+
+						for (int i = 0; i < overlays.size(); i++) {
+							if (overlays[i]->GetId() == idx) {
+								overlays[i]->AddReferenceToEntity(&attr.second);
+								break;
+							}
+						}
+
+					}
+					else if (idx < 0) {
+						std::unordered_map<int, Entity*>& prefabs = PrefabManager::GetPrefabs();
+
+						auto prefabIt = prefabs.find(idx);
+
+						if (prefabIt != prefabs.end()) {
+							prefabIt->second->AddReferenceToEntity(&attr.second);
+							continue;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	void Scene::RenderChildEntities(Entity* entity)

@@ -23,7 +23,7 @@ namespace ShyEditor {
 
 	ScriptCreation::ScriptCreation() : Window("Create script", ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus)
 	{
-		editor = Editor::getInstance();
+		editor = Editor::GetInstance();
 
 		dropDownSelection = new ScriptCreationUtilities::ScriptDropdownSelection(this);
 
@@ -44,8 +44,8 @@ namespace ShyEditor {
 
 		windowPosX = windowPosY = 0;
 
-		windowWidth = Editor::getInstance()->getMainWindowSize().x;
-		windowHeight = Editor::getInstance()->getMainWindowSize().y;
+		windowWidth = Editor::GetInstance()->GetMainWindowSize().x;
+		windowHeight = Editor::GetInstance()->GetMainWindowSize().y;
 
 		instance = this;
 	}
@@ -168,7 +168,7 @@ namespace ShyEditor {
 				root[event.first] = next->GetId();
 		}
 
-		std::ofstream file(editor->getProjectInfo().path + "\\Assets\\Scripts\\" + std::string(menuBar->GetName()) + ".script");
+		std::ofstream file(editor->GetProjectInfo().path + "\\Assets\\Scripts\\" + std::string(menuBar->GetName()) + ".script");
 
 		if (file.is_open()) {
 			file << root.dump(4);
@@ -198,7 +198,7 @@ namespace ShyEditor {
 			return;
 		}
 
-		std::ifstream fileStream(editor->getProjectInfo().path +  "\\Assets\\Scripts\\" + fileName + ".script");
+		std::ifstream fileStream(editor->GetProjectInfo().path +  "\\Assets\\Scripts\\" + fileName + ".script");
 
 		if (!fileStream.good() || !json::accept(fileStream)) {
 			return;

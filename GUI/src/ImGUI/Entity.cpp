@@ -28,7 +28,7 @@ namespace ShyEditor {
 
 	Entity::Entity(std::string& path, bool isTransform) : isTransform(isTransform) {
 
-		editor = Editor::getInstance();
+		editor = Editor::GetInstance();
 
 		name = path;
 
@@ -209,9 +209,9 @@ namespace ShyEditor {
 		else
 
 			// Render outline
-			if (this == editor->getScene()->GetSelectedEntity()) {
+			if (this == editor->GetScene()->GetSelectedEntity()) {
 
-				// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
+				// Save the previous color to restart it later
 				Uint8 r, g, b, a;
 				SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 
@@ -424,8 +424,11 @@ namespace ShyEditor {
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
 	void Entity::SetPosition(ImVec2 newPos) {
+		ImVec2 previousPos = ImVec2(GetPosition());
 
 		transform->SetPosition(newPos.x, newPos.y);
+
+		TranslateChildren(this, &previousPos);
 	}
 
 	ImVec2 Entity::GetPosition() {
@@ -438,7 +441,11 @@ namespace ShyEditor {
 
 	void Entity::SetRotation(float r)
 	{
+		float previousRotation = GetRotation();
+
 		transform->SetRotation(r);
+
+		RotateChildren(this, this, r - previousRotation);
 	}
 
 	ImVec2 Entity::GetAdjustedPosition() {
@@ -474,9 +481,6 @@ namespace ShyEditor {
 
 
 
-
-
-
 	// --------------------------------------- Deleting entity logic ---------------------------------------
 
 	bool Entity::IsWaitingToDelete() {
@@ -485,6 +489,10 @@ namespace ShyEditor {
 
 	void Entity::ToDelete() {
 		waitingToDelete = true;
+
+		for (auto& attr : referencesToEntity) {
+			attr->value.value.entityIdx = 0;
+		}
 
 		//If its a prefab instance we remove it from the manager
 		if (IsPrefabInstance()) {
@@ -545,24 +553,25 @@ namespace ShyEditor {
 
 
 
-
-
-
 	// ---------------------------------------- Entity drawing logic ----------------------------------------------
 
 	void Entity::DrawTransformInEditor() {
 
-		transform->GetPosition().y *= -1;
-		ImGui::Text("Position");
-		ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f");
-		transform->GetPosition().y *= -1;
+		ImVec2 previousPosition = ImVec2(transform->GetPosition());
 
+		ImGui::Text("Position");
+		if (ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f")) {
+			TranslateChildren(this, &previousPosition);
+		}
 
 		ImGui::Text("Scale");
 		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
 
+		float previousRotation = transform->GetRotation();
 		ImGui::Text("Rotation");
-		ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f");
+		if (ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f")) {
+			RotateChildren(this, this, transform->GetRotation() - previousRotation);
+		}
 
 		ImGui::Text("Render order");
 		ImGui::InputInt("##render_order", &renderOrder);
@@ -874,7 +883,7 @@ namespace ShyEditor {
 			std::string scriptName = (*it).first;
 			if (ImGui::CollapsingHeader(scriptName.c_str())) {
 
-				for (auto& attribute : (*it).second.getAllAttributes()) {
+				for (auto& attribute : (*it).second.GetAllAttributes()) {
 					std::string attributeName = attribute.first;
 					Components::Attribute* attr = &attribute.second;
 
@@ -932,6 +941,11 @@ namespace ShyEditor {
 		return changes;
 	}
 
+	void Entity::AddReferenceToEntity(Components::Attribute* attr)
+	{
+		referencesToEntity.push_back(attr);
+	}
+
 	bool Entity::DrawFloat(std::string attrName, ::Components::Attribute* attr) {
 
 		return ImGui::DragFloat(("##" + attrName).c_str(), &attr->value.value.valueFloat, 0.3f, 0.0f, 0.0f, "%.2f");
@@ -974,15 +988,51 @@ namespace ShyEditor {
 
 	bool Entity::DrawEntity(std::string attrName, ::Components::Attribute* attr) {
 
-		std::map<int, Entity*>& entities = editor->getScene()->GetEntities();
+		std::map<int, Entity*>& entities = editor->GetScene()->GetEntities();
+		std::vector<Entity*>& overlays = editor->GetScene()->GetOverlays();
+		std::unordered_map<int, Entity*>& prefabs = PrefabManager::GetPrefabs();
 
-		auto entityIt = entities.find((int)attr->value.value.entityIdx);
-		Entity* entity = entityIt != entities.end() ? entityIt->second : nullptr;
+		Entity* entity = nullptr;
+
+		auto entityIt = entities.find(attr->value.value.entityIdx);
+		auto prefab = PrefabManager::GetPrefabById(attr->value.value.entityIdx);
+
+		if (prefab != nullptr) {
+			entity = prefab;
+		}
+		else if(entityIt != entities.end()) {
+			entity = entityIt->second;
+		}
+		else {
+			for (auto overlay : overlays) {
+				if (overlay->GetId() == attr->value.value.entityIdx) {
+					entity = overlay;
+				}
+			}
+		}
+		
+		if (entity != nullptr && entity->IsPrefab()) {
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f));
+		}
 
 		if (ImGui::BeginCombo(("##" + attrName).c_str(), entity != nullptr ? entity->GetName().c_str() : "")) {
+			
+			if (entity != nullptr && entity->IsPrefab()) {
+				ImGui::PopStyleColor();
+			}
+
+			//Prefabs cant reference entities
+			if (IsPrefab()) {
+				ImGui::EndCombo();
+				return false;
+			}
+
 			for (auto entity : entities) {
-				if (ImGui::Selectable(entity.second->GetName().c_str())) {
+				std::string selectableId = entity.second->GetName() + "##" + std::to_string(entity.second->id);
+				if (ImGui::Selectable(selectableId.c_str())) {
 					attr->value.value.entityIdx = entity.second->GetId();
+			
+					entity.second->AddReferenceToEntity(attr);
 
 					ImGui::EndCombo();
 
@@ -990,8 +1040,46 @@ namespace ShyEditor {
 				}
 			}
 
+			for (auto overlay : overlays) {
+				std::string selectableId = overlay->GetName() + "##" + std::to_string(overlay->id);
+				if (ImGui::Selectable(selectableId.c_str())) {
+					attr->value.value.entityIdx = overlay->GetId();
+
+					overlay->AddReferenceToEntity(attr);
+
+					ImGui::EndCombo();
+
+					return true;
+				}
+			}
+
+			for (auto prefab : prefabs) {
+
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.831f, 0.168f, 0.604f, 1.0f)); 
+
+				std::string selectableId = prefab.second->GetName() + "##" + std::to_string(prefab.second->id);
+
+				if (ImGui::Selectable(selectableId.c_str())) {
+					attr->value.value.entityIdx = prefab.second->GetId();
+
+					prefab.second->AddReferenceToEntity(attr);
+
+					ImGui::PopStyleColor();
+
+					ImGui::EndCombo();
+
+					return true;
+				}
+
+				ImGui::PopStyleColor();
+			}
+
 			ImGui::EndCombo();
 		}
+		else if (entity != nullptr && entity->IsPrefab()) {
+			ImGui::PopStyleColor();
+		}
+
 
 		ImGui::SameLine();
 
@@ -1357,6 +1445,7 @@ namespace ShyEditor {
 		for (const auto& compJson : jsonData["components"]) {
 			Components::Component component = Components::Component::FromJson(compJson.dump());
 			entity->AddComponent(component);
+
 		}
 
 		// Scripts
@@ -1398,27 +1487,47 @@ namespace ShyEditor {
 	void Entity::AssignId(Entity* entity)
 	{
 		// Gets the list of entities in the scene
-		std::map<int, Entity*>& entities = Editor::getInstance()->getScene()->GetEntities();
+		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
 
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
+			
+			if (IsIdAlreadyUsed(Entity::unusedIds.back())) {
 
-			if (entities.find(Entity::unusedIds.back()) == entities.end())
-				entity->SetId(Entity::unusedIds.back());
-			else {
 				Entity::unusedIds.pop_back();
 				AssignId(entity);
+			}
+			else {
+				entity->SetId(Entity::unusedIds.back());
 			}
 		}
 		else {
 			//Ensure id is not being used already
-			while (entities.find(Entity::lastId) != entities.end()) {
+			while (IsIdAlreadyUsed(Entity::lastId)) {
 				Entity::lastId++;
 			}
 
 			entity->SetId(Entity::lastId);
 			Entity::lastId++;
 		}
+	}
+
+	bool Entity::IsIdAlreadyUsed(int id)
+	{
+		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
+		std::vector<Entity*>& overlays = Editor::GetInstance()->GetScene()->GetOverlays();
+
+		if (entities.find(id) != entities.end()) {
+			return true;
+		}
+
+		for (auto overlay : overlays) {
+			if (overlay->GetId() == id) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 

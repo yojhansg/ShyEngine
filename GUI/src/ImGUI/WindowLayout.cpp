@@ -36,7 +36,7 @@ bool ShyEditor::WindowLayout::Update()
 		ImGui::DockBuilderRemoveNode(id);
 
 		ImGui::DockBuilderAddNode(id);
-		ImGui::DockBuilderSetNodeSize(id, Editor::getInstance()->getMainWindowSize());
+		ImGui::DockBuilderSetNodeSize(id, Editor::GetInstance()->GetMainWindowSize());
 
 
 		switch (current)
