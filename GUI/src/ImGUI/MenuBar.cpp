@@ -56,7 +56,6 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Build", NULL, false))
                 {
-
                     Editor::GetInstance()->GetBuildManager()->GenerateBuild();
                 };
 
@@ -65,7 +64,6 @@ namespace ShyEditor {
 
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
-                    ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
                     Editor::GetInstance()->End();
                 };
 
@@ -292,17 +290,19 @@ namespace ShyEditor {
             {
                 if (strlen(nameBuffer) > 0) {
 
-                    //Save current scene
+                    // Save current scene
                     editor->GetScene()->SaveScene();
 
-                    //Create new scene
+                    // Create new scene
                     editor->GetScene()->NewScene(nameBuffer);
 
                     // Store the scene as the last opened one
-                    editor->SetLastOpenedScene(nameBuffer);
+                    auto name = std::string(nameBuffer) + ".scene";
+                    editor->SetLastOpenedScene(name);
 
-                    //Save empty new scene
-                    editor->GetScene()->SaveScene();
+                    bool load = editor->GetScene()->LoadScene();
+                    editor->SetAnySceneOpened(load);
+
                 }
 
                 ImGui::CloseCurrentPopup();

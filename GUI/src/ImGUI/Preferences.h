@@ -13,6 +13,7 @@ namespace ShyEditor {
 		std::string initialScene;
 		std::string windowTitle;
 		std::string creator;
+		bool splashScreen;
 
 		// Window
 		std::string name;
@@ -84,6 +85,7 @@ namespace ShyEditor {
 
 		static void Open();
 
+		static void StoreData();
 		static void LoadData();
 
 		static void GenerateDebug();

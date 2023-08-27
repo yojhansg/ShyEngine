@@ -49,12 +49,14 @@ namespace ShyEditor {
 
 
 		if (ImGui::Button("Create world entity")) {
-			scene->SetSelectedEntity(scene->AddEntity("Empty entity"));
+			if (editor->IsAnySceneOpened())
+				scene->SetSelectedEntity(scene->AddEntity("Empty entity"));
 		}
 
 		ImGui::SameLine();
 		if (ImGui::Button("Create UI element")) {
-			scene->SetSelectedEntity(scene->AddOverlay("Empty UI element"));
+			if (editor->IsAnySceneOpened())
+				scene->SetSelectedEntity(scene->AddOverlay("Empty UI element"));
 		}
 
 

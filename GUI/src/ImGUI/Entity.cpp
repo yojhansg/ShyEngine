@@ -558,9 +558,12 @@ namespace ShyEditor {
 	void Entity::DrawTransformInEditor() {
 
 		ImVec2 previousPosition = ImVec2(transform->GetPosition());
+		ImVec2 currentPos = ImVec2(transform->GetPosition().x , -transform->GetPosition().y);
 
 		ImGui::Text("Position");
-		if (ImGui::DragFloat2("##position_drag", (float*)&transform->GetPosition(), 0.3f, 0.0f, 0.0f, "%.2f")) {
+		if (ImGui::DragFloat2("##position_drag", (float*)&currentPos, 0.3f, 0.0f, 0.0f, "%.2f")) {
+
+			transform->SetPosition(currentPos.x, -currentPos.y);
 			TranslateChildren(this, &previousPosition);
 		}
 

@@ -46,7 +46,7 @@ namespace ShyEditor {
         showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
 
         creationDate = name = projectFilePath = openPath = lastSavedProjectPath = "";
-        lastOpenedScenePath = "Scene";
+        lastOpenedScenePath = "Scene.scene";
 
         errorMessage = L"Default error message. No one knows what went wrong :(";
 
@@ -694,6 +694,10 @@ namespace ShyEditor {
         fileStreamOut.close();
     }
 
+    std::string ProjectsManager::GetProjectFilePath() {
+        return instance->projectFilePath;
+    }
+
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {
 
         std::error_code ec;
@@ -723,7 +727,7 @@ namespace ShyEditor {
         j["objects"] = nlohmann::json::array();
         j["overlays"] = nlohmann::json::array();
 
-        std::ofstream outputFile(root + "\\Assets\\Scene.scene" );
+        std::ofstream outputFile(root + "\\Assets\\" + lastOpenedScenePath);
         if (outputFile.is_open()) {
             outputFile << j.dump(4);
             outputFile.close();

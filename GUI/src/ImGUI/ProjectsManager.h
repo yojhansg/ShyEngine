@@ -40,6 +40,8 @@ namespace ShyEditor {
 		// Stores the last opened scene path in the project file
 		static void StoreLastOpenedScene(const std::string& scenePath);
 
+		static std::string GetProjectFilePath();
+
 	private:
 
 		static ProjectsManager* instance;

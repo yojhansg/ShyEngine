@@ -96,7 +96,7 @@ bool Engine::init() {
 	if (data.windowIcon != "")
 		rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
 	else
-		rendererManager->SetWindowIcon("Assets/icon.png");
+		rendererManager->SetWindowIcon("Assets\\icon.png");
 
 	rendererManager->SetRenderTarget(false);
 
@@ -105,12 +105,10 @@ bool Engine::init() {
 	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
 
 	sceneManager->ChangeScene(data.resourcesPath + data.initialScene, (int)ECS::SceneManager::PUSH);
-
+	sceneManager->manageScenes();
 
 	resourcesManager->SetResourcesPath(data.resourcesPath);
 
-
-	sceneManager->manageScenes();
 
 	if (sceneManager->getNumberOfScenes() == 0) {
 		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");

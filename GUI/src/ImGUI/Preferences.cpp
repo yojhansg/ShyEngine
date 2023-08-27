@@ -2,12 +2,14 @@
 
 #include "ProjectsManager.h"
 #include "nlohmann/json.hpp"
+#include "PrefabManager.h"
+#include "LogManager.h"
 #include "Editor.h"
 #include "imgui.h"
 #include "Game.h"
-#include "PrefabManager.h"
 
 #include <fstream>
+#include <sstream>
 
 #include "CheckML.h"
 
@@ -39,6 +41,7 @@ namespace ShyEditor {
 		data.initialScene = "Scene";
 		data.creator = "Yojhan, Pablo e Ivan";
 		data.name = Editor::GetInstance()->GetProjectInfo().name;
+		data.splashScreen = false;
 
 		// Window
 		data.windowTitle = Editor::GetInstance()->GetProjectInfo().name;
@@ -67,6 +70,7 @@ namespace ShyEditor {
 		data.channels = 1;
 		data.chunksize = 2048;
 
+		LoadData();
 
 	}
 
@@ -358,7 +362,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = true;
 		root["debugFrameRate"] = true;
 
-		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
 
 		PrefabManager::SavePrefabs(root["path"]);
 
@@ -378,7 +382,7 @@ namespace ShyEditor {
 		root["debugPhysics"] = false;
 		root["debugFrameRate"] = false;
 
-		root["path"] = Editor::GetInstance()->GetProjectInfo().path + "\\Assets";
+		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
 		PrefabManager::SavePrefabs(root["path"]);
 
 		std::ofstream file("Engine\\config.json");
@@ -396,6 +400,7 @@ namespace ShyEditor {
 		root["game"] = data.name;
 		root["creator"] = data.creator;
 		root["initialScene"] = data.initialScene;
+		root["splashScreen"] = false;
 
 		// Window
 		root["windowTitle"] = data.windowTitle;
@@ -409,6 +414,7 @@ namespace ShyEditor {
 		root["gravity"] = std::to_string(data.gravity_x) + ", " + std::to_string(data.gravity_y);
 		root["layers"] = data.layers;
 		root["matrix"] = data.collisionMatrix;
+		root["debugPhysics"] = true;
 
 		// Input
 		root["closeWithEscape"] = data.closeWithEscape;
@@ -416,6 +422,7 @@ namespace ShyEditor {
 		// Overlay
 		root["timeToDoubleClick"] = data.timeToDoubleClick;
 		root["timeToHoldClick"] = data.timeToHoldClick;
+		root["debugFrameRate"] = true;
 
 		// Audio
 		root["frequency"] = data.frequency;
@@ -442,6 +449,104 @@ namespace ShyEditor {
 			}
 			ImGui::EndPopup();
 		}
+
+	}
+
+	void Preferences::StoreData() {
+
+		std::ifstream projectFile(ProjectsManager::GetProjectFilePath());
+
+		if (!projectFile.good() || !json::accept(projectFile)) {
+			LogManager::LogError("Could not open project file to store preferences data.");
+			return;
+		}
+
+		projectFile.clear();
+		projectFile.seekg(0);
+
+		ordered_json project = ordered_json::parse(projectFile);
+
+		ordered_json preferences = instance->BasicData();
+
+		project["Preferences"] = preferences;
+
+		std::ofstream output(ProjectsManager::GetProjectFilePath());
+		output << project.dump(4);
+		output.close();
+		
+	}
+
+	void Preferences::LoadData() {
+
+		std::ifstream projectFile(ProjectsManager::GetProjectFilePath());
+
+		if (!projectFile.good() || !json::accept(projectFile)) {
+			LogManager::LogError("Could not open project file to store preferences data.");
+			return;
+		}
+
+		projectFile.clear();
+		projectFile.seekg(0);
+
+		ordered_json project = ordered_json::parse(projectFile);
+
+		if (!project.contains("Preferences")) return;
+
+		ordered_json preferences = project["Preferences"];
+
+		// General
+		instance->data.name = preferences["game"];
+		instance->data.creator = preferences["creator"];
+		instance->data.initialScene = preferences["initialScene"];
+		instance->data.splashScreen = preferences["splashScreen"];
+
+
+		// Window
+		instance->data.windowTitle = preferences["windowTitle"];
+		instance->data.icon = preferences["windowIcon"];
+
+		std::string size = preferences["windowSize"];
+		std::stringstream windowSize(size);
+		std::string x, y;
+		std::getline(windowSize, x, ',');
+		std::getline(windowSize, y, ',');
+
+		instance->data.width = std::stoi(x); 
+		instance->data.height = std::stoi(y);
+
+		instance->data.vsync = preferences["vsync"];
+		instance->data.fullscreen = preferences["fullScreen"];
+		instance->data.showCursor = preferences["showcursor"];
+
+
+		// Physics
+		std::string gravity = preferences["gravity"];
+		std::stringstream worldGravity(gravity);
+		std::getline(worldGravity, x, ',');
+		std::getline(worldGravity, y, ',');
+
+		instance->data.gravity_x = std::stof(x);
+		instance->data.gravity_y = std::stof(y);
+		
+		instance->data.layers = preferences["layers"];
+		instance->data.collisionMatrix = preferences["matrix"];
+		instance->data.debugPhysics = preferences["debugPhysics"];
+
+
+		// Input
+		instance->data.closeWithEscape = preferences["closeWithEscape"];
+
+
+		// Overlay
+		instance->data.timeToDoubleClick = preferences["timeToDoubleClick"];
+		instance->data.timeToHoldClick = preferences["timeToHoldClick"];
+		instance->data.debugFramerate = preferences["debugFrameRate"];
+
+
+		// Audio
+		instance->data.frequency = preferences["frequency"];
+		instance->data.channels = preferences["channels"];
+		instance->data.chunksize = preferences["chuncksize"];
 
 	}
 
