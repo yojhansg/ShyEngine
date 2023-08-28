@@ -1309,6 +1309,58 @@ namespace ShyEditor {
 		}
 	}
 
+	void Entity::TransformToJson(nlohmann::ordered_json& json)
+	{
+		if (isTransform) {
+			ImVec2 position = ImVec2(transform->GetPosition());
+			ImVec2 size = ImVec2(transform->GetScale());
+			float rotation = transform->GetRotation();
+
+			//If it has a parent the transform is relative to the parent
+			if (parent != nullptr) {
+				position.x -= parent->GetPosition().x;
+				position.x -= parent->GetPosition().y;
+
+				size.x -= parent->GetScaleX();
+				size.y -= parent->GetScaleY();
+
+				rotation -= parent->GetRotation();
+			}
+
+			json["localPosition"] = std::to_string(position.x) + ", " + std::to_string( -position.y );
+			json["localScale"] = std::to_string(size.x) + ", " + std::to_string(size.y);
+			json["localRotation"] = std::to_string(rotation);
+		}
+		else {
+			
+			ImVec2 position = ImVec2(overlay->GetPosition());
+			ImVec2 size = ImVec2(overlay->GetSize());
+
+			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
+
+			if (parent != nullptr) {
+				position.x -= parent->GetOverlay()->GetPosition().x;
+				position.y -= parent->GetOverlay()->GetPosition().y;
+
+				size.x -= parent->GetOverlay()->GetSize().x;
+				size.y -= parent->GetOverlay()->GetSize().y;
+			}
+
+
+			json["placement"] = std::to_string(overlay->GetPlacement());
+			json["anchor"] = std::to_string(overlay->GetAnchor().x) + "," + std::to_string(overlay->GetAnchor().y);
+			json["top"] = std::to_string(overlay->GetTop());
+			json["left"] = std::to_string(overlay->GetLeft());
+			json["right"] = std::to_string(overlay->GetRight());
+			json["bottom"] = std::to_string(overlay->GetBottom());
+			json["position"] = std::to_string(position.x) + ", " + std::to_string(position.y);
+			json["size"] = std::to_string(size.x) + ", " + std::to_string(size.y);
+
+
+			//TODO: color e interactable
+		}
+	}
+
 	// ------------------------ Serialization and deseralization logic -------------------------
 
 	std::string Entity::ToJson() {
@@ -1333,27 +1385,8 @@ namespace ShyEditor {
 
 		j["isTransform"] = isTransform;
 
-		if (isTransform) {
+		TransformToJson(j);
 
-			j["localPosition"] = std::to_string(transform->GetPosition().x) + ", " + std::to_string(-transform->GetPosition().y);
-			j["localScale"] = std::to_string(transform->GetScale().x) + ", " + std::to_string(transform->GetScale().y);
-			j["localRotation"] = std::to_string(transform->GetRotation());
-		}
-		else {
-			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
-
-			j["placement"] = std::to_string(overlay->GetPlacement());
-			j["anchor"] = std::to_string(overlay->GetAnchor().x) + "," + std::to_string(overlay->GetAnchor().y);
-			j["top"] = std::to_string(overlay->GetTop());
-			j["left"] = std::to_string(overlay->GetLeft());
-			j["right"] = std::to_string(overlay->GetRight());
-			j["bottom"] = std::to_string(overlay->GetBottom());
-			j["position"] = std::to_string(overlay->GetPosition().x) + ", " + std::to_string(overlay->GetPosition().y);
-			j["size"] = std::to_string(overlay->GetSize().x) + ", " + std::to_string(overlay->GetSize().y);
-
-
-			//TODO: color e interactable
-		}
 		nlohmann::ordered_json componentsJson = nlohmann::json::array();
 		for (auto it = components.begin(); it != components.end(); it++) {
 
@@ -1505,6 +1538,25 @@ namespace ShyEditor {
 
 			entity->AddChild(child);
 			child->SetParent(entity);
+			
+			//Set transform to global coordinates instead of relative to parent
+			if (child->isTransform) {
+				child->transform->GetPosition().x += child->GetParent()->GetPosition().x;
+				child->transform->GetPosition().y += child->GetParent()->GetPosition().y;
+
+				child->transform->GetScale().x += child->GetParent()->GetScaleX();
+				child->transform->GetScale().y += child->GetParent()->GetScaleY();
+
+				child->transform->GetRotation() += child->GetParent()->GetRotation();
+
+			}
+			else {
+				child->overlay->GetPosition().x += child->GetParent()->overlay->GetPosition().x;
+				child->overlay->GetPosition().y += child->GetParent()->overlay->GetPosition().y;
+
+				child->overlay->GetSize().x += child->GetParent()->GetOverlay()->GetSize().x;
+				child->overlay->GetSize().y += child->GetParent()->GetOverlay()->GetSize().y;
+			}
 		}
 
 		return entity;
