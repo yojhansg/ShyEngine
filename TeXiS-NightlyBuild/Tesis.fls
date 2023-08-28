@@ -330,14 +330,13 @@ INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
 INPUT .\Capitulos\EstadoDelArte.tex
 INPUT .\Capitulos\EstadoDelArte.tex
 OUTPUT Capitulos\EstadoDelArte.aux
 INPUT .\Capitulos\EstadoDelArte.tex
 INPUT .\Capitulos\EstadoDelArte.tex
 INPUT Capitulos\EstadoDelArte.tex
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1000.tfm
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecxc1000.tfm
 INPUT .\Capitulos\Contribuciones.tex
 INPUT .\Capitulos\Contribuciones.tex
 OUTPUT Capitulos\Contribuciones.aux
@@ -360,8 +359,6 @@ INPUT .\Tesis.bbl
 INPUT .\Tesis.bbl
 INPUT Tesis.bbl
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1000.tfm
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti0800.tfm
 INPUT .\Cascaras\fin.tex
 INPUT .\Cascaras\fin.tex
 OUTPUT Cascaras\fin.aux
@@ -404,14 +401,10 @@ INPUT .\Cascaras\fin.aux
 INPUT Cascaras\fin.aux
 INPUT .\Tesis.out
 INPUT .\Tesis.out
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti0800.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti0800.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1000.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1000.pk
+INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
+INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1095.pk
@@ -438,5 +431,3 @@ INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb

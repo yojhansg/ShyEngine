@@ -139,11 +139,36 @@ posteriormente.
 \end{itemize}
 
 
-Editor....
+- El Editor consiste en 2 proyectos de Visual Studio:
+
+\begin{itemize}
+
+    \item \texttt{Proyecto de componentes}: Este proyecto tiene la responsabilidad de gestionar la adquisición y procesamiento de scripts y 
+    componentes procedentes del motor subyacente. Estos elementos son preparados para su utilización posterior en el editor.
+
+    \item \texttt{Proyecto de ImGUI}:  En este proyecto se encuentra toda la funcionalidad relativa al editor, haciendo uso de la biblioteca ImGUI. 
+    Aquí se engloba la creación y manejo de ventanas, cuadros de diálogo emergentes, menús desplegables, renderización de la escena en edición, así 
+    como la gestión de archivos, entre otras características.
+
+    \item \texttt{Proyecto main}: Este proyecto ejecuta el bucle principal del editor y genera el ejecutable.
+
+\end{itemize}
 
 Scripting...
 
-Unión de editor-motor-scripting...
+\medskip
+
+- La integración entre el editor y el motor se materializa mediante un flujo de intercambio de datos. Inicialmente, el motor lleva a cabo la serialización de 
+los componentes disponibles en un formato JSON. Posteriormente, el editor se encarga de leer y procesar estos componentes serializados, permitiendo su asignación a las 
+diferentes entidades en desarrollo.
+Una vez que el proceso de desarrollo del videojuego ha concluido, el editor toma la iniciativa de serializar la escena completa. Esto abarca las entidades presentes en
+la escena, junto con sus respectivos componentes y scripts asociados. Con la escena debidamente serializada, el editor ejecuta el archivo ejecutable (.exe) 
+al motor. En este punto, es el motor el que asume la responsabilidad de interpretar y cargar las escenas previamente serializadas por el editor.
+
+Este enfoque de intercambio de datos entre el editor y el motor permite una sincronización efectiva de la información esencial para la construcción y ejecución del 
+videojuego, al tiempo que mantiene una clara separación de las tareas y roles entre las dos entidades.
+
+\medskip
 
 Fase de prueba con usuarios...
 
@@ -277,11 +302,37 @@ follows later.
 \end{itemize}
 
 
-Editor....
+- The Editor consists of 2 Visual Studio projects:
+
+\begin{itemize}
+
+    \item \texttt{Componentes project}: This project is responsible for managing the acquisition and processing of scripts and components 
+    from the underlying engine. 
+
+    \item \texttt{ImGUI project}:  In this project you will find all the functionality related to the editor, making use of the ImGUI library. 
+    This includes the creation and management of windows, pop-up dialog boxes, drop-down menus, rendering of the editing scene, as well as file management, among other features. 
+    as well as file management, among other features.
+
+    \item \texttt{main project}: This project implements the main loop of the editor and generates the executable.
+
+\end{itemize}
+
 
 Scripting...
 
-Unión de editor-motor-scripting...
+\medskip
+
+
+- The integration between the editor and the engine takes the form of a data exchange flow. Initially, the engine performs the serialization of the available components in a JSON format.components available in a JSON format. Subsequently, the editor is in charge of reading and processing these serialized components, allowing their assignment to the different entities under development. 
+different entities under development.
+Once the video game development process has been completed, the editor takes the initiative to serialize the entire scene. This encompasses the entities present in
+the scene, along with their respective components and associated scripts. With the scene duly serialized, the editor runs the executable file (.exe) 
+to the engine. At this point, it is the engine that assumes responsibility for interpreting and loading the scenes previously serialized by the editor.
+
+This approach to data exchange between the editor and the engine allows for effective synchronization of the information essential for the construction and execution of the 
+while maintaining a clear separation of tasks and roles between the two entities.
+
+\medskip
 
 Fase de prueba con usuarios...
 
@@ -289,27 +340,33 @@ Fase de prueba con usuarios...
 
 
 
-%-------------------------------------------------------------------
-\section*{\NotasBibliograficas}
-%-------------------------------------------------------------------
-\TocNotasBibliograficas
+% %-------------------------------------------------------------------
+% \section*{\NotasBibliograficas}
+% %-------------------------------------------------------------------
+% \TocNotasBibliograficas
 
-Citamos algo para que aparezca en la bibliografía\ldots
-\citep{ldesc2e}
+% Citamos algo para que aparezca en la bibliografía\ldots
+% \citep{ldesc2e}
 
-\medskip
+% \medskip
 
-Y también ponemos el acrónimo \ac{CVS} para que no cruja.
+% Y también ponemos el acrónimo \ac{CVS} para que no cruja.
 
-Ten en cuenta que si no quieres acrónimos (o no quieres que te falle la compilación en ``release'' mientras
-no tengas ninguno) basta con que no definas la constante \verb+\acronimosEnRelease+ (en \texttt{config.tex}).
+% Ten en cuenta que si no quieres acrónimos (o no quieres que te falle la compilación en ``release'' mientras
+% no tengas ninguno) basta con que no definas la constante \verb+\acronimosEnRelease+ (en \texttt{config.tex}).
 
 %-------------------------------------------------------------------
 \section*{\ProximoCapitulo}
 %-------------------------------------------------------------------
 \TocProximoCapitulo
 
-En el siguiente capítulo...
+En  capítulo \hyperref[chap:estado_del_arte]{\textit{2 Estado del Arte}} se explica qué son los motores de video-
+juegos 2D y cuáles hemos tomado como referencia para desarrollar el
+nuestro. Asimismo, se expondrán las librerías que hemos decidido emplear en nuestro proyecto y se 
+justificará la elección de cada una. Además, se menciona la diferencia entre el desarrollo de un
+videojuego a través de scripting y programación. Por último, se habla sobre
+el papel que juegan los motores en el mercado actual de los
+videojuegos.
 
 % Variable local para emacs, para  que encuentre el fichero maestro de
 % compilación y funcionen mejor algunas teclas rápidas de AucTeX
