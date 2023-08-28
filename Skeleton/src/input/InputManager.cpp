@@ -64,10 +64,10 @@ namespace Input {
 
 		switch (event.type) {
 		case SDL_KEYDOWN:
-			onKeyDown(event);
+			onKeyDown();
 			break;
 		case SDL_KEYUP:
-			onKeyUp(event);
+			onKeyUp();
 			break;
 		case SDL_MOUSEWHEEL:
 			onMouseWheelMotion(event);
@@ -104,11 +104,11 @@ namespace Input {
 
 	// --------- KB ------------
 
-	void InputManager::onKeyDown(const SDL_Event& event) {
+	void InputManager::onKeyDown() {
 		isKeyDownEvent_ = true;
 	}
 
-	void InputManager::onKeyUp(const SDL_Event& event) {
+	void InputManager::onKeyUp() {
 		isKeyUpEvent_ = true;
 	}
 
@@ -120,6 +120,34 @@ namespace Input {
 		return isKeyUpEvent_;
 	}
 
+	// Letter
+	bool InputManager::isLetterDown(KB_LETTERS l) {
+		return keyDownEvent() && kbState_[ConvertToScancode(l)] == 1;
+	}
+
+	bool InputManager::isLetterUp(KB_LETTERS l) {
+		return keyUpEvent() && kbState_[ConvertToScancode(l)] == 0;
+	}
+
+	// Number
+	bool InputManager::isNumberDown(KB_NUMBERS n) {
+		return keyDownEvent() && kbState_[ConvertToScancode(n)] == 1;
+	}
+
+	bool InputManager::isNumberUp(KB_NUMBERS n) {
+		return keyUpEvent() && kbState_[ConvertToScancode(n)] == 0;
+	}
+
+	// Special Key
+	bool InputManager::isSpecialKeyDown(KB_SPECIALKEYS s) {
+		return keyDownEvent() && kbState_[ConvertToScancode(s)] == 1;
+	}
+
+	bool InputManager::isSpecialKeyUp(KB_SPECIALKEYS s) {
+		return keyUpEvent() && kbState_[ConvertToScancode(s)] == 0;
+	}
+
+	// With SDL Scancode enum
 	bool InputManager::isKeyDown(SDL_Scancode key) {
 		return keyDownEvent() && kbState_[key] == 1;
 	}
@@ -489,6 +517,237 @@ namespace Input {
 	std::string InputManager::getJoystickName() {
 
 		return joystickNames[joystickId];
+	}
+
+
+	// --------- Enum Conversion Methods -----------
+
+	SDL_Scancode InputManager::ConvertToScancode(const KB_LETTERS& letter) {
+
+		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
+
+		switch (letter) {
+			case A:
+				scancode = SDL_SCANCODE_A;
+				break;
+			case B:
+				scancode = SDL_SCANCODE_B;
+				break;
+			case C:
+				scancode = SDL_SCANCODE_C;
+				break;
+			case D:
+				scancode = SDL_SCANCODE_D;
+				break;
+			case E:
+				scancode = SDL_SCANCODE_E;
+				break;
+			case F:
+				scancode = SDL_SCANCODE_F;
+				break;
+			case G:
+				scancode = SDL_SCANCODE_G;
+				break;
+			case H:
+				scancode = SDL_SCANCODE_H;
+				break;
+			case I:
+				scancode = SDL_SCANCODE_I;
+				break;
+			case J:
+				scancode = SDL_SCANCODE_J;
+				break;
+			case K:
+				scancode = SDL_SCANCODE_K;
+				break;
+			case L:
+				scancode = SDL_SCANCODE_L;
+				break;
+			case M:
+				scancode = SDL_SCANCODE_M;
+				break;
+			case N:
+				scancode = SDL_SCANCODE_N;
+				break;
+			case O:
+				scancode = SDL_SCANCODE_O;
+				break;
+			case P:
+				scancode = SDL_SCANCODE_P;
+				break;
+			case Q:
+				scancode = SDL_SCANCODE_Q;
+				break;
+			case R:
+				scancode = SDL_SCANCODE_R;
+				break;
+			case S:
+				scancode = SDL_SCANCODE_S;
+				break;
+			case T:
+				scancode = SDL_SCANCODE_T;
+				break;
+			case U:
+				scancode = SDL_SCANCODE_U;
+				break;
+			case V:
+				scancode = SDL_SCANCODE_V;
+				break;
+			case W:
+				scancode = SDL_SCANCODE_W;
+				break;
+			case X:
+				scancode = SDL_SCANCODE_X;
+				break;
+			case Y:
+				scancode = SDL_SCANCODE_Y;
+				break;
+			case Z:
+				scancode = SDL_SCANCODE_Z;
+				break;
+			default:
+				break;
+		}
+
+		return scancode;
+
+	}
+
+	SDL_Scancode InputManager::ConvertToScancode(const KB_NUMBERS& number) {
+
+		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
+
+		switch (number) {
+			case Num1:
+				scancode = SDL_SCANCODE_1;
+				break;
+			case Num2:
+				scancode = SDL_SCANCODE_2;
+				break;
+			case Num3:
+				scancode = SDL_SCANCODE_3;
+				break;
+			case Num4:
+				scancode = SDL_SCANCODE_4;
+				break;
+			case Num5:
+				scancode = SDL_SCANCODE_5;
+				break;
+			case Num6:
+				scancode = SDL_SCANCODE_6;
+				break;
+			case Num7:
+				scancode = SDL_SCANCODE_7;
+				break;
+			case Num8:
+				scancode = SDL_SCANCODE_8;
+				break;
+			case Num9:
+				scancode = SDL_SCANCODE_9;
+				break;
+			case Num0:
+				scancode = SDL_SCANCODE_0;
+				break;
+			case F1:
+				scancode = SDL_SCANCODE_F1;
+				break;
+			case F2:
+				scancode = SDL_SCANCODE_F2;
+				break;
+			case F3:
+				scancode = SDL_SCANCODE_F3;
+				break;
+			case F4:
+				scancode = SDL_SCANCODE_F4;
+				break;
+			case F5:
+				scancode = SDL_SCANCODE_F5;
+				break;
+			case F6:
+				scancode = SDL_SCANCODE_F6;
+				break;
+			case F7:
+				scancode = SDL_SCANCODE_F7;
+				break;
+			case F8:
+				scancode = SDL_SCANCODE_F8;
+				break;
+			case F9:
+				scancode = SDL_SCANCODE_F9;
+				break;
+			case F10:
+				scancode = SDL_SCANCODE_F10;
+				break;
+			case F11:
+				scancode = SDL_SCANCODE_F11;
+				break;
+			case F12:
+				scancode = SDL_SCANCODE_F12;
+				break;
+			default:
+				break;
+		}
+
+		return scancode;
+
+	}
+
+	SDL_Scancode InputManager::ConvertToScancode(const KB_SPECIALKEYS& specialKey) {
+
+		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
+
+		switch (specialKey) {
+			case RETURN:
+				scancode = SDL_SCANCODE_RETURN;
+				break;
+			case ESCAPE:
+				scancode = SDL_SCANCODE_ESCAPE;
+				break;
+			case BACKSPACE:
+				scancode = SDL_SCANCODE_BACKSPACE;
+				break;
+			case TAB:
+				scancode = SDL_SCANCODE_TAB;
+				break;
+			case SPACE:
+				scancode = SDL_SCANCODE_SPACE;
+				break;
+			case RIGHT:
+				scancode = SDL_SCANCODE_RIGHT;
+				break;
+			case LEFT:
+				scancode = SDL_SCANCODE_LEFT;
+				break;
+			case DOWN:
+				scancode = SDL_SCANCODE_DOWN;
+				break;
+			case UP:
+				scancode = SDL_SCANCODE_UP;
+				break;
+			case LCTRL:
+				scancode = SDL_SCANCODE_LCTRL;
+				break;
+			case LSHIFT:
+				scancode = SDL_SCANCODE_LSHIFT;
+				break;
+			case LALT:
+				scancode = SDL_SCANCODE_LALT;
+				break;
+			case RCTRL:
+				scancode = SDL_SCANCODE_RCTRL;
+				break;
+			case RSHIFT:
+				scancode = SDL_SCANCODE_RSHIFT;
+				break;
+			case RALT:
+				scancode = SDL_SCANCODE_RALT;
+				break;
+			default:
+				break;
+		}
+
+		return scancode;
+
 	}
 
 }
