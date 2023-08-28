@@ -1081,22 +1081,22 @@ ECSReader& ECSReader::GenerateAttributeJSON()
 std::string ECSReader::ProcessType(std::string const& input)
 {
 	if (input == "std::string" || input == "string" || input == "cstring" || input == "cString")
-		return "string";
+		return "Text";
 
 	if (input == "float" || input == "int" || input == "double")
-		return "float";
+		return "Number";
 
 	if (input == "Utilities::Vector2D" || input == "Vector2D" || input == "cVector2D")
-		return "Vector2D";
+		return "Pair";
 
 	if (input == "char")
-		return "char";
+		return "Letter";
 
 	if (input == "Color" || input == "Utilities::Color" || input == "cColor")
-		return "color";
+		return "Color";
 
 	if (input == "bool")
-		return "bool";
+		return "Toggle";
 
 	if (input == "Entity*" || input == "ECS::Entity*")
 		return "Entity";
@@ -1105,7 +1105,7 @@ std::string ECSReader::ProcessType(std::string const& input)
 		return "void";
 
 	if (input == "cVariable" || input == "Scripting::Variable")
-		return "any";
+		return "Any";
 
 	std::cout << "Error con el tipo: " << input << std::endl;
 	return input;

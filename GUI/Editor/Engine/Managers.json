@@ -5,11 +5,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "val",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "Set",
@@ -19,21 +19,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "Get",
-                "return": "any"
+                "return": "Any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "val",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "SetLocal",
@@ -43,21 +43,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "GetLocal",
-                "return": "any"
+                "return": "Any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "val",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "SetGlobal",
@@ -67,11 +67,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "GetGlobal",
-                "return": "any"
+                "return": "Any"
             }
         ],
         "name": "Attribute"
@@ -81,13 +81,13 @@
             {
                 "input": [],
                 "name": "GetPosition",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "newPosition",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "SetPosition",
@@ -96,13 +96,13 @@
             {
                 "input": [],
                 "name": "GetScale",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "newScale",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "SetScale",
@@ -117,11 +117,11 @@
                 "input": [
                     {
                         "name": "angle",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Radians",
-                "return": "float"
+                "return": "Number"
             }
         ],
         "name": "DegreesTo"
@@ -141,12 +141,12 @@
                     }
                 ],
                 "name": "Name",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [],
                 "name": "CurrentName",
-                "return": "string"
+                "return": "Text"
             }
         ],
         "name": "Entity"
@@ -161,7 +161,7 @@
                     },
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "EntityEvent",
@@ -171,7 +171,7 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "GlobalEvent",
@@ -185,7 +185,7 @@
             {
                 "input": [],
                 "name": "Graph",
-                "return": "string"
+                "return": "Text"
             }
         ],
         "name": "Graph"
@@ -195,12 +195,257 @@
             {
                 "input": [],
                 "name": "keyDownEvent",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [],
                 "name": "keyUpEvent",
-                "return": "bool"
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "HorizontalMovement",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "VerticalMovement",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "mouseMotionEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "wheelMotionEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonDownEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonUpEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "getMousePos",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "getWheelMotionY",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getJoysticksConnected",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "isJoystickAxisMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isJoystickButtonEventDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isJoystickButtonEventUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickValue",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickTriggerValue",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickButtonState",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "getJoysticksNumButtons",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "isLeftJoystickMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isRightJoystickMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isLeftTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isRightTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "joystickConnectedEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "joystickDisconnectedEvent",
+                "return": "Toggle"
             }
         ],
         "name": "InputManager"
@@ -211,123 +456,123 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Equals",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "NotEquals",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Lesser",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Greater",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "LesserOrEqual",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "GreaterOrEqual",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "bool"
+                        "type": "Toggle"
                     },
                     {
                         "name": "b",
-                        "type": "bool"
+                        "type": "Toggle"
                     }
                 ],
                 "name": "And",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "bool"
+                        "type": "Toggle"
                     },
                     {
                         "name": "b",
-                        "type": "bool"
+                        "type": "Toggle"
                     }
                 ],
                 "name": "Or",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "b",
-                        "type": "bool"
+                        "type": "Toggle"
                     }
                 ],
                 "name": "Negate",
-                "return": "bool"
+                "return": "Toggle"
             }
         ],
         "name": "Logic"
@@ -338,133 +583,133 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Add",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Subtract",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Multiply",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Divide",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Power",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Root",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Max",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Min",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "PlusOne",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "MinusOne",
-                "return": "float"
+                "return": "Number"
             }
         ],
         "name": "Math"
@@ -475,7 +720,7 @@
                 "input": [
                     {
                         "name": "url",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "OpenURL",
@@ -489,13 +734,13 @@
             {
                 "input": [],
                 "name": "getGravity",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "gravity",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "setGravity",
@@ -505,7 +750,7 @@
                 "input": [
                     {
                         "name": "layerName",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "addCollisionLayer",
@@ -515,7 +760,7 @@
                 "input": [
                     {
                         "name": "layerName",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "removeCollisionLayer",
@@ -525,15 +770,15 @@
                 "input": [
                     {
                         "name": "layerNameA",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "layerNameB",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "collide",
-                        "type": "bool"
+                        "type": "Toggle"
                     }
                 ],
                 "name": "setCollisionBetweenLayers",
@@ -543,25 +788,25 @@
                 "input": [
                     {
                         "name": "layerNameA",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "layerNameB",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "layersCollide",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "layerName",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "layersExists",
-                "return": "bool"
+                "return": "Toggle"
             }
         ],
         "name": "PhysicsManager"
@@ -572,7 +817,7 @@
                 "input": [
                     {
                         "name": "val",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "Print",
@@ -587,11 +832,11 @@
                 "input": [
                     {
                         "name": "angle",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Degrees",
-                "return": "float"
+                "return": "Number"
             }
         ],
         "name": "RadiansTo"
@@ -601,83 +846,83 @@
             {
                 "input": [],
                 "name": "UnitValue",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "min",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "max",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "NumberBetween",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Between",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "min",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "max",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "AngleBetween",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "UnitVector",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "val",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ScaledVector",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Color",
-                "return": "color"
+                "return": "Color"
             },
             {
                 "input": [
                     {
                         "name": "c1",
-                        "type": "color"
+                        "type": "Color"
                     },
                     {
                         "name": "c2",
-                        "type": "color"
+                        "type": "Color"
                     }
                 ],
                 "name": "ColorBetween",
-                "return": "color"
+                "return": "Color"
             }
         ],
         "name": "Random"
@@ -687,171 +932,171 @@
             {
                 "input": [],
                 "name": "Now",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "WeekDay",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ShortWeekDay",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Month",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ShortMonth",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "DayOfWeekIndex",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "MonthIndex",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "MonthDay",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Year",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Hours",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Minutes",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Seconds",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "now",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Since",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "HourTime",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "PreciseHourTime",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "TimeStamp",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "time",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Date",
-                "return": "string"
+                "return": "Text"
             }
         ],
         "name": "RealTime"
@@ -861,12 +1106,12 @@
             {
                 "input": [],
                 "name": "getWidth",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "getHeight",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
@@ -877,7 +1122,7 @@
                 "input": [
                     {
                         "name": "show",
-                        "type": "bool"
+                        "type": "Toggle"
                     }
                 ],
                 "name": "showCursor",
@@ -887,11 +1132,11 @@
                 "input": [
                     {
                         "name": "w",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "h",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "resizeWindow",
@@ -901,7 +1146,7 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "renameWindow",
@@ -911,11 +1156,11 @@
                 "input": [
                     {
                         "name": "x",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "y",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "repositionWindow",
@@ -925,11 +1170,11 @@
                 "input": [
                     {
                         "name": "path",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "SetWindowIcon",
-                "return": "bool"
+                "return": "Toggle"
             }
         ],
         "name": "RendererManager"
@@ -945,7 +1190,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Save",
@@ -955,7 +1200,7 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Load",
@@ -965,11 +1210,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "value",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "SetSlot",
@@ -979,21 +1224,21 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "GetSlot",
-                "return": "any"
+                "return": "Any"
             },
             {
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "value",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "Set",
@@ -1003,11 +1248,11 @@
                 "input": [
                     {
                         "name": "name",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "Get",
-                "return": "any"
+                "return": "Any"
             },
             {
                 "input": [],
@@ -1018,17 +1263,17 @@
                 "input": [
                     {
                         "name": "slot",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Exists",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "slot",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "DeleteSave",
@@ -1043,11 +1288,11 @@
                 "input": [
                     {
                         "name": "scenePath",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "pushMode",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ChangeScene",
@@ -1066,12 +1311,12 @@
             {
                 "input": [],
                 "name": "getNumberOfScenes",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "GetCurrentScenePath",
-                "return": "string"
+                "return": "Text"
             }
         ],
         "name": "SceneManager"
@@ -1082,7 +1327,7 @@
                 "input": [
                     {
                         "name": "volume",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "setMasterVolume",
@@ -1092,7 +1337,7 @@
                 "input": [
                     {
                         "name": "nChannels",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "setChannelsCapacity",
@@ -1107,161 +1352,161 @@
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "b",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "Equals",
-                "return": "bool"
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "b",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "Concatenate",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "begin",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "end",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Substring",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Begining",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "End",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "values",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "Trim",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     }
                 ],
                 "name": "TrimBlanks",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "GetLetter",
-                "return": "char"
+                "return": "Letter"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "string"
+                        "type": "Text"
                     },
                     {
                         "name": "c",
-                        "type": "char"
+                        "type": "Letter"
                     }
                 ],
                 "name": "Find",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "variable",
-                        "type": "any"
+                        "type": "Any"
                     }
                 ],
                 "name": "ToString",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "number",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "zeroCount",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "LeadingZeros",
-                "return": "string"
+                "return": "Text"
             },
             {
                 "input": [
                     {
                         "name": "number",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "RemoveDecimals",
-                "return": "string"
+                "return": "Text"
             }
         ],
         "name": "Text"
@@ -1271,47 +1516,47 @@
             {
                 "input": [],
                 "name": "GetTimeSinceBegining",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "GetTimeSinceBeginingMilliseconds",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "GetDeltaTime",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "GetFrameRate",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [],
                 "name": "GetPhysicsDeltaTime",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "val",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ScaleWithDeltaTime",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "val",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "ScaleWithPhysicsDeltaTime",
-                "return": "float"
+                "return": "Number"
             }
         ],
         "name": "Time"
@@ -1322,193 +1567,193 @@
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Magnitude",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "X",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Y",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Angle",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "other",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "AngleWithVector",
-                "return": "float"
+                "return": "Number"
             },
             {
                 "input": [
                     {
                         "name": "x",
-                        "type": "float"
+                        "type": "Number"
                     },
                     {
                         "name": "y",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Create",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Normalize",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "vec",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "angle",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Rotate",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "b",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Add",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "b",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Subtract",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "b",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Dot",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "b",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     }
                 ],
                 "name": "Cross",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [
                     {
                         "name": "a",
-                        "type": "Vector2D"
+                        "type": "Pair"
                     },
                     {
                         "name": "b",
-                        "type": "float"
+                        "type": "Number"
                     }
                 ],
                 "name": "Multiply",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Up",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Left",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Right",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Down",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "One",
-                "return": "Vector2D"
+                "return": "Pair"
             },
             {
                 "input": [],
                 "name": "Zero",
-                "return": "Vector2D"
+                "return": "Pair"
             }
         ],
         "name": "Vector2D"

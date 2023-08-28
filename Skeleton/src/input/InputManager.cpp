@@ -121,30 +121,41 @@ namespace Input {
 	}
 
 	// Letter
-	bool InputManager::isLetterDown(KB_LETTERS l) {
-		return keyDownEvent() && kbState_[ConvertToScancode(l)] == 1;
+	bool InputManager::isLetterDown(int l) {
+		return keyDownEvent() && kbState_[ConvertToScancode((KB_LETTERS)l)] == 1;
 	}
 
-	bool InputManager::isLetterUp(KB_LETTERS l) {
-		return keyUpEvent() && kbState_[ConvertToScancode(l)] == 0;
+	bool InputManager::isLetterHold(int l) {
+		return kbState_[ConvertToScancode((KB_LETTERS)l)] == 1;
+	}
+
+	bool InputManager::isLetterUp(int l) {
+		return keyUpEvent() && kbState_[ConvertToScancode((KB_LETTERS)l)] == 0;
 	}
 
 	// Number
-	bool InputManager::isNumberDown(KB_NUMBERS n) {
-		return keyDownEvent() && kbState_[ConvertToScancode(n)] == 1;
+	bool InputManager::isNumberDown(int n) {
+		return keyDownEvent() && kbState_[ConvertToScancode((KB_NUMBERS)n)] == 1;
+	}
+	bool InputManager::isNumberHold(int n) {
+		return kbState_[ConvertToScancode((KB_NUMBERS)n)] == 1;
 	}
 
-	bool InputManager::isNumberUp(KB_NUMBERS n) {
-		return keyUpEvent() && kbState_[ConvertToScancode(n)] == 0;
+	bool InputManager::isNumberUp(int n) {
+		return keyUpEvent() && kbState_[ConvertToScancode((KB_NUMBERS)n)] == 0;
 	}
 
 	// Special Key
-	bool InputManager::isSpecialKeyDown(KB_SPECIALKEYS s) {
-		return keyDownEvent() && kbState_[ConvertToScancode(s)] == 1;
+	bool InputManager::isSpecialKeyDown(int s) {
+		return keyDownEvent() && kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 1;
 	}
 
-	bool InputManager::isSpecialKeyUp(KB_SPECIALKEYS s) {
-		return keyUpEvent() && kbState_[ConvertToScancode(s)] == 0;
+	bool InputManager::isSpecialKeyHold(int s) {
+		return kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 1;
+	}
+
+	bool InputManager::isSpecialKeyUp(int s) {
+		return keyUpEvent() && kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 0;
 	}
 
 	// With SDL Scancode enum
@@ -175,19 +186,19 @@ namespace Input {
 		return wheelMotionY_;
 	}
 
-	bool InputManager::isMouseButtonDown(MOUSEBUTTON b) {
+	bool InputManager::isMouseButtonDown(int b) {
 		return mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUp(MOUSEBUTTON b) {
+	bool InputManager::isMouseButtonUp(int b) {
 		return !mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonDownEvent(MOUSEBUTTON b) {
+	bool InputManager::isMouseButtonDownEvent(int b) {
 		return isMouseButtonEventDown_ && mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUpEvent(MOUSEBUTTON b) {
+	bool InputManager::isMouseButtonUpEvent(int b) {
 		return isMouseButtonEventUp_ && !mbState_[b];
 	}
 
@@ -206,13 +217,13 @@ namespace Input {
 
 		switch (event.button.button) {
 		case SDL_BUTTON_LEFT:
-			mbState_[LEFT] = isDown;
+			mbState_[(int)MOUSEBUTTON::LEFT] = isDown;
 			break;
 		case SDL_BUTTON_MIDDLE:
-			mbState_[MIDDLE] = isDown;
+			mbState_[(int)MOUSEBUTTON::MIDDLE] = isDown;
 			break;
 		case SDL_BUTTON_RIGHT:
-			mbState_[RIGHT] = isDown;
+			mbState_[(int)MOUSEBUTTON::RIGHT] = isDown;
 			break;
 		default:
 			break;
@@ -438,15 +449,47 @@ namespace Input {
 		return joystickId;
 	}
 
-	Utilities::Vector2D InputManager::getJoystickValue(CONTROLLERSTICK ct) {
 
+	float InputManager::HorizontalMovement()
+	{
+		float dir = 0;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterDown((int)KB_LETTERS::A))
+			dir += -1;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterDown((int)KB_LETTERS::D))
+			dir += 1;
+
+		//TODO: meter el input de mando
+
+		return dir;
+	}
+
+	float InputManager::VerticalMovement()
+	{
+		float dir = 0;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterDown((int)KB_LETTERS::S))
+			dir += -1;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterDown((int)KB_LETTERS::W))
+			dir += 1;
+
+		//TODO: meter el input de mando
+
+		return dir;
+	}
+
+	Utilities::Vector2D InputManager::getJoystickValue(int intct) {
+
+		CONTROLLERSTICK ct = (CONTROLLERSTICK) intct;
 		Utilities::Vector2D v = Utilities::Vector2D();
 
 		switch (ct) {
-		case LEFT_STICK:
+		case CONTROLLERSTICK::LEFT_STICK:
 			v = joystickValues[joystickId].first;
 			break;
-		case RIGHT_STICK:
+		case CONTROLLERSTICK::RIGHT_STICK:
 			v = joystickValues[joystickId].second;
 			break;
 		default:
@@ -456,15 +499,16 @@ namespace Input {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	float InputManager::getJoystickTriggerValue(CONTROLLERTRIGGER ct) {
+	float InputManager::getJoystickTriggerValue(int intct) {
 
+		CONTROLLERTRIGGER ct = (CONTROLLERTRIGGER)intct;
 		float v = 0.0f;
 
 		switch (ct) {
-		case LEFT_TRIGGER:
+		case CONTROLLERTRIGGER::LEFT_TRIGGER:
 			v = joystickTriggerValues[joystickId].first;
 			break;
-		case RIGHT_TRIGGER:
+		case CONTROLLERTRIGGER::RIGHT_TRIGGER:
 			v = joystickTriggerValues[joystickId].second;
 			break;
 		default:
@@ -527,82 +571,82 @@ namespace Input {
 		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
 
 		switch (letter) {
-			case A:
+		case KB_LETTERS::A:
 				scancode = SDL_SCANCODE_A;
 				break;
-			case B:
+			case KB_LETTERS::B:
 				scancode = SDL_SCANCODE_B;
 				break;
-			case C:
+			case KB_LETTERS::C:
 				scancode = SDL_SCANCODE_C;
 				break;
-			case D:
+			case KB_LETTERS::D:
 				scancode = SDL_SCANCODE_D;
 				break;
-			case E:
+			case KB_LETTERS::E:
 				scancode = SDL_SCANCODE_E;
 				break;
-			case F:
+			case KB_LETTERS::F:
 				scancode = SDL_SCANCODE_F;
 				break;
-			case G:
+			case KB_LETTERS::G:
 				scancode = SDL_SCANCODE_G;
 				break;
-			case H:
+			case KB_LETTERS::H:
 				scancode = SDL_SCANCODE_H;
 				break;
-			case I:
+			case KB_LETTERS::I:
 				scancode = SDL_SCANCODE_I;
 				break;
-			case J:
+			case KB_LETTERS::J:
 				scancode = SDL_SCANCODE_J;
 				break;
-			case K:
+			case KB_LETTERS::K:
 				scancode = SDL_SCANCODE_K;
 				break;
-			case L:
+			case KB_LETTERS::L:
 				scancode = SDL_SCANCODE_L;
 				break;
-			case M:
+			case KB_LETTERS::M:
 				scancode = SDL_SCANCODE_M;
 				break;
-			case N:
+			case KB_LETTERS::N:
 				scancode = SDL_SCANCODE_N;
 				break;
-			case O:
+			case KB_LETTERS::O:
 				scancode = SDL_SCANCODE_O;
 				break;
-			case P:
+			case KB_LETTERS::P:
 				scancode = SDL_SCANCODE_P;
 				break;
-			case Q:
+			case KB_LETTERS::Q:
 				scancode = SDL_SCANCODE_Q;
 				break;
-			case R:
+			case KB_LETTERS::R:
 				scancode = SDL_SCANCODE_R;
 				break;
-			case S:
+			case KB_LETTERS::S:
 				scancode = SDL_SCANCODE_S;
 				break;
-			case T:
+			case KB_LETTERS::T:
 				scancode = SDL_SCANCODE_T;
 				break;
-			case U:
+			case KB_LETTERS::U:
 				scancode = SDL_SCANCODE_U;
 				break;
-			case V:
+			case KB_LETTERS::V:
 				scancode = SDL_SCANCODE_V;
 				break;
-			case W:
+			case KB_LETTERS::W:
 				scancode = SDL_SCANCODE_W;
 				break;
-			case X:
+			case KB_LETTERS::X:
 				scancode = SDL_SCANCODE_X;
 				break;
-			case Y:
+			case KB_LETTERS::Y:
 				scancode = SDL_SCANCODE_Y;
 				break;
-			case Z:
+			case KB_LETTERS::Z:
 				scancode = SDL_SCANCODE_Z;
 				break;
 			default:
@@ -618,70 +662,70 @@ namespace Input {
 		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
 
 		switch (number) {
-			case Num1:
+		case KB_NUMBERS::Num1:
 				scancode = SDL_SCANCODE_1;
 				break;
-			case Num2:
+			case KB_NUMBERS::Num2:
 				scancode = SDL_SCANCODE_2;
 				break;
-			case Num3:
+			case KB_NUMBERS::Num3:
 				scancode = SDL_SCANCODE_3;
 				break;
-			case Num4:
+			case KB_NUMBERS::Num4:
 				scancode = SDL_SCANCODE_4;
 				break;
-			case Num5:
+			case KB_NUMBERS::Num5:
 				scancode = SDL_SCANCODE_5;
 				break;
-			case Num6:
+			case KB_NUMBERS::Num6:
 				scancode = SDL_SCANCODE_6;
 				break;
-			case Num7:
+			case KB_NUMBERS::Num7:
 				scancode = SDL_SCANCODE_7;
 				break;
-			case Num8:
+			case KB_NUMBERS::Num8:
 				scancode = SDL_SCANCODE_8;
 				break;
-			case Num9:
+			case KB_NUMBERS::Num9:
 				scancode = SDL_SCANCODE_9;
 				break;
-			case Num0:
+			case KB_NUMBERS::Num0:
 				scancode = SDL_SCANCODE_0;
 				break;
-			case F1:
+			case KB_NUMBERS::F1:
 				scancode = SDL_SCANCODE_F1;
 				break;
-			case F2:
+			case KB_NUMBERS::F2:
 				scancode = SDL_SCANCODE_F2;
 				break;
-			case F3:
+			case KB_NUMBERS::F3:
 				scancode = SDL_SCANCODE_F3;
 				break;
-			case F4:
+			case KB_NUMBERS::F4:
 				scancode = SDL_SCANCODE_F4;
 				break;
-			case F5:
+			case KB_NUMBERS::F5:
 				scancode = SDL_SCANCODE_F5;
 				break;
-			case F6:
+			case KB_NUMBERS::F6:
 				scancode = SDL_SCANCODE_F6;
 				break;
-			case F7:
+			case KB_NUMBERS::F7:
 				scancode = SDL_SCANCODE_F7;
 				break;
-			case F8:
+			case KB_NUMBERS::F8:
 				scancode = SDL_SCANCODE_F8;
 				break;
-			case F9:
+			case KB_NUMBERS::F9:
 				scancode = SDL_SCANCODE_F9;
 				break;
-			case F10:
+			case KB_NUMBERS::F10:
 				scancode = SDL_SCANCODE_F10;
 				break;
-			case F11:
+			case KB_NUMBERS::F11:
 				scancode = SDL_SCANCODE_F11;
 				break;
-			case F12:
+			case KB_NUMBERS::F12:
 				scancode = SDL_SCANCODE_F12;
 				break;
 			default:
@@ -697,49 +741,49 @@ namespace Input {
 		SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
 
 		switch (specialKey) {
-			case RETURN:
+		case KB_SPECIALKEYS::RETURN:
 				scancode = SDL_SCANCODE_RETURN;
 				break;
-			case ESCAPE:
+			case KB_SPECIALKEYS::ESCAPE:
 				scancode = SDL_SCANCODE_ESCAPE;
 				break;
-			case BACKSPACE:
+			case KB_SPECIALKEYS::BACKSPACE:
 				scancode = SDL_SCANCODE_BACKSPACE;
 				break;
-			case TAB:
+			case KB_SPECIALKEYS::TAB:
 				scancode = SDL_SCANCODE_TAB;
 				break;
-			case SPACE:
+			case KB_SPECIALKEYS::SPACE:
 				scancode = SDL_SCANCODE_SPACE;
 				break;
-			case RIGHT:
+			case KB_SPECIALKEYS::RIGHT:
 				scancode = SDL_SCANCODE_RIGHT;
 				break;
-			case LEFT:
+			case KB_SPECIALKEYS::LEFT:
 				scancode = SDL_SCANCODE_LEFT;
 				break;
-			case DOWN:
+			case KB_SPECIALKEYS::DOWN:
 				scancode = SDL_SCANCODE_DOWN;
 				break;
-			case UP:
+			case KB_SPECIALKEYS::UP:
 				scancode = SDL_SCANCODE_UP;
 				break;
-			case LCTRL:
+			case KB_SPECIALKEYS::LCTRL:
 				scancode = SDL_SCANCODE_LCTRL;
 				break;
-			case LSHIFT:
+			case KB_SPECIALKEYS::LSHIFT:
 				scancode = SDL_SCANCODE_LSHIFT;
 				break;
-			case LALT:
+			case KB_SPECIALKEYS::LALT:
 				scancode = SDL_SCANCODE_LALT;
 				break;
-			case RCTRL:
+			case KB_SPECIALKEYS::RCTRL:
 				scancode = SDL_SCANCODE_RCTRL;
 				break;
-			case RSHIFT:
+			case KB_SPECIALKEYS::RSHIFT:
 				scancode = SDL_SCANCODE_RSHIFT;
 				break;
-			case RALT:
+			case KB_SPECIALKEYS::RALT:
 				scancode = SDL_SCANCODE_RALT;
 				break;
 			default:

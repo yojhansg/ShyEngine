@@ -156,12 +156,15 @@ namespace Components {
 	private:
 
 		std::string name;
+		std::string path;
+
+
 		std::unordered_map<std::string, Attribute> attributes;
 		std::unordered_map<std::string, std::string> enums;
 
 	public:
 
-		Script(cstring name);
+		Script(cstring name, cstring path);
 
 		std::string GetName();
 
@@ -175,6 +178,7 @@ namespace Components {
 		bool IsEnum(const std::string& attribute);
 		std::string GetEnum(const std::string& attribute);
 
+		std::string GetPath();
 
 		static Script fromJson(std::string name, std::string json);
 	};

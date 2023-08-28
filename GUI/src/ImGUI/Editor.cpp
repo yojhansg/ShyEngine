@@ -384,7 +384,7 @@ bool Editor::RunProjectsWindow() {
 	if (result == ShyEditor::ProjectsManager::Result::CLOSED)
 		return false;
 
-	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "\\Assets" + "\\Scripts");
+	Components::ComponentManager::ReadScripts(instance->projecInfo->path + "\\Assets");
 	ShyEditor::ResourcesManager::GetInstance()->SetProjectPath(instance->projecInfo->path);
 
 	return true;

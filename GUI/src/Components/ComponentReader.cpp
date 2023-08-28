@@ -164,7 +164,7 @@ namespace Components {
 	}
 
 
-	std::vector<Script> ComponentReader::ReadScripts(cstring filePath)
+	std::vector<Script> ComponentReader::ReadScripts(cstring filePath, cstring relativePath)
 	{
 
 		if (!std::filesystem::is_directory(filePath)) {
@@ -175,11 +175,19 @@ namespace Components {
 		auto scripts = std::vector<Script>();
 		for (const auto& entry : std::filesystem::directory_iterator(filePath)) {
 
-			if (entry.is_directory()) continue; //TODO: leer en carpetas anidadas
+			if (entry.is_directory()) {
+
+				auto folderScripts = ReadScripts(entry.path().string(), relativePath + entry.path().filename().string() + "/");
+
+				for (auto& folderScript : folderScripts)
+					scripts.push_back(folderScript);
+
+				continue;
+			}
 
 			if (entry.path().extension() != ".script") continue;
 
-			Script script = Script(entry.path().filename().stem().string());
+			Script script = Script(entry.path().filename().stem().string(), relativePath);
 
 			std::ifstream fileStream(entry.path());
 

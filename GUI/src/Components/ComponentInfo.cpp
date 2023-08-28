@@ -218,28 +218,28 @@ namespace Components {
 		else if (type == AttributesType::NONE) {
 			returnValue = "null";
 		}
-		
+
 		return returnValue;
 	}
 
 	AttributesType Attribute::GetAttributeTypeFromTypeStr(const std::string& typeStr) {
 
-		if (typeStr == "float") {
+		if (typeStr == "Number" || typeStr == "float") {
 			return AttributesType::FLOAT;
 		}
-		else if (typeStr == "Vector2D") {
+		else if (typeStr == "Pair" || typeStr == "Vector2D") {
 			return AttributesType::VECTOR2;
 		}
-		else if (typeStr == "string") {
+		else if (typeStr == "Text" || typeStr == "string") {
 			return AttributesType::STRING;
 		}
-		else if (typeStr == "bool") {
+		else if (typeStr == "Toggle" || typeStr == "bool") {
 			return AttributesType::BOOL;
 		}
-		else if (typeStr == "color") {
+		else if (typeStr == "Color" || typeStr == "color") {
 			return AttributesType::COLOR;
 		}
-		else if (typeStr == "char") {
+		else if (typeStr == "Letter" || typeStr == "char") {
 			return AttributesType::CHAR;
 		}
 		else if (typeStr == "Entity") {
@@ -369,7 +369,8 @@ namespace Components {
 	}
 
 
-	Script::Script(cstring name) : name(name) {}
+	Script::Script(cstring name, cstring path) : name(name), path(path) {}
+
 
 	std::string Script::GetName()
 	{
@@ -447,8 +448,27 @@ namespace Components {
 		return enums[attribute];
 	}
 
-	Script Script::fromJson(std::string name, std::string json) {
-		Script script(name);
+	std::string Script::GetPath()
+	{
+		return path;
+	}
+
+	Script Script::fromJson(std::string path, std::string json) {
+
+		size_t pos = path.find_last_of('/');
+		std::string name;
+
+		if (pos != path.npos)
+		{
+			name = path.substr(pos);
+			path = path.substr(0, pos);
+		}
+		else
+		{
+			name = path;
+			path = "";
+		}
+		Script script(name, path);
 
 		nlohmann::json jsonData = nlohmann::json::parse(json);
 

@@ -24,35 +24,35 @@ namespace Input {
 
 	public:
 
-		enum MOUSEBUTTON : uint8_t {
+		enum class MOUSEBUTTON : uint8_t {
 			LEFT = 0, MIDDLE = 1, RIGHT = 2
 		};
 
-		enum CONTROLLERSTICK : uint8_t {
+		enum class CONTROLLERSTICK : uint8_t {
 			LEFT_STICK = 0, RIGHT_STICK = 1,
 		};
 
-		enum CONTROLLERTRIGGER : uint8_t {
+		enum class CONTROLLERTRIGGER : uint8_t {
 			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1,
 		};
 
 		// PS4 Mapping
-		enum PS4_CONTROLLER_BUTTONS : uint8_t {
+		enum class PS4_CONTROLLER_BUTTONS : uint8_t {
 			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
 
-		enum KB_LETTERS {
+		enum class KB_LETTERS {
 			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
 			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25,
 		};
 
-		enum KB_NUMBERS {
+		enum class KB_NUMBERS {
 			Num1 = 0, Num2 = 1, Num3 = 2, Num4 = 3, Num5 = 4, Num6 = 5, Num7 = 6, Num8 = 7, Num9 = 8, Num0 = 9, F1 = 10, F2 = 11, 
 			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21
 		};
 
-		enum KB_SPECIALKEYS {
+		enum class KB_SPECIALKEYS {
 			RETURN = 0, ESCAPE = 1, BACKSPACE = 2, TAB = 3, SPACE = 4, RIGHT = 5, LEFT = 6, DOWN = 7, UP = 8, LCTRL = 9, LSHIFT = 10,
 			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14,
 		};
@@ -68,24 +68,29 @@ namespace Input {
 
 		bool isKeyUp(SDL_Scancode key);
 
-		// Keyboard
 	publish:
 
-		bool keyDownEvent();
+		//Down Hold Up
 
+		// Keyboard
+		bool keyDownEvent();
 		bool keyUpEvent();
 
-		bool isLetterDown(KB_LETTERS l);
+		bool isLetterDown(int l);
+		bool isLetterHold(int l);
+		bool isLetterUp(int l);
 
-		bool isLetterUp(KB_LETTERS l);
+		bool isNumberDown(int n);
+		bool isNumberHold(int n);
+		bool isNumberUp(int n);
 
-		bool isNumberDown(KB_NUMBERS n);
+		bool isSpecialKeyDown(int s);
+		bool isSpecialKeyHold(int s);
+		bool isSpecialKeyUp(int s);
 
-		bool isNumberUp(KB_NUMBERS n);
 
-		bool isSpecialKeyDown(KB_SPECIALKEYS s);
-
-		bool isSpecialKeyUp(KB_SPECIALKEYS s);
+		float HorizontalMovement();
+		float VerticalMovement();
 
 
 		// Mouse
@@ -93,13 +98,13 @@ namespace Input {
 
 		bool wheelMotionEvent();
 
-		bool isMouseButtonDown(MOUSEBUTTON b);
+		bool isMouseButtonDown(int b);
 
-		bool isMouseButtonUp(MOUSEBUTTON b);
+		bool isMouseButtonUp(int b);
 
-		bool isMouseButtonDownEvent(MOUSEBUTTON b);
+		bool isMouseButtonDownEvent(int b);
 
-		bool isMouseButtonUpEvent(MOUSEBUTTON b);
+		bool isMouseButtonUpEvent(int b);
 
 		Utilities::Vector2D getMousePos();
 
@@ -114,9 +119,9 @@ namespace Input {
 
 		bool isJoystickButtonEventUp();
 
-		Utilities::Vector2D getJoystickValue(CONTROLLERSTICK ct);
+		Utilities::Vector2D getJoystickValue(int ct);
 
-		float getJoystickTriggerValue(CONTROLLERTRIGGER ct);
+		float getJoystickTriggerValue(int ct);
 		
 		bool getJoystickButtonState(int button);
 

@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Aug 26 18:22:40 2023
+//Creation time : Mon Aug 28 05:32:35 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -150,6 +150,39 @@ Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec)
 Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_HorizontalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_mouseMotionEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_wheelMotionEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonDownEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonUpEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getMousePos(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getWheelMotionY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getJoysticksConnected(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isJoystickAxisMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isJoystickButtonEventDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isJoystickButtonEventUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getJoystickValue(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getJoystickTriggerValue(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getJoystickButtonState(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getJoysticksNumButtons(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftJoystickMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightJoystickMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftTriggerMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightTriggerMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_joystickConnectedEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_joystickDisconnectedEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_getGravity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_setGravity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_addCollisionLayer(std::vector<Scripting::Variable>const& vec);

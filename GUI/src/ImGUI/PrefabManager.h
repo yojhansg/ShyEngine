@@ -20,7 +20,7 @@ namespace ShyEditor {
 		static int lastPrefabId; // Starts at -1 and goes down
 
 		static void AssignId(Entity* prefab);
-		static bool IsAlreadyUsed(int id);
+		static bool IsIdAlreadyUsed(int id);
 
 		Editor* editor;
 		Texture* prefabText;

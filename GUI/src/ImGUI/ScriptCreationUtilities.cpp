@@ -1186,7 +1186,9 @@ namespace ShyEditor {
 					ScriptInput* node = new ScriptInput(type);
 
 					node->SetPosition((windowSize.x - node->GetW()) * 0.5f - scrollx, (windowSize.y - node->GetH()) * 0.5f - scrolly);
-					node->SetEnum("");
+
+					if (isEnum)
+						node->SetEnum("");
 
 					creator->AddNode(node);
 

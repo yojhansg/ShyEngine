@@ -1371,7 +1371,7 @@ namespace ShyEditor {
 			if (scriptJson.is_null())
 				scriptJson = nlohmann::json::array();
 
-			scriptsJson[it->second.GetName()] = scriptJson;
+			scriptsJson[it->second.GetPath() + it->second.GetName()] = scriptJson;
 		}
 
 		j["scripts"] = scriptsJson;
@@ -1535,10 +1535,9 @@ namespace ShyEditor {
 			}
 		}
 		else {
-			int id = Entity::lastId;
 
 			//Ensure id is not being used already
-			while (IsIdAlreadyUsed(id)) {
+			while (IsIdAlreadyUsed(Entity::lastId)) {
 				Entity::lastId++;
 			}
 

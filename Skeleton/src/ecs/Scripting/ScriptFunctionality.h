@@ -35,6 +35,7 @@ publish:
 	ECS::Entity* Entity();
 
 	// TODO: entity_Destroy, entity_Create
+	//TODO: Name y current name no se entiende lo que es
 	std::string Entity_Name(ECS::Entity* ent);
 	std::string Entity_CurrentName();
 
