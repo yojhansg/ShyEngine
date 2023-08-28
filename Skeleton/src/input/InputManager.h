@@ -29,11 +29,11 @@ namespace Input {
 		};
 
 		enum class CONTROLLERSTICK : uint8_t {
-			LEFT_STICK = 0, RIGHT_STICK = 1,
+			LEFT_STICK = 0, RIGHT_STICK = 1
 		};
 
 		enum class CONTROLLERTRIGGER : uint8_t {
-			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1,
+			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1
 		};
 
 		// PS4 Mapping
@@ -42,19 +42,32 @@ namespace Input {
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
 
+		//XBOX Mapping
+		enum class XBOX_CONTROLLER_BUTTONS : uint8_t {
+			A = 0, B = 1, X = 2, Y = 3, SHARE = 4, HOME = 5, OPTIONS = 6, L3 = 7, R3 = 8,
+			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
+		};
+
+		enum class KeyState {
+
+			None, JustDown, Down, Up
+		};
+
+		//Keyboard
+
 		enum class KB_LETTERS {
 			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
-			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25,
+			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25, Count
 		};
 
 		enum class KB_NUMBERS {
 			Num1 = 0, Num2 = 1, Num3 = 2, Num4 = 3, Num5 = 4, Num6 = 5, Num7 = 6, Num8 = 7, Num9 = 8, Num0 = 9, F1 = 10, F2 = 11, 
-			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21
+			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21, Count
 		};
 
 		enum class KB_SPECIALKEYS {
 			RETURN = 0, ESCAPE = 1, BACKSPACE = 2, TAB = 3, SPACE = 4, RIGHT = 5, LEFT = 6, DOWN = 7, UP = 8, LCTRL = 9, LSHIFT = 10,
-			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14,
+			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14, Count
 		};
 
 		~InputManager();
@@ -88,6 +101,7 @@ namespace Input {
 		bool isSpecialKeyHold(int s);
 		bool isSpecialKeyUp(int s);
 
+		void UpdateKeyState(KeyState& key);
 
 		float HorizontalMovement();
 		float VerticalMovement();
@@ -154,6 +168,12 @@ namespace Input {
 		SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
 		SDL_Scancode ConvertToScancode(const KB_SPECIALKEYS& specialKey);
 
+
+		KB_LETTERS ConvertToLetter(const SDL_Scancode& scancode);
+		KB_NUMBERS ConvertToNumbers(const SDL_Scancode& scancode);
+		KB_SPECIALKEYS ConvertToSpecialKeys(const SDL_Scancode& scancode);
+
+
 		bool valid;
 
 		// Clear the state
@@ -163,6 +183,14 @@ namespace Input {
 		void update(const SDL_Event& event);
 
 		// --------- MOUSE & KB ------------
+
+		void letterPressed(KB_LETTERS letter);
+		void numberPressed(KB_NUMBERS letter);
+		void specialKeyPressed(KB_SPECIALKEYS letter);
+
+		void letterReleased(KB_LETTERS letter);
+		void numberReleased(KB_NUMBERS letter);
+		void specialKeyReleased(KB_SPECIALKEYS letter);
 
 		void onKeyDown();
 
@@ -184,10 +212,18 @@ namespace Input {
 		bool isMouseWheelEvent_;
 		bool isMouseButtonEventDown_;
 		bool isMouseButtonEventUp_;
+
+
 		Utilities::Vector2D mousePos_;
 		std::array<bool, 3> mbState_;
 		int wheelMotionY_;
 		const Uint8* kbState_;
+
+
+		//Keyboard keys
+		KeyState letters[(int)KB_LETTERS::Count];
+		KeyState numbers[(int)KB_NUMBERS::Count];
+		KeyState specialKeys[(int)KB_SPECIALKEYS::Count];
 
 
 		// ----- CONTROLLER -------

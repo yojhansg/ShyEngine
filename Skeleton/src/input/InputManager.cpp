@@ -44,6 +44,14 @@ namespace Input {
 		isMouseButtonEventUp_ = isMouseMotionEvent_ = isMouseWheelEvent_ = false;
 		isJoystickButtonDownEvent_ = isJoystickButtonUpEvent_ = false; joystickConnected_ = false;
 		joystickDisconnected_ = false;
+
+
+		for (int i = 0; i < (int)KB_LETTERS::Count; i++)
+			UpdateKeyState(letters[i]);
+		for (int i = 0; i < (int)KB_NUMBERS::Count; i++)
+			UpdateKeyState(numbers[i]);
+		for (int i = 0; i < (int)KB_SPECIALKEYS::Count; i++)
+			UpdateKeyState(specialKeys[i]);
 	}
 
 	void InputManager::update(const SDL_Event& event) {
@@ -65,9 +73,19 @@ namespace Input {
 		switch (event.type) {
 		case SDL_KEYDOWN:
 			onKeyDown();
+
+			letterPressed(ConvertToLetter(event.key.keysym.scancode));
+			numberPressed(ConvertToNumbers(event.key.keysym.scancode));
+			specialKeyPressed(ConvertToSpecialKeys(event.key.keysym.scancode));
+
 			break;
 		case SDL_KEYUP:
 			onKeyUp();
+
+			letterReleased(ConvertToLetter(event.key.keysym.scancode));
+			numberReleased(ConvertToNumbers(event.key.keysym.scancode));
+			specialKeyReleased(ConvertToSpecialKeys(event.key.keysym.scancode));
+
 			break;
 		case SDL_MOUSEWHEEL:
 			onMouseWheelMotion(event);
@@ -122,40 +140,40 @@ namespace Input {
 
 	// Letter
 	bool InputManager::isLetterDown(int l) {
-		return keyDownEvent() && kbState_[ConvertToScancode((KB_LETTERS)l)] == 1;
+		return letters[l] == KeyState::JustDown;
 	}
 
 	bool InputManager::isLetterHold(int l) {
-		return kbState_[ConvertToScancode((KB_LETTERS)l)] == 1;
+		return letters[l] == KeyState::JustDown || letters[l] == KeyState::Down;
 	}
 
 	bool InputManager::isLetterUp(int l) {
-		return keyUpEvent() && kbState_[ConvertToScancode((KB_LETTERS)l)] == 0;
+		return letters[l] == KeyState::Up;
 	}
 
 	// Number
 	bool InputManager::isNumberDown(int n) {
-		return keyDownEvent() && kbState_[ConvertToScancode((KB_NUMBERS)n)] == 1;
+		return numbers[n] == KeyState::JustDown;
 	}
 	bool InputManager::isNumberHold(int n) {
-		return kbState_[ConvertToScancode((KB_NUMBERS)n)] == 1;
+		return numbers[n] == KeyState::JustDown || numbers[n] == KeyState::Down;
 	}
 
 	bool InputManager::isNumberUp(int n) {
-		return keyUpEvent() && kbState_[ConvertToScancode((KB_NUMBERS)n)] == 0;
+		return numbers[n] == KeyState::Up;
 	}
 
 	// Special Key
 	bool InputManager::isSpecialKeyDown(int s) {
-		return keyDownEvent() && kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 1;
+		return specialKeys[s] == KeyState::JustDown;
 	}
 
 	bool InputManager::isSpecialKeyHold(int s) {
-		return kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 1;
+		return specialKeys[s] == KeyState::JustDown || specialKeys[s] == KeyState::Down;
 	}
 
 	bool InputManager::isSpecialKeyUp(int s) {
-		return keyUpEvent() && kbState_[ConvertToScancode((KB_SPECIALKEYS)s)] == 0;
+		return specialKeys[s] == KeyState::Up;
 	}
 
 	// With SDL Scancode enum
@@ -165,6 +183,60 @@ namespace Input {
 
 	bool InputManager::isKeyUp(SDL_Scancode key) {
 		return keyUpEvent() && kbState_[key] == 0;
+	}
+
+
+
+	void InputManager::letterPressed(KB_LETTERS letter)
+	{
+		if (letter == KB_LETTERS::Count) return;
+		if (letters[(int)letter] == KeyState::Down) return;
+
+		letters[(int)letter] = KeyState::JustDown;
+	}
+
+	void InputManager::numberPressed(KB_NUMBERS number)
+	{
+		if (number == KB_NUMBERS::Count) return;
+		if (numbers[(int)number] == KeyState::Down) return;
+
+		numbers[(int)number] = KeyState::JustDown;
+	}
+
+	void InputManager::specialKeyPressed(KB_SPECIALKEYS specialKey)
+	{
+		if (specialKey == KB_SPECIALKEYS::Count) return;
+		if (specialKeys[(int)specialKey] == KeyState::Down) return;
+
+		specialKeys[(int)specialKey] = KeyState::JustDown;
+	}
+
+	void InputManager::letterReleased(KB_LETTERS letter)
+	{
+		if (letter == KB_LETTERS::Count) return;
+		letters[(int)letter] = KeyState::Up;
+	}
+
+	void InputManager::numberReleased(KB_NUMBERS number)
+	{
+		if (number == KB_NUMBERS::Count) return;
+		numbers[(int)number] = KeyState::Up;
+	}
+
+	void InputManager::specialKeyReleased(KB_SPECIALKEYS specialKey)
+	{
+		if (specialKey == KB_SPECIALKEYS::Count) return;
+		specialKeys[(int)specialKey] = KeyState::Up;
+	}
+
+
+	void InputManager::UpdateKeyState(KeyState& key)
+	{
+		if (key == KeyState::JustDown)
+			key = KeyState::Down;
+
+		if (key == KeyState::Up)
+			key = KeyState::None;
 	}
 
 
@@ -352,6 +424,8 @@ namespace Input {
 	}
 
 	void InputManager::joystickDisconnected() {
+
+
 		joystickDisconnected_ = true;
 
 		numJoysticksConnected--;
@@ -454,10 +528,10 @@ namespace Input {
 	{
 		float dir = 0;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterDown((int)KB_LETTERS::A))
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
 			dir += -1;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterDown((int)KB_LETTERS::D))
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::D))
 			dir += 1;
 
 		//TODO: meter el input de mando
@@ -469,10 +543,13 @@ namespace Input {
 	{
 		float dir = 0;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterDown((int)KB_LETTERS::S))
+		if (isLetterDown((int)KB_LETTERS::S))
+			Console::Output::Print("jeje", "funciona");
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
 			dir += -1;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterDown((int)KB_LETTERS::W))
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
 			dir += 1;
 
 		//TODO: meter el input de mando
@@ -792,6 +869,75 @@ namespace Input {
 
 		return scancode;
 
+	}
+
+	Input::InputManager::KB_LETTERS Input::InputManager::ConvertToLetter(const SDL_Scancode& scancode)
+	{
+		if (scancode >= SDL_SCANCODE_A && scancode <= SDL_SCANCODE_Z) {
+
+			return (KB_LETTERS)(scancode - SDL_SCANCODE_A);
+		}
+
+		return KB_LETTERS::Count;
+	}
+
+	Input::InputManager::KB_NUMBERS Input::InputManager::ConvertToNumbers(const SDL_Scancode& scancode)
+	{
+
+		if (scancode >= SDL_SCANCODE_1 && scancode <= SDL_SCANCODE_0) {
+
+			return (KB_NUMBERS)(scancode - SDL_SCANCODE_1);
+		}
+
+
+		if (scancode >= SDL_SCANCODE_F1 && scancode <= SDL_SCANCODE_F12) {
+
+			return (KB_NUMBERS) ((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
+		}
+
+
+
+		return KB_NUMBERS::Count;
+	}
+
+	Input::InputManager::KB_SPECIALKEYS Input::InputManager::ConvertToSpecialKeys(const SDL_Scancode& scancode)
+	{
+		switch (scancode) {
+		case SDL_SCANCODE_RETURN :
+			return KB_SPECIALKEYS::RETURN;
+		case SDL_SCANCODE_ESCAPE:
+			return KB_SPECIALKEYS::ESCAPE;
+		case SDL_SCANCODE_BACKSPACE :
+			return KB_SPECIALKEYS::BACKSPACE;
+		case SDL_SCANCODE_TAB:
+			return KB_SPECIALKEYS::TAB;
+		case SDL_SCANCODE_SPACE:
+			return KB_SPECIALKEYS::SPACE;
+		case SDL_SCANCODE_RIGHT:
+			return KB_SPECIALKEYS::RIGHT;
+		case SDL_SCANCODE_LEFT:
+			return  KB_SPECIALKEYS::LEFT;
+		case SDL_SCANCODE_DOWN:
+			return KB_SPECIALKEYS::DOWN;
+		case SDL_SCANCODE_UP:
+			return KB_SPECIALKEYS::UP;
+		case SDL_SCANCODE_LCTRL:
+			return KB_SPECIALKEYS::LCTRL;
+		case SDL_SCANCODE_LSHIFT:
+			return KB_SPECIALKEYS::LSHIFT;
+		case SDL_SCANCODE_LALT:
+			return KB_SPECIALKEYS::LALT;
+		case SDL_SCANCODE_RCTRL:
+			return KB_SPECIALKEYS::RCTRL;
+		case SDL_SCANCODE_RSHIFT:
+			return KB_SPECIALKEYS::RSHIFT;
+		case SDL_SCANCODE_RALT:
+			return KB_SPECIALKEYS::RALT;
+		default:
+			break;
+		}
+
+		return KB_SPECIALKEYS::Count;
 	}
 
 }
