@@ -460,8 +460,8 @@ namespace Components {
 
 		if (pos != path.npos)
 		{
-			name = path.substr(pos);
-			path = path.substr(0, pos);
+			name = path.substr(pos + 1);
+			path = path.substr(0, pos + 1);
 		}
 		else
 		{
