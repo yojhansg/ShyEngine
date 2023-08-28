@@ -198,18 +198,35 @@ namespace ShyEditor {
 		}
 
 		if (PrefabManager::unusedIds.size() != 0) {
-			prefab->SetId(PrefabManager::unusedIds.back());
+			int  id = PrefabManager::unusedIds.back();
 			PrefabManager::unusedIds.pop_back();
+
+			if (IsIdAlreadyUsed(id)) {
+				AssignId(prefab);
+			}
+			else {
+				prefab->SetId(id);
+			}
 		}
 		else {
+			int id = PrefabManager::lastPrefabId;
+
 			//Ensure id is not being used already
-			while (instance->prefabs.find(PrefabManager::lastPrefabId) != instance->prefabs.end()) {
+			while (IsIdAlreadyUsed(id)) {
 				PrefabManager::lastPrefabId--;
 			}
 
 			prefab->SetId(PrefabManager::lastPrefabId);
 			PrefabManager::lastPrefabId--;
 		}
+	}
+
+	bool PrefabManager::IsIdAlreadyUsed(int id)
+	{
+		if (instance->prefabs.find(id) != instance->prefabs.end()) {
+			return true;
+		}
+		return false;
 	}
 
 	void PrefabManager::AddPrefab(Entity* prefab)
