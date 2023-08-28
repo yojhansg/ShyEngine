@@ -12,7 +12,6 @@
 Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
 */
 
-//TODO: terminar partida con escape que sea un parametro que se lea del fichero global
 namespace Utilities {
 	class Vector2D;
 }
@@ -43,6 +42,21 @@ namespace Input {
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
 
+		enum KB_LETTERS {
+			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
+			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25,
+		};
+
+		enum KB_NUMBERS {
+			Num1 = 0, Num2 = 1, Num3 = 2, Num4 = 3, Num5 = 4, Num6 = 5, Num7 = 6, Num8 = 7, Num9 = 8, Num0 = 9, F1 = 10, F2 = 11, 
+			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21
+		};
+
+		enum KB_SPECIALKEYS {
+			RETURN = 0, ESCAPE = 1, BACKSPACE = 2, TAB = 3, SPACE = 4, RIGHT = 5, LEFT = 6, DOWN = 7, UP = 8, LCTRL = 9, LSHIFT = 10,
+			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14,
+		};
+
 		~InputManager();
 
 		bool Valid() override;
@@ -50,17 +64,29 @@ namespace Input {
 		// Called in the main loop to check is window is closed
 		bool handleInput(SDL_Event& e);
 
+		bool isKeyDown(SDL_Scancode key);
+
+		bool isKeyUp(SDL_Scancode key);
+
 		// Keyboard
 	publish:
+
 		bool keyDownEvent();
 
 		bool keyUpEvent();
 
-	public:
+		bool isLetterDown(KB_LETTERS l);
 
-		bool isKeyDown(SDL_Scancode key);
+		bool isLetterUp(KB_LETTERS l);
 
-		bool isKeyUp(SDL_Scancode key);
+		bool isNumberDown(KB_NUMBERS n);
+
+		bool isNumberUp(KB_NUMBERS n);
+
+		bool isSpecialKeyDown(KB_SPECIALKEYS s);
+
+		bool isSpecialKeyUp(KB_SPECIALKEYS s);
+
 
 		// Mouse
 		bool mouseMotionEvent();
@@ -88,8 +114,6 @@ namespace Input {
 
 		bool isJoystickButtonEventUp();
 
-		bool getJoystickId();
-
 		Utilities::Vector2D getJoystickValue(CONTROLLERSTICK ct);
 
 		float getJoystickTriggerValue(CONTROLLERTRIGGER ct);
@@ -110,12 +134,20 @@ namespace Input {
 
 		bool joystickDisconnectedEvent();
 
+	public:
+
 		std::string getJoystickName();
+
+		bool getJoystickId();
 
 	private:
 
 		InputManager();
 		InputManager(bool closeWithEscape);
+
+		SDL_Scancode ConvertToScancode(const KB_LETTERS& letter);
+		SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
+		SDL_Scancode ConvertToScancode(const KB_SPECIALKEYS& specialKey);
 
 		bool valid;
 
@@ -127,9 +159,9 @@ namespace Input {
 
 		// --------- MOUSE & KB ------------
 
-		void onKeyDown(const SDL_Event& event);
+		void onKeyDown();
 
-		void onKeyUp(const SDL_Event& event);
+		void onKeyUp();
 
 		void onMouseMotion(const SDL_Event& event);
 

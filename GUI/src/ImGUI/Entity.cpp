@@ -1522,24 +1522,23 @@ namespace ShyEditor {
 
 	void Entity::AssignId(Entity* entity)
 	{
-		// Gets the list of entities in the scene
-		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
-
 		// See if we can reutilize an id
 		if (Entity::unusedIds.size() != 0) {
+			int  id = Entity::unusedIds.back();
+			Entity::unusedIds.pop_back();
 
-			if (IsIdAlreadyUsed(Entity::unusedIds.back())) {
-
-				Entity::unusedIds.pop_back();
+			if (IsIdAlreadyUsed(id)) {
 				AssignId(entity);
 			}
 			else {
-				entity->SetId(Entity::unusedIds.back());
+				entity->SetId(id);
 			}
 		}
 		else {
+			int id = Entity::lastId;
+
 			//Ensure id is not being used already
-			while (IsIdAlreadyUsed(Entity::lastId)) {
+			while (IsIdAlreadyUsed(id)) {
 				Entity::lastId++;
 			}
 
