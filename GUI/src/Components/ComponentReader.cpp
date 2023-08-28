@@ -209,6 +209,11 @@ namespace Components {
 						attribute.SetType(typeString, type);
 						attribute.SetValue(value);
 
+
+						if (sv.contains("enum"))
+							script.AddEnumAttribute(name, sv["enum"].get<std::string>());
+
+
 						script.AddAttribute(name, attribute);
 					}
 				}

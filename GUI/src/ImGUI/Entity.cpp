@@ -558,7 +558,7 @@ namespace ShyEditor {
 	void Entity::DrawTransformInEditor() {
 
 		ImVec2 previousPosition = ImVec2(transform->GetPosition());
-		ImVec2 currentPos = ImVec2(transform->GetPosition().x , -transform->GetPosition().y);
+		ImVec2 currentPos = ImVec2(transform->GetPosition().x, -transform->GetPosition().y);
 
 		ImGui::Text("Position");
 		if (ImGui::DragFloat2("##position_drag", (float*)&currentPos, 0.3f, 0.0f, 0.0f, "%.2f")) {
@@ -697,17 +697,6 @@ namespace ShyEditor {
 							int currentSelected = attr->value.value.valueFloat;
 							std::vector<std::string> strs = Components::ComponentManager::GetEnum(enums);
 
-							//size_t ini = 0;
-							//size_t pos = enums.find('/');
-							//while (pos != enums.npos) {
-
-							//	strs.push_back(enums.substr(ini, pos - ini));
-
-							//	ini = pos + 1;
-							//	pos = enums.find('/', ini);
-							//}
-							//strs.push_back(enums.substr(ini));
-
 
 							if (ImGui::BeginCombo(("##" + attributeName + it->first).c_str(), strs[currentSelected].c_str())) {
 
@@ -719,6 +708,7 @@ namespace ShyEditor {
 									if (ImGui::Selectable(strs[i].c_str(), isSelected))
 									{
 										attr->value.value.valueFloat = i;
+										changes = true;
 									}
 								}
 
@@ -821,7 +811,7 @@ namespace ShyEditor {
 										if (ImGui::AcceptDragDropPayload("Asset"))
 										{
 											attr->value.valueString = asset->relativePath;
-
+											changes = true;
 										}
 
 										ImGui::EndDragDropTarget();
@@ -905,8 +895,41 @@ namespace ShyEditor {
 					switch (attr->GetType()) {
 
 					case Components::AttributesType::FLOAT:
-						changes = DrawFloat(attributeName + it->first, attr);
-						break;
+
+					{
+						if (it->second.IsEnum(attributeName))
+						{
+
+							std::string enums = it->second.GetEnum(attributeName);
+
+
+							int currentSelected = attr->value.value.valueFloat;
+							std::vector<std::string> strs = Components::ComponentManager::GetEnum(enums);
+
+
+							if (ImGui::BeginCombo(("##" + attributeName + it->first).c_str(), strs[currentSelected].c_str())) {
+
+
+								for (int i = 0; i < strs.size(); i++) {
+
+									bool isSelected = i == currentSelected;
+
+									if (ImGui::Selectable(strs[i].c_str(), isSelected))
+									{
+										attr->value.value.valueFloat = i;
+										changes = true;
+									}
+								}
+
+
+								ImGui::EndCombo();
+							}
+
+						}
+						else
+							changes = DrawFloat(attributeName + it->first, attr);
+					}
+					break;
 					case Components::AttributesType::VECTOR2:
 						changes = DrawVector2(attributeName + it->first, attr);
 						break;

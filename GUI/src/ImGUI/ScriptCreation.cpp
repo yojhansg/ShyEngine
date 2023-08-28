@@ -125,12 +125,22 @@ namespace ShyEditor {
 					static_cast<ScriptCreationUtilities::ScriptInput*>(node);
 
 				if (input->IsSerialized())
-					serializedValues.push_back({
+				{
+
+					json serializationData = {
 
 						{"type", ::Components::Attribute::GetTypeStrFromAttributeType(input->GetAttrType())},
 						{"name", input->GetName()},
 						{"defaultValue", jsonNode["value"]}
-						});
+					};
+
+					if (input->IsEnum()) {
+						serializationData["enum"] = input->EnumType();
+					}
+
+
+					serializedValues.push_back(serializationData);
+				}
 
 				consts.push_back(jsonNode);
 
@@ -198,7 +208,7 @@ namespace ShyEditor {
 			return;
 		}
 
-		std::ifstream fileStream(editor->GetProjectInfo().path +  "\\Assets\\Scripts\\" + fileName + ".script");
+		std::ifstream fileStream(editor->GetProjectInfo().path + "\\Assets\\Scripts\\" + fileName + ".script");
 
 		if (!fileStream.good() || !json::accept(fileStream)) {
 			return;
@@ -397,7 +407,7 @@ namespace ShyEditor {
 		else if (attrType == Components::AttributesType::FLOAT) {
 			value.value.valueFloat = json["value"].get<float>();
 		}
-		else if(attrType == Components::AttributesType::VECTOR2) {
+		else if (attrType == Components::AttributesType::VECTOR2) {
 			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f", &value.value.valueVector2.x, &value.value.valueVector2.y);
 		}
 		else if (attrType == Components::AttributesType::STRING) {
@@ -409,10 +419,10 @@ namespace ShyEditor {
 		else if (attrType == Components::AttributesType::COLOR) {
 			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
 		}
-		else if(attrType == Components::AttributesType::ENTITY) {
+		else if (attrType == Components::AttributesType::ENTITY) {
 			value.value.entityIdx = -1;
 		}
-		else if(attrType == Components::AttributesType::CHAR) {
+		else if (attrType == Components::AttributesType::CHAR) {
 			value.value.valueChar = '\0';
 		}
 

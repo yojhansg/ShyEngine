@@ -432,6 +432,21 @@ namespace Components {
 		return root.dump(2);
 	}
 
+	void Script::AddEnumAttribute(const std::string& attribute, const std::string& enumCategory)
+	{
+		enums[attribute] = enumCategory;
+	}
+
+	bool Script::IsEnum(const std::string& attribute)
+	{
+		return enums.contains(attribute);
+	}
+
+	std::string Script::GetEnum(const std::string& attribute)
+	{
+		return enums[attribute];
+	}
+
 	Script Script::fromJson(std::string name, std::string json) {
 		Script script(name);
 

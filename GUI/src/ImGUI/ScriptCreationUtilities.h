@@ -377,16 +377,20 @@ namespace ShyEditor {
 			*/
 			void SetSerialized(bool value, const std::string& str);
 
+			/*
+				Devuelve el tipo de atributo del nodo
+			*/
+			::Components::AttributesType GetAttrType();
+
 
 			/*
 				Marca el nodo como tipo enumerado
 			*/
 			void SetEnum(const std::string& enumStr);
 
-			/*
-				Devuelve el tipo de atributo del nodo
-			*/
-			::Components::AttributesType GetAttrType();
+			bool IsEnum();
+
+			std::string EnumType();
 
 		private:
 

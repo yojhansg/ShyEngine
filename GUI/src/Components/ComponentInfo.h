@@ -157,6 +157,7 @@ namespace Components {
 
 		std::string name;
 		std::unordered_map<std::string, Attribute> attributes;
+		std::unordered_map<std::string, std::string> enums;
 
 	public:
 
@@ -168,6 +169,12 @@ namespace Components {
 		std::unordered_map<std::string, Attribute>& GetAllAttributes();
 
 		std::string ToJson();
+
+		void AddEnumAttribute(const std::string& attribute, const std::string& enumCategory);
+
+		bool IsEnum(const std::string& attribute);
+		std::string GetEnum(const std::string& attribute);
+
 
 		static Script fromJson(std::string name, std::string json);
 	};

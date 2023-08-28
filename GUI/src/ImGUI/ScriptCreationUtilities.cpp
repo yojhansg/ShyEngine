@@ -1107,6 +1107,7 @@ namespace ShyEditor {
 	ScriptCreationUtilities::ScriptMenuBar::ScriptMenuBar(ScriptCreation* creator) : creator(creator)
 	{
 		showClosePopup = false;
+		showNodeSearch = false;
 		nameBuffer[0] = '\0';
 		nameSearch[0] = '\0';
 	}
@@ -1611,6 +1612,16 @@ namespace ShyEditor {
 	::Components::AttributesType ScriptCreationUtilities::ScriptInput::GetAttrType()
 	{
 		return attrType;
+	}
+
+	bool ScriptCreationUtilities::ScriptInput::IsEnum()
+	{
+		return isEnum;
+	}
+
+	std::string ScriptCreationUtilities::ScriptInput::EnumType()
+	{
+		return enumStr;
 	}
 
 	ScriptCreationUtilities::ScriptFork::ScriptFork(Fork type) : forkType(type)

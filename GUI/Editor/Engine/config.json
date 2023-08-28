@@ -9,7 +9,7 @@
     "fullScreen": false,
     "game": "FlappyBird",
     "gravity": "0.000000, 9.810000",
-    "initialScene": "Scene",
+    "initialScene": "Scene.scene",
     "layers": [
         "Default"
     ],
@@ -304,12 +304,13 @@
         ]
     ],
     "path": "C:\\Users\\sryoj\\Documents\\ShyEngine\\FlappyBird\\Assets",
+    "projectFilePath": "C:\\Users\\sryoj\\Documents\\ShyEngine\\FlappyBird\\FlappyBird.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
     "windowIcon": "",
-    "windowSize": "1920, 1080",
+    "windowSize": "600, 1000",
     "windowTitle": "FlappyBird"
 }

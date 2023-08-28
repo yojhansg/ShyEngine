@@ -381,6 +381,10 @@ namespace ShyEditor {
 		bool inScene = IsMouseHoveringWindow();
 		auto mouse = MousePositionInScene();
 
+		mouse.x += Preferences::GetData().width * 0.5f;
+		mouse.y += Preferences::GetData().height * 0.5f;
+
+
 		float cameraScale = sceneCamera->GetScale();
 
 		for (auto overlayEntity : overlays) {
@@ -1010,15 +1014,16 @@ namespace ShyEditor {
 		float gameSizeX = Preferences::GetData().width;
 		float gameSizeY = Preferences::GetData().height;
 
-		float width = gameSizeX * sceneCamera->GetScale();
-		float height = gameSizeY * sceneCamera->GetScale();
+		float cameraScale = sceneCamera->GetScale();
+
+		float width = gameSizeX * cameraScale;
+		float height = gameSizeY * cameraScale;
 
 
 		sceneCamera->CenterPosition(position.x, position.y);
 
-
-		x = position.x;
-		y = position.y;
+		x = position.x - gameSizeX * 0.5f * cameraScale;
+		y = position.y - gameSizeY * 0.5f * cameraScale;
 		w = width;
 		h = height;
 	}

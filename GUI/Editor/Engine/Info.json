@@ -14,6 +14,19 @@
 
         "Fit": [
             "Clamp", "Overflow","WrapClamp","WrapOverflow","Expand"
+        ],
+
+        "MouseButton": [
+
+        ],
+        "ControllerStick": [
+
+        ],
+        "ControllerTrigger":[
+
+        ],
+        "PS4ControllerButtons":[
+            
         ]
     },
 
