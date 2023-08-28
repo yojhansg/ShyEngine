@@ -155,21 +155,19 @@ namespace Components {
 
 	const std::vector<std::string>& ComponentManager::GetEnum(cstring name)
 	{
-		/*auto v = std::vector<std::string>();
+		return instance->enums[name];
+	}
 
+	std::vector<std::string> ComponentManager::GetEnumNames()
+	{
+		auto v = std::vector<std::string>();
 
-		int size = std::stoi(instance->info["enums_" + name + "_Count"]);
+		for (auto& it : instance->enums) {
 
-		for (int i = 0; i < size; i++) {
-
-			v.push_back(instance->info["enums_" + name + "_" + std::to_string(i)]);
+			v.push_back(it.first);
 		}
 
-
-		return v;*/
-
-
-		return instance->enums[name];
+		return v;
 	}
 
 

@@ -291,6 +291,12 @@ namespace ShyEditor {
 			}
 
 
+			if (constNode.contains("enum") && constNode["enum"].get<bool>()) {
+
+				input->SetEnum(constNode["enumStr"].get<std::string>());
+			}
+
+
 			SetNode(input->GetId(), input);
 		}
 
