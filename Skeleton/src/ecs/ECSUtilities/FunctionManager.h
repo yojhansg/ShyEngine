@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Aug 28 15:33:41 2023
+//Creation time : Mon Aug 28 18:43:23 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -105,8 +105,29 @@ Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const
 Scripting::Variable PhysicBody_getFriction(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setBounciness(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getOffSet(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_addOffSet(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setRotationFreezed(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_isRotationFreezed(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setBodyType(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getBodyType(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setLinearDrag(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getLinearDrag(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setAngularDrag(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getAngularDrag(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setGravityScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_setAngularVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getAngularVelocity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyForce(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyForceToCenter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyTorque(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyLinearImpulse(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyLinearImpulseToCenter(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_applyAngularImpulse(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_loadSound(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_play(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundEmitter_pause(std::vector<Scripting::Variable>const& vec);

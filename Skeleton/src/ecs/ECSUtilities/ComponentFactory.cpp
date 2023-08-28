@@ -5,6 +5,7 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
+#include "Components/Movement.h"
 #include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
@@ -24,6 +25,7 @@ ComponentFactory::ComponentFactory(){
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
+	components["Movement"] = &ComponentFactory::CreateMovement;
 	components["MusicEmitter"] = &ComponentFactory::CreateMusicEmitter;
 	components["Overlay"] = &ComponentFactory::CreateOverlay;
 	components["OverlayButton"] = &ComponentFactory::CreateOverlayButton;
@@ -57,6 +59,10 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateImage(){
 		return new ECS::Image();
+
+}
+	ECS::Component* ComponentFactory::CreateMovement(){
+		return new ECS::Movement();
 
 }
 	ECS::Component* ComponentFactory::CreateMusicEmitter(){

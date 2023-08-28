@@ -197,6 +197,7 @@ void Engine::close() {
 
 	resourcesManager->close();
 	physicsManager->close();
+	inputManager->close();
 	rendererManager->close();
 	sceneManager->close();
 

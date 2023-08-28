@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Aug 28 15:33:41 2023
+//Creation time: Mon Aug 28 18:43:23 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -23,6 +23,7 @@
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
+#include <Components/Movement.h>
 #include <Components/MusicEmitter.h>
 #include <Components/Overlay.h>
 #include <Components/OverlayButton.h>
@@ -137,8 +138,29 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getFriction",PhysicBody_getFriction);
 	map.emplace("PhysicBody_setBounciness",PhysicBody_setBounciness);
 	map.emplace("PhysicBody_getBounciness",PhysicBody_getBounciness);
+	map.emplace("PhysicBody_getOffSet",PhysicBody_getOffSet);
+	map.emplace("PhysicBody_addOffSet",PhysicBody_addOffSet);
+	map.emplace("PhysicBody_setRotationFreezed",PhysicBody_setRotationFreezed);
+	map.emplace("PhysicBody_isRotationFreezed",PhysicBody_isRotationFreezed);
+	map.emplace("PhysicBody_setBodyType",PhysicBody_setBodyType);
+	map.emplace("PhysicBody_getBodyType",PhysicBody_getBodyType);
+	map.emplace("PhysicBody_setLinearDrag",PhysicBody_setLinearDrag);
+	map.emplace("PhysicBody_getLinearDrag",PhysicBody_getLinearDrag);
+	map.emplace("PhysicBody_setAngularDrag",PhysicBody_setAngularDrag);
+	map.emplace("PhysicBody_getAngularDrag",PhysicBody_getAngularDrag);
+	map.emplace("PhysicBody_setGravityScale",PhysicBody_setGravityScale);
+	map.emplace("PhysicBody_getGravityScale",PhysicBody_getGravityScale);
+	map.emplace("PhysicBody_setCollisionLayer",PhysicBody_setCollisionLayer);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
+	map.emplace("PhysicBody_setAngularVelocity",PhysicBody_setAngularVelocity);
+	map.emplace("PhysicBody_getAngularVelocity",PhysicBody_getAngularVelocity);
+	map.emplace("PhysicBody_applyForce",PhysicBody_applyForce);
+	map.emplace("PhysicBody_applyForceToCenter",PhysicBody_applyForceToCenter);
+	map.emplace("PhysicBody_applyTorque",PhysicBody_applyTorque);
+	map.emplace("PhysicBody_applyLinearImpulse",PhysicBody_applyLinearImpulse);
+	map.emplace("PhysicBody_applyLinearImpulseToCenter",PhysicBody_applyLinearImpulseToCenter);
+	map.emplace("PhysicBody_applyAngularImpulse",PhysicBody_applyAngularImpulse);
 	map.emplace("SoundEmitter_loadSound",SoundEmitter_loadSound);
 	map.emplace("SoundEmitter_play",SoundEmitter_play);
 	map.emplace("SoundEmitter_pause",SoundEmitter_pause);
@@ -1906,6 +1928,241 @@ Scripting::Variable PhysicBody_getBounciness(std::vector<Scripting::Variable>con
 	float ret = self->getBounciness();
 	return ret;
 }
+Scripting::Variable PhysicBody_getOffSet(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getOffSet", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getOffSet", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getOffSet();
+	return ret;
+}
+Scripting::Variable PhysicBody_addOffSet(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_addOffSet", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_addOffSet", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_addOffSet", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_addOffSet", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->addOffSet(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_setRotationFreezed(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setRotationFreezed", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Bool){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setRotationFreezed", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setRotationFreezed", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setRotationFreezed(vec[1].value.Bool);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_isRotationFreezed(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_isRotationFreezed", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_isRotationFreezed", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	bool ret = self->isRotationFreezed();
+	return ret;
+}
+Scripting::Variable PhysicBody_setBodyType(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setBodyType", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setBodyType", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setBodyType", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setBodyType(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_getBodyType(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getBodyType", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getBodyType", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	int ret = self->getBodyType();
+	return ret;
+}
+Scripting::Variable PhysicBody_setLinearDrag(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setLinearDrag", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setLinearDrag", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setLinearDrag", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setLinearDrag(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_getLinearDrag(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getLinearDrag", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getLinearDrag", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getLinearDrag();
+	return ret;
+}
+Scripting::Variable PhysicBody_setAngularDrag(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularDrag", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularDrag", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularDrag", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setAngularDrag(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_getAngularDrag(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getAngularDrag", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getAngularDrag", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getAngularDrag();
+	return ret;
+}
+Scripting::Variable PhysicBody_setGravityScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setGravityScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setGravityScale", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setGravityScale", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setGravityScale(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getGravityScale", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getGravityScale", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getGravityScale();
+	return ret;
+}
+Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setCollisionLayer", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::String){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setCollisionLayer", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setCollisionLayer", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setCollisionLayer(vec[1].str);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -1945,6 +2202,171 @@ Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable
 	}
 	Vector2D ret = self->getLinearVelocity();
 	return ret;
+}
+Scripting::Variable PhysicBody_setAngularVelocity(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularVelocity", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularVelocity", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_setAngularVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->setAngularVelocity(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_getAngularVelocity(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getAngularVelocity", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getAngularVelocity", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getAngularVelocity();
+	return ret;
+}
+Scripting::Variable PhysicBody_applyForce(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForce", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForce", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForce", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForce", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyForce(vec[1].vector, vec[2].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_applyForceToCenter(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForceToCenter", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForceToCenter", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyForceToCenter", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyForceToCenter(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_applyTorque(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyTorque", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyTorque", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyTorque", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyTorque(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_applyLinearImpulse(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulse", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulse", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulse", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulse", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyLinearImpulse(vec[1].vector, vec[2].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_applyLinearImpulseToCenter(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulseToCenter", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulseToCenter", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyLinearImpulseToCenter", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyLinearImpulseToCenter(vec[1].vector);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable PhysicBody_applyAngularImpulse(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyAngularImpulse", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyAngularImpulse", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_applyAngularImpulse", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	self->applyAngularImpulse(vec[1].value.Float);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable SoundEmitter_loadSound(std::vector<Scripting::Variable>const& vec){
 

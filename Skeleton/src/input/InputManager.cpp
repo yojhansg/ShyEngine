@@ -2,6 +2,8 @@
 #include <Vector2D.h>
 #include <ConsoleManager.h>
 
+#include "CheckML.h"
+
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
 #define TRIGGER_DEADZONE 1000
@@ -302,6 +304,7 @@ namespace Input {
 	}
 
 	void InputManager::removeJoystick(int joystick_id) {
+
 		SDL_JoystickClose(joysticks[joystick_id]);
 
 		joysticks.pop_back();
@@ -332,7 +335,9 @@ namespace Input {
 	}
 
 	void InputManager::removeJoysticks() {
-		for (int i = numJoysticksConnected - 1; i >= 0; i--) removeJoystick(i);
+		for (int i = numJoysticksConnected - 1; i >= 0; i--) {
+			removeJoystick(i);
+		}
 	}
 
 	void InputManager::joystickConnected() {
@@ -480,17 +485,20 @@ namespace Input {
 		return dir;
 	}
 
-	Utilities::Vector2D InputManager::getJoystickValue(int intct) {
+
+	// With ID
+
+	Utilities::Vector2D InputManager::getJoystickValue(int intct, int id) {
 
 		CONTROLLERSTICK ct = (CONTROLLERSTICK) intct;
 		Utilities::Vector2D v = Utilities::Vector2D();
 
 		switch (ct) {
 		case CONTROLLERSTICK::LEFT_STICK:
-			v = joystickValues[joystickId].first;
+			v = joystickValues[id].first;
 			break;
 		case CONTROLLERSTICK::RIGHT_STICK:
-			v = joystickValues[joystickId].second;
+			v = joystickValues[id].second;
 			break;
 		default:
 			break;
@@ -499,17 +507,17 @@ namespace Input {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	float InputManager::getJoystickTriggerValue(int intct) {
+	float InputManager::getJoystickTriggerValue(int intct, int id) {
 
 		CONTROLLERTRIGGER ct = (CONTROLLERTRIGGER)intct;
 		float v = 0.0f;
 
 		switch (ct) {
 		case CONTROLLERTRIGGER::LEFT_TRIGGER:
-			v = joystickTriggerValues[joystickId].first;
+			v = joystickTriggerValues[id].first;
 			break;
 		case CONTROLLERTRIGGER::RIGHT_TRIGGER:
-			v = joystickTriggerValues[joystickId].second;
+			v = joystickTriggerValues[id].second;
 			break;
 		default:
 			break;
@@ -518,34 +526,34 @@ namespace Input {
 		return v / (float)(MAX_STICK_VALUE);
 	}
 
-	bool InputManager::getJoystickButtonState(int button) {
+	bool InputManager::getJoystickButtonState(int button, int id) {
 
-		return joystickButtonStates[joystickId][button];
+		return joystickButtonStates[id][button];
 	}
 
-	int InputManager::getJoysticksNumButtons() {
+	int InputManager::getJoysticksNumButtons(int id) {
 
-		return joystickNumButtons[joystickId];
+		return joystickNumButtons[id];
 	}
 
-	bool InputManager::isLeftJoystickMotion() {
+	bool InputManager::isLeftJoystickMotion(int id) {
 
-		return joystickValues[joystickId].first->getX() != 0 || joystickValues[joystickId].first->getY() != 0;
+		return joystickValues[id].first->getX() != 0 || joystickValues[id].first->getY() != 0;
 	}
 
-	bool InputManager::isRightJoystickMotion() {
+	bool InputManager::isRightJoystickMotion(int id) {
 
-		return joystickValues[joystickId].second->getX() != 0 || joystickValues[joystickId].second->getY() != 0;
+		return joystickValues[id].second->getX() != 0 || joystickValues[id].second->getY() != 0;
 	}
 
-	bool InputManager::isLeftTriggerMotion() {
+	bool InputManager::isLeftTriggerMotion(int id) {
 
-		return joystickTriggerValues[joystickId].first != 0;
+		return joystickTriggerValues[id].first != 0;
 	}
 
-	bool InputManager::isRightTriggerMotion() {
+	bool InputManager::isRightTriggerMotion(int id) {
 
-		return joystickTriggerValues[joystickId].second != 0;
+		return joystickTriggerValues[id].second != 0;
 	}
 
 	bool InputManager::joystickConnectedEvent() {
@@ -553,14 +561,50 @@ namespace Input {
 		return joystickConnected_;
 	}
 
+
+	// With out ID
+
+	Utilities::Vector2D InputManager::getJoystickValue(int ct) {
+		return getJoystickValue(ct, joystickId);
+	}
+
+	float InputManager::getJoystickTriggerValue(int ct) {
+		return getJoystickTriggerValue(ct, joystickId);
+	}
+
+	bool InputManager::getJoystickButtonState(int button) {
+		return getJoystickButtonState(button, joystickId);
+	}
+
+	int InputManager::getJoysticksNumButtons() {
+		return getJoystickButtonState(joystickId);
+	}
+
+	bool InputManager::isLeftJoystickMotion() {
+		return isLeftJoystickMotion(joystickId);
+	}
+
+	bool InputManager::isRightJoystickMotion() {
+		return isRightJoystickMotion(joystickId);
+	}
+
+	bool InputManager::isLeftTriggerMotion() {
+		return isLeftTriggerMotion(joystickId);
+	}
+
+	bool InputManager::isRightTriggerMotion() {
+		return isRightTriggerMotion(joystickId);
+	}
+
+
 	bool InputManager::joystickDisconnectedEvent() {
 
 		return joystickDisconnected_;
 	}
 
-	std::string InputManager::getJoystickName() {
+	std::string InputManager::getJoystickName(int id) {
 
-		return joystickNames[joystickId];
+		return joystickNames[id];
 	}
 
 

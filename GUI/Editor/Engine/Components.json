@@ -158,6 +158,14 @@
     "BoxBody": {
         "attributes": [
             {
+                "name": "size",
+                "type": "Pair"
+            },
+            {
+                "name": "offSet",
+                "type": "Pair"
+            },
+            {
                 "name": "bodyType",
                 "type": "Number"
             },
@@ -190,6 +198,14 @@
                 "type": "Number"
             },
             {
+                "name": "size",
+                "type": "Pair"
+            },
+            {
+                "name": "offSet",
+                "type": "Pair"
+            },
+            {
                 "name": "bodyType",
                 "type": "Number"
             },
@@ -217,6 +233,14 @@
     },
     "EdgeBody": {
         "attributes": [
+            {
+                "name": "size",
+                "type": "Pair"
+            },
+            {
+                "name": "offSet",
+                "type": "Pair"
+            },
             {
                 "name": "bodyType",
                 "type": "Number"
@@ -352,6 +376,14 @@
                 ],
                 "name": "setFlipMode",
                 "return": "void"
+            }
+        ]
+    },
+    "Movement": {
+        "attributes": [
+            {
+                "name": "velocity",
+                "type": "Number"
             }
         ]
     },
@@ -1550,6 +1582,14 @@
     "PhysicBody": {
         "attributes": [
             {
+                "name": "size",
+                "type": "Pair"
+            },
+            {
+                "name": "offSet",
+                "type": "Pair"
+            },
+            {
                 "name": "bodyType",
                 "type": "Number"
             },
@@ -1652,6 +1692,168 @@
                     {
                         "name": "entity",
                         "type": "Entity"
+                    }
+                ],
+                "name": "getOffSet",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "x",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "y",
+                        "type": "Number"
+                    }
+                ],
+                "name": "addOffSet",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "freezed",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "setRotationFreezed",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "isRotationFreezed",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "type",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setBodyType",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getBodyType",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "drag",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setLinearDrag",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getLinearDrag",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "drag",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setAngularDrag",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getAngularDrag",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "scale",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setGravityScale",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getGravityScale",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "layerName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "setCollisionLayer",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
                     },
                     {
                         "name": "x",
@@ -1674,6 +1876,122 @@
                 ],
                 "name": "getLinearVelocity",
                 "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setAngularVelocity",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getAngularVelocity",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "force",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "point",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "applyForce",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "force",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "applyForceToCenter",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "torque",
+                        "type": "Number"
+                    }
+                ],
+                "name": "applyTorque",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "impulse",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "point",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "applyLinearImpulse",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "impulse",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "applyLinearImpulseToCenter",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "impulse",
+                        "type": "Number"
+                    }
+                ],
+                "name": "applyAngularImpulse",
+                "return": "void"
             }
         ]
     },

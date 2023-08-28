@@ -5,6 +5,7 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
+#include "Components/Movement.h"
 #include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
@@ -24,6 +25,7 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
 	reflectionMethods["EdgeBody"] = &ClassReflection::ReflectEdgeBody;
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
+	reflectionMethods["Movement"] = &ClassReflection::ReflectMovement;
 	reflectionMethods["MusicEmitter"] = &ClassReflection::ReflectMusicEmitter;
 	reflectionMethods["Overlay"] = &ClassReflection::ReflectOverlay;
 	reflectionMethods["OverlayButton"] = &ClassReflection::ReflectOverlayButton;
@@ -64,6 +66,10 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		BoxBody* self = static_cast<BoxBody*>(selfComp);
+		if(map.contains("size"))
+			self->size = map.at("size");
+		if(map.contains("offSet"))
+			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))
@@ -82,6 +88,10 @@ ClassReflection::ClassReflection(){
 		CircleBody* self = static_cast<CircleBody*>(selfComp);
 		if(map.contains("radius"))
 			self->radius = std::stof(map.at("radius"));
+		if(map.contains("size"))
+			self->size = map.at("size");
+		if(map.contains("offSet"))
+			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))
@@ -98,6 +108,10 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		EdgeBody* self = static_cast<EdgeBody*>(selfComp);
+		if(map.contains("size"))
+			self->size = map.at("size");
+		if(map.contains("offSet"))
+			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))
@@ -116,6 +130,12 @@ ClassReflection::ClassReflection(){
 		Image* self = static_cast<Image*>(selfComp);
 		if(map.contains("fileName"))
 			self->fileName = map.at("fileName");
+
+}
+	void ClassReflection::ReflectMovement(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
+		Movement* self = static_cast<Movement*>(selfComp);
+		if(map.contains("velocity"))
+			self->velocity = std::stof(map.at("velocity"));
 
 }
 	void ClassReflection::ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -334,6 +354,10 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectPhysicBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		PhysicBody* self = static_cast<PhysicBody*>(selfComp);
+		if(map.contains("size"))
+			self->size = map.at("size");
+		if(map.contains("offSet"))
+			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
 			self->bodyType = std::stoi(map.at("bodyType"));
 		if(map.contains("mass"))

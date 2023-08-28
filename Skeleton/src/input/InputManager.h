@@ -119,29 +119,54 @@ namespace Input {
 
 		bool isJoystickButtonEventUp();
 
-		Utilities::Vector2D getJoystickValue(int ct);
+		// With id
 
-		float getJoystickTriggerValue(int ct);
+			Utilities::Vector2D getJoystickValue(int ct, int id);
+
+			float getJoystickTriggerValue(int ct, int id);
 		
-		bool getJoystickButtonState(int button);
+			bool getJoystickButtonState(int button, int id);
 
-		int getJoysticksNumButtons();
+			int getJoysticksNumButtons(int id);
 
-		bool isLeftJoystickMotion();
+			bool isLeftJoystickMotion(int id);
 
-		bool isRightJoystickMotion();
+			bool isRightJoystickMotion(int id);
 
-		bool isLeftTriggerMotion();
+			bool isLeftTriggerMotion(int id);
 
-		bool isRightTriggerMotion();
+			bool isRightTriggerMotion(int id);
+
+
+		// Without id
+
+			Utilities::Vector2D getJoystickValue(int ct);
+
+			float getJoystickTriggerValue(int ct);
+
+			bool getJoystickButtonState(int button);
+
+			int getJoysticksNumButtons();
+
+			bool isLeftJoystickMotion();
+
+			bool isRightJoystickMotion();
+
+			bool isLeftTriggerMotion();
+
+			bool isRightTriggerMotion();
+
+
 
 		bool joystickConnectedEvent();
 
 		bool joystickDisconnectedEvent();
 
+
+
 	public:
 
-		std::string getJoystickName();
+		std::string getJoystickName(int id);
 
 		bool getJoystickId();
 
