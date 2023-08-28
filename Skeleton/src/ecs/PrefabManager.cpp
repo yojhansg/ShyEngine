@@ -57,15 +57,15 @@ namespace ECS {
 				return;
 			}
 
-			// If the JSON doesn't contain the "withOverlay" attribute
-			if (!pref.contains("withOverlay")) {
+			// If the JSON doesn't contain the "isTransform" attribute
+			if (!pref.contains("isTransform")) {
 				Console::Output::PrintError("Load prefabs error", "The prefabs file doesn't have a valid format.");
 				return;
 			}
 
-			bool wOverlay = pref["withOverlay"].get<bool>();
+			bool isTransform = pref["isTransform"].get<bool>();
 
-			if (wOverlay)
+			if (isTransform)
 				prefabsWithOverlay.insert(std::make_pair(pref["name"].get<std::string>(), pref));
 			else
 				prefabsWithTransform.insert(std::make_pair(pref["name"].get<std::string>(), pref));

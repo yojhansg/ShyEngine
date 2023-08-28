@@ -74,6 +74,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("layerName"))
+			self->layerName = map.at("layerName");
 
 }
 	void ClassReflection::ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -90,6 +92,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("layerName"))
+			self->layerName = map.at("layerName");
 
 }
 	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -104,6 +108,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("layerName"))
+			self->layerName = map.at("layerName");
 
 }
 	void ClassReflection::ReflectImage(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -338,6 +344,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("layerName"))
+			self->layerName = map.at("layerName");
 
 }
 	void ClassReflection::ReflectSoundEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

@@ -176,7 +176,7 @@ namespace Physics {
 
 		for (int i = 0; i < layersCount; i++) {
 
-			if (collision_matrix[layerN][i])
+			if (collision_matrix[layerN][layersCount - 1 - i])
 				flags += std::pow(2, i);
 
 		}

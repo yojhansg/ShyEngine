@@ -176,6 +176,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "layerName",
+                "type": "Text"
             }
         ]
     },
@@ -204,6 +208,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "layerName",
+                "type": "Text"
             }
         ]
     },
@@ -228,6 +236,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "layerName",
+                "type": "Text"
             }
         ]
     },
@@ -1556,6 +1568,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "layerName",
+                "type": "Text"
             }
         ],
         "methods": [

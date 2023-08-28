@@ -534,6 +534,7 @@ namespace ShyEditor {
 		instance->data.gravity_y = std::stof(y);
 		
 		instance->data.layers = preferences["layers"];
+		instance->nLayers = instance->data.layers.size();
 		instance->data.collisionMatrix = preferences["matrix"];
 		instance->data.debugPhysics = preferences["debugPhysics"];
 

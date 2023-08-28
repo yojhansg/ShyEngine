@@ -99,6 +99,7 @@ namespace ECS {
     publish:
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();
+
     public:
 
         // Force methods
@@ -138,6 +139,9 @@ namespace ECS {
         reflect bool trigger;   
         reflect bool freezeRotation;
 
+        // Collision Layer
+        reflect std::string layerName;
+
         // Box2d properties
         b2BodyDef* bodyDef;
         b2Body* body;
@@ -154,9 +158,6 @@ namespace ECS {
         Vector2D lastPositionSync;
         float lastRotationSync;
         Vector2D lastScaleInfo;
-
-        // Collision Layer
-        std::string layerName;
 
         // Collison/Trigger Stay
         bool onCollisonStay;
