@@ -21,52 +21,175 @@
 %-------------------------------------------------------------------
 \label{cap2:sec:motores}
 
-Explicar qué es un motor de videojuegos 2D.
+Un motor de videojuegos 2D se refiere a un sistema de software integral diseñado para facilitar el desarrollo, diseño y ejecución de 
+videojuegos que se desarrollan en un entorno bidimensional. Este componente tecnológico proporciona un conjunto de herramientas y 
+funcionalidades predefinidas que permiten a los desarrolladores crear juegos visuales en dos dimensiones de manera eficiente y efectiva. 
+Los motores de videojuegos 2D son esenciales para el proceso de producción de juegos, ya que simplifican tareas técnicas complejas y permiten 
+a los creadores centrarse en la creatividad y la jugabilidad.
+
+Los puntos clave que caracterizan un motor de videojuegos 2D incluyen:
+
+\begin{itemize}
+
+    \item \texttt{Gestión de Gráficos y Renderizado}: El motor maneja la representación visual de los elementos del juego, 
+    como personajes, escenarios y objetos, asegurando la colocación precisa y la superposición adecuada de estos componentes 
+    en el espacio bidimensional. Proporciona herramientas para el dibujo, la animación y el manejo de capas gráficas.
+
+    \item \texttt{Física y Colisiones}: Los motores 2D permiten simular efectos físicos realistas, como gravedad, movimiento 
+    y colisiones entre objetos. Esto permite que los elementos del juego interactúen de manera coherente y creíble, mejorando la 
+    experiencia de juego.
+
+    \item \texttt{Entrada del Usuario}: Los motores de videojuegos 2D ofrecen una interfaz para capturar y procesar la entrada del jugador, 
+    como pulsaciones de teclas y movimientos del mouse. Estos datos se utilizan para controlar la interacción del jugador con el juego.
+    
+    \item \texttt{Lógica del Juego}: Incluye el conjunto de reglas, mecánicas y comportamientos que definen la jugabilidad del videojuego. 
+    El motor facilita la implementación de esta lógica y proporciona estructuras para gestionar eventos y estados del juego.
+
+    \item \texttt{Gestión de Escenas y Niveles}: Los motores 2D permiten la creación y gestión de múltiples escenas o niveles dentro de 
+    un juego. Esto posibilita la transición suave entre diferentes partes del juego y la estructuración efectiva de la experiencia del jugador.
+    
+    \item \texttt{Sonido y Música}:  Los motores de videojuegos 2D permiten la integración de efectos de sonido y música para enriquecer la 
+    atmósfera del juego y proporcionar retroalimentación auditiva al jugador.
+
+
+\end{itemize}
+
 
 %-------------------------------------------------------------------
 \section{Referencias de motores de videojuegos 2D}
 %-------------------------------------------------------------------
 \label{cap2:sec:referencias}
 
-Hablar sobre los motores que hemos tomado como referencia.
-
 %-------------------------------------------------------------------
 \section{Editores en motores de videojuegos}
 %-------------------------------------------------------------------
 \label{cap2:sec:editores}
 
-Explicar qué es un editor en el ámbito de motores de videojuegos y qué importancia tienen para el usuario.
+Un editor de videojuegos es una herramienta de software que facilita la creación, modificación y organización de diversos 
+elementos que componen un videojuego. Este componente tecnológico proporciona una interfaz visual y funcionalidades específicas que 
+permiten a los desarrolladores y diseñadores trabajar en la construcción y edición de contenido de juegos de manera eficiente y efectiva. 
+Los editores de videojuegos son esenciales en el proceso de producción, ya que permiten la creación y personalización de niveles, personajes, 
+escenarios y otros componentes visuales y jugables.
+
+\begin{itemize}
+
+    \item \texttt{Creación de Escenarios y Niveles}: Los editores de videojuegos ofrecen herramientas para diseñar y crear los entornos 
+    jugables en los que se desenvuelven los juegos. Esto incluye la disposición de elementos, la configuración de obstáculos y la definición 
+    de rutas.
+
+    \item \texttt{Diseño de Personajes y Objetos}: Los editores permiten la creación y personalización de personajes jugables, personajes 
+    no jugables (PNJ), enemigos, objetos y elementos interactivos. Esto puede incluir la definición de apariencia, comportamiento y habilidades.
+
+    \item \texttt{Gestión de Recursos Multimedia}: Los editores de videojuegos facilitan la importación y organización de gráficos, 
+    sonidos, música y otros activos multimedia que se utilizarán en el juego.
+    
+    \item \texttt{Asignación de Comportamientos y Lógica}: Los editores permiten definir el comportamiento de los elementos del juego mediante 
+    la asignación de reglas, scripts y lógica programada. Esto incluye la configuración de interacciones y eventos.
+
+    \item \texttt{Edición de Eventos y Secuencias}: Los editores posibilitan la creación y edición de eventos específicos del juego, 
+    así como secuencias de eventos que pueden desencadenar acciones en el juego en respuesta a las acciones del jugador.
+    
+    \item \texttt{Personalización de Interfaz de Usuario}: Algunos editores permiten la adaptación de la interfaz de usuario del juego, 
+    lo que incluye la disposición de elementos de la pantalla, el diseño de menús y la presentación visual general.
+   
+    \item \texttt{Pruebas y Depuración}:  Los editores de videojuegos a menudo incluyen herramientas de prueba y depuración que permiten a 
+    los desarrolladores evaluar y ajustar el comportamiento del juego durante el proceso de creación.
+
+    \item \texttt{Exportación y Distribución}: Una función esencial de los editores es la capacidad de exportar el juego en un 
+    formato que pueda ser ejecutado por el motor de videojuegos correspondiente. Esto permite la distribución y el acceso al juego final.
+
+\end{itemize}
 
 %-------------------------------------------------------------------
 \section{Scripting vs programación}
 %-------------------------------------------------------------------
 \label{cap2:sec:scripting}
 
-Explicar la diferencia entre el desarrollo de un videojuego a través de scripting por nodos y a través de 
-programación. Hablar también sobre los sistemas de scripting investigados y explicar sus principales 
-características.
+El desarrollo de videojuegos puede llevarse a cabo utilizando diferentes enfoques, entre los que se destacan el scripting por nodos y 
+la programación tradicional. Estos enfoques influyen en la manera en que se construye la lógica y la funcionalidad del juego. Además, existen 
+sistemas específicos de scripting que simplifican la creación de videojuegos, como los Blueprints de Unreal Engine y Scratch. A continuación, 
+se explorarán las diferencias entre ambos enfoques y se describirán los sistemas investigados.
+
+\subsection{Scripting por Nodos vs. Programación}
+\label{cap2:sec:scripting:sec:scriptingvsprogramacion}
+
+\begin{itemize}
+
+    \item \texttt{Scripting por Nodos}: Este enfoque utiliza interfaces visuales y gráficas para representar la lógica del juego mediante 
+    nodos interconectados. Los desarrolladores ensamblan estos nodos para definir el flujo de control, las interacciones y las acciones del 
+    juego. No se requiere conocimiento profundo de programación, lo que lo hace más accesible para principiantes. Es común en herramientas 
+    como Unreal Engine y Scratch.
+
+    \item \texttt{Programación}: La programación tradicional implica escribir código en lenguajes de programación como C++, CSharp, 
+    Python o JavaScript. Los desarrolladores crean instrucciones detalladas para definir el comportamiento del juego. Este enfoque es 
+    más poderoso y versátil, pero puede requerir un nivel más alto de experiencia en programación.
+
+\end{itemize}
+
+\subsection{Sistemas de Scripting Investigados}
+\label{cap2:sec:scripting:sec:scriptinginvestigados}
+
+En el proceso de investigación y desarrollo, optamos por no basarnos en sistemas de scripting preexistentes, ya que nuestro 
+objetivo era crear una solución propia que se ajustara a nuestras necesidades particulares. Sin embargo, en cuanto a la interfaz visual del 
+scripting, hemos tomado referencia de la conocida herramienta de modelado y animación 3D Blender, ya que consideramos que atractiva.  
+Diseñamos nuestro propio sistema de scripting con el propósito de cumplir con las siguientes características clave:
+
+\begin{itemize}
+
+    \item \texttt{Flexibilidad y comodidad para no desarrolladores}: Reconociendo la amplia variedad de habilidades entre los usuarios, 
+    hemos eliminado la necesidad de conocimientos en programación. Nuestro enfoque visual y basado en nodos significa que no es necesario 
+    escribir código. Los usuarios pueden construir interacciones y comportamientos simplemente conectando bloques visuales.
+    
+    \item \texttt{No Requiere Conocimientos de Programación}: Reconociendo la amplia variedad de habilidades entre los usuarios, hemos 
+    eliminado la necesidad de conocimientos en programación. Nuestro enfoque visual y basado en nodos significa que no es necesario escribir 
+    código. Los usuarios pueden construir interacciones y comportamientos simplemente conectando bloques visuales.
+
+    \item \texttt{Aprendizaje Sencillo}: Valoramos la importancia de una curva de aprendizaje suave. Hemos diseñado nuestro sistema con 
+    claridad en mente, asegurándonos de que los conceptos sean fáciles de entender. Esto permite a los usuarios adquirir rápidamente la 
+    confianza necesaria para utilizar el sistema y plasmar sus ideas en el juego.
+    
+    \item \texttt{Enfoque Visualmente Intuitivo}: Inspirados en los principios de diseño de interfaz de usuario, hemos creado un entorno 
+    visualmente atractivo y fácil de navegar. Los usuarios pueden interactuar con elementos gráficos que representan conceptos y funciones 
+    de juego, lo que facilita la creación de lógica y la toma de decisiones.
+
+\end{itemize}
 
 %-------------------------------------------------------------------
 \section{Librerias utilizadas}
 %-------------------------------------------------------------------
 \label{cap2:sec:librerias}
 
-Librearias utilizadas y por que
+Hemos seleccionado cuidadosamente un conjunto de librerías para respaldar el desarrollo de nuestro sistema de scripting personalizado. 
+Entre estas librerías, ImgUI, SDL y Box2D han sido esenciales debido a sus características y ventajas específicas:
 
-%-------------------------------------------------------------------
-\section{Mercado de los motores de videojuegos 2D}
-%-------------------------------------------------------------------
-\label{cap2:sec:mercado}
+\subsection{ImGUI}
+\label{cap2:sec:librerias:sec:imgui}
 
-¿Una sección para el mercado?
+Optamos por ImgUI para potenciar la interfaz de usuario de nuestro editor. Su flexibilidad y capacidad para personalización han sido 
+especialmente valiosas, permitiéndonos crear ventanas, cuadros emergentes y controles altamente adaptables para nuestras necesidades 
+específicas. La documentación detallada y la amplia gama de ejemplos proporcionados han facilitado la implementación de soluciones de 
+interfaz visualmente atractivas y funcionales.
+
+\subsection{SDL (Simple DirectMedia Layer)}
+\label{cap2:sec:librerias:sec:sdl}
+
+La elección de SDL se ha extendido a ambos componentes, el editor y el motor, debido a su versatilidad y amplias capacidades. 
+Para el editor, SDL ha proporcionado una forma eficiente de gestionar elementos multimedia, como fuentes y renderización, mejorando la 
+calidad visual y la interacción del usuario. En el motor, SDL se ha empleado para lograr la misma calidad visual, gestionar elementos 
+multimedia y para facilitar la interacción con el usuario en la ejecución del juego.
+
+\subsection{Box2D}
+\label{cap2:sec:librerias:sec:sdl}
+
+Hemos decidido implementar Box2D para el motor del videojuego. Box2D se ha utilizado para gestionar las simulaciones físicas que 
+queríamos lograr en el entorno de juego. Esta librería ha sido especialmente útil para crear interacciones físicas precisas y realistas 
+entre los elementos del juego. Si bien no se ha aplicado en el editor, su incorporación en el motor ha enriquecido la experiencia de juego
+al agregar un componente realista de movimiento y colisiones.
 
 %-------------------------------------------------------------------
 \section*{\NotasBibliograficas}
 %-------------------------------------------------------------------
 \TocNotasBibliograficas
-
-Referencias a los motores 2D y sistemas de scripting investigados. 
-Asi como documentacione y repositorios utilizados.
-
-
-
+\bibitem{sdl} Simple DirectMedia Layer (SDL): \url{https://www.libsdl.org}
+\bibitem{box2d} Box2D: A 2D Physics Engine for Games: \url{https://box2d.org}
+\bibitem{repo1} Repositorio de ImGUI: \url{https://github.com/ocornut/imgui}
