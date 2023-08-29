@@ -27,6 +27,7 @@ namespace ECS {
 		Transform* transform;
 
 		reflect float velocity;
+		reflect bool clampDiagonalVelocity;
 
 	};
 

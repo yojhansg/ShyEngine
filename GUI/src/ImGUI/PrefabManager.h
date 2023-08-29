@@ -54,7 +54,7 @@ namespace ShyEditor {
 
 		PrefabManager();
 		~PrefabManager();
-		
+
 		void Behaviour() override;
 
 		static void Open();

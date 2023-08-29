@@ -81,6 +81,8 @@ namespace Input {
 
 		bool isKeyUp(SDL_Scancode key);
 
+		void UpdateKeyState(KeyState& key);
+
 	publish:
 
 		//Down Hold Up
@@ -101,10 +103,8 @@ namespace Input {
 		bool isSpecialKeyHold(int s);
 		bool isSpecialKeyUp(int s);
 
-		void UpdateKeyState(KeyState& key);
-
-		float HorizontalMovement();
-		float VerticalMovement();
+		float KeyBoardHorizontalMovement();
+		float KeyBoardVerticalMovement();
 
 
 		// Mouse
@@ -124,6 +124,7 @@ namespace Input {
 
 		int getWheelMotionY();
 
+
 		// Controller
 		int getJoysticksConnected();
 
@@ -135,21 +136,25 @@ namespace Input {
 
 		// With id
 
-			Utilities::Vector2D getJoystickValue(int ct, int id);
+			Utilities::Vector2D getJoystickValueWithId(int ct, int id);
 
-			float getJoystickTriggerValue(int ct, int id);
+			float getJoystickTriggerValueWithId(int ct, int id);
 		
-			bool getJoystickButtonState(int button, int id);
+			bool getJoystickButtonStateWithId(int button, int id);
 
-			int getJoysticksNumButtons(int id);
+			int getJoysticksNumButtonsWithId(int id);
 
-			bool isLeftJoystickMotion(int id);
+			bool isLeftJoystickMotionWithId(int id);
 
-			bool isRightJoystickMotion(int id);
+			bool isRightJoystickMotionWithId(int id);
 
-			bool isLeftTriggerMotion(int id);
+			bool isLeftTriggerMotionWithId(int id);
 
-			bool isRightTriggerMotion(int id);
+			bool isRightTriggerMotionWithId(int id);
+
+			float ControllerHorizontalMovementWithId(int id);
+
+			float ControllerVerticalMovementWithId(int id);
 
 
 		// Without id
@@ -169,6 +174,10 @@ namespace Input {
 			bool isLeftTriggerMotion();
 
 			bool isRightTriggerMotion();
+
+			float ControllerHorizontalMovement();
+
+			float ControllerVerticalMovement();
 
 
 

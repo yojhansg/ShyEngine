@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Aug 28 18:43:23 2023
+//Creation time: Tue Aug 29 00:40:31 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -213,8 +213,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_isSpecialKeyDown",InputManager_isSpecialKeyDown);
 	map.emplace("InputManager_isSpecialKeyHold",InputManager_isSpecialKeyHold);
 	map.emplace("InputManager_isSpecialKeyUp",InputManager_isSpecialKeyUp);
-	map.emplace("InputManager_HorizontalMovement",InputManager_HorizontalMovement);
-	map.emplace("InputManager_VerticalMovement",InputManager_VerticalMovement);
+	map.emplace("InputManager_KeyBoardHorizontalMovement",InputManager_KeyBoardHorizontalMovement);
+	map.emplace("InputManager_KeyBoardVerticalMovement",InputManager_KeyBoardVerticalMovement);
 	map.emplace("InputManager_mouseMotionEvent",InputManager_mouseMotionEvent);
 	map.emplace("InputManager_wheelMotionEvent",InputManager_wheelMotionEvent);
 	map.emplace("InputManager_isMouseButtonDown",InputManager_isMouseButtonDown);
@@ -227,6 +227,16 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_isJoystickAxisMotion",InputManager_isJoystickAxisMotion);
 	map.emplace("InputManager_isJoystickButtonEventDown",InputManager_isJoystickButtonEventDown);
 	map.emplace("InputManager_isJoystickButtonEventUp",InputManager_isJoystickButtonEventUp);
+	map.emplace("InputManager_getJoystickValueWithId",InputManager_getJoystickValueWithId);
+	map.emplace("InputManager_getJoystickTriggerValueWithId",InputManager_getJoystickTriggerValueWithId);
+	map.emplace("InputManager_getJoystickButtonStateWithId",InputManager_getJoystickButtonStateWithId);
+	map.emplace("InputManager_getJoysticksNumButtonsWithId",InputManager_getJoysticksNumButtonsWithId);
+	map.emplace("InputManager_isLeftJoystickMotionWithId",InputManager_isLeftJoystickMotionWithId);
+	map.emplace("InputManager_isRightJoystickMotionWithId",InputManager_isRightJoystickMotionWithId);
+	map.emplace("InputManager_isLeftTriggerMotionWithId",InputManager_isLeftTriggerMotionWithId);
+	map.emplace("InputManager_isRightTriggerMotionWithId",InputManager_isRightTriggerMotionWithId);
+	map.emplace("InputManager_ControllerHorizontalMovementWithId",InputManager_ControllerHorizontalMovementWithId);
+	map.emplace("InputManager_ControllerVerticalMovementWithId",InputManager_ControllerVerticalMovementWithId);
 	map.emplace("InputManager_getJoystickValue",InputManager_getJoystickValue);
 	map.emplace("InputManager_getJoystickTriggerValue",InputManager_getJoystickTriggerValue);
 	map.emplace("InputManager_getJoystickButtonState",InputManager_getJoystickButtonState);
@@ -235,6 +245,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_isRightJoystickMotion",InputManager_isRightJoystickMotion);
 	map.emplace("InputManager_isLeftTriggerMotion",InputManager_isLeftTriggerMotion);
 	map.emplace("InputManager_isRightTriggerMotion",InputManager_isRightTriggerMotion);
+	map.emplace("InputManager_ControllerHorizontalMovement",InputManager_ControllerHorizontalMovement);
+	map.emplace("InputManager_ControllerVerticalMovement",InputManager_ControllerVerticalMovement);
 	map.emplace("InputManager_joystickConnectedEvent",InputManager_joystickConnectedEvent);
 	map.emplace("InputManager_joystickDisconnectedEvent",InputManager_joystickDisconnectedEvent);
 	map.emplace("PhysicsManager_getGravity",PhysicsManager_getGravity);
@@ -3163,14 +3175,14 @@ Scripting::Variable InputManager_isSpecialKeyUp(std::vector<Scripting::Variable>
 	bool ret = manager->isSpecialKeyUp(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable InputManager_HorizontalMovement(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable InputManager_KeyBoardHorizontalMovement(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
-	float ret = manager->HorizontalMovement();
+	float ret = manager->KeyBoardHorizontalMovement();
 	return ret;
 }
-Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable InputManager_KeyBoardVerticalMovement(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
-	float ret = manager->VerticalMovement();
+	float ret = manager->KeyBoardVerticalMovement();
 	return ret;
 }
 Scripting::Variable InputManager_mouseMotionEvent(std::vector<Scripting::Variable>const& vec){
@@ -3233,6 +3245,56 @@ Scripting::Variable InputManager_isJoystickButtonEventUp(std::vector<Scripting::
 	bool ret = manager->isJoystickButtonEventUp();
 	return ret;
 }
+Scripting::Variable InputManager_getJoystickValueWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	Utilities::Vector2D ret = manager->getJoystickValueWithId(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_getJoystickTriggerValueWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	float ret = manager->getJoystickTriggerValueWithId(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_getJoystickButtonStateWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->getJoystickButtonStateWithId(vec[0].value.Float, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_getJoysticksNumButtonsWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	int ret = manager->getJoysticksNumButtonsWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_isLeftJoystickMotionWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->isLeftJoystickMotionWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_isRightJoystickMotionWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->isRightJoystickMotionWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_isLeftTriggerMotionWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->isLeftTriggerMotionWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_isRightTriggerMotionWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->isRightTriggerMotionWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_ControllerHorizontalMovementWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	float ret = manager->ControllerHorizontalMovementWithId(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable InputManager_ControllerVerticalMovementWithId(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	float ret = manager->ControllerVerticalMovementWithId(vec[0].value.Float);
+	return ret;
+}
 Scripting::Variable InputManager_getJoystickValue(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
 	Utilities::Vector2D ret = manager->getJoystickValue(vec[0].value.Float);
@@ -3271,6 +3333,16 @@ Scripting::Variable InputManager_isLeftTriggerMotion(std::vector<Scripting::Vari
 Scripting::Variable InputManager_isRightTriggerMotion(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
 	bool ret = manager->isRightTriggerMotion();
+	return ret;
+}
+Scripting::Variable InputManager_ControllerHorizontalMovement(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	float ret = manager->ControllerHorizontalMovement();
+	return ret;
+}
+Scripting::Variable InputManager_ControllerVerticalMovement(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	float ret = manager->ControllerVerticalMovement();
 	return ret;
 }
 Scripting::Variable InputManager_joystickConnectedEvent(std::vector<Scripting::Variable>const& vec){

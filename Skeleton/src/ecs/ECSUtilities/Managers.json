@@ -294,12 +294,12 @@
             },
             {
                 "input": [],
-                "name": "HorizontalMovement",
+                "name": "KeyBoardHorizontalMovement",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "VerticalMovement",
+                "name": "KeyBoardVerticalMovement",
                 "return": "Number"
             },
             {
@@ -387,6 +387,118 @@
                     {
                         "name": "ct",
                         "type": "Number"
+                    },
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickValueWithId",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickTriggerValueWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickButtonStateWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoysticksNumButtonsWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLeftJoystickMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isRightJoystickMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLeftTriggerMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isRightTriggerMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ControllerHorizontalMovementWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ControllerVerticalMovementWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
                     }
                 ],
                 "name": "getJoystickValue",
@@ -436,6 +548,16 @@
                 "input": [],
                 "name": "isRightTriggerMotion",
                 "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "ControllerHorizontalMovement",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "ControllerVerticalMovement",
+                "return": "Number"
             },
             {
                 "input": [],

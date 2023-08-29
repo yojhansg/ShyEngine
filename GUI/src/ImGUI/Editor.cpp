@@ -103,9 +103,9 @@ bool Editor::Init() {
 void Editor::Loop() {
 
 	// The projects management window
-	instance->exitEditor = !instance->RunProjectsWindow();
+	bool closed = !instance->RunProjectsWindow();
 
-	if (!instance->exitEditor) {
+	if (!closed) {
 		// Configure the SDL window to start the editor
 		SDL_SetWindowResizable(instance->window, SDL_TRUE);
 		SDL_SetWindowSize(instance->window, _WindowMainSize);
@@ -123,10 +123,14 @@ void Editor::Loop() {
 		instance->UpdateAndRenderWindows();
 	}
 
-	// Save editor information between its executions
-	ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
-	ShyEditor::Preferences::StoreData();
-	ShyEditor::PrefabManager::SavePrefabs();
+	if (!closed) {
+
+		// Save editor information between its executions
+		ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
+		ShyEditor::Preferences::StoreData();
+		ShyEditor::PrefabManager::SavePrefabs();
+
+	}
 
 }
 
