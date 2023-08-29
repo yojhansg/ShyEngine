@@ -1,32 +1,44 @@
 #include "ScriptFunctionality.h"
-#include <math.h>
-#include "Entity.h"
-#include <Script.h>
-#include "StringTrim.h"
-#include <format>
-#include "Scene.h"
+#include "RendererManager.h"
 #include "ConsoleManager.h"
 #include "ScriptManager.h"
+#include "SceneManager.h"
+#include "StringTrim.h"
+#include "Entity.h"
+#include "Script.h"
+#include "Scene.h"
+#include "Utils.h"
+
 #include <sstream>
 #include <iomanip>
-
+#include <math.h>
+#include <format>
 #include <ctime>
-#include <RendererManager.h>
-#include <SceneManager.h>
+#include <random>
 
 #define DELTA 0.001f
-
-
 #define TIME_DIFF 1680833948
 
-Scripting::ScriptFunctionality::~ScriptFunctionality()
-{
-}
+
+Scripting::ScriptFunctionality::~ScriptFunctionality() {}
 
 Scripting::ScriptFunctionality::ScriptFunctionality()
 {
+	std::srand(std::time(NULL));
 }
 
+void Scripting::ScriptFunctionality::Print(cVariable val)
+{
+	std::string objectName = Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity()->getEntityName();
+
+	std::string scriptName = Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
+
+	Console::Output::Print(objectName + ": " + scriptName, Text_ToString(val));
+}
+
+
+
+// ------------------------------ Entity -----------------------------------
 
 ECS::Entity* Scripting::ScriptFunctionality::Entity()
 {
@@ -43,28 +55,24 @@ std::string Scripting::ScriptFunctionality::Entity_CurrentName()
 	return Entity()->getEntityName();
 }
 
-void Scripting::ScriptFunctionality::Entity_Event(ECS::Entity* ent, cstring name) {
+void Scripting::ScriptFunctionality::Event_EntityEvent(ECS::Entity* ent, cstring name) {
 	ent->Event(name);
 }
 
-void Scripting::ScriptFunctionality::GlobalEvent(cstring name) {
+void Scripting::ScriptFunctionality::Event_GlobalEvent(cstring name) {
 
 	ECS::SceneManager::instance()->getCurrentScene()->Event(name);
 }
 
-std::string Scripting::ScriptFunctionality::Script()
+std::string Scripting::ScriptFunctionality::Graph()
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 }
 
-void Scripting::ScriptFunctionality::Print(cVariable val)
-{
-	std::string objectName = Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity()->getEntityName();
 
-	std::string scriptName = Scripting::ScriptManager::instance()->GetCurrentScript()->GetName();
 
-	Console::Output::Print(objectName + ": " + scriptName, String_ToString(val));
-}
+
+// ------------------------------ Math -----------------------------------
 
 float Scripting::ScriptFunctionality::Math_Add(float a, float b)
 {
@@ -96,18 +104,15 @@ float Scripting::ScriptFunctionality::Math_Root(float a, float b)
 	return powf(a , 1.0f / b);
 }
 
-
 float Scripting::ScriptFunctionality::Math_Max(float a, float b)
 {
 	return std::max(a, b);
 }
 
-
 float Scripting::ScriptFunctionality::Math_Min(float a, float b)
 {
 	return std::min(a, b);
 }
-
 
 float Scripting::ScriptFunctionality::Math_PlusOne(float a)
 {
@@ -118,6 +123,11 @@ float Scripting::ScriptFunctionality::Math_MinusOne(float a)
 {
 	return a - 1;
 }
+
+
+
+
+// ------------------------------ Logic -----------------------------------
 
 bool Scripting::ScriptFunctionality::Logic_Equals(float a, float b)
 {
@@ -169,6 +179,11 @@ bool Scripting::ScriptFunctionality::Logic_Negate(bool b)
 {
 	return !b;
 }
+
+
+
+
+// ------------------------------ Vector2D -----------------------------------
 
 Vector2D Scripting::ScriptFunctionality::Vector2D_Create(float x, float y)
 {
@@ -242,42 +257,78 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Multiply(cVector2D a, float b)
 	return a * b;
 }
 
-bool Scripting::ScriptFunctionality::String_Equals(cstring a, cstring b)
+Vector2D Scripting::ScriptFunctionality::Vector2D_Up()
+{
+	return Vector2D(0, -1);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Down()
+{
+	return Vector2D(0, 1);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Left()
+{
+	return Vector2D(-1, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Right()
+{
+	return Vector2D(1, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Zero()
+{
+	return Vector2D(0, 0);
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_One()
+{
+	return Vector2D(1, 1);
+}
+
+
+
+
+
+// ------------------------------ Text -----------------------------------
+
+bool Scripting::ScriptFunctionality::Text_Equals(cstring a, cstring b)
 {
 	return a == b;
 }
 
-std::string Scripting::ScriptFunctionality::String_Concatenate(cstring a, cstring b)
+std::string Scripting::ScriptFunctionality::Text_Concatenate(cstring a, cstring b)
 {
 	return a + b;
 }
 
-std::string Scripting::ScriptFunctionality::String_Substring(cstring a, int begin, int end)
+std::string Scripting::ScriptFunctionality::Text_Substring(cstring a, int begin, int end)
 {
 	return a.substr(begin, end - begin);
 }
 
-std::string Scripting::ScriptFunctionality::String_Begining(cstring a, int b) {
+std::string Scripting::ScriptFunctionality::Text_Begining(cstring a, int b) {
 	return a.substr(0, b);
 }
-std::string Scripting::ScriptFunctionality::String_End(cstring a, int b) {
+std::string Scripting::ScriptFunctionality::Text_End(cstring a, int b) {
 	return a.substr(a.size() - b);
 }
-std::string Scripting::ScriptFunctionality::String_Trim(cstring a, cstring values) {
+std::string Scripting::ScriptFunctionality::Text_Trim(cstring a, cstring values) {
 	return Utilities::trim(a, values);
 }
-std::string Scripting::ScriptFunctionality::String_TrimBlanks(cstring a) {
+std::string Scripting::ScriptFunctionality::Text_TrimBlanks(cstring a) {
 	return Utilities::trim(a);
 
 }
-char Scripting::ScriptFunctionality::String_GetLetter(cstring a, int b) {
+char Scripting::ScriptFunctionality::Text_GetLetter(cstring a, int b) {
 	return a[b];
 }
-int Scripting::ScriptFunctionality::String_Find(cstring a, char c) {
+int Scripting::ScriptFunctionality::Text_Find(cstring a, char c) {
 	return a.find(c);
 }
 
-std::string Scripting::ScriptFunctionality::String_LeadingZeros(int number, int leadingZeros) {
+std::string Scripting::ScriptFunctionality::Text_LeadingZeros(int number, int leadingZeros) {
 
 	std::stringstream ss;
 	ss << std::setw(leadingZeros) << std::setfill('0') << number;
@@ -285,12 +336,12 @@ std::string Scripting::ScriptFunctionality::String_LeadingZeros(int number, int 
 }
 
 
-std::string Scripting::ScriptFunctionality::String_RemoveDecimals(float number) {
+std::string Scripting::ScriptFunctionality::Text_RemoveDecimals(float number) {
 
 	return std::to_string((int)number);
 }
 
-std::string Scripting::ScriptFunctionality::String_ToString(cVariable variable) {
+std::string Scripting::ScriptFunctionality::Text_ToString(cVariable variable) {
 
 	switch (variable.type)
 	{
@@ -315,6 +366,11 @@ std::string Scripting::ScriptFunctionality::String_ToString(cVariable variable) 
 		break;
 	}
 }
+
+
+
+
+// ------------------------------ Attributes -----------------------------------
 
 void Scripting::ScriptFunctionality::Attribute_Set(cstring name, cVariable val)
 {
@@ -346,14 +402,19 @@ Scripting::Variable Scripting::ScriptFunctionality::Attribute_GetGlobal(cstring 
 	return ScriptManager::instance()->GetGlobal(name);
 }
 
-int Scripting::ScriptFunctionality::Time_Now()
+
+
+
+// ------------------------------ Time -----------------------------------
+
+int Scripting::ScriptFunctionality::RealTime_Now()
 {
 	return std::time(0) - TIME_DIFF;
 }
 
-std::string Scripting::ScriptFunctionality::Time_WeekDay(int time)
+std::string Scripting::ScriptFunctionality::RealTime_WeekDay(int time)
 {
-	switch (Time_DayOfWeekIndex(time) - 1) {
+	switch (RealTime_DayOfWeekIndex(time) - 1) {
 
 	case 0:
 		return "Sunday";
@@ -374,10 +435,9 @@ std::string Scripting::ScriptFunctionality::Time_WeekDay(int time)
 	}
 }
 
-
-std::string Scripting::ScriptFunctionality::Time_ShortWeekDay(int time)
+std::string Scripting::ScriptFunctionality::RealTime_ShortWeekDay(int time)
 {
-	switch (Time_DayOfWeekIndex(time) - 1) {
+	switch (RealTime_DayOfWeekIndex(time) - 1) {
 
 	case 0:
 		return "Sun";
@@ -398,10 +458,9 @@ std::string Scripting::ScriptFunctionality::Time_ShortWeekDay(int time)
 	}
 }
 
-
-std::string Scripting::ScriptFunctionality::Time_Month(int time)
+std::string Scripting::ScriptFunctionality::RealTime_Month(int time)
 {
-	switch (Time_MonthIndex(time) - 1) {
+	switch (RealTime_MonthIndex(time) - 1) {
 
 	case 0:
 		return "January";
@@ -432,10 +491,9 @@ std::string Scripting::ScriptFunctionality::Time_Month(int time)
 	}
 }
 
-
-std::string Scripting::ScriptFunctionality::Time_ShortMonth(int time)
+std::string Scripting::ScriptFunctionality::RealTime_ShortMonth(int time)
 {
-	switch (Time_MonthIndex(time) - 1) {
+	switch (RealTime_MonthIndex(time) - 1) {
 
 	case 0:
 		return "Jan";
@@ -466,8 +524,7 @@ std::string Scripting::ScriptFunctionality::Time_ShortMonth(int time)
 	}
 }
 
-
-int Scripting::ScriptFunctionality::Time_DayOfWeekIndex(int time)
+int Scripting::ScriptFunctionality::RealTime_DayOfWeekIndex(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -476,7 +533,7 @@ int Scripting::ScriptFunctionality::Time_DayOfWeekIndex(int time)
 	return now.tm_wday + 1;
 }
 
-int Scripting::ScriptFunctionality::Time_MonthIndex(int time)
+int Scripting::ScriptFunctionality::RealTime_MonthIndex(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -485,8 +542,7 @@ int Scripting::ScriptFunctionality::Time_MonthIndex(int time)
 	return now.tm_mon + 1;
 }
 
-
-int Scripting::ScriptFunctionality::Time_MonthDay(int time)
+int Scripting::ScriptFunctionality::RealTime_MonthDay(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -495,8 +551,7 @@ int Scripting::ScriptFunctionality::Time_MonthDay(int time)
 	return now.tm_mday;
 }
 
-
-int Scripting::ScriptFunctionality::Time_Year(int time)
+int Scripting::ScriptFunctionality::RealTime_Year(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -505,7 +560,7 @@ int Scripting::ScriptFunctionality::Time_Year(int time)
 	return now.tm_year + 1900;
 }
 
-int Scripting::ScriptFunctionality::Time_Hours(int time)
+int Scripting::ScriptFunctionality::RealTime_Hours(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -514,8 +569,7 @@ int Scripting::ScriptFunctionality::Time_Hours(int time)
 	return now.tm_hour;
 }
 
-
-int Scripting::ScriptFunctionality::Time_Minutes(int time)
+int Scripting::ScriptFunctionality::RealTime_Minutes(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -524,7 +578,7 @@ int Scripting::ScriptFunctionality::Time_Minutes(int time)
 	return now.tm_min;
 }
 
-int Scripting::ScriptFunctionality::Time_Seconds(int time)
+int Scripting::ScriptFunctionality::RealTime_Seconds(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
@@ -533,53 +587,51 @@ int Scripting::ScriptFunctionality::Time_Seconds(int time)
 	return now.tm_sec;
 }
 
-std::string Scripting::ScriptFunctionality::Time_TimeHHMM(int time)
+std::string Scripting::ScriptFunctionality::RealTime_HourTime(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
 	localtime_s(&now, &t);
 
 	return
-		String_LeadingZeros(now.tm_hour, 2) + ":" +
-		String_LeadingZeros(now.tm_min, 2);
+		Text_LeadingZeros(now.tm_hour, 2) + ":" +
+		Text_LeadingZeros(now.tm_min, 2);
 }
 
-
-std::string Scripting::ScriptFunctionality::Time_TimeHHMMSS(int time)
+std::string Scripting::ScriptFunctionality::RealTime_PreciseHourTime(int time)
 {
 	const std::time_t t(GetRealTime(time));
 	std::tm now;
 	localtime_s(&now, &t);
 
 	return
-		String_LeadingZeros(now.tm_hour, 2) + ":" +
-		String_LeadingZeros(now.tm_min, 2) + ":" +
-		String_LeadingZeros(now.tm_sec, 2);
+		Text_LeadingZeros(now.tm_hour, 2) + ":" +
+		Text_LeadingZeros(now.tm_min, 2) + ":" +
+		Text_LeadingZeros(now.tm_sec, 2);
 }
 
-std::string Scripting::ScriptFunctionality::Time_TimeStamp(int time)
+std::string Scripting::ScriptFunctionality::RealTime_TimeStamp(int time)
 {
 	//Monday
 	//Wed Apr  5 01:50 : 49 2023
 	return std::format("{} {} {} {} {} ",
-		Time_ShortWeekDay(time),
-		Time_ShortMonth(time),
-		Time_MonthDay(time),
-		Time_TimeHHMM(time),
-		Time_Year(time)
+		RealTime_ShortWeekDay(time),
+		RealTime_ShortMonth(time),
+		RealTime_MonthDay(time),
+		RealTime_HourTime(time),
+		RealTime_Year(time)
 		);
 }
 
 
-
-std::string Scripting::ScriptFunctionality::Time_DDMMYY(int time)
+std::string Scripting::ScriptFunctionality::RealTime_Date(int time)
 {
 	//Monday
 	//Wed Apr  5 01:50 : 49 2023
 	return std::format("{}/{}/{} ",
-		Time_MonthDay(time),
-		Time_MonthIndex(time),
-		Time_Year(time)
+		RealTime_MonthDay(time),
+		RealTime_MonthIndex(time),
+		RealTime_Year(time)
 	);
 }
 
@@ -588,8 +640,7 @@ int Scripting::ScriptFunctionality::GetRealTime(int time) {
 	return time + TIME_DIFF;
 }
 
-
-std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
+std::string Scripting::ScriptFunctionality::RealTime_Since(int time, int now)
 {
 	int dif = std::abs(now - time);
 
@@ -612,16 +663,21 @@ std::string Scripting::ScriptFunctionality::Time_Since(int time, int now)
 	}
 
 	if (dif < 60 * 60 * 24 * 7) {
-		return Time_WeekDay(time);
+		return RealTime_WeekDay(time);
 	}
 
-	if (Time_Year(time) != Time_Year(now)) {
-		return Time_DDMMYY(time);
+	if (RealTime_Year(time) != RealTime_Year(now)) {
+		return RealTime_Date(time);
 	}
 
-	return std::format("{}-{}", Time_MonthDay(time), Time_ShortMonth(time));
+	return std::format("{}-{}", RealTime_MonthDay(time), RealTime_ShortMonth(time));
 }
 
+
+
+
+
+// ------------------------------ Camera -----------------------------------
 
 Utilities::Vector2D Scripting::ScriptFunctionality::Camera_GetPosition()
 {
@@ -646,11 +702,67 @@ void Scripting::ScriptFunctionality::Camera_SetScale(float newScale)
 }
 
 
+
+
+// ------------------------------ Random -----------------------------------
+
+float Scripting::ScriptFunctionality::DegreesTo_Radians(float angle)
+{
+	return Utilities::Utils::DegreesToRadians(angle);
+}
+
+float Scripting::ScriptFunctionality::RadiansTo_Degrees(float angle)
+{
+	return Utilities::Utils::RadiansToDegrees(angle);
+}
+
+float Scripting::ScriptFunctionality::Random_NumberBetween(int min, int max)
+{
+	return Utilities::Utils::RandomIntBetween(min, max);
+}
+
+float Scripting::ScriptFunctionality::Random_AngleBetween(float min, float max)
+{
+	return Utilities::Utils::RandomAngleBetween(min, max);
+}
+
+Color Scripting::ScriptFunctionality::Random_Color()
+{
+	return Utilities::Utils::RandomColor();
+}
+
+Color Scripting::ScriptFunctionality::Random_ColorBetween(cColor c1, cColor c2)
+{
+	return Utilities::Utils::RandomColorBetween(c1, c2);
+}
+
+
+float Scripting::ScriptFunctionality::Random_UnitValue()
+{
+	return (float)std::rand() / RAND_MAX;
+}
+
+float Scripting::ScriptFunctionality::Random_Between(float a, float b)
+{
+	return a + Random_UnitValue() * (b - a);
+}
+
+Utilities::Vector2D Scripting::ScriptFunctionality::Random_UnitVector()
+{
+	return Utilities::Vector2D(Random_UnitValue(), Random_UnitValue()).normalize();
+}
+
+Utilities::Vector2D Scripting::ScriptFunctionality::Random_ScaledVector(float val)
+{
+	return Random_UnitVector() * val;
+}
+
+
+
 #include <Windows.h>
 #include <shellapi.h>
 
-
-void Scripting::ScriptFunctionality::Open_URL(cstring url) {
+void Scripting::ScriptFunctionality::OpenURL(cstring url) {
 
 	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }

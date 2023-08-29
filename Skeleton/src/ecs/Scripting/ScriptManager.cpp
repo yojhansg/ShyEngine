@@ -9,6 +9,7 @@
 #include <ConsoleManager.h>
 
 #include "json.hpp"
+#include "ResourcesManager.h"
 
 using namespace nlohmann;
 
@@ -40,11 +41,88 @@ Scripting::Variable Scripting::ScriptManager::GetGlobal(std::string const& name)
 
 	if (!globalAttributes.contains(name)) {
 
-		Console::Output::PrintWarning("Global attributes", "Trying to access unexisting global variable. Returing empty instead");
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Global attributes", 
+			"Trying to access unexisting global variable <" + name + ">. Returing empty instead");
+
 		return Scripting::Variable::Null();
 	}
 
 	return globalAttributes[name];
+}
+
+void Scripting::ScriptManager::CollectionCreate(cstring name, int size)
+{
+	if (collections.contains(name)) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Trying to create an already existing collection <" + name + ">. Destroying previous collection");
+
+		CollectionDestroy(name);
+	}
+
+	collections[name] = std::vector<Scripting::Variable>(size);
+}
+
+void Scripting::ScriptManager::CollectionDestroy(cstring name)
+{
+	if (!collections.contains(name)) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Trying to destroy an inexisting collection <" + name + ">");
+		return;
+	}
+
+	collections.erase(name);
+}
+
+void Scripting::ScriptManager::CollectionModify(cstring name, int idx, cVariable val)
+{
+	if (!collections.contains(name)) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Trying to destroy an inexisting collection <" + name + ">");
+		return;
+	}
+
+	auto& vec = collections[name];
+	int size = vec.size();
+
+	if(idx < 0 || idx >= size) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Index <" + std::to_string(idx) + "> is unaccesible. Size of the collection: " + std::to_string(size));
+		return;
+	}
+
+	collections[name][idx] = val;
+}
+
+int Scripting::ScriptManager::CollectionSize(cstring name)
+{
+	if (!collections.contains(name)) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Trying to destroy an inexisting collection <" + name + ">");
+		return -1;
+	}
+
+	return collections[name].size();
+}
+
+Scripting::Variable Scripting::ScriptManager::CollectionPeek(cstring name, int idx)
+{
+	if (!collections.contains(name)) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Trying to destroy an inexisting collection <" + name + ">");
+		return Scripting::Variable::Null();
+	}
+
+	auto& vec = collections[name];
+	int size = vec.size();
+
+	if (idx < 0 || idx >= size) {
+		Console::Output::PrintError(instance()->currentScript->GetName() + ": Collections",
+			"Index <" + std::to_string(idx) + "> is unaccesible. Size of the collection: " + std::to_string(size));
+
+		return Scripting::Variable::Null();;
+	}
+
+	return vec[idx];
 }
 
 
@@ -57,7 +135,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 		return manager->scripts[path];
 	}
 
-	std::ifstream fileStream("Scripts/" + path + manager->extension);
+	std::ifstream fileStream(Resources::ResourcesManager::GetResourcesPath() + path + manager->extension);
 
 	if (!fileStream.good())
 	{
@@ -154,6 +232,15 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				std::string vec = constValue["value"].get<std::string>();
 				value = vec;
 			}
+			else if (type == "color") {
+				Utilities::Color col = Utilities::Color::CreateColor(constValue["value"].get<std::string>());
+				value = col;
+			}
+			else if (type == "Entity") {
+
+				value.type = Variable::Type::Entity;
+				value.value.entityId = constValue["value"].get<int>();
+			}
 
 			if (allScriptNodes[nodeIdx] != nullptr) {
 
@@ -163,6 +250,12 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 
 			ConstNode* constValueNode = new ConstNode(nodeIdx, value);
 			allScriptNodes[nodeIdx] = constValueNode;
+
+			if (constValue.contains("name")) {
+
+				constValueNode->SetName(constValue["name"].get<std::string>());
+			}
+
 		}
 	}
 

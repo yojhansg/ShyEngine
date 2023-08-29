@@ -4,6 +4,8 @@
 #include <string>
 #include <Component.h>
 
+using cString = std::string const&;
+
 namespace Renderer {
 	class Font;
 	class Texture;
@@ -20,39 +22,47 @@ namespace ECS {
 		//TODO: color del texto
 		//TODO: poner outline
 		//TODO: opciones de calidad del texto
-		//TODO: ver si hacer el texto en unicode
 
 		enum class Fit {
 			Clamp, Overflow, WrapClamp, WrapOverflow, Expand
 		};
+		static int ConvertFit(cString str);
+		static std::string ConvertFit(int idx);
 
 		enum class VerticalAlignment {
 			Top, Center, Bottom
 		};
+		static int ConvertVerticalAlignment(cString str);
+		static std::string ConvertVerticalAlignment(int idx);
 
 		enum class HorizontalAlignment {
 			Left, Center, Right
 		};
+		static int ConvertHorizontalAlignment(cString str);
+		static std::string ConvertHorizontalAlignment(int idx);
 
 		OverlayText();
 		~OverlayText();
+
+
+
 	private:
 
 		Overlay* overlay;
 
-		Renderer::Font* font;
+		Renderer::Font* fontPtr;
 		Renderer::Texture* texture;
 
-		reflect int pointSize;
-		reflect std::string path;
 		reflect std::string text;
+		reflect std::string font;
+		reflect int fontSize;
 
-		//TODO: text alignment
 		reflect int horizontalAlignment;
 		reflect int verticalAlignment;
 
 		reflect int fit;
 
+		//TODO: quitar line spacing
 		reflect int lineSpacing;
 
 		void init() override;
@@ -65,14 +75,15 @@ namespace ECS {
 	publish:
 
 
-		int GetFit();
-		void SetFit(int fit);
+		std::string GetFit();
+		void SetFit(cstring fit);
 
-		int GetVerticalAlignment();
-		int GetHorizontalAlignment();
+		std::string GetVerticalAlignment();
+		std::string GetHorizontalAlignment();
 
-		void SetVerticalAlignment(int align);
-		void SetHorizontalAlignment(int align);
+		void SetVerticalAlignment(cString align);
+		void SetHorizontalAlignment(cString align);
+
 
 		std::string GetFont();
 		void SetFont(std::string font);

@@ -9,23 +9,22 @@
  * operations. All operations generate new Vector2D, they do not
  * modify the vectors on which they operate. The only methods that
  * modify the state are the different setters (and operator=).
- *
  */
 
 namespace Utilities {
 
 	class Vector2D {
 
-		//TODO: Dot product y Cross product
+		// TODO: Dot product y Cross product
 
 	public:
 
-		// various constructors
+		// Various constructors
 		Vector2D() noexcept :
 			x_(), y_() {
 		}
 
-		//Construct a Vector2D given a string representing its value ("(2, 1)", "3, 1")
+		// Construct a Vector2D given a string representing its value ("(2, 1)", "3, 1")
 		Vector2D(std::string const& str);
 		Vector2D(const char* charArray);
 
@@ -86,17 +85,17 @@ namespace Utilities {
 
 		// ** various operations
 
-		// length of the vector
+		// Length of the vector
 		inline float magnitude() const {
 			return sqrtf(powf(x_, 2) + powf(y_, 2));
 		}
 
-		// square length of the vector
+		// Square length of the vector
 		inline float sqrMagnitude() const {
 			return x_ * x_ + y_ * y_;
 		}
 
-		// vector in the same direction of length 1
+		// Vector in the same direction of length 1
 		inline Vector2D normalize() const {
 			return *this / magnitude();
 		}
@@ -105,7 +104,7 @@ namespace Utilities {
 			return x_ * y_;
 		}
 
-		// counter clockwise rotation in a normal coordinate system, and
+		// Counter clockwise rotation in a normal coordinate system, and
 		// it is clockwise rotation if we work with a coordinate system
 		// in which the vertical axe is flipped (it is like a mirror over
 		// the horizontal axe)-- which the case when working with the SDL.
@@ -119,7 +118,7 @@ namespace Utilities {
 		//
 		float angle(const Vector2D& v) const;
 
-		// vector subtraction
+		// Vector subtraction
 		inline Vector2D operator-(const Vector2D& v) const {
 			return Vector2D(x_ - v.x_, y_ - v.y_);
 		}
@@ -130,7 +129,7 @@ namespace Utilities {
 			return *this;
 		}
 
-		// vector addition
+		// Vector addition
 		inline Vector2D operator+(const Vector2D& v) const {
 			return Vector2D(x_ + v.x_, y_ + v.y_);
 		}
@@ -149,12 +148,12 @@ namespace Utilities {
 			return x_ == v.x_ && y_ == v.y_;
 		}
 
-		// multiplication by constant (scaling)
+		// Multiplication by constant (scaling)
 		inline Vector2D operator*(float d) const {
 			return Vector2D(x_ * d, y_ * d);
 		}
 
-		// multiplication by constant (scaling)
+		// Multiplication by constant (scaling)
 		inline Vector2D operator*=(float d) const {
 			return Vector2D(x_ * d, y_ * d);
 		}
@@ -171,17 +170,17 @@ namespace Utilities {
 			return *this;
 		}
 
-		// division by constant (scaling)
+		// Division by constant (scaling)
 		inline Vector2D operator/(float d) const {
 			return Vector2D(x_ / d, y_ / d);
 		}
 
-		// scalar multiplication
-		inline float operator *(const Vector2D& d) const {
+		// Scalar multiplication
+		inline float operator*(const Vector2D& d) const {
 			return d.x_ * x_ + d.y_ * y_;
 		}
 
-		// scalar multiplication
+		// Scalar multiplication
 		inline Vector2D mult(const Vector2D& d) const {
 			return Vector2D(d.x_ * x_ , d.y_ * y_);
 		}
@@ -196,7 +195,7 @@ namespace Utilities {
 		float y_;  // second coordinate
 	};
 
-	// needed for printing a value of tyep Vector2D with std::cout.
+	// Needed for printing a value of tyep Vector2D with std::cout.
 	// The definition is in .cpp
 	std::ostream& operator<<(std::ostream& os, const Vector2D& v);
 

@@ -52,6 +52,7 @@ void ECSReader::AskForPath(std::string const& name, std::string& path)
 ECSReader& ECSReader::Read()
 {
 	ProcessFolder(root);
+	ManageInheritance();
 	return *this;
 }
 
@@ -108,8 +109,6 @@ void ECSReader::ProcessFile(std::string const& path)
 
 
 	bool currentClassIsManager = false;
-
-
 
 	while (stream) {
 		std::string line;
@@ -197,7 +196,7 @@ void ECSReader::ProcessFile(std::string const& path)
 
 			if (forceAddClassName) {
 
-				methods[currentClassName];
+				allComponents.emplace(currentClassName);
 			}
 
 
@@ -216,7 +215,10 @@ void ECSReader::ProcessFile(std::string const& path)
 					}
 				}
 
-				components.push_back(std::make_pair(currentClassName, path));
+				componentsWithPaths.push_back(std::make_pair(currentClassName, path));
+
+				if (!allComponents.contains(currentClassName))
+					allComponents.emplace(currentClassName);
 			}
 
 			continue;
@@ -233,6 +235,9 @@ void ECSReader::ProcessFile(std::string const& path)
 			std::string attName = attNameWithComa.substr(0, attNameWithComa.find(";"));
 
 			attributes[currentClassName].push_back({ attReturnType, attName });
+
+			if (!allComponents.contains(currentClassName))
+				allComponents.emplace(currentClassName);
 
 			if (!fileIncluded) {
 
@@ -262,8 +267,13 @@ void ECSReader::ProcessFile(std::string const& path)
 				continue;
 			}
 
-			if (!currentClassIsManager)
+			if (!currentClassIsManager) {
+
 				methods[currentClassName].push_back(method);
+
+				if (!allComponents.contains(currentClassName))
+					allComponents.emplace(currentClassName);
+			}
 
 			else
 				managerMethods[currentClassName].push_back(method);
@@ -280,7 +290,35 @@ void ECSReader::ProcessFile(std::string const& path)
 		}
 	}
 
+
 	stream.close();
+}
+
+
+//Cuando un componente hereda de otro, incluimos los atributos de la clase padre en la clase hijo
+
+void ECSReader::ManageInheritance()
+{
+	for (auto& inheritance : classInheritance) {
+
+		std::string const& childClass = inheritance.first;
+		std::string const& parentClass = inheritance.second;
+
+		if (attributes.contains(parentClass)) {
+
+
+			if (!attributes.contains(childClass)) {
+
+				attributes[childClass];
+			}
+
+			for (auto& attr : attributes[parentClass])
+			{
+				attributes[childClass].push_back(attr);
+			}
+		}
+
+	}
 }
 
 
@@ -346,6 +384,7 @@ ECSReader::Method ECSReader::CreateMethod(std::string const& line, std::string c
 }
 
 
+
 #define TAB "\t"
 #define NEWLINE "\n"
 #define VARIABLE "Scripting::Variable"
@@ -398,7 +437,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 	definition << TAB "if(" << givenEntity << " != " << expectedEntity << "){" NEWLINE;
 	//entity, script, function, i, expected, given
-	definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+	definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() <<
 		"\", std::to_string(0)" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 
@@ -413,10 +452,10 @@ std::string ECSReader::Method::FunctionDefinition()
 
 			definition << TAB "if(" << given << " != " << expected << "){" NEWLINE;
 			//entity, script, function, i, expected, given
-			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() <<
+			definition << TAB TAB"DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() <<
 				"\", std::to_string(" << i + 1 << ")" << ", " << "std::string(\"\")" << ", " << " \"\"" << "); " NEWLINE;
 			definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
-			
+
 			definition << TAB"}" NEWLINE NEWLINE;
 		}
 	}
@@ -428,7 +467,7 @@ std::string ECSReader::Method::FunctionDefinition()
 
 
 	definition << TAB "if(self == nullptr){" NEWLINE;
-	definition << TAB TAB"DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Script({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
+	definition << TAB TAB"DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, \"" + ScriptName() + "\", vec[0].value.entity->getEntityName(), " + className + ");" NEWLINE;
 	definition << TAB TAB"return Scripting::Variable::Null();" NEWLINE;
 	definition << TAB"}" NEWLINE;
 
@@ -522,7 +561,7 @@ std::string ECSReader::Method::String2ScriptingVariable(std::string const& in)
 	if (in == "char")
 		return ".value.Char";
 
-	if (in == "std::string" || in == "string" || in == "cstring") {
+	if (in == "std::string" || in == "string" || in == "cstring" || in == "cString") {
 		return ".str";
 	}
 
@@ -555,7 +594,7 @@ std::string ECSReader::Method::String2ScriptingEnum(std::string const& in)
 		return "Bool";
 	if (in == "char")
 		return "Char";
-	if (in == "std::string" || in == "string" || in == "cstring") {
+	if (in == "std::string" || in == "string" || in == "cstring" || in == "cString") {
 		return "String";
 	}
 	if (in == "Utilities::Vector2D" || in == "Vector2D" || in == "cVector2D") {
@@ -596,7 +635,7 @@ std::string ECSReader::Attribute::TypeConversion(std::string const& convertName)
 		return convertName + " == \"true\" ? true : false";
 	}
 
-	if (type == "string" || type == "std::string" || type == "cstring") {
+	if (type == "string" || type == "std::string" || type == "cstring" || type == "cString") {
 		return convertName;
 	}
 
@@ -673,7 +712,7 @@ ECSReader& ECSReader::CreateFunctionManagerSource()
 
 	//TODO: por muy epico que sea el codigo realmente quedaria mejor sin los defines estos
 
-cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
+	cpp << R"~(#define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
 #define _DebugError(entity, script, function, title, error) _Console(_ErrorInfo(entity, script, function, title), error)
 
@@ -709,7 +748,8 @@ using namespace ECS;
 using namespace Physics;
 using namespace Input;
 using namespace Scripting;
-
+using namespace Sound;
+using namespace Renderer;
 
 
 void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map){
@@ -791,15 +831,6 @@ ECSReader& ECSReader::ClassReflection()
 		.AddAtribute("std::unordered_map<std::string, ReflectionMethod>", "reflectionMethods")
 		.Empty(1);
 
-
-
-	for (auto& inh : classInheritance) {
-
-		attributes[inh.first];
-	}
-
-
-
 	std::stringstream constructor;
 
 	constructor << "\n";
@@ -836,18 +867,6 @@ ECSReader& ECSReader::ClassReflection()
 			method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
 
 			method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
-		}
-
-		if (classInheritance.contains(className.first)) {
-
-			std::string inheritance = classInheritance[className.first];
-			if (attributes.contains(inheritance))
-				for (auto& attribute : attributes[inheritance]){
-
-					method << "\t\tif(map.contains(\"" << attribute.name << "\"))\n";
-
-					method << "\t\t\tself->" << attribute.name << " = " << attribute.TypeConversion("map.at(\"" + attribute.name + "\")") << ";\n";
-				}
 		}
 
 		creator.AddMethod("void", "Reflect" + className.first, { {"ECS::Component*", "selfComp"},
@@ -891,7 +910,7 @@ ECSReader& ECSReader::ComponentFactory()
 
 	constructor << "\n";
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		constructor << "\tcomponents[\"" << component.first << "\"] = &ComponentFactory::Create" << component.first << ";\n";
 	}
@@ -913,7 +932,7 @@ ECSReader& ECSReader::ComponentFactory()
 		.Empty(1);
 
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		std::stringstream method;
 
@@ -933,7 +952,7 @@ ECSReader& ECSReader::ComponentFactory()
 	creator.EndClass();
 
 
-	for (auto& component : components) {
+	for (auto& component : componentsWithPaths) {
 
 		auto FileName = std::filesystem::path(component.second);
 
@@ -959,7 +978,7 @@ using namespace nlohmann;
 
 
 
-ECSReader& ECSReader::Convert2JSON()
+ECSReader& ECSReader::GenerateFunctionJSON()
 {
 	/*
 		Ejemplo del JSON
@@ -1006,7 +1025,221 @@ ECSReader& ECSReader::Convert2JSON()
 		}
 	}
 
-	std::ofstream fmJSON(output + "/FunctionManager.json");
+	std::ofstream fmJSON(output + "/Functions.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+
+ECSReader& ECSReader::GenerateAttributeJSON()
+{
+	/*
+		Ejemplo del JSON
+
+			{
+			"Transform" : {
+
+				{"type", "int"},
+				{"name", "mass"},
+				}
+			}
+		}
+	*/
+
+
+	json root;
+
+	for (auto& currentClass : attributes) {
+
+		root[currentClass.first] = nullptr;
+
+		for (auto& attr : currentClass.second) {
+
+			root[currentClass.first] += {
+
+				{"type", attr.type},
+				{ "name" , attr.name },
+			};
+		}
+	}
+
+	std::ofstream fmJSON(output + "/Attributes.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+std::string ECSReader::ProcessType(std::string const& input)
+{
+	if (input == "std::string" || input == "string" || input == "cstring" || input == "cString")
+		return "Text";
+
+	if (input == "float" || input == "int" || input == "double")
+		return "Number";
+
+	if (input == "Utilities::Vector2D" || input == "Vector2D" || input == "cVector2D")
+		return "Pair";
+
+	if (input == "char")
+		return "Letter";
+
+	if (input == "Color" || input == "Utilities::Color" || input == "cColor")
+		return "Color";
+
+	if (input == "bool")
+		return "Toggle";
+
+	if (input == "Entity*" || input == "ECS::Entity*")
+		return "Entity";
+
+	if (input == "void")
+		return "void";
+
+	if (input == "cVariable" || input == "Scripting::Variable")
+		return "Any";
+
+	std::cout << "Error con el tipo: " << input << std::endl;
+	return input;
+}
+
+
+ECSReader& ECSReader::GenerateComponentsJSON()
+{
+	json root;
+
+	for (auto& component : allComponents) {
+
+		json cmp = nlohmann::ordered_json();
+
+		if (attributes.contains(component)) {
+
+			for (auto& attr : attributes[component]) {
+
+				cmp["attributes"] += {
+
+					{"type", ProcessType(attr.type)},
+					{ "name" , attr.name }
+				};
+			}
+		}
+
+
+		if (methods.contains(component)) {
+
+			for (auto& method : methods[component]) {
+
+				json methodData = json::basic_json();
+
+				methodData["return"] = ProcessType(method.returnType);
+				methodData["name"] = method.methodName;
+
+				json inputJson = nlohmann::ordered_json();
+
+				inputJson += {
+					{"type", "Entity"},
+					{ "name", "entity" }
+				};
+
+				for (auto& input : method.input) {
+					inputJson +=
+					{
+						{"type", ProcessType(input.type)},
+						{ "name", input.name }
+					};
+				}
+
+				methodData["input"] = inputJson;
+
+				cmp["methods"] += methodData;
+			}
+
+		}
+
+		root[component] = cmp;
+	}
+
+	std::ofstream fmJSON(output + "/Components.json");
+
+	fmJSON << root.dump(4) << std::endl;
+
+	fmJSON.close();
+
+	return *this;
+}
+
+
+
+
+ECSReader& ECSReader::GenerateManagersJSON()
+{
+	json root = json::array();
+
+
+	std::map<std::string, std::vector<Method>> correctedManagerMethods = managerMethods;
+
+
+	correctedManagerMethods.erase("ScriptFunctionality");
+
+	for (auto& method : managerMethods["ScriptFunctionality"])
+	{
+		size_t separator = method.methodName.find("_");
+
+		std::string newClassName = method.methodName.substr(0, separator);
+		std::string newMethodName = method.methodName.substr(separator + 1);
+
+
+		Method newMethod;
+
+		newMethod.className = newClassName;
+		newMethod.methodName = newMethodName;
+		newMethod.returnType = method.returnType;
+		newMethod.input = method.input;
+
+		correctedManagerMethods[newClassName].push_back(newMethod);
+
+	}
+
+
+	for (auto& manager : correctedManagerMethods)
+	{
+		json managerJson;
+
+		managerJson["name"] = manager.first;
+		managerJson["methods"] = json::array();
+
+		for (auto& method : manager.second) {
+
+
+			json methodJson;
+
+			json inputJson = json::array();
+			for (auto& input : method.input) {
+
+				inputJson.push_back(
+					{ {"name", input.name}, {"type", ProcessType(input.type)} });
+			}
+
+			methodJson["input"] = inputJson;
+			methodJson["return"] = ProcessType(method.returnType);
+			methodJson["name"] = method.methodName;
+
+			managerJson["methods"].push_back(methodJson);
+		}
+
+		root.push_back(managerJson);
+	}
+
+
+	std::ofstream fmJSON(output + "/Managers.json");
 
 	fmJSON << root.dump(4) << std::endl;
 

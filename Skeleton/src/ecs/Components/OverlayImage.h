@@ -17,10 +17,9 @@ namespace ECS {
 
 		OverlayImage();
 
-
 		reflect std::string path;
-	private:
 
+	private:
 
 		Overlay* overlay;
 

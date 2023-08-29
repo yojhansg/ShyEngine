@@ -39,9 +39,16 @@ void Scripting::Fork::Operate(Node*& next, int iterationIdx)
 
 		break;
 	case Scripting::Fork::ForkType::For:
+
+
+		for (int i = 0; i < condition->output.value.Float; i++) {
+
+			A->Cicle(iterationIdx);
+		}
+		next = B;
+
 		break;
 	default:
-
 
 		if (condition->output.value.Bool)
 			next = A;

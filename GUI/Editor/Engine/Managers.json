@@ -1,0 +1,1761 @@
+[
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "val",
+                        "type": "Any"
+                    }
+                ],
+                "name": "Set",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "Get",
+                "return": "Any"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "val",
+                        "type": "Any"
+                    }
+                ],
+                "name": "SetLocal",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "GetLocal",
+                "return": "Any"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "val",
+                        "type": "Any"
+                    }
+                ],
+                "name": "SetGlobal",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "GetGlobal",
+                "return": "Any"
+            }
+        ],
+        "name": "Attribute"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "GetPosition",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "newPosition",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "SetPosition",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "GetScale",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "newScale",
+                        "type": "Number"
+                    }
+                ],
+                "name": "SetScale",
+                "return": "void"
+            }
+        ],
+        "name": "Camera"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "angle",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Radians",
+                "return": "Number"
+            }
+        ],
+        "name": "DegreesTo"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Entity",
+                "return": "Entity"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ent",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "Name",
+                "return": "Text"
+            },
+            {
+                "input": [],
+                "name": "CurrentName",
+                "return": "Text"
+            }
+        ],
+        "name": "Entity"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "ent",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "EntityEvent",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "GlobalEvent",
+                "return": "void"
+            }
+        ],
+        "name": "Event"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Graph",
+                "return": "Text"
+            }
+        ],
+        "name": "Graph"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "keyDownEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "keyUpEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLetterUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isNumberUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isSpecialKeyUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "HorizontalMovement",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "VerticalMovement",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "mouseMotionEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "wheelMotionEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonDownEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isMouseButtonUpEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "getMousePos",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "getWheelMotionY",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getJoysticksConnected",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "isJoystickAxisMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isJoystickButtonEventDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isJoystickButtonEventUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickValue",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "ct",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickTriggerValue",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getJoystickButtonState",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "getJoysticksNumButtons",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "isLeftJoystickMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isRightJoystickMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isLeftTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isRightTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "joystickConnectedEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "joystickDisconnectedEvent",
+                "return": "Toggle"
+            }
+        ],
+        "name": "InputManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Equals",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "NotEquals",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Lesser",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Greater",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "LesserOrEqual",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "GreaterOrEqual",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Toggle"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "And",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Toggle"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "Or",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "b",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "Negate",
+                "return": "Toggle"
+            }
+        ],
+        "name": "Logic"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Add",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Subtract",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Multiply",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Divide",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Power",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Root",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Max",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Min",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    }
+                ],
+                "name": "PlusOne",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    }
+                ],
+                "name": "MinusOne",
+                "return": "Number"
+            }
+        ],
+        "name": "Math"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "url",
+                        "type": "Text"
+                    }
+                ],
+                "name": "OpenURL",
+                "return": "void"
+            }
+        ],
+        "name": "OpenURL"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "getGravity",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "gravity",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "setGravity",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "layerName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "addCollisionLayer",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "layerName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "removeCollisionLayer",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "layerNameA",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "layerNameB",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "collide",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "setCollisionBetweenLayers",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "layerNameA",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "layerNameB",
+                        "type": "Text"
+                    }
+                ],
+                "name": "layersCollide",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "layerName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "layersExists",
+                "return": "Toggle"
+            }
+        ],
+        "name": "PhysicsManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "Any"
+                    }
+                ],
+                "name": "Print",
+                "return": "void"
+            }
+        ],
+        "name": "Print"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "angle",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Degrees",
+                "return": "Number"
+            }
+        ],
+        "name": "RadiansTo"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "UnitValue",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "min",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "max",
+                        "type": "Number"
+                    }
+                ],
+                "name": "NumberBetween",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Between",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "min",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "max",
+                        "type": "Number"
+                    }
+                ],
+                "name": "AngleBetween",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "UnitVector",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ScaledVector",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Color",
+                "return": "Color"
+            },
+            {
+                "input": [
+                    {
+                        "name": "c1",
+                        "type": "Color"
+                    },
+                    {
+                        "name": "c2",
+                        "type": "Color"
+                    }
+                ],
+                "name": "ColorBetween",
+                "return": "Color"
+            }
+        ],
+        "name": "Random"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "Now",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "WeekDay",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ShortWeekDay",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Month",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ShortMonth",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "DayOfWeekIndex",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "MonthIndex",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "MonthDay",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Year",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Hours",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Minutes",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Seconds",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "now",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Since",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "HourTime",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "PreciseHourTime",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "TimeStamp",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "time",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Date",
+                "return": "Text"
+            }
+        ],
+        "name": "RealTime"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "getWidth",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getHeight",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "toggleFullScreen",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "show",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "showCursor",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "w",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "h",
+                        "type": "Number"
+                    }
+                ],
+                "name": "resizeWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "renameWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "x",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "y",
+                        "type": "Number"
+                    }
+                ],
+                "name": "repositionWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "path",
+                        "type": "Text"
+                    }
+                ],
+                "name": "SetWindowIcon",
+                "return": "Toggle"
+            }
+        ],
+        "name": "RendererManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "SaveAll",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Save",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Load",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "value",
+                        "type": "Any"
+                    }
+                ],
+                "name": "SetSlot",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "GetSlot",
+                "return": "Any"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "value",
+                        "type": "Any"
+                    }
+                ],
+                "name": "Set",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "name",
+                        "type": "Text"
+                    }
+                ],
+                "name": "Get",
+                "return": "Any"
+            },
+            {
+                "input": [],
+                "name": "ClearSlot",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Exists",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "slot",
+                        "type": "Number"
+                    }
+                ],
+                "name": "DeleteSave",
+                "return": "void"
+            }
+        ],
+        "name": "SaveManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "scenePath",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "pushMode",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ChangeScene",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "ResetScene",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "EndGame",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "getNumberOfScenes",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "GetCurrentScenePath",
+                "return": "Text"
+            }
+        ],
+        "name": "SceneManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "volume",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setMasterVolume",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "nChannels",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setChannelsCapacity",
+                "return": "void"
+            }
+        ],
+        "name": "SoundManager"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Text"
+                    }
+                ],
+                "name": "Equals",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Text"
+                    }
+                ],
+                "name": "Concatenate",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "begin",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "end",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Substring",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Begining",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "End",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "values",
+                        "type": "Text"
+                    }
+                ],
+                "name": "Trim",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    }
+                ],
+                "name": "TrimBlanks",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "GetLetter",
+                "return": "Letter"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Text"
+                    },
+                    {
+                        "name": "c",
+                        "type": "Letter"
+                    }
+                ],
+                "name": "Find",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "variable",
+                        "type": "Any"
+                    }
+                ],
+                "name": "ToString",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "number",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "zeroCount",
+                        "type": "Number"
+                    }
+                ],
+                "name": "LeadingZeros",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "number",
+                        "type": "Number"
+                    }
+                ],
+                "name": "RemoveDecimals",
+                "return": "Text"
+            }
+        ],
+        "name": "Text"
+    },
+    {
+        "methods": [
+            {
+                "input": [],
+                "name": "GetTimeSinceBegining",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "GetTimeSinceBeginingMilliseconds",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "GetDeltaTime",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "GetFrameRate",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "GetPhysicsDeltaTime",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ScaleWithDeltaTime",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "val",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ScaleWithPhysicsDeltaTime",
+                "return": "Number"
+            }
+        ],
+        "name": "Time"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Magnitude",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "X",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Y",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Angle",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "other",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "AngleWithVector",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "x",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "y",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Create",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Normalize",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "vec",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "angle",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Rotate",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Add",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Subtract",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Dot",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "Cross",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Multiply",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Up",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Left",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Right",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Down",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "One",
+                "return": "Pair"
+            },
+            {
+                "input": [],
+                "name": "Zero",
+                "return": "Pair"
+            }
+        ],
+        "name": "Vector2D"
+    }
+]

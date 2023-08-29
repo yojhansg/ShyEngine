@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Component.h"
-#include <RendererManager.h>
+#include <SDL_rect.h>
+
+struct SDL_Renderer;
 
 namespace Renderer {
 	class Texture;
@@ -11,7 +13,6 @@ namespace ECS {
 
 	class Transform;
 
-	//TODO: change texture
 	class Image : public Component {
 
 		friend class Animation;
@@ -27,27 +28,26 @@ namespace ECS {
 		void render() override;
 
 	publish:
+
 		int getTextureWidth();
 
 		int getTextureHeight();
 
 		void setSrcRect(int x, int y, int w, int h);
 
-		void setFlipX(bool flip);
-
-		void setFlipY(bool flip);
-
 		void setRotaionPoint(int x, int y);
 
 		Utilities::Vector2D scaledSize();
 
-		void ChangeTexture(cstring texturePath);
+		void loadTexture(cstring texturePath);
+
+		// Sets the flip mode for the image
+		// 0 for no flip, 1 for flip horizontally
+		// and 2 for flip vertically
+		void setFlipMode(int flipmode);
 
 	private:
 
-		void flipMode();
-
-		//TODO: ver si encapsular estas cosas de SDL para que el en main no se incluya SDL
 		SDL_Renderer* renderer;
 		Renderer::Texture* texture;
 
@@ -61,9 +61,7 @@ namespace ECS {
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;
 			
-		bool flipX, flipY;
-
-		SDL_RendererFlip mode;
+		int flipmode;
 
 		SDL_Point* rotationPoint;
 	};

@@ -92,14 +92,28 @@ Scripting::Variable ECS::Script::Get(cstring name)
 	return attributes[name];
 }
 
-void ECS::Script::Set(cstring name, Scripting::Variable variable)
+void ECS::Script::Set(cstring name, cVariable variable)
 {
 	attributes[name] = variable;
+}
+
+Scripting::Variable ECS::Script::GetSerialisedValue(cstring name)
+{
+	if (serializedValues.contains(name))
+		return serializedValues[name];
+
+	return Scripting::Variable::Null();
+}
+
+void ECS::Script::SetSerialisedValue(cstring name, cVariable val)
+{
+	serializedValues[name] = val;
 }
 
 void ECS::Script::Initialise(cstring path)
 {
 	name = path;
+
 	nodes = Scripting::ScriptManager::LoadScript(path);
 }
 

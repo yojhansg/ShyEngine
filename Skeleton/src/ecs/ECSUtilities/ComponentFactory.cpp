@@ -2,16 +2,17 @@
 
 #include "Components/Animation.h"
 #include "Components/BoxBody.h"
-#include "Components/Camera.h"
-#include "Components/ChainBody.h"
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
+#include "Components/Movement.h"
+#include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
-#include "Components/TestComponent.h"
+#include "Components/ParticleSystem.h"
+#include "Components/SoundEmitter.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
 
@@ -21,16 +22,17 @@ ComponentFactory::ComponentFactory(){
 
 	components["Animation"] = &ComponentFactory::CreateAnimation;
 	components["BoxBody"] = &ComponentFactory::CreateBoxBody;
-	components["Camera"] = &ComponentFactory::CreateCamera;
-	components["ChainBody"] = &ComponentFactory::CreateChainBody;
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
+	components["Movement"] = &ComponentFactory::CreateMovement;
+	components["MusicEmitter"] = &ComponentFactory::CreateMusicEmitter;
 	components["Overlay"] = &ComponentFactory::CreateOverlay;
 	components["OverlayButton"] = &ComponentFactory::CreateOverlayButton;
 	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
 	components["OverlayText"] = &ComponentFactory::CreateOverlayText;
-	components["TestComponent"] = &ComponentFactory::CreateTestComponent;
+	components["ParticleSystem"] = &ComponentFactory::CreateParticleSystem;
+	components["SoundEmitter"] = &ComponentFactory::CreateSoundEmitter;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
 
@@ -47,14 +49,6 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::BoxBody();
 
 }
-	ECS::Component* ComponentFactory::CreateCamera(){
-		return new ECS::Camera();
-
-}
-	ECS::Component* ComponentFactory::CreateChainBody(){
-		return new ECS::ChainBody();
-
-}
 	ECS::Component* ComponentFactory::CreateCircleBody(){
 		return new ECS::CircleBody();
 
@@ -65,6 +59,14 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateImage(){
 		return new ECS::Image();
+
+}
+	ECS::Component* ComponentFactory::CreateMovement(){
+		return new ECS::Movement();
+
+}
+	ECS::Component* ComponentFactory::CreateMusicEmitter(){
+		return new ECS::MusicEmitter();
 
 }
 	ECS::Component* ComponentFactory::CreateOverlay(){
@@ -83,8 +85,12 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::OverlayText();
 
 }
-	ECS::Component* ComponentFactory::CreateTestComponent(){
-		return new ECS::TestComponent();
+	ECS::Component* ComponentFactory::CreateParticleSystem(){
+		return new ECS::ParticleSystem();
+
+}
+	ECS::Component* ComponentFactory::CreateSoundEmitter(){
+		return new ECS::SoundEmitter();
 
 }
 	ECS::Component* ComponentFactory::CreateTransform(){

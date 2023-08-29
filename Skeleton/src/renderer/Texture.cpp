@@ -1,16 +1,29 @@
 #include "Texture.h"
 #include "RendererManager.h"
 #include <SDL_image.h>
-#include <cassert>
+#include "ConsoleManager.h"
 
 Renderer::Texture::Texture(const std::string& filepath) {
-	
+
+	texture = nullptr;
+	width = height = 0;
+
 	// Surface and texture
 	SDL_Surface* surface = IMG_Load(filepath.c_str());
-	assert(surface != nullptr, "Couldn't load image: " + filepath);
+
+	if (surface == nullptr)
+	{
+		Console::Output::PrintError("Texture loading error", "Couldnt load texture from file <" + filepath + ">");
+		return;
+	}
 
 	texture = SDL_CreateTextureFromSurface(RendererManager::instance()->getRenderer(), surface);
-	assert(texture != nullptr, "Couldn't load image: " + filepath);
+
+	if (texture == nullptr)
+	{
+		Console::Output::PrintError("Texture loading error", "Couldnt load texture from file <" + filepath + ">");
+		return;
+	}
 
 	width = surface->w; height = surface->h;
 
@@ -21,7 +34,10 @@ Renderer::Texture::Texture(SDL_Texture* text)
 {
 	texture = text;
 
-	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height) < 0) {
+		Console::Output::PrintError("Texture loading error", SDL_GetError());
+		return;
+	}
 }
 
 

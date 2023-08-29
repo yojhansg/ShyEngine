@@ -1,11 +1,11 @@
 #include "Engine.h"
-#include "Game.h"
 #include "DataLoader.h"
+#include "SplashScene.h"
 
-#include <ECSUtilities/FunctionManager.h>
-#include <ECSUtilities/ComponentFactory.h>
-#include <ECSUtilities/ClassReflection.h>
 #include <Scripting/ScriptFunctionality.h>
+#include <ECSUtilities/ComponentFactory.h>
+#include <ECSUtilities/FunctionManager.h>
+#include <ECSUtilities/ClassReflection.h>
 #include <Scripting/ScriptManager.h>
 
 #include <ResourcesManager.h>
@@ -14,30 +14,28 @@
 #include <OverlayManager.h>
 #include <PhysicsManager.h>
 #include <ConsoleManager.h>
+#include <PrefabManager.h>
 #include <RenderManager.h>
 #include <SoundManager.h>
 #include <InputManager.h>
 #include <SceneManager.h>
 #include <EngineTime.h>
 #include <Component.h>
-#include <SDLUtils.h>
+#include <filesystem>
 #include <Scene.h>
 #include <chrono>
-
-#include <iostream>
-
 using namespace std::chrono;
 
 Engine::Engine() {
 
 	physicsManager = nullptr; rendererManager = nullptr; inputManager = nullptr;
 	sceneManager = nullptr; engineTime = nullptr; renderManager = nullptr;
-	overlayManager = nullptr;
+	overlayManager = nullptr; resourcesManager = nullptr;
 }
 
 bool Engine::init() {
 
-	DataLoader data = DataLoader::Load("flappyBird");
+	DataLoader data = DataLoader::Load("config");
 
 	if (!data.valid) {
 		Console::Output::PrintNoFormat("CRITICAL ERROR: The engine couldn't load the game configuration file <config.json>", Console::Color::LightRed);
@@ -45,41 +43,80 @@ bool Engine::init() {
 	}
 
 	if (ECS_Version != ECSfunc_Version) {
-		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour");
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the scripting version. This may cause unexpected behaviour.");
 	}
 
 	if (ECS_Version != ECSreflection_Version) {
-		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour");
+		Console::Output::PrintWarning("Engine version", "The engine version does not match the editor reflection version. This may cause unexpected behaviour.");
 	}
 
+
+	// --------------------------------- MANAGERS -----------------------------------
+
 	sceneManager = ECS::SceneManager::init();
-	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync);
-	physicsManager = Physics::PhysicsManager::init(data.gravity);
-	renderManager = ECS::RenderManager::init();
-	inputManager = Input::InputManager::init(data.closeWithEscape); 
-	engineTime = Utilities::Time::init(); 
-	Resources::ResourcesManager::init();
-	ECS::ContactListener::init(); 
-	SoundManager::SoundManager::init();
+	if (!sceneManager->Valid()) return false;
+
+	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync, data.fullscreen, data.showCursor);
+	if (!rendererManager->Valid()) return false;
+
+	physicsManager = Physics::PhysicsManager::init(data.gravity, data.layers, data.collisionMatrix);
+	if (!physicsManager->Valid()) return false;
+
+	inputManager = Input::InputManager::init(data.closeWithEscape);
+	if (!inputManager->Valid()) return false;
+
+	if (!Sound::SoundManager::init(data.frequency, data.channels + 1, data.chunksize)->Valid()) return false;
+
+	renderManager = ECS::RenderManager::init();	
+
+	engineTime = Utilities::Time::init();
+
+	resourcesManager = Resources::ResourcesManager::init();
+
+	resourcesManager->SetResourcesPath("Assets\\");
+
+	ECS::SplashScene::LoadResources();
+
+	ECS::ContactListener::init();
+
+	ECS::PrefabManager::init(data.projectFilePath);
+
 	Scripting::ScriptManager::init();
+
 	Scripting::ScriptFunctionality::init();
+
 	ComponentFactory::init();
 
-	overlayManager = ECS::OverlayManager::init(data.debugFrameRate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate 
+	overlayManager = ECS::OverlayManager::init(data.debugFramerate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
 
-	//Maximun size = 64x64 pixels
-	rendererManager->SetWindowIcon(data.windowIcon);
+
+
+	// ------- Data configuration ---------
+
+	if (data.windowIcon != "")
+		rendererManager->SetWindowIcon(data.resourcesPath + data.windowIcon);
+	else
+		rendererManager->SetWindowIcon("Assets\\icon.png");
+
+	rendererManager->SetRenderTarget(false);
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	//Game(sceneManager).initScenes();
+	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
 
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+	sceneManager->ChangeScene(data.resourcesPath + data.initialScene, (int)ECS::SceneManager::PUSH);
 	sceneManager->manageScenes();
 
-	if (data.useSplashScreen) {
-		sceneManager->SplashScreen();
+	resourcesManager->SetResourcesPath(data.resourcesPath);
+
+
+	if (sceneManager->getNumberOfScenes() == 0) {
+		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");
+		return false;
 	}
+
+	if (data.useSplashScreen)
+		sceneManager->SplashScreen();
 
 	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
 	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);
@@ -119,9 +156,9 @@ void Engine::update() {
 		// LateUpdate
 		scene->lateUpdate(engineTime->deltaTime);
 
-		overlayManager->Update();
-
 		// Render
+		overlayManager->Update();
+		rendererManager->SetRenderTarget(false);
 		rendererManager->clearRenderer(Utilities::Color(131, 92, 243));
 		renderManager->Render();
 		physicsManager->debugDraw();
@@ -155,5 +192,13 @@ void Engine::update() {
 }
 
 void Engine::close() {
+
+	Console::Output::Print("Fin de ejecucion", "Bye!");
+
+	resourcesManager->close();
+	physicsManager->close();
+	inputManager->close();
+	rendererManager->close();
 	sceneManager->close();
+
 }

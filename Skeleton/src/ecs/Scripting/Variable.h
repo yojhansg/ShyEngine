@@ -27,6 +27,7 @@ namespace Scripting {
 
 			Utilities::Color color;
 			ECS::Entity* entity;
+			int entityId;
 		};
 
 
@@ -41,7 +42,6 @@ namespace Scripting {
 
 		/*static constructors*/
 		static Variable Null();
-		static Variable Int(int value);
 		static Variable Float(float value);
 		static Variable Bool(bool value);
 		static Variable Char(char value);

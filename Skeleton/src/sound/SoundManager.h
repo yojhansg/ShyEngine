@@ -1,75 +1,60 @@
 #pragma once
 
+#include "EditorExport.h"
 #include "Singleton.h"
 #include "SDL_mixer.h"
 #include <string>
-#include <map>
+#include <vector>
 
-#define MAX_SOUND_DISTANCE 255
+namespace Sound {
 
-namespace SoundManager {
-
-	class SoundManager : public Utilities::Singleton<SoundManager> {
+	EditorManager SoundManager : public Utilities::Singleton<SoundManager> {
 
 		friend Singleton<SoundManager>;
 
-	public:
+	publish:
 
-		enum SOUND_TYPE
-		{
-			SOUND_MUSIC = 0,
-			SOUND_SFX = 1
-		};
+		// Sets the master volume (affects music and sound channels)
+		// Volume should be between 0 and 1
+		void setMasterVolume(float volume);
+
+		// Sets the number of channels handled by the audio engine
+		void setChannelsCapacity(float nChannels);
+
+	public:
 
 		~SoundManager();
 
-		// Load and store by id a sound or a music depending on the type
-		void load(const std::string& fileName, const std::string& id, SOUND_TYPE type);
+		bool Valid() override;
 
-		// Play a sound specifying a channel. -1 to find the first available channel.
-		// Returns the selected channel or -1 if sound could not be played
-		int playSound(const std::string& id, int loop, int channel = -1);
-		
-		// No need to specify a channel, music has only 1 channel
-		void playMusic(const std::string& id, int loop);
+		// Channels
 
-		// Play a sound with fade in specifying a channel. -1 to find the first available channel
-		void playWithFadeIn(int channel, const std::string& id, int loops, int ms);
+			// Load a sound into the vector
+			int loadSoundEffect(Mix_Chunk* s);
 
-		// Play the music with ms of fade in
-		void playMusicWithFadeIn(const std::string& id, int loops, int ms);
+			// Play a sound specifying a channel. -1 to find the first available channel.
+			// Returns the selected channel or -1 if sound could not be played
+			int playSound(int id, int loop, int channel = -1);
 
-		// Halt the music channel after fading out for ms
-		void fadeOutMusic(int ms);
+			// Play a sound with fade in specifying a channel. -1 to find the first available channel
+			int fadeInChannel(int channel, int id, int loops, int ms);
 
-		void setMasterVolume(float volume);
+			// Play a sound with fade out specifying a channel. -1 to find the first available channel
+			void fadeOutChannel(int channel, int ms);
 
-
-		// Channels API
+			void stopChannel(int channel);
 
 			// Pause a particular channel
 			void pauseChannel(int channel);
-			
-			// Pause all channels
-			void pauseAllChannels();
 
 			// Return 1 if channel is paused, 0 otherwise
 			bool pausedChannel(int channel);
 
-			// Returns the number of paused channels
-			int numberOfPausedChannels();
-
 			// Resume a channel
 			void resumeChannel(int channel);
 
-			// Resume all channels
-			void resumeAllChannels();
-
 			// Returns non-zero if channel is playing, zero otherwise.
 			bool isChannelPlaying(int channel);
-
-			// Return the total number of channel playings
-			int numberOfChannelsPlaying();
 
 			// Set volume to a channel. Volume is between 0 and 128
 			void setChannelVolume(int channel, int volume);
@@ -78,9 +63,24 @@ namespace SoundManager {
 			int getChannelVolume(int channel);
 
 			// Sets the position of the cannel relative to the listener. Angle is between 0-360 and distance is between 0-255
-			void setChannelPosition(int channel, Sint16 angle, Uint8 distance);
+			void setChannelPosition(int channel, int angle, int distance);
 
-		// Music API
+			// Sets the panning of the channel
+			void setChannelPanning(int channel, int left, int right);
+
+		// Music
+
+			// Load a music into the vector
+			int loadMusic(Mix_Music* m);
+
+			// No need to specify a channel, music has only 1 channel
+			void playMusic(int id, int loop);
+
+			// Play the music with ms of fade in
+			void fadeInMusic(int id, int loops, int ms);
+
+			// Halt the music channel after fading out for ms
+			void fadeOutMusic(int ms);
 
 			// Pause the music channel. It can be resumed
 			void pauseMusic();
@@ -95,7 +95,7 @@ namespace SoundManager {
 			void resumeMusic();
 
 			// Returns 1 if music is playing, 0 otherwise
-			bool musicPlaying();
+			bool isMusicPlaying();
 
 			// Set the music channel volume.  Volume is between 0 and 128
 			void setMusicVolume(int volume);
@@ -104,16 +104,21 @@ namespace SoundManager {
 			int getMusicVolume();
 
 			// Rewinds the music
-			void rewingMusic();
+			void rewindMusic();
 		
 	private:
 
 		SoundManager();
+		SoundManager(int frequency, int channels, int chunksize);
 
-		void initSDLMixer();
+		bool initSDLMixer(int frequency, int channels, int chunksize);
 		void closeSDLMixer();
 
-		std::map<std::string, Mix_Chunk*> sfxs;
-		std::map<std::string, Mix_Music*> music;
+		int nChannels;
+
+		std::vector<Mix_Chunk*> sfxs;
+		std::vector<Mix_Music*> music;
+
+		bool valid;
 	};
 }

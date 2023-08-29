@@ -7,6 +7,7 @@
 #include "ConsoleManager.h"
 
 #include "Scripting/Script.h"
+#include "ReferencesManager.h"
 
 namespace ECS {
 
@@ -20,19 +21,22 @@ namespace ECS {
 		hasRemovedComponents = false;
 
 		this->renderOrder = renderOrder;
-
+		usesId = false;
 		inRenderSet = false;
 	}
 
-	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder) {
+	Entity::Entity(const std::string& ent_name, Scene* ent_scene, int renderOrder, int id) {
 
 		name = ent_name;
 		active = true;
 		removed = false;
 		scene = ent_scene;
+		inRemovedEntityList = false;
+		hasRemovedComponents = false;
 
 		this->renderOrder = renderOrder;
-
+		this->id = id;
+		usesId = true;
 		inRenderSet = false;
 	}
 
@@ -40,6 +44,7 @@ namespace ECS {
 		for (auto c : components) {
 			delete c; c = nullptr;
 		}
+
 		components.clear();
 		removedComponents.clear();
 
@@ -47,6 +52,9 @@ namespace ECS {
 			RenderManager::instance()->RemoveElement(renderIt);
 
 		inRenderSet = false;
+
+		if (usesId)
+			ReferencesManager::instance()->RemoveEntityFromMap(id);
 	}
 
 	Scene* Entity::getScene() {
@@ -135,7 +143,7 @@ namespace ECS {
 
 	void Entity::lateUpdate(float deltaTime) {
 		for (auto c : components) {
-			if (c->isActive() && !c->isRemoved()) 
+			if (c->isActive() && !c->isRemoved())
 				c->lateUpdate(deltaTime);
 			else if (c->isRemoved() && !c->inRemovedComponentList)
 				removeComponent(c);
@@ -160,7 +168,7 @@ namespace ECS {
 
 	void Entity::onActive() {
 		for (auto c : components) {
-			 c->onActive();
+			c->onActive();
 		}
 	}
 

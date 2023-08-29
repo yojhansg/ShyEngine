@@ -103,6 +103,8 @@ namespace ECS {
 
 		bool inRemovedComponentList;
 
+		bool valid;
+
 	};
 }
 

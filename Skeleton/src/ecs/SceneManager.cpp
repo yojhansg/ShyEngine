@@ -58,6 +58,7 @@ namespace ECS {
 		scenes.push(scene);
 	}
 
+
 	void SceneManager::ResetScene() {
 		
 		ChangeScene(currentScenePath, LOAD_MODE::POP_AND_PUSH);
@@ -100,8 +101,13 @@ namespace ECS {
 
 		if (scenes.size() > 0) scenes.top()->onSceneDown();
 
-		scenes.push(LoadScene(currentScenePath));
-		scenes.top()->start();
+		auto scene = LoadScene(currentScenePath);
+
+		if (scene != nullptr) {
+
+			scenes.push(scene);
+			scenes.top()->start();
+		}
 	}
 
 	void SceneManager::popScene() {
@@ -135,32 +141,27 @@ namespace ECS {
 	{
 		Scene* scene = SceneLoader::LoadScene(scenePath);
 
-		if (scene == nullptr) {
+		if (scene == nullptr)
 			return nullptr;
-		}
 
 		scene->init();
 		return scene;
 	}
 
 	void SceneManager::SetScene(ECS::Scene* scene) {
-
 		scenes.push(scene);
 		scene->start();
 	}
 
-	void SceneManager::EndGame()
-	{
+	void SceneManager::EndGame() {
 		ChangeScene("", LOAD_MODE::CLEAR);
 	}
 
-	void SceneManager::SetCameraScale(float newScale)
-	{
+	void SceneManager::SetCameraScale(float newScale) {
 		scenes.top()->cameraScale = newScale;
 	}
 
-	void SceneManager::SetCameraPosition(Utilities::Vector2D const& newPosition)
-	{
+	void SceneManager::SetCameraPosition(Utilities::Vector2D const& newPosition) {
 		scenes.top()->cameraPosition = newPosition;
 	}
 

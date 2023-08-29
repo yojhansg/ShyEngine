@@ -1,12 +1,13 @@
 #include "Save.h"
 
-#include "ConsoleManager.h"
-#include <json.hpp>
-#include <fstream>
-#include "Entity.h"
-#include <vector>
+#include <ConsoleManager.h>
 #include <filesystem>
 #include <iostream>
+#include <json.hpp>
+#include <Entity.h>
+#include <fstream>
+#include <vector>
+
 using namespace nlohmann;
 
 using jsonarray = std::vector<json>;
@@ -14,7 +15,6 @@ using jsonarray = std::vector<json>;
 ECS::SaveManager::SaveManager()
 {
 	std::filesystem::create_directory(std::filesystem::path("Saves"));
-
 
 	Load(0);
 	currentLoaded = -1;
@@ -46,7 +46,7 @@ void ECS::SaveManager::Save(int slot)
 
 	json root;
 
-	map["currentEngineDay"] = Scripting::Variable::Int(std::time(NULL) / (1440) - 1166934);
+	map["currentEngineDay"] = Scripting::Variable::Float((int)(std::time(NULL) / (1440)) - 1166934);
 
 
 	int idx = 0;

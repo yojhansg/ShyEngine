@@ -27,7 +27,7 @@ namespace Scripting {
 
 		friend class Engine;
 
-		const std::string extension = ".json";
+		const std::string extension = ".script";
 
 
 	public:
@@ -64,6 +64,13 @@ namespace Scripting {
 		void SetGlobal(std::string const& name, Scripting::Variable const& val);
 		Scripting::Variable GetGlobal(std::string const& name);
 
+
+		void CollectionCreate(cstring name, int size);
+		void CollectionDestroy(cstring name);
+		void CollectionModify(cstring name, int idx, cVariable val);
+		int CollectionSize(cstring name);
+		Scripting::Variable CollectionPeek(cstring name, int idx);
+
 		void NewIteration(ECS::Script* script, Node* beginNode);
 
 		ECS::Script* GetCurrentScript();
@@ -82,6 +89,8 @@ namespace Scripting {
 		std::unordered_map<std::string, CallableFunction> functionMap;
 
 		std::unordered_map<std::string, Scripting::Variable> globalAttributes;
+		
+		std::unordered_map<std::string, std::vector<Scripting::Variable>> collections;
 
 		struct NodeInfo {
 			Fork* fork;

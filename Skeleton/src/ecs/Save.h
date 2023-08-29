@@ -10,7 +10,6 @@
 
 namespace ECS {
 
-
 	//Como funcionan los saves
 	//TODO: autosave
 	EditorManager SaveManager : public Utilities::Singleton<SaveManager> {

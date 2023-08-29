@@ -16,7 +16,6 @@ namespace ECS {
 			Horizontal, Vertical
 		};
 
-
 		Animation();
 		~Animation();
 
@@ -39,6 +38,7 @@ namespace ECS {
 
 		void SetAnimationLenght(int lenght);
 		int getAnimationLenght();
+
 	private:
 
 		void ChangeAnimationFrame();
@@ -52,7 +52,6 @@ namespace ECS {
 		reflect int animationRows;
 
 		reflect int animationSheetStyle;
-
 		reflect int animationLenght;
 
 		int frameWidth;

@@ -41,6 +41,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <unordered_set>
 
 
 class ECSReader {
@@ -102,9 +103,27 @@ public:
 	ECSReader& ClassReflection();
 
 	/*
-		Genera un fichero JSON con la informacion relevante del ECS
+		Genera un fichero JSON con la informacion de las funciones del ECS
 	*/
-	ECSReader& Convert2JSON();
+	ECSReader& GenerateFunctionJSON();
+
+	/*
+		Genera un fichero JSON con la informacion de los atributos del ECS
+	*/
+	ECSReader& GenerateAttributeJSON();
+
+	/*
+		Genera un fichero JSON con una lista con todos los componentes del ECS
+	*/
+	ECSReader& GenerateComponentsJSON();
+
+
+	/*
+		Genera un fichero JSON con una lista con todos los componentes del ECS
+	*/
+	ECSReader& GenerateManagersJSON();
+
+
 
 	/*
 		TODO: Comentario descriptivo
@@ -126,6 +145,9 @@ public:
 		con el modificador de acceso <publish>
 	*/
 	void ProcessFile(std::string const& path);
+	
+
+	void ManageInheritance();
 
 	/*
 		Llama a <AskForPath> preguntando por la ruta de los ficheros
@@ -218,6 +240,11 @@ public:
 		std::string TypeConversion(std::string const& convertName);
 	};
 
+	/*
+		Ajusta los tipos para ser procesados por el motor
+	*/
+	std::string ProcessType(std::string const& input);
+
 private:
 
 	/*
@@ -229,6 +256,8 @@ private:
 	/*
 		Vector con la informacion de los metodos encontrados
 	*/
+	std::unordered_set<std::string> allComponents;
+
 	std::vector<std::string> filesToInclude;
 	std::vector<std::string> managerFiles;
 	std::map<std::string, std::vector<Method>> methods;
@@ -237,7 +266,7 @@ private:
 
 	std::map<std::string, std::string> classInheritance;
 
-	std::vector<std::pair<std::string, std::string>> components;
+	std::vector<std::pair<std::string, std::string>> componentsWithPaths;
 	/*
 		Crea la carpeta de salida en caso de que no exista
 	*/

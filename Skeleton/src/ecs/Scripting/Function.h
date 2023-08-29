@@ -20,8 +20,6 @@ namespace Scripting {
 
 		void Operate(Node*& nextNode, int iterationIdx) override;
 
-		void ForceReevaluation() override;
-
 		void SetNextNode(Node* nextNode);
 
 		void SetInput(std::vector<OutputNode*> input);

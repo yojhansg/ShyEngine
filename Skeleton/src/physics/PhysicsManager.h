@@ -13,6 +13,9 @@ class b2World;
 class b2Body;
 class b2ContactListener;
 
+
+using cString = std::string const&;
+
 namespace Physics {
 
 	class DebugDraw;
@@ -27,44 +30,51 @@ namespace Physics {
 
 		b2World* getWorld();
 
-		void setGravity(const Utilities::Vector2D& gravity);
-		Utilities::Vector2D getGravity();
-
 		void fixedUpdate(float fixedDeltaTime);
 
-	publish:
 		void debugDraw();
 
 		void enableDebugDraw(bool enable);
 
 		void handleBodies();
 
-	public:
 		void setContactListener(b2ContactListener* contactListener);
 
 		float getScreenToWorldFactor();
-
-		void addCollisionLayer(const std::string& layerName);
-
-		void removeCollisionLayer(const std::string& layerName);
 
 		int getLayerBits(const std::string& layerName);
 
 		int getMaskBits(const std::string& layerName);
 
-		void setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide);
-
-		bool layersExists(const std::string& layerName);
-
 		void setBodyEnabled(b2Body* body, bool enabled);
 
-	private:
+	publish:
 
-		void initPhysicsManager(Utilities::Vector2D gravity, int velocityIterations, int positionIterations);
+		Utilities::Vector2D getGravity();
+
+		void setGravity(cVector2D gravity);
+
+		void addCollisionLayer(cString layerName);
+
+		void removeCollisionLayer(cString layerName);
+
+		void setCollisionBetweenLayers(cString layerNameA, cString layerNameB, bool collide);
+
+		bool layersCollide(cString layerNameA, cString layerNameB);
+
+		bool layersExists(cString layerName);
+
+	private:
+		
+		void showMatrix();
+
+		void initPhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations, int positionIterations);
 
 		PhysicsManager();
 
-		PhysicsManager(Utilities::Vector2D gravity, int velocityIterations = 6, int positionIterations = 3);
+		PhysicsManager(Utilities::Vector2D gravity, std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix, int velocityIterations = 6, int positionIterations = 3);
+
+		void LoadMatrixFromData(std::vector<std::string> dataLayers, std::vector<std::vector<bool>> dataMatrix);
 
 		int velocityIterations;
 		int positionIterations;

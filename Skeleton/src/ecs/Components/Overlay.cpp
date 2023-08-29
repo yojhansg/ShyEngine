@@ -1,7 +1,9 @@
 #include "Overlay.h"
 #include "RendererManager.h"
-
 #include "OverlayManager.h"
+#include "ConsoleManager.h"
+#include "SDL_render.h"
+#include "SDL_rect.h"
 #include "Texture.h"
 
 ECS::Overlay::Overlay() {
@@ -14,7 +16,7 @@ ECS::Overlay::Overlay() {
 
 	render_x = render_y = render_w = render_h = 0;
 
-	renderScale = 1;
+	scale = 1;
 	interactable = true;
 
 	OverlayManager::instance()->AddElement(this);
@@ -193,12 +195,12 @@ void ECS::Overlay::SetColor(Utilities::Color color)
 
 float ECS::Overlay::GetRenderScale()
 {
-	return renderScale;
+	return scale;
 }
 
 void ECS::Overlay::SetRenderScale(float newRenderScale)
 {
-	renderScale = newRenderScale;
+	scale = newRenderScale;
 }
 
 void ECS::Overlay::ResetRenderScale()
@@ -275,10 +277,10 @@ float ECS::Overlay::RenderScale()
 {
 	if (parent != nullptr) {
 
-		return renderScale * parent->RenderScale();
+		return scale * parent->RenderScale();
 	}
 
-	return renderScale;
+	return scale;
 }
 
 
@@ -331,9 +333,7 @@ void ECS::Overlay::CalculateRenderRect(int& x, int& y, int& w, int& h)
 		break;
 	}
 	default:
-		//TODO: error
-		
-		print("Entity with invalid placement", "Overlay");
+		Console::Output::PrintError("Overlay component", "Entity with invalid placement.");
 		break;
 	}
 

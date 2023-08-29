@@ -35,9 +35,9 @@ ECS::OverlayManager::OverlayManager(bool debugFrameRate, float timeToDoubleClick
 		frameRateEntity->addComponent<ECS::Overlay>()->SetPositioned({ 0, 0 }, { 100, 10 });
 		frameRateText = frameRateEntity->addComponent<ECS::OverlayText>();
 
-		frameRateText->SetFit(1);
+		frameRateText->SetFit("Overflow");
 		frameRateText->SetText("Frame rate: 60");
-
+		frameRateText->SetFont("Default.ttf");
 		frameRateEntity->init();
 		frameRateEntity->start();
 	}
@@ -82,10 +82,10 @@ void ECS::OverlayManager::Update()
 {
 	const Utilities::Vector2D mousePosition = Input::InputManager::instance()->getMousePos();
 
-	const bool hold = Input::InputManager::instance()->isMouseButtonDown(Input::InputManager::LEFT);
-	const bool clickBegin = Input::InputManager::instance()->isMouseButtonDownEvent(Input::InputManager::LEFT);
-	const bool click = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::LEFT);
-	const bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent(Input::InputManager::RIGHT);
+	const bool hold = Input::InputManager::instance()->isMouseButtonDown((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool clickBegin = Input::InputManager::instance()->isMouseButtonDownEvent((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool click = Input::InputManager::instance()->isMouseButtonUpEvent((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent((int)Input::InputManager::MOUSEBUTTON::RIGHT);
 
 
 	Overlay* newelem = nullptr;

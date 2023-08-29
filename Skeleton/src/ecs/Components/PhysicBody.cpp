@@ -2,6 +2,8 @@
 #include "PhysicsManager.h"
 #include "box2d/b2_world.h"
 #include "Transform.h"
+
+#include <ConsoleManager.h>
 #include <Entity.h>
 
 namespace ECS {
@@ -39,7 +41,7 @@ namespace ECS {
 		onCollisonStay = false;
 		onTriggerStay = false;
 
-		b = nullptr;
+		collisionEntity = nullptr;
 
 		trigger = false;
 		freezeRotation = false;
@@ -51,13 +53,18 @@ namespace ECS {
 	}
 
 	void PhysicBody::onDestroy() {
-		world->DestroyBody(body);
+		//world->DestroyBody(body);
 	}
 
 	void PhysicBody::init() {
 
 		transform = this->getEntity()->getComponent<Transform>();
-		assert(transform != nullptr, "La entidad debe contener un componente Transform");
+
+		if (transform == nullptr) {
+			printError("Missing transform", "The entity must contain a transform component.");
+			this->remove();
+			return;
+		}
 
 		world = Physics::PhysicsManager::instance()->getWorld();
 
@@ -68,7 +75,7 @@ namespace ECS {
 	void PhysicBody::start() {
 
 		auto position = transform->GetWorldPosition();
-		auto rotation = transform->GetWorldRotation();
+		auto rotation = -transform->GetWorldRotation();
 		auto scale = transform->GetWorldScale();
 
 
@@ -105,13 +112,13 @@ namespace ECS {
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
 
 		auto position = transform->GetWorldPosition();
-		auto rotation = transform->GetWorldRotation();
+		auto rotation = -transform->GetWorldRotation();
 		auto scale = transform->GetWorldScale();
 
 		if (onCollisonStay)
-			getEntity()->onCollisionStay(b);
+			getEntity()->onCollisionStay(collisionEntity);
 		else if (onTriggerStay)
-			getEntity()->onTriggerStay(b);
+			getEntity()->onTriggerStay(collisionEntity);
 
 		if (bodyType != (int) BODY_TYPE::STATIC) {
 
@@ -144,7 +151,7 @@ namespace ECS {
 
 			// Transform
 			transform->SetWorldPosition(newPos);
-			transform->SetWorldRotation(newRotation);
+			transform->SetWorldRotation(-newRotation);
 
 		}
 
@@ -265,9 +272,12 @@ namespace ECS {
 		return body->GetAngle() * (180 / b2_pi);
 	}
 
-	void PhysicBody::setCollisionLayer(const std::string& layerName) {
+	void PhysicBody::setCollisionLayer(cstring layerName) {
 
-		assert(pm->layersExists(layerName), "La capa con nombre " + layerName + " no existe");
+		if (!pm->layersExists(layerName)) {
+			Console::Output::PrintError("Physics Body", "The layer with name " + layerName + " does not exist.");
+			return;
+		}
 
 		this->layerName = layerName;
 	}
@@ -275,13 +285,13 @@ namespace ECS {
 	void PhysicBody::setCollisionStay(bool stay, Entity* b) {
 		onCollisonStay = stay;
 
-		this->b = b;
+		this->collisionEntity = b;
 	}
 
 	void PhysicBody::setTriggerStay(bool stay, Entity* b) {
 		onTriggerStay = stay;
 
-		this->b = b;
+		this->collisionEntity = b;
 	}
 
 	void PhysicBody::setLinearVelocity(float x, float y) {
@@ -300,11 +310,11 @@ namespace ECS {
 		return body->GetAngularVelocity();
 	}
 
-	void PhysicBody::applyForce(const Vector2D& force, const Vector2D& point) {
+	void PhysicBody::applyForce(cVector2D force, cVector2D point) {
 		body->ApplyForce({ force.getX(), force.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicBody::applyForceToCenter(const Vector2D& force) {
+	void PhysicBody::applyForceToCenter(cVector2D force) {
 		body->ApplyForceToCenter({ force.getX(), force.getY() }, true);
 	}
 
@@ -312,11 +322,11 @@ namespace ECS {
 		body->ApplyTorque(torque, true);
 	}
 
-	void PhysicBody::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point) {
+	void PhysicBody::applyLinearImpulse(cVector2D impulse, cVector2D point) {
 		body->ApplyLinearImpulse({ impulse.getX(), impulse.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicBody::applyLinearImpulseToCenter(const Vector2D& impulse) {
+	void PhysicBody::applyLinearImpulseToCenter(cVector2D impulse) {
 		body->ApplyLinearImpulseToCenter({ impulse.getX(), impulse.getY() }, true);
 	}
 

@@ -62,26 +62,48 @@ namespace ECS {
         void setBounciness(float bounciness);
         float getBounciness();
 
-    public:
-
-        // Common body methods
         Vector2D getOffSet();
         void addOffSet(float x, float y);
 
         void setRotationFreezed(bool freezed);
         bool isRotationFreezed();
-        
+
         void setBodyType(int type);
         int getBodyType();
-        
+
         void setLinearDrag(float drag);
         float getLinearDrag();
-        
+
         void setAngularDrag(float drag);
         float getAngularDrag();
-                
+
         void setGravityScale(float scale);
         float getGravityScale();
+
+        // Collision Filtering
+        void setCollisionLayer(cstring layerName);
+
+        void setLinearVelocity(float x, float y);
+        Vector2D getLinearVelocity();
+
+        void setAngularVelocity(float a);
+        float getAngularVelocity();
+
+        // Force methods
+
+        void applyForce(cVector2D force, cVector2D point);
+
+        void applyForceToCenter(cVector2D force);
+
+        void applyTorque(float torque);
+
+        void applyLinearImpulse(cVector2D impulse, cVector2D point);
+
+        void applyLinearImpulseToCenter(cVector2D impulse);
+
+        void applyAngularImpulse(float impulse);
+
+    public:
 
         virtual void setMass(float mass) = 0;
         float getMass();
@@ -89,54 +111,32 @@ namespace ECS {
         virtual float getArea() = 0;
         float getAngle();
 
-        // Collision Filtering
-        void setCollisionLayer(const std::string& layerName);
-
         // Collison/Trigger Stay
         void setCollisionStay(bool stay, Entity* b);
         void setTriggerStay(bool stay, Entity* b);
-
-    publish:
-        void setLinearVelocity(float x, float y);
-        Vector2D getLinearVelocity();
-    public:
-
-        // Force methods
-
-        void setAngularVelocity(float a);
-        float getAngularVelocity();
-
-        void applyForce(const Vector2D& force, const Vector2D& point);
-        
-        void applyForceToCenter(const Vector2D& force);
-
-        void applyTorque(float torque);
-
-        void applyLinearImpulse(const Vector2D& impulse, const Vector2D& point);
-
-        void applyLinearImpulseToCenter(const Vector2D& impulse);
-
-        void applyAngularImpulse(float impulse);
 
     protected:
 
         virtual void scaleShape() = 0;
 
-        Vector2D size;
-        Vector2D offSet;
-
-        float screenToWorldFactor;
-
-        reflect int bodyType;
-
         // Box2d
         b2World* world;
+
+        reflect Vector2D size;
+        reflect Vector2D offSet;
+
+        reflect int bodyType;
 
         // Fixture properties
         reflect float mass;
         reflect float bounciness;
         reflect bool trigger;   
         reflect bool freezeRotation;
+
+        // Collision Layer
+        reflect std::string layerName;
+
+        float screenToWorldFactor;
 
         // Box2d properties
         b2BodyDef* bodyDef;
@@ -155,14 +155,11 @@ namespace ECS {
         float lastRotationSync;
         Vector2D lastScaleInfo;
 
-        // Collision Layer
-        std::string layerName;
-
         // Collison/Trigger Stay
         bool onCollisonStay;
         bool onTriggerStay;
 
-        Entity* b;
+        Entity* collisionEntity;
 
     };
 }

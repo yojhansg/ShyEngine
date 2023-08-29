@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <vector>
 
+#include <iostream>
+
 namespace Physics {
 
 	DebugDraw::DebugDraw() {
@@ -88,34 +90,36 @@ namespace Physics {
 
 		float screenToWorldFactor = PhysicsManager::instance()->getScreenToWorldFactor();
 
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		//SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		auto red = b2Color(0, 1, 0);
 
 		for (int i = 1; i < vertexCount; i++) {
 			b2Vec2 v1 = vertices[i - 1];
 			b2Vec2 v2 = vertices[i];
 
-			v1 *= screenToWorldFactor;
-			v2 *= screenToWorldFactor;
+			DrawSegment(v1, v2, red);
+
+			//v1 *= screenToWorldFactor;
+			//v2 *= screenToWorldFactor;
 
 
-			int ax = v1.x;
-			int ay = v1.y;
-			int bx = v2.x;
-			int by = v2.y;
+			//int ax = v1.x;
+			//int ay = v1.y;
+			//int bx = v2.x;
+			//int by = v2.y;
 
-			Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
-			Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
+			//Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
+			//Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
 
-			SDL_RenderDrawLine(renderer, ax, ay, bx, by);
+			//SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 		}
 
 		b2Vec2 v1 = vertices[vertexCount - 1];
 		b2Vec2 v2 = vertices[0];
 
-		v1 *= screenToWorldFactor;
+		DrawSegment(v1, v2, red);
+		/*v1 *= screenToWorldFactor;
 		v2 *= screenToWorldFactor;
-
-
 
 		int ax = v1.x;
 		int ay = v1.y;
@@ -124,7 +128,7 @@ namespace Physics {
 
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
-		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
+		SDL_RenderDrawLine(renderer, ax, ay, bx, by);*/
 
 	}
 
@@ -142,10 +146,14 @@ namespace Physics {
 		int bx = b.x;
 		int by = b.y;
 
+		//std::cout << ax << " " << ay << ", " << bx << " " << by << std::endl;
+
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
 
 		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
+
+		//std::cout << ax << " " << ay << ", " << bx << " " << by << std::endl << std::endl;
 
 	}
 

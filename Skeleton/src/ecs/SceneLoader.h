@@ -16,23 +16,24 @@ namespace ECS {
 	class Entity;
 	class Overlay;
 	class Transform;
+	class PrefabManager;
 
 	class SceneLoader {
 
-	public:
+		friend PrefabManager;
 
-		static const std::string extension;
+	public:
 
 		SceneLoader() = delete;
 
 		static ECS::Scene* LoadScene(std::string const& scenePath);
 
-
 	private:
 
-		static void ProcessTransform(ECS::Scene* scene, nlohmann::json& transform, ECS::Transform* parent);
-		static void ProcessOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent);
-		static void ProcessComponent(ECS::Entity* scene, nlohmann::json& component);
+		static void ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::json& transform, ECS::Transform* parent);
+		static void ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent);
+		static void ProcessComponent(ECS::Entity* entity, nlohmann::json& component);
+		static void ProcessScripts(nlohmann::json& jsonData, ECS::Entity* entity);
 	};
 
 }

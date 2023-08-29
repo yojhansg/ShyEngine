@@ -1,24 +1,23 @@
-#include <memory>
 #include <iostream>
-#include "Engine.h"
-#include "Save.h"
-#include "ConsoleManager.h"
+#include <memory>
 #include <string>
 #include <format>
 
+#include "Engine.h"
+#include "Save.h"
+#include "ConsoleManager.h"
+
 #include "Scripting/ScriptFunctionality.h"
 
-//TODO: ver nombres mejores para el set y el get del guardado (save y load ? y que el otro save y load pasen a ser saveToDisk y loadFromDisk)
+void saveTimesPlayed() {
 
-int main(int argc, char* args[]) {
-
-	/*ECS::SaveManager* save = ECS::SaveManager::instance();
+	ECS::SaveManager* save = ECS::SaveManager::instance();
 
 	int slot = 1;
 
 	if (!save->Exists(1)) {
 
-		save->SetSlot("contador", Scripting::Variable::Int(0));
+		save->SetSlot("contador", Scripting::Variable::Float(0));
 	}
 
 	else {
@@ -29,23 +28,41 @@ int main(int argc, char* args[]) {
 
 	Console::Output::PrintNoFormat(std::format("Has abierto el juego {} veces", save->GetSlot("contador").value.Float));
 
-	save->Save(1);*/
-
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-	Engine engine;
-
-	bool ret = engine.init();
-
-	if (!ret) {
-		return -1;
-	}
-
-	engine.update();
-
-	engine.close();
-
-	std::cout << "This was My Engine!\n";
-
-	return 0;
+	save->Save(1);
 }
+
+
+/*
+* This is a way to avoid opening the debug console in release mode.
+*/
+
+#ifdef _DEBUG
+
+	int main(int argc, char* args[]) {
+
+#else
+
+	#include <Windows.h>
+
+	INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, int nCmdShow) {
+
+#endif
+
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+		// saveTimesPlayed();
+
+		Engine engine;
+
+		bool ret = engine.init();
+
+		if (!ret) {
+			return -1;
+		}
+
+		engine.update();
+
+		engine.close();
+
+		return 0;
+	}

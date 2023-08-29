@@ -61,13 +61,19 @@ namespace ECS {
 
 	void Transform::SetParent(Transform* tr)
 	{
+		localPosition = GetWorldPosition();
+		localScale = GetWorldScale();
+		localRotation = GetWorldRotation();
+
 		if (parent != nullptr) {
 			parent->RemoveChildren(this);
 		}
 
 		parent = tr;
-		if (tr != nullptr)
+		if (tr != nullptr) {
 			tr->SetChildren(this);
+			SetTransformRelativeToNewParent();
+		}
 	}
 
 	void Transform::SetChildren(Transform* tr)
@@ -98,7 +104,12 @@ namespace ECS {
 	{
 		if (parent != nullptr) {
 
-			this->localPosition = position - parent->GetWorldPosition();
+			Utilities::Vector2D newPos = { position - parent->GetWorldPosition() };
+			newPos = newPos.rotate(-parent->GetWorldRotation());
+
+			this->localPosition = newPos;
+
+
 			return;
 		}
 
@@ -149,8 +160,12 @@ namespace ECS {
 
 	Utilities::Vector2D Transform::GetWorldPosition()
 	{
-		if (parent != nullptr)
-			return parent->GetWorldPosition() + localPosition.rotate(parent->GetWorldRotation());
+		if (parent != nullptr) {
+			Utilities::Vector2D rotatedPosition = GetLocalPosition().rotate(parent->GetWorldRotation());
+			Utilities::Vector2D parentWorldPos = parent->GetWorldPosition();
+			
+			return Utilities::Vector2D{ parentWorldPos.getX() + rotatedPosition.getX(), parentWorldPos.getY() + rotatedPosition.getY() };
+		}
 
 		return localPosition;
 	}
@@ -166,7 +181,7 @@ namespace ECS {
 	float Transform::GetWorldRotation()
 	{
 		if (parent != nullptr)
-			return localRotation + parent->GetLocalRotation();
+			return localRotation + parent->GetWorldRotation();
 
 		return localRotation;
 	}
@@ -191,6 +206,27 @@ namespace ECS {
 
 	void Transform::Scale(float scale) {
 		this->localScale *= scale;
+	}
+
+	void Transform::SetTransformRelativeToNewParent()
+	{
+			Utilities::Vector2D parentPos = parent->GetWorldPosition();
+			Utilities::Vector2D newPos = { GetLocalPosition().getX() - parentPos.getX(), GetLocalPosition().getY() - parentPos.getY() };
+
+			//Tiene sentido
+			newPos = newPos.rotate(-parent->GetWorldRotation());
+
+			SetLocalPosition(newPos);
+
+			float parentRot = parent->GetWorldRotation();
+			float newRot = GetLocalRotation() - parentRot;
+
+			SetLocalRotation(newRot);
+
+			Utilities::Vector2D parentScale = parent->GetWorldScale();
+			Utilities::Vector2D newScale = { GetLocalScale().getX() / parentScale.getX(), GetLocalScale().getY() / parentScale.getY() };
+
+			SetScale(newScale);
 	}
 
 }

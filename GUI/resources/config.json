@@ -1,0 +1,18 @@
+{
+    "closeWithScape": true,
+    "creator": "Yojhan",
+    "debugFrameRate": true,
+    "debugPhysics": true,
+    "fullScreen": false,
+    "game": "PabloProject",
+    "gravity": "0.000000, 9.810000",
+    "initialScene": "scene",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\PabloProject",
+    "splashScreen": false,
+    "timeToDoubleClick": 0.5,
+    "timeToHoldClick": 0.10000000149011612,
+    "vsync": true,
+    "windowIcon": "ShyIcon.png",
+    "windowSize": "1920, 1080",
+    "windowTitle": "La casa de los espiritus"
+}

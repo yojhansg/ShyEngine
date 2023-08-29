@@ -1,14 +1,23 @@
 #pragma once
 
-
 #include <string>
 #define WHITESPACE "\n\r\t\f\v "
-
 /*
 	Funciones para eliminar espacios de cadenas de texto
 */
 namespace Utilities {
 
+
+	inline std::string static tolower(const std::string& s) {
+
+		std::string str = s;
+
+		for (int i = 0; i < str.length(); i++) {
+			str[i] = std::tolower(str[i]);
+		}
+
+		return str;
+	}
 
 	inline std::string static ltrim(const std::string& s, const std::string& to_trim = WHITESPACE)
 	{

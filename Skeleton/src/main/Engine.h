@@ -16,6 +16,11 @@ namespace ECS {
 	class OverlayManager;
 	class RenderManager;
 	class SceneManager;
+	class PrefabManager;
+}
+
+namespace Resources {
+	class ResourcesManager;
 }
 
 namespace Utilities {
@@ -34,6 +39,7 @@ public:
 
 private:
 
+	Resources::ResourcesManager* resourcesManager;
 	Renderer::RendererManager* rendererManager;
 	Physics::PhysicsManager* physicsManager;
 	ECS::OverlayManager* overlayManager;

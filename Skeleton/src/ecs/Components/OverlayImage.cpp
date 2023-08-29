@@ -4,6 +4,7 @@
 #include "ResourcesManager.h"
 #include "Texture.h"
 #include "RendererManager.h"
+#include "SDL_rect.h"
 
 ECS::OverlayImage::OverlayImage()
 {

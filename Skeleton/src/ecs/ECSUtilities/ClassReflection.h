@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Mon Apr 10 18:01:04 2023
+//Creation time : Tue Aug 29 00:40:31 2023
 
 #define ECSreflection_Version 1.0
 
@@ -26,13 +26,15 @@ public:
 
 	void ReflectBoxBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
-	void ReflectChainBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
-
 	void ReflectCircleBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectImage(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
+
+	void ReflectMovement(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
+
+	void ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectOverlay(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
@@ -42,7 +44,11 @@ public:
 
 	void ReflectOverlayText(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
+	void ReflectParticleSystem(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
+
 	void ReflectPhysicBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
+
+	void ReflectSoundEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
 	void ReflectTransform(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map);
 
