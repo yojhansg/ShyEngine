@@ -7,7 +7,7 @@
 #include "Editor.h"
 #include "imgui.h"
 #include "Game.h"
-
+#include "ProjectsManager.h"
 #include <fstream>
 #include <sstream>
 
@@ -385,6 +385,27 @@ namespace ShyEditor {
 
 		root["path"] = Editor::GetInstance()->GetProjectInfo().assetPath;
 		root["projectFilePath"] = ProjectsManager::GetProjectFilePath();
+
+		PrefabManager::SavePrefabs();
+
+		std::ofstream file("Engine\\config.json");
+
+		file << root.dump(4);
+
+		file.close();
+	}
+
+	void Preferences::GenerateBuild()
+	{
+		json root = instance->BasicData();
+
+		// Specific configuration for release
+		root["splashScreen"] = true;
+		root["debugPhysics"] = false;
+		root["debugFrameRate"] = false;
+
+		root["path"] = "Assets";
+		root["projectFilePath"] = ProjectsManager::GetProjectFileName();
 
 		PrefabManager::SavePrefabs();
 

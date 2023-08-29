@@ -1,7 +1,10 @@
 #include "Build.h"
+#include "ResourcesManager.h"
+
+
 
 #include "imgui.h"
-
+#include "Preferences.h"
 #include <iostream>
 
 //Para convertir de PWSTR a string
@@ -14,12 +17,24 @@
 
 #include <filesystem>
 
+#include <locale>
+#include <codecvt>
+
+
+
+
 ShyEditor::Build::Build()
 {
 	inProgress = false;
 	progression = 0;
 	popUpOpen = false;
 	buildPath = "";
+}
+
+ShyEditor::Build::~Build()
+{
+	if (thread.joinable())
+		thread.join();
 }
 
 
@@ -67,34 +82,161 @@ bool ShyEditor::Build::SelectFolder()
 
 
 
-void ShyEditor::Build::Copy(std::string file, std::string path, int size)
+void ShyEditor::Build::Copy(std::string origin, std::string destination)
 {
+	std::filesystem::path file(origin);
+
+	std::filesystem::path dest(destination);
+
+	if (std::filesystem::is_directory(origin))
+		dest /= file.filename();
 
 
+	try {
+		std::filesystem::copy(file, dest, std::filesystem::copy_options::overwrite_existing | std::filesystem::copy_options::recursive);
+	}
+	catch (std::exception& e) {
 
 
-
+		//TODO: hacer algo con el error
+		std::cout << e.what() << std::endl;
+	}
 }
 
+void ShyEditor::Build::ChangeExeIcon(const std::string& exe)
+{
+
+	//std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	//std::wstring w_exe = converter.from_bytes(exe);
+	const wchar_t* exeFilePath = L"C:\\Users\\sryoj\\Desktop\\Build\\FlappyBird.exe";
+	const wchar_t* exeFilePath2 = L"C:\\Users\\sryoj\\Desktop\\Build\\FlappyBird2.exe";
+
+
+	const wchar_t* iconFilePath = L"C:\\Users\\sryoj\\Desktop\\Build\\Assets\\icon.ico";
+
+#define ICON_ID 101
+
+	// Cargamos la biblioteca de recursos del archivo ejecutable
+
+
+	// Encuentra el recurso ICON en la biblioteca de recursos
+
+
+
+	HICON hIcon = (HICON)LoadImage(NULL, L"C:\\Users\\sryoj\\Desktop\\Build\\Assets\\icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+
+	if (hIcon == NULL) {
+		// Manejar errores, si es necesario
+		std::cout << "no se lee el fichero" << std::endl;
+		return;
+	}
+
+	// Abre el archivo ejecutable para actualizar los recursos
+	HANDLE hUpdate = BeginUpdateResource(exeFilePath2, FALSE);
+	if (hUpdate == NULL) {
+		std::cout << "Error al abrir el archivo ejecutable" << std::endl;
+		return;
+	}
+
+	auto lockResource = LockResource(hIcon);
+
+	if (lockResource == NULL) {
+
+		std::cout << "No se puede hacer lock" << std::endl;
+		return;
+	}
+
+	auto resourceSize = SizeofResource(NULL, (HRSRC)hIcon);
+
+
+
+	// Actualiza el recurso ICON en el archivo ejecutable
+	if (!UpdateResource(hUpdate, RT_GROUP_ICON, MAKEINTRESOURCE(ICON_ID), 0, lockResource, resourceSize)) {
+		std::cout << "Error al actualizar el recurso ICON" << std::endl;
+		EndUpdateResource(hUpdate, TRUE);
+		return;
+	}
+
+	// Cierra el archivo ejecutable
+	if (!EndUpdateResource(hUpdate, FALSE)) {
+		std::cout << "Error al guardar el archivo ejecutable" << std::endl;
+		return;
+	}
+
+	DestroyIcon(hIcon);
+
+	std::cout << "Icono actualizado con éxito" << std::endl;
+
+
+
+	return;
+
+}
 
 
 
 void ShyEditor::Build::BuildThread()
 {
 
+	/*
+		Recursos a copiar al generar una build:
+
+		-Exe del motor (Hay que cambiarle el nombre y el icono)
+		-Dlls del exe
+		-Recursos del motor
+		-Recursos del proyecto
+
+	*/
+
+	Preferences::GenerateBuild();
 
 
+	float enginefilesPercentage = 0.25f;
+	float projectFilesPercentage = 0.50f;
+	float generateExePercentage = 0.10f;
 
-	std::cout << "Empezando hilo" << std::endl;
+	std::vector<std::string> engineFiles = {
+		"EngineRelease.exe", "config.json",
+		"SDL2.dll", "SDL2_image.dll" ,
+		"SDL2_mixer.dll",  "SDL2_ttf.dll" ,
+		"Assets"
+	};
 
-	while (progression < 1) {
+	
+	for (auto& value : engineFiles) {
 
-		std::cout << "Avanzo un poco" << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		progression += .2f;
+		Copy(ResourcesManager::EDITORENGINEFOLDER + "/" + value, buildPath);
+
+		progression += enginefilesPercentage / engineFiles.size();
 	}
 
-	std::cout << "hilo terminado" << std::endl;
+	std::string exe = buildPath + "/" + Preferences::GetData().name + ".exe";
+
+	Copy(ResourcesManager::GetProjectPath() + "/Assets", buildPath);
+
+	progression += projectFilesPercentage;
+
+	std::string relaseBuildPath = buildPath + "/EngineRelease.exe";
+
+	std::string command = std::format("ResourceHacker.exe -open {} -save {} -action addoverwrite -res {} -mask ICONGROUP, 101, 0", 
+		relaseBuildPath,
+		exe,
+		std::string(buildPath + "/Assets/" + Preferences::GetData().icon)
+		);
+
+	system((command).c_str());
+
+
+	progression += generateExePercentage;
+
+
+	if (!std::filesystem::exists(exe))
+		std::filesystem::rename(relaseBuildPath, exe);
+	else
+		std::filesystem::remove(relaseBuildPath);
+
+
+	progression = 1;
 
 	inProgress = false;
 }
@@ -155,8 +297,6 @@ void ShyEditor::Build::GenerateBuild()
 	if (thread.joinable())
 		thread.join();
 
-
-	std::cout << buildPath << std::endl;
 
 	popUpOpen = true;
 	inProgress = true;

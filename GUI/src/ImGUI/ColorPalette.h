@@ -23,6 +23,7 @@ namespace ShyEditor {
 
 		struct Palette {
 
+			//General
 			Color text;
 			Color head;
 			Color area;
@@ -32,6 +33,34 @@ namespace ShyEditor {
 			Color scriptBackground;
 
 			float windowRounding;
+
+
+			//Scene
+
+			struct {
+
+				Color background;
+				float backgroundAlpha;
+
+				Color frame;
+				int frameWidth;
+
+				Color objectFrame;
+				int objectFrameWidth;
+
+				Color UIBorder;
+				Color UIBorderHover;
+				int UIBorderWidth;
+
+
+				Color grid;
+				int gridSpacing;
+				int gridInterval;
+				float gridAlpha;
+				int gridThickness;
+
+			} scene;
+
 
 			// Scripting
 			float nodeRounding;
@@ -58,6 +87,9 @@ namespace ShyEditor {
 			float flowlineOutlineThickness;
 			float flowlineCurvature;
 			float flowlineAlpha;
+
+
+			//Font
 
 			ImFont* fontPtr;
 			std::string font;
@@ -106,6 +138,8 @@ namespace ShyEditor {
 
 
 #define ColorPaletteParams(color) color.r, color.g, color.b
+#define ColorPaletteParamsInt(color) color.r * 255, color.g * 255, color.b * 255
+
 #define ColorPalette2ImVec4(color) ImVec4(ColorPaletteParams(color), 1)
 #define ColorPaletteAlpha2ImVec4(color, a) ImVec4(ColorPaletteParams(color), a)
 #define ColorPalette2ImColor(color) ImColor(ColorPalette2ImVec4(color))

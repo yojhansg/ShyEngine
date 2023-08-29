@@ -3,6 +3,7 @@
 #include "LogManager.h"
 #include "Entity.h"
 #include "imgui.h"
+#include "ColorPalette.h"
 #include "SDL.h"
 
 #include "CheckML.h"
@@ -170,8 +171,12 @@ namespace ShyEditor {
 	void Camera::PrepareCameraRender()
 	{
 		if (targetTexture != NULL) {
+			
+			
+			auto& color = ColorPalette::GetCurrentPalette().scene;
+			
 			SDL_SetRenderTarget(renderer, targetTexture);
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+			SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(color.background), color.backgroundAlpha * 255);
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 			SDL_RenderClear(renderer);
 		}

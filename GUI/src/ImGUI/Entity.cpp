@@ -14,6 +14,7 @@
 #include "PrefabManager.h"
 #include "SDL.h"
 #include "Font.h"
+#include "ColorPalette.h"
 
 #include <fstream>
 #include "CheckML.h"
@@ -180,9 +181,6 @@ namespace ShyEditor {
 	}
 
 
-
-
-
 	// ------------------------------------- Render, update and input -----------------------------------
 
 	void Entity::RenderTransform(SDL_Renderer* renderer, Camera* camera) {
@@ -192,8 +190,8 @@ namespace ShyEditor {
 		ImVec2 cameraPosition = camera->GetPosition();
 		float cameraScale = camera->GetScale();
 
-		float width = textureSize->x * GetScaleX() * cameraScale;
-		float height = textureSize->y * GetScaleY() * cameraScale;
+		float width = textureSize->x * GetWorldScale().x * cameraScale;
+		float height = textureSize->y * GetWorldScale().y * cameraScale;
 
 
 		ImVec2 worldPosition = ImVec2(position.x * cameraScale + cameraPosition.x, position.y * cameraScale + cameraPosition.y);
@@ -204,7 +202,7 @@ namespace ShyEditor {
 
 		// Image render
 		if (visible && texture != NULL)
-			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, transform->GetRotation(), NULL, SDL_FLIP_NONE);
+			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, GetWorldRotation(), NULL, SDL_FLIP_NONE);
 
 		else
 
@@ -212,21 +210,28 @@ namespace ShyEditor {
 			if (this == editor->GetScene()->GetSelectedEntity()) {
 
 				// Save the previous color to restart it later
-				Uint8 r, g, b, a;
-				SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+				auto& currentPalette = ColorPalette::GetCurrentPalette().scene;
+				int thickness = currentPalette.objectFrameWidth;
 
-				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-
-				int thickness = 3;
+				if (thickness > 0) {
 
 
-				for (int i = 0; i < thickness; i++) {
-					SDL_Rect currentRect = { dst.x - i, dst.y - i, dst.w + i * 2, dst.h + i * 2 };
-					SDL_RenderDrawRect(renderer, &currentRect);
+					Uint8 r, g, b, a;
+					SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+
+
+					SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(currentPalette.objectFrame), 255);
+
+
+
+					for (int i = 0; i < thickness; i++) {
+						SDL_Rect currentRect = { dst.x - i, dst.y - i, dst.w + i * 2, dst.h + i * 2 };
+						SDL_RenderDrawRect(renderer, &currentRect);
+					}
+
+					SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
 				}
-
-				SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
 				//if (showGizmo) {
 				//	dst.x += dst.w / 2;
 				//	dst.y -= dst.h / 2;
@@ -290,8 +295,6 @@ namespace ShyEditor {
 
 
 
-
-
 	// ----------------------------- Name, ID and texture getters/setters ---------------------------
 
 	std::string Entity::GetName() {
@@ -301,6 +304,27 @@ namespace ShyEditor {
 	void Entity::SetName(const std::string& newName) {
 		name = newName;
 	}
+
+	Texture* Entity::GetTexture() {
+		return texture;
+	}
+
+	ImVec2& Entity::GetTextureSize() {
+		return *textureSize;
+	}
+
+	int Entity::GetId() {
+		return id;
+	}
+
+	void Entity::SetId(int id)
+	{
+		this->id = id;
+	}
+
+
+
+	// ----------------------------- Prefab related getters/setters ---------------------------
 
 	void Entity::SetPrefabId(int prefabId)
 	{
@@ -333,33 +357,6 @@ namespace ShyEditor {
 		return entity;
 	}
 
-	Texture* Entity::GetTexture() {
-		return texture;
-	}
-
-	int Entity::GetId() {
-		return id;
-	}
-
-	void Entity::SetId(int id)
-	{
-		this->id = id;
-	}
-
-	void Entity::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
-	{
-		this->components = components;
-	}
-
-	void Entity::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
-	{
-		this->scripts = scripts;
-	}
-
-
-
-
-
 
 	// ----------------------------------- Visibility getters/setters -----------------------------------
 
@@ -378,9 +375,10 @@ namespace ShyEditor {
 		}
 	}
 
-
-
-
+	bool Entity::IsTransform()
+	{
+		return isTransform;
+	}
 
 
 	// ----------------------------------- Components and Scripts logic --------------------------------------
@@ -417,43 +415,27 @@ namespace ShyEditor {
 		return scripts;
 	}
 
+	void Entity::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
+	{
+		this->components = components;
+	}
 
+	void Entity::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
+	{
+		this->scripts = scripts;
+	}
 
 
 
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
-	void Entity::SetPosition(ImVec2 newPos) {
-		ImVec2 previousPos = ImVec2(GetPosition());
 
-		transform->SetPosition(newPos.x, newPos.y);
+	ImVec2& Entity::GetAdjustedPosition() {
 
-		TranslateChildren(this, &previousPos);
-	}
+		ImVec2 position = GetWorldPosition();
 
-	ImVec2 Entity::GetPosition() {
-		return transform->GetPosition();
-	}
-
-	float Entity::GetRotation() {
-		return transform->GetRotation();
-	}
-
-	void Entity::SetRotation(float r)
-	{
-		float previousRotation = GetRotation();
-
-		transform->SetRotation(r);
-
-		RotateChildren(this, this, r - previousRotation);
-	}
-
-	ImVec2 Entity::GetAdjustedPosition() {
-
-		ImVec2 position = transform->GetPosition();
-
-		float width = textureSize->x * GetScaleX();
-		float height = textureSize->y * GetScaleY();
+		float width = textureSize->x * GetWorldScale().x;
+		float height = textureSize->y * GetWorldScale().y;
 
 		// The entities have their origin at the center
 		position.x -= width * 0.5f;
@@ -462,21 +444,66 @@ namespace ShyEditor {
 		return position;
 	}
 
-	ImVec2 Entity::GetSize() {
-		return *textureSize;
+	ImVec2& Entity::GetLocalPosition() {
+		return transform->GetLocalPosition();
 	}
 
-	float Entity::GetScaleX() {
-		return transform->GetScale().x;
-	}
-
-	float Entity::GetScaleY() {
-		return transform->GetScale().y;
-	}
-
-	void Entity::SetScale(float x, float y)
+	ImVec2& Entity::GetWorldPosition()
 	{
-		transform->SetScale(x, y);
+
+		return transform->GetWorldPosition();
+	}
+
+	float& Entity::GetLocalRotation() {
+		return transform->GetLocalRotation();
+	}
+
+	float& Entity::GetWorldRotation()
+	{
+		return transform->GetWorldRotation();
+	}
+
+	ImVec2& Entity::GetLocalScale() {
+		return transform->GetLocalScale();
+	}
+
+	ImVec2& Entity::GetWorldScale()
+	{
+		return transform->GetWorldScale();
+	}
+
+	void Entity::SetLocalPosition(ImVec2& newPos) {
+		transform->SetLocalPosition(newPos);
+	}
+
+	void Entity::SetWorldPosition(ImVec2& pos)
+	{
+		transform->SetWorldPosition(pos);
+	}
+
+	void Entity::SetLocalRotation(float r)
+	{
+		transform->SetLocalRotation(r);
+	}
+
+	void Entity::SetWorldRotation(float r)
+	{
+		transform->SetWorldRotation(r);
+	}
+
+	void Entity::SetLocalScale(ImVec2& newScale)
+	{
+		transform->SetLocalScale(newScale);
+	}
+
+	void Entity::SetWorldScale(ImVec2& scale)
+	{
+		transform->SetWorldScale(scale);
+	}
+
+	Overlay* Entity::GetOverlay()
+	{
+		return overlay;
 	}
 
 
@@ -513,12 +540,15 @@ namespace ShyEditor {
 
 
 
-
-
 	// --------------------------------- Entity children and parent logic ------------------------------------
 
 	void Entity::SetParent(Entity* entity) {
+
+		SetTransformToWorldValues();
+
 		parent = entity;
+
+		SetTransformRelativeToNewParent();
 	}
 
 	Entity* Entity::GetParent() {
@@ -553,27 +583,31 @@ namespace ShyEditor {
 
 
 
+
 	// ---------------------------------------- Entity drawing logic ----------------------------------------------
 
 	void Entity::DrawTransformInEditor() {
 
-		ImVec2 previousPosition = ImVec2(transform->GetPosition());
-		ImVec2 currentPos = ImVec2(transform->GetPosition().x, -transform->GetPosition().y);
+		ImVec2 currentPos = GetLocalPosition();
+		currentPos.y *= -1;
 
 		ImGui::Text("Position");
 		if (ImGui::DragFloat2("##position_drag", (float*)&currentPos, 0.3f, 0.0f, 0.0f, "%.2f")) {
-
-			transform->SetPosition(currentPos.x, -currentPos.y);
-			TranslateChildren(this, &previousPosition);
+			ImVec2 newPos = { currentPos.x, -currentPos.y };
+			SetLocalPosition(newPos);
 		}
 
+		ImVec2 currentScale = GetLocalScale();
 		ImGui::Text("Scale");
-		ImGui::DragFloat2("##scale_drag", (float*)&transform->GetScale(), 0.02f, 0.0f, FLT_MAX, "%.2f");
+		if (ImGui::DragFloat2("##scale_drag", (float*)&currentScale, 0.02f, 0.0f, FLT_MAX, "%.2f")) {
+			ImVec2 newScale = { currentScale.x, currentScale.y };
+			SetLocalScale(newScale);
+		}
 
-		float previousRotation = transform->GetRotation();
+		float currentRot = GetLocalRotation();
 		ImGui::Text("Rotation");
-		if (ImGui::DragFloat("##rotation_drag", &transform->GetRotation(), 0.1f, 0.0f, 0.0f, "%.2f")) {
-			RotateChildren(this, this, transform->GetRotation() - previousRotation);
+		if (ImGui::DragFloat("##rotation_drag", &currentRot, 0.1f, 0.0f, 0.0f, "%.2f")) {
+			SetLocalRotation(currentRot);
 		}
 
 		ImGui::Text("Render order");
@@ -650,9 +684,6 @@ namespace ShyEditor {
 
 		ImGui::EndChild();
 	}
-
-
-
 
 	//Returns true if there has been a change in a component
 	bool Entity::DrawComponentsInEditor() {
@@ -977,10 +1008,274 @@ namespace ShyEditor {
 		return changes;
 	}
 
+
+	//Add an attribute that references this object
 	void Entity::AddReferenceToEntity(Components::Attribute* attr)
 	{
 		referencesToEntity.push_back(attr);
 	}
+
+
+	// ------------------------ Serialization and deseralization logic -------------------------
+
+	std::string Entity::ToJson() {
+
+		nlohmann::ordered_json j;
+		j["name"] = name;
+
+		nlohmann::ordered_json childsJson = nlohmann::json::array();
+		for (auto& childPair : children) {
+			auto child = j.parse(childPair.second->ToJson());
+
+			childsJson.push_back(child);
+		}
+
+		j["id"] = id;
+
+		j["childs"] = childsJson;
+
+		j["order"] = renderOrder;
+
+		j["prefabId"] = prefabId;
+
+		j["isTransform"] = isTransform;
+
+		if (isTransform) {
+			ImVec2 position = GetLocalPosition();
+			ImVec2 size = GetLocalScale();
+			float rotation = GetLocalRotation();
+
+			j["localPosition"] = std::to_string(position.x) + ", " + std::to_string(-position.y);
+			j["localScale"] = std::to_string(size.x) + ", " + std::to_string(size.y);
+			j["localRotation"] = std::to_string(rotation);
+		}
+		else {
+
+			ImVec2 position = ImVec2(overlay->GetPosition());
+			ImVec2 size = ImVec2(overlay->GetSize());
+
+			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
+
+			j["placement"] = std::to_string(overlay->GetPlacement());
+			j["anchor"] = std::to_string(overlay->GetAnchor().x) + "," + std::to_string(overlay->GetAnchor().y);
+			j["top"] = std::to_string(overlay->GetTop());
+			j["left"] = std::to_string(overlay->GetLeft());
+			j["right"] = std::to_string(overlay->GetRight());
+			j["bottom"] = std::to_string(overlay->GetBottom());
+			j["position"] = std::to_string(position.x) + ", " + std::to_string(position.y);
+			j["size"] = std::to_string(size.x) + ", " + std::to_string(size.y);
+
+
+			//TODO: color e interactable
+		}
+
+		nlohmann::ordered_json componentsJson = nlohmann::json::array();
+		for (auto it = components.begin(); it != components.end(); it++) {
+
+
+			componentsJson.push_back(it->second.ToJson());
+		}
+
+		j["components"] = componentsJson;
+
+
+		nlohmann::ordered_json scriptsJson = nlohmann::json();
+		for (auto it = scripts.begin(); it != scripts.end(); it++) {
+			auto scriptJson = j.parse(it->second.ToJson());
+
+			if (scriptJson.is_null())
+				scriptJson = nlohmann::json::array();
+
+			scriptsJson[it->second.GetPath() + it->second.GetName()] = scriptJson;
+		}
+
+		j["scripts"] = scriptsJson;
+
+
+		return j.dump(2);
+	}
+
+	Entity* Entity::FromJson(nlohmann::ordered_json& jsonData) {
+
+		std::string errorMsg = "The JSON entity has not the correct format.";
+
+		if (!jsonData.contains("name")) {
+			LogManager::LogError(errorMsg);
+			return nullptr;
+		}
+
+		std::string entityName = jsonData["name"];
+
+
+		Entity::unusedIds.push_back(jsonData["id"]);
+
+		bool isTransform = jsonData["isTransform"];
+
+		Entity* entity = new Entity(entityName, isTransform);
+		entity->name = entityName;
+
+		entity->prefabId = jsonData["prefabId"];
+
+		if (!jsonData.contains("id")) {
+			LogManager::LogError(errorMsg);
+			return nullptr;
+		}
+
+		if (!jsonData.contains("order")) {
+			LogManager::LogError(errorMsg);
+			return entity;
+		}
+
+		entity->renderOrder = jsonData["order"];
+
+		if (isTransform)
+		{
+			if (!jsonData.contains("localPosition")) {
+				LogManager::LogError(errorMsg);
+				return entity;
+			}
+
+			if (!jsonData.contains("localScale")) {
+				LogManager::LogError(errorMsg);
+				return entity;
+			}
+
+			if (!jsonData.contains("localRotation")) {
+				LogManager::LogError(errorMsg);
+				return entity;
+			}
+
+			// Deserialize localPosition, localScale, and localRotation
+			std::string localPositionStr = jsonData["localPosition"];
+			std::string localScaleStr = jsonData["localScale"];
+			std::string localRotation = jsonData["localRotation"];
+
+			// Parse localPosition and localScale
+			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->GetLocalPosition().x, &entity->GetLocalPosition().y);
+			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->GetLocalScale().x, &entity->GetLocalScale().y);
+
+			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
+			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
+
+			entity->GetLocalPosition().y *= -1;
+
+			entity->SetLocalRotation(std::stof(localRotation));
+		}
+		else {
+
+			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
+
+			entity->overlay->GetPlacement() = jsonData.contains("placement") ? std::stoi(jsonData["placement"].get<std::string>()) : 0;
+			entity->overlay->GetTop() = jsonData.contains("top") ? std::stoi(jsonData["top"].get<std::string>()) : 0;
+			entity->overlay->GetBottom() = jsonData.contains("bottom") ? std::stoi(jsonData["bottom"].get<std::string>()) : 0;
+			entity->overlay->GetLeft() = jsonData.contains("left") ? std::stoi(jsonData["left"].get<std::string>()) : 0;
+			entity->overlay->GetRight() = jsonData.contains("right") ? std::stoi(jsonData["right"].get<std::string>()) : 0;
+
+			if (jsonData.contains("position")) {
+
+				std::string position = jsonData["position"];
+				sscanf_s(position.c_str(), "%f, %f", &entity->overlay->GetPosition().x, &entity->overlay->GetPosition().y);
+			}
+
+			if (jsonData.contains("size")) {
+
+				std::string size = jsonData["size"];
+				sscanf_s(size.c_str(), "%f, %f", &entity->overlay->GetSize().x, &entity->overlay->GetSize().y);
+			}
+
+			//TODO: color y interactable
+
+		}
+
+		// Components
+		if (!jsonData.contains("components")) {
+			LogManager::LogError(errorMsg);
+			return entity;
+		}
+
+		for (const auto& compJson : jsonData["components"]) {
+			Components::Component component = Components::Component::FromJson(compJson.dump());
+			entity->AddComponent(component);
+
+		}
+
+		// Scripts
+		if (!jsonData.contains("scripts")) {
+			LogManager::LogError(errorMsg);
+			return entity;
+		}
+
+		for (const auto& scriptJson : jsonData["scripts"].items()) {
+			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
+			entity->AddScript(script);
+		}
+
+		if (!jsonData.contains("childs")) {
+			LogManager::LogError(errorMsg);
+			return entity;
+		}
+
+		for (auto& childJson : jsonData["childs"]) {
+			Entity* child = Entity::FromJson(childJson);
+
+			entity->AddChild(child);
+			child->SetParent(entity);
+
+		}
+
+		return entity;
+	}
+
+
+
+	// ------------------------ Id Management -------------------------
+
+	void Entity::AssignId(Entity* entity)
+	{
+		// See if we can reutilize an id
+		if (Entity::unusedIds.size() != 0) {
+			int  id = Entity::unusedIds.back();
+			Entity::unusedIds.pop_back();
+
+			if (IsIdAlreadyUsed(id)) {
+				AssignId(entity);
+			}
+			else {
+				entity->SetId(id);
+			}
+		}
+		else {
+
+			//Ensure id is not being used already
+			while (IsIdAlreadyUsed(Entity::lastId)) {
+				Entity::lastId++;
+			}
+
+			entity->SetId(Entity::lastId);
+			Entity::lastId++;
+		}
+	}
+
+	bool Entity::IsIdAlreadyUsed(int id)
+	{
+		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
+		std::vector<Entity*>& overlays = Editor::GetInstance()->GetScene()->GetOverlays();
+
+		if (entities.find(id) != entities.end()) {
+			return true;
+		}
+
+		for (auto overlay : overlays) {
+			if (overlay->GetId() == id) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	// ------------------------ Editor drawing methods -------------------------
 
 	bool Entity::DrawFloat(std::string attrName, ::Components::Attribute* attr) {
 
@@ -1249,36 +1544,6 @@ namespace ShyEditor {
 
 	// ---------------------- Entity children settings (Transform and visibility) ----------------------
 
-	void Entity::TranslateChildren(Entity* entity, ImVec2* previousPos) {
-
-		ImVec2 parentPreviousPos = { previousPos->x, previousPos->y };
-
-		for (auto childPair : entity->GetChildren()) {
-
-			ImVec2 childPos = childPair.second->GetPosition();
-
-			float xDiff = entity->GetPosition().x - parentPreviousPos.x;
-			float yDiff = entity->GetPosition().y - parentPreviousPos.y;
-
-			previousPos->x = childPos.x;
-			previousPos->y = childPos.y;
-
-			childPair.second->SetPosition(ImVec2(childPos.x + xDiff, childPos.y + yDiff));
-
-			TranslateChildren(childPair.second, previousPos);
-		}
-	}
-
-	void Entity::ScaleChildren(Entity* entity, int scaleFactor) {
-
-		for (auto& childPair : entity->GetChildren()) {
-
-			childPair.second->transform->GetScale().x += scaleFactor;
-			childPair.second->transform->GetScale().y += scaleFactor;
-
-			ScaleChildren(childPair.second, scaleFactor);
-		}
-	}
 
 	void Entity::SetChildrenVisible(Entity* entity, bool visible) {
 
@@ -1290,288 +1555,43 @@ namespace ShyEditor {
 		}
 	}
 
-	void Entity::RotateChildren(Entity* entity, Entity* entityCenter, float rotationAngle) {
-
-		float angleRadians = rotationAngle * (3.14159265359f / 180.0f);
-
-		for (auto& child : entity->GetChildren())
-		{
-			auto& childPos = child.second->transform->GetPosition();
-
-			float newX = cos(angleRadians) * (childPos.x - entityCenter->transform->GetPosition().x) - sin(angleRadians) * (childPos.y - entityCenter->transform->GetPosition().y) + entityCenter->transform->GetPosition().x;
-			float newY = sin(angleRadians) * (childPos.x - entityCenter->transform->GetPosition().x) + cos(angleRadians) * (childPos.y - entityCenter->transform->GetPosition().y) + entityCenter->transform->GetPosition().y;
-
-			child.second->transform->GetPosition().x = newX;
-			child.second->transform->GetPosition().y = newY;
-			child.second->transform->GetRotation() += rotationAngle;
-
-			RotateChildren(child.second, entityCenter, rotationAngle);
-		}
-	}
-
-	// ------------------------ Serialization and deseralization logic -------------------------
-
-	std::string Entity::ToJson() {
-
-		nlohmann::ordered_json j;
-		j["name"] = name;
-
-		nlohmann::ordered_json childsJson = nlohmann::json::array();
-		for (auto& childPair : children) {
-			auto child = j.parse(childPair.second->ToJson());
-
-			childsJson.push_back(child);
-		}
-
-		j["id"] = id;
-
-		j["childs"] = childsJson;
-
-		j["order"] = renderOrder;
-
-		j["prefabId"] = prefabId;
-
-		j["isTransform"] = isTransform;
-
-		if (isTransform) {
-			ImVec2 position = ImVec2(transform->GetPosition());
-			ImVec2 size = ImVec2(transform->GetScale());
-			float rotation = transform->GetRotation();
-
-			j["localPosition"] = std::to_string(position.x) + ", " + std::to_string(-position.y);
-			j["localScale"] = std::to_string(size.x) + ", " + std::to_string(size.y);
-			j["localRotation"] = std::to_string(rotation);
-		}
-		else {
-
-			ImVec2 position = ImVec2(overlay->GetPosition());
-			ImVec2 size = ImVec2(overlay->GetSize());
-
-			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
-
-			j["placement"] = std::to_string(overlay->GetPlacement());
-			j["anchor"] = std::to_string(overlay->GetAnchor().x) + "," + std::to_string(overlay->GetAnchor().y);
-			j["top"] = std::to_string(overlay->GetTop());
-			j["left"] = std::to_string(overlay->GetLeft());
-			j["right"] = std::to_string(overlay->GetRight());
-			j["bottom"] = std::to_string(overlay->GetBottom());
-			j["position"] = std::to_string(position.x) + ", " + std::to_string(position.y);
-			j["size"] = std::to_string(size.x) + ", " + std::to_string(size.y);
-
-
-			//TODO: color e interactable
-		}
-
-		nlohmann::ordered_json componentsJson = nlohmann::json::array();
-		for (auto it = components.begin(); it != components.end(); it++) {
-
-
-			componentsJson.push_back(it->second.ToJson());
-		}
-
-		j["components"] = componentsJson;
-
-
-		nlohmann::ordered_json scriptsJson = nlohmann::json();
-		for (auto it = scripts.begin(); it != scripts.end(); it++) {
-			auto scriptJson = j.parse(it->second.ToJson());
-
-			if (scriptJson.is_null())
-				scriptJson = nlohmann::json::array();
-
-			scriptsJson[it->second.GetPath() + it->second.GetName()] = scriptJson;
-		}
-
-		j["scripts"] = scriptsJson;
-
-
-		return j.dump(2);
-	}
-
-	Entity* Entity::FromJson(nlohmann::ordered_json& jsonData) {
-
-		std::string errorMsg = "The JSON entity has not the correct format.";
-
-		if (!jsonData.contains("name")) {
-			LogManager::LogError(errorMsg);
-			return nullptr;
-		}
-
-		std::string entityName = jsonData["name"];
-
-
-		Entity::unusedIds.push_back(jsonData["id"]);
-
-		bool isTransform = jsonData["isTransform"];
-
-		Entity* entity = new Entity(entityName, isTransform);
-		entity->name = entityName;
-
-		entity->prefabId = jsonData["prefabId"];
-
-		if (!jsonData.contains("id")) {
-			LogManager::LogError(errorMsg);
-			return nullptr;
-		}
-
-		if (!jsonData.contains("order")) {
-			LogManager::LogError(errorMsg);
-			return entity;
-		}
-
-		entity->renderOrder = jsonData["order"];
-
-		if (isTransform)
-		{
-			if (!jsonData.contains("localPosition")) {
-				LogManager::LogError(errorMsg);
-				return entity;
-			}
-
-			if (!jsonData.contains("localScale")) {
-				LogManager::LogError(errorMsg);
-				return entity;
-			}
-
-			if (!jsonData.contains("localRotation")) {
-				LogManager::LogError(errorMsg);
-				return entity;
-			}
-
-			// Deserialize localPosition, localScale, and localRotation
-			std::string localPositionStr = jsonData["localPosition"];
-			std::string localScaleStr = jsonData["localScale"];
-			std::string localRotation = jsonData["localRotation"];
-
-			// Parse localPosition and localScale
-			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->transform->GetPosition().x, &entity->transform->GetPosition().y);
-			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->transform->GetScale().x, &entity->transform->GetScale().y);
-
-			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
-			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
-
-			entity->transform->GetPosition().y *= -1;
-
-			entity->transform->SetRotation(std::stof(localRotation));
-		}
-		else {
-
-			//"placement", "anchor", "top", "left", "right", "bottom", "position", "size", "color", "interactable"
-
-			entity->overlay->GetPlacement() = jsonData.contains("placement") ? std::stoi(jsonData["placement"].get<std::string>()) : 0;
-			entity->overlay->GetTop() = jsonData.contains("top") ? std::stoi(jsonData["top"].get<std::string>()) : 0;
-			entity->overlay->GetBottom() = jsonData.contains("bottom") ? std::stoi(jsonData["bottom"].get<std::string>()) : 0;
-			entity->overlay->GetLeft() = jsonData.contains("left") ? std::stoi(jsonData["left"].get<std::string>()) : 0;
-			entity->overlay->GetRight() = jsonData.contains("right") ? std::stoi(jsonData["right"].get<std::string>()) : 0;
-
-			if (jsonData.contains("position")) {
-
-				std::string position = jsonData["position"];
-				sscanf_s(position.c_str(), "%f, %f", &entity->overlay->GetPosition().x, &entity->overlay->GetPosition().y);
-			}
-
-			if (jsonData.contains("size")) {
-
-				std::string size = jsonData["size"];
-				sscanf_s(size.c_str(), "%f, %f", &entity->overlay->GetSize().x, &entity->overlay->GetSize().y);
-			}
-
-			//TODO: color y interactable
-
-		}
-
-		// Components
-		if (!jsonData.contains("components")) {
-			LogManager::LogError(errorMsg);
-			return entity;
-		}
-
-		for (const auto& compJson : jsonData["components"]) {
-			Components::Component component = Components::Component::FromJson(compJson.dump());
-			entity->AddComponent(component);
-
-		}
-
-		// Scripts
-		if (!jsonData.contains("scripts")) {
-			LogManager::LogError(errorMsg);
-			return entity;
-		}
-
-		for (const auto& scriptJson : jsonData["scripts"].items()) {
-			Components::Script script = Components::Script::fromJson(scriptJson.key(), scriptJson.value().dump());
-			entity->AddScript(script);
-		}
-
-		if (!jsonData.contains("childs")) {
-			LogManager::LogError(errorMsg);
-			return entity;
-		}
-
-		for (auto& childJson : jsonData["childs"]) {
-			Entity* child = Entity::FromJson(childJson);
-
-			entity->AddChild(child);
-			child->SetParent(entity);
-			
-		}
-
-		return entity;
-	}
-
-	bool Entity::IsTransform()
+	void Entity::SetTransformRelativeToNewParent()
 	{
-		return isTransform;
+		if (IsTransform() && parent != nullptr) {
+			ImVec2 parentPos = parent->GetWorldPosition();
+			ImVec2 newPos = { GetLocalPosition().x - parentPos.x, GetLocalPosition().y - parentPos.y };
+
+			//Tiene sentido
+			newPos = Transform::rotate(-parent->GetWorldRotation(), newPos);
+
+			SetLocalPosition(newPos);
+
+			float parentRot = parent->GetWorldRotation();
+			float newRot = GetLocalRotation() - parentRot;
+
+			SetLocalRotation(newRot);
+		
+			ImVec2 parentScale = parent->GetWorldScale();
+			ImVec2 newScale = { GetLocalScale().x / parentScale.x, GetLocalScale().y / parentScale.y };
+
+			SetLocalScale(newScale);
+		}
 	}
 
-	Overlay* Entity::GetOverlay()
+	void Entity::SetTransformToWorldValues()
 	{
-		return overlay;
-	}
+		if (IsTransform()) {
+			ImVec2 worldPos = GetWorldPosition();
+			SetLocalPosition(worldPos);
 
-	void Entity::AssignId(Entity* entity)
-	{
-		// See if we can reutilize an id
-		if (Entity::unusedIds.size() != 0) {
-			int  id = Entity::unusedIds.back();
-			Entity::unusedIds.pop_back();
+			ImVec2 worldScale = GetWorldScale();
+			SetLocalScale(worldScale);
 
-			if (IsIdAlreadyUsed(id)) {
-				AssignId(entity);
-			}
-			else {
-				entity->SetId(id);
-			}
-		}
-		else {
-
-			//Ensure id is not being used already
-			while (IsIdAlreadyUsed(Entity::lastId)) {
-				Entity::lastId++;
-			}
-
-			entity->SetId(Entity::lastId);
-			Entity::lastId++;
+			float worldRotation = GetWorldRotation();
+			SetLocalRotation(worldRotation);
 		}
 	}
 
-	bool Entity::IsIdAlreadyUsed(int id)
-	{
-		std::map<int, Entity*>& entities = Editor::GetInstance()->GetScene()->GetEntities();
-		std::vector<Entity*>& overlays = Editor::GetInstance()->GetScene()->GetOverlays();
-
-		if (entities.find(id) != entities.end()) {
-			return true;
-		}
-
-		for (auto overlay : overlays) {
-			if (overlay->GetId() == id) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 
 
@@ -1602,36 +1622,161 @@ namespace ShyEditor {
 		position = nullptr;
 	}
 
-	ImVec2& Transform::GetPosition()
+	ImVec2& Transform::GetLocalPosition()
 	{
 		return *position;
 	}
 
-	ImVec2& Transform::GetScale()
+	ImVec2& Transform::GetWorldPosition()
 	{
-		return *scale;
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+			
+			//Tiene sentido
+			ImVec2 rotatedPosition = Transform::rotate(parent->GetWorldRotation(), GetLocalPosition());
+			ImVec2 parentWorldPos = parent->GetWorldPosition();
+
+			ImVec2 worldPos = { parentWorldPos.x + rotatedPosition.x, parentWorldPos.y + rotatedPosition.y };
+
+			return worldPos;
+		}
+
+
+		return GetLocalPosition();
 	}
 
-	float& Transform::GetRotation()
+	float& Transform::GetLocalRotation()
 	{
 		return rotation;
 	}
 
-	void Transform::SetPosition(float x, float y)
+	float& Transform::GetWorldRotation()
 	{
-		position->x = x;
-		position->y = y;
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+			float worldRotation = GetLocalRotation() + parent->GetWorldRotation();
+
+			return worldRotation;
+		}
+
+		return GetLocalRotation();
 	}
 
-	void Transform::SetScale(float x, float y)
+	ImVec2& Transform::GetLocalScale()
 	{
-		scale->x = x;
-		scale->y = y;
+		return *scale;
 	}
 
-	void Transform::SetRotation(float r)
+	ImVec2& Transform::GetWorldScale()
+	{
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+			ImVec2 scale = GetLocalScale();
+			ImVec2 parentScale = parent->GetWorldScale();
+
+			ImVec2 worldScale = { scale.x * parentScale.x, scale.y * parentScale.y };
+
+			return worldScale;
+		}
+
+		return GetLocalScale();
+	}
+
+	void Transform::SetLocalPosition(ImVec2& newPos)
+	{
+		position->x = newPos.x;
+		position->y = newPos.y;
+	}
+
+	void Transform::SetWorldPosition(ImVec2& pos)
+	{
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+			ImVec2 parentWorldPos = parent->GetWorldPosition();
+
+			ImVec2 newPos = { pos.x - parentWorldPos.x, pos.y - parentWorldPos.y };
+
+			newPos = Transform::rotate(-parent->GetWorldRotation(), newPos);
+
+			SetLocalPosition(newPos);
+			return;
+		}
+
+		SetLocalPosition(pos);
+	}
+
+	void Transform::SetLocalRotation(float r)
 	{
 		rotation = r;
+	}
+
+	void Transform::SetWorldRotation(float r)
+	{
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+
+			SetLocalRotation(r - parent->GetWorldRotation());
+			return;
+		}
+
+		SetLocalRotation(r);
+	}
+
+	void Transform::SetLocalScale(ImVec2& newScale)
+	{
+		scale->x = newScale.x;
+		scale->y = newScale.y;
+	}
+
+	void Transform::SetWorldScale(ImVec2& scale)
+	{
+		Entity* parent = obj->GetParent();
+
+		if (parent != nullptr) {
+
+			ImVec2 parentWorldScale = parent->GetWorldScale();
+
+			ImVec2 newScale = { scale.x / parentWorldScale.x, scale.y / parentWorldScale.y };
+
+			SetLocalScale(newScale);
+			return;
+		}
+
+		SetLocalScale(scale);
+	}
+
+
+	//ImVec2 doesnt have rotate method, this is just a workaround so we dont have to create a whole Vector2 class just for this
+	ImVec2& Transform::rotate(float degrees, ImVec2 vec)
+	{
+		ImVec2 r;
+		degrees = fmod(degrees, 360.0f);
+		if (degrees > 180.0f) {
+			degrees = degrees - 360.0f;
+		}
+		else if (degrees <= -180.0f) {
+			degrees = 360.0f + degrees;
+		}
+
+		float angle = degrees * PI / 180.0f;
+		float sine = sin(angle);
+		float cosine = cos(angle);
+
+		//rotation matrix
+		float matrix[2][2] = { { cosine, -sine }, { sine, cosine } };
+
+		float x = vec.x;
+		float y = vec.y;
+
+		r.x = matrix[0][0] * x + matrix[0][1] * y;
+		r.y = matrix[1][0] * x + matrix[1][1] * y;
+
+		return r;
 	}
 
 
@@ -1918,21 +2063,22 @@ namespace ShyEditor {
 			SDL_RenderCopy(renderer, texture->getSDLTexture(), NULL, &dest);
 		}
 	}
+
 	std::string OverlayImage::GetPath()
 	{
 		return path;
 	}
+
 	Texture* OverlayImage::GetTexture()
 	{
 		return texture;
 	}
+
 	void OverlayImage::SetTexture(std::string path, Texture* texture)
 	{
 		this->path = path;
 		this->texture = texture;
 	}
-
-
 
 
 
@@ -1963,10 +2109,12 @@ namespace ShyEditor {
 	{
 		return path;
 	}
+
 	std::string OverlayText::GetText()
 	{
 		return text;
 	}
+
 	void OverlayText::Clear()
 	{
 		if (texture != nullptr) {

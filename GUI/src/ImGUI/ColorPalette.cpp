@@ -79,6 +79,26 @@ namespace ShyEditor {
 		palette.gridIntervalScale = 4;
 		palette.gridSpacing = 50;
 
+
+
+		palette.scene.background = { .2f, .2f, .2f };
+		palette.scene.backgroundAlpha = 0;
+		palette.scene.frame = { 0, 0 ,0 };
+		palette.scene.frameWidth = 10;
+		palette.scene.objectFrame = {255, 0, 0};
+		palette.scene.objectFrameWidth = 3;
+		palette.scene.UIBorder = { 1, 1, 1 };
+		palette.scene.UIBorderHover = { 1, .2f, .2f };
+		palette.scene.UIBorderWidth = 5;
+		palette.scene.gridInterval = 5;
+		palette.scene.gridSpacing = 50;
+		palette.scene.gridAlpha = .5f;
+		palette.scene.gridThickness = 1;
+		palette.scene.grid = { 255, 255, 255 };
+
+
+
+
 		palette.font = ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\Montserrat-Regular.ttf";
 		palette.fontSize = 18.f;
 		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
@@ -271,6 +291,34 @@ namespace ShyEditor {
 
 			if (ImGui::DragFloat("Window rounding", &current.windowRounding, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
 			//ShowFloat("Window rounding", current.windowRounding, 1, 0, 100);
+
+			ImGui::Unindent();
+		}
+
+		if (ImGui::CollapsingHeader("Scene")) {
+
+			ImGui::Indent();
+			if (ImGui::ColorEdit3("Background", &current.scene.background.r)) areThereChanges = true;
+			if (ImGui::DragFloat("Background alpha", &current.scene.backgroundAlpha, .1f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+			if (ImGui::ColorEdit3("Frame", &current.scene.frame.r)) areThereChanges = true;
+			if (ImGui::DragInt("Frame thickness", &current.scene.frameWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+			if (ImGui::ColorEdit3("Entity frame", &current.scene.objectFrame.r)) areThereChanges = true;
+			if (ImGui::DragInt("Entity frame thickness", &current.scene.objectFrameWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+			if (ImGui::ColorEdit3("UI frame", &current.scene.UIBorder.r)) areThereChanges = true;
+			if (ImGui::ColorEdit3("UI hover", &current.scene.UIBorderHover.r)) areThereChanges = true;
+			if (ImGui::DragInt("UI frame thickness", &current.scene.UIBorderWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+
+			if (ImGui::ColorEdit3("Grid", &current.scene.grid.r)) areThereChanges = true;
+			if (ImGui::DragFloat("Grid alpha", &current.scene.gridAlpha, .1f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			if (ImGui::DragInt("Grid thickness", &current.scene.gridThickness, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			if (ImGui::DragInt("Grid spacing", &current.scene.gridSpacing, 1, 0, 500, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			if (ImGui::DragInt("Grid interval", &current.scene.gridInterval, 1, 1, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+
 
 			ImGui::Unindent();
 		}
