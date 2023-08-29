@@ -16,6 +16,7 @@
 #include "PrefabManager.h"
 #include "SDL.h"
 #include "ComponentInfo.h"
+#include "ColorPalette.h"
 
 #include <nlohmann/json.hpp>
 #include <string>
@@ -355,17 +356,25 @@ namespace ShyEditor {
 
 	void Scene::RenderFrame()
 	{
-		// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
-		Uint8 r, g, b, a;
-		SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-		SDL_Rect frameRect{};
-		CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
+		auto& color = ColorPalette::GetCurrentPalette().scene;
 
-		RenderRectangle(frameRect.x, frameRect.y, frameRect.w, frameRect.h, 10);
+		int thickness = color.frameWidth;
 
-		SDL_SetRenderDrawColor(renderer, r, g, b, a);
+		if (thickness > 0) {
+
+			// SAVE THE PREVIOUS COLOR TO RESTART IT AFTER DRAWING THE FRAME
+			Uint8 r, g, b, a;
+			SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+			SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(color.frame), 255);
+
+			SDL_Rect frameRect{};
+			CalculateFrameRect(frameRect.x, frameRect.y, frameRect.w, frameRect.h);
+
+			RenderRectangle(frameRect.x, frameRect.y, frameRect.w, frameRect.h, thickness);
+
+			SDL_SetRenderDrawColor(renderer, r, g, b, a);
+		}
 	}
 
 	void Scene::RenderUI() {
@@ -400,42 +409,53 @@ namespace ShyEditor {
 
 			bool mouseclicked = ImGui::IsMouseClicked(0);
 
-			const int thickness = 10;
 
+			auto& color = ColorPalette::GetCurrentPalette().scene;
 
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			RenderRectangle(dest.x, dest.y, dest.w, dest.h, 5);
+			int thickness = color.UIBorderWidth;
 
+			bool drawUiElements = thickness > 0;
+
+			if (drawUiElements) {
+
+				SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(color.UIBorder), 255);
+				RenderRectangle(dest.x, dest.y, dest.w, dest.h, thickness);
+			}
 			overlay->Render(renderer, dest.x, dest.y, dest.w, dest.h);
 
 			if (!inScene) continue;
 
 			if (selectedOverlay.overlay == nullptr)
 			{
+				thickness *= 2;
 
-				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+				SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(color.UIBorderHover), 255);
 
 				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.w, thickness)) {
 
-					RenderHorizontalSegment(dest.x, dest.y, dest.w, thickness);
+					if (drawUiElements)
+						RenderHorizontalSegment(dest.x, dest.y, dest.w, thickness);
 					if (mouseclicked) selectedOverlay.dir |= DIR_TOP;
 				}
 
 				if (PointInsideHorizontalSegment(mouse.x, mouse.y, dest.x, dest.y + dest.h, dest.w, thickness)) {
 
-					RenderHorizontalSegment(dest.x, dest.y + dest.h, dest.w, thickness);
+					if (drawUiElements)
+						RenderHorizontalSegment(dest.x, dest.y + dest.h, dest.w, thickness);
 					if (mouseclicked) selectedOverlay.dir |= DIR_BOTTOM;
 				}
 
 				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x, dest.y, dest.h, thickness)) {
 
-					RenderVerticalSegment(dest.x, dest.y, dest.h, thickness);
+					if (drawUiElements)
+						RenderVerticalSegment(dest.x, dest.y, dest.h, thickness);
 					if (mouseclicked) selectedOverlay.dir |= DIR_LEFT;
 				}
 
 				if (PointInsideVerticalSegment(mouse.x, mouse.y, dest.x + dest.w, dest.y, dest.h, thickness)) {
 
-					RenderVerticalSegment(dest.x + dest.w, dest.y, dest.h, thickness);
+					if (drawUiElements)
+						RenderVerticalSegment(dest.x + dest.w, dest.y, dest.h, thickness);
 					if (mouseclicked) selectedOverlay.dir |= DIR_RIGHT;
 				}
 			}
@@ -822,10 +842,12 @@ namespace ShyEditor {
 
 			// Cambiar las propiedades del grid dependiendo del orden de magnitud
 
+			auto& color = ColorPalette::GetCurrentPalette().scene;
+
 			float camScale = sceneCamera->GetScale();
 
-			float spacing = 50 * sceneCamera->GetScale();
-			int interval = 5;
+			float spacing = color.gridSpacing * sceneCamera->GetScale();
+			int interval = color.gridInterval;
 
 			int offset_x = windowWidth * 0.5f;
 			int offset_y = windowHeight * 0.5f;
@@ -836,9 +858,10 @@ namespace ShyEditor {
 				spacing *= interval;
 			}
 
-			ScriptCreationUtilities::Grid::SetAlpha(0.5f);
-
+			ScriptCreationUtilities::Grid::SetAlpha(color.gridAlpha);
+			ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(color.grid));
 			ScriptCreationUtilities::Grid::SetSpacing(spacing);
+			ScriptCreationUtilities::Grid::SetThickness(color.gridThickness);
 			ScriptCreationUtilities::Grid::SetInterval(interval);
 			ScriptCreationUtilities::Grid::SetOffset(offset_x + sceneCamera->GetPosition().x, offset_y + sceneCamera->GetPosition().y);
 			ScriptCreationUtilities::Grid::Draw();
@@ -1050,7 +1073,7 @@ namespace ShyEditor {
 	{
 		int ht = std::round(thickness * 0.5f);
 
-		SDL_Rect frameRect = { x - ht, y - ht, w + ht * 2, h + ht * 2 };
+		SDL_Rect frameRect = { x, y, w, h };
 
 
 		for (int i = 0; i < thickness; i++) //SDL no tiene soporte para cambiar el grosor de la linea
@@ -1058,10 +1081,10 @@ namespace ShyEditor {
 
 			SDL_RenderDrawRect(renderer, &frameRect);
 
-			frameRect.x++;
-			frameRect.y++;
-			frameRect.w -= 2;
-			frameRect.h -= 2;
+			frameRect.x--;
+			frameRect.y--;
+			frameRect.w += 2;
+			frameRect.h += 2;
 		}
 
 

@@ -14,6 +14,7 @@
 #include "PrefabManager.h"
 #include "SDL.h"
 #include "Font.h"
+#include "ColorPalette.h"
 
 #include <fstream>
 #include "CheckML.h"
@@ -212,21 +213,28 @@ namespace ShyEditor {
 			if (this == editor->GetScene()->GetSelectedEntity()) {
 
 				// Save the previous color to restart it later
-				Uint8 r, g, b, a;
-				SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+				auto& currentPalette = ColorPalette::GetCurrentPalette().scene;
+				int thickness = currentPalette.objectFrameWidth;
 
-				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-
-				int thickness = 3;
+				if (thickness > 0) {
 
 
-				for (int i = 0; i < thickness; i++) {
-					SDL_Rect currentRect = { dst.x - i, dst.y - i, dst.w + i * 2, dst.h + i * 2 };
-					SDL_RenderDrawRect(renderer, &currentRect);
+					Uint8 r, g, b, a;
+					SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+
+
+					SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(currentPalette.objectFrame), 255);
+
+
+
+					for (int i = 0; i < thickness; i++) {
+						SDL_Rect currentRect = { dst.x - i, dst.y - i, dst.w + i * 2, dst.h + i * 2 };
+						SDL_RenderDrawRect(renderer, &currentRect);
+					}
+
+					SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
 				}
-
-				SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
 				//if (showGizmo) {
 				//	dst.x += dst.w / 2;
 				//	dst.y -= dst.h / 2;
