@@ -543,9 +543,6 @@ namespace Input {
 	{
 		float dir = 0;
 
-		if (isLetterDown((int)KB_LETTERS::S))
-			Console::Output::Print("jeje", "funciona");
-
 		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
 			dir += -1;
 

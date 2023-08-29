@@ -90,6 +90,7 @@ namespace ShyEditor {
 
 		static void GenerateDebug();
 		static void GenerateRelease();
+		static void GenerateBuild();
 
 		void Behaviour() override;
 
