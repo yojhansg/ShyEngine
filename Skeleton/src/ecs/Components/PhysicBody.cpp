@@ -272,7 +272,7 @@ namespace ECS {
 		return body->GetAngle() * (180 / b2_pi);
 	}
 
-	void PhysicBody::setCollisionLayer(const std::string& layerName) {
+	void PhysicBody::setCollisionLayer(cstring layerName) {
 
 		if (!pm->layersExists(layerName)) {
 			Console::Output::PrintError("Physics Body", "The layer with name " + layerName + " does not exist.");
@@ -310,11 +310,11 @@ namespace ECS {
 		return body->GetAngularVelocity();
 	}
 
-	void PhysicBody::applyForce(const Vector2D& force, const Vector2D& point) {
+	void PhysicBody::applyForce(cVector2D force, cVector2D point) {
 		body->ApplyForce({ force.getX(), force.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicBody::applyForceToCenter(const Vector2D& force) {
+	void PhysicBody::applyForceToCenter(cVector2D force) {
 		body->ApplyForceToCenter({ force.getX(), force.getY() }, true);
 	}
 
@@ -322,11 +322,11 @@ namespace ECS {
 		body->ApplyTorque(torque, true);
 	}
 
-	void PhysicBody::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point) {
+	void PhysicBody::applyLinearImpulse(cVector2D impulse, cVector2D point) {
 		body->ApplyLinearImpulse({ impulse.getX(), impulse.getY() }, { point.getX(), point.getY() }, true);
 	}
 
-	void PhysicBody::applyLinearImpulseToCenter(const Vector2D& impulse) {
+	void PhysicBody::applyLinearImpulseToCenter(cVector2D impulse) {
 		body->ApplyLinearImpulseToCenter({ impulse.getX(), impulse.getY() }, true);
 	}
 

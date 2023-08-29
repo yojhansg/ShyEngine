@@ -2,6 +2,8 @@
 #include <Vector2D.h>
 #include <ConsoleManager.h>
 
+#include "CheckML.h"
+
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
 #define TRIGGER_DEADZONE 1000
@@ -374,6 +376,7 @@ namespace Input {
 	}
 
 	void InputManager::removeJoystick(int joystick_id) {
+
 		SDL_JoystickClose(joysticks[joystick_id]);
 
 		joysticks.pop_back();
@@ -404,7 +407,9 @@ namespace Input {
 	}
 
 	void InputManager::removeJoysticks() {
-		for (int i = numJoysticksConnected - 1; i >= 0; i--) removeJoystick(i);
+		for (int i = numJoysticksConnected - 1; i >= 0; i--) {
+			removeJoystick(i);
+		}
 	}
 
 	void InputManager::joystickConnected() {
@@ -437,54 +442,53 @@ namespace Input {
 
 	void InputManager::onJoystickAxisMotion(const SDL_Event& event) {
 
-		if (joysticks.size() > 0) {
+		if (joysticks.size() <= 0) return;
 
-			isAxisMotionEvent_ = true;
-			joystickId = event.jaxis.which;
+		isAxisMotionEvent_ = true;
+		joystickId = event.jaxis.which;
 
-			// Left & right joysticks
-			if (event.jaxis.axis < 4) {
+		// Left & right joysticks
+		if (event.jaxis.axis < 4) {
 
-				if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
-				{
-					switch (event.jaxis.axis) {
-					case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
-					case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
-					case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
-					case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-					default:
-						break;
-					}
+			if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
+			{
+				switch (event.jaxis.axis) {
+				case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
+				case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
+				case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
+				case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
+				default:
+					break;
 				}
-				else {
-
-					isAxisMotionEvent_ = false;
-
-					for (auto i = 0u; i < joysticks.size(); i++) {
-						joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
-						joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
-
-						joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
-					}
-				}
-
-			} // Left & right triggers
+			}
 			else {
 
-				if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+				isAxisMotionEvent_ = false;
 
-					switch (event.jaxis.axis) {
-					case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-					case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-					default:
-						break;
-					}
-				}
-				else {
-					isAxisMotionEvent_ = false;
+				for (auto i = 0u; i < joysticks.size(); i++) {
+					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
+					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
 
 					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 				}
+			}
+
+		} // Left & right triggers
+		else {
+
+			if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+
+				switch (event.jaxis.axis) {
+				case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+				case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+				default:
+					break;
+				}
+			}
+			else {
+				isAxisMotionEvent_ = false;
+
+				joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 			}
 		}
 	}
@@ -524,22 +528,20 @@ namespace Input {
 	}
 
 
-	float InputManager::HorizontalMovement()
+	float InputManager::KeyBoardHorizontalMovement()
 	{
 		float dir = 0;
 
 		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
 			dir += -1;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::D))
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
 			dir += 1;
-
-		//TODO: meter el input de mando
 
 		return dir;
 	}
 
-	float InputManager::VerticalMovement()
+	float InputManager::KeyBoardVerticalMovement()
 	{
 		float dir = 0;
 
@@ -549,22 +551,24 @@ namespace Input {
 		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
 			dir += 1;
 
-		//TODO: meter el input de mando
-
 		return dir;
 	}
 
-	Utilities::Vector2D InputManager::getJoystickValue(int intct) {
+
+
+	// With ID
+
+	Utilities::Vector2D InputManager::getJoystickValueWithId(int intct, int id) {
 
 		CONTROLLERSTICK ct = (CONTROLLERSTICK) intct;
 		Utilities::Vector2D v = Utilities::Vector2D();
 
 		switch (ct) {
 		case CONTROLLERSTICK::LEFT_STICK:
-			v = joystickValues[joystickId].first;
+			v = joystickValues[id].first;
 			break;
 		case CONTROLLERSTICK::RIGHT_STICK:
-			v = joystickValues[joystickId].second;
+			v = joystickValues[id].second;
 			break;
 		default:
 			break;
@@ -573,17 +577,17 @@ namespace Input {
 		return v / (MAX_STICK_VALUE);
 	}
 
-	float InputManager::getJoystickTriggerValue(int intct) {
+	float InputManager::getJoystickTriggerValueWithId(int intct, int id) {
 
 		CONTROLLERTRIGGER ct = (CONTROLLERTRIGGER)intct;
 		float v = 0.0f;
 
 		switch (ct) {
 		case CONTROLLERTRIGGER::LEFT_TRIGGER:
-			v = joystickTriggerValues[joystickId].first;
+			v = joystickTriggerValues[id].first;
 			break;
 		case CONTROLLERTRIGGER::RIGHT_TRIGGER:
-			v = joystickTriggerValues[joystickId].second;
+			v = joystickTriggerValues[id].second;
 			break;
 		default:
 			break;
@@ -592,34 +596,103 @@ namespace Input {
 		return v / (float)(MAX_STICK_VALUE);
 	}
 
-	bool InputManager::getJoystickButtonState(int button) {
+	bool InputManager::getJoystickButtonStateWithId(int button, int id) {
 
-		return joystickButtonStates[joystickId][button];
+		return joystickButtonStates[id][button];
+	}
+
+	int InputManager::getJoysticksNumButtonsWithId(int id) {
+
+		return joystickNumButtons[id];
+	}
+
+	bool InputManager::isLeftJoystickMotionWithId(int id) {
+
+		return joystickValues[id].first->getX() != 0 || joystickValues[id].first->getY() != 0;
+	}
+
+	bool InputManager::isRightJoystickMotionWithId(int id) {
+
+		return joystickValues[id].second->getX() != 0 || joystickValues[id].second->getY() != 0;
+	}
+
+	bool InputManager::isLeftTriggerMotionWithId(int id) {
+
+		return joystickTriggerValues[id].first != 0;
+	}
+
+	bool InputManager::isRightTriggerMotionWithId(int id) {
+
+		return joystickTriggerValues[id].second != 0;
+	}
+
+	float InputManager::ControllerHorizontalMovementWithId(int id)
+	{
+		float dir = 0;
+
+		if (isLeftJoystickMotionWithId(id))
+			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getX();
+
+		return dir;
+	}
+
+	float InputManager::ControllerVerticalMovementWithId(int id)
+	{
+		float dir = 0;
+
+		if (isLeftJoystickMotionWithId(id))
+			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getY();
+
+		return dir;
+	}
+
+
+	// With out ID
+
+	Utilities::Vector2D InputManager::getJoystickValue(int ct) {
+		return getJoystickValueWithId(ct, joystickId);
+	}
+
+	float InputManager::getJoystickTriggerValue(int ct) {
+		return getJoystickTriggerValueWithId(ct, joystickId);
+	}
+
+	bool InputManager::getJoystickButtonState(int button) {
+		return getJoystickButtonStateWithId(button, joystickId);
 	}
 
 	int InputManager::getJoysticksNumButtons() {
-
-		return joystickNumButtons[joystickId];
+		return getJoysticksNumButtonsWithId(joystickId);
 	}
 
 	bool InputManager::isLeftJoystickMotion() {
-
-		return joystickValues[joystickId].first->getX() != 0 || joystickValues[joystickId].first->getY() != 0;
+		return isLeftJoystickMotionWithId(joystickId);
 	}
 
 	bool InputManager::isRightJoystickMotion() {
-
-		return joystickValues[joystickId].second->getX() != 0 || joystickValues[joystickId].second->getY() != 0;
+		return isRightJoystickMotionWithId(joystickId);
 	}
 
 	bool InputManager::isLeftTriggerMotion() {
-
-		return joystickTriggerValues[joystickId].first != 0;
+		return isLeftTriggerMotionWithId(joystickId);
 	}
 
 	bool InputManager::isRightTriggerMotion() {
+		return isRightTriggerMotionWithId(joystickId);
+	}
 
-		return joystickTriggerValues[joystickId].second != 0;
+	float InputManager::ControllerHorizontalMovement() {
+		return ControllerHorizontalMovementWithId(joystickId);
+	}
+
+	float InputManager::ControllerVerticalMovement() {
+		return ControllerVerticalMovementWithId(joystickId);
+	}
+
+
+	bool InputManager::joystickDisconnectedEvent() {
+
+		return joystickDisconnected_;
 	}
 
 	bool InputManager::joystickConnectedEvent() {
@@ -627,14 +700,9 @@ namespace Input {
 		return joystickConnected_;
 	}
 
-	bool InputManager::joystickDisconnectedEvent() {
+	std::string InputManager::getJoystickName(int id) {
 
-		return joystickDisconnected_;
-	}
-
-	std::string InputManager::getJoystickName() {
-
-		return joystickNames[joystickId];
+		return joystickNames[id];
 	}
 
 
@@ -878,21 +946,17 @@ namespace Input {
 		return KB_LETTERS::Count;
 	}
 
-	Input::InputManager::KB_NUMBERS Input::InputManager::ConvertToNumbers(const SDL_Scancode& scancode)
-	{
+	Input::InputManager::KB_NUMBERS Input::InputManager::ConvertToNumbers(const SDL_Scancode& scancode) {
 
 		if (scancode >= SDL_SCANCODE_1 && scancode <= SDL_SCANCODE_0) {
 
 			return (KB_NUMBERS)(scancode - SDL_SCANCODE_1);
 		}
 
-
 		if (scancode >= SDL_SCANCODE_F1 && scancode <= SDL_SCANCODE_F12) {
 
 			return (KB_NUMBERS) ((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
 		}
-
-
 
 		return KB_NUMBERS::Count;
 	}

@@ -114,8 +114,6 @@ namespace ShyEditor {
 		std::string ToJson();
 		static Entity* FromJson(nlohmann::ordered_json& json);
 
-		void TransformToJson(nlohmann::ordered_json& json);
-
 	private:
 
 		// Entity name
