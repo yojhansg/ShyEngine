@@ -173,10 +173,8 @@ namespace ShyEditor {
 		if (targetTexture != NULL) {
 			
 			
-			auto& color = ColorPalette::GetCurrentPalette().scene;
-			
 			SDL_SetRenderTarget(renderer, targetTexture);
-			SDL_SetRenderDrawColor(renderer, ColorPaletteParamsInt(color.background), color.backgroundAlpha * 255);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 			SDL_RenderClear(renderer);
 		}

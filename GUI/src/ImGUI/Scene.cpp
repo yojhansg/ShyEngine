@@ -860,6 +860,9 @@ namespace ShyEditor {
 				spacing *= interval;
 			}
 
+
+			ScriptCreationUtilities::Grid::DrawBackgroundColor(ColorPaletteParams(color.background), color.backgroundAlpha);
+
 			ScriptCreationUtilities::Grid::SetAlpha(color.gridAlpha);
 			ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(color.grid));
 			ScriptCreationUtilities::Grid::SetSpacing(spacing);
@@ -942,7 +945,7 @@ namespace ShyEditor {
 
 			ImVec2 position = MousePositionInScene();
 
-			entity->SetPosition(position);
+			entity->SetWorldPosition(position);
 			selectedEntity = entity;
 		}
 
@@ -959,7 +962,7 @@ namespace ShyEditor {
 
 				ImVec2 position = MousePositionInScene();
 
-				entity->SetPosition(position);
+				entity->SetWorldPosition(position);
 			}
 			else {
 				AddOverlay(entity);

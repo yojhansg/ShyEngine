@@ -14,13 +14,15 @@ namespace ShyEditor {
 
 	ColorPalette* ColorPalette::instance = nullptr;
 
-	ColorPalette::ColorPalette(const std::string& name) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), name(name)
+	ColorPalette::ColorPalette(const std::string& name) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), filename(name)
 	{
 		initialisation = true;
 		current = {};
 		instance = this;
 		pendingApply = false;
+		changes = false;
 
+		LoadFonts();
 		LoadDefaultPalette();
 		LoadPalettes();
 
@@ -28,7 +30,7 @@ namespace ShyEditor {
 		windowHeight = 500;
 		canBeDisplayedOnTop = true;
 
-		SwapPalette("Default");
+		SwapPalette("Engine default");
 		Apply();
 
 		initialisation = false;
@@ -41,43 +43,44 @@ namespace ShyEditor {
 		instance = nullptr;
 	}
 
-	void ColorPalette::LoadDefaultPalette() 
+	void ColorPalette::LoadDefaultPalette()
 	{
 		Palette palette{};
 
+		palette.name = "Engine default";
 		palette.text = { 0.9254901960784314f , 0.9411764705882353f , 0.9450980392156863f };
 		palette.head = { 0.1607843137254902f , 0.5019607843137255f , 0.7254901960784314f };
 		palette.area = { 0.2235294117647059f , 0.3098039215686275f , 0.4117647058823529f };
 		palette.body = { 0.1725490196078431f , 0.2431372549019608f , 0.3137254901960784f };
 		palette.popups = { 0.1294117647058824f , 0.1803921568627451f , 0.2352941176470588f };
 
-		palette.scriptBackground = { .12f, .12f, .12f };
+		palette.scripting.scriptBackground = { .12f, .12f, .12f };
 
-		palette.hover = { 1, .6f, .6f };
-		palette.buttonThickness = 1;
+		palette.scripting.hover = { 1, .6f, .6f };
+		palette.scripting.buttonThickness = 1;
 
 		palette.windowRounding = 0;
-		palette.nodeRounding = 10;
+		palette.scripting.nodeRounding = 10;
 
-		palette.line = { 1, 1, 1 };
-		palette.lineThickness = 1;
-		palette.lineOutline = { 1, 1, 1 };
-		palette.lineOutlineThickness = 0;
-		palette.lineCurvature = 0.5f;
-		palette.lineAlpha = 1;
+		palette.scripting.line = { 1, 1, 1 };
+		palette.scripting.lineThickness = 1;
+		palette.scripting.lineOutline = { 1, 1, 1 };
+		palette.scripting.lineOutlineThickness = 0;
+		palette.scripting.lineCurvature = 0.5f;
+		palette.scripting.lineAlpha = 1;
 
-		palette.flowline = { 1, 1, 1 };
-		palette.flowlineThickness = 5;
-		palette.flowlineOutline = { 1, 1, 1 };
-		palette.flowlineOutlineThickness = 0;
-		palette.flowlineCurvature = 0.5f;
-		palette.flowlineAlpha = 1;
+		palette.scripting.flowline = { 1, 1, 1 };
+		palette.scripting.flowlineThickness = 5;
+		palette.scripting.flowlineOutline = { 1, 1, 1 };
+		palette.scripting.flowlineOutlineThickness = 0;
+		palette.scripting.flowlineCurvature = 0.5f;
+		palette.scripting.flowlineAlpha = 1;
 
-		palette.grid = { .4f, .4f, .4f };
-		palette.gridInterval = 5;
-		palette.gridThickness = 1;
-		palette.gridIntervalScale = 4;
-		palette.gridSpacing = 50;
+		palette.scripting.grid = { .4f, .4f, .4f };
+		palette.scripting.gridInterval = 5;
+		palette.scripting.gridThickness = 1;
+		palette.scripting.gridIntervalScale = 4;
+		palette.scripting.gridSpacing = 50;
 
 
 
@@ -85,7 +88,7 @@ namespace ShyEditor {
 		palette.scene.backgroundAlpha = 0;
 		palette.scene.frame = { 0, 0 ,0 };
 		palette.scene.frameWidth = 10;
-		palette.scene.objectFrame = {255, 0, 0};
+		palette.scene.objectFrame = { 255, 0, 0 };
 		palette.scene.objectFrameWidth = 3;
 		palette.scene.UIBorder = { 1, 1, 1 };
 		palette.scene.UIBorderHover = { 1, .2f, .2f };
@@ -98,22 +101,53 @@ namespace ShyEditor {
 
 
 
-
-		palette.font = ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\Montserrat-Regular.ttf";
-		palette.fontSize = 18.f;
-		palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
+		std::string defaultFont = "Montserrat - Regular.ttf_18";
+		if (fonts.contains(defaultFont))
+			palette.fontPtr = fonts[defaultFont];
 
 
 		if (palette.fontPtr == nullptr)
-			LogManager::LogError("Could not load font with path: " + palette.font);
+			LogManager::LogError("Could not load default font");
 
-		palettes.emplace("Default", palette);
+		palettes.emplace(palette.name, palette);
 	}
 
 
+	void ColorPalette::LoadFonts()
+	{
+		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes\\Fonts.palette";
+
+		std::ifstream fileStream(palettePath);
+
+		if (!fileStream.good() || !json::accept(fileStream)) {
+			LogManager::LogError("Could not load fonts: " + palettePath);
+			return;
+		}
+
+		fileStream.clear();
+		fileStream.seekg(0);
+
+		json root = json::parse(fileStream);
+		fileStream.close();
+
+
+		for (auto& fontJs : root) {
+
+			std::string font = fontJs["font"];
+			int size = fontJs["size"];
+
+			std::string key = font + "_" + std::to_string(size);
+
+			auto fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF((ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\" + font).c_str(), size);
+
+			fonts[key] = fontPtr;
+		}
+
+	}
+
 	void ColorPalette::LoadPalettes() {
 
-		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes" + "\\" + name + ".palette";
+		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes" + "\\" + filename + ".palette";
 
 		std::ifstream fileStream(palettePath);
 
@@ -130,18 +164,17 @@ namespace ShyEditor {
 
 		for (auto& paletteInfo : root) {
 
-			Palette palette{};
 			std::string name = paletteInfo["name"].get<std::string>();
-			palette.font = ResourcesManager::EDITORASSETSFOLDER + "\\Fonts\\" + paletteInfo["font"].get<std::string>();
-			palette.fontSize = paletteInfo["fontSize"].get<int>();
 
-			palette.fontPtr = ImGui::GetIO().Fonts->AddFontFromFileTTF(palette.font.c_str(), palette.fontSize);
+			Palette palette{};
 
-			if (palette.fontPtr == nullptr)
-				LogManager::LogError("Could not load font with path: " + palette.font);
+			palette.name = name;
+
+			std::string font = paletteInfo["font"].get<std::string>();
+			palette.fontPtr = fonts.contains(font) ? fonts[font] : nullptr;
+
 
 			//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
-
 #define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());
 
 			ReadPaletteValue(text, palette, paletteInfo);
@@ -149,9 +182,9 @@ namespace ShyEditor {
 			ReadPaletteValue(area, palette, paletteInfo);
 			ReadPaletteValue(body, palette, paletteInfo);
 			ReadPaletteValue(popups, palette, paletteInfo);
-			ReadPaletteValue(scriptBackground, palette, paletteInfo);
-			ReadPaletteValue(grid, palette, paletteInfo);
-			ReadPaletteValue(line, palette, paletteInfo);
+			ReadPaletteValue(scripting.scriptBackground, palette, paletteInfo);
+			ReadPaletteValue(scripting.grid, palette, paletteInfo);
+			ReadPaletteValue(scripting.line, palette, paletteInfo);
 
 			//TODO: leer el resto de colores
 
@@ -176,7 +209,8 @@ namespace ShyEditor {
 	{
 		auto& io = ImGui::GetIO();
 
-		io.FontDefault = current.fontPtr;
+		if (current.fontPtr != nullptr)
+			io.FontDefault = current.fontPtr;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -250,47 +284,47 @@ namespace ShyEditor {
 
 		ImGui::TextWrapped("Choose theme");
 
+		if (ImGui::BeginCombo("Palette selector", current.name.c_str())) {
+			for (auto& palette : palettes) {
 
-		for (auto& palette : palettes) {
+				//TODO: push de los colores
+				ImGui::PushStyleColor(ImGuiCol_Text, toVec4(palette.second.text, 1));
+				ImGui::PushStyleColor(ImGuiCol_Header, toVec4(palette.second.body, 1));
+				ImGui::PushFont(palette.second.fontPtr);
 
-			//TODO: push de los colores
-			ImGui::PushFont(palette.second.fontPtr);
+
+				if (ImGui::Selectable(palette.first.c_str(), current.name == palette.second.name)) {
+
+					SwapPalette(palette.first);
+				}
 
 
-			if (ImGui::Button(palette.first.c_str())) {
-
-				SwapPalette(palette.first);
+				ImGui::PopStyleColor(2);
+				ImGui::PopFont();
 			}
 
-
-			ImGui::PopFont();
+			ImGui::EndCombo();
 		}
 
 		ImGui::ShowFontSelector("Font");
 
-#define ShowColor(name, color) if (ImGui::ColorEdit3(name, &color.r)) areThereChanges = true;
+#define ShowColor(name, color) if (ImGui::ColorEdit3(filename, &color.r)) areThereChanges = true;
 #define ShowFloat(name, value, speed, min, max)\
-	if (ImGui::DragFloat(name, &value), speed, min, max, "%.3f", ImGuiSliderFlags_AlwaysClamp) {\
+	if (ImGui::DragFloat(filename, &value), speed, min, max, "%.3f", ImGuiSliderFlags_AlwaysClamp) {\
 	 areThereChanges = true; if(value < min) value = min; if(value > max) value = max;}
 
 
-		bool areThereChanges = false;
 
 		if (ImGui::CollapsingHeader("Editor")) {
 
 			ImGui::Indent();
-			if (ImGui::ColorEdit3("Text", &current.text.r)) areThereChanges = true;
 
-			if (ImGui::ColorEdit3("Area", &current.area.r)) areThereChanges = true;
-
-			if (ImGui::ColorEdit3("Body", &current.body.r)) areThereChanges = true;
-
-			if (ImGui::ColorEdit3("Head", &current.head.r)) areThereChanges = true;
-
-			if (ImGui::ColorEdit3("Pop ups", &current.popups.r)) areThereChanges = true;
-
-			if (ImGui::DragFloat("Window rounding", &current.windowRounding, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-			//ShowFloat("Window rounding", current.windowRounding, 1, 0, 100);
+			Col("Text", &current.text);
+			Col("Area", &current.area);
+			Col("Body", &current.body);
+			Col("Head", &current.head);
+			Col("Pop ups", &current.popups);
+			Float("Window rounding", &current.windowRounding);
 
 			ImGui::Unindent();
 		}
@@ -298,26 +332,26 @@ namespace ShyEditor {
 		if (ImGui::CollapsingHeader("Scene")) {
 
 			ImGui::Indent();
-			if (ImGui::ColorEdit3("Background", &current.scene.background.r)) areThereChanges = true;
-			if (ImGui::DragFloat("Background alpha", &current.scene.backgroundAlpha, .1f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
 
-			if (ImGui::ColorEdit3("Frame", &current.scene.frame.r)) areThereChanges = true;
-			if (ImGui::DragInt("Frame thickness", &current.scene.frameWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			Col("Background", &current.scene.background);
+			NormalizedFloat("Background alpha", &current.scene.backgroundAlpha);
 
-			if (ImGui::ColorEdit3("Entity frame", &current.scene.objectFrame.r)) areThereChanges = true;
-			if (ImGui::DragInt("Entity frame thickness", &current.scene.objectFrameWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			Col("Frame", &current.scene.frame);
+			Int("Frame thickness", &current.scene.frameWidth);
 
-			if (ImGui::ColorEdit3("UI frame", &current.scene.UIBorder.r)) areThereChanges = true;
-			if (ImGui::ColorEdit3("UI hover", &current.scene.UIBorderHover.r)) areThereChanges = true;
-			if (ImGui::DragInt("UI frame thickness", &current.scene.UIBorderWidth, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+			Col("Entity frame", &current.scene.objectFrame);
+			Int("Entity frame thickness", &current.scene.objectFrameWidth);
+
+			Col("UI frame", &current.scene.UIBorder);
+			Col("UI hover", &current.scene.UIBorderHover);
+			Int("UI frame thickness", &current.scene.UIBorderWidth);
 
 
-			if (ImGui::ColorEdit3("Grid", &current.scene.grid.r)) areThereChanges = true;
-			if (ImGui::DragFloat("Grid alpha", &current.scene.gridAlpha, .1f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-			if (ImGui::DragInt("Grid thickness", &current.scene.gridThickness, 1, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-			if (ImGui::DragInt("Grid spacing", &current.scene.gridSpacing, 1, 0, 500, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-			if (ImGui::DragInt("Grid interval", &current.scene.gridInterval, 1, 1, 100, "%d", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-
+			Col("Grid", &current.scene.grid);
+			Float("Grid alpha", &current.scene.gridAlpha);
+			Int("Grid thickness", &current.scene.gridThickness, 0, 100, 1, true);
+			Int("Grid spacing", &current.scene.gridSpacing, 1, 1000, 1, true);
+			Int("Grid interval", &current.scene.gridInterval, 1, 100, .2f);
 
 
 			ImGui::Unindent();
@@ -325,45 +359,55 @@ namespace ShyEditor {
 
 		if (ImGui::CollapsingHeader("Scripting")) {
 			ImGui::Indent();
-			if (ImGui::ColorEdit3("Background", &current.scriptBackground.r)) areThereChanges = true;
-			if (ImGui::ColorEdit3("Hover", &current.hover.r)) areThereChanges = true;
-			if (ImGui::DragFloat("Button thickness", &current.buttonThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
-			if (ImGui::DragFloat("Node rounding", &current.nodeRounding, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp)) areThereChanges = true;
+
+			Col("Background", &current.scripting.scriptBackground);
+			Col("Hover", &current.scripting.hover);
+			Float("Button thickness", &current.scripting.buttonThickness);
+			Float("Node rounding", &current.scripting.nodeRounding);
 
 			if (ImGui::CollapsingHeader("Graphics")) {
-
 				ImGui::Indent();
+
 				if (ImGui::CollapsingHeader("Input line")) {
 					ImGui::Indent();
-					if (ImGui::DragFloat("Thickness##Input", &current.lineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (ImGui::ColorEdit3("Color##Input", &current.line.r)) areThereChanges = true;
-					if (ImGui::DragFloat("Outline thickness##Input", &current.lineOutlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (current.lineOutlineThickness > 0)
-						if (ImGui::ColorEdit3("Outline color##Input", &current.lineOutline.r)) areThereChanges = true;
-					if (ImGui::DragFloat("Curvature##Input", &current.lineCurvature, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (ImGui::DragFloat("Alpha##Input", &current.lineAlpha, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+
+					Float("Thickness##Input", &current.scripting.lineThickness);
+					Col("Color##Input", &current.scripting.line);
+					Float("Outline thickness##Input", &current.scripting.lineOutlineThickness);
+
+					if (current.scripting.lineOutlineThickness > 0)
+						Col("Outline color##Input", &current.scripting.lineOutline);
+
+					NormalizedFloat("Curvature##Input", &current.scripting.lineCurvature);
+					NormalizedFloat("Alpha##Input", &current.scripting.lineAlpha);
 
 					ImGui::Unindent();
 				}
 				if (ImGui::CollapsingHeader("Flow line")) {
 					ImGui::Indent();
-					if (ImGui::DragFloat("Thickness##Flow", &current.flowlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (ImGui::ColorEdit3("Color##Flow", &current.flowline.r)) areThereChanges = true;
-					if (ImGui::DragFloat("Outline thickness##Flow", &current.flowlineOutlineThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (current.flowlineOutlineThickness > 0)
-						if (ImGui::ColorEdit3("Outline color##Flow", &current.flowlineOutline.r)) areThereChanges = true;
-					if (ImGui::DragFloat("Curvature##Flow", &current.flowlineCurvature, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
-					if (ImGui::DragFloat("Alpha##Flow", &current.flowlineAlpha, .01f, 0, 1, "%.3f", ImGuiSliderFlags_AlwaysClamp))areThereChanges = true;
+
+					Float("Thickness##Flow", &current.scripting.flowlineThickness);
+					Col("Color##Flow", &current.scripting.flowline);
+					Float("Outline thickness##Flow", &current.scripting.flowlineOutlineThickness);
+
+					if (current.scripting.flowlineOutlineThickness > 0)
+						Col("Outline color##Flow", &current.scripting.flowlineOutline);
+
+					NormalizedFloat("Curvature##Flow", &current.scripting.flowlineCurvature);
+					NormalizedFloat("Alpha##Flow", &current.scripting.flowlineAlpha);
+
 					ImGui::Unindent();
 				}
 
 				if (ImGui::CollapsingHeader("Grid")) {
 					ImGui::Indent();
-					if (ImGui::DragFloat("Spacing##Grid", &current.gridSpacing, 2, 2, 1000, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
-					if (ImGui::DragFloat("Thickness##Grid", &current.gridThickness, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
-					if (ImGui::ColorEdit3("Color##Grid", &current.grid.r)) areThereChanges = true;
-					if (ImGui::DragInt("Interval##Grid", &current.gridInterval, .2, 1, 100, "%d", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
-					if (ImGui::DragFloat("Interval Scale##Grid", &current.gridIntervalScale, 1, 0, 100, "%.3f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic))areThereChanges = true;
+
+					Int("Spacing##Grid", &current.scripting.gridSpacing, 2, 1000, 2, true);
+					Int("Thickness##Grid", &current.scripting.gridThickness, 0, 100, 1, true);
+
+					Col("Color##Grid", &current.scripting.grid);
+					Int("Interval##Grid", &current.scripting.gridInterval, 1, 100, .2f);
+					Float("Interval Scale##Grid", &current.scripting.gridIntervalScale);
 					ImGui::Unindent();
 				}
 
@@ -375,13 +419,49 @@ namespace ShyEditor {
 		}
 
 
-		if (areThereChanges) {
+		if (changes) {
 
 			pendingApply = true;
 		}
 
 
 		ImGui::End();
+	}
+
+
+	void ColorPalette::Col(const char* name, Color* value)
+	{
+		if (ImGui::ColorEdit3(name, &value->r))
+			changes = true;
+	}
+
+	void ColorPalette::Int(const char* name, int* value, int min, int max, float speed, bool log)
+	{
+		int flags = ImGuiSliderFlags_AlwaysClamp;
+
+		if (log)
+			flags |= ImGuiSliderFlags_Logarithmic;
+
+
+		if (ImGui::DragInt(name, value, speed, min, max, "%d", flags))
+			changes = true;
+	}
+
+	void ColorPalette::NormalizedFloat(const char* name, float* value)
+	{
+		if (ImGui::SliderFloat(name, value, 0, 1))
+			changes = true;
+	}
+
+	void ColorPalette::Float(const char* name, float* value, float min, float max, float speed, bool log)
+	{
+		int flags = ImGuiSliderFlags_AlwaysClamp;
+
+		if (log)
+			flags |= ImGuiSliderFlags_Logarithmic;
+
+		if (ImGui::DragFloat(name, value, speed, min, max, "%.3f", flags))
+			changes = true;
 	}
 
 	void ColorPalette::ApplyPalette()

@@ -130,7 +130,7 @@ namespace ShyEditor {
 		ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(outputButtonSize, outputButtonSize * 2), false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
 		ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
@@ -435,7 +435,7 @@ namespace ShyEditor {
 
 	void ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float y, const std::string& tooltip)
 	{
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 
 		Bezier::SetColor(ColorPaletteParams(palette.flowline));
 		Bezier::SetThickness(palette.flowlineThickness);
@@ -588,7 +588,7 @@ namespace ShyEditor {
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
 		ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
@@ -877,6 +877,16 @@ namespace ShyEditor {
 	void ScriptCreationUtilities::Grid::ResetIntevalScale()
 	{
 		Grid::intervalScale = 4;
+	}
+
+	void ScriptCreationUtilities::Grid::DrawBackgroundColor(float r, float g, float b, float a)
+	{
+		auto drawList = ImGui::GetWindowDrawList();
+
+		auto windowSize = ImGui::GetWindowSize();
+		auto windowPos = ImGui::GetWindowPos();
+
+		drawList->AddRectFilled(windowPos, ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y), RGBA2ImColor(r, g, b, a), 0, 0);
 	}
 
 	void ScriptCreationUtilities::Grid::Draw()
@@ -1341,16 +1351,10 @@ namespace ShyEditor {
 
 			ImGui::OpenPopup("Close without saving");
 			auto size = ImGui::GetWindowSize();
-
-			auto drawList = ImGui::GetWindowDrawList();
-
-			drawList->AddRectFilled(ImVec2(0, 0), windowSize, ColorPalette2ImColor(ColorPalette::GetCurrentPalette().scriptBackground), 0, 0);
-
-
 			ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
 
 		}
-		if (ImGui::BeginPopup("Close without saving")) {
+		if (ImGui::BeginPopupModal("Close without saving")) {
 
 			ImGui::Text("Esto es un mensaje emergente");
 			bool closePopup = false;
@@ -1782,7 +1786,7 @@ namespace ShyEditor {
 
 		auto drawList = ImGui::GetWindowDrawList();
 
-		auto& colorPalette = ColorPalette::GetCurrentPalette();
+		auto& colorPalette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(colorPalette.line, colorPalette.lineAlpha);
 
 		if (drawInputFilled)
