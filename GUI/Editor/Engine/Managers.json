@@ -294,12 +294,12 @@
             },
             {
                 "input": [],
-                "name": "HorizontalMovement",
+                "name": "KeyBoardHorizontalMovement",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "VerticalMovement",
+                "name": "KeyBoardVerticalMovement",
                 "return": "Number"
             },
             {
@@ -364,42 +364,194 @@
             },
             {
                 "input": [],
-                "name": "getJoysticksConnected",
+                "name": "getControllersConnected",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "isJoystickAxisMotion",
+                "name": "isControllersButtonEventDown",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isJoystickButtonEventDown",
+                "name": "isControllersButtonEventUp",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isJoystickButtonEventUp",
+                "name": "isControllerAxisMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "controllerConnectedEvent",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "controllerDisconnectedEvent",
                 "return": "Toggle"
             },
             {
                 "input": [
                     {
-                        "name": "ct",
+                        "name": "button",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "id",
                         "type": "Number"
                     }
                 ],
-                "name": "getJoystickValue",
-                "return": "Pair"
+                "name": "isControllerButtonDownWithId",
+                "return": "Toggle"
             },
             {
                 "input": [
                     {
-                        "name": "ct",
+                        "name": "button",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "id",
                         "type": "Number"
                     }
                 ],
-                "name": "getJoystickTriggerValue",
+                "name": "isControllerButtonHoldWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isControllerButtonUpWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getLeftTriggerValueWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getRightTriggerValueWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLeftTriggerMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isRightTriggerMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getLeftJoystickXWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getLeftJoystickYWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getRightJoystickXWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "getRightJoystickYWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isLeftJoystickMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isRightJoystickMotionWithId",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ControllerHorizontalMovementWithId",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "id",
+                        "type": "Number"
+                    }
+                ],
+                "name": "ControllerVerticalMovementWithId",
                 "return": "Number"
             },
             {
@@ -409,12 +561,67 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getJoystickButtonState",
+                "name": "isControllerButtonDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isControllerButtonHold",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    }
+                ],
+                "name": "isControllerButtonUp",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "getJoysticksNumButtons",
+                "name": "getLeftTriggerValue",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getRightTriggerValue",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "isLeftTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "isRightTriggerMotion",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "getLeftJoystickX",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getLeftJoystickY",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getRightJoystickX",
+                "return": "Number"
+            },
+            {
+                "input": [],
+                "name": "getRightJoystickY",
                 "return": "Number"
             },
             {
@@ -429,23 +636,13 @@
             },
             {
                 "input": [],
-                "name": "isLeftTriggerMotion",
-                "return": "Toggle"
+                "name": "ControllerHorizontalMovement",
+                "return": "Number"
             },
             {
                 "input": [],
-                "name": "isRightTriggerMotion",
-                "return": "Toggle"
-            },
-            {
-                "input": [],
-                "name": "joystickConnectedEvent",
-                "return": "Toggle"
-            },
-            {
-                "input": [],
-                "name": "joystickDisconnectedEvent",
-                "return": "Toggle"
+                "name": "ControllerVerticalMovement",
+                "return": "Number"
             }
         ],
         "name": "InputManager"

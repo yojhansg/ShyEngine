@@ -85,7 +85,7 @@ namespace Input {
 
 		void UpdateKeyState(ButtonState& key);
 
-	reflect
+	publish:
 
 		// Keyboard
 		bool keyDownEvent();

@@ -3,11 +3,11 @@
     "chuncksize": 2048,
     "closeWithEscape": true,
     "creator": "Yojhan, Pablo e Ivan",
-    "debugFrameRate": false,
-    "debugPhysics": false,
+    "debugFrameRate": true,
+    "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "Fpli",
+    "game": "MyGame",
     "gravity": "0.000000, 9.810000",
     "initialScene": "Scene.scene",
     "layers": [
@@ -303,14 +303,14 @@
             false
         ]
     ],
-    "path": "Assets",
-    "projectFilePath": "FlappyBird.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\MyGame.shyproject",
     "showcursor": true,
-    "splashScreen": true,
+    "splashScreen": false,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
-    "windowIcon": "icon.ico",
-    "windowSize": "600, 1000",
-    "windowTitle": "FlappyBird"
+    "windowIcon": "",
+    "windowSize": "1920, 1080",
+    "windowTitle": "MyGame"
 }
