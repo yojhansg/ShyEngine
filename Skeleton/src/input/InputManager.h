@@ -1,11 +1,14 @@
 #pragma once
 
 #include "SDL.h"
+
+#include <unordered_map>
 #include <Singleton.h>
-#include <array>
+#include <Vector2D.h>
 #include <vector>
 #include <string>
-#include <Vector2D.h>
+#include <array>
+
 #include <EditorExport.h>
 
 /*
@@ -33,27 +36,26 @@ namespace Input {
 		};
 
 		enum class CONTROLLERTRIGGER : uint8_t {
-			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1
+			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1, N_TRIGGERS = 2
 		};
 
 		// PS4 Mapping
 		enum class PS4_CONTROLLER_BUTTONS : uint8_t {
-			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
-			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
+			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5, OPTIONS = 6, L3 = 7, R3 = 8,
+			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15, Count = 16
 		};
 
-		//XBOX Mapping
+		// XBOX Mapping
 		enum class XBOX_CONTROLLER_BUTTONS : uint8_t {
 			A = 0, B = 1, X = 2, Y = 3, SHARE = 4, HOME = 5, OPTIONS = 6, L3 = 7, R3 = 8,
 			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
 		};
 
-		enum class KeyState {
-
+		enum class ButtonState {
 			None, JustDown, Down, Up
 		};
 
-		//Keyboard
+		// Keyboard
 
 		enum class KB_LETTERS {
 			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
@@ -81,11 +83,9 @@ namespace Input {
 
 		bool isKeyUp(SDL_Scancode key);
 
-		void UpdateKeyState(KeyState& key);
+		void UpdateKeyState(ButtonState& key);
 
-	publish:
-
-		//Down Hold Up
+	reflect
 
 		// Keyboard
 		bool keyDownEvent();
@@ -120,37 +120,52 @@ namespace Input {
 
 		bool isMouseButtonUpEvent(int b);
 
-		Utilities::Vector2D getMousePos();
+		cVector2D getMousePos();
 
 		int getWheelMotionY();
 
 
 		// Controller
-		int getJoysticksConnected();
+		int getControllersConnected();
 
-		bool isJoystickAxisMotion();
+		bool isControllersButtonEventDown();
 
-		bool isJoystickButtonEventDown();
+		bool isControllersButtonEventUp();
 
-		bool isJoystickButtonEventUp();
+		bool isControllerAxisMotion();
+
+		bool controllerConnectedEvent();
+
+		bool controllerDisconnectedEvent();
 
 		// With id
 
-			Utilities::Vector2D getJoystickValueWithId(int ct, int id);
+			bool isControllerButtonDownWithId(int button, int id);
 
-			float getJoystickTriggerValueWithId(int ct, int id);
-		
-			bool getJoystickButtonStateWithId(int button, int id);
+			bool isControllerButtonHoldWithId(int button, int id);
 
-			int getJoysticksNumButtonsWithId(int id);
+			bool isControllerButtonUpWithId(int button, int id);
+
+			float getLeftTriggerValueWithId(int id);
+
+			float getRightTriggerValueWithId(int id);
+
+			bool isLeftTriggerMotionWithId(int id);
+
+			bool isRightTriggerMotionWithId(int id);
+
+			float getLeftJoystickXWithId(int id);
+
+			float getLeftJoystickYWithId(int id);
+
+			float getRightJoystickXWithId(int id);
+
+			float getRightJoystickYWithId(int id);
 
 			bool isLeftJoystickMotionWithId(int id);
 
 			bool isRightJoystickMotionWithId(int id);
 
-			bool isLeftTriggerMotionWithId(int id);
-
-			bool isRightTriggerMotionWithId(int id);
 
 			float ControllerHorizontalMovementWithId(int id);
 
@@ -159,39 +174,37 @@ namespace Input {
 
 		// Without id
 
-			Utilities::Vector2D getJoystickValue(int ct);
+			bool isControllerButtonDown(int button);
 
-			float getJoystickTriggerValue(int ct);
+			bool isControllerButtonHold(int button);
 
-			bool getJoystickButtonState(int button);
+			bool isControllerButtonUp(int button);
 
-			int getJoysticksNumButtons();
+			float getLeftTriggerValue();
 
-			bool isLeftJoystickMotion();
-
-			bool isRightJoystickMotion();
+			float getRightTriggerValue();
 
 			bool isLeftTriggerMotion();
 
 			bool isRightTriggerMotion();
 
+			float getLeftJoystickX();
+
+			float getLeftJoystickY();
+
+			float getRightJoystickX();
+
+			float getRightJoystickY();
+
+			bool isLeftJoystickMotion();
+
+			bool isRightJoystickMotion();
+
+
 			float ControllerHorizontalMovement();
 
 			float ControllerVerticalMovement();
 
-
-
-		bool joystickConnectedEvent();
-
-		bool joystickDisconnectedEvent();
-
-
-
-	public:
-
-		std::string getJoystickName(int id);
-
-		bool getJoystickId();
 
 	private:
 
@@ -202,13 +215,10 @@ namespace Input {
 		SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
 		SDL_Scancode ConvertToScancode(const KB_SPECIALKEYS& specialKey);
 
-
 		KB_LETTERS ConvertToLetter(const SDL_Scancode& scancode);
 		KB_NUMBERS ConvertToNumbers(const SDL_Scancode& scancode);
 		KB_SPECIALKEYS ConvertToSpecialKeys(const SDL_Scancode& scancode);
 
-
-		bool valid;
 
 		// Clear the state
 		void clearState();
@@ -238,6 +248,7 @@ namespace Input {
 
 
 		bool closeWithEscape;
+		bool valid;
 
 		bool isKeyUpEvent_;
 		bool isKeyDownEvent_;
@@ -254,47 +265,51 @@ namespace Input {
 		const Uint8* kbState_;
 
 
-		//Keyboard keys
-		KeyState letters[(int)KB_LETTERS::Count];
-		KeyState numbers[(int)KB_NUMBERS::Count];
-		KeyState specialKeys[(int)KB_SPECIALKEYS::Count];
+		// Keyboard keys
+		ButtonState letters[(int)KB_LETTERS::Count];
+		ButtonState numbers[(int)KB_NUMBERS::Count];
+		ButtonState specialKeys[(int)KB_SPECIALKEYS::Count];
 
 
 		// ----- CONTROLLER -------
 
-		bool initialiseJoysticks();
+		struct ControllerData {
+			SDL_GameController* controller;
+			SDL_Joystick* joystick;
+			SDL_JoystickID id;
+			std::string name;
+			std::vector<ButtonState> buttonsStates;
+			Utilities::Vector2D triggers; // X for LEFT trigger, Y for RIGHT trigger
+			std::pair<Utilities::Vector2D, Utilities::Vector2D> joysticks;
+		};
 
-		bool addJoystick(int joystick_id);
+		bool initControllers();
 
-		void removeJoystick(int joystick_id);
+		void addController(int which);
 
-		void clearJoysticksButtons();
+		void removeController(int which);
 
-		void removeJoysticks();
+		void controllerButtonPressed(const SDL_Event& event);
 
-		void joystickConnected();
+		void controllerButtonReleased(const SDL_Event& event);
 
-		void joystickDisconnected();
+		void updateControllersButtons();
 
-		void onJoystickAxisMotion(const SDL_Event& event);
+		void onControllerAxisMotion(const SDL_Event& event);
 
-		void onJoystickButtonDown(const SDL_Event& event);
+		void readSticksValues();
 
-		void onJoystickButtonUp(const SDL_Event& event);
 
-		std::vector<SDL_Joystick*> joysticks;
-		std::vector<std::pair<Utilities::Vector2D*, Utilities::Vector2D*>> joystickValues;
-		std::vector<std::pair<int, int>> joystickTriggerValues;
-		std::vector<std::vector<bool>> joystickButtonStates;
-		std::vector<int> joystickNumButtons;
-		std::vector<std::string> joystickNames;
+		std::unordered_map<int, ControllerData> controllers;
 
 		bool isAxisMotionEvent_;
-		bool isJoystickButtonDownEvent_;
-		bool isJoystickButtonUpEvent_;
-		bool joystickConnected_;
-		bool joystickDisconnected_;
-		int joystickId;
-		int numJoysticksConnected;
+		bool isControllerButtonDownEvent_;
+		bool isControllerButtonUpEvent_;
+		bool controllerConnected_;
+		bool controllerDisconnected_;
+
+		int lastInputReceivedController;
+
+		int numControllersConnected;
 	};
 }

@@ -384,6 +384,10 @@
             {
                 "name": "velocity",
                 "type": "Number"
+            },
+            {
+                "name": "clampDiagonalVelocity",
+                "type": "Toggle"
             }
         ]
     },

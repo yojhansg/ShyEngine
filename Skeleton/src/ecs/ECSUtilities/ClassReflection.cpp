@@ -136,6 +136,8 @@ ClassReflection::ClassReflection(){
 		Movement* self = static_cast<Movement*>(selfComp);
 		if(map.contains("velocity"))
 			self->velocity = std::stof(map.at("velocity"));
+		if(map.contains("clampDiagonalVelocity"))
+			self->clampDiagonalVelocity = map.at("clampDiagonalVelocity") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

@@ -4,9 +4,10 @@
 
 #include "CheckML.h"
 
+#include <iostream>
+
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
-#define TRIGGER_DEADZONE 1000
 
 namespace Input {
 
@@ -16,7 +17,9 @@ namespace Input {
 
 		kbState_ = SDL_GetKeyboardState(0);
 
-		valid = initialiseJoysticks();
+		valid = initControllers();
+
+		numControllersConnected = 0;
 
 		clearState();
 	}
@@ -26,7 +29,7 @@ namespace Input {
 	}
 
 	InputManager::~InputManager() {
-		removeJoysticks();
+		
 	}
 
 	bool InputManager::handleInput(SDL_Event& e) {
@@ -44,9 +47,8 @@ namespace Input {
 
 		isKeyDownEvent_ = isKeyUpEvent_ = isMouseButtonEventDown_ = false;
 		isMouseButtonEventUp_ = isMouseMotionEvent_ = isMouseWheelEvent_ = false;
-		isJoystickButtonDownEvent_ = isJoystickButtonUpEvent_ = false; joystickConnected_ = false;
-		joystickDisconnected_ = false;
-
+		isControllerButtonDownEvent_ = isControllerButtonUpEvent_ = false; controllerConnected_ = false;
+		controllerDisconnected_ = false;
 
 		for (int i = 0; i < (int)KB_LETTERS::Count; i++)
 			UpdateKeyState(letters[i]);
@@ -54,6 +56,9 @@ namespace Input {
 			UpdateKeyState(numbers[i]);
 		for (int i = 0; i < (int)KB_SPECIALKEYS::Count; i++)
 			UpdateKeyState(specialKeys[i]);
+
+		updateControllersButtons();
+
 	}
 
 	void InputManager::update(const SDL_Event& event) {
@@ -65,12 +70,6 @@ namespace Input {
 			Console::Output::PrintError("SDL Joystick Query", SDL_GetError());
 			return;
 		}
-
-		// Checking for controllers connections or disconnections
-		if (numJoysticksConnected < numJoysticks)
-			joystickConnected();
-		else if (numJoysticksConnected > numJoysticks)
-			joystickDisconnected();
 
 		switch (event.type) {
 		case SDL_KEYDOWN:
@@ -101,18 +100,26 @@ namespace Input {
 		case SDL_MOUSEBUTTONUP:
 			onMouseButtonChange(event, false);
 			break;
-		case SDL_JOYAXISMOTION:
-			onJoystickAxisMotion(event);
+		case SDL_CONTROLLERDEVICEADDED:
+			addController(event.cdevice.which);
+			break;
+		case SDL_CONTROLLERDEVICEREMOVED:
+			removeController(event.cdevice.which);
 			break;
 		case SDL_JOYBUTTONDOWN:
-			onJoystickButtonDown(event);
+			controllerButtonPressed(event);
 			break;
 		case SDL_JOYBUTTONUP:
-			onJoystickButtonUp(event);
+			controllerButtonReleased(event);
+			break;
+		case SDL_JOYAXISMOTION:
+			onControllerAxisMotion(event);
 			break;
 		default:
 			break;
 		}
+
+		readSticksValues();
 
 		int mouse_x, mouse_y;
 		SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -142,40 +149,40 @@ namespace Input {
 
 	// Letter
 	bool InputManager::isLetterDown(int l) {
-		return letters[l] == KeyState::JustDown;
+		return letters[l] == ButtonState::JustDown;
 	}
 
 	bool InputManager::isLetterHold(int l) {
-		return letters[l] == KeyState::JustDown || letters[l] == KeyState::Down;
+		return letters[l] == ButtonState::JustDown || letters[l] == ButtonState::Down;
 	}
 
 	bool InputManager::isLetterUp(int l) {
-		return letters[l] == KeyState::Up;
+		return letters[l] == ButtonState::Up;
 	}
 
 	// Number
 	bool InputManager::isNumberDown(int n) {
-		return numbers[n] == KeyState::JustDown;
+		return numbers[n] == ButtonState::JustDown;
 	}
 	bool InputManager::isNumberHold(int n) {
-		return numbers[n] == KeyState::JustDown || numbers[n] == KeyState::Down;
+		return numbers[n] == ButtonState::JustDown || numbers[n] == ButtonState::Down;
 	}
 
 	bool InputManager::isNumberUp(int n) {
-		return numbers[n] == KeyState::Up;
+		return numbers[n] == ButtonState::Up;
 	}
 
 	// Special Key
 	bool InputManager::isSpecialKeyDown(int s) {
-		return specialKeys[s] == KeyState::JustDown;
+		return specialKeys[s] == ButtonState::JustDown;
 	}
 
 	bool InputManager::isSpecialKeyHold(int s) {
-		return specialKeys[s] == KeyState::JustDown || specialKeys[s] == KeyState::Down;
+		return specialKeys[s] == ButtonState::JustDown || specialKeys[s] == ButtonState::Down;
 	}
 
 	bool InputManager::isSpecialKeyUp(int s) {
-		return specialKeys[s] == KeyState::Up;
+		return specialKeys[s] == ButtonState::Up;
 	}
 
 	// With SDL Scancode enum
@@ -192,53 +199,79 @@ namespace Input {
 	void InputManager::letterPressed(KB_LETTERS letter)
 	{
 		if (letter == KB_LETTERS::Count) return;
-		if (letters[(int)letter] == KeyState::Down) return;
+		if (letters[(int)letter] == ButtonState::Down) return;
 
-		letters[(int)letter] = KeyState::JustDown;
+		letters[(int)letter] = ButtonState::JustDown;
 	}
 
 	void InputManager::numberPressed(KB_NUMBERS number)
 	{
 		if (number == KB_NUMBERS::Count) return;
-		if (numbers[(int)number] == KeyState::Down) return;
+		if (numbers[(int)number] == ButtonState::Down) return;
 
-		numbers[(int)number] = KeyState::JustDown;
+		numbers[(int)number] = ButtonState::JustDown;
 	}
 
 	void InputManager::specialKeyPressed(KB_SPECIALKEYS specialKey)
 	{
 		if (specialKey == KB_SPECIALKEYS::Count) return;
-		if (specialKeys[(int)specialKey] == KeyState::Down) return;
+		if (specialKeys[(int)specialKey] == ButtonState::Down) return;
 
-		specialKeys[(int)specialKey] = KeyState::JustDown;
+		specialKeys[(int)specialKey] = ButtonState::JustDown;
 	}
 
 	void InputManager::letterReleased(KB_LETTERS letter)
 	{
 		if (letter == KB_LETTERS::Count) return;
-		letters[(int)letter] = KeyState::Up;
+		letters[(int)letter] = ButtonState::Up;
 	}
 
 	void InputManager::numberReleased(KB_NUMBERS number)
 	{
 		if (number == KB_NUMBERS::Count) return;
-		numbers[(int)number] = KeyState::Up;
+		numbers[(int)number] = ButtonState::Up;
 	}
 
 	void InputManager::specialKeyReleased(KB_SPECIALKEYS specialKey)
 	{
 		if (specialKey == KB_SPECIALKEYS::Count) return;
-		specialKeys[(int)specialKey] = KeyState::Up;
+		specialKeys[(int)specialKey] = ButtonState::Up;
 	}
 
 
-	void InputManager::UpdateKeyState(KeyState& key)
+	void InputManager::UpdateKeyState(ButtonState& key)
 	{
-		if (key == KeyState::JustDown)
-			key = KeyState::Down;
+		if (key == ButtonState::JustDown)
+			key = ButtonState::Down;
 
-		if (key == KeyState::Up)
-			key = KeyState::None;
+		if (key == ButtonState::Up)
+			key = ButtonState::None;
+	}
+
+	float InputManager::KeyBoardHorizontalMovement()
+	{
+		float dir = 0;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
+			dir += -1;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
+			dir += 1;
+
+		return dir;
+	}
+
+	float InputManager::KeyBoardVerticalMovement()
+	{
+		float dir = 0;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
+			dir += -1;
+
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
+			dir += 1;
+
+		return dir;
 	}
 
 
@@ -252,7 +285,7 @@ namespace Input {
 		return isMouseWheelEvent_;
 	}
 
-	Utilities::Vector2D InputManager::getMousePos() {
+	cVector2D InputManager::getMousePos() {
 		return mousePos_;
 	}
 
@@ -307,402 +340,337 @@ namespace Input {
 
 	// ---------- CONTROLLER -----------
 
-	bool InputManager::initialiseJoysticks() {
-
-		int nJoysticks = SDL_NumJoysticks();
-
-		// Check for SDL_NumJoysticks() error
-		if (nJoysticks < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
+	bool InputManager::initControllers() {
 
 		// Check for SDL_JoystickEventState(SDL_ENABLE) error
 		if (SDL_JoystickEventState(SDL_ENABLE) < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
 			return false;
 		}
-
-		if (nJoysticks > 0) {
-
-			for (int i = 0; i < nJoysticks; i++) addJoystick(i);
-
-			clearJoysticksButtons();
-
-		}
-
-		numJoysticksConnected = nJoysticks;
 
 		return true;
 	}
 
-	bool InputManager::addJoystick(int joystick_id) {
+	void InputManager::addController(int which) {
 
-		SDL_Joystick* joy = SDL_JoystickOpen(joystick_id);
+		controllerConnected_ = true;
 
-		// Check for SDL_JoystickOpen() error
-		if (joy == NULL) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
+		if (!SDL_IsGameController(which))
+			return;
 
-		const char* buffer = SDL_JoystickName(joy);
-		std::string joystickName(buffer);
+		// SDL GameController
+		SDL_GameController* sdlController = SDL_GameControllerOpen(which);
 
-		// Check for SDL_JoystickName() error
-		if (buffer == NULL) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
-
-		int joyNButtons = SDL_JoystickNumButtons(joy);
-		if (joyNButtons < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
-
-		// Adds the information
-		joysticks.push_back(joy);
-
-		joystickNames.push_back(joystickName);
-
-		joystickValues.push_back(std::make_pair(new Utilities::Vector2D(0, 0), new Utilities::Vector2D(0, 0)));
-
-		joystickTriggerValues.push_back(std::make_pair(0, 0));
-
-		joystickNumButtons.push_back(joyNButtons);
-
-		return true;
-	}
-
-	void InputManager::removeJoystick(int joystick_id) {
-
-		SDL_JoystickClose(joysticks[joystick_id]);
-
-		joysticks.pop_back();
-
-		joystickNames.pop_back();
-
-		delete joystickValues[joystick_id].first;
-		delete joystickValues[joystick_id].second;
-		joystickValues.pop_back();
-
-		joystickTriggerValues.pop_back();
-
-		joystickNumButtons.pop_back();
-	}
-
-	void InputManager::clearJoysticksButtons() {
-
-		for (auto i = 0u; i < joysticks.size(); i++) {
-
-			int joyNButtons = SDL_JoystickNumButtons(joysticks[i]);
-			if (joyNButtons < 0) {
-				Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-				return;
-			}
-
-			joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
-		}
-	}
-
-	void InputManager::removeJoysticks() {
-		for (int i = numJoysticksConnected - 1; i >= 0; i--) {
-			removeJoystick(i);
-		}
-	}
-
-	void InputManager::joystickConnected() {
-		joystickConnected_ = true;
-
-		addJoystick(numJoysticksConnected);
-
-		int joyNButtons = SDL_JoystickNumButtons(joysticks[numJoysticksConnected]);
-		if (joyNButtons < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+		if (sdlController == NULL) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
 			return;
 		}
 
-		joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
+		// SDL Joystick
+		SDL_Joystick* joystick = SDL_GameControllerGetJoystick(sdlController);
 
-		numJoysticksConnected++;
+		if (joystick == NULL) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
+			return;
+		}
+
+		// SDL Joystick ID
+		SDL_JoystickID id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(sdlController));
+
+		if (id < 0) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
+			return;
+		}
+
+		// SDL GameController Name
+		const char* buffer = SDL_GameControllerName(sdlController);
+		std::string name = "Empty";
+		if (buffer != NULL)
+			name = buffer;
+
+
+		// Controller Data
+		ControllerData data;
+		data.controller = sdlController;
+		data.joystick = joystick;
+		data.id = id;
+		data.name = name;
+		data.buttonsStates = std::vector<ButtonState>((int)PS4_CONTROLLER_BUTTONS::Count, ButtonState::None);
+		data.triggers = Utilities::Vector2D();
+		data.joysticks = std::make_pair(Utilities::Vector2D(), Utilities::Vector2D());
+
+		controllers.insert(std::make_pair(which, data));
+
+		numControllersConnected++;
+
 	}
 
-	void InputManager::joystickDisconnected() {
+	void InputManager::removeController(int which) {
 
+		controllerDisconnected_ = true;
 
-		joystickDisconnected_ = true;
+		SDL_GameControllerClose(controllers[which].controller);
 
-		numJoysticksConnected--;
+		controllers.erase(which);
 
-		removeJoystick(numJoysticksConnected);
-
-		joystickButtonStates.pop_back();
+		numControllersConnected--;
 	}
 
-	void InputManager::onJoystickAxisMotion(const SDL_Event& event) {
 
-		if (joysticks.size() <= 0) return;
 
-		isAxisMotionEvent_ = true;
-		joystickId = event.jaxis.which;
 
-		// Left & right joysticks
-		if (event.jaxis.axis < 4) {
+	void InputManager::controllerButtonPressed(const SDL_Event& event) {
+		isControllerButtonDownEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
 
-			if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
-			{
-				switch (event.jaxis.axis) {
-				case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
-				case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
-				case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
-				case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-				default:
-					break;
-				}
-			}
-			else {
+		auto& state = controllers[lastInputReceivedController].buttonsStates[event.cbutton.button];
 
-				isAxisMotionEvent_ = false;
+		if (state == ButtonState::Down) return;
 
-				for (auto i = 0u; i < joysticks.size(); i++) {
-					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
-					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
+		state = ButtonState::JustDown;
+	}
 
-					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
-				}
-			}
+	void InputManager::controllerButtonReleased(const SDL_Event& event) {
+		isControllerButtonUpEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
 
-		} // Left & right triggers
-		else {
+		controllers[lastInputReceivedController].buttonsStates[event.cbutton.button] = ButtonState::Up;
+	}
 
-			if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+	void InputManager::updateControllersButtons() {
 
-				switch (event.jaxis.axis) {
-				case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-				case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-				default:
-					break;
-				}
-			}
-			else {
-				isAxisMotionEvent_ = false;
+		for (auto& c : controllers) {
+			for (auto& b : c.second.buttonsStates) {
 
-				joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
+				if (b == ButtonState::JustDown)
+					b = ButtonState::Down;
+
+				if (b == ButtonState::Up)
+					b = ButtonState::None;
 			}
 		}
 	}
 
-	void InputManager::onJoystickButtonDown(const SDL_Event& event) {
-		isJoystickButtonDownEvent_ = true;
-		joystickId = event.jaxis.which;
 
-		joystickButtonStates[joystickId][event.jbutton.button] = true;
+
+	void InputManager::onControllerAxisMotion(const SDL_Event& event) {
+
+		isAxisMotionEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
+
+		if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) {
+			controllers[lastInputReceivedController].triggers.setX((float) event.caxis.value / MAX_STICK_VALUE);
+
+		}
+		else if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT) {
+			controllers[lastInputReceivedController].triggers.setY((float) event.caxis.value / MAX_STICK_VALUE);
+		}
 	}
 
-	void InputManager::onJoystickButtonUp(const SDL_Event& event) {
-		isJoystickButtonUpEvent_ = true;
-		joystickId = event.jaxis.which;
+	void InputManager::readSticksValues() {
 
-		joystickButtonStates[joystickId][event.jbutton.button] = false;
+		for (auto& c : controllers) {
+
+			// Left stick
+			Sint16 axis0 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_LEFTX);
+			Sint16 axis1 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_LEFTY);
+
+			if (std::abs(axis0) < STICK_DEADZONE)
+				axis0 = 0;
+
+			if (std::abs(axis1) < STICK_DEADZONE)
+				axis1 = 0;
+
+			c.second.joysticks.first.setX((float)axis0 / MAX_STICK_VALUE);
+			c.second.joysticks.first.setY(-(float)axis1 / MAX_STICK_VALUE);
+
+
+			// Rigth stick
+			axis0 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_RIGHTX);
+			axis1 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_RIGHTY);
+
+			if (std::abs(axis0) < STICK_DEADZONE)
+				axis0 = 0;
+
+			if (std::abs(axis1) < STICK_DEADZONE)
+				axis1 = 0;
+
+			c.second.joysticks.second.setX((float)axis0 / MAX_STICK_VALUE);
+			c.second.joysticks.second.setY(-(float)axis1 / MAX_STICK_VALUE);
+
+		}
+
+
 	}
 
-	int InputManager::getJoysticksConnected() {
-		return numJoysticksConnected;
+	int InputManager::getControllersConnected() {
+		return numControllersConnected;
 	}
 
-	bool InputManager::isJoystickAxisMotion() {
+	bool InputManager::isControllersButtonEventDown() {
+		return isControllerButtonDownEvent_;
+	}
+
+	bool InputManager::isControllersButtonEventUp() {
+		return isControllerButtonUpEvent_;
+	}
+
+	bool InputManager::isControllerAxisMotion() {
 		return isAxisMotionEvent_;
 	}
 
-	bool InputManager::isJoystickButtonEventDown() {
-		return isJoystickButtonDownEvent_;
+	bool InputManager::controllerConnectedEvent() {
+		return controllerConnected_;
 	}
 
-	bool InputManager::isJoystickButtonEventUp() {
-		return isJoystickButtonUpEvent_;
-	}
-
-	bool InputManager::getJoystickId() {
-		return joystickId;
-	}
-
-
-	float InputManager::KeyBoardHorizontalMovement()
-	{
-		float dir = 0;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
-			dir += -1;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
-			dir += 1;
-
-		return dir;
-	}
-
-	float InputManager::KeyBoardVerticalMovement()
-	{
-		float dir = 0;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
-			dir += -1;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
-			dir += 1;
-
-		return dir;
+	bool InputManager::controllerDisconnectedEvent() {
+		return controllerDisconnected_;
 	}
 
 
 
 	// With ID
 
-	Utilities::Vector2D InputManager::getJoystickValueWithId(int intct, int id) {
+	bool InputManager::isControllerButtonDownWithId(int button, int id) {
 
-		CONTROLLERSTICK ct = (CONTROLLERSTICK) intct;
-		Utilities::Vector2D v = Utilities::Vector2D();
-
-		switch (ct) {
-		case CONTROLLERSTICK::LEFT_STICK:
-			v = joystickValues[id].first;
-			break;
-		case CONTROLLERSTICK::RIGHT_STICK:
-			v = joystickValues[id].second;
-			break;
-		default:
-			break;
+		if (id >= numControllersConnected) {
+			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+			return false;
 		}
 
-		return v / (MAX_STICK_VALUE);
+		return controllers[id].buttonsStates[button] == ButtonState::JustDown;
 	}
 
-	float InputManager::getJoystickTriggerValueWithId(int intct, int id) {
+	bool InputManager::isControllerButtonHoldWithId(int button, int id) {
 
-		CONTROLLERTRIGGER ct = (CONTROLLERTRIGGER)intct;
-		float v = 0.0f;
-
-		switch (ct) {
-		case CONTROLLERTRIGGER::LEFT_TRIGGER:
-			v = joystickTriggerValues[id].first;
-			break;
-		case CONTROLLERTRIGGER::RIGHT_TRIGGER:
-			v = joystickTriggerValues[id].second;
-			break;
-		default:
-			break;
+		if (id >= numControllersConnected) {
+			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+			return false;
 		}
 
-		return v / (float)(MAX_STICK_VALUE);
+		return controllers[id].buttonsStates[button] == ButtonState::JustDown || controllers[id].buttonsStates[button] == ButtonState::Down;
 	}
 
-	bool InputManager::getJoystickButtonStateWithId(int button, int id) {
+	bool InputManager::isControllerButtonUpWithId(int button, int id) {
 
-		return joystickButtonStates[id][button];
+		if (id >= numControllersConnected) {
+			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+			return false;
+		}
+
+		return controllers[id].buttonsStates[button] == ButtonState::Up;
 	}
 
-	int InputManager::getJoysticksNumButtonsWithId(int id) {
-
-		return joystickNumButtons[id];
+	float InputManager::getLeftTriggerValueWithId(int id) {
+		return controllers[id].triggers.getX();
 	}
 
-	bool InputManager::isLeftJoystickMotionWithId(int id) {
-
-		return joystickValues[id].first->getX() != 0 || joystickValues[id].first->getY() != 0;
-	}
-
-	bool InputManager::isRightJoystickMotionWithId(int id) {
-
-		return joystickValues[id].second->getX() != 0 || joystickValues[id].second->getY() != 0;
+	float InputManager::getRightTriggerValueWithId(int id) {
+		return controllers[id].triggers.getY();
 	}
 
 	bool InputManager::isLeftTriggerMotionWithId(int id) {
-
-		return joystickTriggerValues[id].first != 0;
+		return controllers[id].triggers.getX() > 0;
 	}
 
 	bool InputManager::isRightTriggerMotionWithId(int id) {
-
-		return joystickTriggerValues[id].second != 0;
+		return controllers[id].triggers.getY() > 0;
 	}
 
-	float InputManager::ControllerHorizontalMovementWithId(int id)
-	{
-		float dir = 0;
-
-		if (isLeftJoystickMotionWithId(id))
-			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getX();
-
-		return dir;
+	float InputManager::getLeftJoystickXWithId(int id) {
+		return controllers[id].joysticks.first.getX();
 	}
 
-	float InputManager::ControllerVerticalMovementWithId(int id)
-	{
-		float dir = 0;
+	float InputManager::getLeftJoystickYWithId(int id) {
+		return controllers[id].joysticks.first.getY();
+	}
 
-		if (isLeftJoystickMotionWithId(id))
-			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getY();
+	float InputManager::getRightJoystickXWithId(int id) {
+		return controllers[id].joysticks.second.getX();
+	}
 
-		return dir;
+	float InputManager::getRightJoystickYWithId(int id) {
+		return controllers[id].joysticks.second.getY();
+	}
+
+	bool InputManager::isLeftJoystickMotionWithId(int id) {
+		return controllers[id].joysticks.first.getX() > 0 || controllers[id].joysticks.first.getY() > 0;
+	}
+
+	bool InputManager::isRightJoystickMotionWithId(int id) {
+		return controllers[id].joysticks.second.getX() > 0 || controllers[id].joysticks.second.getY() > 0;
+	}
+
+
+	float InputManager::ControllerHorizontalMovementWithId(int id) {
+		return getLeftJoystickXWithId(id);
+	}
+
+	float InputManager::ControllerVerticalMovementWithId(int id) {
+		return getLeftJoystickYWithId(id);
 	}
 
 
 	// With out ID
 
-	Utilities::Vector2D InputManager::getJoystickValue(int ct) {
-		return getJoystickValueWithId(ct, joystickId);
+	bool InputManager::isControllerButtonDown(int button) {
+		return isControllerButtonDownWithId(button, lastInputReceivedController);
 	}
 
-	float InputManager::getJoystickTriggerValue(int ct) {
-		return getJoystickTriggerValueWithId(ct, joystickId);
+	bool InputManager::isControllerButtonHold(int button) {
+		return isControllerButtonHoldWithId(button, lastInputReceivedController);
 	}
 
-	bool InputManager::getJoystickButtonState(int button) {
-		return getJoystickButtonStateWithId(button, joystickId);
+	bool InputManager::isControllerButtonUp(int button) {
+		return isControllerButtonUpWithId(button, lastInputReceivedController);
 	}
 
-	int InputManager::getJoysticksNumButtons() {
-		return getJoysticksNumButtonsWithId(joystickId);
+	float InputManager::getLeftTriggerValue() {
+		return getLeftTriggerValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isLeftJoystickMotion() {
-		return isLeftJoystickMotionWithId(joystickId);
-	}
-
-	bool InputManager::isRightJoystickMotion() {
-		return isRightJoystickMotionWithId(joystickId);
+	float InputManager::getRightTriggerValue() {
+		return getRightTriggerValueWithId(lastInputReceivedController);
 	}
 
 	bool InputManager::isLeftTriggerMotion() {
-		return isLeftTriggerMotionWithId(joystickId);
+		return isLeftTriggerMotionWithId(lastInputReceivedController);
 	}
 
 	bool InputManager::isRightTriggerMotion() {
-		return isRightTriggerMotionWithId(joystickId);
+		return isRightTriggerMotionWithId(lastInputReceivedController);
+	}
+
+	float InputManager::getLeftJoystickX() {
+		return getLeftJoystickXWithId(lastInputReceivedController);
+	}
+
+	float InputManager::getLeftJoystickY() {
+		return getLeftJoystickYWithId(lastInputReceivedController);
+	}
+
+	float InputManager::getRightJoystickX() {
+		return getRightJoystickXWithId(lastInputReceivedController);
+	}
+
+	float InputManager::getRightJoystickY() {
+		return getRightJoystickYWithId(lastInputReceivedController);
+	}
+
+	bool InputManager::isLeftJoystickMotion() {
+		return isLeftJoystickMotionWithId(lastInputReceivedController);
+	}
+
+	bool InputManager::isRightJoystickMotion() {
+		return isRightJoystickMotionWithId(lastInputReceivedController);
 	}
 
 	float InputManager::ControllerHorizontalMovement() {
-		return ControllerHorizontalMovementWithId(joystickId);
+		return ControllerHorizontalMovementWithId(lastInputReceivedController);
 	}
 
 	float InputManager::ControllerVerticalMovement() {
-		return ControllerVerticalMovementWithId(joystickId);
-	}
-
-
-	bool InputManager::joystickDisconnectedEvent() {
-
-		return joystickDisconnected_;
-	}
-
-	bool InputManager::joystickConnectedEvent() {
-
-		return joystickConnected_;
-	}
-
-	std::string InputManager::getJoystickName(int id) {
-
-		return joystickNames[id];
+		return ControllerVerticalMovementWithId(lastInputReceivedController);
 	}
 
 
