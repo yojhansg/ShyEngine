@@ -166,7 +166,7 @@ namespace ECS {
 	float Transform::GetWorldRotation()
 	{
 		if (parent != nullptr)
-			return localRotation + parent->GetLocalRotation();
+			return localRotation + parent->GetWorldRotation();
 
 		return localRotation;
 	}

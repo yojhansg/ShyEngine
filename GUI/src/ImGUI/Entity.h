@@ -18,6 +18,7 @@ namespace Components {
 	class Script;
 }
 
+#define PI 3.14159265358979323846264338327950288f
 namespace ShyEditor {
 
 	class Camera;
@@ -49,6 +50,7 @@ namespace ShyEditor {
 		std::string GetName();
 		void SetName(const std::string& newName);
 		Texture* GetTexture();
+		ImVec2& GetTextureSize();
 		int GetId();
 		void SetId(int id);
 
@@ -77,17 +79,28 @@ namespace ShyEditor {
 		void SetScripts(std::unordered_map<std::string, Components::Script> scripts);
 
 		// Tranform attributes getters/setters
-		void SetPosition(ImVec2 newPos);
-		ImVec2 GetPosition();
-		float GetRotation();
-		void SetRotation(float r);
-		ImVec2 GetAdjustedPosition();
-		ImVec2 GetSize();
-		float GetScaleX();
-		float GetScaleY();
-		void SetScale(float x, float y);
+		ImVec2& GetAdjustedPosition();
+		ImVec2& GetPosition();
+		ImVec2& GetWorldPosition();
 
+		float& GetRotation();
+		float& GetWorldRotation();
+
+		ImVec2& GetScale();
+		ImVec2& GetWorldScale();
+
+		void SetPosition(ImVec2& newPos);
+		void SetWorldPosition(ImVec2& pos);
+
+		void SetRotation(float r);
+		void SetWorldRotation(float r);
+
+		void SetScale(ImVec2& newScale);
+		void SetWorldScale(ImVec2& scale);
+
+	
 		Overlay* GetOverlay();
+
 
 		// Deleting entity logic
 		bool IsWaitingToDelete();
@@ -166,7 +179,7 @@ namespace ShyEditor {
 		float previousMousePosY;
 		bool waitingToDelete;
 
-		// Entity draw methods
+		// Editor drawing methods
 		bool DrawFloat(std::string attrName, Components::Attribute* attr);
 		bool DrawVector2(std::string attrName, Components::Attribute* attr);
 		bool DrawString(std::string attrName, Components::Attribute* attr, bool readOnly = false);
@@ -177,11 +190,12 @@ namespace ShyEditor {
 
 		void DrawArrowButton(ImVec2& value, const ImVec2& dir);
 
-		// Entity children settings (Transform and visibility)
-		void TranslateChildren(Entity* entity, ImVec2* previousPos);
-		void ScaleChildren(Entity* entity, int scaleFactor);
+		// Entity children settings
 		void SetChildrenVisible(Entity* entity, bool visible);
-		void RotateChildren(Entity* entity, Entity* entityCenter, float rotationAngle);
+
+		// Sets the relative transform when setting a newParent
+		void SetTransformRelativeToNewParent();
+		void SetTransformToWorldValues();
 	};
 
 
@@ -204,13 +218,25 @@ namespace ShyEditor {
 		~Transform();
 		
 		ImVec2& GetPosition();
+		ImVec2& GetWorldPosition();
 
-		ImVec2 &GetScale();
-		float &GetRotation();
+		float& GetRotation();
+		float& GetWorldRotation();
 
-		void SetPosition(float x, float y);
-		void SetScale(float x, float y);
-		void SetRotation(float r);
+		ImVec2& GetScale();
+		ImVec2& GetWorldScale();
+
+		void SetPosition(ImVec2& newPos);
+		void SetWorldPosition(ImVec2& pos);
+
+
+		void SetRotation(float r); 
+		void SetWorldRotation(float r);
+
+		void SetScale(ImVec2& newScale);
+		void SetWorldScale(ImVec2& scale);
+
+		static ImVec2& rotate(float degrees, ImVec2 vec);
 	};
 
 

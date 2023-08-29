@@ -288,7 +288,7 @@ namespace ShyEditor {
 
 		overlays.clear();
 	}
-
+	
 	void Scene::UpdateReferencesToEntity(Entity* entity) {
 		for (auto& script : *entity->GetScripts()) {
 			for (auto& attr : script.second.GetAllAttributes()) {
@@ -671,18 +671,20 @@ namespace ShyEditor {
 
 				const float incrementSpeed = .3f;
 
-				float r = selectedEntity->GetRotation();
+				float r = selectedEntity->GetWorldRotation();
 
 				r += event->motion.xrel * incrementSpeed;
 
-				selectedEntity->SetRotation(r);
+				selectedEntity->SetWorldRotation(r);
 			}
 			else if (ImGui::IsKeyDown(ImGuiKey_LeftAlt)) {
 
 				const float incrementSpeed = .03f;
 
-				float x = selectedEntity->GetScaleX();
-				float y = selectedEntity->GetScaleY();
+				ImVec2 worldScale = selectedEntity->GetWorldScale();
+
+				float x = worldScale.x;
+				float y = worldScale.y;
 
 				float xspeed = std::log10(1 + x) * incrementSpeed;
 				float yspeed = std::log10(1 + y) * incrementSpeed;
@@ -700,16 +702,16 @@ namespace ShyEditor {
 				x = std::clamp(x, 0.f, FLT_MAX);
 				y = std::clamp(y, 0.f, FLT_MAX);
 
-				selectedEntity->SetScale(x, y);
+				ImVec2 newScale = { x, y };
+				selectedEntity->SetWorldScale(newScale);
 			}
 			else {
 
-				auto pos = selectedEntity->GetPosition();
+				auto pos = selectedEntity->GetWorldPosition();
 				pos.x += event->motion.xrel * invCameraScale;
 				pos.y += event->motion.yrel * invCameraScale;
 
-
-				selectedEntity->SetPosition(pos);
+				selectedEntity->SetWorldPosition(pos);
 			}
 		}
 
@@ -723,7 +725,7 @@ namespace ShyEditor {
 
 				if (selectedEntity->IsTransform()) {
 
-					auto pos = selectedEntity->GetPosition();
+					auto pos = selectedEntity->GetWorldPosition();
 					sceneCamera->SetPosition(pos.x, pos.y);
 				}
 				else {
@@ -966,9 +968,6 @@ namespace ShyEditor {
 		mousepos.x /= cameraScale;
 		mousepos.y /= cameraScale;
 
-
-
-
 		return mousepos;
 	}
 
@@ -977,10 +976,12 @@ namespace ShyEditor {
 		auto mousePos = MousePositionInScene();
 
 		auto entityPos = entity->GetAdjustedPosition();
-		auto entitySize = entity->GetSize();
+		auto entitySize = entity->GetTextureSize();
 
-		entitySize.x *= entity->GetScaleX();
-		entitySize.y *= entity->GetScaleY();
+		ImVec2 worldScale = entity->GetWorldScale();
+
+		entitySize.x *= worldScale.x;
+		entitySize.y *= worldScale.y;
 
 		return mousePos.x > entityPos.x && mousePos.x < entityPos.x + entitySize.x &&
 			mousePos.y > entityPos.y && mousePos.y < entityPos.y + entitySize.y;
