@@ -7,7 +7,7 @@
     "debugPhysics": false,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "FlappyBird",
+    "game": "Fpli",
     "gravity": "0.000000, 9.810000",
     "initialScene": "Scene.scene",
     "layers": [
@@ -310,7 +310,7 @@
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
-    "windowIcon": "",
+    "windowIcon": "icon.ico",
     "windowSize": "600, 1000",
     "windowTitle": "FlappyBird"
 }

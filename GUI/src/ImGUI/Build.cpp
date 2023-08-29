@@ -117,7 +117,7 @@ void ShyEditor::Build::ChangeExeIcon(const std::string& exe)
 #define ICON_ID 101
 
 	// Cargamos la biblioteca de recursos del archivo ejecutable
-	
+
 
 	// Encuentra el recurso ICON en la biblioteca de recursos
 
@@ -197,7 +197,13 @@ void ShyEditor::Build::BuildThread()
 		float percentage;
 	};
 
-	std::vector<CopyValues> engineFiles = { {"EngineRelease.exe", 0.33f}, {"config.json", 0.33f},  {"SDL2.dll", 0.33f}, {"SDL2_image.dll", 0.33f}, {"SDL2_mixer.dll", 0.33f}, {"SDL2_ttf.dll", 0.33f}, {"Assets", 0.33f} };
+	std::vector<CopyValues> engineFiles = {
+		{"EngineRelease.exe", 0.33f}, {"config.json", 0.33f},
+		{"SDL2.dll", 0.33f}, {"SDL2_image.dll", 0.33f},
+		{"SDL2_mixer.dll", 0.33f}, {"SDL2_ttf.dll", 0.33f},
+		{"Assets", 0.33f}
+		//{"ResourceHacker.exe", 0.33f},
+	};
 
 
 	for (auto& value : engineFiles) {
@@ -205,20 +211,34 @@ void ShyEditor::Build::BuildThread()
 		Copy(ResourcesManager::EDITORENGINEFOLDER + "/" + value.path, buildPath);
 	}
 
+	std::string exe = buildPath + "/" + Preferences::GetData().name + ".exe";
 
 	Copy(ResourcesManager::GetProjectPath() + "/Assets", buildPath);
 
 
-	std::string exe = buildPath + "/" + Preferences::GetData().name + ".exe";
+	std::string command = std::format("ResourceHacker.exe -open {} -save {} -action addoverwrite -res {} -mask ICONGROUP,101", 
+		
+		std::string(buildPath + "/EngineRelease.exe"),
+		exe,
+		std::string(buildPath + "/Assets/" + Preferences::GetData().icon)
+		);
+
+	std::cout << command << std::endl;
+
+	system((command).c_str());
+
+	//std::vector<std::string> filesToRemove{ "ResourceHacker.exe", "ResourceHacker.ini" };
 
 
-	std::filesystem::rename(buildPath + "/EngineRelease.exe", exe);
+	//for (auto& remove : filesToRemove) {
 
+	//	std::filesystem::remove(buildPath + "/" + remove);
+	//}
 
-	//ChangeExeIcon("");
-	
+	//std::string relaseBuildPath = buildPath + "/EngineRelease.exe";
 
-
+	//if (std::filesystem::exists(relaseBuildPath))
+	//	std::filesystem::rename(buildPath + "/EngineRelease.exe", exe);
 
 	inProgress = false;
 }
