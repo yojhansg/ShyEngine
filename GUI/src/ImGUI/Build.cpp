@@ -215,30 +215,26 @@ void ShyEditor::Build::BuildThread()
 
 	Copy(ResourcesManager::GetProjectPath() + "/Assets", buildPath);
 
+	std::string relaseBuildPath = buildPath + "/EngineRelease.exe";
 
-	std::string command = std::format("ResourceHacker.exe -open {} -save {} -action addoverwrite -res {} -mask ICONGROUP,101", 
-		
-		std::string(buildPath + "/EngineRelease.exe"),
+	std::string command = std::format("ResourceHacker.exe -open {} -save {} -action addoverwrite -res {} -mask ICONGROUP, 101, 0", 
+		relaseBuildPath,
 		exe,
 		std::string(buildPath + "/Assets/" + Preferences::GetData().icon)
 		);
 
-	std::cout << command << std::endl;
-
 	system((command).c_str());
 
-	//std::vector<std::string> filesToRemove{ "ResourceHacker.exe", "ResourceHacker.ini" };
 
+	std::string deletecommand = std::format("ResourceHacker.exe -delete {} -resource 101",
+		exe
+	);
 
-	//for (auto& remove : filesToRemove) {
+	//system((deletecommand).c_str());
 
-	//	std::filesystem::remove(buildPath + "/" + remove);
-	//}
-
-	//std::string relaseBuildPath = buildPath + "/EngineRelease.exe";
 
 	//if (std::filesystem::exists(relaseBuildPath))
-	//	std::filesystem::rename(buildPath + "/EngineRelease.exe", exe);
+	//	std::filesystem::rename(relaseBuildPath, exe);
 
 	inProgress = false;
 }
