@@ -66,6 +66,8 @@ namespace ECS {
 		void Rotate(float rotation);
 		void Scale(float scale);
 
+		void SetTransformRelativeToNewParent();
+
 	private:
 
 		reflect Utilities::Vector2D localPosition;

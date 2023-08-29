@@ -80,22 +80,22 @@ namespace ShyEditor {
 
 		// Tranform attributes getters/setters
 		ImVec2& GetAdjustedPosition();
-		ImVec2& GetPosition();
+		ImVec2& GetLocalPosition();
 		ImVec2& GetWorldPosition();
 
-		float& GetRotation();
+		float& GetLocalRotation();
 		float& GetWorldRotation();
 
-		ImVec2& GetScale();
+		ImVec2& GetLocalScale();
 		ImVec2& GetWorldScale();
 
-		void SetPosition(ImVec2& newPos);
+		void SetLocalPosition(ImVec2& newPos);
 		void SetWorldPosition(ImVec2& pos);
 
-		void SetRotation(float r);
+		void SetLocalRotation(float r);
 		void SetWorldRotation(float r);
 
-		void SetScale(ImVec2& newScale);
+		void SetLocalScale(ImVec2& newScale);
 		void SetWorldScale(ImVec2& scale);
 
 	
@@ -217,23 +217,23 @@ namespace ShyEditor {
 		Transform(const Transform& tr, Entity* obj);
 		~Transform();
 		
-		ImVec2& GetPosition();
+		ImVec2& GetLocalPosition();
 		ImVec2& GetWorldPosition();
 
-		float& GetRotation();
+		float& GetLocalRotation();
 		float& GetWorldRotation();
 
-		ImVec2& GetScale();
+		ImVec2& GetLocalScale();
 		ImVec2& GetWorldScale();
 
-		void SetPosition(ImVec2& newPos);
+		void SetLocalPosition(ImVec2& newPos);
 		void SetWorldPosition(ImVec2& pos);
 
 
-		void SetRotation(float r); 
+		void SetLocalRotation(float r); 
 		void SetWorldRotation(float r);
 
-		void SetScale(ImVec2& newScale);
+		void SetLocalScale(ImVec2& newScale);
 		void SetWorldScale(ImVec2& scale);
 
 		static ImVec2& rotate(float degrees, ImVec2 vec);

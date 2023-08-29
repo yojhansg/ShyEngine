@@ -436,8 +436,8 @@ namespace ShyEditor {
 		return position;
 	}
 
-	ImVec2& Entity::GetPosition() {
-		return transform->GetPosition();
+	ImVec2& Entity::GetLocalPosition() {
+		return transform->GetLocalPosition();
 	}
 
 	ImVec2& Entity::GetWorldPosition()
@@ -446,8 +446,8 @@ namespace ShyEditor {
 		return transform->GetWorldPosition();
 	}
 
-	float& Entity::GetRotation() {
-		return transform->GetRotation();
+	float& Entity::GetLocalRotation() {
+		return transform->GetLocalRotation();
 	}
 
 	float& Entity::GetWorldRotation()
@@ -455,8 +455,8 @@ namespace ShyEditor {
 		return transform->GetWorldRotation();
 	}
 
-	ImVec2& Entity::GetScale() {
-		return transform->GetScale();
+	ImVec2& Entity::GetLocalScale() {
+		return transform->GetLocalScale();
 	}
 
 	ImVec2& Entity::GetWorldScale()
@@ -464,8 +464,8 @@ namespace ShyEditor {
 		return transform->GetWorldScale();
 	}
 
-	void Entity::SetPosition(ImVec2& newPos) {
-		transform->SetPosition(newPos);
+	void Entity::SetLocalPosition(ImVec2& newPos) {
+		transform->SetLocalPosition(newPos);
 	}
 
 	void Entity::SetWorldPosition(ImVec2& pos)
@@ -473,9 +473,9 @@ namespace ShyEditor {
 		transform->SetWorldPosition(pos);
 	}
 
-	void Entity::SetRotation(float r)
+	void Entity::SetLocalRotation(float r)
 	{
-		transform->SetRotation(r);
+		transform->SetLocalRotation(r);
 	}
 
 	void Entity::SetWorldRotation(float r)
@@ -483,9 +483,9 @@ namespace ShyEditor {
 		transform->SetWorldRotation(r);
 	}
 
-	void Entity::SetScale(ImVec2& newScale)
+	void Entity::SetLocalScale(ImVec2& newScale)
 	{
-		transform->SetScale(newScale);
+		transform->SetLocalScale(newScale);
 	}
 
 	void Entity::SetWorldScale(ImVec2& scale)
@@ -580,26 +580,26 @@ namespace ShyEditor {
 
 	void Entity::DrawTransformInEditor() {
 
-		ImVec2 currentPos = GetPosition();
+		ImVec2 currentPos = GetLocalPosition();
 		currentPos.y *= -1;
 
 		ImGui::Text("Position");
 		if (ImGui::DragFloat2("##position_drag", (float*)&currentPos, 0.3f, 0.0f, 0.0f, "%.2f")) {
 			ImVec2 newPos = { currentPos.x, -currentPos.y };
-			SetPosition(newPos);
+			SetLocalPosition(newPos);
 		}
 
-		ImVec2 currentScale = GetScale();
+		ImVec2 currentScale = GetLocalScale();
 		ImGui::Text("Scale");
 		if (ImGui::DragFloat2("##scale_drag", (float*)&currentScale, 0.02f, 0.0f, FLT_MAX, "%.2f")) {
 			ImVec2 newScale = { currentScale.x, currentScale.y };
-			SetScale(newScale);
+			SetLocalScale(newScale);
 		}
 
-		float currentRot = GetRotation();
+		float currentRot = GetLocalRotation();
 		ImGui::Text("Rotation");
 		if (ImGui::DragFloat("##rotation_drag", &currentRot, 0.1f, 0.0f, 0.0f, "%.2f")) {
-			SetRotation(currentRot);
+			SetLocalRotation(currentRot);
 		}
 
 		ImGui::Text("Render order");
@@ -1033,9 +1033,9 @@ namespace ShyEditor {
 		j["isTransform"] = isTransform;
 
 		if (isTransform) {
-			ImVec2 position = GetPosition();
-			ImVec2 size = GetScale();
-			float rotation = GetRotation();
+			ImVec2 position = GetLocalPosition();
+			ImVec2 size = GetLocalScale();
+			float rotation = GetLocalRotation();
 
 			j["localPosition"] = std::to_string(position.x) + ", " + std::to_string(-position.y);
 			j["localScale"] = std::to_string(size.x) + ", " + std::to_string(size.y);
@@ -1143,15 +1143,15 @@ namespace ShyEditor {
 			std::string localRotation = jsonData["localRotation"];
 
 			// Parse localPosition and localScale
-			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->GetPosition().x, &entity->GetPosition().y);
-			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->GetScale().x, &entity->GetScale().y);
+			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->GetLocalPosition().x, &entity->GetLocalPosition().y);
+			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->GetLocalScale().x, &entity->GetLocalScale().y);
 
 			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
 			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
 
-			entity->GetPosition().y *= -1;
+			entity->GetLocalPosition().y *= -1;
 
-			entity->SetRotation(std::stof(localRotation));
+			entity->SetLocalRotation(std::stof(localRotation));
 		}
 		else {
 
@@ -1551,21 +1551,22 @@ namespace ShyEditor {
 	{
 		if (IsTransform() && parent != nullptr) {
 			ImVec2 parentPos = parent->GetWorldPosition();
-			ImVec2 newPos = { GetPosition().x - parentPos.x, GetPosition().y - parentPos.y };
+			ImVec2 newPos = { GetLocalPosition().x - parentPos.x, GetLocalPosition().y - parentPos.y };
 
+			//Tiene sentido
 			newPos = Transform::rotate(-parent->GetWorldRotation(), newPos);
 
-			SetPosition(newPos);
+			SetLocalPosition(newPos);
 
 			float parentRot = parent->GetWorldRotation();
-			float newRot = GetRotation() - parentRot;
+			float newRot = GetLocalRotation() - parentRot;
 
-			SetRotation(newRot);
+			SetLocalRotation(newRot);
 		
 			ImVec2 parentScale = parent->GetWorldScale();
-			ImVec2 newScale = { GetScale().x / parentScale.x, GetScale().y / parentScale.y };
+			ImVec2 newScale = { GetLocalScale().x / parentScale.x, GetLocalScale().y / parentScale.y };
 
-			SetScale(newScale);
+			SetLocalScale(newScale);
 		}
 	}
 
@@ -1573,13 +1574,13 @@ namespace ShyEditor {
 	{
 		if (IsTransform()) {
 			ImVec2 worldPos = GetWorldPosition();
-			SetPosition(worldPos);
+			SetLocalPosition(worldPos);
 
 			ImVec2 worldScale = GetWorldScale();
-			SetScale(worldScale);
+			SetLocalScale(worldScale);
 
 			float worldRotation = GetWorldRotation();
-			SetRotation(worldRotation);
+			SetLocalRotation(worldRotation);
 		}
 	}
 
@@ -1613,7 +1614,7 @@ namespace ShyEditor {
 		position = nullptr;
 	}
 
-	ImVec2& Transform::GetPosition()
+	ImVec2& Transform::GetLocalPosition()
 	{
 		return *position;
 	}
@@ -1623,19 +1624,21 @@ namespace ShyEditor {
 		Entity* parent = obj->GetParent();
 
 		if (parent != nullptr) {
-			ImVec2 parentRot = Transform::rotate(parent->GetWorldRotation(), GetPosition());
+			
+			//Tiene sentido
+			ImVec2 rotatedPosition = Transform::rotate(parent->GetWorldRotation(), GetLocalPosition());
 			ImVec2 parentWorldPos = parent->GetWorldPosition();
 
-			ImVec2 worldPos = { parentWorldPos.x + parentRot.x, parentWorldPos.y + parentRot.y };
+			ImVec2 worldPos = { parentWorldPos.x + rotatedPosition.x, parentWorldPos.y + rotatedPosition.y };
 
 			return worldPos;
 		}
 
 
-		return GetPosition();
+		return GetLocalPosition();
 	}
 
-	float& Transform::GetRotation()
+	float& Transform::GetLocalRotation()
 	{
 		return rotation;
 	}
@@ -1645,15 +1648,15 @@ namespace ShyEditor {
 		Entity* parent = obj->GetParent();
 
 		if (parent != nullptr) {
-			float worldRotation = GetRotation() + parent->GetWorldRotation();
+			float worldRotation = GetLocalRotation() + parent->GetWorldRotation();
 
 			return worldRotation;
 		}
 
-		return GetRotation();
+		return GetLocalRotation();
 	}
 
-	ImVec2& Transform::GetScale()
+	ImVec2& Transform::GetLocalScale()
 	{
 		return *scale;
 	}
@@ -1663,7 +1666,7 @@ namespace ShyEditor {
 		Entity* parent = obj->GetParent();
 
 		if (parent != nullptr) {
-			ImVec2 scale = GetScale();
+			ImVec2 scale = GetLocalScale();
 			ImVec2 parentScale = parent->GetWorldScale();
 
 			ImVec2 worldScale = { scale.x * parentScale.x, scale.y * parentScale.y };
@@ -1671,10 +1674,10 @@ namespace ShyEditor {
 			return worldScale;
 		}
 
-		return GetScale();
+		return GetLocalScale();
 	}
 
-	void Transform::SetPosition(ImVec2& newPos)
+	void Transform::SetLocalPosition(ImVec2& newPos)
 	{
 		position->x = newPos.x;
 		position->y = newPos.y;
@@ -1691,14 +1694,14 @@ namespace ShyEditor {
 
 			newPos = Transform::rotate(-parent->GetWorldRotation(), newPos);
 
-			SetPosition(newPos);
+			SetLocalPosition(newPos);
 			return;
 		}
 
-		SetPosition(pos);
+		SetLocalPosition(pos);
 	}
 
-	void Transform::SetRotation(float r)
+	void Transform::SetLocalRotation(float r)
 	{
 		rotation = r;
 	}
@@ -1709,14 +1712,14 @@ namespace ShyEditor {
 
 		if (parent != nullptr) {
 
-			SetRotation(r - parent->GetWorldRotation());
+			SetLocalRotation(r - parent->GetWorldRotation());
 			return;
 		}
 
-		SetRotation(r);
+		SetLocalRotation(r);
 	}
 
-	void Transform::SetScale(ImVec2& newScale)
+	void Transform::SetLocalScale(ImVec2& newScale)
 	{
 		scale->x = newScale.x;
 		scale->y = newScale.y;
@@ -1732,11 +1735,11 @@ namespace ShyEditor {
 
 			ImVec2 newScale = { scale.x / parentWorldScale.x, scale.y / parentWorldScale.y };
 
-			SetScale(newScale);
+			SetLocalScale(newScale);
 			return;
 		}
 
-		SetScale(scale);
+		SetLocalScale(scale);
 	}
 
 
