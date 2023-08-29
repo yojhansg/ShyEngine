@@ -942,7 +942,7 @@ namespace ShyEditor {
 
 			ImVec2 position = MousePositionInScene();
 
-			entity->SetPosition(position);
+			entity->SetWorldPosition(position);
 			selectedEntity = entity;
 		}
 
@@ -959,7 +959,7 @@ namespace ShyEditor {
 
 				ImVec2 position = MousePositionInScene();
 
-				entity->SetPosition(position);
+				entity->SetWorldPosition(position);
 			}
 			else {
 				AddOverlay(entity);

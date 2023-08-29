@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Tue Aug 29 16:35:54 2023
+//Creation time : Tue Aug 29 19:49:41 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -169,6 +169,64 @@ Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& 
 Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Rotate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Scale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_SetTransformRelativeToNewParent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_keyDownEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_keyUpEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLetterUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isNumberUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isSpecialKeyUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_KeyBoardHorizontalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_KeyBoardVerticalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_mouseMotionEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_wheelMotionEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonDownEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isMouseButtonUpEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getMousePos(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getWheelMotionY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getControllersConnected(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllersButtonEventDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllersButtonEventUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerAxisMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_controllerConnectedEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_controllerDisconnectedEvent(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonDownWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonHoldWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonUpWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftTriggerValueWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightTriggerValueWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftTriggerMotionWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightTriggerMotionWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftJoystickXWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftJoystickYWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightJoystickXWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightJoystickYWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftJoystickMotionWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightJoystickMotionWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_ControllerHorizontalMovementWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_ControllerVerticalMovementWithId(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonDown(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonHold(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isControllerButtonUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftTriggerValue(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightTriggerValue(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftTriggerMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightTriggerMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftJoystickX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getLeftJoystickY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightJoystickX(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_getRightJoystickY(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isLeftJoystickMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_isRightJoystickMotion(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_ControllerHorizontalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_ControllerVerticalMovement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_getGravity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_setGravity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicsManager_addCollisionLayer(std::vector<Scripting::Variable>const& vec);

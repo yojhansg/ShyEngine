@@ -384,6 +384,10 @@
             {
                 "name": "velocity",
                 "type": "Number"
+            },
+            {
+                "name": "clampDiagonalVelocity",
+                "type": "Toggle"
             }
         ]
     },
@@ -2554,6 +2558,16 @@
                     }
                 ],
                 "name": "Scale",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "SetTransformRelativeToNewParent",
                 "return": "void"
             }
         ]
