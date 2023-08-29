@@ -442,54 +442,53 @@ namespace Input {
 
 	void InputManager::onJoystickAxisMotion(const SDL_Event& event) {
 
-		if (joysticks.size() > 0) {
+		if (joysticks.size() <= 0) return;
 
-			isAxisMotionEvent_ = true;
-			joystickId = event.jaxis.which;
+		isAxisMotionEvent_ = true;
+		joystickId = event.jaxis.which;
 
-			// Left & right joysticks
-			if (event.jaxis.axis < 4) {
+		// Left & right joysticks
+		if (event.jaxis.axis < 4) {
 
-				if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
-				{
-					switch (event.jaxis.axis) {
-					case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
-					case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
-					case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
-					case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-					default:
-						break;
-					}
+			if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
+			{
+				switch (event.jaxis.axis) {
+				case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
+				case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
+				case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
+				case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
+				default:
+					break;
 				}
-				else {
-
-					isAxisMotionEvent_ = false;
-
-					for (auto i = 0u; i < joysticks.size(); i++) {
-						joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
-						joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
-
-						joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
-					}
-				}
-
-			} // Left & right triggers
+			}
 			else {
 
-				if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+				isAxisMotionEvent_ = false;
 
-					switch (event.jaxis.axis) {
-					case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-					case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-					default:
-						break;
-					}
-				}
-				else {
-					isAxisMotionEvent_ = false;
+				for (auto i = 0u; i < joysticks.size(); i++) {
+					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
+					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
 
 					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 				}
+			}
+
+		} // Left & right triggers
+		else {
+
+			if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+
+				switch (event.jaxis.axis) {
+				case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
+				case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
+				default:
+					break;
+				}
+			}
+			else {
+				isAxisMotionEvent_ = false;
+
+				joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
 			}
 		}
 	}
@@ -536,7 +535,7 @@ namespace Input {
 		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
 			dir += -1;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::D))
+		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
 			dir += 1;
 
 		return dir;

@@ -15,7 +15,7 @@ namespace ECS {
 		transform = nullptr;
 
 		velocity = 0.0f;
-		clampDiagonalVelocity = false;
+		clampDiagonalVelocity = true;
 	}
 
 	void Movement::init() {
@@ -34,9 +34,12 @@ namespace ECS {
 
 	void Movement::update(float dt) {
 
-		Utilities::Vector2D movement = { im->KeyBoardHorizontalMovement() , im->KeyBoardVerticalMovement() };
+		Utilities::Vector2D kb_movement = { im->KeyBoardHorizontalMovement() , im->KeyBoardVerticalMovement() };
+		Utilities::Vector2D ct_movement = { im->ControllerHorizontalMovement() , im->ControllerVerticalMovement() };
 
-		if (clampDiagonalVelocity && movement.magnitude() > 1)
+		Utilities::Vector2D movement = kb_movement + ct_movement;
+
+		if (clampDiagonalVelocity && movement.magnitude() > 0)
 			movement = movement.normalize();
 
 		transform->Translate(movement * dt * velocity);
