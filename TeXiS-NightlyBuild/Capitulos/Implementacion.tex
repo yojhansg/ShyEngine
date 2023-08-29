@@ -1,0 +1,127 @@
+%---------------------------------------------------------------------
+%
+%                          Implementacion
+%
+%---------------------------------------------------------------------
+
+\chapter{Implementación}
+
+%-------------------------------------------------------------------
+\section{Editor}
+%-------------------------------------------------------------------
+\label{cap4:sec:editor}
+
+\subsection{Gestión de Escenas}
+
+La clase \texttt{Scene} desempeña un papel de vital importancia en el editor, ya que asume la responsabilidad de gestionar las distintas escenas disponibles. 
+Cada instancia de esta clase contiene listas de objetos y superposiciones (\textit{overlays}), que serán renderizados en la ventana principal del editor. Además, 
+\texttt{Scene} presenta funcionalidades clave para ejecutar operaciones esenciales. Por ejemplo, facilita la adición de entidades y superposiciones, la capacidad 
+de guardar y cargar escenas desde archivos en formato JSON, así como también la gestión tanto de la interfaz de usuario como de la representación visual de los 
+elementos presentes en la escena. La clase \texttt{Scene} incluye una cámara virtual que se integra en la escena y permite al usuario explorar y visualizar el entorno 
+desde diferentes perspectivas.
+
+\subsubsection{Métodos relevantes de la clase \texttt{Scene}}
+
+\begin{itemize}
+    \item \texttt{AddEntity()}: Este método permite añadir una nueva entidad a la lista de objetos de la escena. Las entidades representan elementos visuales 
+    u objetos interactivos presentes en la escena. \texttt{AddEntity()} tiene dos versiones, una que recibe la propia entidad ya creada y otra que la construye a partir de 
+    la ruta de una imagen.
+    
+    \item \texttt{AddOverlay()}: Similar al método anterior, \texttt{AddOverlay()} agrega elemententos de la interfaz a la lista de superposiciones de la 
+    escena. Las superposiciones son elementos que se muestran por encima de las entidades y pueden contener información adicional. 
+    \texttt{AddOverlay()} tiene dos versiones, una que recibe la propia entidad ya creada y otra que la construye a partir de la ruta de una imagen.
+    
+    \item \texttt{SaveScene()}: El método \texttt{SaveScene()} cumple con la tarea de llevar a cabo la serialización integral de la información de 
+    la escena y sus entidades asociadas en un archivo \texttt{".scene"} en formato JSON. Esto garantiza la preservación y almacenamiento de la configuración completa de 
+    la escena, incluyendo tanto los detalles de la propia escena como las propiedades de sus entidades. Esta información podrá ser recuperada en el futuro 
+    de manera precisa y coherente en el método \texttt{LoadScene()}.
+
+    \item \texttt{LoadScene()}: Mediante \texttt{LoadScene()}, es posible cargar una escena previamente guardada en un archivo \texttt{".scene"}. Esta función reconstruye 
+    la estructura de la escena y de sus entidades a partir de los datos almacenados en el archivo.
+    
+    \item \texttt{RenderUI()}: Esta función tiene la responsabilidad de renderizar la interfaz de usuario (UI) asociada a la escena, incluyendo los 
+    overlays mencionados previamente. Es importante destacar que renderizar elementos de Overlay difiere de renderizar objetos con transform, una similitud 
+    que aquellos familiarizados con plataformas como Unity podrían encontrar. Mientras que los objetos con transform representan entidades en la escena 
+    con atributos de posición, orientación  y escala, los overlays son elementos de interfaz que se superponen en la escena, proporcionando información 
+    contextual o funcionalidades adicionales sin afectar directamente la posición o estructura de los objetos en la escena tridimensional.
+    
+    \item \texttt{RenderEntities()}: El método \texttt{RenderEntities()} desempeña la función específica de renderizar las entidades que poseen transform 
+    en la escena, presentándolas visualmente en la ventana principal del editor. Mientras \texttt{RenderUI()} se enfoca en la interfaz de usuario 
+    y superposiciones, \texttt{RenderEntities()} se centra únicamente en la visualización de las entidades con atributos con \texttt{transform}.
+    
+    \item \texttt{HandleInput()}: La función \texttt{HandleInput()} desempeña un papel crucial al gestionar las entradas del usuario, que comprenden 
+    acciones como clics de ratón y pulsaciones de teclas. A través de esta función, el usuario tiene la capacidad de interactuar con la escena y sus componentes. 
+    Además de permitir la selección y manipulación de entidades, este método también cumple un rol esencial en el control de la cámara. Mediante la interpretación 
+    de las entradas, es posible ajustar la vista de la cámara, realizar movimientos y, en definitiva, modificar la perspectiva con la cual se visualiza 
+    la escena.
+    
+    \item \texttt{Behaviour()}: La función \texttt{Behaviour()} orquesta el funcionamiento general de la escena en el editor. Esto incluye la ejecución de 
+    la interfaz de usuario, la representación visual de las entidades y superposiciones, y la respuesta a las interacciones del usuario.
+    
+\end{itemize}
+
+En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
+editor, garantizando una experiencia interactiva y eficiente para los usuarios.
+
+
+
+\section{Jerarquía en las escenas}
+
+En el entorno del editor, la organización jerárquica de los elementos es una característica fundamental que permite una gestión coherente y eficiente de las entidades 
+presentes en la escena. La clase \texttt{Entidad} se convierte en un componente clave para establecer esta jerarquía, ya que cada instancia incluye punteros tanto a su 
+entidad padre como a una lista de entidades hijas. 
+
+La jerarquía de entidades también se refleja en la gestión de los transform. Si una entidad tiene un padre, estos valores locales se vuelven relativos al 
+padre, lo que garantiza que los movimientos y ajustes de transformación sean coherentes respecto a la jerarquía.
+
+Para gestionar estos aspectos, la clase \texttt{Transform} se encarga de proporcionar métodos para obtener y establecer tanto los valores globales como los 
+relativos.
+
+\subsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
+
+\begin{itemize}
+    \item \texttt{AddChild()}: Este método permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
+    
+    \item \texttt{RemoveChild()}: Usando \texttt{RemoveChild()}, es posible eliminar una entidad de la lista de hijos de la entidad actual, rompiendo la relación 
+    jerárquica.
+    
+    \item \texttt{SetParent()}: El método \texttt{SetParent()} se encarga de establecer la entidad padre de la entidad actual, ajustando sus valores locales de 
+    transformación de acuerdo con la jerarquía. También es posible llamar al método con nullptr establecer que la entidad carece de padre.
+    
+\end{itemize}
+
+\subsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
+
+\begin{itemize}
+    \item \texttt{GetWorldPosition()}: Con \texttt{GetWorldPosition()}, se obtiene la posición global de la entidad, considerando la transformación jerárquica 
+    en la estructura.
+    \item \texttt{GetWorldScale()}: Al utilizar \texttt{GetWorldScale()}, se obtiene la escala global de la entidad, considerando la estructura jerárquica.
+    
+    \item \texttt{GetWorldRotation()}: \texttt{GetWorldRotation()} devuelve la rotación global de la entidad, teniendo en cuenta la jerarquía en la transformación.
+
+    \item \texttt{SetWorldPosition()}: \texttt{SetWorldPosition()} permite establecer la posición global de la entidad, ajustando sus valores locales y considerando 
+    la jerarquía.
+    
+    \item \texttt{SetWorldScale()}: Con \texttt{SetWorldScale()}, es posible establecer la escala global de la entidad, ajustando sus valores locales y 
+    respetando la jerarquía.
+
+    \item \texttt{SetWorldRotation()}: Este método, \texttt{SetWorldRotation()}, se utiliza para establecer la rotación global de la entidad, considerando 
+    la jerarquía y ajustando sus valores locales.
+
+
+    \item \texttt{GetLocalPosition()}: \texttt{GetLocalPosition()} devuelve la posición local de la entidad, que es relativa a su entidad padre en la jerarquía.
+    
+    \item \texttt{GetLocalScale()}: \texttt{GetLocalScale()} devuelve la escala local de la entidad, que se relaciona con su entidad padre en la jerarquía.
+
+    \item \texttt{GetLocalRotation()}: \texttt{GetLocalRotation()} devuelve la rotación local de la entidad, en relación con su entidad padre en la jerarquía.
+
+    \item \texttt{SetLocalPosition()}: \texttt{SetLocalPosition()} permite establecer la posición local de la entidad, considerando su entidad padre en la jerarquía.
+    
+    \item \texttt{SetLocalScale()}: \texttt{SetLocalScale()} permite establecer la escala local de la entidad, considerando su entidad padre en la jerarquía.
+    
+    \item \texttt{SetLocalRotation()}: \texttt{SetLocalRotation()} permite establecer la rotación local de la entidad, considerando su entidad padre en la jerarquía.
+
+\end{itemize}
+
+Estos métodos, en conjunto, permiten establecer y mantener la jerarquía entre entidades y gestionar sus transformaciones de manera coherente, garantizando la organización precisa y eficiente de la escena en el editor.
+
