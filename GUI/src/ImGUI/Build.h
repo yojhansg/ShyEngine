@@ -15,14 +15,15 @@ namespace ShyEditor {
 
 
 		bool popUpOpen;
-		bool inProgress;
 		std::thread thread;
+		std::atomic<bool> inProgress;
 		std::atomic<float> progression;
 
 		std::string buildPath;
 
-		void Copy(std::string file, std::string path, int size);
+		void Copy(std::string file, std::string path);
 
+		void ChangeExeIcon(const std::string& exe);
 
 		void BuildThread();
 		bool SelectFolder();
@@ -30,6 +31,7 @@ namespace ShyEditor {
 	public:
 
 		Build();
+		~Build();
 
 		void BuildProgression();
 		void GenerateBuild();

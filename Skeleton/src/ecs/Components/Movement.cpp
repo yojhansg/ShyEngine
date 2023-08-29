@@ -6,11 +6,16 @@
 #include "InputManager.h"
 
 #include <iostream>
+#include <Vector2D.h>
 
 namespace ECS {
 
 	Movement::Movement() {
+		im = nullptr;
 		transform = nullptr;
+
+		velocity = 0.0f;
+		clampDiagonalVelocity = true;
 	}
 
 	void Movement::init() {
@@ -25,20 +30,19 @@ namespace ECS {
 			return;
 		}
 
-		Console::Output::Print("Numero de mandos: ", std::to_string(im->getJoysticksConnected()));
 	}
 
 	void Movement::update(float dt) {
 
-		if (im->isJoystickButtonEventDown()) {
-			if (im->getJoystickButtonState(0, 0)) {
-				std::cout << "Mando 1" << std::endl;
-			}
+		Utilities::Vector2D kb_movement = { im->KeyBoardHorizontalMovement() , im->KeyBoardVerticalMovement() };
+		Utilities::Vector2D ct_movement = { im->ControllerHorizontalMovement() , im->ControllerVerticalMovement() };
 
-			if (im->getJoystickButtonState(0, 1)) {
-				std::cout << "Mando 2" << std::endl;
-			}
-		}
+		Utilities::Vector2D movement = kb_movement + ct_movement;
+
+		if (clampDiagonalVelocity && movement.magnitude() > 0)
+			movement = movement.normalize();
+
+		transform->Translate(movement * dt * velocity);
 
 	}
 
