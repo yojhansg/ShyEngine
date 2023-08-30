@@ -10,7 +10,7 @@
     "frequency": 44100,
     "fullScreen": false,
     "game": "MyGame",
-    "gravity": "0.000000, 9.810000",
+    "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
         "Default"

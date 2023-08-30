@@ -70,6 +70,7 @@ namespace ECS {
 
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
+
 	}
 
 	void PhysicBody::start() {

@@ -127,7 +127,7 @@ namespace Physics {
 		}
 
 		// A non-existing layer can not be deleted
-		if (layers.find(layerName) == layers.end()) {
+		if (!layersExists(layerName)) {
 			Console::Output::PrintError("Physics layers", "The layer with name " + layerName + " doesn't exist.");
 			return;
 		}
@@ -170,6 +170,11 @@ namespace Physics {
 
 	int PhysicsManager::getMaskBits(const std::string& layerName) {
 
+		if (!layersExists(layerName)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerName + " doesn't exist.");
+			return 0;
+		}
+
 		int layerN = layers.at(layerName);
 
 		int flags = 0;
@@ -185,10 +190,26 @@ namespace Physics {
 	}
 
 	int PhysicsManager::getLayerBits(const std::string& layerName) {
+
+		if (!layersExists(layerName)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerName + " doesn't exist.");
+			return 0;
+		}
+
 		return std::pow(2, layers.at(layerName));
 	}
 
 	void PhysicsManager::setCollisionBetweenLayers(const std::string& layerNameA, const std::string& layerNameB, bool collide) {
+
+		if (!layersExists(layerNameA)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerNameA + " doesn't exist.");
+			return;
+		}
+
+		if (!layersExists(layerNameB)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerNameB + " doesn't exist.");
+			return;
+		}
 
 		int layerA = layers.at(layerNameA);
 		int layerB = layers.at(layerNameB);
@@ -199,6 +220,16 @@ namespace Physics {
 	}
 
 	bool PhysicsManager::layersCollide(const std::string& layerNameA, const std::string& layerNameB) {
+
+		if (!layersExists(layerNameA)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerNameA + " doesn't exist.");
+			return false;
+		}
+
+		if (!layersExists(layerNameB)) {
+			Console::Output::PrintError("Physics layers", "The layer with name " + layerNameB + " doesn't exist.");
+			return false;
+		}
 
 		int layerA = layers.at(layerNameA);
 		int layerB = layers.at(layerNameB);
