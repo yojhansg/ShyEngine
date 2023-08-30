@@ -420,7 +420,7 @@ namespace ShyEditor {
 			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
 		}
 		else if (attrType == Components::AttributesType::ENTITY) {
-			value.value.entityIdx = -1;
+			value.value.entityIdx = 0;
 		}
 		else if (attrType == Components::AttributesType::CHAR) {
 			value.value.valueChar = '\0';

@@ -345,6 +345,11 @@ void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* ent
 				Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
 				value = col;
 			}
+			else if (type == "Entity") {
+
+				value = Scripting::Variable::Entity(nullptr);
+				value.value.entityId = attr["value"].get<int>();
+			}
 
 			scriptCmp->SetSerialisedValue(attribute.key(), value);
 		}

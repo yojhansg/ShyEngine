@@ -485,6 +485,12 @@ namespace ShyEditor {
 				drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, hoverColor, palette.buttonThickness);
 
 
+			if (ImGui::IsMouseDoubleClicked(0)) {
+
+				RemoveNext();
+			}
+
+
 			if (tooltip != "") {
 				ImGui::SetTooltip(tooltip.c_str());
 			}
@@ -546,6 +552,7 @@ namespace ShyEditor {
 			ImVec2 previousPosB = ImVec2(previousPos.x + nodeSize, previousPos.y - nodeSize);
 			ImVec2 previousPosC = ImVec2(previousPos.x + nodeSize + nodeSize, previousPos.y);
 			ImVec2 previousPosD = ImVec2(previousPos.x + nodeSize, previousPos.y + nodeSize);
+
 
 			drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, nodeColor);
 		}
@@ -630,7 +637,7 @@ namespace ShyEditor {
 				ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 				(
 					in.GetTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-					in.GetTypeStr() == "any"
+					in.GetTypeStr() == "Any"
 					)
 
 				) {
@@ -1555,9 +1562,9 @@ namespace ShyEditor {
 		json root = ScriptNode::ToJson();
 
 		//TODO: serialised values
-		root["serialized"] = serialized;
+		root["serialized"] = IsSerialized();
 
-		if (serialized)
+		if (IsSerialized())
 			root["name"] = serializedName;
 
 		root["type"] = Components::Attribute::GetTypeStrFromAttributeType(attrType);
