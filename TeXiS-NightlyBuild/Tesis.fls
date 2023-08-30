@@ -322,10 +322,6 @@ INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi6.
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 OUTPUT Tesis.toc
 INPUT .\Capitulos\Introduccion.tex
 INPUT .\Capitulos\Introduccion.tex
@@ -333,6 +329,10 @@ OUTPUT Capitulos\Introduccion.aux
 INPUT .\Capitulos\Introduccion.tex
 INPUT .\Capitulos\Introduccion.tex
 INPUT Capitulos\Introduccion.tex
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
 INPUT .\Capitulos\EstadoDelArte.tex
 INPUT .\Capitulos\EstadoDelArte.tex
@@ -346,7 +346,6 @@ OUTPUT Capitulos\Implementacion.aux
 INPUT .\Capitulos\Implementacion.tex
 INPUT .\Capitulos\Implementacion.tex
 INPUT Capitulos\Implementacion.tex
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
 INPUT .\Imagenes\Vectorial\Jerarquia.PNG
 INPUT .\Imagenes\Vectorial\Jerarquia.PNG
 INPUT .\Imagenes\Vectorial\Jerarquia.PNG
@@ -430,8 +429,6 @@ INPUT .\Tesis.out
 INPUT .\Tesis.out
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
-INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
 INPUT C:\Users\Ivanof18\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1095.pk

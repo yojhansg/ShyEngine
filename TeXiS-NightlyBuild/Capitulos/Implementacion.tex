@@ -65,10 +65,13 @@ desde diferentes perspectivas.
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
+\medskip
+\textit{Mostrar imagenes de las distintas escenas ¿?}
+
 
 %------------------------------------------------ ENTIDADES --------------------------------------------
 
-\section{Entidades}
+\subsection{Entidades}
 
 En el contexto del editor, las entidades son elementos fundamentales que componen la escena. Cada entidad se distingue por un identificador único asignado a 
 ella, lo que permite una diferenciación clara entre las diversas entidades presentes. Ademas, una entindad también pueden estar asociada con una Textura, 
@@ -76,7 +79,7 @@ aunque esta asociación no es obligatoria, lo que significa que una entidad podrí
 \texttt{Image}, que permite modificar la ruta de la imagen asociada a la textura.
 
 
-\subsection{Métodos relevantes de la clase \texttt{Entidad}}
+\subsubsection{Métodos relevantes de la clase \texttt{Entidad}}
 
 \begin{itemize}
     \item \texttt{AssignId()}: El método \texttt{AssignId()} gestiona la asignación y desasignación de identificadores a las entidades. 
@@ -119,7 +122,7 @@ gestión de manera efectiva y coherente.
 %------------------------------------------------ JERARQUÍA --------------------------------------------
 
 
-\section{Jerarquía en las escenas}
+\subsection{Jerarquía en las escenas}
 
 En el entorno del editor, la organización jerárquica de los elementos es una característica fundamental que permite una gestión coherente y eficiente de las entidades 
 presentes en la escena. La clase \texttt{Entidad} se convierte en un componente clave para establecer esta jerarquía, ya que cada instancia incluye punteros tanto a su 
@@ -131,7 +134,7 @@ padre, lo que garantiza que los movimientos y ajustes de transformación sean coh
 Para gestionar estos aspectos, la clase \texttt{Transform} se encarga de proporcionar métodos para obtener y establecer tanto los valores globales como los 
 relativos.
 
-\subsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
+\subsubsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
 
 \begin{itemize}
     \item \texttt{AddChild()}: Este método permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
@@ -144,7 +147,7 @@ relativos.
     
 \end{itemize}
 
-\subsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
+\subsubsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
 
 \begin{itemize}
     \item \texttt{GetWorldPosition()}: Con \texttt{GetWorldPosition()}, se obtiene la posición global de la entidad, considerando la transformación jerárquica 
@@ -185,7 +188,7 @@ dropdowns en el editor. \ref{fig:instancia_prefab}
 
 %------------------------------------------------ PREFABS --------------------------------------------
 
-\section{Prefabs y PrefabManager}
+\subsection{Prefabs y PrefabManager}
 
 Los prefabs son copias de entidades que se guardan como plantillas para su posterior instanciación o para manejar varias instancias de un mismo prefab mientras 
 se comparte una base común. Estos prefabs tienen la particularidad de que su identificador (id) es negativo, lo que los distingue de las entidades regulares. 
@@ -195,7 +198,7 @@ Cada entidad tiene un atributo llamado \texttt{prefabId}, el cual, en caso de se
 La gestión de prefabs se lleva a cabo mediante la clase \texttt{PrefabManager}, que mantiene una lista de todos los prefabs disponibles, junto con un mapa 
 donde las claves son las IDs de los prefabs y los valores son vectores que contienen los ids de las entidades que son instancias de ese prefab.
 
-\subsection{Métodos relevantes de \texttt{PrefabManager} para la gestion de prefabs}
+\subsubsection{Métodos relevantes de \texttt{PrefabManager} para la gestion de prefabs}
 
 \begin{itemize}
     \item \texttt{UpdatePrefabInstances()}: Este método se encarga de actualizar las instancias de los prefabs en 
@@ -214,7 +217,7 @@ donde las claves son las IDs de los prefabs y los valores son vectores que conti
 \end{itemize}
 
 
-\subsection{Métodos relevantes de la clase \texttt{Entidad} para la gestion de prefabs }
+\subsubsection{Métodos relevantes de la clase \texttt{Entidad} para la gestion de prefabs }
 
 \begin{itemize}
     \item \texttt{IsPrefab()}: Indica si la entidad es un prefab (id negativo) o no.
