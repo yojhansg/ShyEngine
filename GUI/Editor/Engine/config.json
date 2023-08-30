@@ -1,6 +1,6 @@
 {
-    "bgAlpha": 68,
-    "bgColor": "0, 199, 151",
+    "bgAlpha": 255,
+    "bgColor": "25, 25, 25",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,

@@ -13,7 +13,7 @@ namespace Input {
 
 	InputManager::InputManager() : InputManager(true) {}
 
-	InputManager::InputManager(bool closeWithEscape): closeWithEscape(closeWithEscape) {
+	InputManager::InputManager(bool closeWithEscape) : closeWithEscape(closeWithEscape) {
 
 		kbState_ = SDL_GetKeyboardState(0);
 
@@ -29,7 +29,7 @@ namespace Input {
 	}
 
 	InputManager::~InputManager() {
-		
+
 	}
 
 	bool InputManager::handleInput(SDL_Event& e) {
@@ -139,59 +139,70 @@ namespace Input {
 		isKeyUpEvent_ = true;
 	}
 
-	bool InputManager::keyDownEvent() {
+	bool InputManager::AnyKeyPressed() {
 		return isKeyDownEvent_;
 	}
 
-	bool InputManager::keyUpEvent() {
+	bool InputManager::AnyKeyReleased() {
 		return isKeyUpEvent_;
 	}
 
 	// Letter
-	bool InputManager::isLetterDown(int l) {
+	bool InputManager::IsLetterPressed(int l) {
 		return letters[l] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isLetterHold(int l) {
+	bool InputManager::IsLetterDown(int l) {
 		return letters[l] == ButtonState::JustDown || letters[l] == ButtonState::Down;
 	}
 
-	bool InputManager::isLetterUp(int l) {
+	bool InputManager::IsLetterUp(int l) {
+		return letters[l] == ButtonState::Up || letters[l] == ButtonState::None;
+	}
+
+	bool InputManager::IsLetterReleased(int l) {
 		return letters[l] == ButtonState::Up;
 	}
 
 	// Number
-	bool InputManager::isNumberDown(int n) {
+	bool InputManager::IsNumberPressed(int n) {
 		return numbers[n] == ButtonState::JustDown;
 	}
-	bool InputManager::isNumberHold(int n) {
+	bool InputManager::IsNumberDown(int n) {
 		return numbers[n] == ButtonState::JustDown || numbers[n] == ButtonState::Down;
 	}
+	bool InputManager::IsNumberUp(int n) {
+		return numbers[n] == ButtonState::Up || numbers[n] == ButtonState::None;
+	}
 
-	bool InputManager::isNumberUp(int n) {
+	bool InputManager::IsNumberReleased(int n) {
 		return numbers[n] == ButtonState::Up;
 	}
 
 	// Special Key
-	bool InputManager::isSpecialKeyDown(int s) {
+	bool InputManager::IsSpecialKeyPressed(int s) {
 		return specialKeys[s] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isSpecialKeyHold(int s) {
+	bool InputManager::IsSpecialKeyDown(int s) {
 		return specialKeys[s] == ButtonState::JustDown || specialKeys[s] == ButtonState::Down;
 	}
 
-	bool InputManager::isSpecialKeyUp(int s) {
+	bool InputManager::IsSpecialKeyUp(int s) {
+		return specialKeys[s] == ButtonState::Up || specialKeys[s] == ButtonState::None;
+	}
+
+	bool InputManager::IsSpecialKeyReleased(int s) {
 		return specialKeys[s] == ButtonState::Up;
 	}
 
 	// With SDL Scancode enum
 	bool InputManager::isKeyDown(SDL_Scancode key) {
-		return keyDownEvent() && kbState_[key] == 1;
+		return AnyKeyPressed() && kbState_[key] == 1;
 	}
 
 	bool InputManager::isKeyUp(SDL_Scancode key) {
-		return keyUpEvent() && kbState_[key] == 0;
+		return AnyKeyReleased() && kbState_[key] == 0;
 	}
 
 
@@ -248,28 +259,52 @@ namespace Input {
 			key = ButtonState::None;
 	}
 
-	float InputManager::KeyBoardHorizontalMovement()
+	float InputManager::HorizontalMovement()
 	{
 		float dir = 0;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
-			dir += -1;
+		if (InputManager::ConnectedControllersCount() > 0)
+			dir += GetLeftStickHorizontalValue();
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::LEFT) || IsLetterDown((int)KB_LETTERS::A))
+		{
+			dir += -1;
+			if (dir < -1)
+				dir = -1;
+		}
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::RIGHT) || IsLetterDown((int)KB_LETTERS::D))
+		{
 			dir += 1;
+			if (dir > 1)
+				dir = 1;
+		}
+
 
 		return dir;
 	}
 
-	float InputManager::KeyBoardVerticalMovement()
+	float InputManager::VerticalMovement()
 	{
 		float dir = 0;
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
-			dir += -1;
+		if (InputManager::ConnectedControllersCount() > 0)
+			dir += GetLeftStickVerticalValue();
 
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::DOWN) || IsLetterDown((int)KB_LETTERS::S))
+		{
+			dir += -1;
+			if (dir < -1)
+				dir = -1;
+		}
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::UP) || IsLetterDown((int)KB_LETTERS::W))
+		{
 			dir += 1;
+			if (dir > 1)
+				dir = 1;
+		}
+
 
 		return dir;
 	}
@@ -277,35 +312,35 @@ namespace Input {
 
 	// ----------- MOUSE -----------------
 
-	bool InputManager::mouseMotionEvent() {
+	bool InputManager::HasMouseMoved() {
 		return isMouseMotionEvent_;
 	}
 
-	bool InputManager::wheelMotionEvent() {
+	bool InputManager::HasMouseWheelMoved() {
 		return isMouseWheelEvent_;
 	}
 
-	cVector2D InputManager::getMousePos() {
+	cVector2D InputManager::GetMousePosition() {
 		return mousePos_;
 	}
 
-	int InputManager::getWheelMotionY() {
+	int InputManager::GetMouseWheelScroll() {
 		return wheelMotionY_;
 	}
 
-	bool InputManager::isMouseButtonDown(int b) {
+	bool InputManager::IsMouseButtonDown(int b) {
 		return mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUp(int b) {
+	bool InputManager::IsMouseButtonUp(int b) {
 		return !mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonDownEvent(int b) {
+	bool InputManager::IsMouseButtonPressed(int b) {
 		return isMouseButtonEventDown_ && mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUpEvent(int b) {
+	bool InputManager::IsMouseButtonReleased(int b) {
 		return isMouseButtonEventUp_ && !mbState_[b];
 	}
 
@@ -459,11 +494,11 @@ namespace Input {
 		lastInputReceivedController = event.cdevice.which;
 
 		if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) {
-			controllers[lastInputReceivedController].triggers.setX((float) event.caxis.value / MAX_STICK_VALUE);
+			controllers[lastInputReceivedController].triggers.setX((float)event.caxis.value / MAX_STICK_VALUE);
 
 		}
 		else if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT) {
-			controllers[lastInputReceivedController].triggers.setY((float) event.caxis.value / MAX_STICK_VALUE);
+			controllers[lastInputReceivedController].triggers.setY((float)event.caxis.value / MAX_STICK_VALUE);
 		}
 	}
 
@@ -503,27 +538,27 @@ namespace Input {
 
 	}
 
-	int InputManager::getControllersConnected() {
+	int InputManager::ConnectedControllersCount() {
 		return numControllersConnected;
 	}
 
-	bool InputManager::isControllersButtonEventDown() {
+	bool InputManager::AnyControllerButtonPressed() {
 		return isControllerButtonDownEvent_;
 	}
 
-	bool InputManager::isControllersButtonEventUp() {
+	bool InputManager::AnyControllerButtonReleased() {
 		return isControllerButtonUpEvent_;
 	}
 
-	bool InputManager::isControllerAxisMotion() {
+	bool InputManager::AnyControllerAxisMotion() {
 		return isAxisMotionEvent_;
 	}
 
-	bool InputManager::controllerConnectedEvent() {
+	bool InputManager::AnyControllerConnected() {
 		return controllerConnected_;
 	}
 
-	bool InputManager::controllerDisconnectedEvent() {
+	bool InputManager::AnyControllerDisconnected() {
 		return controllerDisconnected_;
 	}
 
@@ -531,7 +566,7 @@ namespace Input {
 
 	// With ID
 
-	bool InputManager::isControllerButtonDownWithId(int button, int id) {
+	bool InputManager::IsControllerButtonPressedWithId(int button, int id) {
 
 		if (id >= numControllersConnected) {
 			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
@@ -541,7 +576,7 @@ namespace Input {
 		return controllers[id].buttonsStates[button] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isControllerButtonHoldWithId(int button, int id) {
+	bool InputManager::IsControllerButtonDownWithId(int button, int id) {
 
 		if (id >= numControllersConnected) {
 			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
@@ -551,7 +586,7 @@ namespace Input {
 		return controllers[id].buttonsStates[button] == ButtonState::JustDown || controllers[id].buttonsStates[button] == ButtonState::Down;
 	}
 
-	bool InputManager::isControllerButtonUpWithId(int button, int id) {
+	bool InputManager::IsControllerButtonReleasedWithId(int button, int id) {
 
 		if (id >= numControllersConnected) {
 			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
@@ -561,116 +596,100 @@ namespace Input {
 		return controllers[id].buttonsStates[button] == ButtonState::Up;
 	}
 
-	float InputManager::getLeftTriggerValueWithId(int id) {
+	float InputManager::GetLeftTriggerValueWithId(int id) {
 		return controllers[id].triggers.getX();
 	}
 
-	float InputManager::getRightTriggerValueWithId(int id) {
+	float InputManager::GetRightTriggerValueWithId(int id) {
 		return controllers[id].triggers.getY();
 	}
 
-	bool InputManager::isLeftTriggerMotionWithId(int id) {
+	bool InputManager::IsLeftTriggerDownWithId(int id) {
 		return controllers[id].triggers.getX() > 0;
 	}
 
-	bool InputManager::isRightTriggerMotionWithId(int id) {
+	bool InputManager::IsRightTriggerDownWithId(int id) {
 		return controllers[id].triggers.getY() > 0;
 	}
 
-	float InputManager::getLeftJoystickXWithId(int id) {
+	float InputManager::GetLeftStickHorizontalValueWithId(int id) {
 		return controllers[id].joysticks.first.getX();
 	}
 
-	float InputManager::getLeftJoystickYWithId(int id) {
+	float InputManager::GetLeftStickVerticalValueWithId(int id) {
 		return controllers[id].joysticks.first.getY();
 	}
 
-	float InputManager::getRightJoystickXWithId(int id) {
+	float InputManager::GetRightStickHorizontalValueWithId(int id) {
 		return controllers[id].joysticks.second.getX();
 	}
 
-	float InputManager::getRightJoystickYWithId(int id) {
+	float InputManager::GetRightStickVerticalValueWithId(int id) {
 		return controllers[id].joysticks.second.getY();
 	}
 
-	bool InputManager::isLeftJoystickMotionWithId(int id) {
+	bool InputManager::HasLeftStickMovedWithId(int id) {
 		return controllers[id].joysticks.first.getX() > 0 || controllers[id].joysticks.first.getY() > 0;
 	}
 
-	bool InputManager::isRightJoystickMotionWithId(int id) {
+	bool InputManager::HasRightStickMovedWithId(int id) {
 		return controllers[id].joysticks.second.getX() > 0 || controllers[id].joysticks.second.getY() > 0;
 	}
 
 
-	float InputManager::ControllerHorizontalMovementWithId(int id) {
-		return getLeftJoystickXWithId(id);
-	}
-
-	float InputManager::ControllerVerticalMovementWithId(int id) {
-		return getLeftJoystickYWithId(id);
-	}
-
 
 	// With out ID
 
-	bool InputManager::isControllerButtonDown(int button) {
-		return isControllerButtonDownWithId(button, lastInputReceivedController);
+	bool InputManager::IsControllerButtonPressed(int button) {
+		return IsControllerButtonPressedWithId(button, lastInputReceivedController);
 	}
 
-	bool InputManager::isControllerButtonHold(int button) {
-		return isControllerButtonHoldWithId(button, lastInputReceivedController);
+	bool InputManager::IsControllerButtonDown(int button) {
+		return IsControllerButtonDownWithId(button, lastInputReceivedController);
 	}
 
-	bool InputManager::isControllerButtonUp(int button) {
-		return isControllerButtonUpWithId(button, lastInputReceivedController);
+	bool InputManager::IsControllerButtonUp(int button) {
+		return IsControllerButtonReleasedWithId(button, lastInputReceivedController);
 	}
 
-	float InputManager::getLeftTriggerValue() {
-		return getLeftTriggerValueWithId(lastInputReceivedController);
+	float InputManager::GetLeftTriggerValue() {
+		return GetLeftTriggerValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::getRightTriggerValue() {
-		return getRightTriggerValueWithId(lastInputReceivedController);
+	float InputManager::GetRightTriggerValue() {
+		return GetRightTriggerValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isLeftTriggerMotion() {
-		return isLeftTriggerMotionWithId(lastInputReceivedController);
+	bool InputManager::IsLeftTriggerDown() {
+		return IsLeftTriggerDownWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isRightTriggerMotion() {
-		return isRightTriggerMotionWithId(lastInputReceivedController);
+	bool InputManager::IsRightTriggerDown() {
+		return IsRightTriggerDownWithId(lastInputReceivedController);
 	}
 
-	float InputManager::getLeftJoystickX() {
-		return getLeftJoystickXWithId(lastInputReceivedController);
+	float InputManager::GetLeftStickHorizontalValue() {
+		return GetLeftStickHorizontalValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::getLeftJoystickY() {
-		return getLeftJoystickYWithId(lastInputReceivedController);
+	float InputManager::GetLeftStickVerticalValue() {
+		return GetLeftStickVerticalValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::getRightJoystickX() {
-		return getRightJoystickXWithId(lastInputReceivedController);
+	float InputManager::GetRightStickHorizontalValue() {
+		return GetRightStickHorizontalValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::getRightJoystickY() {
-		return getRightJoystickYWithId(lastInputReceivedController);
+	float InputManager::GetRightStickVerticalValue() {
+		return GetRightStickVerticalValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isLeftJoystickMotion() {
-		return isLeftJoystickMotionWithId(lastInputReceivedController);
+	bool InputManager::HasLeftStickMoved() {
+		return HasLeftStickMovedWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isRightJoystickMotion() {
-		return isRightJoystickMotionWithId(lastInputReceivedController);
-	}
-
-	float InputManager::ControllerHorizontalMovement() {
-		return ControllerHorizontalMovementWithId(lastInputReceivedController);
-	}
-
-	float InputManager::ControllerVerticalMovement() {
-		return ControllerVerticalMovementWithId(lastInputReceivedController);
+	bool InputManager::HasRightStickMoved() {
+		return HasRightStickMovedWithId(lastInputReceivedController);
 	}
 
 
@@ -682,85 +701,85 @@ namespace Input {
 
 		switch (letter) {
 		case KB_LETTERS::A:
-				scancode = SDL_SCANCODE_A;
-				break;
-			case KB_LETTERS::B:
-				scancode = SDL_SCANCODE_B;
-				break;
-			case KB_LETTERS::C:
-				scancode = SDL_SCANCODE_C;
-				break;
-			case KB_LETTERS::D:
-				scancode = SDL_SCANCODE_D;
-				break;
-			case KB_LETTERS::E:
-				scancode = SDL_SCANCODE_E;
-				break;
-			case KB_LETTERS::F:
-				scancode = SDL_SCANCODE_F;
-				break;
-			case KB_LETTERS::G:
-				scancode = SDL_SCANCODE_G;
-				break;
-			case KB_LETTERS::H:
-				scancode = SDL_SCANCODE_H;
-				break;
-			case KB_LETTERS::I:
-				scancode = SDL_SCANCODE_I;
-				break;
-			case KB_LETTERS::J:
-				scancode = SDL_SCANCODE_J;
-				break;
-			case KB_LETTERS::K:
-				scancode = SDL_SCANCODE_K;
-				break;
-			case KB_LETTERS::L:
-				scancode = SDL_SCANCODE_L;
-				break;
-			case KB_LETTERS::M:
-				scancode = SDL_SCANCODE_M;
-				break;
-			case KB_LETTERS::N:
-				scancode = SDL_SCANCODE_N;
-				break;
-			case KB_LETTERS::O:
-				scancode = SDL_SCANCODE_O;
-				break;
-			case KB_LETTERS::P:
-				scancode = SDL_SCANCODE_P;
-				break;
-			case KB_LETTERS::Q:
-				scancode = SDL_SCANCODE_Q;
-				break;
-			case KB_LETTERS::R:
-				scancode = SDL_SCANCODE_R;
-				break;
-			case KB_LETTERS::S:
-				scancode = SDL_SCANCODE_S;
-				break;
-			case KB_LETTERS::T:
-				scancode = SDL_SCANCODE_T;
-				break;
-			case KB_LETTERS::U:
-				scancode = SDL_SCANCODE_U;
-				break;
-			case KB_LETTERS::V:
-				scancode = SDL_SCANCODE_V;
-				break;
-			case KB_LETTERS::W:
-				scancode = SDL_SCANCODE_W;
-				break;
-			case KB_LETTERS::X:
-				scancode = SDL_SCANCODE_X;
-				break;
-			case KB_LETTERS::Y:
-				scancode = SDL_SCANCODE_Y;
-				break;
-			case KB_LETTERS::Z:
-				scancode = SDL_SCANCODE_Z;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_A;
+			break;
+		case KB_LETTERS::B:
+			scancode = SDL_SCANCODE_B;
+			break;
+		case KB_LETTERS::C:
+			scancode = SDL_SCANCODE_C;
+			break;
+		case KB_LETTERS::D:
+			scancode = SDL_SCANCODE_D;
+			break;
+		case KB_LETTERS::E:
+			scancode = SDL_SCANCODE_E;
+			break;
+		case KB_LETTERS::F:
+			scancode = SDL_SCANCODE_F;
+			break;
+		case KB_LETTERS::G:
+			scancode = SDL_SCANCODE_G;
+			break;
+		case KB_LETTERS::H:
+			scancode = SDL_SCANCODE_H;
+			break;
+		case KB_LETTERS::I:
+			scancode = SDL_SCANCODE_I;
+			break;
+		case KB_LETTERS::J:
+			scancode = SDL_SCANCODE_J;
+			break;
+		case KB_LETTERS::K:
+			scancode = SDL_SCANCODE_K;
+			break;
+		case KB_LETTERS::L:
+			scancode = SDL_SCANCODE_L;
+			break;
+		case KB_LETTERS::M:
+			scancode = SDL_SCANCODE_M;
+			break;
+		case KB_LETTERS::N:
+			scancode = SDL_SCANCODE_N;
+			break;
+		case KB_LETTERS::O:
+			scancode = SDL_SCANCODE_O;
+			break;
+		case KB_LETTERS::P:
+			scancode = SDL_SCANCODE_P;
+			break;
+		case KB_LETTERS::Q:
+			scancode = SDL_SCANCODE_Q;
+			break;
+		case KB_LETTERS::R:
+			scancode = SDL_SCANCODE_R;
+			break;
+		case KB_LETTERS::S:
+			scancode = SDL_SCANCODE_S;
+			break;
+		case KB_LETTERS::T:
+			scancode = SDL_SCANCODE_T;
+			break;
+		case KB_LETTERS::U:
+			scancode = SDL_SCANCODE_U;
+			break;
+		case KB_LETTERS::V:
+			scancode = SDL_SCANCODE_V;
+			break;
+		case KB_LETTERS::W:
+			scancode = SDL_SCANCODE_W;
+			break;
+		case KB_LETTERS::X:
+			scancode = SDL_SCANCODE_X;
+			break;
+		case KB_LETTERS::Y:
+			scancode = SDL_SCANCODE_Y;
+			break;
+		case KB_LETTERS::Z:
+			scancode = SDL_SCANCODE_Z;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -773,73 +792,73 @@ namespace Input {
 
 		switch (number) {
 		case KB_NUMBERS::Num1:
-				scancode = SDL_SCANCODE_1;
-				break;
-			case KB_NUMBERS::Num2:
-				scancode = SDL_SCANCODE_2;
-				break;
-			case KB_NUMBERS::Num3:
-				scancode = SDL_SCANCODE_3;
-				break;
-			case KB_NUMBERS::Num4:
-				scancode = SDL_SCANCODE_4;
-				break;
-			case KB_NUMBERS::Num5:
-				scancode = SDL_SCANCODE_5;
-				break;
-			case KB_NUMBERS::Num6:
-				scancode = SDL_SCANCODE_6;
-				break;
-			case KB_NUMBERS::Num7:
-				scancode = SDL_SCANCODE_7;
-				break;
-			case KB_NUMBERS::Num8:
-				scancode = SDL_SCANCODE_8;
-				break;
-			case KB_NUMBERS::Num9:
-				scancode = SDL_SCANCODE_9;
-				break;
-			case KB_NUMBERS::Num0:
-				scancode = SDL_SCANCODE_0;
-				break;
-			case KB_NUMBERS::F1:
-				scancode = SDL_SCANCODE_F1;
-				break;
-			case KB_NUMBERS::F2:
-				scancode = SDL_SCANCODE_F2;
-				break;
-			case KB_NUMBERS::F3:
-				scancode = SDL_SCANCODE_F3;
-				break;
-			case KB_NUMBERS::F4:
-				scancode = SDL_SCANCODE_F4;
-				break;
-			case KB_NUMBERS::F5:
-				scancode = SDL_SCANCODE_F5;
-				break;
-			case KB_NUMBERS::F6:
-				scancode = SDL_SCANCODE_F6;
-				break;
-			case KB_NUMBERS::F7:
-				scancode = SDL_SCANCODE_F7;
-				break;
-			case KB_NUMBERS::F8:
-				scancode = SDL_SCANCODE_F8;
-				break;
-			case KB_NUMBERS::F9:
-				scancode = SDL_SCANCODE_F9;
-				break;
-			case KB_NUMBERS::F10:
-				scancode = SDL_SCANCODE_F10;
-				break;
-			case KB_NUMBERS::F11:
-				scancode = SDL_SCANCODE_F11;
-				break;
-			case KB_NUMBERS::F12:
-				scancode = SDL_SCANCODE_F12;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_1;
+			break;
+		case KB_NUMBERS::Num2:
+			scancode = SDL_SCANCODE_2;
+			break;
+		case KB_NUMBERS::Num3:
+			scancode = SDL_SCANCODE_3;
+			break;
+		case KB_NUMBERS::Num4:
+			scancode = SDL_SCANCODE_4;
+			break;
+		case KB_NUMBERS::Num5:
+			scancode = SDL_SCANCODE_5;
+			break;
+		case KB_NUMBERS::Num6:
+			scancode = SDL_SCANCODE_6;
+			break;
+		case KB_NUMBERS::Num7:
+			scancode = SDL_SCANCODE_7;
+			break;
+		case KB_NUMBERS::Num8:
+			scancode = SDL_SCANCODE_8;
+			break;
+		case KB_NUMBERS::Num9:
+			scancode = SDL_SCANCODE_9;
+			break;
+		case KB_NUMBERS::Num0:
+			scancode = SDL_SCANCODE_0;
+			break;
+		case KB_NUMBERS::F1:
+			scancode = SDL_SCANCODE_F1;
+			break;
+		case KB_NUMBERS::F2:
+			scancode = SDL_SCANCODE_F2;
+			break;
+		case KB_NUMBERS::F3:
+			scancode = SDL_SCANCODE_F3;
+			break;
+		case KB_NUMBERS::F4:
+			scancode = SDL_SCANCODE_F4;
+			break;
+		case KB_NUMBERS::F5:
+			scancode = SDL_SCANCODE_F5;
+			break;
+		case KB_NUMBERS::F6:
+			scancode = SDL_SCANCODE_F6;
+			break;
+		case KB_NUMBERS::F7:
+			scancode = SDL_SCANCODE_F7;
+			break;
+		case KB_NUMBERS::F8:
+			scancode = SDL_SCANCODE_F8;
+			break;
+		case KB_NUMBERS::F9:
+			scancode = SDL_SCANCODE_F9;
+			break;
+		case KB_NUMBERS::F10:
+			scancode = SDL_SCANCODE_F10;
+			break;
+		case KB_NUMBERS::F11:
+			scancode = SDL_SCANCODE_F11;
+			break;
+		case KB_NUMBERS::F12:
+			scancode = SDL_SCANCODE_F12;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -852,52 +871,52 @@ namespace Input {
 
 		switch (specialKey) {
 		case KB_SPECIALKEYS::RETURN:
-				scancode = SDL_SCANCODE_RETURN;
-				break;
-			case KB_SPECIALKEYS::ESCAPE:
-				scancode = SDL_SCANCODE_ESCAPE;
-				break;
-			case KB_SPECIALKEYS::BACKSPACE:
-				scancode = SDL_SCANCODE_BACKSPACE;
-				break;
-			case KB_SPECIALKEYS::TAB:
-				scancode = SDL_SCANCODE_TAB;
-				break;
-			case KB_SPECIALKEYS::SPACE:
-				scancode = SDL_SCANCODE_SPACE;
-				break;
-			case KB_SPECIALKEYS::RIGHT:
-				scancode = SDL_SCANCODE_RIGHT;
-				break;
-			case KB_SPECIALKEYS::LEFT:
-				scancode = SDL_SCANCODE_LEFT;
-				break;
-			case KB_SPECIALKEYS::DOWN:
-				scancode = SDL_SCANCODE_DOWN;
-				break;
-			case KB_SPECIALKEYS::UP:
-				scancode = SDL_SCANCODE_UP;
-				break;
-			case KB_SPECIALKEYS::LCTRL:
-				scancode = SDL_SCANCODE_LCTRL;
-				break;
-			case KB_SPECIALKEYS::LSHIFT:
-				scancode = SDL_SCANCODE_LSHIFT;
-				break;
-			case KB_SPECIALKEYS::LALT:
-				scancode = SDL_SCANCODE_LALT;
-				break;
-			case KB_SPECIALKEYS::RCTRL:
-				scancode = SDL_SCANCODE_RCTRL;
-				break;
-			case KB_SPECIALKEYS::RSHIFT:
-				scancode = SDL_SCANCODE_RSHIFT;
-				break;
-			case KB_SPECIALKEYS::RALT:
-				scancode = SDL_SCANCODE_RALT;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_RETURN;
+			break;
+		case KB_SPECIALKEYS::ESCAPE:
+			scancode = SDL_SCANCODE_ESCAPE;
+			break;
+		case KB_SPECIALKEYS::BACKSPACE:
+			scancode = SDL_SCANCODE_BACKSPACE;
+			break;
+		case KB_SPECIALKEYS::TAB:
+			scancode = SDL_SCANCODE_TAB;
+			break;
+		case KB_SPECIALKEYS::SPACE:
+			scancode = SDL_SCANCODE_SPACE;
+			break;
+		case KB_SPECIALKEYS::RIGHT:
+			scancode = SDL_SCANCODE_RIGHT;
+			break;
+		case KB_SPECIALKEYS::LEFT:
+			scancode = SDL_SCANCODE_LEFT;
+			break;
+		case KB_SPECIALKEYS::DOWN:
+			scancode = SDL_SCANCODE_DOWN;
+			break;
+		case KB_SPECIALKEYS::UP:
+			scancode = SDL_SCANCODE_UP;
+			break;
+		case KB_SPECIALKEYS::LCTRL:
+			scancode = SDL_SCANCODE_LCTRL;
+			break;
+		case KB_SPECIALKEYS::LSHIFT:
+			scancode = SDL_SCANCODE_LSHIFT;
+			break;
+		case KB_SPECIALKEYS::LALT:
+			scancode = SDL_SCANCODE_LALT;
+			break;
+		case KB_SPECIALKEYS::RCTRL:
+			scancode = SDL_SCANCODE_RCTRL;
+			break;
+		case KB_SPECIALKEYS::RSHIFT:
+			scancode = SDL_SCANCODE_RSHIFT;
+			break;
+		case KB_SPECIALKEYS::RALT:
+			scancode = SDL_SCANCODE_RALT;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -923,7 +942,7 @@ namespace Input {
 
 		if (scancode >= SDL_SCANCODE_F1 && scancode <= SDL_SCANCODE_F12) {
 
-			return (KB_NUMBERS) ((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
+			return (KB_NUMBERS)((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
 		}
 
 		return KB_NUMBERS::Count;
@@ -932,11 +951,11 @@ namespace Input {
 	Input::InputManager::KB_SPECIALKEYS Input::InputManager::ConvertToSpecialKeys(const SDL_Scancode& scancode)
 	{
 		switch (scancode) {
-		case SDL_SCANCODE_RETURN :
+		case SDL_SCANCODE_RETURN:
 			return KB_SPECIALKEYS::RETURN;
 		case SDL_SCANCODE_ESCAPE:
 			return KB_SPECIALKEYS::ESCAPE;
-		case SDL_SCANCODE_BACKSPACE :
+		case SDL_SCANCODE_BACKSPACE:
 			return KB_SPECIALKEYS::BACKSPACE;
 		case SDL_SCANCODE_TAB:
 			return KB_SPECIALKEYS::TAB;
