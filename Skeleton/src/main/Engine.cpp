@@ -56,7 +56,7 @@ bool Engine::init() {
 	sceneManager = ECS::SceneManager::init();
 	if (!sceneManager->Valid()) return false;
 
-	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync, data.fullscreen, data.showCursor);
+	rendererManager = Renderer::RendererManager::init(data.windowTitle, data.windowSize.getX(), data.windowSize.getY(), data.vsync, data.fullscreen, data.showCursor, data.bgColor, data.bgAlpha);
 	if (!rendererManager->Valid()) return false;
 
 	physicsManager = Physics::PhysicsManager::init(data.gravity, data.layers, data.collisionMatrix);
@@ -159,7 +159,7 @@ void Engine::update() {
 		// Render
 		overlayManager->Update();
 		rendererManager->SetRenderTarget(false);
-		rendererManager->clearRenderer(Utilities::Color(131, 92, 243));
+		rendererManager->clearRenderer();
 		renderManager->Render();
 		physicsManager->debugDraw();
 		overlayManager->Render();

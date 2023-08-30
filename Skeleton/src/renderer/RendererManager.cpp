@@ -6,13 +6,16 @@
 
 namespace Renderer {
 
-	RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400, true, false, true) {}
+	RendererManager::RendererManager() : RendererManager("SDL Window", 600, 400, true, false, true, "black", 255) {}
 
-	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync, bool fullscreen, bool showcursor) {
+	RendererManager::RendererManager(const std::string& title, int w, int h, bool vsync, bool fullscreen, bool showcursor, cString bgColor, int bgAlpha) {
 		windowTitle = title;
 		width = w;  height = h;
 		targetTexture = nullptr;
 		icon = nullptr;
+
+		this->bgColor = Utilities::Color::CreateColor(bgColor);
+		this->bgAlpha = bgAlpha;
 
 		valid = initSDL(vsync, fullscreen, showcursor);
 	}
@@ -173,8 +176,8 @@ namespace Renderer {
 			Console::Output::PrintError("Show cursor error", SDL_GetError());
 	}
 
-	void RendererManager::clearRenderer(cColor bg) {
-		SDL_SetRenderDrawColor(renderer, bg.r, bg.g, bg.b, 255);
+	void RendererManager::clearRenderer() {
+		SDL_SetRenderDrawColor(renderer, bgColor.r, bgColor.g, bgColor.b, bgAlpha);
 		SDL_RenderClear(renderer);
 	}
 

@@ -51,6 +51,7 @@ namespace ShyEditor {
 		data.vsync = true;
 		data.showCursor = true;
 		data.fullscreen = false;
+		data.bgColor = PreferencesColor();
 
 		// Physics
 		data.gravity_x = 0;
@@ -167,6 +168,13 @@ namespace ShyEditor {
 		ImGui::Text("Start showing cursor");
 		ImGui::SameLine();
 		ImGui::Checkbox("##showcursor", &data.showCursor);
+
+
+		// Background Color
+		ImGui::Text("Background Color");
+		ImGui::SameLine();
+		ImGui::ColorEdit4("##background", (float*)&data.bgColor);
+
 
 		ImGui::Unindent();
 
@@ -434,6 +442,9 @@ namespace ShyEditor {
 		root["fullScreen"] = data.fullscreen;
 		root["showcursor"] = data.showCursor;
 
+		root["bgColor"] = std::to_string((int)(data.bgColor.r * 255)) + ", " + std::to_string((int)(data.bgColor.g * 255)) + ", " + std::to_string((int)(data.bgColor.b * 255));
+		root["bgAlpha"] = (int)(data.bgColor.a * 255);
+
 		// Physics
 		root["gravity"] = std::to_string(data.gravity_x) + ", " + std::to_string(data.gravity_y);
 		root["layers"] = data.layers;
@@ -533,7 +544,7 @@ namespace ShyEditor {
 
 		std::string size = preferences["windowSize"];
 		std::stringstream windowSize(size);
-		std::string x, y;
+		std::string x, y, z;
 		std::getline(windowSize, x, ',');
 		std::getline(windowSize, y, ',');
 
@@ -544,6 +555,16 @@ namespace ShyEditor {
 		instance->data.fullscreen = preferences["fullScreen"];
 		instance->data.showCursor = preferences["showcursor"];
 
+		std::string bgColor = preferences["bgColor"];
+		std::stringstream backgroundColor(bgColor);
+		std::getline(backgroundColor, x, ',');
+		std::getline(backgroundColor, y, ',');
+		std::getline(backgroundColor, z, ',');
+
+		instance->data.bgColor.r = std::stoi(x) / 255.0f;
+		instance->data.bgColor.g = std::stoi(y) / 255.0f;
+		instance->data.bgColor.b = std::stoi(z) / 255.0f;
+		instance->data.bgColor.a = preferences["bgAlpha"] / 255.0f;
 
 		// Physics
 		std::string gravity = preferences["gravity"];

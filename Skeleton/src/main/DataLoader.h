@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <Vector2D.h>
+#include <Color.h>
 
 
 class DataLoader {
@@ -34,6 +35,8 @@ public:
 	bool vsync;
 	bool fullscreen;
 	bool showCursor;
+	std::string bgColor;
+	int bgAlpha;
 
 	// Physics
 	bool debugPhysics;
