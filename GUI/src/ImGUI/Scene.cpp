@@ -30,6 +30,9 @@ namespace ShyEditor {
 
 	Scene::Scene() : Window("Scene", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse) {
 
+		sceneScale = 1;
+		scenePosition_x = scenePosition_y = 0;
+
 		Editor* editor = Editor::GetInstance();
 		editor->SetScene(this);
 
@@ -78,6 +81,22 @@ namespace ShyEditor {
 		overlays.clear();
 
 		delete sceneCamera;
+	}
+
+	float& Scene::GetSceneScale()
+	{
+		return sceneScale;
+	}
+
+	ImVec2 Scene::GetScenePosition()
+	{
+		return ImVec2(scenePosition_x, scenePosition_y);
+	}
+
+	void Scene::SetCameraPosition(float x, float y)
+	{
+		scenePosition_x = x;
+		scenePosition_y = y;
 	}
 
 	Entity* Scene::AddEntity(std::string path) {
@@ -209,6 +228,7 @@ namespace ShyEditor {
 		sceneName = p.filename().stem().string();
 		name = sceneName.c_str();
 
+
 		std::ifstream inputFile(scenePath);
 
 		if (!inputFile.good() || !nlohmann::ordered_json::accept(inputFile)) {
@@ -226,9 +246,22 @@ namespace ShyEditor {
 
 		Entity::unusedIds.clear();
 		Entity::lastId = 1;
-
 		// Delete info of previous scene
 		DeleteContentInScene();
+
+		if (jsonData.contains("position"))
+		{
+			sscanf_s(jsonData["position"].get<std::string>().c_str(), "%f, %f", &scenePosition_x, &scenePosition_y);
+
+			scenePosition_x *= -1;
+			scenePosition_y *= -1;
+		}
+
+		if (jsonData.contains("scale"))
+		{
+			sceneScale = jsonData["scale"].get<float>();
+		}
+
 
 		if (!jsonData.contains("objects")) {
 			LogManager::LogError("The scene file has not the expected format.");
@@ -276,6 +309,10 @@ namespace ShyEditor {
 	}
 
 	void Scene::DeleteContentInScene() {
+
+		sceneScale = 1;
+		scenePosition_x = scenePosition_y = 0;
+
 		// Delete info of previous scene
 		selectedEntity = nullptr;
 
@@ -1049,10 +1086,15 @@ namespace ShyEditor {
 
 		sceneCamera->CenterPosition(position.x, position.y);
 
-		x = position.x - gameSizeX * 0.5f * cameraScale;
-		y = position.y - gameSizeY * 0.5f * cameraScale;
-		w = width;
-		h = height;
+		float invSceneScale = 1 / sceneScale;
+
+		float w_ = width  * invSceneScale;
+		float h_ = height * invSceneScale;
+
+		x = position.x - gameSizeX * 0.5f * cameraScale + scenePosition_x * cameraScale + (width  - w_) * 0.5f;
+		y = position.y - gameSizeY * 0.5f * cameraScale + scenePosition_y * cameraScale + (height - h_) * 0.5f;
+		w = w_;
+		h = h_;
 	}
 
 	bool Scene::PointInsideHorizontalSegment(int x, int y, int sx, int sy, int w, int thickness)
@@ -1136,6 +1178,9 @@ namespace ShyEditor {
 		nlohmann::ordered_json j;
 
 		j["name"] = sceneName;
+
+		j["position"] = std::to_string(-scenePosition_x) + ", " + std::to_string(-scenePosition_y);
+		j["scale"] = sceneScale;
 
 		nlohmann::ordered_json entitiesJson = nlohmann::json::array();
 		for (const auto& pair : entities) {
