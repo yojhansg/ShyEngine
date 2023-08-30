@@ -56,6 +56,11 @@ void Scripting::ScriptFunctionality::Create_EntityWithOverlay(cstring entName) {
 	ECS::PrefabManager::instance()->InstantiatePrefabWithOverlay(entName, ECS::SceneManager::instance()->getCurrentScene());
 }
 
+void Scripting::ScriptFunctionality::Destroy_Entity(ECS::Entity* ent) {
+
+	ent->removeEntity();
+}
+
 std::string Scripting::ScriptFunctionality::Entity_Name(ECS::Entity* ent)
 {
 	return ent->getEntityName();

@@ -39,7 +39,7 @@ publish:
 	void Create_EntityWithTransform(cstring entName);
 	void Create_EntityWithOverlay(cstring entName);
 
-	void Destroy_Entity();
+	void Destroy_Entity(ECS::Entity* ent);
 
 	//TODO: Name y current name no se entiende lo que es
 	std::string Entity_Name(ECS::Entity* ent);
