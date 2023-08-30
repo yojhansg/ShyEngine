@@ -85,6 +85,7 @@ public:
 	*/
 	static void HelpMarker(const std::string& str);
 	static std::string Beautify(const std::string& str);
+
 private:
 
 	Editor();
@@ -103,6 +104,10 @@ private:
 
 	void CreateWindows();
 	bool SplashScreen();
+
+	// Imgui.ini configuration
+	void StoreImGuiIniFile();
+	void LoadImGuiIniFile();
 
 	static Editor* instance;
 

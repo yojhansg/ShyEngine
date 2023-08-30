@@ -112,6 +112,7 @@ void Editor::Loop() {
 		SDL_SetWindowPosition(instance->window, _Centered);
 
 		// Init the ImGUI windows in the editor
+		instance->LoadImGuiIniFile();
 		instance->CreateWindows();
 	}
 
@@ -129,7 +130,7 @@ void Editor::Loop() {
 		ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
 		ShyEditor::Preferences::StoreData();
 		ShyEditor::PrefabManager::SavePrefabs();
-
+		instance->StoreImGuiIniFile();
 	}
 
 }
@@ -468,6 +469,28 @@ void Editor::HandleInput()
 		for (auto window : windows)
 			window->HandleInput(&event);
 	}
+}
+
+void Editor::StoreImGuiIniFile() {
+
+	std::string path = projecInfo->path + "\\UserSettings\\imgui.ini";
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = NULL;
+
+	ImGui::SaveIniSettingsToDisk(path.c_str());
+}
+
+void Editor::LoadImGuiIniFile() {
+
+	std::string path = projecInfo->path + "\\UserSettings\\imgui.ini";
+
+	if (!std::filesystem::exists(path)) return;
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = NULL;
+
+	ImGui::LoadIniSettingsFromDisk(path.c_str());
 }
 
 void Editor::ChangeEditorState(const EDITOR_STATE& state) {

@@ -715,6 +715,12 @@ namespace ShyEditor {
             return false;
         }
 
+        std::filesystem::create_directories(root + "\\UserSettings", ec);
+        if (ec) {
+            errorMessage = L"Error while creating the project user settings folder.";
+            return false;
+        }
+
         for (int i = 0; i < assetsFolders.size(); i++) {
 
             std::filesystem::create_directories(root + "\\Assets" + assetsFolders[i], ec);
