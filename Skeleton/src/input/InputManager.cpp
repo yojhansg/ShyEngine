@@ -28,9 +28,7 @@ namespace Input {
 		return valid;
 	}
 
-	InputManager::~InputManager() {
-
-	}
+	InputManager::~InputManager() {}
 
 	bool InputManager::handleInput(SDL_Event& e) {
 		clearState();
@@ -149,50 +147,124 @@ namespace Input {
 
 	// Letter
 	bool InputManager::IsLetterPressed(int l) {
+
+		if (l >= (int) KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
 		return letters[l] == ButtonState::JustDown;
 	}
 
 	bool InputManager::IsLetterDown(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
 		return letters[l] == ButtonState::JustDown || letters[l] == ButtonState::Down;
 	}
 
 	bool InputManager::IsLetterUp(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
 		return letters[l] == ButtonState::Up || letters[l] == ButtonState::None;
 	}
 
 	bool InputManager::IsLetterReleased(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
 		return letters[l] == ButtonState::Up;
 	}
 
 	// Number
 	bool InputManager::IsNumberPressed(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
 		return numbers[n] == ButtonState::JustDown;
 	}
+
 	bool InputManager::IsNumberDown(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
 		return numbers[n] == ButtonState::JustDown || numbers[n] == ButtonState::Down;
 	}
+
 	bool InputManager::IsNumberUp(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
 		return numbers[n] == ButtonState::Up || numbers[n] == ButtonState::None;
 	}
 
 	bool InputManager::IsNumberReleased(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
 		return numbers[n] == ButtonState::Up;
 	}
 
 	// Special Key
 	bool InputManager::IsSpecialKeyPressed(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
 		return specialKeys[s] == ButtonState::JustDown;
 	}
 
 	bool InputManager::IsSpecialKeyDown(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
 		return specialKeys[s] == ButtonState::JustDown || specialKeys[s] == ButtonState::Down;
 	}
 
 	bool InputManager::IsSpecialKeyUp(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
 		return specialKeys[s] == ButtonState::Up || specialKeys[s] == ButtonState::None;
 	}
 
 	bool InputManager::IsSpecialKeyReleased(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
 		return specialKeys[s] == ButtonState::Up;
 	}
 
@@ -329,18 +401,42 @@ namespace Input {
 	}
 
 	bool InputManager::IsMouseButtonDown(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return mbState_[b];
 	}
 
 	bool InputManager::IsMouseButtonUp(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return !mbState_[b];
 	}
 
 	bool InputManager::IsMouseButtonPressed(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return isMouseButtonEventDown_ && mbState_[b];
 	}
 
 	bool InputManager::IsMouseButtonReleased(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return isMouseButtonEventUp_ && !mbState_[b];
 	}
 
@@ -568,8 +664,13 @@ namespace Input {
 
 	bool InputManager::IsControllerButtonPressedWithId(int button, int id) {
 
-		if (id >= numControllersConnected) {
-			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
 			return false;
 		}
 
@@ -578,8 +679,13 @@ namespace Input {
 
 	bool InputManager::IsControllerButtonDownWithId(int button, int id) {
 
-		if (id >= numControllersConnected) {
-			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
 			return false;
 		}
 
@@ -588,8 +694,13 @@ namespace Input {
 
 	bool InputManager::IsControllerButtonReleasedWithId(int button, int id) {
 
-		if (id >= numControllersConnected) {
-			Console::Output::PrintWarning("Controller Events", "There is no controller with the specified id");
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
 			return false;
 		}
 
@@ -597,42 +708,102 @@ namespace Input {
 	}
 
 	float InputManager::GetLeftTriggerValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].triggers.getX();
 	}
 
 	float InputManager::GetRightTriggerValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].triggers.getY();
 	}
 
 	bool InputManager::IsLeftTriggerDownWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].triggers.getX() > 0;
 	}
 
 	bool InputManager::IsRightTriggerDownWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].triggers.getY() > 0;
 	}
 
 	float InputManager::GetLeftStickHorizontalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.first.getX();
 	}
 
 	float InputManager::GetLeftStickVerticalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.first.getY();
 	}
 
 	float InputManager::GetRightStickHorizontalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.second.getX();
 	}
 
 	float InputManager::GetRightStickVerticalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.second.getY();
 	}
 
 	bool InputManager::HasLeftStickMovedWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.first.getX() > 0 || controllers[id].joysticks.first.getY() > 0;
 	}
 
 	bool InputManager::HasRightStickMovedWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
 		return controllers[id].joysticks.second.getX() > 0 || controllers[id].joysticks.second.getY() > 0;
 	}
 

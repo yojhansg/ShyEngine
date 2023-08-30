@@ -28,7 +28,7 @@ namespace Input {
 	public:
 
 		enum class MOUSEBUTTON : uint8_t {
-			LEFT, MIDDLE, RIGHT
+			LEFT, MIDDLE, RIGHT, Count
 		};
 
 		enum class CONTROLLERSTICK : uint8_t {
@@ -58,18 +58,15 @@ namespace Input {
 		// Keyboard
 
 		enum class KB_LETTERS {
-			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
-			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25, Count
+			A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, Count
 		};
 
 		enum class KB_NUMBERS {
-			Num1 = 0, Num2 = 1, Num3 = 2, Num4 = 3, Num5 = 4, Num6 = 5, Num7 = 6, Num8 = 7, Num9 = 8, Num0 = 9, F1 = 10, F2 = 11,
-			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21, Count
+			Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9, Num0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, Count
 		};
 
 		enum class KB_SPECIALKEYS {
-			RETURN = 0, ESCAPE = 1, BACKSPACE = 2, TAB = 3, SPACE = 4, RIGHT = 5, LEFT = 6, DOWN = 7, UP = 8, LCTRL = 9, LSHIFT = 10,
-			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14, Count
+			RETURN, ESCAPE, BACKSPACE, TAB, SPACE, RIGHT, LEFT, DOWN, UP, LCTRL, LSHIFT, LALT, RCTRL, RSHIFT, RALT, Count
 		};
 
 		~InputManager();
