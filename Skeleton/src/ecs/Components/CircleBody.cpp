@@ -14,6 +14,8 @@ namespace ECS {
 
 		radius = 0.5f;
 
+		size = { 1, 1 };
+
 		shorterAxis = false;
 
 	}
@@ -27,8 +29,13 @@ namespace ECS {
 		Image* image = this->getEntity()->getComponent<Image>();
 
 		// Collider radius = max between imagen width and height if exists
-		if (image != nullptr)
-			size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
+		if (image != nullptr) {
+
+			Utilities::Vector2D imageSize = { image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor };
+
+			if (radius == 0)
+				size.set(imageSize);
+		}
 
 
 		auto scale = transform->GetWorldScale();

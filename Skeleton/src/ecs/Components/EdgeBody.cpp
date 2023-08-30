@@ -11,6 +11,8 @@ namespace ECS {
 
 		shape = nullptr;
 
+		size = { 1, 1 };
+
 		vertex1 = { 0, 0 };
 		vertex2 = { 0, 0 };
 	}

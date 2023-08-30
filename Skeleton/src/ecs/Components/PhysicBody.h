@@ -122,7 +122,6 @@ namespace ECS {
         // Box2d
         b2World* world;
 
-        reflect Vector2D size;
         reflect Vector2D offSet;
 
         reflect int bodyType;
@@ -132,6 +131,7 @@ namespace ECS {
         reflect float bounciness;
         reflect bool trigger;   
         reflect bool freezeRotation;
+        reflect float gravityScale;
 
         // Collision Layer
         reflect std::string layerName;

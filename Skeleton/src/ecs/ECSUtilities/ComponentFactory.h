@@ -5,7 +5,7 @@
 #include <unordered_map>
 namespace ECS { class Component; }
 
-//Creation time : Wed Aug 30 04:17:34 2023
+//Creation time : Wed Aug 30 17:49:05 2023
 
 #define ECSreflection_Version 1.0
 
@@ -33,6 +33,7 @@ typedef ECS::Component*(ComponentFactory::*ComponentCreation)();
 	ECS::Component* CreateOverlayImage();
 	ECS::Component* CreateOverlayText();
 	ECS::Component* CreateParticleSystem();
+	ECS::Component* CreatePhysicalMovement();
 	ECS::Component* CreateSoundEmitter();
 	ECS::Component* CreateTransform();
 	ECS::Component* CreateScript();

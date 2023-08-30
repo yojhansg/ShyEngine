@@ -11,6 +11,7 @@ namespace ECS {
 	BoxBody::BoxBody() {
 	
 		shape = nullptr;
+		size = { 1, 1 };
 	}
 
 	void BoxBody::init() {
@@ -22,8 +23,13 @@ namespace ECS {
 		Image* image = this->getEntity()->getComponent<Image>();
 
 		// Collider size = Image size if Image component exists in the entity
-		if (image != nullptr)
-			size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
+		if (image != nullptr) {
+
+			Utilities::Vector2D imageSize = { image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor };
+
+			if (size.getX() == 0 && size.getY() == 0)
+				size.set(imageSize);
+		}
 
 		shape->SetAsBox(size.getX() / 2.0f, size.getY() / 2.0f);
 

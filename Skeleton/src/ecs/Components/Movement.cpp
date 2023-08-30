@@ -1,6 +1,8 @@
 #include "Movement.h"
 #include "Entity.h"
 #include "Transform.h"
+#include "BoxBody.h"
+#include "CircleBody.h"
 
 #include "ConsoleManager.h"
 #include "InputManager.h"
@@ -13,9 +15,11 @@ namespace ECS {
 	Movement::Movement() {
 		im = nullptr;
 		transform = nullptr;
+		body = nullptr;
 
 		velocity = 0.0f;
 		clampDiagonalVelocity = true;
+		usePhysics = false;
 	}
 
 	void Movement::init() {
@@ -30,16 +34,43 @@ namespace ECS {
 			return;
 		}
 
+		if (usePhysics) {
+
+			BoxBody* bBody = this->getEntity()->getComponent<BoxBody>();
+			CircleBody* cBody = this->getEntity()->getComponent<CircleBody>();
+
+			if (bBody == nullptr && cBody == nullptr) {
+				printError("Missing physic body (Circle o Box)", "The entity must contain a physical body in case you want it to move with physics.");
+				this->remove();
+				return;
+			}
+
+			if (bBody != nullptr)
+				body = bBody;
+			else if (cBody != nullptr)
+				body = cBody;
+		}
+
 	}
 
 	void Movement::update(float dt) {
 
-		Utilities::Vector2D movement = { im->HorizontalMovement(), im->VerticalMovement() };
+		direction = { im->HorizontalMovement(), im->VerticalMovement() };
 
-		if (clampDiagonalVelocity && movement.magnitude() > 0)
-			movement = movement.normalize();
+		if (clampDiagonalVelocity && direction.magnitude() > 0)
+			direction = direction.normalize();
 
-		transform->Translate(movement * dt * velocity);
+		if (usePhysics) return;
+
+		transform->Translate(direction * dt * velocity);
+
+	}
+
+	void Movement::fixedUpdate(float fixedDt) {
+
+		if (!usePhysics) return;
+		
+		body->setLinearVelocity(direction.getX() * fixedDt * velocity, direction.getY() * fixedDt * velocity);
 
 	}
 

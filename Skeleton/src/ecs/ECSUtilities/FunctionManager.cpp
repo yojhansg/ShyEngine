@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Wed Aug 30 04:17:34 2023
+//Creation time: Wed Aug 30 17:49:05 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -30,6 +30,7 @@
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
 #include <Components/ParticleSystem.h>
+#include <Components/PhysicalMovement.h>
 #include <Components/PhysicBody.h>
 #include <Components/SoundEmitter.h>
 #include <Components/Transform.h>
@@ -62,6 +63,10 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Animation_GetAnimation",Animation_GetAnimation);
 	map.emplace("Animation_SetAnimationLenght",Animation_SetAnimationLenght);
 	map.emplace("Animation_getAnimationLenght",Animation_getAnimationLenght);
+	map.emplace("BoxBody_getSize",BoxBody_getSize);
+	map.emplace("BoxBody_setSize",BoxBody_setSize);
+	map.emplace("BoxBody_setMass",BoxBody_setMass);
+	map.emplace("BoxBody_getArea",BoxBody_getArea);
 	map.emplace("Image_getTextureWidth",Image_getTextureWidth);
 	map.emplace("Image_getTextureHeight",Image_getTextureHeight);
 	map.emplace("Image_setSrcRect",Image_setSrcRect);
@@ -568,6 +573,81 @@ Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable
 		return Scripting::Variable::Null();
 	}
 	int ret = self->getAnimationLenght();
+	return ret;
+}
+Scripting::Variable BoxBody_getSize(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_getSize", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	BoxBody* self = vec[0].value.entity->getComponent<BoxBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_getSize", vec[0].value.entity->getEntityName(), BoxBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getSize();
+	return ret;
+}
+Scripting::Variable BoxBody_setSize(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setSize", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setSize", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[2].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setSize", std::to_string(2), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	BoxBody* self = vec[0].value.entity->getComponent<BoxBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setSize", vec[0].value.entity->getEntityName(), BoxBody);
+		return Scripting::Variable::Null();
+	}
+	self->setSize(vec[1].value.Float, vec[2].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable BoxBody_setMass(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setMass", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setMass", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	BoxBody* self = vec[0].value.entity->getComponent<BoxBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_setMass", vec[0].value.entity->getEntityName(), BoxBody);
+		return Scripting::Variable::Null();
+	}
+	self->setMass(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable BoxBody_getArea(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_getArea", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	BoxBody* self = vec[0].value.entity->getComponent<BoxBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "BoxBody_getArea", vec[0].value.entity->getEntityName(), BoxBody);
+		return Scripting::Variable::Null();
+	}
+	float ret = self->getArea();
 	return ret;
 }
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec){

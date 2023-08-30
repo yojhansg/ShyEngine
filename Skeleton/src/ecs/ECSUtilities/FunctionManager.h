@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Wed Aug 30 04:17:34 2023
+//Creation time : Wed Aug 30 17:49:05 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -29,6 +29,10 @@ Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& ve
 Scripting::Variable Animation_GetAnimation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_SetAnimationLenght(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_getAnimationLenght(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable BoxBody_getSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable BoxBody_setSize(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable BoxBody_setMass(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable BoxBody_getArea(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_getTextureWidth(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_getTextureHeight(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Image_setSrcRect(std::vector<Scripting::Variable>const& vec);

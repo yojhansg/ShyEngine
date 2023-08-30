@@ -12,6 +12,7 @@
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
 #include "Components/ParticleSystem.h"
+#include "Components/PhysicalMovement.h"
 #include "Components/SoundEmitter.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
@@ -32,6 +33,7 @@ ComponentFactory::ComponentFactory(){
 	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
 	components["OverlayText"] = &ComponentFactory::CreateOverlayText;
 	components["ParticleSystem"] = &ComponentFactory::CreateParticleSystem;
+	components["PhysicalMovement"] = &ComponentFactory::CreatePhysicalMovement;
 	components["SoundEmitter"] = &ComponentFactory::CreateSoundEmitter;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
@@ -87,6 +89,10 @@ ComponentFactory::ComponentFactory(){
 }
 	ECS::Component* ComponentFactory::CreateParticleSystem(){
 		return new ECS::ParticleSystem();
+
+}
+	ECS::Component* ComponentFactory::CreatePhysicalMovement(){
+		return new ECS::PhysicalMovement();
 
 }
 	ECS::Component* ComponentFactory::CreateSoundEmitter(){
