@@ -42,5 +42,6 @@ namespace ShyEditor {
 	private:
 
 		Entity* copiedEntity;
+		Entity* cutEntity;
 	};
 }

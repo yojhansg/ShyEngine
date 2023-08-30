@@ -27,12 +27,18 @@ namespace ShyEditor {
 		acceptAssetDrop = true;
 
 		copiedEntity = nullptr;
+		cutEntity = nullptr;
+
 	}
 
 	Hierarchy::~Hierarchy()
 	{
 		if (copiedEntity != nullptr) {
 			delete copiedEntity;
+		}
+
+		if (cutEntity != nullptr) {
+			delete cutEntity;
 		}
 
 		Window::~Window();
@@ -200,21 +206,33 @@ namespace ShyEditor {
 					}
 		
 					copiedEntity = new Entity(*selectedEntity);
+					cutEntity = nullptr;
 
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_V) {
+					Entity* entityToPaste;
 
-					if (copiedEntity == nullptr) return;
+					if (copiedEntity != nullptr) {
+						entityToPaste = copiedEntity;
+					}
+					else if (cutEntity != nullptr) {
+						entityToPaste = cutEntity;
+					}
+					else return;
 
-					if (copiedEntity->IsTransform()) {
-						scene->AddEntity(copiedEntity);
+					if (entityToPaste->IsTransform()) {
+						scene->AddEntity(entityToPaste);
 					}
 					else {
-						scene->AddOverlay(copiedEntity);
+						scene->AddOverlay(entityToPaste);
 					}
 
-					copiedEntity = new Entity(*copiedEntity);
+					if (copiedEntity != nullptr) {
+						copiedEntity = new Entity(*copiedEntity);
+					}
+					
+					cutEntity = nullptr;
 				}
 
 				if (event->key.keysym.scancode == SDL_SCANCODE_D) {
@@ -233,18 +251,34 @@ namespace ShyEditor {
 				if (event->key.keysym.scancode == SDL_SCANCODE_X) {
 					if (selectedEntity == nullptr) return;
 
-					if (copiedEntity != nullptr) {
-						Entity::unusedIds.push_back(copiedEntity->GetId());
-						delete copiedEntity;
+					if (cutEntity != nullptr) {
+						Entity::unusedIds.push_back(cutEntity->GetId());
+						delete cutEntity;
 					}
 
-					copiedEntity = new Entity(*selectedEntity);
+					cutEntity = new Entity(*selectedEntity);
+					copiedEntity = nullptr;
 
 					if (selectedEntity->IsTransform()) {
 						scene->GetEntities()[selectedEntity->GetId()]->ToDelete();
 					}
 					else {
-						scene->GetOverlays()[selectedEntity->GetId()]->ToDelete();
+						for (auto& overlay : scene->GetOverlays()) {
+							
+							if (overlay->GetId() == selectedEntity->GetId()) {
+								overlay->ToDelete();
+								break;
+							}
+
+							for (auto& child : overlay->GetChildren()) {
+								if (child.second->GetId() == selectedEntity->GetId()) {
+									child.second->ToDelete();
+									break;
+								}
+
+								break;
+							}
+						}
 					}
 				}
 
@@ -275,6 +309,10 @@ namespace ShyEditor {
 			destination->RemoveChild(source);
 
 			source->SetParent(destination->GetParent());
+			
+			// If we break the hierarchy, then this is not an instance of the prefab anymore
+			source->SetPrefabId(0);
+			PrefabManager::RemoveInstance(source);
 
 			if (source->GetParent() != nullptr) {
 				source->GetParent()->AddChild(source);
@@ -378,7 +416,7 @@ namespace ShyEditor {
 
 		ImGui::SameLine();
 
-		if (entity->IsPrefabInstance() || isParentFromPrefab(entity)) {
+		if (entity->IsPrefabInstance() || (entity->IsPrefabInstance() && isParentFromPrefab(entity))) {
 			ImGui::TextColored(ImVec4(0.831f, 0.168f, 0.604f, 1.0f) , entity->GetName().c_str());
 		}
 		else {

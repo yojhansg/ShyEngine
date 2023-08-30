@@ -101,6 +101,8 @@ namespace ShyEditor {
 
 		AssignId(this);
 
+		prefabId = 0;
+
 		if (entity.IsPrefab()) {
 			prefabId = entity.id;
 			PrefabManager::AddInstance(entity.id, id);
@@ -145,9 +147,7 @@ namespace ShyEditor {
 		previousMousePosY = entity.previousMousePosY;
 		waitingToDelete = entity.waitingToDelete;
 
-		if (entity.parent == nullptr) {
-			parent = nullptr;
-		}
+		parent = nullptr;
 
 		for (auto pair : entity.children) {
 			Entity* child = new Entity(*pair.second);
