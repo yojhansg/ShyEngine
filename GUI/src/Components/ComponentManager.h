@@ -6,7 +6,10 @@
 #include "ComponentInfo.h"
 
 template <typename T>
-using string_map = std::unordered_map<std::string, T>;
+using ordered_string_map = std::unordered_map<std::string, T>;
+
+template <typename T>
+using string_map = std::map<std::string, T>;
 
 namespace Components {
 
@@ -19,13 +22,18 @@ namespace Components {
 		static ComponentManager* instance;
 		static void EnsureInitialised();
 
+		/*
+			Para almacenar componentes usamos un mapa en lugar de un 'unordered_map'
+			para convervar el orden (alfabetico) de los componentes
+		*/
+
 		string_map<Component> components;
 		string_map<Component> managers;
 
 		static std::string scriptPath;
 		std::vector<Script> scripts;
 
-		string_map<std::string> info;
+		ordered_string_map<std::string> info;
 		string_map<std::vector<std::string>> enums;
 	public:
 

@@ -76,11 +76,11 @@ namespace Components {
 	}
 
 
-	std::unordered_map<std::string, Component>& ComponentManager::GetAllComponents() {
+	std::map<std::string, Component>& ComponentManager::GetAllComponents() {
 		return instance->components;
 	}
 
-	std::unordered_map<std::string, Component>& ComponentManager::GetAllManagers()
+	std::map<std::string, Component>& ComponentManager::GetAllManagers()
 	{
 		return instance->managers;
 	}
