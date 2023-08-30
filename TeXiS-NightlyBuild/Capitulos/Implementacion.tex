@@ -11,6 +11,8 @@
 %-------------------------------------------------------------------
 \label{cap4:sec:editor}
 
+%------------------------------------------------ GESTION DE ESCENAS --------------------------------------------
+
 \subsection{Gestión de Escenas}
 
 La clase \texttt{Scene} desempeña un papel de vital importancia en el editor, ya que asume la responsabilidad de gestionar las distintas escenas disponibles. 
@@ -63,6 +65,58 @@ desde diferentes perspectivas.
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
+
+%------------------------------------------------ ENTIDADES --------------------------------------------
+
+\section{Entidades}
+
+En el contexto del editor, las entidades son elementos fundamentales que componen la escena. Cada entidad se distingue por un identificador único asignado a 
+ella, lo que permite una diferenciación clara entre las diversas entidades presentes. Ademas, una entindad también pueden estar asociada con una Textura, 
+aunque esta asociación no es obligatoria, lo que significa que una entidad podría ser simplemente una entidad vacía. Destacar la existencia también del componente
+\texttt{Image}, que permite modificar la ruta de la imagen asociada a la textura.
+
+
+\subsection{Métodos relevantes de la clase \texttt{Entidad}}
+
+\begin{itemize}
+    \item \texttt{AssignId()}: El método \texttt{AssignId()} gestiona la asignación y desasignación de identificadores a las entidades. 
+    Esto permite que cada entidad tenga un identificador único que la distinga de otras en la escena.
+    
+    \item \texttt{RenderTransform()}: Con el método \texttt{RenderTransform()}, las entidades se presentan en la pantalla, lo que implica su visualización en la 
+    ventana principal del editor.
+    
+    \item \texttt{Update()}: El método \texttt{Update()} se encarga de actualizar ciertos atributos de la entidad en cada frame. Esta función es esencial para 
+    mantener la coherencia y la actualización constante de las propiedades de las entidades durante la ejecución del editor.
+    
+    \item \texttt{HandleInput()}: \texttt{HandleInput()} permite a las entidades responder a las entradas del usuario, como clics de ratón y pulsaciones de teclas. 
+ 
+    \item \texttt{AddComponent()}: \texttt{AddComponent()} posibilita la adición de componentes a la entidad. Los componentes son módulos que agregan funcionalidad a 
+    la entidad, como algún Collider o Animación, entre otras. 
+    
+    \item \texttt{AddScript()}: De manera similar a \texttt{AddComponent()}, \texttt{AddScript()} permite agregar scripts a la entidad. Los scripts son fragmentos de 
+    código que definen comportamientos específicos para la entidad. En el caso de nuestro editor, dichos scripts se generan automaticamente a través de nodos visuales.
+    Estos nodos proporcionan una interfaz visual para crear comportamientos y lógica sin necesidad de escribir código directamente.    
+
+    \item \texttt{SetComponents()}: \texttt{SetComponents()} se utiliza para establecer la lista de componentes asociados a la entidad. Util a la hora de crear una entidad 
+    copia de un \texttt{Prefab}
+    
+    \item \texttt{SetScripts()}: Con \texttt{SetScripts()}, es posible definir los scripts que se aplicarán a la entidad. Util a la hora de crear una entidad 
+    copia de un \texttt{Prefab}
+    
+    \item \texttt{ToDelete()}: Mediante \texttt{ToDelete()}, se marca la entidad para su eliminación posterior. Este método permite gestionar la eliminación de 
+    entidades de manera controlada.
+    
+    \item \texttt{IsTransform()}: \texttt{IsTransform()} se emplea para determinar si una entidad es de tipo transform (con atributos de posición, escala y rotación) o 
+    si se trata de un overlay. Esto permite una diferenciación en el manejo de las entidades según su naturaleza.
+
+\end{itemize}
+
+Estos métodos, en conjunto, definen la funcionalidad y el comportamiento de las entidades en el editor, permitiendo su manipulación, renderizado y 
+gestión de manera efectiva y coherente.
+
+
+
+%------------------------------------------------ JERARQUÍA --------------------------------------------
 
 
 \section{Jerarquía en las escenas}
@@ -125,3 +179,52 @@ relativos.
 
 Estos métodos, en conjunto, permiten establecer y mantener la jerarquía entre entidades y gestionar sus transformaciones de manera coherente, garantizando la organización precisa y eficiente de la escena en el editor.
 
+
+
+%------------------------------------------------ PREFABS --------------------------------------------
+
+\section{Prefabs y PrefabManager}
+
+Los prefabs son copias de entidades que se guardan como plantillas para su posterior instanciación o para manejar varias instancias de un mismo prefab mientras 
+se comparte una base común. Estos prefabs tienen la particularidad de que su identificador (id) es negativo, lo que los distingue de las entidades regulares. 
+Esta característica les permite limitar ciertas funcionalidades, como la capacidad de referenciar otras entidades a través de scripts.
+
+Cada entidad tiene un atributo llamado \texttt{prefabId}, el cual, en caso de ser negativo, indica que se trata de una instancia de un prefab. 
+La gestión de prefabs se lleva a cabo mediante la clase \texttt{PrefabManager}, que mantiene una lista de todos los prefabs disponibles, junto con un mapa 
+donde las claves son las IDs de los prefabs y los valores son vectores que contienen los ids de las entidades que son instancias de ese prefab.
+
+\subsection{Métodos relevantes de \texttt{PrefabManager} para la gestion de prefabs}
+
+\begin{itemize}
+    \item \texttt{UpdatePrefabInstances()}: Este método se encarga de actualizar las instancias de los prefabs en 
+    el escenario, asegurando su coherencia y consistencia.
+    
+    \item \texttt{AddPrefab()}: Permite agregar un nuevo prefab a la lista de prefabs disponibles.
+    
+    \item \texttt{AddInstance()}: Agrega una referencia a una instancia  de un prefab al vector correspondiente en el mapa de instancias.
+    
+    \item \texttt{RemoveInstance()}: Elimina la referencia a una instancia de un prefab del vector correspondiente en el mapa de instancias. Este método acepta tanto
+    un puntero a la propia entidad que queremos quitar de la lista o bien dos ids, la del prefab y la de la entidad instanciada.
+    
+    \item \texttt{GetPrefabs()}: Devuelve la lista de todos los prefabs disponibles.
+    
+    \item \texttt{GetPrefabById()}: Permite obtener un prefab específico según su id.
+\end{itemize}
+
+
+\subsection{Métodos relevantes de la clase \texttt{Entidad} para la gestion de prefabs }
+
+\begin{itemize}
+    \item \texttt{IsPrefab()}: Indica si la entidad es un prefab (id negativo) o no.
+    
+    \item \texttt{IsPrefabInstance()}: Verifica si la entidad es una instancia de un prefab.
+    
+    \item \texttt{GetPrefabId()}: Devuelve la id del prefab al que pertenece la entidad en caso de ser una instancia de un prefab.
+    
+    \item \texttt{SetPrefabId()}: Establece la id de prefab para una entidad, lo que la convierte en una instancia de ese prefab.
+    
+    \item \texttt{GetTopParentPrefab()}: Devuelve la entidad de nivel superior dentro de la jerarquía de instancias de un mismo prefab.
+\end{itemize}
+
+La gestión de prefabs mediante la clase \texttt{PrefabManager} permite mantener un control organizado de las plantillas y sus instancias, facilitando la edición 
+y manipulación coherente de la escena en el editor.
