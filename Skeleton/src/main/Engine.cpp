@@ -118,9 +118,6 @@ bool Engine::init() {
 	if (data.useSplashScreen)
 		sceneManager->SplashScreen();
 
-	Scripting::ScriptFunctionality::instance()->Camera_SetPosition({ 0, 0 });
-	Scripting::ScriptFunctionality::instance()->Camera_SetScale(1.f);
-
 	return true;
 }
 

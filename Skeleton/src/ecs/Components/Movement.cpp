@@ -34,10 +34,7 @@ namespace ECS {
 
 	void Movement::update(float dt) {
 
-		Utilities::Vector2D kb_movement = { im->KeyBoardHorizontalMovement() , im->KeyBoardVerticalMovement() };
-		Utilities::Vector2D ct_movement = { im->ControllerHorizontalMovement() , im->ControllerVerticalMovement() };
-
-		Utilities::Vector2D movement = kb_movement + ct_movement;
+		Utilities::Vector2D movement = { im->HorizontalMovement(), im->VerticalMovement() };
 
 		if (clampDiagonalVelocity && movement.magnitude() > 0)
 			movement = movement.normalize();

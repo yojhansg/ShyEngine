@@ -101,7 +101,7 @@ float Scripting::ScriptFunctionality::Math_Power(float a, float b)
 
 float Scripting::ScriptFunctionality::Math_Root(float a, float b)
 {
-	return powf(a , 1.0f / b);
+	return powf(a, 1.0f / b);
 }
 
 float Scripting::ScriptFunctionality::Math_Max(float a, float b)
@@ -354,7 +354,10 @@ std::string Scripting::ScriptFunctionality::Text_ToString(cVariable variable) {
 	case Scripting::Variable::Type::String:
 		return variable.str;
 	case Scripting::Variable::Type::Entity:
-		return variable.value.entity->getEntityName();
+
+		if (variable.value.entity != nullptr)
+			return variable.value.entity->getEntityName();
+		return "-Entity not found-";
 	case Scripting::Variable::Type::Color:
 		return variable.value.color;
 	case Scripting::Variable::Type::Vector2D:
@@ -620,7 +623,7 @@ std::string Scripting::ScriptFunctionality::RealTime_TimeStamp(int time)
 		RealTime_MonthDay(time),
 		RealTime_HourTime(time),
 		RealTime_Year(time)
-		);
+	);
 }
 
 

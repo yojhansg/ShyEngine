@@ -56,6 +56,12 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	Scene* scene = SceneManager::instance()->createScene(file["name"].get<std::string>());
 
 
+	if (file.contains("position"))
+		scene->cameraPosition = file["position"].get<std::string>();
+
+	if (file.contains("scale"))
+		scene->cameraScale = file["scale"].get<float>();
+
 
 	if (!file.contains("objects")) {
 		Console::Output::PrintError("Load scene error", "The scene file doesn't have a valid format.");
@@ -331,13 +337,18 @@ void ECS::SceneLoader::ProcessScripts(nlohmann::json& jsonData, ECS::Entity* ent
 				std::string vec = attr["value"].get<std::string>();
 				value = (Utilities::Vector2D)vec;
 			}
-			else if (type == "string" ) {
+			else if (type == "string") {
 				std::string vec = attr["value"].get<std::string>();
 				value = vec;
 			}
 			else if (type == "color") {
 				Utilities::Color col = Utilities::Color::CreateColor(attr["value"].get<std::string>());
 				value = col;
+			}
+			else if (type == "Entity") {
+
+				value = Scripting::Variable::Entity(nullptr);
+				value.value.entityId = attr["value"].get<int>();
 			}
 
 			scriptCmp->SetSerialisedValue(attribute.key(), value);

@@ -59,6 +59,9 @@ namespace ShyEditor {
 		int viewMode;
 		Camera* sceneCamera;
 
+		float sceneScale;
+		float scenePosition_x, scenePosition_y;
+
 		std::map<int, Entity*> entities;
 		std::vector<Entity*> overlays;
 
@@ -86,6 +89,10 @@ namespace ShyEditor {
 
 		Scene();
 		~Scene();
+
+		float& GetSceneScale();
+		ImVec2 GetScenePosition();
+		void SetCameraPosition(float x, float y);
 
 		Entity* AddEntity(std::string path);
 		void AddEntity(Entity* entity);

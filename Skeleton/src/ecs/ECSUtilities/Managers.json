@@ -194,12 +194,12 @@
         "methods": [
             {
                 "input": [],
-                "name": "keyDownEvent",
+                "name": "AnyKeyPressed",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "keyUpEvent",
+                "name": "AnyKeyReleased",
                 "return": "Toggle"
             },
             {
@@ -209,7 +209,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isLetterDown",
+                "name": "IsLetterPressed",
                 "return": "Toggle"
             },
             {
@@ -219,7 +219,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isLetterHold",
+                "name": "IsLetterDown",
                 "return": "Toggle"
             },
             {
@@ -229,7 +229,17 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isLetterUp",
+                "name": "IsLetterUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "l",
+                        "type": "Number"
+                    }
+                ],
+                "name": "IsLetterReleased",
                 "return": "Toggle"
             },
             {
@@ -239,7 +249,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isNumberDown",
+                "name": "IsNumberPressed",
                 "return": "Toggle"
             },
             {
@@ -249,7 +259,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isNumberHold",
+                "name": "IsNumberDown",
                 "return": "Toggle"
             },
             {
@@ -259,7 +269,17 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isNumberUp",
+                "name": "IsNumberUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "n",
+                        "type": "Number"
+                    }
+                ],
+                "name": "IsNumberReleased",
                 "return": "Toggle"
             },
             {
@@ -269,7 +289,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isSpecialKeyDown",
+                "name": "IsSpecialKeyPressed",
                 "return": "Toggle"
             },
             {
@@ -279,7 +299,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isSpecialKeyHold",
+                "name": "IsSpecialKeyDown",
                 "return": "Toggle"
             },
             {
@@ -289,27 +309,37 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isSpecialKeyUp",
+                "name": "IsSpecialKeyUp",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "s",
+                        "type": "Number"
+                    }
+                ],
+                "name": "IsSpecialKeyReleased",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "KeyBoardHorizontalMovement",
+                "name": "HorizontalMovement",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "KeyBoardVerticalMovement",
+                "name": "VerticalMovement",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "mouseMotionEvent",
+                "name": "HasMouseMoved",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "wheelMotionEvent",
+                "name": "HasMouseWheelMoved",
                 "return": "Toggle"
             },
             {
@@ -319,7 +349,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isMouseButtonDown",
+                "name": "IsMouseButtonDown",
                 "return": "Toggle"
             },
             {
@@ -329,7 +359,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isMouseButtonUp",
+                "name": "IsMouseButtonUp",
                 "return": "Toggle"
             },
             {
@@ -339,7 +369,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isMouseButtonDownEvent",
+                "name": "IsMouseButtonPressed",
                 "return": "Toggle"
             },
             {
@@ -349,47 +379,47 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isMouseButtonUpEvent",
+                "name": "IsMouseButtonReleased",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "getMousePos",
+                "name": "GetMousePosition",
                 "return": "Pair"
             },
             {
                 "input": [],
-                "name": "getWheelMotionY",
+                "name": "GetMouseWheelScroll",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "getControllersConnected",
+                "name": "ConnectedControllersCount",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "isControllersButtonEventDown",
+                "name": "AnyControllerButtonPressed",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isControllersButtonEventUp",
+                "name": "AnyControllerButtonReleased",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isControllerAxisMotion",
+                "name": "AnyControllerAxisMotion",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "controllerConnectedEvent",
+                "name": "AnyControllerConnected",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "controllerDisconnectedEvent",
+                "name": "AnyControllerDisconnected",
                 "return": "Toggle"
             },
             {
@@ -403,7 +433,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isControllerButtonDownWithId",
+                "name": "IsControllerButtonPressedWithId",
                 "return": "Toggle"
             },
             {
@@ -417,7 +447,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isControllerButtonHoldWithId",
+                "name": "IsControllerButtonDownWithId",
                 "return": "Toggle"
             },
             {
@@ -431,7 +461,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isControllerButtonUpWithId",
+                "name": "IsControllerButtonReleasedWithId",
                 "return": "Toggle"
             },
             {
@@ -441,7 +471,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getLeftTriggerValueWithId",
+                "name": "GetLeftTriggerValueWithId",
                 "return": "Number"
             },
             {
@@ -451,7 +481,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getRightTriggerValueWithId",
+                "name": "GetRightTriggerValueWithId",
                 "return": "Number"
             },
             {
@@ -461,7 +491,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isLeftTriggerMotionWithId",
+                "name": "IsLeftTriggerDownWithId",
                 "return": "Toggle"
             },
             {
@@ -471,7 +501,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isRightTriggerMotionWithId",
+                "name": "IsRightTriggerDownWithId",
                 "return": "Toggle"
             },
             {
@@ -481,7 +511,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getLeftJoystickXWithId",
+                "name": "GetLeftStickHorizontalValueWithId",
                 "return": "Number"
             },
             {
@@ -491,7 +521,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getLeftJoystickYWithId",
+                "name": "GetLeftStickVerticalValueWithId",
                 "return": "Number"
             },
             {
@@ -501,7 +531,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getRightJoystickXWithId",
+                "name": "GetRightStickHorizontalValueWithId",
                 "return": "Number"
             },
             {
@@ -511,7 +541,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "getRightJoystickYWithId",
+                "name": "GetRightStickVerticalValueWithId",
                 "return": "Number"
             },
             {
@@ -521,7 +551,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isLeftJoystickMotionWithId",
+                "name": "HasLeftStickMovedWithId",
                 "return": "Toggle"
             },
             {
@@ -531,37 +561,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isRightJoystickMotionWithId",
-                "return": "Toggle"
-            },
-            {
-                "input": [
-                    {
-                        "name": "id",
-                        "type": "Number"
-                    }
-                ],
-                "name": "ControllerHorizontalMovementWithId",
-                "return": "Number"
-            },
-            {
-                "input": [
-                    {
-                        "name": "id",
-                        "type": "Number"
-                    }
-                ],
-                "name": "ControllerVerticalMovementWithId",
-                "return": "Number"
-            },
-            {
-                "input": [
-                    {
-                        "name": "button",
-                        "type": "Number"
-                    }
-                ],
-                "name": "isControllerButtonDown",
+                "name": "HasRightStickMovedWithId",
                 "return": "Toggle"
             },
             {
@@ -571,7 +571,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isControllerButtonHold",
+                "name": "IsControllerButtonPressed",
                 "return": "Toggle"
             },
             {
@@ -581,68 +581,68 @@
                         "type": "Number"
                     }
                 ],
-                "name": "isControllerButtonUp",
+                "name": "IsControllerButtonDown",
+                "return": "Toggle"
+            },
+            {
+                "input": [
+                    {
+                        "name": "button",
+                        "type": "Number"
+                    }
+                ],
+                "name": "IsControllerButtonUp",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "getLeftTriggerValue",
+                "name": "GetLeftTriggerValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "getRightTriggerValue",
+                "name": "GetRightTriggerValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "isLeftTriggerMotion",
+                "name": "IsLeftTriggerDown",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isRightTriggerMotion",
+                "name": "IsRightTriggerDown",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "getLeftJoystickX",
+                "name": "GetLeftStickHorizontalValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "getLeftJoystickY",
+                "name": "GetLeftStickVerticalValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "getRightJoystickX",
+                "name": "GetRightStickHorizontalValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "getRightJoystickY",
+                "name": "GetRightStickVerticalValue",
                 "return": "Number"
             },
             {
                 "input": [],
-                "name": "isLeftJoystickMotion",
+                "name": "HasLeftStickMoved",
                 "return": "Toggle"
             },
             {
                 "input": [],
-                "name": "isRightJoystickMotion",
+                "name": "HasRightStickMoved",
                 "return": "Toggle"
-            },
-            {
-                "input": [],
-                "name": "ControllerHorizontalMovement",
-                "return": "Number"
-            },
-            {
-                "input": [],
-                "name": "ControllerVerticalMovement",
-                "return": "Number"
             }
         ],
         "name": "InputManager"
