@@ -46,6 +46,8 @@ DataLoader DataLoader::Load(std::string const& path) {
 	data.vsync = LoadValue("vsync", bool, true);
 	data.fullscreen = LoadValue("fullScreen", bool, false);
 	data.showCursor = LoadValue("showcursor", bool, true);
+	data.bgColor = LoadValue("bgColor", std::string, "0, 0, 0");
+	data.bgAlpha = LoadValue("bgAlpha", int, 255);
 
 	// Physics
 	data.gravity = LoadValue("gravity", std::string, "0, -9.81");

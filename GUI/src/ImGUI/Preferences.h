@@ -7,6 +7,18 @@
 
 namespace ShyEditor {
 
+	struct PreferencesColor {
+
+		PreferencesColor() {
+			r = g = b = 0; a = 1;
+		}
+
+		float r;
+		float g;
+		float b;
+		float a;
+	};
+
 	struct ProjectData {
 
 		// General
@@ -23,6 +35,7 @@ namespace ShyEditor {
 		bool vsync;
 		bool fullscreen;
 		bool showCursor;
+		PreferencesColor bgColor;
 
 		// Physics
 		bool debugPhysics;
