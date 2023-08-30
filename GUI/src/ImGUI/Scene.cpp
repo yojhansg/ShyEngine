@@ -860,6 +860,9 @@ namespace ShyEditor {
 				spacing *= interval;
 			}
 
+
+			ScriptCreationUtilities::Grid::DrawBackgroundColor(ColorPaletteParams(color.background), color.backgroundAlpha);
+
 			ScriptCreationUtilities::Grid::SetAlpha(color.gridAlpha);
 			ScriptCreationUtilities::Grid::SetColor(ColorPaletteParams(color.grid));
 			ScriptCreationUtilities::Grid::SetSpacing(spacing);

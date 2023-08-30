@@ -23,6 +23,8 @@ namespace ShyEditor {
 
 		struct Palette {
 
+			std::string name;
+
 			//General
 			Color text;
 			Color head;
@@ -30,7 +32,6 @@ namespace ShyEditor {
 			Color body;
 			Color popups;
 
-			Color scriptBackground;
 
 			float windowRounding;
 
@@ -61,39 +62,38 @@ namespace ShyEditor {
 
 			} scene;
 
-
 			// Scripting
-			float nodeRounding;
+			struct {
+				Color scriptBackground;
+				float nodeRounding;
 
-			Color grid;
-			float gridThickness;
-			float gridSpacing;
-			float gridIntervalScale;
-			int gridInterval;
-			
-			Color hover;
-			float buttonThickness;
+				Color grid;
+				int gridThickness;
+				int gridSpacing;
+				float gridIntervalScale;
+				int gridInterval;
 
-			Color line;
-			float lineThickness;
-			Color lineOutline;
-			float lineOutlineThickness;
-			float lineCurvature;
-			float lineAlpha;
+				Color hover;
+				float buttonThickness;
 
-			Color flowline;
-			float flowlineThickness;
-			Color flowlineOutline;
-			float flowlineOutlineThickness;
-			float flowlineCurvature;
-			float flowlineAlpha;
+				Color line;
+				float lineThickness;
+				Color lineOutline;
+				float lineOutlineThickness;
+				float lineCurvature;
+				float lineAlpha;
 
+				Color flowline;
+				float flowlineThickness;
+				Color flowlineOutline;
+				float flowlineOutlineThickness;
+				float flowlineCurvature;
+				float flowlineAlpha;
 
+			} scripting;
 			//Font
 
 			ImFont* fontPtr;
-			std::string font;
-			float fontSize;
 		};
 
 	public:
@@ -116,6 +116,13 @@ namespace ShyEditor {
 
 	private:
 
+		void Col(const char* name, Color* value);
+		void Int(const char* name, int* value, int min = 0.0f, int max = 100, float speed = 1, bool log = false);
+		void NormalizedFloat(const char* name, float* value);
+		void Float(const char* name, float* value, float min = 0.0f, float max = 100, float speed = 1.f, bool log = false);
+
+
+		void LoadFonts();
 		void LoadPalettes();
 		void LoadDefaultPalette();
 
@@ -125,12 +132,15 @@ namespace ShyEditor {
 
 		Palette current;
 
-		std::string name;
+		std::string filename;
 		std::unordered_map<std::string, Palette> palettes;
+
+		std::unordered_map<std::string, ImFont*> fonts;
 
 		bool open;
 		bool pendingApply;
 		bool initialisation;
+		bool changes;
 
 	};
 

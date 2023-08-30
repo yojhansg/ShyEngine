@@ -1,8 +1,7 @@
 [
     {
         "name": "Basic",
-        "font": "Cute Notes.ttf",
-        "fontSize": 30,
+        "font": "Cute Notes.ttf_30",
 
 
         "text": "#000000",
@@ -10,9 +9,9 @@
         "area": "#aaaaaa",
         "body": "#ffffff",
         "popups": "#aaaaaa",
-        "scriptBackground": "#000000",
-        "grid": "#ffffff",
-        "line": "#ffffff"
+        "scripting.scriptBackground": "#000000",
+        "scripting.grid": "#ffffff",
+        "scripting.line": "#ffffff"
     }
 
 ]

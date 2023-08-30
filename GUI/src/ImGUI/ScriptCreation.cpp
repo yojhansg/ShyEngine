@@ -471,7 +471,7 @@ namespace ShyEditor {
 
 		auto background = ImGui::GetWindowDrawList();
 
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 		auto color = palette.scriptBackground;
 		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
 

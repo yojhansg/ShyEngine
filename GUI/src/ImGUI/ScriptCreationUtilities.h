@@ -1099,6 +1099,13 @@ namespace ShyEditor {
 			static void ResetIntevalScale();
 
 
+			static void DrawBackgroundColor(float r, float g, float b, float a);
+
+
+			/*
+				Pinta la cuadricula con la configuración dada
+			*/
+
 			static void Draw();
 		};
 
