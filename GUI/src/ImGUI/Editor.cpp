@@ -116,7 +116,7 @@ void Editor::Loop() {
 	}
 
 	// Editor main loop
-	while (!instance->exitEditor) {
+	while (!instance->exitEditor && !closed) {
 
 		ShyEditor::Game::CheckEnd();
 		instance->HandleInput();

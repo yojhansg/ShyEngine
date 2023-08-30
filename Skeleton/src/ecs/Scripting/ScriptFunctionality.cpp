@@ -2,6 +2,7 @@
 #include "RendererManager.h"
 #include "ConsoleManager.h"
 #include "ScriptManager.h"
+#include "PrefabManager.h"
 #include "SceneManager.h"
 #include "StringTrim.h"
 #include "Entity.h"
@@ -43,6 +44,16 @@ void Scripting::ScriptFunctionality::Print(cVariable val)
 ECS::Entity* Scripting::ScriptFunctionality::Entity()
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity();
+}
+
+void Scripting::ScriptFunctionality::Create_EntityWithTransform(cstring entName) {
+
+	ECS::PrefabManager::instance()->InstantiatePrefabWithTransform(entName, ECS::SceneManager::instance()->getCurrentScene());
+}
+
+void Scripting::ScriptFunctionality::Create_EntityWithOverlay(cstring entName) {
+
+	ECS::PrefabManager::instance()->InstantiatePrefabWithOverlay(entName, ECS::SceneManager::instance()->getCurrentScene());
 }
 
 std::string Scripting::ScriptFunctionality::Entity_Name(ECS::Entity* ent)
