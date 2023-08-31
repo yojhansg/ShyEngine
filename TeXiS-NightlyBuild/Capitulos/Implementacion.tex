@@ -66,8 +66,8 @@ En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una fu
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
 \medskip
-\textit{Mostrar imagenes de las distintas escenas ¿?}
 
+\textbf{\textit{TODO: Mostrar imagenes de las distintas escenas ¿?\ldots}}
 
 %------------------------------------------------ ENTIDADES --------------------------------------------
 
@@ -235,26 +235,66 @@ La gestión de prefabs mediante la clase \texttt{PrefabManager} permite mantener 
 y manipulación coherente de la escena en el editor. Para su diferenciación visual con el resto de entidades, se dibujan de otro color dentro del editor, como vemos 
 en la figura \ref{fig:instancia_prefab}.
 
-\medskip
-
-\begin{figure}[h]
-    \centering
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=6cm,height=3cm]{Imagenes/Vectorial/Jerarquia.PNG}
-        \caption{}
-        \label{fig:jerarquia}
-    \end{minipage}%
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=6cm,height=3cm]{Imagenes/Vectorial/InstanciaPrefab.PNG}
-        \caption{}
-        \label{fig:instancia_prefab}
-    \end{minipage}
-\end{figure}
 
 
+%------------------------------------------------ COMPONENTES Y SCRIPTS --------------------------------------------
+\subsection{Componentes}
+
+En el contexto del sistema descrito, los componentes juegan un papel fundamental al definir el comportamiento y las propiedades de las entidades en el motor. 
+Los componentes son leídos desde un archivo JSON del motor, el cual contiene información sobre cada componente, sus atributos y funciones.
+
+La estructura de un componente se organiza en clases que facilitan su manejo y uso en el motor. Cada componente se compone de atributos y funciones que 
+definen su comportamiento y propiedades. La información sobre atributos y funciones se almacena en clases específicas \texttt{Attribute} y \texttt{Function}, 
+y todo esto se agrupa bajo la clase \texttt{Component}.
+
+La clase \texttt{Entidad} desempeña un papel esencial en la gestión de componentes. Cada entidad contiene una lista de componentes que define sus características 
+y comportamientos. Los componentes se serializan junto a la entidad a la que pertenecen.
+
+\subsubsection{Métodos relevantes de la clase \texttt{Attribute} }
+
+\begin{itemize}
+    \item \texttt{GetValue()}: Devuelve el valor actual del atributo.
+    \item \texttt{SetValue()}: Establece el valor del atributo.
+    \item \texttt{GetType()}: Devuelve el tipo del atributo.
+    \item \texttt{GetName()}: Devuelve el nombre del atributo.
+\end{itemize}
+
+\subsubsection{Métodos relevantes de la clase \texttt{Function} }
+
+\begin{itemize}
+    \item \texttt{SetReturn()}: Establece tipo de retorno de la función.
+    \item \texttt{GetReturn()}: Devuelve el tipo de retorno de la función.
+    \item \texttt{AddInput()}: Añade un posible input a la función.
+    \item \texttt{GetName()}: Devuelve el nombre de la función.
+    \item \texttt{GetComponent()}: Devuelve el nombre del componente al que pertenece la función.
+\end{itemize}
 
 
+\subsubsection{Métodos relevantes de la clase \texttt{Component} }
+
+\begin{itemize}
+    \item \texttt{GetName()}: Devuelve el nombre del componente.
+    \item \texttt{GetAttribute()}: Permite obtener un atributo específico de un componente mediante su nombre. 
+    \item \texttt{GetFunction()}: Permite obtener una función específica de un componente utilizando su nombre
+    \item \texttt{FromJson()}: Reconstruye un componente a partir de un fragmento en formato JSON.
+    \item \texttt{ToJson()}: Lleva a cabo la serialización integral de la información del componente y sus atributos y funciones 
+    asociadas en un archivo en formato JSON. 
+\end{itemize}
 
 
+\subsubsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de componentes }
+
+\begin{itemize}
+    \item \texttt{AddComponent()}: Añade un componente a la entidad.
+    \item \texttt{GetComponents()}: Devuelve el mapa de componentes de la entidad.
+    \item \texttt{SetComponents()}: Recibe y una lista de componentes para asignarsela a la entidad.
+\end{itemize}
+
+En resumen, los componentes y su relación con las entidades en el motor permiten una estructuración eficiente y una personalización 
+precisa de la funcionalidad de cada elemento en el mundo virtual, enriqueciendo la experiencia del usuario y posibilitando un proceso 
+de desarrollo más fluido y adaptativo.
+
+
+\subsection{Scripts}
+
+\textbf{\textit{TODO: Completar\ldots}}
