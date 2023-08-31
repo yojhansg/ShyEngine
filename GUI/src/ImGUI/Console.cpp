@@ -15,7 +15,6 @@ namespace ShyEditor {
 
 		canBeDisplayedOnTop = true;
 
-		Hide();
 	}
 
 

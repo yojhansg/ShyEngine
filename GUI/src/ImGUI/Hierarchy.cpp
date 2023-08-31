@@ -27,6 +27,7 @@ namespace ShyEditor {
 		acceptAssetDrop = true;
 
 		copiedEntity = nullptr;
+
 	}
 
 	Hierarchy::~Hierarchy()

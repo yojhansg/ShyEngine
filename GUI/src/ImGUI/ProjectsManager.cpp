@@ -2,7 +2,9 @@
 
 #include "imgui_impl_sdlrenderer2.h"
 #include "imgui_impl_sdl2.h"
+#include "ResourcesManager.h"
 #include "LogManager.h"
+#include "Texture.h"
 #include "Editor.h"
 #include "Window.h"
 #include "imgui.h"
@@ -21,7 +23,11 @@
 
 #define ProjectExtension ".shyproject"
 
+#define FolderImage "folder.png"
+#define TrashImage "basura.png"
+
 using namespace nlohmann;
+namespace fs = std::filesystem;
 
 namespace ShyEditor {
 
@@ -35,7 +41,8 @@ namespace ShyEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
-    const std::string ProjectsManager::ImGuiINIPath = "\\UserSettings\\imgui.ini";
+    const std::string ProjectsManager::ImGuiINIFile = "\\UserSettings\\imgui.ini";
+    const std::string ProjectsManager::WindowsDataFile = "\\UserSettings\\windows.json";
 
     const std::vector<std::string> ProjectsManager::assetsFolders = { "\\Scripts" };
 
@@ -51,6 +58,9 @@ namespace ShyEditor {
         lastOpenedScenePath = "Scene.scene";
 
         errorMessage = L"Default error message. No one knows what went wrong :(";
+
+        folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
+        trash = ResourcesManager::GetInstance()->AddTexture(TrashImage, true);
 
         w = h = 0.0f;
     }
@@ -94,24 +104,24 @@ namespace ShyEditor {
             StartImGuiFrame();
 
             ImGui::SetNextWindowPos(ImVec2(0, 0));
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x / 3.0f, ImGui::GetIO().DisplaySize.y * 4.0f / 5.0f));
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x / 3.0f, ImGui::GetIO().DisplaySize.y));
 
             // New Project Window
             result = NewProject();
 
             ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 3, 0));
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x / 1.5f, ImGui::GetIO().DisplaySize.y * 4.0f / 5.0f));
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x / 1.5f, ImGui::GetIO().DisplaySize.y));
 
             // Open Project Window
             if (!windowClosed)
                 result = OpenProject();
 
-            ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 5.0f));
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 5.0f));
+            /*ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 5.0f));
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 5.0f));*/
 
-            // Close Editor
-            if (!windowClosed)
-                result = CloseEditor();
+            //// Close Editor
+            //if (!windowClosed)
+            //    result = CloseEditor();
 
             ImGuiRender(renderer);
 
@@ -162,8 +172,10 @@ namespace ShyEditor {
         ImGui::SetNextItemWidth(w / 1.2f);
         ImGui::InputText("##project_path", create_project_path, IM_ARRAYSIZE(create_project_path));
 
+        ImGui::SameLine();
+
         // Select folder button logic
-        if (ImGui::Button("Select Folder", ImVec2(w / 2.0f, h / 20.0f))) {
+        if (ImGui::ImageButton(folder->getSDLTexture(), ImVec2(20, 20))) {
 
             BROWSEINFOA bi;
             ZeroMemory(&bi, sizeof(bi));
@@ -189,7 +201,7 @@ namespace ShyEditor {
             projectFilePath = std::string(create_project_path) + "\\" + std::string(project_name) + "\\" + std::string(project_name) + ProjectExtension;
 
 
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.0f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 2.5f));
 
         // Create project button logic
         if (ImGui::Button("Create Project", ImVec2(w / 2.0f, h / 15.0f)))
@@ -232,8 +244,10 @@ namespace ShyEditor {
         ImGui::SetNextItemWidth(w / 1.2f);
         ImGui::InputText("##project_path", open_project_path, IM_ARRAYSIZE(open_project_path));
 
+        ImGui::SameLine();
+
         // Select file logic button
-        if (ImGui::Button("Select File", ImVec2(w / 4.0f, h / 20.0f))) {
+        if (ImGui::ImageButton(folder->getSDLTexture(), ImVec2(20, 20))) {
 
 
             OPENFILENAMEA ofn;  // Estructura de di�logo de archivo
@@ -260,7 +274,7 @@ namespace ShyEditor {
 
 
         // Open project logic button
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 3.3f));
+        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 4.0f, h / 4.0f));
         if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f))) {
 
             // Input validation
@@ -288,7 +302,7 @@ namespace ShyEditor {
 
         }
 
-        ImGui::SetCursorPosY(h / 2.3f);
+        ImGui::SetCursorPosY(h / 2.6f);
         ImGui::Text("Recent Projects:");
 
         // Listbox for the recent projects
@@ -298,10 +312,23 @@ namespace ShyEditor {
 
             for (int i = 0; i < recentProjectsInfo.size() && !recentProjectOpened; i++) {
 
+                if (recentProjectsInfo[i].deleted) continue;
+
                 std::string t = "Project: " + recentProjectsInfo[i].name + "\t\tDate: " + recentProjectsInfo[i].date;
-                if (ImGui::Button(t.c_str(), ImVec2(w, h / 8))) {
+                if (ImGui::Button(t.c_str(), ImVec2(w  * 0.78f, h / 10))) {
                     recentProjectOpened = true;
                     recentProjectOpenedPath = recentProjectsInfo[i].path;
+                }
+
+                ImGui::SameLine();
+                if (ImGui::ImageButton(trash->getSDLTexture(), ImVec2(w * 0.09f, h / 10.95f))) {
+                    recentProjectsInfo[i].deleted = true;
+
+                    std::string projectFolder = fs::path(recentProjectsInfo[i].path).parent_path().string();
+
+                    if (fs::exists(projectFolder) && fs::is_directory(projectFolder)) {
+                        fs::remove_all(projectFolder);
+                    }
                 }
             }
 
@@ -334,22 +361,6 @@ namespace ShyEditor {
 
         ImGui::End();
 
-        return Result::CLOSED;
-    }
-
-    ProjectsManager::Result ProjectsManager::CloseEditor() {
-
-        ImGui::Begin("CLOSE", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
-
-        ImVec2 size = ImGui::GetWindowSize();
-        w = size.x; h = size.y;
-
-        ImGui::SetCursorPos(ImVec2(w / 2.0f - w / 8.0f, h / 2.0f));
-
-        if (ImGui::Button("Close", ImVec2(w / 4.0f, h / 5.0f)))
-            windowClosed = true;
-
-        ImGui::End();
         return Result::CLOSED;
     }
 

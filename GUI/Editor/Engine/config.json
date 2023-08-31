@@ -1,6 +1,6 @@
 {
-    "bgAlpha": 68,
-    "bgColor": "0, 199, 151",
+    "bgAlpha": 255,
+    "bgColor": "65, 181, 107",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -9,15 +9,15 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "MyGame",
-    "gravity": "0.000000, -9.810000",
+    "game": "FirstGame",
+    "gravity": "0.000000, 9.810000",
     "initialScene": "Scene.scene",
     "layers": [
         "Default"
     ],
     "matrix": [
         [
-            true,
+            false,
             false,
             false,
             false,
@@ -305,8 +305,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\Assets",
-    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\MyGame.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\FirstGame\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\FirstGame\\FirstGame.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
@@ -314,5 +314,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "MyGame"
+    "windowTitle": "FirstGame"
 }

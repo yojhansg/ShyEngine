@@ -24,7 +24,6 @@ namespace ShyEditor {
 
 	Preferences::Preferences() : Window("Preferences", 0)
 	{
-		Hide();
 		instance = this;
 
 		open = false;

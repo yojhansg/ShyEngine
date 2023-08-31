@@ -40,7 +40,6 @@ namespace ShyEditor {
 		windowWidth = 700;
 		windowHeight = 700;
 
-		Hide();
 	}
 
 	PrefabManager::~PrefabManager()
