@@ -22,6 +22,8 @@ namespace ShyEditor {
 
     class Window {
 
+    public:
+
     protected:
 
         int flags;
@@ -62,7 +64,6 @@ namespace ShyEditor {
         void Hide();
         void Show();
         bool IsVisible();
-
 
         bool IsMouseHoveringWindow();
 

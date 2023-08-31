@@ -86,7 +86,7 @@ namespace ShyEditor {
                     PrefabManager::Open();
                 }
 
-                if (ImGui::MenuItem("Theme selector")) {
+                if (ImGui::MenuItem("Palette selector")) {
 
                     ColorPalette::Open();
                 }

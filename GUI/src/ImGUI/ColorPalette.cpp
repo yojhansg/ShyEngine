@@ -35,7 +35,6 @@ namespace ShyEditor {
 
 		initialisation = false;
 
-		Hide();
 	}
 
 	ColorPalette::~ColorPalette()

@@ -106,8 +106,11 @@ private:
 	bool SplashScreen();
 
 	// Imgui.ini configuration
-	void StoreImGuiIniFile();
-	void LoadImGuiIniFile();
+	void StoreImGuiINIFile();
+	void LoadImGuiINIFile();
+
+	void StoreWindowsData();
+	void LoadWindowsData();
 
 	static Editor* instance;
 

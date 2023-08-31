@@ -43,7 +43,8 @@ namespace ShyEditor {
 		static std::string GetProjectFilePath();
 		static std::string GetProjectFileName();
 
-		static const std::string ImGuiINIPath;
+		static const std::string ImGuiINIFile;
+		static const std::string WindowsDataFile;
 
 	private:
 

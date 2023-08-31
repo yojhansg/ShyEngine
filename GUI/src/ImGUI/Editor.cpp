@@ -7,11 +7,13 @@
 #include "SDL_image.h"
 #include "imgui_internal.h"
 #include "SDL_ttf.h"
+#include "nlohmann/json.hpp"
 
 #include "ComponentManager.h"
 #include "ResourcesManager.h" 
 #include "ProjectsManager.h"
 #include "ScriptCreation.h"
+#include "PrefabManager.h"
 #include "FileExplorer.h"
 #include "WindowLayout.h"
 #include "ColorPalette.h"
@@ -26,13 +28,15 @@
 #include "Build.h"
 #include "Scene.h"
 #include "Game.h"
-#include "PrefabManager.h"
 
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 
 #include "CheckML.h"
+
+using nlohmann::json;
+using nlohmann::ordered_json;
 
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
@@ -112,8 +116,9 @@ void Editor::Loop() {
 		SDL_SetWindowPosition(instance->window, _Centered);
 
 		// Init the ImGUI windows in the editor
-		instance->LoadImGuiIniFile();
+		instance->LoadImGuiINIFile();
 		instance->CreateWindows();
+		instance->LoadWindowsData();
 	}
 
 	// Editor main loop
@@ -130,7 +135,8 @@ void Editor::Loop() {
 		ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
 		ShyEditor::Preferences::StoreData();
 		ShyEditor::PrefabManager::SavePrefabs();
-		instance->StoreImGuiIniFile();
+		instance->StoreImGuiINIFile();
+		instance->StoreWindowsData();
 	}
 
 }
@@ -471,19 +477,22 @@ void Editor::HandleInput()
 	}
 }
 
-void Editor::StoreImGuiIniFile() {
+void Editor::StoreImGuiINIFile() {
 
-	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIPath;
+	// ImGui .INI
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIFile;
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = NULL;
 
 	ImGui::SaveIniSettingsToDisk(path.c_str());
+
 }
 
-void Editor::LoadImGuiIniFile() {
+void Editor::LoadImGuiINIFile() {
 
-	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIPath;
+	// ImGui .INI
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIFile;
 
 	if (!std::filesystem::exists(path)) return;
 
@@ -491,7 +500,79 @@ void Editor::LoadImGuiIniFile() {
 	io.IniFilename = NULL;
 
 	ImGui::LoadIniSettingsFromDisk(path.c_str());
+
 }
+
+
+void Editor::StoreWindowsData() {
+
+	// Windows Opened/Closed information
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::WindowsDataFile;
+
+	json j;
+	json windowsArray = json::array();
+
+	int index = 0;
+	for (auto w : windows) {
+
+		json windowJson;
+		windowJson["Index"] = index;
+		windowJson["Visible"] = w->IsVisible();
+
+		windowsArray.push_back(windowJson);
+
+		index++;
+	}
+
+	j["Windows"] = windowsArray;
+
+	std::ofstream file(path);
+	file << j.dump(4);
+	file.close();
+
+}
+
+void Editor::LoadWindowsData() {
+
+	// Windows Opened/Closed information
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::WindowsDataFile;
+	std::ifstream file(path);
+
+	if (!file.good() || !json::accept(file)) {
+		ShyEditor::LogManager::LogError("Could not open the custom file to load windows data. Opening defult one.");
+
+		file = std::ifstream("windows.json");
+
+		if (!file.good() || !json::accept(file)) {
+			ShyEditor::LogManager::LogError("Could not open default windows data file.");
+			return;
+		}
+	}
+
+	file.clear();
+	file.seekg(0);
+
+	json j = json::parse(file);
+
+	file.close();
+
+	if (!j.contains("Windows")) {
+		ShyEditor::LogManager::LogError("The Windows data file does not contain the expected format.");
+		return;
+	}
+
+	for (auto windowJson : j["Windows"]) {
+
+		int index = windowJson["Index"];
+
+		if (windowJson["Visible"])
+			windows[index]->Show();
+		else 
+			windows[index]->Hide();
+	}
+
+}
+
 
 void Editor::ChangeEditorState(const EDITOR_STATE& state) {
 
