@@ -116,6 +116,31 @@
             {
                 "input": [
                     {
+                        "name": "entName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "EntityWithTransform",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entName",
+                        "type": "Text"
+                    }
+                ],
+                "name": "EntityWithOverlay",
+                "return": "void"
+            }
+        ],
+        "name": "Create"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
                         "name": "angle",
                         "type": "Number"
                     }
@@ -125,6 +150,21 @@
             }
         ],
         "name": "DegreesTo"
+    },
+    {
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "ent",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "Entity",
+                "return": "void"
+            }
+        ],
+        "name": "Destroy"
     },
     {
         "methods": [

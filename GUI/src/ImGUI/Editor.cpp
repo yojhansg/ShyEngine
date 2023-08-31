@@ -473,7 +473,7 @@ void Editor::HandleInput()
 
 void Editor::StoreImGuiIniFile() {
 
-	std::string path = projecInfo->path + "\\UserSettings\\imgui.ini";
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIPath;
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = NULL;
@@ -483,7 +483,7 @@ void Editor::StoreImGuiIniFile() {
 
 void Editor::LoadImGuiIniFile() {
 
-	std::string path = projecInfo->path + "\\UserSettings\\imgui.ini";
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIPath;
 
 	if (!std::filesystem::exists(path)) return;
 

@@ -35,6 +35,8 @@ namespace ShyEditor {
     std::wstring ProjectsManager::projectsfileFolder = L"\\ShyEngine\\RecentProjects";
     std::wstring ProjectsManager::projectsfileName = L"\\recentprojects.json";
 
+    const std::string ProjectsManager::ImGuiINIPath = "\\UserSettings\\imgui.ini";
+
     const std::vector<std::string> ProjectsManager::assetsFolders = { "\\Scripts" };
 
     ProjectsManager::ProjectsManager() {

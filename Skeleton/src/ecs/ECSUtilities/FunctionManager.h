@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Wed Aug 30 17:49:05 2023
+//Creation time : Thu Aug 31 02:03:41 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -262,6 +262,9 @@ Scripting::Variable SceneManager_getNumberOfScenes(std::vector<Scripting::Variab
 Scripting::Variable SceneManager_GetCurrentScenePath(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Print(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Create_EntityWithTransform(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Create_EntityWithOverlay(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Destroy_Entity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Event_EntityEvent(std::vector<Scripting::Variable>const& vec);

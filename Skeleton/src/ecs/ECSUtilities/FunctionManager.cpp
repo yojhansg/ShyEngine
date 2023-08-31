@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Wed Aug 30 17:49:05 2023
+//Creation time: Thu Aug 31 02:03:41 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -30,7 +30,6 @@
 #include <Components/OverlayImage.h>
 #include <Components/OverlayText.h>
 #include <Components/ParticleSystem.h>
-#include <Components/PhysicalMovement.h>
 #include <Components/PhysicBody.h>
 #include <Components/SoundEmitter.h>
 #include <Components/Transform.h>
@@ -296,6 +295,9 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("SceneManager_GetCurrentScenePath",SceneManager_GetCurrentScenePath);
 	map.emplace("Print",ScriptFunctionality_Print);
 	map.emplace("Entity",ScriptFunctionality_Entity);
+	map.emplace("Create_EntityWithTransform",ScriptFunctionality_Create_EntityWithTransform);
+	map.emplace("Create_EntityWithOverlay",ScriptFunctionality_Create_EntityWithOverlay);
+	map.emplace("Destroy_Entity",ScriptFunctionality_Destroy_Entity);
 	map.emplace("Entity_Name",ScriptFunctionality_Entity_Name);
 	map.emplace("Entity_CurrentName",ScriptFunctionality_Entity_CurrentName);
 	map.emplace("Event_EntityEvent",ScriptFunctionality_Event_EntityEvent);
@@ -3664,6 +3666,21 @@ Scripting::Variable ScriptFunctionality_Entity(std::vector<Scripting::Variable>c
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	ECS::Entity* ret = manager->Entity();
 	return ret;
+}
+Scripting::Variable ScriptFunctionality_Create_EntityWithTransform(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Create_EntityWithTransform(vec[0].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Create_EntityWithOverlay(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Create_EntityWithOverlay(vec[0].str);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_Destroy_Entity(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	manager->Destroy_Entity(vec[0].value.entity);
+	return Scripting::Variable::Null();
 }
 Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();

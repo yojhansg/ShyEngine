@@ -42,6 +42,9 @@ namespace ShyEditor {
 
 		static std::string GetProjectFilePath();
 		static std::string GetProjectFileName();
+
+		static const std::string ImGuiINIPath;
+
 	private:
 
 		static ProjectsManager* instance;

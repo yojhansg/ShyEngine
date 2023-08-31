@@ -2061,18 +2061,6 @@
             }
         ]
     },
-    "PhysicalMovement": {
-        "attributes": [
-            {
-                "name": "velocity",
-                "type": "Number"
-            },
-            {
-                "name": "clampDiagonalVelocity",
-                "type": "Toggle"
-            }
-        ]
-    },
     "Script": null,
     "SoundEmitter": {
         "attributes": [
