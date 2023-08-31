@@ -82,30 +82,44 @@ namespace ShyEditor {
 
 	void Preferences::Behaviour()
 	{
-		if (ImGui::CollapsingHeader("General")) {
-			GeneralHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Window")) {
-			WindowHeader();
-		}
+		if (ImGui::BeginTabBar("PreferencesTab")) {
 
-		if (ImGui::CollapsingHeader("Physics")) {
-			PhysicsHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Input")) {
-			InputHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Overlay")) {
-			OverlayHeader();
-		}
+			if (ImGui::BeginTabItem("General")) {
+				GeneralHeader();
+				ImGui::EndTabItem();
+			}
 
-		if (ImGui::CollapsingHeader("Audio")) {
-			AudioHeader();
-		}
+			if (ImGui::BeginTabItem("Window")) {
+				WindowHeader();
+				ImGui::EndTabItem();
+			}
 
+			if (ImGui::BeginTabItem("Physics")) {
+				PhysicsHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Input")) {
+				InputHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Overlay")) {
+				OverlayHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Audio")) {
+				AudioHeader();
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
+
+		}
 		// BUILD PATH
 
 
@@ -508,7 +522,7 @@ namespace ShyEditor {
 		std::ofstream output(ProjectsManager::GetProjectFilePath());
 		output << project.dump(4);
 		output.close();
-		
+
 	}
 
 	void Preferences::LoadData() {
@@ -548,7 +562,7 @@ namespace ShyEditor {
 		std::getline(windowSize, x, ',');
 		std::getline(windowSize, y, ',');
 
-		instance->data.width = std::stoi(x); 
+		instance->data.width = std::stoi(x);
 		instance->data.height = std::stoi(y);
 
 		instance->data.vsync = preferences["vsync"];
@@ -574,7 +588,7 @@ namespace ShyEditor {
 
 		instance->data.gravity_x = std::stof(x);
 		instance->data.gravity_y = std::stof(y);
-		
+
 		instance->data.layers = preferences["layers"];
 		instance->nLayers = instance->data.layers.size();
 		instance->data.collisionMatrix = preferences["matrix"];
