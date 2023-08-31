@@ -18,15 +18,15 @@ FMOD como librería de sonido y Lua como lenguaje de scripting.
 
 Con esta experiencia nos dimos cuenta de varias cosas. Es más comodo trabajar con un motor que cuenta 
 con un editor integrado en vez de acceder a él directamente a través de programación. Además, la forma 
-de programar los scripts debe ser cómoda y inuida ya que es la tarea que más más tiempo va a ocupar al 
-desarrollaor.
+de programar los scripts, queson fragmentos de código que definen comportamientos específicos para las entidades, 
+debe ser cómoda e intuible ya que es la tarea que más más tiempo va a ocupar al desarrollaor.
 
-En cuarto y con la reciente experiencia de desarrollo de un motor decidimos que la propuesta del trabajo de fin de 
+Por último, en cuarto y con la reciente experiencia de desarrollo de un motor decidimos que la propuesta del trabajo de fin de 
 grado sería un motor con la siguientes características:
 
 \begin{itemize}
 
-\item \texttt{Autosuficiente}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
+\item \texttt{Autosuficiencia}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
 y objetos desde el editor y cuenta con la creación de ejecutables finales del juego para su distribución. 
 Además, el motor podrá mostrar la ejecución del juego directamente en el editor durante su desarrollo. 
 Obviamente no tiene toda la funcionalidad necesaria como para no depender de ninguna herrmienta externa 
@@ -34,12 +34,12 @@ durante el desarrollo pero si aporta lo básico para el ciclo de desarrollo de un
 
 \item \texttt{Editor integrado}: La principal herramienta de un motor autosuficiente es el editor, encargado 
 de comunicar al motor las accciones del desarrollador. No teníamos experiencia en desarrollo de aplicaciones 
-de escritorio, ya que para el motor de tercero no hicimos editor, por lo que sabíamos que podía ser un reto.
+de escritorio, ya que para el motor de tercero no hicimos editor (por lo que sabíamos que podía ser un reto).
 
 \item \texttt{Programación visual basada en nodos}: Esta es la parte a destacar de nuestro motor. Debido a la 
 complejidad que presentan algunos motores de la actualidad para desarrolladores principiantes o inexpertos, 
 la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
-videojuego. Sabíamos que podía ser un reto a nivel técnico pero aportaría mucha comodidad, fluidez y por 
+videojuego. Sabíamos que podía ser desafiante a nivel técnico pero aportaría mucha comodidad, fluidez y por 
 supuesto abriría las puertas de nuestro motor a muchos desarrolladores con poca experiencia en programación.
 
 \end{itemize}
@@ -60,7 +60,7 @@ cualquier tipo de videojuego 2D.
 Con la autosuficiencia del motor queremos conseguir que los usuarios puedan desarrollar sus videojuegos con la mínima
 dependencia posible de herramientas externas de tal forma que todo el trabajo pase por el editor.
 
-Con el editor queremos conseguir que el desarrollo sea cómodo, fluido, visual evitando así que el desarrollador se 
+Con el editor queremos conseguir que el desarrollo sea cómodo, fluido y visual evitando así que el desarrollador se 
 tenga que comnunicar con el motor vía programación.
 
 Con el sistema de programación visual basada en nodos queremos conseguir abrir las puertas de nuestro motor a
@@ -104,7 +104,7 @@ de scripting visual basado en nodos.
 
 \begin{itemize}
 
-\item \texttt{Proyecto principal}: Este proyecto implementa el bucle principal del motor y de general el ejecutable
+\item \texttt{Proyecto principal}: Este proyecto implementa el bucle principal del motor y de generar el ejecutable
 de juego.
 
 \item \texttt{Proyecto de físicas}: Implementa un manager con el que acceder a la configuración del mundo físico.
@@ -112,7 +112,7 @@ de juego.
 \item \texttt{Proyecto de gráficos}: Implementa un manager con el que acceder a la configuración de renderizado 
 de SDL, como la ventana de juego o la cámara.
 
-\item \texttt{Proyecto de recursos}: Implementa un manager para el guardado de recursos como imágenes o fuentes
+\item \texttt{Proyecto de recursos}: Implementa un manager para el guardado de recursos, como imágenes o fuentes
 de texto.
 
 \item \texttt{Proyecto de sonido}: Implementa un manager para cargar, reproducir o detener efectos de sonido
@@ -158,8 +158,8 @@ Scripting\ldots
 los componentes disponibles en un formato JSON. Posteriormente, el editor se encarga de leer y procesar estos componentes serializados, permitiendo su asignación a las 
 diferentes entidades en desarrollo.
 Una vez que el proceso de desarrollo del videojuego ha concluido, el editor toma la iniciativa de serializar la escena completa. Esto abarca las entidades presentes en
-la escena, junto con sus respectivos componentes y scripts asociados. Con la escena debidamente serializada, el editor ejecuta el archivo ejecutable (.exe) 
-al motor. En este punto, es el motor el que asume la responsabilidad de interpretar y cargar las escenas previamente serializadas por el editor.
+la escena, junto con sus respectivos componentes y scripts asociados. Con la escena debidamente serializada, el editor ejecuta el archivo
+ejecutable (.exe) del motor. En este punto, es el motor el que asume la responsabilidad de interpretar y cargar las escenas previamente serializadas por el editor.
 
 Este enfoque de intercambio de datos entre el editor y el motor permite una sincronización efectiva de la información esencial para la construcción y ejecución del 
 videojuego, al tiempo que mantiene una clara separación de las tareas y roles entre las dos entidades.
