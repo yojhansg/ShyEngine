@@ -18,7 +18,7 @@ namespace ShyEditor {
 			float r, g, b;
 
 			static Color FromHexString(const std::string& hex);
-
+			std::string ToHexString();
 		};
 
 		struct Palette {
@@ -26,15 +26,22 @@ namespace ShyEditor {
 			std::string name;
 
 			//General
-			Color text;
-			Color head;
-			Color area;
-			Color body;
-			Color popups;
+
+			Color text; //texto
+			Color primary; //cabeceras
+			Color secondary; //elementos
+			Color background; //fondo ventanas
+			Color mainWindowBackground; //fondo ventana sdl
+			Color popups; //fondo pop ups
+			Color border; //borde ventana
 
 
 			float windowRounding;
 
+			float windowBorder;
+			float frameBorder;
+			float popUpBorder;
+			float windowAlpha;
 
 			//Scene
 
@@ -64,7 +71,7 @@ namespace ShyEditor {
 
 			// Scripting
 			struct {
-				Color scriptBackground;
+				Color background;
 				float nodeRounding;
 
 				Color grid;
@@ -92,18 +99,16 @@ namespace ShyEditor {
 
 			} scripting;
 			//Font
-
+			std::string fontName;
 			ImFont* fontPtr;
 		};
 
 	public:
 
-		ColorPalette(const std::string& name);
+		ColorPalette();
 		~ColorPalette();
 
 		void SwapPalette(const std::string& palette);
-
-		void Serialize();
 
 		static void Open();
 
@@ -123,25 +128,29 @@ namespace ShyEditor {
 
 
 		void LoadFonts();
-		void LoadPalettes();
+		void LoadPalettes(const std::string& file);
 		void LoadDefaultPalette();
 
 		void Apply();
+
+		void SavePalette();
+
 
 		static ColorPalette* instance;
 
 		Palette current;
 
-		std::string filename;
 		std::unordered_map<std::string, Palette> palettes;
 
 		std::unordered_map<std::string, ImFont*> fonts;
 
-		bool open;
 		bool pendingApply;
 		bool initialisation;
 		bool changes;
+		bool showSavePopup;
+		bool showErasePopup;
 
+		char paletteName[16];
 	};
 
 }
