@@ -385,7 +385,7 @@ namespace ShyEditor {
 
 		std::ifstream fileStream(palettePath);
 
-		json root;
+		nlohmann::ordered_json root;
 
 		if (fileStream.good() && json::accept(fileStream)) {
 
@@ -396,7 +396,7 @@ namespace ShyEditor {
 			fileStream.close();
 		}
 
-		json palette;
+		nlohmann::ordered_json palette;
 
 		palette["name"] = paletteName;
 		palette["font"] = current.fontName;
