@@ -157,7 +157,7 @@
     <ClInclude Include="..\..\src\ecs\Components\Animation.h" />
     <ClInclude Include="..\..\src\ecs\Components\BoxBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\CircleBody.h" />
-    <ClInclude Include="..\..\src\ecs\Components\Movement.h" />
+    <ClInclude Include="..\..\src\ecs\Components\TopDownController.h" />
     <ClInclude Include="..\..\src\ecs\Components\MusicEmitter.h" />
     <ClInclude Include="..\..\src\ecs\Components\OverlayButton.h" />
     <ClInclude Include="..\..\src\ecs\Components\Overlay.h" />
@@ -167,6 +167,7 @@
     <ClInclude Include="..\..\src\ecs\Components\PhysicBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\EdgeBody.h" />
     <ClInclude Include="..\..\src\ecs\Components\Image.h" />
+    <ClInclude Include="..\..\src\ecs\Components\PlatformController.h" />
     <ClInclude Include="..\..\src\ecs\Components\SoundEmitter.h" />
     <ClInclude Include="..\..\src\ecs\Components\Transform.h" />
     <ClInclude Include="..\..\src\ecs\ContactListener.h" />
@@ -199,7 +200,7 @@
     <ClCompile Include="..\..\src\ecs\Components\Animation.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\BoxBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\CircleBody.cpp" />
-    <ClCompile Include="..\..\src\ecs\Components\Movement.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\TopDownController.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\MusicEmitter.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\OverlayButton.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Overlay.cpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="..\..\src\ecs\Components\PhysicBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\EdgeBody.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Image.cpp" />
+    <ClCompile Include="..\..\src\ecs\Components\PlatformController.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\SoundEmitter.cpp" />
     <ClCompile Include="..\..\src\ecs\Components\Transform.cpp" />
     <ClCompile Include="..\..\src\ecs\ContactListener.cpp" />

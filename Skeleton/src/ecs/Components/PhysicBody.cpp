@@ -1,7 +1,11 @@
 #include "PhysicBody.h"
 #include "PhysicsManager.h"
 #include "box2d/b2_world.h"
+#include "box2d/b2_contact.h"
 #include "Transform.h"
+#include "BoxBody.h"
+#include "CircleBody.h"
+#include "EdgeBody.h"
 
 #include <ConsoleManager.h>
 #include <Entity.h>
@@ -30,6 +34,7 @@ namespace ECS {
 
 		bounciness = .5f;
 		gravityScale = 1.0f;
+		friction = 1.0f;
 
 		body = nullptr;
 		bodyDef = nullptr;
@@ -112,6 +117,9 @@ namespace ECS {
 		setTrigger(trigger);
 		setRotationFreezed(freezeRotation);
 		setGravityScale(gravityScale);
+		setFriction(friction);
+		setLinearDrag(linearDamping);
+		setAngularDrag(angularDamping);
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
@@ -179,6 +187,22 @@ namespace ECS {
 	void PhysicBody::onSceneDown() {
 		pm->setBodyEnabled(body, false);
 	}
+
+	PhysicBody* PhysicBody::GetComponentFromEntity(Entity* ent) {
+
+		PhysicBody* other = ent->getComponent<BoxBody>();
+
+		if (other == nullptr)
+			other = ent->getComponent<CircleBody>();
+
+		if (other == nullptr)
+			other = ent->getComponent<EdgeBody>();
+
+		return other;
+
+	}
+
+
 
 	void PhysicBody::setTrigger(bool trigger) {
 		fixture->SetSensor(trigger);
@@ -271,6 +295,15 @@ namespace ECS {
 		return body->GetGravityScale();
 	}
 
+	Vector2D PhysicBody::getCollisionNormal() {
+		return collisionNormal;
+	}
+
+	Vector2D PhysicBody::getCollisionPoint() {
+		return collisionPoint;
+	}
+
+
 	float PhysicBody::getMass() {
 		return mass;
 	}
@@ -289,6 +322,10 @@ namespace ECS {
 		this->layerName = layerName;
 	}
 
+	cstring PhysicBody::getCollisionLayer() {
+		return this->layerName;
+	}
+
 	void PhysicBody::setCollisionStay(bool stay, Entity* b) {
 		onCollisonStay = stay;
 
@@ -299,6 +336,16 @@ namespace ECS {
 		onTriggerStay = stay;
 
 		this->collisionEntity = b;
+	}
+
+	void PhysicBody::setBox2DContact(b2Contact* c) {
+		this->contact = c;
+
+		// Local Normal
+		collisionNormal.set(this->contact->GetManifold()->localNormal.x, this->contact->GetManifold()->localNormal.y);
+
+		// Local Point
+		collisionPoint.set(this->contact->GetManifold()->localPoint.x, this->contact->GetManifold()->localPoint.y);
 	}
 
 	void PhysicBody::setLinearVelocity(float x, float y) {
@@ -316,6 +363,12 @@ namespace ECS {
 	float PhysicBody::getAngularVelocity() {
 		return body->GetAngularVelocity();
 	}
+
+	bool PhysicBody::collidesWith(PhysicBody* b) {
+		return pm->layersCollide(layerName, b->getCollisionLayer());
+	}
+
+
 
 	void PhysicBody::applyForce(cVector2D force, cVector2D point) {
 		body->ApplyForce({ force.getX(), force.getY() }, { point.getX(), point.getY() }, true);

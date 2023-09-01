@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Thu Aug 31 02:03:41 2023
+//Creation time : Fri Sep  1 16:06:46 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -122,6 +122,7 @@ Scripting::Variable PhysicBody_getAngularDrag(std::vector<Scripting::Variable>co
 Scripting::Variable PhysicBody_setGravityScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getLinearVelocity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setAngularVelocity(std::vector<Scripting::Variable>const& vec);
@@ -190,6 +191,7 @@ Scripting::Variable InputManager_IsSpecialKeyUp(std::vector<Scripting::Variable>
 Scripting::Variable InputManager_IsSpecialKeyReleased(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_HorizontalMovement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_Jump(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_HasMouseMoved(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_HasMouseWheelMoved(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_IsMouseButtonDown(std::vector<Scripting::Variable>const& vec);
@@ -219,7 +221,7 @@ Scripting::Variable InputManager_HasLeftStickMovedWithId(std::vector<Scripting::
 Scripting::Variable InputManager_HasRightStickMovedWithId(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_IsControllerButtonPressed(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_IsControllerButtonDown(std::vector<Scripting::Variable>const& vec);
-Scripting::Variable InputManager_IsControllerButtonUp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_IsControllerButtonReleased(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_GetLeftTriggerValue(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_GetRightTriggerValue(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_IsLeftTriggerDown(std::vector<Scripting::Variable>const& vec);

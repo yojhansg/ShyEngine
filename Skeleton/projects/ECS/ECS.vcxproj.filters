@@ -150,7 +150,10 @@
     <ClInclude Include="..\..\src\ecs\ReferencesManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\Components\Movement.h">
+    <ClInclude Include="..\..\src\ecs\Components\TopDownController.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\Components\PlatformController.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,7 +275,10 @@
     <ClCompile Include="..\..\src\ecs\ReferencesManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ecs\Components\Movement.cpp">
+    <ClCompile Include="..\..\src\ecs\Components\TopDownController.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecs\Components\PlatformController.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>

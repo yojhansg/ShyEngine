@@ -321,7 +321,11 @@ namespace ShyEditor {
                 }
 
                 ImGui::SameLine();
-                if (ImGui::ImageButton(trash->getSDLTexture(), ImVec2(w * 0.09f, h / 10.95f))) {
+
+                std::string label = "##" + std::to_string(i);
+
+                if (ImGui::Button(label.c_str(), ImVec2(w * 0.095f, h / 10))) {
+
                     recentProjectsInfo[i].deleted = true;
 
                     std::string projectFolder = fs::path(recentProjectsInfo[i].path).parent_path().string();
@@ -330,6 +334,11 @@ namespace ShyEditor {
                         fs::remove_all(projectFolder);
                     }
                 }
+
+                ImGui::SameLine();
+                ImGui::SetCursorPosX(ImGui::GetWindowSize().x - ImGui::GetWindowSize().x / 9);
+                ImGui::Image(trash->getSDLTexture(), ImVec2(w * 0.09f, h / 10));
+
             }
 
             ImGui::EndListBox();

@@ -115,6 +115,8 @@ namespace Input {
 		float HorizontalMovement();
 		float VerticalMovement();
 
+		bool Jump();
+
 
 		// Mouse
 		bool HasMouseMoved();
@@ -182,7 +184,7 @@ namespace Input {
 
 				bool IsControllerButtonDown(int button);
 
-				bool IsControllerButtonUp(int button);
+				bool IsControllerButtonReleased(int button);
 
 				float GetLeftTriggerValue();
 

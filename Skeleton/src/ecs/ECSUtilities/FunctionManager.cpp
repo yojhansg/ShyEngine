@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Thu Aug 31 02:03:41 2023
+//Creation time: Fri Sep  1 16:06:46 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -23,7 +23,6 @@
 #include <Components/CircleBody.h>
 #include <Components/EdgeBody.h>
 #include <Components/Image.h>
-#include <Components/Movement.h>
 #include <Components/MusicEmitter.h>
 #include <Components/Overlay.h>
 #include <Components/OverlayButton.h>
@@ -31,7 +30,9 @@
 #include <Components/OverlayText.h>
 #include <Components/ParticleSystem.h>
 #include <Components/PhysicBody.h>
+#include <Components/PlatformController.h>
 #include <Components/SoundEmitter.h>
+#include <Components/TopDownController.h>
 #include <Components/Transform.h>
 #include <Save.h>
 #include <SceneManager.h>
@@ -155,6 +156,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_setGravityScale",PhysicBody_setGravityScale);
 	map.emplace("PhysicBody_getGravityScale",PhysicBody_getGravityScale);
 	map.emplace("PhysicBody_setCollisionLayer",PhysicBody_setCollisionLayer);
+	map.emplace("PhysicBody_getCollisionLayer",PhysicBody_getCollisionLayer);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
 	map.emplace("PhysicBody_getLinearVelocity",PhysicBody_getLinearVelocity);
 	map.emplace("PhysicBody_setAngularVelocity",PhysicBody_setAngularVelocity);
@@ -223,6 +225,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_IsSpecialKeyReleased",InputManager_IsSpecialKeyReleased);
 	map.emplace("InputManager_HorizontalMovement",InputManager_HorizontalMovement);
 	map.emplace("InputManager_VerticalMovement",InputManager_VerticalMovement);
+	map.emplace("InputManager_Jump",InputManager_Jump);
 	map.emplace("InputManager_HasMouseMoved",InputManager_HasMouseMoved);
 	map.emplace("InputManager_HasMouseWheelMoved",InputManager_HasMouseWheelMoved);
 	map.emplace("InputManager_IsMouseButtonDown",InputManager_IsMouseButtonDown);
@@ -252,7 +255,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_HasRightStickMovedWithId",InputManager_HasRightStickMovedWithId);
 	map.emplace("InputManager_IsControllerButtonPressed",InputManager_IsControllerButtonPressed);
 	map.emplace("InputManager_IsControllerButtonDown",InputManager_IsControllerButtonDown);
-	map.emplace("InputManager_IsControllerButtonUp",InputManager_IsControllerButtonUp);
+	map.emplace("InputManager_IsControllerButtonReleased",InputManager_IsControllerButtonReleased);
 	map.emplace("InputManager_GetLeftTriggerValue",InputManager_GetLeftTriggerValue);
 	map.emplace("InputManager_GetRightTriggerValue",InputManager_GetRightTriggerValue);
 	map.emplace("InputManager_IsLeftTriggerDown",InputManager_IsLeftTriggerDown);
@@ -2267,6 +2270,21 @@ Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable
 	self->setCollisionLayer(vec[1].str);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable PhysicBody_getCollisionLayer(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionLayer", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionLayer", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	cstring ret = self->getCollisionLayer();
+	return ret;
+}
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -3307,6 +3325,11 @@ Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variabl
 	float ret = manager->VerticalMovement();
 	return ret;
 }
+Scripting::Variable InputManager_Jump(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->Jump();
+	return ret;
+}
 Scripting::Variable InputManager_HasMouseMoved(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
 	bool ret = manager->HasMouseMoved();
@@ -3452,9 +3475,9 @@ Scripting::Variable InputManager_IsControllerButtonDown(std::vector<Scripting::V
 	bool ret = manager->IsControllerButtonDown(vec[0].value.Float);
 	return ret;
 }
-Scripting::Variable InputManager_IsControllerButtonUp(std::vector<Scripting::Variable>const& vec){
+Scripting::Variable InputManager_IsControllerButtonReleased(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
-	bool ret = manager->IsControllerButtonUp(vec[0].value.Float);
+	bool ret = manager->IsControllerButtonReleased(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable InputManager_GetLeftTriggerValue(std::vector<Scripting::Variable>const& vec){

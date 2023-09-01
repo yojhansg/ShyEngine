@@ -26,6 +26,9 @@ namespace ECS {
 
 		if (entA == nullptr || entB == nullptr) return;
 
+		phyA->setBox2DContact(contact);
+		phyB->setBox2DContact(contact);
+
 		if (contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()) {
 			entA->onTriggerEnter(entB);
 			entB->onTriggerEnter(entA);
@@ -58,6 +61,9 @@ namespace ECS {
 
 		if (entA == nullptr || entB == nullptr) return;
 
+		phyA->setBox2DContact(contact);
+		phyB->setBox2DContact(contact);
+
 		if (contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()) {
 			entA->onTriggerExit(entB);
 			entB->onTriggerExit(entA);
@@ -72,6 +78,7 @@ namespace ECS {
 			phyA->setCollisionStay(false, entB);
 			phyB->setCollisionStay(false, entA);
 		}
+
 	}
 
 }

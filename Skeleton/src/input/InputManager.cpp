@@ -381,6 +381,10 @@ namespace Input {
 		return dir;
 	}
 
+	bool InputManager::Jump() {
+		return IsSpecialKeyPressed((int)KB_SPECIALKEYS::SPACE) || IsControllerButtonPressed((int)PS4_CONTROLLER_BUTTONS::X);
+	}
+
 
 	// ----------- MOUSE -----------------
 
@@ -664,6 +668,8 @@ namespace Input {
 
 	bool InputManager::IsControllerButtonPressedWithId(int button, int id) {
 
+		if (numControllersConnected == 0) return false;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -678,6 +684,8 @@ namespace Input {
 	}
 
 	bool InputManager::IsControllerButtonDownWithId(int button, int id) {
+
+		if (numControllersConnected == 0) return false;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -694,6 +702,8 @@ namespace Input {
 
 	bool InputManager::IsControllerButtonReleasedWithId(int button, int id) {
 
+		if (numControllersConnected == 0) return false;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -709,6 +719,8 @@ namespace Input {
 
 	float InputManager::GetLeftTriggerValueWithId(int id) {
 
+		if (numControllersConnected == 0) return 0;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -718,6 +730,8 @@ namespace Input {
 	}
 
 	float InputManager::GetRightTriggerValueWithId(int id) {
+
+		if (numControllersConnected == 0) return 0;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -729,6 +743,8 @@ namespace Input {
 
 	bool InputManager::IsLeftTriggerDownWithId(int id) {
 
+		if (numControllersConnected == 0) return false;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -738,6 +754,8 @@ namespace Input {
 	}
 
 	bool InputManager::IsRightTriggerDownWithId(int id) {
+
+		if (numControllersConnected == 0) return false;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -749,6 +767,8 @@ namespace Input {
 
 	float InputManager::GetLeftStickHorizontalValueWithId(int id) {
 
+		if (numControllersConnected == 0) return 0;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -758,6 +778,8 @@ namespace Input {
 	}
 
 	float InputManager::GetLeftStickVerticalValueWithId(int id) {
+
+		if (numControllersConnected == 0) return 0;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -769,6 +791,8 @@ namespace Input {
 
 	float InputManager::GetRightStickHorizontalValueWithId(int id) {
 
+		if (numControllersConnected == 0) return 0;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -778,6 +802,8 @@ namespace Input {
 	}
 
 	float InputManager::GetRightStickVerticalValueWithId(int id) {
+
+		if (numControllersConnected == 0) return 0;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -789,6 +815,8 @@ namespace Input {
 
 	bool InputManager::HasLeftStickMovedWithId(int id) {
 
+		if (numControllersConnected == 0) return false;
+
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
 			return false;
@@ -798,6 +826,8 @@ namespace Input {
 	}
 
 	bool InputManager::HasRightStickMovedWithId(int id) {
+
+		if (numControllersConnected == 0) return false;
 
 		if (id >= numControllersConnected || id < 0) {
 			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
@@ -819,7 +849,7 @@ namespace Input {
 		return IsControllerButtonDownWithId(button, lastInputReceivedController);
 	}
 
-	bool InputManager::IsControllerButtonUp(int button) {
+	bool InputManager::IsControllerButtonReleased(int button) {
 		return IsControllerButtonReleasedWithId(button, lastInputReceivedController);
 	}
 

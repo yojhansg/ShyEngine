@@ -5,14 +5,15 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
-#include "Components/Movement.h"
 #include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
 #include "Components/OverlayImage.h"
 #include "Components/OverlayText.h"
 #include "Components/ParticleSystem.h"
+#include "Components/PlatformController.h"
 #include "Components/SoundEmitter.h"
+#include "Components/TopDownController.h"
 #include "Components/Transform.h"
 #include "Scripting/Script.h"
 
@@ -25,14 +26,15 @@ ComponentFactory::ComponentFactory(){
 	components["CircleBody"] = &ComponentFactory::CreateCircleBody;
 	components["EdgeBody"] = &ComponentFactory::CreateEdgeBody;
 	components["Image"] = &ComponentFactory::CreateImage;
-	components["Movement"] = &ComponentFactory::CreateMovement;
 	components["MusicEmitter"] = &ComponentFactory::CreateMusicEmitter;
 	components["Overlay"] = &ComponentFactory::CreateOverlay;
 	components["OverlayButton"] = &ComponentFactory::CreateOverlayButton;
 	components["OverlayImage"] = &ComponentFactory::CreateOverlayImage;
 	components["OverlayText"] = &ComponentFactory::CreateOverlayText;
 	components["ParticleSystem"] = &ComponentFactory::CreateParticleSystem;
+	components["PlatformController"] = &ComponentFactory::CreatePlatformController;
 	components["SoundEmitter"] = &ComponentFactory::CreateSoundEmitter;
+	components["TopDownController"] = &ComponentFactory::CreateTopDownController;
 	components["Transform"] = &ComponentFactory::CreateTransform;
 	components["Script"] = &ComponentFactory::CreateScript;
 
@@ -61,10 +63,6 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::Image();
 
 }
-	ECS::Component* ComponentFactory::CreateMovement(){
-		return new ECS::Movement();
-
-}
 	ECS::Component* ComponentFactory::CreateMusicEmitter(){
 		return new ECS::MusicEmitter();
 
@@ -89,8 +87,16 @@ ComponentFactory::ComponentFactory(){
 		return new ECS::ParticleSystem();
 
 }
+	ECS::Component* ComponentFactory::CreatePlatformController(){
+		return new ECS::PlatformController();
+
+}
 	ECS::Component* ComponentFactory::CreateSoundEmitter(){
 		return new ECS::SoundEmitter();
+
+}
+	ECS::Component* ComponentFactory::CreateTopDownController(){
+		return new ECS::TopDownController();
 
 }
 	ECS::Component* ComponentFactory::CreateTransform(){
