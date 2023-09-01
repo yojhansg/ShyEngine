@@ -12,7 +12,7 @@
         "scene.UIBorder": "#ffffff",
         "scene.UIBorderHover": "#ff3333",
         "scene.UIBorderWidth": 5,
-        "scene.background": "#8947ff",
+        "scene.background": "#4da4e0",
         "scene.backgroundAlpha": 1.0,
         "scene.frame": "#000000",
         "scene.frameWidth": 10,
