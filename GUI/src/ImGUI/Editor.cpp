@@ -586,7 +586,7 @@ void Editor::LoadWindowsData() {
 			windows[index]->Hide();
 	}
 
-	scriptCreation->Hide();
+	scriptCreation->Show();
 
 }
 
