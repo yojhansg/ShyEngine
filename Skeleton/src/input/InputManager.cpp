@@ -4,19 +4,22 @@
 
 #include "CheckML.h"
 
+#include <iostream>
+
 #define MAX_STICK_VALUE 32767
 #define STICK_DEADZONE 3276
-#define TRIGGER_DEADZONE 1000
 
 namespace Input {
 
 	InputManager::InputManager() : InputManager(true) {}
 
-	InputManager::InputManager(bool closeWithEscape): closeWithEscape(closeWithEscape) {
+	InputManager::InputManager(bool closeWithEscape) : closeWithEscape(closeWithEscape) {
 
 		kbState_ = SDL_GetKeyboardState(0);
 
-		valid = initialiseJoysticks();
+		valid = initControllers();
+
+		numControllersConnected = 0;
 
 		clearState();
 	}
@@ -25,9 +28,7 @@ namespace Input {
 		return valid;
 	}
 
-	InputManager::~InputManager() {
-		removeJoysticks();
-	}
+	InputManager::~InputManager() {}
 
 	bool InputManager::handleInput(SDL_Event& e) {
 		clearState();
@@ -44,9 +45,8 @@ namespace Input {
 
 		isKeyDownEvent_ = isKeyUpEvent_ = isMouseButtonEventDown_ = false;
 		isMouseButtonEventUp_ = isMouseMotionEvent_ = isMouseWheelEvent_ = false;
-		isJoystickButtonDownEvent_ = isJoystickButtonUpEvent_ = false; joystickConnected_ = false;
-		joystickDisconnected_ = false;
-
+		isControllerButtonDownEvent_ = isControllerButtonUpEvent_ = false; controllerConnected_ = false;
+		controllerDisconnected_ = false;
 
 		for (int i = 0; i < (int)KB_LETTERS::Count; i++)
 			UpdateKeyState(letters[i]);
@@ -54,6 +54,9 @@ namespace Input {
 			UpdateKeyState(numbers[i]);
 		for (int i = 0; i < (int)KB_SPECIALKEYS::Count; i++)
 			UpdateKeyState(specialKeys[i]);
+
+		updateControllersButtons();
+
 	}
 
 	void InputManager::update(const SDL_Event& event) {
@@ -65,12 +68,6 @@ namespace Input {
 			Console::Output::PrintError("SDL Joystick Query", SDL_GetError());
 			return;
 		}
-
-		// Checking for controllers connections or disconnections
-		if (numJoysticksConnected < numJoysticks)
-			joystickConnected();
-		else if (numJoysticksConnected > numJoysticks)
-			joystickDisconnected();
 
 		switch (event.type) {
 		case SDL_KEYDOWN:
@@ -101,18 +98,26 @@ namespace Input {
 		case SDL_MOUSEBUTTONUP:
 			onMouseButtonChange(event, false);
 			break;
-		case SDL_JOYAXISMOTION:
-			onJoystickAxisMotion(event);
+		case SDL_CONTROLLERDEVICEADDED:
+			addController(event.cdevice.which);
+			break;
+		case SDL_CONTROLLERDEVICEREMOVED:
+			removeController(event.cdevice.which);
 			break;
 		case SDL_JOYBUTTONDOWN:
-			onJoystickButtonDown(event);
+			controllerButtonPressed(event);
 			break;
 		case SDL_JOYBUTTONUP:
-			onJoystickButtonUp(event);
+			controllerButtonReleased(event);
+			break;
+		case SDL_JOYAXISMOTION:
+			onControllerAxisMotion(event);
 			break;
 		default:
 			break;
 		}
+
+		readSticksValues();
 
 		int mouse_x, mouse_y;
 		SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -132,59 +137,144 @@ namespace Input {
 		isKeyUpEvent_ = true;
 	}
 
-	bool InputManager::keyDownEvent() {
+	bool InputManager::AnyKeyPressed() {
 		return isKeyDownEvent_;
 	}
 
-	bool InputManager::keyUpEvent() {
+	bool InputManager::AnyKeyReleased() {
 		return isKeyUpEvent_;
 	}
 
 	// Letter
-	bool InputManager::isLetterDown(int l) {
-		return letters[l] == KeyState::JustDown;
+	bool InputManager::IsLetterPressed(int l) {
+
+		if (l >= (int) KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
+		return letters[l] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isLetterHold(int l) {
-		return letters[l] == KeyState::JustDown || letters[l] == KeyState::Down;
+	bool InputManager::IsLetterDown(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
+		return letters[l] == ButtonState::JustDown || letters[l] == ButtonState::Down;
 	}
 
-	bool InputManager::isLetterUp(int l) {
-		return letters[l] == KeyState::Up;
+	bool InputManager::IsLetterUp(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
+		return letters[l] == ButtonState::Up || letters[l] == ButtonState::None;
+	}
+
+	bool InputManager::IsLetterReleased(int l) {
+
+		if (l >= (int)KB_LETTERS::Count || l < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The letter with index " + std::to_string(l) + " does not exist");
+			return false;
+		}
+
+		return letters[l] == ButtonState::Up;
 	}
 
 	// Number
-	bool InputManager::isNumberDown(int n) {
-		return numbers[n] == KeyState::JustDown;
-	}
-	bool InputManager::isNumberHold(int n) {
-		return numbers[n] == KeyState::JustDown || numbers[n] == KeyState::Down;
+	bool InputManager::IsNumberPressed(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
+		return numbers[n] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isNumberUp(int n) {
-		return numbers[n] == KeyState::Up;
+	bool InputManager::IsNumberDown(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
+		return numbers[n] == ButtonState::JustDown || numbers[n] == ButtonState::Down;
+	}
+
+	bool InputManager::IsNumberUp(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
+		return numbers[n] == ButtonState::Up || numbers[n] == ButtonState::None;
+	}
+
+	bool InputManager::IsNumberReleased(int n) {
+
+		if (n >= (int)KB_NUMBERS::Count || n < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The number with index " + std::to_string(n) + " does not exist");
+			return false;
+		}
+
+		return numbers[n] == ButtonState::Up;
 	}
 
 	// Special Key
-	bool InputManager::isSpecialKeyDown(int s) {
-		return specialKeys[s] == KeyState::JustDown;
+	bool InputManager::IsSpecialKeyPressed(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
+		return specialKeys[s] == ButtonState::JustDown;
 	}
 
-	bool InputManager::isSpecialKeyHold(int s) {
-		return specialKeys[s] == KeyState::JustDown || specialKeys[s] == KeyState::Down;
+	bool InputManager::IsSpecialKeyDown(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
+		return specialKeys[s] == ButtonState::JustDown || specialKeys[s] == ButtonState::Down;
 	}
 
-	bool InputManager::isSpecialKeyUp(int s) {
-		return specialKeys[s] == KeyState::Up;
+	bool InputManager::IsSpecialKeyUp(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
+		return specialKeys[s] == ButtonState::Up || specialKeys[s] == ButtonState::None;
+	}
+
+	bool InputManager::IsSpecialKeyReleased(int s) {
+
+		if (s >= (int)KB_SPECIALKEYS::Count || s < 0) {
+			Console::Output::PrintError("KeyBoard Input", "The special key with index " + std::to_string(s) + " does not exist");
+			return false;
+		}
+
+		return specialKeys[s] == ButtonState::Up;
 	}
 
 	// With SDL Scancode enum
 	bool InputManager::isKeyDown(SDL_Scancode key) {
-		return keyDownEvent() && kbState_[key] == 1;
+		return AnyKeyPressed() && kbState_[key] == 1;
 	}
 
 	bool InputManager::isKeyUp(SDL_Scancode key) {
-		return keyUpEvent() && kbState_[key] == 0;
+		return AnyKeyReleased() && kbState_[key] == 0;
 	}
 
 
@@ -192,87 +282,161 @@ namespace Input {
 	void InputManager::letterPressed(KB_LETTERS letter)
 	{
 		if (letter == KB_LETTERS::Count) return;
-		if (letters[(int)letter] == KeyState::Down) return;
+		if (letters[(int)letter] == ButtonState::Down) return;
 
-		letters[(int)letter] = KeyState::JustDown;
+		letters[(int)letter] = ButtonState::JustDown;
 	}
 
 	void InputManager::numberPressed(KB_NUMBERS number)
 	{
 		if (number == KB_NUMBERS::Count) return;
-		if (numbers[(int)number] == KeyState::Down) return;
+		if (numbers[(int)number] == ButtonState::Down) return;
 
-		numbers[(int)number] = KeyState::JustDown;
+		numbers[(int)number] = ButtonState::JustDown;
 	}
 
 	void InputManager::specialKeyPressed(KB_SPECIALKEYS specialKey)
 	{
 		if (specialKey == KB_SPECIALKEYS::Count) return;
-		if (specialKeys[(int)specialKey] == KeyState::Down) return;
+		if (specialKeys[(int)specialKey] == ButtonState::Down) return;
 
-		specialKeys[(int)specialKey] = KeyState::JustDown;
+		specialKeys[(int)specialKey] = ButtonState::JustDown;
 	}
 
 	void InputManager::letterReleased(KB_LETTERS letter)
 	{
 		if (letter == KB_LETTERS::Count) return;
-		letters[(int)letter] = KeyState::Up;
+		letters[(int)letter] = ButtonState::Up;
 	}
 
 	void InputManager::numberReleased(KB_NUMBERS number)
 	{
 		if (number == KB_NUMBERS::Count) return;
-		numbers[(int)number] = KeyState::Up;
+		numbers[(int)number] = ButtonState::Up;
 	}
 
 	void InputManager::specialKeyReleased(KB_SPECIALKEYS specialKey)
 	{
 		if (specialKey == KB_SPECIALKEYS::Count) return;
-		specialKeys[(int)specialKey] = KeyState::Up;
+		specialKeys[(int)specialKey] = ButtonState::Up;
 	}
 
 
-	void InputManager::UpdateKeyState(KeyState& key)
+	void InputManager::UpdateKeyState(ButtonState& key)
 	{
-		if (key == KeyState::JustDown)
-			key = KeyState::Down;
+		if (key == ButtonState::JustDown)
+			key = ButtonState::Down;
 
-		if (key == KeyState::Up)
-			key = KeyState::None;
+		if (key == ButtonState::Up)
+			key = ButtonState::None;
+	}
+
+	float InputManager::HorizontalMovement()
+	{
+		float dir = 0;
+
+		if (InputManager::ConnectedControllersCount() > 0)
+			dir += GetLeftStickHorizontalValue();
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::LEFT) || IsLetterDown((int)KB_LETTERS::A))
+		{
+			dir += -1;
+			if (dir < -1)
+				dir = -1;
+		}
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::RIGHT) || IsLetterDown((int)KB_LETTERS::D))
+		{
+			dir += 1;
+			if (dir > 1)
+				dir = 1;
+		}
+
+
+		return dir;
+	}
+
+	float InputManager::VerticalMovement()
+	{
+		float dir = 0;
+
+		if (InputManager::ConnectedControllersCount() > 0)
+			dir += GetLeftStickVerticalValue();
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::DOWN) || IsLetterDown((int)KB_LETTERS::S))
+		{
+			dir += -1;
+			if (dir < -1)
+				dir = -1;
+		}
+
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::UP) || IsLetterDown((int)KB_LETTERS::W))
+		{
+			dir += 1;
+			if (dir > 1)
+				dir = 1;
+		}
+
+
+		return dir;
 	}
 
 
 	// ----------- MOUSE -----------------
 
-	bool InputManager::mouseMotionEvent() {
+	bool InputManager::HasMouseMoved() {
 		return isMouseMotionEvent_;
 	}
 
-	bool InputManager::wheelMotionEvent() {
+	bool InputManager::HasMouseWheelMoved() {
 		return isMouseWheelEvent_;
 	}
 
-	Utilities::Vector2D InputManager::getMousePos() {
+	cVector2D InputManager::GetMousePosition() {
 		return mousePos_;
 	}
 
-	int InputManager::getWheelMotionY() {
+	int InputManager::GetMouseWheelScroll() {
 		return wheelMotionY_;
 	}
 
-	bool InputManager::isMouseButtonDown(int b) {
+	bool InputManager::IsMouseButtonDown(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUp(int b) {
+	bool InputManager::IsMouseButtonUp(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return !mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonDownEvent(int b) {
+	bool InputManager::IsMouseButtonPressed(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return isMouseButtonEventDown_ && mbState_[b];
 	}
 
-	bool InputManager::isMouseButtonUpEvent(int b) {
+	bool InputManager::IsMouseButtonReleased(int b) {
+
+		if (b >= (int)MOUSEBUTTON::Count || b < 0) {
+			Console::Output::PrintError("Mouse Input", "The mouse button with index " + std::to_string(b) + " does not exist");
+			return false;
+		}
+
 		return isMouseButtonEventUp_ && !mbState_[b];
 	}
 
@@ -307,402 +471,396 @@ namespace Input {
 
 	// ---------- CONTROLLER -----------
 
-	bool InputManager::initialiseJoysticks() {
-
-		int nJoysticks = SDL_NumJoysticks();
-
-		// Check for SDL_NumJoysticks() error
-		if (nJoysticks < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
+	bool InputManager::initControllers() {
 
 		// Check for SDL_JoystickEventState(SDL_ENABLE) error
 		if (SDL_JoystickEventState(SDL_ENABLE) < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
 			return false;
 		}
-
-		if (nJoysticks > 0) {
-
-			for (int i = 0; i < nJoysticks; i++) addJoystick(i);
-
-			clearJoysticksButtons();
-
-		}
-
-		numJoysticksConnected = nJoysticks;
 
 		return true;
 	}
 
-	bool InputManager::addJoystick(int joystick_id) {
+	void InputManager::addController(int which) {
 
-		SDL_Joystick* joy = SDL_JoystickOpen(joystick_id);
+		controllerConnected_ = true;
 
-		// Check for SDL_JoystickOpen() error
-		if (joy == NULL) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
+		if (!SDL_IsGameController(which))
+			return;
 
-		const char* buffer = SDL_JoystickName(joy);
-		std::string joystickName(buffer);
+		// SDL GameController
+		SDL_GameController* sdlController = SDL_GameControllerOpen(which);
 
-		// Check for SDL_JoystickName() error
-		if (buffer == NULL) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
-
-		int joyNButtons = SDL_JoystickNumButtons(joy);
-		if (joyNButtons < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-			return false;
-		}
-
-		// Adds the information
-		joysticks.push_back(joy);
-
-		joystickNames.push_back(joystickName);
-
-		joystickValues.push_back(std::make_pair(new Utilities::Vector2D(0, 0), new Utilities::Vector2D(0, 0)));
-
-		joystickTriggerValues.push_back(std::make_pair(0, 0));
-
-		joystickNumButtons.push_back(joyNButtons);
-
-		return true;
-	}
-
-	void InputManager::removeJoystick(int joystick_id) {
-
-		SDL_JoystickClose(joysticks[joystick_id]);
-
-		joysticks.pop_back();
-
-		joystickNames.pop_back();
-
-		delete joystickValues[joystick_id].first;
-		delete joystickValues[joystick_id].second;
-		joystickValues.pop_back();
-
-		joystickTriggerValues.pop_back();
-
-		joystickNumButtons.pop_back();
-	}
-
-	void InputManager::clearJoysticksButtons() {
-
-		for (auto i = 0u; i < joysticks.size(); i++) {
-
-			int joyNButtons = SDL_JoystickNumButtons(joysticks[i]);
-			if (joyNButtons < 0) {
-				Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
-				return;
-			}
-
-			joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
-		}
-	}
-
-	void InputManager::removeJoysticks() {
-		for (int i = numJoysticksConnected - 1; i >= 0; i--) {
-			removeJoystick(i);
-		}
-	}
-
-	void InputManager::joystickConnected() {
-		joystickConnected_ = true;
-
-		addJoystick(numJoysticksConnected);
-
-		int joyNButtons = SDL_JoystickNumButtons(joysticks[numJoysticksConnected]);
-		if (joyNButtons < 0) {
-			Console::Output::PrintError("SDL Joystick Initialisation", SDL_GetError());
+		if (sdlController == NULL) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
 			return;
 		}
 
-		joystickButtonStates.push_back(std::vector<bool>(joyNButtons, false));
+		// SDL Joystick
+		SDL_Joystick* joystick = SDL_GameControllerGetJoystick(sdlController);
 
-		numJoysticksConnected++;
+		if (joystick == NULL) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
+			return;
+		}
+
+		// SDL Joystick ID
+		SDL_JoystickID id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(sdlController));
+
+		if (id < 0) {
+			Console::Output::PrintError("SDL GameController Initialisation", SDL_GetError());
+			return;
+		}
+
+		// SDL GameController Name
+		const char* buffer = SDL_GameControllerName(sdlController);
+		std::string name = "Empty";
+		if (buffer != NULL)
+			name = buffer;
+
+
+		// Controller Data
+		ControllerData data;
+		data.controller = sdlController;
+		data.joystick = joystick;
+		data.id = id;
+		data.name = name;
+		data.buttonsStates = std::vector<ButtonState>((int)PS4_CONTROLLER_BUTTONS::Count, ButtonState::None);
+		data.triggers = Utilities::Vector2D();
+		data.joysticks = std::make_pair(Utilities::Vector2D(), Utilities::Vector2D());
+
+		controllers.insert(std::make_pair(which, data));
+
+		numControllersConnected++;
+
 	}
 
-	void InputManager::joystickDisconnected() {
+	void InputManager::removeController(int which) {
 
+		controllerDisconnected_ = true;
 
-		joystickDisconnected_ = true;
+		SDL_GameControllerClose(controllers[which].controller);
 
-		numJoysticksConnected--;
+		controllers.erase(which);
 
-		removeJoystick(numJoysticksConnected);
-
-		joystickButtonStates.pop_back();
+		numControllersConnected--;
 	}
 
-	void InputManager::onJoystickAxisMotion(const SDL_Event& event) {
 
-		if (joysticks.size() <= 0) return;
 
-		isAxisMotionEvent_ = true;
-		joystickId = event.jaxis.which;
 
-		// Left & right joysticks
-		if (event.jaxis.axis < 4) {
+	void InputManager::controllerButtonPressed(const SDL_Event& event) {
+		isControllerButtonDownEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
 
-			if (std::abs(event.jaxis.value) > STICK_DEADZONE) // Deadzone
-			{
-				switch (event.jaxis.axis) {
-				case 0: joystickValues[joystickId].first->setX(event.jaxis.value); break;
-				case 1: joystickValues[joystickId].first->setY(-event.jaxis.value); break;
-				case 2: joystickValues[joystickId].second->setX(event.jaxis.value); break;
-				case 3: joystickValues[joystickId].second->setY(-event.jaxis.value); break;
-				default:
-					break;
-				}
-			}
-			else {
+		auto& state = controllers[lastInputReceivedController].buttonsStates[event.cbutton.button];
 
-				isAxisMotionEvent_ = false;
+		if (state == ButtonState::Down) return;
 
-				for (auto i = 0u; i < joysticks.size(); i++) {
-					joystickValues[joystickId].first->setX(0); joystickValues[joystickId].first->setY(0);
-					joystickValues[joystickId].second->setX(0); joystickValues[joystickId].second->setY(0);
+		state = ButtonState::JustDown;
+	}
 
-					joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
-				}
-			}
+	void InputManager::controllerButtonReleased(const SDL_Event& event) {
+		isControllerButtonUpEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
 
-		} // Left & right triggers
-		else {
+		controllers[lastInputReceivedController].buttonsStates[event.cbutton.button] = ButtonState::Up;
+	}
 
-			if (event.jaxis.value > -MAX_STICK_VALUE + TRIGGER_DEADZONE) { // Trigger Deadzone
+	void InputManager::updateControllersButtons() {
 
-				switch (event.jaxis.axis) {
-				case 4: joystickTriggerValues[joystickId].first = event.jaxis.value; break;
-				case 5: joystickTriggerValues[joystickId].second = event.jaxis.value; break;
-				default:
-					break;
-				}
-			}
-			else {
-				isAxisMotionEvent_ = false;
+		for (auto& c : controllers) {
+			for (auto& b : c.second.buttonsStates) {
 
-				joystickTriggerValues[joystickId].first = 0; joystickTriggerValues[joystickId].second = 0;
+				if (b == ButtonState::JustDown)
+					b = ButtonState::Down;
+
+				if (b == ButtonState::Up)
+					b = ButtonState::None;
 			}
 		}
 	}
 
-	void InputManager::onJoystickButtonDown(const SDL_Event& event) {
-		isJoystickButtonDownEvent_ = true;
-		joystickId = event.jaxis.which;
 
-		joystickButtonStates[joystickId][event.jbutton.button] = true;
+
+	void InputManager::onControllerAxisMotion(const SDL_Event& event) {
+
+		isAxisMotionEvent_ = true;
+		lastInputReceivedController = event.cdevice.which;
+
+		if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT) {
+			controllers[lastInputReceivedController].triggers.setX((float)event.caxis.value / MAX_STICK_VALUE);
+
+		}
+		else if (event.caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT) {
+			controllers[lastInputReceivedController].triggers.setY((float)event.caxis.value / MAX_STICK_VALUE);
+		}
 	}
 
-	void InputManager::onJoystickButtonUp(const SDL_Event& event) {
-		isJoystickButtonUpEvent_ = true;
-		joystickId = event.jaxis.which;
+	void InputManager::readSticksValues() {
 
-		joystickButtonStates[joystickId][event.jbutton.button] = false;
+		for (auto& c : controllers) {
+
+			// Left stick
+			Sint16 axis0 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_LEFTX);
+			Sint16 axis1 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_LEFTY);
+
+			if (std::abs(axis0) < STICK_DEADZONE)
+				axis0 = 0;
+
+			if (std::abs(axis1) < STICK_DEADZONE)
+				axis1 = 0;
+
+			c.second.joysticks.first.setX((float)axis0 / MAX_STICK_VALUE);
+			c.second.joysticks.first.setY(-(float)axis1 / MAX_STICK_VALUE);
+
+
+			// Rigth stick
+			axis0 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_RIGHTX);
+			axis1 = SDL_GameControllerGetAxis(c.second.controller, SDL_CONTROLLER_AXIS_RIGHTY);
+
+			if (std::abs(axis0) < STICK_DEADZONE)
+				axis0 = 0;
+
+			if (std::abs(axis1) < STICK_DEADZONE)
+				axis1 = 0;
+
+			c.second.joysticks.second.setX((float)axis0 / MAX_STICK_VALUE);
+			c.second.joysticks.second.setY(-(float)axis1 / MAX_STICK_VALUE);
+
+		}
+
+
 	}
 
-	int InputManager::getJoysticksConnected() {
-		return numJoysticksConnected;
+	int InputManager::ConnectedControllersCount() {
+		return numControllersConnected;
 	}
 
-	bool InputManager::isJoystickAxisMotion() {
+	bool InputManager::AnyControllerButtonPressed() {
+		return isControllerButtonDownEvent_;
+	}
+
+	bool InputManager::AnyControllerButtonReleased() {
+		return isControllerButtonUpEvent_;
+	}
+
+	bool InputManager::AnyControllerAxisMotion() {
 		return isAxisMotionEvent_;
 	}
 
-	bool InputManager::isJoystickButtonEventDown() {
-		return isJoystickButtonDownEvent_;
+	bool InputManager::AnyControllerConnected() {
+		return controllerConnected_;
 	}
 
-	bool InputManager::isJoystickButtonEventUp() {
-		return isJoystickButtonUpEvent_;
-	}
-
-	bool InputManager::getJoystickId() {
-		return joystickId;
-	}
-
-
-	float InputManager::KeyBoardHorizontalMovement()
-	{
-		float dir = 0;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::LEFT) || isLetterHold((int)KB_LETTERS::A))
-			dir += -1;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::RIGHT) || isLetterHold((int)KB_LETTERS::D))
-			dir += 1;
-
-		return dir;
-	}
-
-	float InputManager::KeyBoardVerticalMovement()
-	{
-		float dir = 0;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::DOWN) || isLetterHold((int)KB_LETTERS::S))
-			dir += -1;
-
-		if (isSpecialKeyHold((int)KB_SPECIALKEYS::UP) || isLetterHold((int)KB_LETTERS::W))
-			dir += 1;
-
-		return dir;
+	bool InputManager::AnyControllerDisconnected() {
+		return controllerDisconnected_;
 	}
 
 
 
 	// With ID
 
-	Utilities::Vector2D InputManager::getJoystickValueWithId(int intct, int id) {
+	bool InputManager::IsControllerButtonPressedWithId(int button, int id) {
 
-		CONTROLLERSTICK ct = (CONTROLLERSTICK) intct;
-		Utilities::Vector2D v = Utilities::Vector2D();
-
-		switch (ct) {
-		case CONTROLLERSTICK::LEFT_STICK:
-			v = joystickValues[id].first;
-			break;
-		case CONTROLLERSTICK::RIGHT_STICK:
-			v = joystickValues[id].second;
-			break;
-		default:
-			break;
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
 		}
 
-		return v / (MAX_STICK_VALUE);
-	}
-
-	float InputManager::getJoystickTriggerValueWithId(int intct, int id) {
-
-		CONTROLLERTRIGGER ct = (CONTROLLERTRIGGER)intct;
-		float v = 0.0f;
-
-		switch (ct) {
-		case CONTROLLERTRIGGER::LEFT_TRIGGER:
-			v = joystickTriggerValues[id].first;
-			break;
-		case CONTROLLERTRIGGER::RIGHT_TRIGGER:
-			v = joystickTriggerValues[id].second;
-			break;
-		default:
-			break;
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
+			return false;
 		}
 
-		return v / (float)(MAX_STICK_VALUE);
+		return controllers[id].buttonsStates[button] == ButtonState::JustDown;
 	}
 
-	bool InputManager::getJoystickButtonStateWithId(int button, int id) {
+	bool InputManager::IsControllerButtonDownWithId(int button, int id) {
 
-		return joystickButtonStates[id][button];
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
+			return false;
+		}
+
+		return controllers[id].buttonsStates[button] == ButtonState::JustDown || controllers[id].buttonsStates[button] == ButtonState::Down;
 	}
 
-	int InputManager::getJoysticksNumButtonsWithId(int id) {
+	bool InputManager::IsControllerButtonReleasedWithId(int button, int id) {
 
-		return joystickNumButtons[id];
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		if (button >= (int)PS4_CONTROLLER_BUTTONS::Count || button < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller button with the specified id: " + std::to_string(button));
+			return false;
+		}
+
+		return controllers[id].buttonsStates[button] == ButtonState::Up;
 	}
 
-	bool InputManager::isLeftJoystickMotionWithId(int id) {
+	float InputManager::GetLeftTriggerValueWithId(int id) {
 
-		return joystickValues[id].first->getX() != 0 || joystickValues[id].first->getY() != 0;
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].triggers.getX();
 	}
 
-	bool InputManager::isRightJoystickMotionWithId(int id) {
+	float InputManager::GetRightTriggerValueWithId(int id) {
 
-		return joystickValues[id].second->getX() != 0 || joystickValues[id].second->getY() != 0;
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].triggers.getY();
 	}
 
-	bool InputManager::isLeftTriggerMotionWithId(int id) {
+	bool InputManager::IsLeftTriggerDownWithId(int id) {
 
-		return joystickTriggerValues[id].first != 0;
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].triggers.getX() > 0;
 	}
 
-	bool InputManager::isRightTriggerMotionWithId(int id) {
+	bool InputManager::IsRightTriggerDownWithId(int id) {
 
-		return joystickTriggerValues[id].second != 0;
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].triggers.getY() > 0;
 	}
 
-	float InputManager::ControllerHorizontalMovementWithId(int id)
-	{
-		float dir = 0;
+	float InputManager::GetLeftStickHorizontalValueWithId(int id) {
 
-		if (isLeftJoystickMotionWithId(id))
-			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getX();
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
 
-		return dir;
+		return controllers[id].joysticks.first.getX();
 	}
 
-	float InputManager::ControllerVerticalMovementWithId(int id)
-	{
-		float dir = 0;
+	float InputManager::GetLeftStickVerticalValueWithId(int id) {
 
-		if (isLeftJoystickMotionWithId(id))
-			dir = getJoystickValueWithId((int)CONTROLLERSTICK::LEFT_STICK, id).getY();
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
 
-		return dir;
+		return controllers[id].joysticks.first.getY();
 	}
+
+	float InputManager::GetRightStickHorizontalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].joysticks.second.getX();
+	}
+
+	float InputManager::GetRightStickVerticalValueWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].joysticks.second.getY();
+	}
+
+	bool InputManager::HasLeftStickMovedWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].joysticks.first.getX() > 0 || controllers[id].joysticks.first.getY() > 0;
+	}
+
+	bool InputManager::HasRightStickMovedWithId(int id) {
+
+		if (id >= numControllersConnected || id < 0) {
+			Console::Output::PrintWarning("Controller Input", "There is no controller with the specified id: " + std::to_string(id));
+			return false;
+		}
+
+		return controllers[id].joysticks.second.getX() > 0 || controllers[id].joysticks.second.getY() > 0;
+	}
+
 
 
 	// With out ID
 
-	Utilities::Vector2D InputManager::getJoystickValue(int ct) {
-		return getJoystickValueWithId(ct, joystickId);
+	bool InputManager::IsControllerButtonPressed(int button) {
+		return IsControllerButtonPressedWithId(button, lastInputReceivedController);
 	}
 
-	float InputManager::getJoystickTriggerValue(int ct) {
-		return getJoystickTriggerValueWithId(ct, joystickId);
+	bool InputManager::IsControllerButtonDown(int button) {
+		return IsControllerButtonDownWithId(button, lastInputReceivedController);
 	}
 
-	bool InputManager::getJoystickButtonState(int button) {
-		return getJoystickButtonStateWithId(button, joystickId);
+	bool InputManager::IsControllerButtonUp(int button) {
+		return IsControllerButtonReleasedWithId(button, lastInputReceivedController);
 	}
 
-	int InputManager::getJoysticksNumButtons() {
-		return getJoysticksNumButtonsWithId(joystickId);
+	float InputManager::GetLeftTriggerValue() {
+		return GetLeftTriggerValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isLeftJoystickMotion() {
-		return isLeftJoystickMotionWithId(joystickId);
+	float InputManager::GetRightTriggerValue() {
+		return GetRightTriggerValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isRightJoystickMotion() {
-		return isRightJoystickMotionWithId(joystickId);
+	bool InputManager::IsLeftTriggerDown() {
+		return IsLeftTriggerDownWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isLeftTriggerMotion() {
-		return isLeftTriggerMotionWithId(joystickId);
+	bool InputManager::IsRightTriggerDown() {
+		return IsRightTriggerDownWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::isRightTriggerMotion() {
-		return isRightTriggerMotionWithId(joystickId);
+	float InputManager::GetLeftStickHorizontalValue() {
+		return GetLeftStickHorizontalValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::ControllerHorizontalMovement() {
-		return ControllerHorizontalMovementWithId(joystickId);
+	float InputManager::GetLeftStickVerticalValue() {
+		return GetLeftStickVerticalValueWithId(lastInputReceivedController);
 	}
 
-	float InputManager::ControllerVerticalMovement() {
-		return ControllerVerticalMovementWithId(joystickId);
+	float InputManager::GetRightStickHorizontalValue() {
+		return GetRightStickHorizontalValueWithId(lastInputReceivedController);
 	}
 
-
-	bool InputManager::joystickDisconnectedEvent() {
-
-		return joystickDisconnected_;
+	float InputManager::GetRightStickVerticalValue() {
+		return GetRightStickVerticalValueWithId(lastInputReceivedController);
 	}
 
-	bool InputManager::joystickConnectedEvent() {
-
-		return joystickConnected_;
+	bool InputManager::HasLeftStickMoved() {
+		return HasLeftStickMovedWithId(lastInputReceivedController);
 	}
 
-	std::string InputManager::getJoystickName(int id) {
-
-		return joystickNames[id];
+	bool InputManager::HasRightStickMoved() {
+		return HasRightStickMovedWithId(lastInputReceivedController);
 	}
 
 
@@ -714,85 +872,85 @@ namespace Input {
 
 		switch (letter) {
 		case KB_LETTERS::A:
-				scancode = SDL_SCANCODE_A;
-				break;
-			case KB_LETTERS::B:
-				scancode = SDL_SCANCODE_B;
-				break;
-			case KB_LETTERS::C:
-				scancode = SDL_SCANCODE_C;
-				break;
-			case KB_LETTERS::D:
-				scancode = SDL_SCANCODE_D;
-				break;
-			case KB_LETTERS::E:
-				scancode = SDL_SCANCODE_E;
-				break;
-			case KB_LETTERS::F:
-				scancode = SDL_SCANCODE_F;
-				break;
-			case KB_LETTERS::G:
-				scancode = SDL_SCANCODE_G;
-				break;
-			case KB_LETTERS::H:
-				scancode = SDL_SCANCODE_H;
-				break;
-			case KB_LETTERS::I:
-				scancode = SDL_SCANCODE_I;
-				break;
-			case KB_LETTERS::J:
-				scancode = SDL_SCANCODE_J;
-				break;
-			case KB_LETTERS::K:
-				scancode = SDL_SCANCODE_K;
-				break;
-			case KB_LETTERS::L:
-				scancode = SDL_SCANCODE_L;
-				break;
-			case KB_LETTERS::M:
-				scancode = SDL_SCANCODE_M;
-				break;
-			case KB_LETTERS::N:
-				scancode = SDL_SCANCODE_N;
-				break;
-			case KB_LETTERS::O:
-				scancode = SDL_SCANCODE_O;
-				break;
-			case KB_LETTERS::P:
-				scancode = SDL_SCANCODE_P;
-				break;
-			case KB_LETTERS::Q:
-				scancode = SDL_SCANCODE_Q;
-				break;
-			case KB_LETTERS::R:
-				scancode = SDL_SCANCODE_R;
-				break;
-			case KB_LETTERS::S:
-				scancode = SDL_SCANCODE_S;
-				break;
-			case KB_LETTERS::T:
-				scancode = SDL_SCANCODE_T;
-				break;
-			case KB_LETTERS::U:
-				scancode = SDL_SCANCODE_U;
-				break;
-			case KB_LETTERS::V:
-				scancode = SDL_SCANCODE_V;
-				break;
-			case KB_LETTERS::W:
-				scancode = SDL_SCANCODE_W;
-				break;
-			case KB_LETTERS::X:
-				scancode = SDL_SCANCODE_X;
-				break;
-			case KB_LETTERS::Y:
-				scancode = SDL_SCANCODE_Y;
-				break;
-			case KB_LETTERS::Z:
-				scancode = SDL_SCANCODE_Z;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_A;
+			break;
+		case KB_LETTERS::B:
+			scancode = SDL_SCANCODE_B;
+			break;
+		case KB_LETTERS::C:
+			scancode = SDL_SCANCODE_C;
+			break;
+		case KB_LETTERS::D:
+			scancode = SDL_SCANCODE_D;
+			break;
+		case KB_LETTERS::E:
+			scancode = SDL_SCANCODE_E;
+			break;
+		case KB_LETTERS::F:
+			scancode = SDL_SCANCODE_F;
+			break;
+		case KB_LETTERS::G:
+			scancode = SDL_SCANCODE_G;
+			break;
+		case KB_LETTERS::H:
+			scancode = SDL_SCANCODE_H;
+			break;
+		case KB_LETTERS::I:
+			scancode = SDL_SCANCODE_I;
+			break;
+		case KB_LETTERS::J:
+			scancode = SDL_SCANCODE_J;
+			break;
+		case KB_LETTERS::K:
+			scancode = SDL_SCANCODE_K;
+			break;
+		case KB_LETTERS::L:
+			scancode = SDL_SCANCODE_L;
+			break;
+		case KB_LETTERS::M:
+			scancode = SDL_SCANCODE_M;
+			break;
+		case KB_LETTERS::N:
+			scancode = SDL_SCANCODE_N;
+			break;
+		case KB_LETTERS::O:
+			scancode = SDL_SCANCODE_O;
+			break;
+		case KB_LETTERS::P:
+			scancode = SDL_SCANCODE_P;
+			break;
+		case KB_LETTERS::Q:
+			scancode = SDL_SCANCODE_Q;
+			break;
+		case KB_LETTERS::R:
+			scancode = SDL_SCANCODE_R;
+			break;
+		case KB_LETTERS::S:
+			scancode = SDL_SCANCODE_S;
+			break;
+		case KB_LETTERS::T:
+			scancode = SDL_SCANCODE_T;
+			break;
+		case KB_LETTERS::U:
+			scancode = SDL_SCANCODE_U;
+			break;
+		case KB_LETTERS::V:
+			scancode = SDL_SCANCODE_V;
+			break;
+		case KB_LETTERS::W:
+			scancode = SDL_SCANCODE_W;
+			break;
+		case KB_LETTERS::X:
+			scancode = SDL_SCANCODE_X;
+			break;
+		case KB_LETTERS::Y:
+			scancode = SDL_SCANCODE_Y;
+			break;
+		case KB_LETTERS::Z:
+			scancode = SDL_SCANCODE_Z;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -805,73 +963,73 @@ namespace Input {
 
 		switch (number) {
 		case KB_NUMBERS::Num1:
-				scancode = SDL_SCANCODE_1;
-				break;
-			case KB_NUMBERS::Num2:
-				scancode = SDL_SCANCODE_2;
-				break;
-			case KB_NUMBERS::Num3:
-				scancode = SDL_SCANCODE_3;
-				break;
-			case KB_NUMBERS::Num4:
-				scancode = SDL_SCANCODE_4;
-				break;
-			case KB_NUMBERS::Num5:
-				scancode = SDL_SCANCODE_5;
-				break;
-			case KB_NUMBERS::Num6:
-				scancode = SDL_SCANCODE_6;
-				break;
-			case KB_NUMBERS::Num7:
-				scancode = SDL_SCANCODE_7;
-				break;
-			case KB_NUMBERS::Num8:
-				scancode = SDL_SCANCODE_8;
-				break;
-			case KB_NUMBERS::Num9:
-				scancode = SDL_SCANCODE_9;
-				break;
-			case KB_NUMBERS::Num0:
-				scancode = SDL_SCANCODE_0;
-				break;
-			case KB_NUMBERS::F1:
-				scancode = SDL_SCANCODE_F1;
-				break;
-			case KB_NUMBERS::F2:
-				scancode = SDL_SCANCODE_F2;
-				break;
-			case KB_NUMBERS::F3:
-				scancode = SDL_SCANCODE_F3;
-				break;
-			case KB_NUMBERS::F4:
-				scancode = SDL_SCANCODE_F4;
-				break;
-			case KB_NUMBERS::F5:
-				scancode = SDL_SCANCODE_F5;
-				break;
-			case KB_NUMBERS::F6:
-				scancode = SDL_SCANCODE_F6;
-				break;
-			case KB_NUMBERS::F7:
-				scancode = SDL_SCANCODE_F7;
-				break;
-			case KB_NUMBERS::F8:
-				scancode = SDL_SCANCODE_F8;
-				break;
-			case KB_NUMBERS::F9:
-				scancode = SDL_SCANCODE_F9;
-				break;
-			case KB_NUMBERS::F10:
-				scancode = SDL_SCANCODE_F10;
-				break;
-			case KB_NUMBERS::F11:
-				scancode = SDL_SCANCODE_F11;
-				break;
-			case KB_NUMBERS::F12:
-				scancode = SDL_SCANCODE_F12;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_1;
+			break;
+		case KB_NUMBERS::Num2:
+			scancode = SDL_SCANCODE_2;
+			break;
+		case KB_NUMBERS::Num3:
+			scancode = SDL_SCANCODE_3;
+			break;
+		case KB_NUMBERS::Num4:
+			scancode = SDL_SCANCODE_4;
+			break;
+		case KB_NUMBERS::Num5:
+			scancode = SDL_SCANCODE_5;
+			break;
+		case KB_NUMBERS::Num6:
+			scancode = SDL_SCANCODE_6;
+			break;
+		case KB_NUMBERS::Num7:
+			scancode = SDL_SCANCODE_7;
+			break;
+		case KB_NUMBERS::Num8:
+			scancode = SDL_SCANCODE_8;
+			break;
+		case KB_NUMBERS::Num9:
+			scancode = SDL_SCANCODE_9;
+			break;
+		case KB_NUMBERS::Num0:
+			scancode = SDL_SCANCODE_0;
+			break;
+		case KB_NUMBERS::F1:
+			scancode = SDL_SCANCODE_F1;
+			break;
+		case KB_NUMBERS::F2:
+			scancode = SDL_SCANCODE_F2;
+			break;
+		case KB_NUMBERS::F3:
+			scancode = SDL_SCANCODE_F3;
+			break;
+		case KB_NUMBERS::F4:
+			scancode = SDL_SCANCODE_F4;
+			break;
+		case KB_NUMBERS::F5:
+			scancode = SDL_SCANCODE_F5;
+			break;
+		case KB_NUMBERS::F6:
+			scancode = SDL_SCANCODE_F6;
+			break;
+		case KB_NUMBERS::F7:
+			scancode = SDL_SCANCODE_F7;
+			break;
+		case KB_NUMBERS::F8:
+			scancode = SDL_SCANCODE_F8;
+			break;
+		case KB_NUMBERS::F9:
+			scancode = SDL_SCANCODE_F9;
+			break;
+		case KB_NUMBERS::F10:
+			scancode = SDL_SCANCODE_F10;
+			break;
+		case KB_NUMBERS::F11:
+			scancode = SDL_SCANCODE_F11;
+			break;
+		case KB_NUMBERS::F12:
+			scancode = SDL_SCANCODE_F12;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -884,52 +1042,52 @@ namespace Input {
 
 		switch (specialKey) {
 		case KB_SPECIALKEYS::RETURN:
-				scancode = SDL_SCANCODE_RETURN;
-				break;
-			case KB_SPECIALKEYS::ESCAPE:
-				scancode = SDL_SCANCODE_ESCAPE;
-				break;
-			case KB_SPECIALKEYS::BACKSPACE:
-				scancode = SDL_SCANCODE_BACKSPACE;
-				break;
-			case KB_SPECIALKEYS::TAB:
-				scancode = SDL_SCANCODE_TAB;
-				break;
-			case KB_SPECIALKEYS::SPACE:
-				scancode = SDL_SCANCODE_SPACE;
-				break;
-			case KB_SPECIALKEYS::RIGHT:
-				scancode = SDL_SCANCODE_RIGHT;
-				break;
-			case KB_SPECIALKEYS::LEFT:
-				scancode = SDL_SCANCODE_LEFT;
-				break;
-			case KB_SPECIALKEYS::DOWN:
-				scancode = SDL_SCANCODE_DOWN;
-				break;
-			case KB_SPECIALKEYS::UP:
-				scancode = SDL_SCANCODE_UP;
-				break;
-			case KB_SPECIALKEYS::LCTRL:
-				scancode = SDL_SCANCODE_LCTRL;
-				break;
-			case KB_SPECIALKEYS::LSHIFT:
-				scancode = SDL_SCANCODE_LSHIFT;
-				break;
-			case KB_SPECIALKEYS::LALT:
-				scancode = SDL_SCANCODE_LALT;
-				break;
-			case KB_SPECIALKEYS::RCTRL:
-				scancode = SDL_SCANCODE_RCTRL;
-				break;
-			case KB_SPECIALKEYS::RSHIFT:
-				scancode = SDL_SCANCODE_RSHIFT;
-				break;
-			case KB_SPECIALKEYS::RALT:
-				scancode = SDL_SCANCODE_RALT;
-				break;
-			default:
-				break;
+			scancode = SDL_SCANCODE_RETURN;
+			break;
+		case KB_SPECIALKEYS::ESCAPE:
+			scancode = SDL_SCANCODE_ESCAPE;
+			break;
+		case KB_SPECIALKEYS::BACKSPACE:
+			scancode = SDL_SCANCODE_BACKSPACE;
+			break;
+		case KB_SPECIALKEYS::TAB:
+			scancode = SDL_SCANCODE_TAB;
+			break;
+		case KB_SPECIALKEYS::SPACE:
+			scancode = SDL_SCANCODE_SPACE;
+			break;
+		case KB_SPECIALKEYS::RIGHT:
+			scancode = SDL_SCANCODE_RIGHT;
+			break;
+		case KB_SPECIALKEYS::LEFT:
+			scancode = SDL_SCANCODE_LEFT;
+			break;
+		case KB_SPECIALKEYS::DOWN:
+			scancode = SDL_SCANCODE_DOWN;
+			break;
+		case KB_SPECIALKEYS::UP:
+			scancode = SDL_SCANCODE_UP;
+			break;
+		case KB_SPECIALKEYS::LCTRL:
+			scancode = SDL_SCANCODE_LCTRL;
+			break;
+		case KB_SPECIALKEYS::LSHIFT:
+			scancode = SDL_SCANCODE_LSHIFT;
+			break;
+		case KB_SPECIALKEYS::LALT:
+			scancode = SDL_SCANCODE_LALT;
+			break;
+		case KB_SPECIALKEYS::RCTRL:
+			scancode = SDL_SCANCODE_RCTRL;
+			break;
+		case KB_SPECIALKEYS::RSHIFT:
+			scancode = SDL_SCANCODE_RSHIFT;
+			break;
+		case KB_SPECIALKEYS::RALT:
+			scancode = SDL_SCANCODE_RALT;
+			break;
+		default:
+			break;
 		}
 
 		return scancode;
@@ -955,7 +1113,7 @@ namespace Input {
 
 		if (scancode >= SDL_SCANCODE_F1 && scancode <= SDL_SCANCODE_F12) {
 
-			return (KB_NUMBERS) ((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
+			return (KB_NUMBERS)((int)KB_NUMBERS::F1 + scancode - SDL_SCANCODE_F1);
 		}
 
 		return KB_NUMBERS::Count;
@@ -964,11 +1122,11 @@ namespace Input {
 	Input::InputManager::KB_SPECIALKEYS Input::InputManager::ConvertToSpecialKeys(const SDL_Scancode& scancode)
 	{
 		switch (scancode) {
-		case SDL_SCANCODE_RETURN :
+		case SDL_SCANCODE_RETURN:
 			return KB_SPECIALKEYS::RETURN;
 		case SDL_SCANCODE_ESCAPE:
 			return KB_SPECIALKEYS::ESCAPE;
-		case SDL_SCANCODE_BACKSPACE :
+		case SDL_SCANCODE_BACKSPACE:
 			return KB_SPECIALKEYS::BACKSPACE;
 		case SDL_SCANCODE_TAB:
 			return KB_SPECIALKEYS::TAB;

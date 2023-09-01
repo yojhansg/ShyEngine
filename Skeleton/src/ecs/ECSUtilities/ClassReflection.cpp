@@ -80,6 +80,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("gravityScale"))
+			self->gravityScale = std::stof(map.at("gravityScale"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
@@ -88,8 +90,6 @@ ClassReflection::ClassReflection(){
 		CircleBody* self = static_cast<CircleBody*>(selfComp);
 		if(map.contains("radius"))
 			self->radius = std::stof(map.at("radius"));
-		if(map.contains("size"))
-			self->size = map.at("size");
 		if(map.contains("offSet"))
 			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
@@ -102,14 +102,14 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("gravityScale"))
+			self->gravityScale = std::stof(map.at("gravityScale"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
 }
 	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		EdgeBody* self = static_cast<EdgeBody*>(selfComp);
-		if(map.contains("size"))
-			self->size = map.at("size");
 		if(map.contains("offSet"))
 			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
@@ -122,6 +122,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("gravityScale"))
+			self->gravityScale = std::stof(map.at("gravityScale"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
@@ -136,6 +138,10 @@ ClassReflection::ClassReflection(){
 		Movement* self = static_cast<Movement*>(selfComp);
 		if(map.contains("velocity"))
 			self->velocity = std::stof(map.at("velocity"));
+		if(map.contains("clampDiagonalVelocity"))
+			self->clampDiagonalVelocity = map.at("clampDiagonalVelocity") == "true" ? true : false;
+		if(map.contains("usePhysics"))
+			self->usePhysics = map.at("usePhysics") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -354,8 +360,6 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectPhysicBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		PhysicBody* self = static_cast<PhysicBody*>(selfComp);
-		if(map.contains("size"))
-			self->size = map.at("size");
 		if(map.contains("offSet"))
 			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
@@ -368,6 +372,8 @@ ClassReflection::ClassReflection(){
 			self->trigger = map.at("trigger") == "true" ? true : false;
 		if(map.contains("freezeRotation"))
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
+		if(map.contains("gravityScale"))
+			self->gravityScale = std::stof(map.at("gravityScale"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 

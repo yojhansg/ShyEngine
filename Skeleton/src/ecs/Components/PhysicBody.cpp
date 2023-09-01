@@ -18,7 +18,6 @@ namespace ECS {
 
 		this->bodyType = (int) BODY_TYPE::STATIC;
 
-		size = { 1, 1 };
 		offSet = { 0, 0 };
 
 		lastPositionSync = { 0, 0 };
@@ -30,6 +29,7 @@ namespace ECS {
 		mass = 1;
 
 		bounciness = .5f;
+		gravityScale = 1.0f;
 
 		body = nullptr;
 		bodyDef = nullptr;
@@ -66,10 +66,11 @@ namespace ECS {
 			return;
 		}
 
-		world = Physics::PhysicsManager::instance()->getWorld();
+		world = pm->getWorld();
 
 		bodyDef = new b2BodyDef();
 		fixtureDef = new b2FixtureDef();
+
 	}
 
 	void PhysicBody::start() {
@@ -84,10 +85,12 @@ namespace ECS {
 
 		Vector2D v = Vector2D(offSet.getX() * std::cos(radians) - offSet.getY() * std::sin(radians), offSet.getX() * std::sin(radians) + offSet.getY() * std::cos(radians));
 
-		b2Vec2 p = { position.getX() / screenToWorldFactor + v.getX() * scale.getX(), position.getY() / screenToWorldFactor + v.getY() * scale.getY() };
+		Vector2D p = { position.getX() + v.getX(), position.getY() + v.getY() };
+
+		p = p / screenToWorldFactor;
 
 		// Position + rotation
-		body->SetTransform(p, radians);
+		body->SetTransform({p.getX(), p.getY()}, radians);
 
 		scaleShape();
 
@@ -103,10 +106,12 @@ namespace ECS {
 
 		fixture->SetFilterData(filter);
 
+		// Fixture and body attributes
 		setBodyType(bodyType);
 		setBounciness(bounciness);
 		setTrigger(trigger);
 		setRotationFreezed(freezeRotation);
+		setGravityScale(gravityScale);
 	}
 
 	void PhysicBody::fixedUpdate(float fixedDeltaTime) {
@@ -125,7 +130,8 @@ namespace ECS {
 			// Position
 			Vector2D trPosOffSet = position - lastPositionSync;
 
-			Vector2D bodyPosOffSet = { body->GetPosition().x * screenToWorldFactor - lastPositionSync.getX(), body->GetPosition().y * screenToWorldFactor - lastPositionSync.getY() };
+			Vector2D bodyPosOffSet = { body->GetPosition().x * screenToWorldFactor - offSet.getX() - lastPositionSync.getX(),
+									  body->GetPosition().y * screenToWorldFactor - offSet.getY() - lastPositionSync.getY()};
 
 			Vector2D newPos = lastPositionSync + trPosOffSet + bodyPosOffSet;
 
@@ -147,7 +153,8 @@ namespace ECS {
 			}
 
 			// Body
-			body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor, newPos.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
+			body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor + offSet.getX() / screenToWorldFactor, 
+				newPos.getY() / screenToWorldFactor + offSet.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
 
 			// Transform
 			transform->SetWorldPosition(newPos);

@@ -420,7 +420,7 @@ namespace ShyEditor {
 			sscanf_s(json["value"].get<std::string>().c_str(), "%f, %f, %f", &value.value.valueColor.r, &value.value.valueColor.g, &value.value.valueColor.b);
 		}
 		else if (attrType == Components::AttributesType::ENTITY) {
-			value.value.entityIdx = -1;
+			value.value.entityIdx = 0;
 		}
 		else if (attrType == Components::AttributesType::CHAR) {
 			value.value.valueChar = '\0';
@@ -471,8 +471,8 @@ namespace ShyEditor {
 
 		auto background = ImGui::GetWindowDrawList();
 
-		auto& palette = ColorPalette::GetCurrentPalette();
-		auto color = palette.scriptBackground;
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
+		auto color = palette.background;
 		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
 
 		auto lineColor = palette.line;

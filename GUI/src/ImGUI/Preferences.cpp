@@ -24,7 +24,6 @@ namespace ShyEditor {
 
 	Preferences::Preferences() : Window("Preferences", 0)
 	{
-		Hide();
 		instance = this;
 
 		open = false;
@@ -51,6 +50,7 @@ namespace ShyEditor {
 		data.vsync = true;
 		data.showCursor = true;
 		data.fullscreen = false;
+		data.bgColor = PreferencesColor();
 
 		// Physics
 		data.gravity_x = 0;
@@ -81,30 +81,44 @@ namespace ShyEditor {
 
 	void Preferences::Behaviour()
 	{
-		if (ImGui::CollapsingHeader("General")) {
-			GeneralHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Window")) {
-			WindowHeader();
-		}
+		if (ImGui::BeginTabBar("PreferencesTab")) {
 
-		if (ImGui::CollapsingHeader("Physics")) {
-			PhysicsHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Input")) {
-			InputHeader();
-		}
 
-		if (ImGui::CollapsingHeader("Overlay")) {
-			OverlayHeader();
-		}
+			if (ImGui::BeginTabItem("General")) {
+				GeneralHeader();
+				ImGui::EndTabItem();
+			}
 
-		if (ImGui::CollapsingHeader("Audio")) {
-			AudioHeader();
-		}
+			if (ImGui::BeginTabItem("Window")) {
+				WindowHeader();
+				ImGui::EndTabItem();
+			}
 
+			if (ImGui::BeginTabItem("Physics")) {
+				PhysicsHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Input")) {
+				InputHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Overlay")) {
+				OverlayHeader();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Audio")) {
+				AudioHeader();
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
+
+		}
 		// BUILD PATH
 
 
@@ -167,6 +181,13 @@ namespace ShyEditor {
 		ImGui::Text("Start showing cursor");
 		ImGui::SameLine();
 		ImGui::Checkbox("##showcursor", &data.showCursor);
+
+
+		// Background Color
+		ImGui::Text("Background Color");
+		ImGui::SameLine();
+		ImGui::ColorEdit4("##background", (float*)&data.bgColor);
+
 
 		ImGui::Unindent();
 
@@ -434,6 +455,9 @@ namespace ShyEditor {
 		root["fullScreen"] = data.fullscreen;
 		root["showcursor"] = data.showCursor;
 
+		root["bgColor"] = std::to_string((int)(data.bgColor.r * 255)) + ", " + std::to_string((int)(data.bgColor.g * 255)) + ", " + std::to_string((int)(data.bgColor.b * 255));
+		root["bgAlpha"] = (int)(data.bgColor.a * 255);
+
 		// Physics
 		root["gravity"] = std::to_string(data.gravity_x) + ", " + std::to_string(data.gravity_y);
 		root["layers"] = data.layers;
@@ -497,7 +521,7 @@ namespace ShyEditor {
 		std::ofstream output(ProjectsManager::GetProjectFilePath());
 		output << project.dump(4);
 		output.close();
-		
+
 	}
 
 	void Preferences::LoadData() {
@@ -533,17 +557,27 @@ namespace ShyEditor {
 
 		std::string size = preferences["windowSize"];
 		std::stringstream windowSize(size);
-		std::string x, y;
+		std::string x, y, z;
 		std::getline(windowSize, x, ',');
 		std::getline(windowSize, y, ',');
 
-		instance->data.width = std::stoi(x); 
+		instance->data.width = std::stoi(x);
 		instance->data.height = std::stoi(y);
 
 		instance->data.vsync = preferences["vsync"];
 		instance->data.fullscreen = preferences["fullScreen"];
 		instance->data.showCursor = preferences["showcursor"];
 
+		std::string bgColor = preferences["bgColor"];
+		std::stringstream backgroundColor(bgColor);
+		std::getline(backgroundColor, x, ',');
+		std::getline(backgroundColor, y, ',');
+		std::getline(backgroundColor, z, ',');
+
+		instance->data.bgColor.r = std::stoi(x) / 255.0f;
+		instance->data.bgColor.g = std::stoi(y) / 255.0f;
+		instance->data.bgColor.b = std::stoi(z) / 255.0f;
+		instance->data.bgColor.a = preferences["bgAlpha"] / 255.0f;
 
 		// Physics
 		std::string gravity = preferences["gravity"];
@@ -553,7 +587,7 @@ namespace ShyEditor {
 
 		instance->data.gravity_x = std::stof(x);
 		instance->data.gravity_y = std::stof(y);
-		
+
 		instance->data.layers = preferences["layers"];
 		instance->nLayers = instance->data.layers.size();
 		instance->data.collisionMatrix = preferences["matrix"];

@@ -40,7 +40,6 @@ namespace ShyEditor {
 		windowWidth = 700;
 		windowHeight = 700;
 
-		Hide();
 	}
 
 	PrefabManager::~PrefabManager()
@@ -385,8 +384,8 @@ namespace ShyEditor {
 			{
 				Texture* text = prefab->IsTransform() ? prefab->GetTexture() : prefab->GetOverlay()->GetImage()->GetTexture();
 
-				float scaleX = prefab->IsTransform() ? prefab->GetScale().x : prefab->GetOverlay()->GetSize().x;
-				float scaleY = prefab->IsTransform() ? prefab->GetScale().y : prefab->GetOverlay()->GetSize().y;
+				float scaleX = prefab->IsTransform() ? prefab->GetWorldScale().x : prefab->GetOverlay()->GetSize().x;
+				float scaleY = prefab->IsTransform() ? prefab->GetWorldScale().y : prefab->GetOverlay()->GetSize().y;
 
 				float sizeX = text->getWidth() * scaleX;
 				float sizeY = text->getHeight() * scaleY;

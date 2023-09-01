@@ -14,7 +14,6 @@
 
 namespace ShyEditor {
 
-
 	Window::Window(std::string _windowName, int f = 0)
 	{
 		flags = f;
@@ -73,12 +72,6 @@ namespace ShyEditor {
 	{
 		if (visible) {
 
-			if (!docked)
-			{
-				ImGui::SetNextWindowPos(ImVec2(windowPosX, windowPosY), ImGuiCond_Appearing);
-				ImGui::SetWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Appearing);
-			}
-
 			ImGui::Begin(windowName.c_str(), &visible, (ImGuiWindowFlags_)flags);
 
 			auto pos = ImGui::GetWindowPos();
@@ -129,14 +122,7 @@ namespace ShyEditor {
 				}
 			}
 
-
-
-
-
-
 			ImGui::End();
-
-
 
 		}
 
@@ -167,9 +153,6 @@ namespace ShyEditor {
 	void Window::Show()
 	{
 		visible = true;
-
-		windowPosX = Editor::GetInstance()->GetMainWindowSize().x / 2 - windowWidth / 2;
-		windowPosY = Editor::GetInstance()->GetMainWindowSize().y / 2 - windowHeight / 2;
 	}
 
 	bool Window::IsVisible()

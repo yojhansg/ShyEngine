@@ -28,6 +28,9 @@ namespace ShyEditor {
 
 		ignoreOutput = false;
 		initialised = false;
+
+
+		unique_id = (uint32_t) this;
 	}
 
 	ScriptCreationUtilities::ScriptNode::~ScriptNode()
@@ -74,8 +77,7 @@ namespace ShyEditor {
 				flag |= ImGuiWindowFlags_NoResize;
 			}
 
-
-			ImGui::Begin(GetStringId().c_str(), NULL, flag);
+			ImGui::Begin((GetStringId() + "##" + std::to_string(unique_id)).c_str(), NULL, flag);
 
 			UpdateAndRender();
 			ManageOutputNode();
@@ -95,7 +97,6 @@ namespace ShyEditor {
 				h = winSize.y;
 			}
 			ImGui::End();
-
 			return close;
 
 		}
@@ -130,7 +131,7 @@ namespace ShyEditor {
 		ImGui::BeginChild((GetStringId() + "output node").c_str(), ImVec2(outputButtonSize, outputButtonSize * 2), false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
 		ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
@@ -375,27 +376,31 @@ namespace ShyEditor {
 
 			bool endMenu = false;
 
+
+			ImGui::SeparatorText("Components");
 			AddValuesFromVector(Components::ComponentManager::GetAllComponents());
+
+			ImGui::SeparatorText("Managers");
 			AddValuesFromVector(Components::ComponentManager::GetAllManagers());
 
 			ImGui::EndPopup();
 		}
 	}
 
-	void ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVector(std::unordered_map<std::string, Components::Component>& v)
+	void ScriptCreationUtilities::ScriptDropdownSelection::AddValuesFromVector(std::map<std::string, Components::Component>& v)
 	{
 		for (auto& comp : v) {
 
-			auto& functions = comp.second.GetAllFunctions();
+			auto& functions = comp.second.GetFunctionsOrdered();
 			if (functions.size() > 0)
 				if (ImGui::CollapsingHeader(comp.first.c_str())) {
 
 					for (auto& function : functions) {
 
-						std::string name = function.first;
+						std::string name = function->getName();
 						if (ImGui::MenuItem(name.c_str())) {
 
-							ScriptNode* node = new ScriptFunction(function.second);
+							ScriptNode* node = new ScriptFunction(*function);
 
 							node->SetPosition(mousex, mousey);
 
@@ -435,7 +440,7 @@ namespace ShyEditor {
 
 	void ScriptCreationUtilities::ScriptFlow::ManageNextNode(float x, float y, const std::string& tooltip)
 	{
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 
 		Bezier::SetColor(ColorPaletteParams(palette.flowline));
 		Bezier::SetThickness(palette.flowlineThickness);
@@ -478,6 +483,12 @@ namespace ShyEditor {
 			}
 			else
 				drawList->AddQuad(nextNodePosition, nextNodePositionBottom, nextNodePositionLeft, nextNodePositionTop, hoverColor, palette.buttonThickness);
+
+
+			if (ImGui::IsMouseDoubleClicked(0)) {
+
+				RemoveNext();
+			}
 
 
 			if (tooltip != "") {
@@ -542,6 +553,7 @@ namespace ShyEditor {
 			ImVec2 previousPosC = ImVec2(previousPos.x + nodeSize + nodeSize, previousPos.y);
 			ImVec2 previousPosD = ImVec2(previousPos.x + nodeSize, previousPos.y + nodeSize);
 
+
 			drawList->AddQuadFilled(previousPos, previousPosB, previousPosC, previousPosD, nodeColor);
 		}
 
@@ -588,7 +600,7 @@ namespace ShyEditor {
 	{
 		auto drawList = ImGui::GetWindowDrawList();
 
-		auto& palette = ColorPalette::GetCurrentPalette();
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(palette.line, palette.lineAlpha);
 		ImColor hoverColor = ColorPaletteAlpha2ImColor(palette.hover, palette.lineAlpha);
 
@@ -625,7 +637,7 @@ namespace ShyEditor {
 				ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 				(
 					in.GetTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-					in.GetTypeStr() == "any"
+					in.GetTypeStr() == "Any"
 					)
 
 				) {
@@ -877,6 +889,16 @@ namespace ShyEditor {
 	void ScriptCreationUtilities::Grid::ResetIntevalScale()
 	{
 		Grid::intervalScale = 4;
+	}
+
+	void ScriptCreationUtilities::Grid::DrawBackgroundColor(float r, float g, float b, float a)
+	{
+		auto drawList = ImGui::GetWindowDrawList();
+
+		auto windowSize = ImGui::GetWindowSize();
+		auto windowPos = ImGui::GetWindowPos();
+
+		drawList->AddRectFilled(windowPos, ImVec2(windowPos.x + windowSize.x, windowPos.y + windowSize.y), RGBA2ImColor(r, g, b, a), 0, 0);
 	}
 
 	void ScriptCreationUtilities::Grid::Draw()
@@ -1341,16 +1363,10 @@ namespace ShyEditor {
 
 			ImGui::OpenPopup("Close without saving");
 			auto size = ImGui::GetWindowSize();
-
-			auto drawList = ImGui::GetWindowDrawList();
-
-			drawList->AddRectFilled(ImVec2(0, 0), windowSize, ColorPalette2ImColor(ColorPalette::GetCurrentPalette().scriptBackground), 0, 0);
-
-
 			ImGui::SetNextWindowPos(ImVec2(size.x * 0.5f, size.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f)); // Centrar el pop-up
 
 		}
-		if (ImGui::BeginPopup("Close without saving")) {
+		if (ImGui::BeginPopupModal("Close without saving")) {
 
 			ImGui::Text("Esto es un mensaje emergente");
 			bool closePopup = false;
@@ -1383,7 +1399,7 @@ namespace ShyEditor {
 	}
 
 
-	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundFunctions(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH)
+	void ScriptCreationUtilities::ScriptMenuBar::ShowFoundFunctions(std::map<std::string, Components::Component>& v, int windowW, int windowH)
 	{
 
 		for (auto& comp : v) {
@@ -1546,9 +1562,9 @@ namespace ShyEditor {
 		json root = ScriptNode::ToJson();
 
 		//TODO: serialised values
-		root["serialized"] = serialized;
+		root["serialized"] = IsSerialized();
 
-		if (serialized)
+		if (IsSerialized())
 			root["name"] = serializedName;
 
 		root["type"] = Components::Attribute::GetTypeStrFromAttributeType(attrType);
@@ -1782,7 +1798,7 @@ namespace ShyEditor {
 
 		auto drawList = ImGui::GetWindowDrawList();
 
-		auto& colorPalette = ColorPalette::GetCurrentPalette();
+		auto& colorPalette = ColorPalette::GetCurrentPalette().scripting;
 		ImColor nodeColor = ColorPaletteAlpha2ImColor(colorPalette.line, colorPalette.lineAlpha);
 
 		if (drawInputFilled)

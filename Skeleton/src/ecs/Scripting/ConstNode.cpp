@@ -12,10 +12,19 @@ void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 {
 	next = nullptr;
 
+	if (name.size() == 0) return;
+
+	ECS::Script* script = ScriptManager::instance()->GetCurrentScript();
+
+	output = script->GetSerialisedValue(name);
+
+
+
 	if (originalValue.type == Variable::Type::Entity)
 	{
 		//TODO: hacer algo con el id
-		int id = originalValue.value.entityId;
+
+		int id = output.value.entityId;
 		if (ECS::ReferencesManager::instance()->IsEntityValid(id)) {
 
 
@@ -25,12 +34,6 @@ void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
 			output.value.entity = nullptr;
 		}
 	}
-
-	if (name.size() == 0) return;
-
-	ECS::Script* script = ScriptManager::instance()->GetCurrentScript();
-
-	output = script->GetSerialisedValue(name);
 
 	if (output.type == Scripting::Variable::Type::Null)
 		output = originalValue;

@@ -17,16 +17,22 @@
         ],
 
         "MouseButton": [
-
+            "Left", "Middle", "Right"
         ],
         "ControllerStick": [
-
+            "Left", "Right"
         ],
         "ControllerTrigger":[
-
+            "Left", "Right"
         ],
-        "PS4ControllerButtons":[
-            
+        "PS4Controller":[
+            "X", "O", "Square", "Triangle", "Share", "Home", "Options", "L3", "R3", "L1", "R1", "Arrow up", "Arrow down",
+            "Arrow left", "Arrow right", "Panel"
+        ],
+
+        "XboxController":[
+            "A", "B", "X", "Y", "Back", "Guide", "Start", "LSB", "RSB", "LB", "RB", "Arrow up", "Arrow down",
+            "Arrow left", "Arrow right"
         ]
     },
 

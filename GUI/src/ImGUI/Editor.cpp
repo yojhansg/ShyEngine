@@ -7,11 +7,13 @@
 #include "SDL_image.h"
 #include "imgui_internal.h"
 #include "SDL_ttf.h"
+#include "nlohmann/json.hpp"
 
 #include "ComponentManager.h"
 #include "ResourcesManager.h" 
 #include "ProjectsManager.h"
 #include "ScriptCreation.h"
+#include "PrefabManager.h"
 #include "FileExplorer.h"
 #include "WindowLayout.h"
 #include "ColorPalette.h"
@@ -26,13 +28,15 @@
 #include "Build.h"
 #include "Scene.h"
 #include "Game.h"
-#include "PrefabManager.h"
 
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 
 #include "CheckML.h"
+
+using nlohmann::json;
+using nlohmann::ordered_json;
 
 
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
@@ -112,11 +116,13 @@ void Editor::Loop() {
 		SDL_SetWindowPosition(instance->window, _Centered);
 
 		// Init the ImGUI windows in the editor
+		instance->LoadImGuiINIFile();
 		instance->CreateWindows();
+		instance->LoadWindowsData();
 	}
 
 	// Editor main loop
-	while (!instance->exitEditor) {
+	while (!instance->exitEditor && !closed) {
 
 		ShyEditor::Game::CheckEnd();
 		instance->HandleInput();
@@ -129,7 +135,8 @@ void Editor::Loop() {
 		ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
 		ShyEditor::Preferences::StoreData();
 		ShyEditor::PrefabManager::SavePrefabs();
-
+		instance->StoreImGuiINIFile();
+		instance->StoreWindowsData();
 	}
 
 }
@@ -374,9 +381,10 @@ bool Editor::SplashScreen() {
 bool Editor::RunProjectsWindow() {
 
 	// Palettes window
-	instance->AddWindow(new ShyEditor::ColorPalette("theme"));
+	instance->AddWindow(new ShyEditor::ColorPalette());
 
 	SDL_SetWindowPosition(instance->window, _Centered);
+	SDL_SetWindowResizable(instance->window, SDL_FALSE);
 
 	ShyEditor::ProjectsManager* dialog = ShyEditor::ProjectsManager::GetInstance();
 
@@ -398,7 +406,9 @@ bool Editor::RunProjectsWindow() {
 
 void Editor::UpdateAndRenderWindows() {
 
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
+	ImVec4 clear_color = ColorPalette2ImVec4(ShyEditor::ColorPalette::GetCurrentPalette().mainWindowBackground);
 
 	// Start the Dear ImGui frame
 	ImGui_ImplSDLRenderer2_NewFrame();
@@ -469,6 +479,103 @@ void Editor::HandleInput()
 			window->HandleInput(&event);
 	}
 }
+
+void Editor::StoreImGuiINIFile() {
+
+	// ImGui .INI
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIFile;
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = NULL;
+
+	ImGui::SaveIniSettingsToDisk(path.c_str());
+
+}
+
+void Editor::LoadImGuiINIFile() {
+
+	// ImGui .INI
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::ImGuiINIFile;
+
+	if (!std::filesystem::exists(path)) return;
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = NULL;
+
+	ImGui::LoadIniSettingsFromDisk(path.c_str());
+
+}
+
+
+void Editor::StoreWindowsData() {
+
+	// Windows Opened/Closed information
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::WindowsDataFile;
+
+	json j;
+	json windowsArray = json::array();
+
+	int index = 0;
+	for (auto w : windows) {
+
+		json windowJson;
+		windowJson["Index"] = index;
+		windowJson["Visible"] = w->IsVisible();
+
+		windowsArray.push_back(windowJson);
+
+		index++;
+	}
+
+	j["Windows"] = windowsArray;
+
+	std::ofstream file(path);
+	file << j.dump(4);
+	file.close();
+
+}
+
+void Editor::LoadWindowsData() {
+
+	// Windows Opened/Closed information
+	std::string path = projecInfo->path + ShyEditor::ProjectsManager::WindowsDataFile;
+	std::ifstream file(path);
+
+	if (!file.good() || !json::accept(file)) {
+		ShyEditor::LogManager::LogError("Could not open the custom file to load windows data. Opening defult one.");
+
+		file = std::ifstream("windows.json");
+
+		if (!file.good() || !json::accept(file)) {
+			ShyEditor::LogManager::LogError("Could not open default windows data file.");
+			return;
+		}
+	}
+
+	file.clear();
+	file.seekg(0);
+
+	json j = json::parse(file);
+
+	file.close();
+
+	if (!j.contains("Windows")) {
+		ShyEditor::LogManager::LogError("The Windows data file does not contain the expected format.");
+		return;
+	}
+
+	for (auto windowJson : j["Windows"]) {
+
+		int index = windowJson["Index"];
+
+		if (windowJson["Visible"])
+			windows[index]->Show();
+		else 
+			windows[index]->Hide();
+	}
+
+}
+
 
 void Editor::ChangeEditorState(const EDITOR_STATE& state) {
 

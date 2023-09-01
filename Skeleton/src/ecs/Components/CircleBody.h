@@ -34,6 +34,8 @@ namespace ECS {
         // Box2d circleShape
         b2CircleShape* shape;
 
+        Vector2D size;
+
     };
 
 }

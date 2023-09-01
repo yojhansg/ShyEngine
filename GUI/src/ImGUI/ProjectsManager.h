@@ -8,18 +8,22 @@ struct SDL_Renderer;
 
 namespace ShyEditor {
 
+	class Texture;
+
 	struct ProjectInfo {
 
 		ProjectInfo() { name = ""; date = ""; path = ""; };
 		ProjectInfo(const std::string& name, const std::string& date, const std::string& path) {
 			this->name = name; this->date = date; this->path = path;
 			assetPath = path + "\\Assets";
+			deleted = false;
 		};
 
 		std::string name;
 		std::string date;
 		std::string path;
 		std::string assetPath;
+		bool deleted;
 	};
 
 	class ProjectsManager {
@@ -42,6 +46,10 @@ namespace ShyEditor {
 
 		static std::string GetProjectFilePath();
 		static std::string GetProjectFileName();
+
+		static const std::string ImGuiINIFile;
+		static const std::string WindowsDataFile;
+
 	private:
 
 		static ProjectsManager* instance;
@@ -93,6 +101,10 @@ namespace ShyEditor {
 		bool showPopUpWindowNewProject;
 		bool showPopUpWindowOpenProject;
 
+		// Textures
+		Texture* folder;
+		Texture* trash;
+
 		void StartImGuiFrame();
 		void ImGuiRender(SDL_Renderer* renderer);
 
@@ -112,7 +124,6 @@ namespace ShyEditor {
 		// Main windows
 		Result NewProject();
 		Result OpenProject();
-		Result CloseEditor();
 
 		// Creates a project file and stores it in the specified path
 		// and with the specified name given in the form

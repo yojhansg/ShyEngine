@@ -1,11 +1,14 @@
 #pragma once
 
 #include "SDL.h"
+
+#include <unordered_map>
 #include <Singleton.h>
-#include <array>
+#include <Vector2D.h>
 #include <vector>
 #include <string>
-#include <Vector2D.h>
+#include <array>
+
 #include <EditorExport.h>
 
 /*
@@ -18,56 +21,52 @@ namespace Utilities {
 
 namespace Input {
 
-	EditorManager InputManager : public Utilities::Singleton<InputManager> {
+	EditorManager InputManager : public Utilities::Singleton<InputManager>{
 
 		friend Singleton<InputManager>;
 
 	public:
 
 		enum class MOUSEBUTTON : uint8_t {
-			LEFT = 0, MIDDLE = 1, RIGHT = 2
+			LEFT, MIDDLE, RIGHT, Count
 		};
 
 		enum class CONTROLLERSTICK : uint8_t {
-			LEFT_STICK = 0, RIGHT_STICK = 1
+			LEFT_STICK, RIGHT_STICK
 		};
 
 		enum class CONTROLLERTRIGGER : uint8_t {
-			LEFT_TRIGGER = 0, RIGHT_TRIGGER = 1
+			LEFT_TRIGGER, RIGHT_TRIGGER, N_TRIGGERS
 		};
 
 		// PS4 Mapping
 		enum class PS4_CONTROLLER_BUTTONS : uint8_t {
-			X = 0, CIRCLE = 1, SQUARE = 2, TRIANGLE = 3, SHARE = 4, HOME = 5,  OPTIONS = 6, L3 = 7, R3 = 8, 
-			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
+			X , CIRCLE , SQUARE , TRIANGLE, SHARE, HOME, OPTIONS, L3, R3,
+			L1, R1, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, PANEL, Count = 16
 		};
 
-		//XBOX Mapping
+		// XBOX Mapping
 		enum class XBOX_CONTROLLER_BUTTONS : uint8_t {
-			A = 0, B = 1, X = 2, Y = 3, SHARE = 4, HOME = 5, OPTIONS = 6, L3 = 7, R3 = 8,
-			L1 = 9, R1 = 10, UP_ARROW = 11, DOWN_ARROW = 12, LEFT_ARROW = 13, RIGHT_ARROW = 14, PANEL = 15
+			A, B, X, Y , BACK, GUIDE, START, LSB, RSB,
+			LR, RB, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, PANEL, Count = 16
 		};
 
-		enum class KeyState {
-
+		enum class ButtonState {
 			None, JustDown, Down, Up
 		};
 
-		//Keyboard
+		// Keyboard
 
 		enum class KB_LETTERS {
-			A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10, L = 11, M = 12, N = 13, O = 14, P = 15,
-			Q = 16, R = 17, S = 18, T = 19, U = 20, V = 21, W = 22, X = 23, Y = 24, Z = 25, Count
+			A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, Count
 		};
 
 		enum class KB_NUMBERS {
-			Num1 = 0, Num2 = 1, Num3 = 2, Num4 = 3, Num5 = 4, Num6 = 5, Num7 = 6, Num8 = 7, Num9 = 8, Num0 = 9, F1 = 10, F2 = 11, 
-			F3 = 12, F4 = 13, F5 = 14, F6 = 15, F7 = 16, F8 = 17, F9 = 18, F10 = 19, F11 = 20, F12 = 21, Count
+			Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9, Num0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, Count
 		};
 
 		enum class KB_SPECIALKEYS {
-			RETURN = 0, ESCAPE = 1, BACKSPACE = 2, TAB = 3, SPACE = 4, RIGHT = 5, LEFT = 6, DOWN = 7, UP = 8, LCTRL = 9, LSHIFT = 10,
-			LALT = 11, RCTRL = 12, RSHIFT = 13, RALT = 14, Count
+			RETURN, ESCAPE, BACKSPACE, TAB, SPACE, RIGHT, LEFT, DOWN, UP, LCTRL, LSHIFT, LALT, RCTRL, RSHIFT, RALT, Count
 		};
 
 		~InputManager();
@@ -81,220 +80,236 @@ namespace Input {
 
 		bool isKeyUp(SDL_Scancode key);
 
-		void UpdateKeyState(KeyState& key);
+		void UpdateKeyState(ButtonState& key);
+
+		/*
+			Nombres de eventos:
+
+			Down: Una tecla esta siendo pulsada
+			Up: Una tecla no esta siendo pulsada
+			Pressed: Una tecla acaba de ser pulsada
+			Released: Una tecla acaba de ser soltada
+		*/
 
 	publish:
 
-		//Down Hold Up
-
 		// Keyboard
-		bool keyDownEvent();
-		bool keyUpEvent();
+		bool AnyKeyPressed();
+		bool AnyKeyReleased();
 
-		bool isLetterDown(int l);
-		bool isLetterHold(int l);
-		bool isLetterUp(int l);
+		bool IsLetterPressed(int l);
+		bool IsLetterDown(int l);
+		bool IsLetterUp(int l);
+		bool IsLetterReleased(int l);
 
-		bool isNumberDown(int n);
-		bool isNumberHold(int n);
-		bool isNumberUp(int n);
+		bool IsNumberPressed(int n);
+		bool IsNumberDown(int n);
+		bool IsNumberUp(int n);
+		bool IsNumberReleased(int n);
 
-		bool isSpecialKeyDown(int s);
-		bool isSpecialKeyHold(int s);
-		bool isSpecialKeyUp(int s);
+		bool IsSpecialKeyPressed(int s);
+		bool IsSpecialKeyDown(int s);
+		bool IsSpecialKeyUp(int s);
+		bool IsSpecialKeyReleased(int s);
 
-		float KeyBoardHorizontalMovement();
-		float KeyBoardVerticalMovement();
+		float HorizontalMovement();
+		float VerticalMovement();
 
 
 		// Mouse
-		bool mouseMotionEvent();
+		bool HasMouseMoved();
 
-		bool wheelMotionEvent();
+		bool HasMouseWheelMoved();
 
-		bool isMouseButtonDown(int b);
+		bool IsMouseButtonDown(int b);
 
-		bool isMouseButtonUp(int b);
+		bool IsMouseButtonUp(int b);
 
-		bool isMouseButtonDownEvent(int b);
+		bool IsMouseButtonPressed(int b);
 
-		bool isMouseButtonUpEvent(int b);
+		bool IsMouseButtonReleased(int b);
 
-		Utilities::Vector2D getMousePos();
+		cVector2D GetMousePosition();
 
-		int getWheelMotionY();
+		int GetMouseWheelScroll();
 
 
 		// Controller
-		int getJoysticksConnected();
+		int ConnectedControllersCount();
 
-		bool isJoystickAxisMotion();
+		bool AnyControllerButtonPressed();
 
-		bool isJoystickButtonEventDown();
+		bool AnyControllerButtonReleased();
 
-		bool isJoystickButtonEventUp();
+		bool AnyControllerAxisMotion();
+
+		bool AnyControllerConnected();
+
+		bool AnyControllerDisconnected();
 
 		// With id
 
-			Utilities::Vector2D getJoystickValueWithId(int ct, int id);
+			bool IsControllerButtonPressedWithId(int button, int id);
 
-			float getJoystickTriggerValueWithId(int ct, int id);
-		
-			bool getJoystickButtonStateWithId(int button, int id);
+			bool IsControllerButtonDownWithId(int button, int id);
 
-			int getJoysticksNumButtonsWithId(int id);
+			bool IsControllerButtonReleasedWithId(int button, int id);
 
-			bool isLeftJoystickMotionWithId(int id);
+			float GetLeftTriggerValueWithId(int id);
 
-			bool isRightJoystickMotionWithId(int id);
+			float GetRightTriggerValueWithId(int id);
 
-			bool isLeftTriggerMotionWithId(int id);
+			bool IsLeftTriggerDownWithId(int id);
 
-			bool isRightTriggerMotionWithId(int id);
+			bool IsRightTriggerDownWithId(int id);
 
-			float ControllerHorizontalMovementWithId(int id);
+			float GetLeftStickHorizontalValueWithId(int id);
 
-			float ControllerVerticalMovementWithId(int id);
+			float GetLeftStickVerticalValueWithId(int id);
 
+			float GetRightStickHorizontalValueWithId(int id);
 
-		// Without id
+			float GetRightStickVerticalValueWithId(int id);
 
-			Utilities::Vector2D getJoystickValue(int ct);
+			bool HasLeftStickMovedWithId(int id);
 
-			float getJoystickTriggerValue(int ct);
+			bool HasRightStickMovedWithId(int id);
 
-			bool getJoystickButtonState(int button);
 
-			int getJoysticksNumButtons();
+			// Without id
 
-			bool isLeftJoystickMotion();
+				bool IsControllerButtonPressed(int button);
 
-			bool isRightJoystickMotion();
+				bool IsControllerButtonDown(int button);
 
-			bool isLeftTriggerMotion();
+				bool IsControllerButtonUp(int button);
 
-			bool isRightTriggerMotion();
+				float GetLeftTriggerValue();
 
-			float ControllerHorizontalMovement();
+				float GetRightTriggerValue();
 
-			float ControllerVerticalMovement();
+				bool IsLeftTriggerDown();
 
+				bool IsRightTriggerDown();
 
+				float GetLeftStickHorizontalValue();
 
-		bool joystickConnectedEvent();
+				float GetLeftStickVerticalValue();
 
-		bool joystickDisconnectedEvent();
+				float GetRightStickHorizontalValue();
 
+				float GetRightStickVerticalValue();
 
+				bool HasLeftStickMoved();
 
-	public:
+				bool HasRightStickMoved();
 
-		std::string getJoystickName(int id);
 
-		bool getJoystickId();
 
-	private:
+		private:
 
-		InputManager();
-		InputManager(bool closeWithEscape);
+			InputManager();
+			InputManager(bool closeWithEscape);
 
-		SDL_Scancode ConvertToScancode(const KB_LETTERS& letter);
-		SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
-		SDL_Scancode ConvertToScancode(const KB_SPECIALKEYS& specialKey);
+			SDL_Scancode ConvertToScancode(const KB_LETTERS& letter);
+			SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
+			SDL_Scancode ConvertToScancode(const KB_SPECIALKEYS& specialKey);
 
+			KB_LETTERS ConvertToLetter(const SDL_Scancode& scancode);
+			KB_NUMBERS ConvertToNumbers(const SDL_Scancode& scancode);
+			KB_SPECIALKEYS ConvertToSpecialKeys(const SDL_Scancode& scancode);
 
-		KB_LETTERS ConvertToLetter(const SDL_Scancode& scancode);
-		KB_NUMBERS ConvertToNumbers(const SDL_Scancode& scancode);
-		KB_SPECIALKEYS ConvertToSpecialKeys(const SDL_Scancode& scancode);
 
+			// Clear the state
+			void clearState();
 
-		bool valid;
+			// Update the state with a new event
+			void update(const SDL_Event& event);
 
-		// Clear the state
-		void clearState();
+			// --------- MOUSE & KB ------------
 
-		// Update the state with a new event
-		void update(const SDL_Event& event);
+			void letterPressed(KB_LETTERS letter);
+			void numberPressed(KB_NUMBERS letter);
+			void specialKeyPressed(KB_SPECIALKEYS letter);
 
-		// --------- MOUSE & KB ------------
+			void letterReleased(KB_LETTERS letter);
+			void numberReleased(KB_NUMBERS letter);
+			void specialKeyReleased(KB_SPECIALKEYS letter);
 
-		void letterPressed(KB_LETTERS letter);
-		void numberPressed(KB_NUMBERS letter);
-		void specialKeyPressed(KB_SPECIALKEYS letter);
+			void onKeyDown();
 
-		void letterReleased(KB_LETTERS letter);
-		void numberReleased(KB_NUMBERS letter);
-		void specialKeyReleased(KB_SPECIALKEYS letter);
+			void onKeyUp();
 
-		void onKeyDown();
+			void onMouseMotion(const SDL_Event& event);
 
-		void onKeyUp();
+			void onMouseButtonChange(const SDL_Event& event, bool isDown);
 
-		void onMouseMotion(const SDL_Event& event);
+			void onMouseWheelMotion(const SDL_Event& event);
 
-		void onMouseButtonChange(const SDL_Event& event, bool isDown);
 
-		void onMouseWheelMotion(const SDL_Event& event);
+			bool closeWithEscape;
+			bool valid;
 
+			bool isKeyUpEvent_;
+			bool isKeyDownEvent_;
 
-		bool closeWithEscape;
+			bool isMouseMotionEvent_;
+			bool isMouseWheelEvent_;
+			bool isMouseButtonEventDown_;
+			bool isMouseButtonEventUp_;
 
-		bool isKeyUpEvent_;
-		bool isKeyDownEvent_;
 
-		bool isMouseMotionEvent_;
-		bool isMouseWheelEvent_;
-		bool isMouseButtonEventDown_;
-		bool isMouseButtonEventUp_;
+			Utilities::Vector2D mousePos_;
+			std::array<bool, 3> mbState_;
+			int wheelMotionY_;
+			const Uint8* kbState_;
 
 
-		Utilities::Vector2D mousePos_;
-		std::array<bool, 3> mbState_;
-		int wheelMotionY_;
-		const Uint8* kbState_;
+			// Keyboard keys
+			ButtonState letters[(int)KB_LETTERS::Count];
+			ButtonState numbers[(int)KB_NUMBERS::Count];
+			ButtonState specialKeys[(int)KB_SPECIALKEYS::Count];
 
 
-		//Keyboard keys
-		KeyState letters[(int)KB_LETTERS::Count];
-		KeyState numbers[(int)KB_NUMBERS::Count];
-		KeyState specialKeys[(int)KB_SPECIALKEYS::Count];
+			// ----- CONTROLLER -------
 
+			struct ControllerData {
+				SDL_GameController* controller;
+				SDL_Joystick* joystick;
+				SDL_JoystickID id;
+				std::string name;
+				std::vector<ButtonState> buttonsStates;
+				Utilities::Vector2D triggers; // X for LEFT trigger, Y for RIGHT trigger
+				std::pair<Utilities::Vector2D, Utilities::Vector2D> joysticks;
+			};
 
-		// ----- CONTROLLER -------
+			bool initControllers();
 
-		bool initialiseJoysticks();
+			void addController(int which);
 
-		bool addJoystick(int joystick_id);
+			void removeController(int which);
 
-		void removeJoystick(int joystick_id);
+			void controllerButtonPressed(const SDL_Event& event);
 
-		void clearJoysticksButtons();
+			void controllerButtonReleased(const SDL_Event& event);
 
-		void removeJoysticks();
+			void updateControllersButtons();
 
-		void joystickConnected();
+			void onControllerAxisMotion(const SDL_Event& event);
 
-		void joystickDisconnected();
+			void readSticksValues();
 
-		void onJoystickAxisMotion(const SDL_Event& event);
 
-		void onJoystickButtonDown(const SDL_Event& event);
+			std::unordered_map<int, ControllerData> controllers;
 
-		void onJoystickButtonUp(const SDL_Event& event);
+			bool isAxisMotionEvent_;
+			bool isControllerButtonDownEvent_;
+			bool isControllerButtonUpEvent_;
+			bool controllerConnected_;
+			bool controllerDisconnected_;
 
-		std::vector<SDL_Joystick*> joysticks;
-		std::vector<std::pair<Utilities::Vector2D*, Utilities::Vector2D*>> joystickValues;
-		std::vector<std::pair<int, int>> joystickTriggerValues;
-		std::vector<std::vector<bool>> joystickButtonStates;
-		std::vector<int> joystickNumButtons;
-		std::vector<std::string> joystickNames;
+			int lastInputReceivedController;
 
-		bool isAxisMotionEvent_;
-		bool isJoystickButtonDownEvent_;
-		bool isJoystickButtonUpEvent_;
-		bool joystickConnected_;
-		bool joystickDisconnected_;
-		int joystickId;
-		int numJoysticksConnected;
+			int numControllersConnected;
 	};
 }

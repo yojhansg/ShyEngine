@@ -20,6 +20,9 @@ namespace ShyEditor {
 
 	void ComponentWindow::Behaviour()
 	{
+		if (!Editor::GetInstance()->IsAnySceneOpened()) return;
+
+
 		Entity* entity = Editor::GetInstance()->GetScene()->GetSelectedEntity();
 
 
@@ -128,6 +131,30 @@ namespace ShyEditor {
 				}
 
 			}
+		}
+
+
+		/*
+			Si no hay ningun objeto seleccionado mostramos los atributos de la escena
+		*/
+
+
+		else
+		{
+			auto scene = Editor::GetInstance()->GetScene();
+
+			ImGui::SeparatorText("Camera properties");
+
+			ImVec2 pos = scene->GetScenePosition();
+
+			ImGui::Text("Position");
+			if (ImGui::DragFloat2("##CameraPosition", &pos.x)) {
+
+				scene->SetCameraPosition(pos.x, pos.y);
+			}
+
+			ImGui::Text("Scale");
+			ImGui::DragFloat("##CameraScale", &scene->GetSceneScale(), 3, 0.0001f, 100000.0f, "%.3f", ImGuiSliderFlags_Logarithmic);
 		}
 
 

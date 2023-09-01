@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "ComponentInfo.h"
+#include <map>
 #include "nlohmann/json_fwd.hpp"
 
 
@@ -256,6 +257,9 @@ namespace ShyEditor {
 		protected:
 
 			ScriptNode();
+
+			//Identificador unico de la ventana. Este valor es constante y no varia
+			uint32_t unique_id;
 
 			int id;	//Id de la ventana
 			Node type; //Tipo de nodo
@@ -817,7 +821,7 @@ namespace ShyEditor {
 				Muestra el desplegable con el resultado de la busqueda de nodos. Ademas procesa la creacion en caso
 				de que el usuaruo seleccione algun elemento del desplegable
 			*/
-			void ShowFoundFunctions(std::unordered_map<std::string, Components::Component>& v, int windowW, int windowH);
+			void ShowFoundFunctions(std::map<std::string, Components::Component>& v, int windowW, int windowH);
 
 			/*
 				Busca un metodo dado su nombre en la lista de componentes y en la lista de managers
@@ -877,7 +881,7 @@ namespace ShyEditor {
 			/*
 				Agrega al desplegable los metodos incluidos en el mapa dado
 			*/
-			void AddValuesFromVector(std::unordered_map<std::string, Components::Component>& v);
+			void AddValuesFromVector(std::map<std::string, Components::Component>& v);
 		};
 
 
@@ -1098,6 +1102,13 @@ namespace ShyEditor {
 			*/
 			static void ResetIntevalScale();
 
+
+			static void DrawBackgroundColor(float r, float g, float b, float a);
+
+
+			/*
+				Pinta la cuadricula con la configuración dada
+			*/
 
 			static void Draw();
 		};

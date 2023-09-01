@@ -10,7 +10,6 @@ namespace Components {
 
 	using cstring = std::string const&;
 
-	//TODO: implementar las cosas para leer chars
 	enum class AttributesType {
 		NONE,
 		FLOAT,

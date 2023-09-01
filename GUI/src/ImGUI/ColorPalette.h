@@ -18,60 +18,97 @@ namespace ShyEditor {
 			float r, g, b;
 
 			static Color FromHexString(const std::string& hex);
-
+			std::string ToHexString();
 		};
 
 		struct Palette {
 
-			Color text;
-			Color head;
-			Color area;
-			Color body;
-			Color popups;
+			std::string name;
 
-			Color scriptBackground;
+			//General
+
+			Color text; //texto
+			Color primary; //cabeceras
+			Color secondary; //elementos
+			Color background; //fondo ventanas
+			Color mainWindowBackground; //fondo ventana sdl
+			Color popups; //fondo pop ups
+			Color border; //borde ventana
+
 
 			float windowRounding;
 
+			float windowBorder;
+			float frameBorder;
+			float popUpBorder;
+			float windowAlpha;
+
+			//Scene
+
+			struct {
+
+				Color background;
+				float backgroundAlpha;
+
+				Color frame;
+				int frameWidth;
+
+				Color objectFrame;
+				int objectFrameWidth;
+
+				Color UIBorder;
+				Color UIBorderHover;
+				int UIBorderWidth;
+
+
+				Color grid;
+				int gridSpacing;
+				int gridInterval;
+				float gridAlpha;
+				int gridThickness;
+
+			} scene;
+
 			// Scripting
-			float nodeRounding;
+			struct {
+				Color background;
+				float nodeRounding;
 
-			Color grid;
-			float gridThickness;
-			float gridSpacing;
-			float gridIntervalScale;
-			int gridInterval;
-			
-			Color hover;
-			float buttonThickness;
+				Color grid;
+				int gridThickness;
+				int gridSpacing;
+				float gridIntervalScale;
+				int gridInterval;
 
-			Color line;
-			float lineThickness;
-			Color lineOutline;
-			float lineOutlineThickness;
-			float lineCurvature;
-			float lineAlpha;
+				Color hover;
+				float buttonThickness;
 
-			Color flowline;
-			float flowlineThickness;
-			Color flowlineOutline;
-			float flowlineOutlineThickness;
-			float flowlineCurvature;
-			float flowlineAlpha;
+				Color line;
+				float lineThickness;
+				Color lineOutline;
+				float lineOutlineThickness;
+				float lineCurvature;
+				float lineAlpha;
 
+				Color flowline;
+				float flowlineThickness;
+				Color flowlineOutline;
+				float flowlineOutlineThickness;
+				float flowlineCurvature;
+				float flowlineAlpha;
+
+			} scripting;
+			//Font
+			std::string fontName;
 			ImFont* fontPtr;
-			std::string font;
-			float fontSize;
 		};
 
 	public:
 
-		ColorPalette(const std::string& name);
+		ColorPalette();
 		~ColorPalette();
 
 		void SwapPalette(const std::string& palette);
-
-		void Serialize();
 
 		static void Open();
 
@@ -84,28 +121,44 @@ namespace ShyEditor {
 
 	private:
 
-		void LoadPalettes();
+		void Col(const char* name, Color* value);
+		void Int(const char* name, int* value, int min = 0.0f, int max = 100, float speed = 1, bool log = false);
+		void NormalizedFloat(const char* name, float* value);
+		void Float(const char* name, float* value, float min = 0.0f, float max = 100, float speed = 1.f, bool log = false);
+
+
+		void LoadFonts();
+		void LoadPalettes(const std::string& file);
 		void LoadDefaultPalette();
 
 		void Apply();
+
+		void SavePalette();
+
 
 		static ColorPalette* instance;
 
 		Palette current;
 
-		std::string name;
 		std::unordered_map<std::string, Palette> palettes;
 
-		bool open;
+		std::unordered_map<std::string, ImFont*> fonts;
+
 		bool pendingApply;
 		bool initialisation;
+		bool changes;
+		bool showSavePopup;
+		bool showErasePopup;
 
+		char paletteName[16];
 	};
 
 }
 
 
 #define ColorPaletteParams(color) color.r, color.g, color.b
+#define ColorPaletteParamsInt(color) color.r * 255, color.g * 255, color.b * 255
+
 #define ColorPalette2ImVec4(color) ImVec4(ColorPaletteParams(color), 1)
 #define ColorPaletteAlpha2ImVec4(color, a) ImVec4(ColorPaletteParams(color), a)
 #define ColorPalette2ImColor(color) ImColor(ColorPalette2ImVec4(color))

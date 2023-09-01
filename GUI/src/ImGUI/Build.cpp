@@ -191,29 +191,30 @@ void ShyEditor::Build::BuildThread()
 	Preferences::GenerateBuild();
 
 
+	float enginefilesPercentage = 0.25f;
+	float projectFilesPercentage = 0.50f;
+	float generateExePercentage = 0.10f;
 
-	struct CopyValues {
-		std::string path;
-		float percentage;
+	std::vector<std::string> engineFiles = {
+		"EngineRelease.exe", "config.json",
+		"SDL2.dll", "SDL2_image.dll" ,
+		"SDL2_mixer.dll",  "SDL2_ttf.dll" ,
+		"Assets"
 	};
 
-	std::vector<CopyValues> engineFiles = {
-		{"EngineRelease.exe", 0.33f}, {"config.json", 0.33f},
-		{"SDL2.dll", 0.33f}, {"SDL2_image.dll", 0.33f},
-		{"SDL2_mixer.dll", 0.33f}, {"SDL2_ttf.dll", 0.33f},
-		{"Assets", 0.33f}
-		//{"ResourceHacker.exe", 0.33f},
-	};
-
-
+	
 	for (auto& value : engineFiles) {
 
-		Copy(ResourcesManager::EDITORENGINEFOLDER + "/" + value.path, buildPath);
+		Copy(ResourcesManager::EDITORENGINEFOLDER + "/" + value, buildPath);
+
+		progression += enginefilesPercentage / engineFiles.size();
 	}
 
 	std::string exe = buildPath + "/" + Preferences::GetData().name + ".exe";
 
 	Copy(ResourcesManager::GetProjectPath() + "/Assets", buildPath);
+
+	progression += projectFilesPercentage;
 
 	std::string relaseBuildPath = buildPath + "/EngineRelease.exe";
 
@@ -226,15 +227,16 @@ void ShyEditor::Build::BuildThread()
 	system((command).c_str());
 
 
-	std::string deletecommand = std::format("ResourceHacker.exe -delete {} -resource 101",
-		exe
-	);
-
-	//system((deletecommand).c_str());
+	progression += generateExePercentage;
 
 
-	//if (std::filesystem::exists(relaseBuildPath))
-	//	std::filesystem::rename(relaseBuildPath, exe);
+	if (!std::filesystem::exists(exe))
+		std::filesystem::rename(relaseBuildPath, exe);
+	else
+		std::filesystem::remove(relaseBuildPath);
+
+
+	progression = 1;
 
 	inProgress = false;
 }

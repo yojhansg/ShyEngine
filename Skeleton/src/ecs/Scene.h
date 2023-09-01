@@ -11,6 +11,8 @@ namespace ECS {
 	class Scene {
 
 		friend class SceneManager;
+		friend class SceneLoader;
+
 	public:
 		Scene(const std::string& sce_name = "New Scene");
 
@@ -60,6 +62,7 @@ namespace ECS {
 
 
 		void Event(std::string const& name);
+
 
 	private:
 

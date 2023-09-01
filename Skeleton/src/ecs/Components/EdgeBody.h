@@ -32,6 +32,8 @@ namespace ECS {
         b2Vec2 vertex1;
         b2Vec2 vertex2;
 
+        Vector2D size;
+
     };
 
 }

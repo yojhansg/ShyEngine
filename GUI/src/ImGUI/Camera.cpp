@@ -3,6 +3,7 @@
 #include "LogManager.h"
 #include "Entity.h"
 #include "imgui.h"
+#include "ColorPalette.h"
 #include "SDL.h"
 
 #include "CheckML.h"
@@ -93,7 +94,7 @@ namespace ShyEditor {
 
 
 		if (isMouseInsideWindow) {
-			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
+			if (event->type == SDL_MOUSEWHEEL) {
 
 				float pscale = scale;
 
@@ -170,6 +171,8 @@ namespace ShyEditor {
 	void Camera::PrepareCameraRender()
 	{
 		if (targetTexture != NULL) {
+			
+			
 			SDL_SetRenderTarget(renderer, targetTexture);
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);

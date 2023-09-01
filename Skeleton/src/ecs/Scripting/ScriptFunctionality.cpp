@@ -2,6 +2,7 @@
 #include "RendererManager.h"
 #include "ConsoleManager.h"
 #include "ScriptManager.h"
+#include "PrefabManager.h"
 #include "SceneManager.h"
 #include "StringTrim.h"
 #include "Entity.h"
@@ -43,6 +44,21 @@ void Scripting::ScriptFunctionality::Print(cVariable val)
 ECS::Entity* Scripting::ScriptFunctionality::Entity()
 {
 	return Scripting::ScriptManager::instance()->GetCurrentScript()->getEntity();
+}
+
+void Scripting::ScriptFunctionality::Create_EntityWithTransform(cstring entName) {
+
+	ECS::PrefabManager::instance()->InstantiatePrefabWithTransform(entName, ECS::SceneManager::instance()->getCurrentScene());
+}
+
+void Scripting::ScriptFunctionality::Create_EntityWithOverlay(cstring entName) {
+
+	ECS::PrefabManager::instance()->InstantiatePrefabWithOverlay(entName, ECS::SceneManager::instance()->getCurrentScene());
+}
+
+void Scripting::ScriptFunctionality::Destroy_Entity(ECS::Entity* ent) {
+
+	ent->removeEntity();
 }
 
 std::string Scripting::ScriptFunctionality::Entity_Name(ECS::Entity* ent)
@@ -101,7 +117,7 @@ float Scripting::ScriptFunctionality::Math_Power(float a, float b)
 
 float Scripting::ScriptFunctionality::Math_Root(float a, float b)
 {
-	return powf(a , 1.0f / b);
+	return powf(a, 1.0f / b);
 }
 
 float Scripting::ScriptFunctionality::Math_Max(float a, float b)
@@ -354,7 +370,10 @@ std::string Scripting::ScriptFunctionality::Text_ToString(cVariable variable) {
 	case Scripting::Variable::Type::String:
 		return variable.str;
 	case Scripting::Variable::Type::Entity:
-		return variable.value.entity->getEntityName();
+
+		if (variable.value.entity != nullptr)
+			return variable.value.entity->getEntityName();
+		return "-Entity not found-";
 	case Scripting::Variable::Type::Color:
 		return variable.value.color;
 	case Scripting::Variable::Type::Vector2D:
@@ -620,7 +639,7 @@ std::string Scripting::ScriptFunctionality::RealTime_TimeStamp(int time)
 		RealTime_MonthDay(time),
 		RealTime_HourTime(time),
 		RealTime_Year(time)
-		);
+	);
 }
 
 

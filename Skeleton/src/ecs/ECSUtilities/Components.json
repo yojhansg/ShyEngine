@@ -186,8 +186,66 @@
                 "type": "Toggle"
             },
             {
+                "name": "gravityScale",
+                "type": "Number"
+            },
+            {
                 "name": "layerName",
                 "type": "Text"
+            }
+        ],
+        "methods": [
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getSize",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "x",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "y",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setSize",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "mass",
+                        "type": "Number"
+                    }
+                ],
+                "name": "setMass",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getArea",
+                "return": "Number"
             }
         ]
     },
@@ -198,10 +256,6 @@
                 "type": "Number"
             },
             {
-                "name": "size",
-                "type": "Pair"
-            },
-            {
                 "name": "offSet",
                 "type": "Pair"
             },
@@ -224,6 +278,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "gravityScale",
+                "type": "Number"
             },
             {
                 "name": "layerName",
@@ -234,10 +292,6 @@
     "EdgeBody": {
         "attributes": [
             {
-                "name": "size",
-                "type": "Pair"
-            },
-            {
                 "name": "offSet",
                 "type": "Pair"
             },
@@ -260,6 +314,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "gravityScale",
+                "type": "Number"
             },
             {
                 "name": "layerName",
@@ -384,6 +442,14 @@
             {
                 "name": "velocity",
                 "type": "Number"
+            },
+            {
+                "name": "clampDiagonalVelocity",
+                "type": "Toggle"
+            },
+            {
+                "name": "usePhysics",
+                "type": "Toggle"
             }
         ]
     },
@@ -1582,10 +1648,6 @@
     "PhysicBody": {
         "attributes": [
             {
-                "name": "size",
-                "type": "Pair"
-            },
-            {
                 "name": "offSet",
                 "type": "Pair"
             },
@@ -1608,6 +1670,10 @@
             {
                 "name": "freezeRotation",
                 "type": "Toggle"
+            },
+            {
+                "name": "gravityScale",
+                "type": "Number"
             },
             {
                 "name": "layerName",
@@ -2554,6 +2620,16 @@
                     }
                 ],
                 "name": "Scale",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "SetTransformRelativeToNewParent",
                 "return": "void"
             }
         ]

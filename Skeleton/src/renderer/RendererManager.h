@@ -34,7 +34,7 @@ namespace Renderer {
 		SDL_Window* getWindow();
 		SDL_Renderer* getRenderer();
 
-		void clearRenderer(cColor color = Utilities::Color(255, 255, 255));
+		void clearRenderer();
 		void presentRenderer();
 		void CopyTargetTextureContent();
 
@@ -65,7 +65,7 @@ namespace Renderer {
 	private:
 
 		RendererManager();
-		RendererManager(cString windowTitle, int width, int height, bool vsync, bool fullscreen, bool showcursor);
+		RendererManager(cString windowTitle, int width, int height, bool vsync, bool fullscreen, bool showcursor, cString bgColor, int bgAlpha);
 
 		bool initSDL(bool vsync, bool fullscreen, bool showcursor);
 		void closeSDL();
@@ -77,6 +77,9 @@ namespace Renderer {
 		SDL_Renderer* renderer; // the renderer
 
 		std::string windowTitle;
+
+		Utilities::Color bgColor;
+		int bgAlpha;
 
 		SDL_Surface* icon;
 

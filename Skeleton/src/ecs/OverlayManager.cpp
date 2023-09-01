@@ -80,12 +80,12 @@ void ECS::OverlayManager::Render()
 
 void ECS::OverlayManager::Update()
 {
-	const Utilities::Vector2D mousePosition = Input::InputManager::instance()->getMousePos();
+	const Utilities::Vector2D mousePosition = Input::InputManager::instance()->GetMousePosition();
 
-	const bool hold = Input::InputManager::instance()->isMouseButtonDown((int)Input::InputManager::MOUSEBUTTON::LEFT);
-	const bool clickBegin = Input::InputManager::instance()->isMouseButtonDownEvent((int)Input::InputManager::MOUSEBUTTON::LEFT);
-	const bool click = Input::InputManager::instance()->isMouseButtonUpEvent((int)Input::InputManager::MOUSEBUTTON::LEFT);
-	const bool rightClick = Input::InputManager::instance()->isMouseButtonUpEvent((int)Input::InputManager::MOUSEBUTTON::RIGHT);
+	const bool hold = Input::InputManager::instance()->IsMouseButtonDown((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool clickBegin = Input::InputManager::instance()->IsMouseButtonPressed((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool click = Input::InputManager::instance()->IsMouseButtonPressed((int)Input::InputManager::MOUSEBUTTON::LEFT);
+	const bool rightClick = Input::InputManager::instance()->IsMouseButtonReleased((int)Input::InputManager::MOUSEBUTTON::RIGHT);
 
 
 	Overlay* newelem = nullptr;
