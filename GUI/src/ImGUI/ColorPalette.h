@@ -133,6 +133,10 @@ namespace ShyEditor {
 
 		void Apply();
 
+		std::string LoadActivePalette();
+		void SaveActivePalette();
+
+
 		void SavePalette();
 
 

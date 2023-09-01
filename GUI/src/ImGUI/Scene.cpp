@@ -430,6 +430,9 @@ namespace ShyEditor {
 		mouse.x += Preferences::GetData().width * 0.5f;
 		mouse.y += Preferences::GetData().height * 0.5f;
 
+		mouse.x -= scenePosition_x * sceneCamera->GetScale();
+		mouse.y -= scenePosition_y * sceneCamera->GetScale();
+
 
 		float cameraScale = sceneCamera->GetScale();
 

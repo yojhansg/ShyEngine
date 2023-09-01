@@ -18,5 +18,9 @@
     {
        "font": "Monocraft.otf",
        "size": 15
+    },
+    {
+       "font": "BadComic.ttf",
+       "size": 18
     }
 ]

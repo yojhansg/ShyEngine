@@ -33,7 +33,7 @@ namespace ShyEditor {
 		windowHeight = 500;
 		canBeDisplayedOnTop = true;
 
-		SwapPalette("Engine default");
+		SwapPalette(LoadActivePalette());
 		Apply();
 
 		initialisation = false;
@@ -44,6 +44,8 @@ namespace ShyEditor {
 
 	ColorPalette::~ColorPalette()
 	{
+		SaveActivePalette();
+
 		instance = nullptr;
 	}
 
@@ -355,8 +357,8 @@ namespace ShyEditor {
 		style.Colors[ImGuiCol_TabUnfocusedActive] = MediumLight(current.primary);
 
 
-		style.Colors[ImGuiCol_DockingPreview] = Magenta;
-		style.Colors[ImGuiCol_DockingEmptyBg] = Magenta;
+		style.Colors[ImGuiCol_DockingPreview] = MediumLight(current.primary);
+		style.Colors[ImGuiCol_DockingEmptyBg] = MediumStrong(current.primary);
 
 
 		style.Colors[ImGuiCol_PlotLines] = Light(current.text);
@@ -369,14 +371,46 @@ namespace ShyEditor {
 		style.Colors[ImGuiCol_DragDropTarget] = Strong(current.primary);
 
 
-
+		style.DockingSeparatorSize = current.windowBorder;
 		style.WindowRounding = current.windowRounding;
 		style.WindowBorderSize = current.windowBorder;
 		style.FrameBorderSize = current.frameBorder;
 		style.PopupBorderSize = current.popUpBorder;
 
-
 		pendingApply = false;
+	}
+
+	std::string ColorPalette::LoadActivePalette()
+	{
+		std::string save = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes\\Active.palette";
+
+		std::ifstream stream(save);
+
+		if (!stream.is_open())
+			return "Engine default";
+
+		std::stringstream str;
+
+		str << stream.rdbuf();
+
+		stream.close();
+		return str.str();
+	}
+
+	void ColorPalette::SaveActivePalette()
+	{
+		std::string save = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes\\Active.palette";
+
+		std::ofstream stream(save);
+
+		if (!stream.is_open())
+			return;
+
+
+		stream << current.name;
+
+		stream.close();
+
 	}
 
 	void ColorPalette::SavePalette()
@@ -477,6 +511,8 @@ namespace ShyEditor {
 
 		outputsfileStream << root.dump(4);
 		outputsfileStream.close();
+
+		current.name = paletteName;
 	}
 
 
