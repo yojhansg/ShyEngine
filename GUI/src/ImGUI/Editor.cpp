@@ -393,7 +393,7 @@ bool Editor::SplashScreen() {
 bool Editor::RunProjectsWindow() {
 
 	// Palettes window
-	instance->AddWindow(new ShyEditor::ColorPalette("theme"));
+	instance->AddWindow(new ShyEditor::ColorPalette());
 
 	SDL_SetWindowPosition(instance->window, _Centered);
 	SDL_SetWindowResizable(instance->window, SDL_FALSE);
@@ -418,7 +418,9 @@ bool Editor::RunProjectsWindow() {
 
 void Editor::UpdateAndRenderWindows() {
 
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
+	ImVec4 clear_color = ColorPalette2ImVec4(ShyEditor::ColorPalette::GetCurrentPalette().mainWindowBackground);
 
 	// Start the Dear ImGui frame
 	ImGui_ImplSDLRenderer2_NewFrame();

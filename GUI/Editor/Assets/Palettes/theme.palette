@@ -5,11 +5,11 @@
 
 
         "text": "#000000",
-        "head": "#aaaaaa",
+        "primary": "#aaaaaa",
         "area": "#aaaaaa",
         "body": "#ffffff",
         "popups": "#aaaaaa",
-        "scripting.scriptBackground": "#000000",
+        "scripting.background": "#000000",
         "scripting.grid": "#ffffff",
         "scripting.line": "#ffffff"
     }

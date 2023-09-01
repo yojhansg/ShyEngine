@@ -14,8 +14,10 @@ namespace ShyEditor {
 
 	ColorPalette* ColorPalette::instance = nullptr;
 
-	ColorPalette::ColorPalette(const std::string& name) : Window("Palette selector", ImGuiWindowFlags_NoCollapse), filename(name)
+	ColorPalette::ColorPalette() : Window("Palette selector", ImGuiWindowFlags_NoCollapse)
 	{
+		showSavePopup = showErasePopup = false;
+
 		initialisation = true;
 		current = {};
 		instance = this;
@@ -24,7 +26,8 @@ namespace ShyEditor {
 
 		LoadFonts();
 		LoadDefaultPalette();
-		LoadPalettes();
+		LoadPalettes("theme");
+		LoadPalettes("user-theme");
 
 		windowWidth = 500;
 		windowHeight = 500;
@@ -34,6 +37,8 @@ namespace ShyEditor {
 		Apply();
 
 		initialisation = false;
+
+
 
 	}
 
@@ -48,12 +53,16 @@ namespace ShyEditor {
 
 		palette.name = "Engine default";
 		palette.text = { 0.9254901960784314f , 0.9411764705882353f , 0.9450980392156863f };
-		palette.head = { 0.1607843137254902f , 0.5019607843137255f , 0.7254901960784314f };
-		palette.area = { 0.2235294117647059f , 0.3098039215686275f , 0.4117647058823529f };
-		palette.body = { 0.1725490196078431f , 0.2431372549019608f , 0.3137254901960784f };
+		palette.primary = { 0.1607843137254902f , 0.5019607843137255f , 0.7254901960784314f };
+		palette.secondary = { 0.2235294117647059f , 0.3098039215686275f , 0.4117647058823529f };
+		palette.background = { 0.1725490196078431f , 0.2431372549019608f , 0.3137254901960784f };
+		palette.border = { 0.1725490196078431f , 0.2431372549019608f , 0.3137254901960784f };
 		palette.popups = { 0.1294117647058824f , 0.1803921568627451f , 0.2352941176470588f };
 
-		palette.scripting.scriptBackground = { .12f, .12f, .12f };
+		palette.mainWindowBackground = { 0.2f, 0.2f, 0.2f };
+		palette.windowAlpha = 0.90f;
+
+		palette.scripting.background = { .12f, .12f, .12f };
 
 		palette.scripting.hover = { 1, .6f, .6f };
 		palette.scripting.buttonThickness = 1;
@@ -87,7 +96,7 @@ namespace ShyEditor {
 		palette.scene.backgroundAlpha = 0;
 		palette.scene.frame = { 0, 0 ,0 };
 		palette.scene.frameWidth = 10;
-		palette.scene.objectFrame = { 255, 0, 0 };
+		palette.scene.objectFrame = { 1, 0, 0 };
 		palette.scene.objectFrameWidth = 3;
 		palette.scene.UIBorder = { 1, 1, 1 };
 		palette.scene.UIBorderHover = { 1, .2f, .2f };
@@ -96,14 +105,16 @@ namespace ShyEditor {
 		palette.scene.gridSpacing = 50;
 		palette.scene.gridAlpha = .5f;
 		palette.scene.gridThickness = 1;
-		palette.scene.grid = { 255, 255, 255 };
+		palette.scene.grid = { 1, 1, 1 };
 
 
 
-		std::string defaultFont = "Montserrat - Regular.ttf_18";
-		if (fonts.contains(defaultFont))
+		std::string defaultFont = "Montserrat-Regular.ttf_18";
+
+		if (fonts.contains(defaultFont)) {
 			palette.fontPtr = fonts[defaultFont];
-
+			palette.fontName = defaultFont;
+		}
 
 		if (palette.fontPtr == nullptr)
 			LogManager::LogError("Could not load default font");
@@ -144,14 +155,13 @@ namespace ShyEditor {
 
 	}
 
-	void ColorPalette::LoadPalettes() {
+	void ColorPalette::LoadPalettes(const std::string& file) {
 
-		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes" + "\\" + filename + ".palette";
+		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes" + "\\" + file + ".palette";
 
 		std::ifstream fileStream(palettePath);
 
 		if (!fileStream.good() || !json::accept(fileStream)) {
-			LogManager::LogError("Could not load palette with path: " + palettePath);
 			return;
 		}
 
@@ -170,27 +180,98 @@ namespace ShyEditor {
 			palette.name = name;
 
 			std::string font = paletteInfo["font"].get<std::string>();
+			palette.fontName = font;
 			palette.fontPtr = fonts.contains(font) ? fonts[font] : nullptr;
 
 
-			//	ImGui::GetIO().Fonts->GetTexDataAsRGBA32(NULL, NULL, NULL, NULL);
-#define ReadPaletteValue(value, palette, data) palette.value = Color::FromHexString(data[#value].get<std::string>());
 
-			ReadPaletteValue(text, palette, paletteInfo);
-			ReadPaletteValue(head, palette, paletteInfo);
-			ReadPaletteValue(area, palette, paletteInfo);
-			ReadPaletteValue(body, palette, paletteInfo);
-			ReadPaletteValue(popups, palette, paletteInfo);
-			ReadPaletteValue(scripting.scriptBackground, palette, paletteInfo);
-			ReadPaletteValue(scripting.grid, palette, paletteInfo);
-			ReadPaletteValue(scripting.line, palette, paletteInfo);
+#define SafeCheck(value, data)\
+		if(data.contains(#value))
 
-			//TODO: leer el resto de colores
+#define ReadPaletteColor(value, palette, data) \
+		SafeCheck(value, data)\
+		palette.value = Color::FromHexString(data[#value].get<std::string>());\
+		else palette.value = palettes["Engine default"].value
 
-#undef ReadPaletteValue
+#define ReadPaletteNumber(value, palette, data, type) \
+		SafeCheck(value, data)\
+		palette.value = data[#value].get<type>();\
+		else palette.value = palettes["Engine default"].value
 
 
-		//TODO: leer valores que no sean colores
+
+#define ReadInt(value) ReadPaletteNumber(value, palette, paletteInfo, int)
+#define ReadFloat(value) ReadPaletteNumber(value, palette, paletteInfo, float)
+#define ReadColor(value) ReadPaletteColor(value, palette, paletteInfo)
+
+
+			//General 
+			ReadColor(text);
+			ReadColor(primary);
+			ReadColor(secondary);
+			ReadColor(background);
+			ReadColor(mainWindowBackground);
+			ReadColor(popups);
+			ReadColor(border);
+
+			ReadFloat(windowRounding);
+			ReadFloat(windowBorder);
+			ReadFloat(frameBorder);
+			ReadFloat(popUpBorder);
+			ReadFloat(windowAlpha);
+
+
+			//Scene
+			ReadColor(scene.background);
+			ReadFloat(scene.backgroundAlpha);
+			ReadColor(scene.frame);
+			ReadInt(scene.frameWidth);
+			ReadColor(scene.objectFrame);
+			ReadInt(scene.objectFrameWidth);
+
+			ReadColor(scene.UIBorder);
+			ReadColor(scene.UIBorderHover);
+			ReadInt(scene.UIBorderWidth);
+
+			ReadColor(scene.grid);
+			ReadInt(scene.gridSpacing);
+			ReadInt(scene.gridInterval);
+			ReadFloat(scene.gridAlpha);
+			ReadInt(scene.gridThickness);
+			//Scripting
+
+			ReadColor(scripting.background);
+			ReadFloat(scripting.nodeRounding);
+			ReadColor(scripting.grid);
+			ReadInt(scripting.gridThickness);
+			ReadInt(scripting.gridSpacing);
+			ReadFloat(scripting.gridIntervalScale);
+			ReadInt(scripting.gridInterval);
+			ReadColor(scripting.hover);
+			ReadFloat(scripting.buttonThickness);
+			ReadColor(scripting.line);
+			ReadFloat(scripting.lineThickness);
+			ReadColor(scripting.lineOutline);
+			ReadFloat(scripting.lineOutlineThickness);
+			ReadFloat(scripting.lineCurvature);
+			ReadFloat(scripting.lineAlpha);
+			ReadColor(scripting.flowline);
+			ReadFloat(scripting.flowlineThickness);
+			ReadColor(scripting.flowlineOutline);
+			ReadFloat(scripting.flowlineOutlineThickness);
+			ReadFloat(scripting.flowlineCurvature);
+			ReadFloat(scripting.flowlineAlpha);
+
+
+
+#undef ReadColor
+#undef ReadFloat
+#undef ReadInt
+#undef ReadPaletteNumber
+#undef ReadPaletteColor
+#undef SafeCheck
+
+			//TODO: leer valores que no sean colores
 
 			palettes.emplace(name, palette);
 		}
@@ -215,59 +296,189 @@ namespace ShyEditor {
 
 #define toVec4(col, a) ImVec4(col.r, col.g, col.b, a)
 
-		style.Colors[ImGuiCol_Text] = toVec4(current.text, 1.00f);
-		style.Colors[ImGuiCol_TextDisabled] = toVec4(current.text, 0.58f);
-		style.Colors[ImGuiCol_WindowBg] = toVec4(current.body, 0.95f);
-		style.Colors[ImGuiCol_ChildBg] = toVec4(current.area, 0.58f);
-		style.Colors[ImGuiCol_Border] = toVec4(current.body, 0.00f);
-		style.Colors[ImGuiCol_BorderShadow] = toVec4(current.body, 0.00f);
-		style.Colors[ImGuiCol_FrameBg] = toVec4(current.area, 1.00f);
-		style.Colors[ImGuiCol_FrameBgHovered] = toVec4(current.head, 0.78f);
-		style.Colors[ImGuiCol_FrameBgActive] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_TitleBg] = toVec4(current.area, 1.00f);
-		style.Colors[ImGuiCol_TitleBgCollapsed] = toVec4(current.area, 0.75f);
-		style.Colors[ImGuiCol_TitleBgActive] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_MenuBarBg] = toVec4(current.area, 0.47f);
-		style.Colors[ImGuiCol_ScrollbarBg] = toVec4(current.area, 1.00f);
-		style.Colors[ImGuiCol_ScrollbarGrab] = toVec4(current.head, 0.21f);
-		style.Colors[ImGuiCol_ScrollbarGrabHovered] = toVec4(current.head, 0.78f);
-		style.Colors[ImGuiCol_ScrollbarGrabActive] = toVec4(current.head, 1.00f);
-		//style.Colors[ImGuiCol_ComboBg] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 1.00f);
-		style.Colors[ImGuiCol_CheckMark] = toVec4(current.head, 0.80f);
-		style.Colors[ImGuiCol_SliderGrab] = toVec4(current.head, 0.50f);
-		style.Colors[ImGuiCol_SliderGrabActive] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_Button] = toVec4(current.head, 0.50f);
-		style.Colors[ImGuiCol_ButtonHovered] = toVec4(current.head, 0.86f);
-		style.Colors[ImGuiCol_ButtonActive] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_Header] = toVec4(current.head, 0.76f);
-		style.Colors[ImGuiCol_HeaderHovered] = toVec4(current.head, 0.86f);
-		style.Colors[ImGuiCol_HeaderActive] = toVec4(current.head, 1.00f);
-		//style.Colors[ImGuiCol_Column] = ImVec4(color_for_head.x, color_for_head.y, color_for_head.z, 0.32f);
-		//style.Colors[ImGuiCol_ColumnHovered] = ImVec4(color_for_head.x, color_for_head.y, color_for_head.z, 0.78f);
-		//style.Colors[ImGuiCol_ColumnActive] = ImVec4(color_for_head.x, color_for_head.y, color_for_head.z, 1.00f);
-		style.Colors[ImGuiCol_ResizeGrip] = toVec4(current.head, 0.15f);
-		style.Colors[ImGuiCol_ResizeGripHovered] = toVec4(current.head, 0.78f);
-		style.Colors[ImGuiCol_ResizeGripActive] = toVec4(current.head, 1.00f);
-		//style.Colors[ImGuiCol_CloseButton] = ImVec4(color_for_text.x, color_for_text.y, color_for_text.z, 0.16f);
-		//style.Colors[ImGuiCol_CloseButtonHovered] = ImVec4(color_for_text.x, color_for_text.y, color_for_text.z, 0.39f);
-		//style.Colors[ImGuiCol_CloseButtonActive] = ImVec4(color_for_text.x, color_for_text.y, color_for_text.z, 1.00f);
-		style.Colors[ImGuiCol_PlotLines] = toVec4(current.text, 0.63f);
-		style.Colors[ImGuiCol_PlotLinesHovered] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_PlotHistogram] = toVec4(current.text, 0.63f);
-		style.Colors[ImGuiCol_PlotHistogramHovered] = toVec4(current.head, 1.00f);
-		style.Colors[ImGuiCol_TextSelectedBg] = toVec4(current.head, 0.43f);
-		style.Colors[ImGuiCol_PopupBg] = toVec4(current.popups, 0.92f);
-		//style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(color_for_area.x, color_for_area.y, color_for_area.z, 0.73f);
+
+#define Light(col) toVec4(col, 0.60f)
+#define MediumLight(col) toVec4(col, 0.70f)
+#define Medium(col) toVec4(col, 0.80f)
+#define MediumStrong(col) toVec4(col, 0.90f)
+#define Strong(col) toVec4(col, 1)
+
+
+#define Hover Strong(current.primary)
+#define Active MediumStrong(current.primary)
+#define Grab MediumLight(current.primary)
+
+
+		style.Colors[ImGuiCol_Text] = Strong(current.text);
+		style.Colors[ImGuiCol_TextDisabled] = Light(current.text);
+		style.Colors[ImGuiCol_WindowBg] = toVec4(current.background, current.windowAlpha);
+		style.Colors[ImGuiCol_ChildBg] = Light(current.primary);
+		style.Colors[ImGuiCol_PopupBg] = MediumStrong(current.popups);
+		style.Colors[ImGuiCol_Border] = Strong(current.border);
+		style.Colors[ImGuiCol_BorderShadow] = Light(current.border);
+		style.Colors[ImGuiCol_FrameBg] = Light(current.secondary);
+		style.Colors[ImGuiCol_FrameBgHovered] = Hover;
+		style.Colors[ImGuiCol_FrameBgActive] = Active;
+		style.Colors[ImGuiCol_TitleBg] = Strong(current.secondary);
+		style.Colors[ImGuiCol_TitleBgActive] = Active;
+		style.Colors[ImGuiCol_TitleBgCollapsed] = Medium(current.secondary);
+		style.Colors[ImGuiCol_MenuBarBg] = Light(current.secondary);
+		style.Colors[ImGuiCol_ScrollbarBg] = Strong(current.secondary);
+		style.Colors[ImGuiCol_ScrollbarGrab] = Grab;
+		style.Colors[ImGuiCol_ScrollbarGrabHovered] = Hover;
+		style.Colors[ImGuiCol_ScrollbarGrabActive] = Active;
+		style.Colors[ImGuiCol_CheckMark] = Medium(current.primary);
+		style.Colors[ImGuiCol_SliderGrab] = Grab;
+		style.Colors[ImGuiCol_SliderGrabActive] = Active;
+		style.Colors[ImGuiCol_Button] = Light(current.primary);
+		style.Colors[ImGuiCol_ButtonHovered] = Hover;
+		style.Colors[ImGuiCol_ButtonActive] = Active;
+		style.Colors[ImGuiCol_Header] = Medium(current.primary);
+		style.Colors[ImGuiCol_HeaderHovered] = Hover;
+		style.Colors[ImGuiCol_HeaderActive] = Active;
+
+#define Magenta ImVec4(1, 0, 1, 1)
+
+		style.Colors[ImGuiCol_Separator] = Strong(current.primary);
+		style.Colors[ImGuiCol_SeparatorHovered] = Strong(current.primary);
+		style.Colors[ImGuiCol_SeparatorActive] = Strong(current.primary);
+
+
+		style.Colors[ImGuiCol_ResizeGrip] = Light(current.secondary);
+		style.Colors[ImGuiCol_ResizeGripHovered] = Hover;
+		style.Colors[ImGuiCol_ResizeGripActive] = Active;
+
+		style.Colors[ImGuiCol_Tab] = MediumLight(current.secondary);
+		style.Colors[ImGuiCol_TabHovered] = Hover;
+		style.Colors[ImGuiCol_TabActive] = Active;
+		style.Colors[ImGuiCol_TabUnfocused] = Light(current.secondary);
+		style.Colors[ImGuiCol_TabUnfocusedActive] = MediumLight(current.primary);
+
+
+		style.Colors[ImGuiCol_DockingPreview] = Magenta;
+		style.Colors[ImGuiCol_DockingEmptyBg] = Magenta;
+
+
+		style.Colors[ImGuiCol_PlotLines] = Light(current.text);
+		style.Colors[ImGuiCol_PlotLinesHovered] = Hover;
+		style.Colors[ImGuiCol_PlotHistogram] = Light(current.text);
+		style.Colors[ImGuiCol_PlotHistogramHovered] = Hover;
+		style.Colors[ImGuiCol_TextSelectedBg] = Light(current.primary);
+
+
+		style.Colors[ImGuiCol_DragDropTarget] = Strong(current.primary);
+
+
 
 		style.WindowRounding = current.windowRounding;
+		style.WindowBorderSize = current.windowBorder;
+		style.FrameBorderSize = current.frameBorder;
+		style.PopupBorderSize = current.popUpBorder;
+
 
 		pendingApply = false;
 	}
 
-	void ColorPalette::Serialize()
+	void ColorPalette::SavePalette()
 	{
-		//TODO: serializar el valor actual
+		std::string palettePath = ResourcesManager::EDITORASSETSFOLDER + "\\Palettes\\user-theme.palette";
+
+		std::ifstream fileStream(palettePath);
+
+		nlohmann::ordered_json root;
+
+		if (fileStream.good() && json::accept(fileStream)) {
+
+			fileStream.clear();
+			fileStream.seekg(0);
+
+			root = json::parse(fileStream);
+			fileStream.close();
+		}
+
+		nlohmann::ordered_json palette;
+
+		palette["name"] = paletteName;
+		palette["font"] = current.fontName;
+
+#define WriteValue(value) palette[#value] = current.value
+
+#define WriteColor(col) palette[#col] = current.col.ToHexString()
+#define WriteFloat WriteValue
+#define WriteInt WriteValue
+
+		//General 
+		WriteColor(text);
+		WriteColor(primary);
+		WriteColor(secondary);
+		WriteColor(background);
+		WriteColor(mainWindowBackground);
+		WriteColor(popups);
+		WriteColor(border);
+
+		WriteFloat(windowRounding);
+		WriteFloat(windowBorder);
+		WriteFloat(frameBorder);
+		WriteFloat(popUpBorder);
+		WriteFloat(windowAlpha);
+
+
+		//Scene
+		WriteColor(scene.background);
+		WriteFloat(scene.backgroundAlpha);
+		WriteColor(scene.frame);
+		WriteInt(scene.frameWidth);
+		WriteColor(scene.objectFrame);
+		WriteInt(scene.objectFrameWidth);
+
+		WriteColor(scene.UIBorder);
+		WriteColor(scene.UIBorderHover);
+		WriteInt(scene.UIBorderWidth);
+
+		WriteColor(scene.grid);
+		WriteInt(scene.gridSpacing);
+		WriteInt(scene.gridInterval);
+		WriteFloat(scene.gridAlpha);
+		WriteInt(scene.gridThickness);
+		//Scripting
+
+		WriteColor(scripting.background);
+		WriteFloat(scripting.nodeRounding);
+		WriteColor(scripting.grid);
+		WriteInt(scripting.gridThickness);
+		WriteInt(scripting.gridSpacing);
+		WriteFloat(scripting.gridIntervalScale);
+		WriteInt(scripting.gridInterval);
+		WriteColor(scripting.hover);
+		WriteFloat(scripting.buttonThickness);
+		WriteColor(scripting.line);
+		WriteFloat(scripting.lineThickness);
+		WriteColor(scripting.lineOutline);
+		WriteFloat(scripting.lineOutlineThickness);
+		WriteFloat(scripting.lineCurvature);
+		WriteFloat(scripting.lineAlpha);
+		WriteColor(scripting.flowline);
+		WriteFloat(scripting.flowlineThickness);
+		WriteColor(scripting.flowlineOutline);
+		WriteFloat(scripting.flowlineOutlineThickness);
+		WriteFloat(scripting.flowlineCurvature);
+		WriteFloat(scripting.flowlineAlpha);
+
+#undef WriteFloat
+#undef WriteInt
+#undef WriteColor
+#undef WriteValue
+
+
+		root.push_back(palette);
+
+
+		std::ofstream outputsfileStream(palettePath);
+
+		outputsfileStream << root.dump(4);
+		outputsfileStream.close();
 	}
+
 
 	void ColorPalette::Open()
 	{
@@ -277,19 +488,17 @@ namespace ShyEditor {
 
 	void ColorPalette::Behaviour()
 	{
-		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight), ImGuiCond_Once);
-		ImGui::Begin(windowName.c_str(), &visible, flags);
-
-
 		ImGui::TextWrapped("Choose theme");
 
 		if (ImGui::BeginCombo("Palette selector", current.name.c_str())) {
 			for (auto& palette : palettes) {
 
 				//TODO: push de los colores
-				ImGui::PushStyleColor(ImGuiCol_Text, toVec4(palette.second.text, 1));
-				ImGui::PushStyleColor(ImGuiCol_Header, toVec4(palette.second.body, 1));
-				ImGui::PushFont(palette.second.fontPtr);
+
+
+				//ImGui::PushStyleColor(ImGuiCol_Text, toVec4(palette.second.text, 1));
+				//ImGui::PushStyleColor(ImGuiCol_Header, toVec4(palette.second.background, 1));
+				//ImGui::PushFont(palette.second.fontPtr);
 
 
 				if (ImGui::Selectable(palette.first.c_str(), current.name == palette.second.name)) {
@@ -298,14 +507,32 @@ namespace ShyEditor {
 				}
 
 
-				ImGui::PopStyleColor(2);
-				ImGui::PopFont();
+				//ImGui::PopStyleColor(2);
+				//ImGui::PopFont();
 			}
 
 			ImGui::EndCombo();
 		}
 
-		ImGui::ShowFontSelector("Font");
+		if (ImGui::BeginCombo("Font selector", current.fontName.c_str())) {
+
+
+			for (auto& font : fonts) {
+
+
+				if (ImGui::Selectable(font.first.c_str(), current.fontName == font.first)) {
+
+					
+					current.fontName = font.first;
+					current.fontPtr = font.second;
+					changes = true;
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+
+		//ImGui::ShowFontSelector("Font");
 
 #define ShowColor(name, color) if (ImGui::ColorEdit3(filename, &color.r)) areThereChanges = true;
 #define ShowFloat(name, value, speed, min, max)\
@@ -318,12 +545,18 @@ namespace ShyEditor {
 
 			ImGui::Indent();
 
-			Col("Text", &current.text);
-			Col("Area", &current.area);
-			Col("Body", &current.body);
-			Col("Head", &current.head);
+			Col("Tex", &current.text);
+			Col("Primary", &current.primary);
+			Col("Secondary", &current.secondary);
+			Col("Background", &current.background);
 			Col("Pop ups", &current.popups);
+			Col("Border", &current.border);
 			Float("Window rounding", &current.windowRounding);
+			Float("Window border size", &current.windowBorder);
+			Float("Frame  border size", &current.frameBorder, 0, 10, 0.01);
+			Float("Pop up border size", &current.popUpBorder);
+			NormalizedFloat("Window transparency", &current.windowAlpha);
+
 
 			ImGui::Unindent();
 		}
@@ -359,7 +592,7 @@ namespace ShyEditor {
 		if (ImGui::CollapsingHeader("Scripting")) {
 			ImGui::Indent();
 
-			Col("Background", &current.scripting.scriptBackground);
+			Col("Background", &current.scripting.background);
 			Col("Hover", &current.scripting.hover);
 			Float("Button thickness", &current.scripting.buttonThickness);
 			Float("Node rounding", &current.scripting.nodeRounding);
@@ -424,13 +657,95 @@ namespace ShyEditor {
 		}
 
 
-		ImGui::End();
+		if (ImGui::Button("Save current palette")) {
+
+			showSavePopup = true;
+			paletteName[0] = '\0';
+		}
+
+		if (ImGui::Button("Remove palette")) {
+
+			showErasePopup = true;
+			paletteName[0] = '\0';
+		}
+
+
+
+		if (showSavePopup)
+		{
+			//TODO: center
+
+			ImGui::OpenPopup("Save color palette");
+
+
+
+		}
+
+		if (ImGui::BeginPopupModal("Save color palette", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
+
+
+			ImGui::InputText("New palette name", paletteName, 16);
+
+
+			if (ImGui::Button("Save")) {
+
+				showSavePopup = false;
+				ImGui::CloseCurrentPopup();
+
+				//TODO: llamar a save
+				SavePalette();
+
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel")) {
+
+				showSavePopup = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
+
+
+		if (showErasePopup)
+		{
+			//TODO: center
+
+			ImGui::OpenPopup("Erase color palette");
+		}
+
+		if (ImGui::BeginPopupModal("Erase color palette", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		{
+
+
+			ImGui::InputText("Palette to erase", paletteName, 16);
+
+			if (ImGui::Button("Erase")) {
+
+				showErasePopup = false;
+				ImGui::CloseCurrentPopup();
+
+				//TODO: llamar a erase
+
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel")) {
+
+				showErasePopup = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
+
 	}
 
 
 	void ColorPalette::Col(const char* name, Color* value)
 	{
-		if (ImGui::ColorEdit3(name, &value->r))
+		if (ImGui::ColorEdit3(name, &value->r, ImGuiColorEditFlags_PickerHueWheel))
 			changes = true;
 	}
 
@@ -494,6 +809,18 @@ namespace ShyEditor {
 		}
 
 		return color;
+	}
+
+	std::string ColorPalette::Color::ToHexString()
+	{
+		std::stringstream ss;
+
+		ss << "#" <<
+			std::hex << std::setw(2) << std::setfill('0') << int(r * 255) <<
+			std::hex << std::setw(2) << std::setfill('0') << int(g * 255) <<
+			std::hex << std::setw(2) << std::setfill('0') << int(b * 255);
+
+		return ss.str();
 	}
 
 }

@@ -94,7 +94,7 @@ namespace ShyEditor {
 
 
 		if (isMouseInsideWindow) {
-			if (event->type == SDL_MOUSEWHEEL && !(SDL_GetModState() & KMOD_SHIFT)) {
+			if (event->type == SDL_MOUSEWHEEL) {
 
 				float pscale = scale;
 
