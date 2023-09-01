@@ -406,6 +406,8 @@ ClassReflection::ClassReflection(){
 			self->platformLayer = map.at("platformLayer");
 		if(map.contains("horizontalDamping"))
 			self->horizontalDamping = std::stof(map.at("horizontalDamping"));
+		if(map.contains("avalaibleJumps"))
+			self->avalaibleJumps = std::stoi(map.at("avalaibleJumps"));
 
 }
 	void ClassReflection::ReflectSoundEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Fri Sep  1 16:06:46 2023
+//Creation time: Fri Sep  1 19:13:34 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -155,6 +155,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getAngularDrag",PhysicBody_getAngularDrag);
 	map.emplace("PhysicBody_setGravityScale",PhysicBody_setGravityScale);
 	map.emplace("PhysicBody_getGravityScale",PhysicBody_getGravityScale);
+	map.emplace("PhysicBody_getCollisionNormal",PhysicBody_getCollisionNormal);
+	map.emplace("PhysicBody_getCollisionPoint",PhysicBody_getCollisionPoint);
 	map.emplace("PhysicBody_setCollisionLayer",PhysicBody_setCollisionLayer);
 	map.emplace("PhysicBody_getCollisionLayer",PhysicBody_getCollisionLayer);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
@@ -2248,6 +2250,36 @@ Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>c
 		return Scripting::Variable::Null();
 	}
 	float ret = self->getGravityScale();
+	return ret;
+}
+Scripting::Variable PhysicBody_getCollisionNormal(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionNormal", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionNormal", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getCollisionNormal();
+	return ret;
+}
+Scripting::Variable PhysicBody_getCollisionPoint(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionPoint", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getCollisionPoint", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getCollisionPoint();
 	return ret;
 }
 Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec){

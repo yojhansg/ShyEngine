@@ -45,6 +45,9 @@ namespace ECS {
 		reflect float jumpForce;
 		reflect std::string platformLayer;
 		reflect float horizontalDamping;
+		reflect int avalaibleJumps;
+
+		int nJumps;
 
 		bool onGround;
 		bool hasJumped;

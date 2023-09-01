@@ -1,6 +1,6 @@
 {
     "bgAlpha": 255,
-    "bgColor": "85, 156, 114",
+    "bgColor": "72, 137, 155",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -9,16 +9,35 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "MyGame",
+    "game": "Platform",
     "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
         "Default",
-        "Ball",
-        "Platform"
+        "Player",
+        "Platform",
+        "Ball"
     ],
     "matrix": [
         [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        [
             true,
             true,
             false,
@@ -38,24 +57,6 @@
         ],
         [
             true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        ],
-        [
-            false,
             false,
             false,
             false,
@@ -307,8 +308,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\Assets",
-    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\MyGame\\MyGame.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
@@ -316,5 +317,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "MyGame"
+    "windowTitle": "Platform"
 }

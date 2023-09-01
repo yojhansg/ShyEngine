@@ -27,6 +27,8 @@ namespace ECS {
 		jumpForce = 1.0f;
 		maxVelocity = 5.0f;
 		horizontalDamping = 0.0f;
+		avalaibleJumps = 1;
+		nJumps = avalaibleJumps;
 	}
 
 	void PlatformController::init() {
@@ -59,8 +61,10 @@ namespace ECS {
 
 	void PlatformController::update(float dt) {
 
-		if (im->Jump() && !hasJumped)
+		if (im->Jump() && !hasJumped && nJumps > 0) {
 			hasJumped = true;
+			nJumps--;
+		}
 
 	}
 
@@ -69,10 +73,15 @@ namespace ECS {
 		direction = im->HorizontalMovement();
 
 		// Salto
-		if (onGround && hasJumped) {
+		if (hasJumped) {
 			float impulse = body->getMass() * jumpForce * fixedDt;
 
+			// Eliminar la velocidad actual en Y
+			body->setLinearVelocity(body->getLinearVelocity().getX(), 0);
+
 			body->applyLinearImpulseToCenter({ 0, impulse });
+
+			hasJumped = false;
 
 		}
 
@@ -102,8 +111,10 @@ namespace ECS {
 		auto other = PhysicBody::GetComponentFromEntity(ent);
 
 		if (body->collidesWith(other) && other->getCollisionLayer() == platformLayer) {
-			if (body->getCollisionNormal().getY() > 0.5f)
+			if (body->getCollisionNormal().getY() > 0.5f) {
 				onGround = true;
+				nJumps = avalaibleJumps;
+			}
 		}
 
 	}

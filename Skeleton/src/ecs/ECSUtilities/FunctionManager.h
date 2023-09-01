@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Fri Sep  1 16:06:46 2023
+//Creation time : Fri Sep  1 19:13:34 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -121,6 +121,8 @@ Scripting::Variable PhysicBody_setAngularDrag(std::vector<Scripting::Variable>co
 Scripting::Variable PhysicBody_getAngularDrag(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setGravityScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getCollisionNormal(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getCollisionPoint(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
