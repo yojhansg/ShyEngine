@@ -374,6 +374,11 @@
             },
             {
                 "input": [],
+                "name": "Jump",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
                 "name": "HasMouseMoved",
                 "return": "Toggle"
             },
@@ -631,7 +636,7 @@
                         "type": "Number"
                     }
                 ],
-                "name": "IsControllerButtonUp",
+                "name": "IsControllerButtonReleased",
                 "return": "Toggle"
             },
             {

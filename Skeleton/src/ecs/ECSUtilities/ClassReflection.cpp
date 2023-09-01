@@ -5,7 +5,6 @@
 #include "Components/CircleBody.h"
 #include "Components/EdgeBody.h"
 #include "Components/Image.h"
-#include "Components/Movement.h"
 #include "Components/MusicEmitter.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayButton.h"
@@ -13,7 +12,9 @@
 #include "Components/OverlayText.h"
 #include "Components/ParticleSystem.h"
 #include "Components/PhysicBody.h"
+#include "Components/PlatformController.h"
 #include "Components/SoundEmitter.h"
+#include "Components/TopDownController.h"
 #include "Components/Transform.h"
 
 
@@ -25,7 +26,6 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["CircleBody"] = &ClassReflection::ReflectCircleBody;
 	reflectionMethods["EdgeBody"] = &ClassReflection::ReflectEdgeBody;
 	reflectionMethods["Image"] = &ClassReflection::ReflectImage;
-	reflectionMethods["Movement"] = &ClassReflection::ReflectMovement;
 	reflectionMethods["MusicEmitter"] = &ClassReflection::ReflectMusicEmitter;
 	reflectionMethods["Overlay"] = &ClassReflection::ReflectOverlay;
 	reflectionMethods["OverlayButton"] = &ClassReflection::ReflectOverlayButton;
@@ -33,7 +33,9 @@ ClassReflection::ClassReflection(){
 	reflectionMethods["OverlayText"] = &ClassReflection::ReflectOverlayText;
 	reflectionMethods["ParticleSystem"] = &ClassReflection::ReflectParticleSystem;
 	reflectionMethods["PhysicBody"] = &ClassReflection::ReflectPhysicBody;
+	reflectionMethods["PlatformController"] = &ClassReflection::ReflectPlatformController;
 	reflectionMethods["SoundEmitter"] = &ClassReflection::ReflectSoundEmitter;
+	reflectionMethods["TopDownController"] = &ClassReflection::ReflectTopDownController;
 	reflectionMethods["Transform"] = &ClassReflection::ReflectTransform;
 
 }ClassReflection::~ClassReflection(){
@@ -82,6 +84,12 @@ ClassReflection::ClassReflection(){
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 		if(map.contains("gravityScale"))
 			self->gravityScale = std::stof(map.at("gravityScale"));
+		if(map.contains("friction"))
+			self->friction = std::stof(map.at("friction"));
+		if(map.contains("linearDamping"))
+			self->linearDamping = std::stof(map.at("linearDamping"));
+		if(map.contains("angularDamping"))
+			self->angularDamping = std::stof(map.at("angularDamping"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
@@ -104,6 +112,12 @@ ClassReflection::ClassReflection(){
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 		if(map.contains("gravityScale"))
 			self->gravityScale = std::stof(map.at("gravityScale"));
+		if(map.contains("friction"))
+			self->friction = std::stof(map.at("friction"));
+		if(map.contains("linearDamping"))
+			self->linearDamping = std::stof(map.at("linearDamping"));
+		if(map.contains("angularDamping"))
+			self->angularDamping = std::stof(map.at("angularDamping"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
@@ -124,6 +138,12 @@ ClassReflection::ClassReflection(){
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 		if(map.contains("gravityScale"))
 			self->gravityScale = std::stof(map.at("gravityScale"));
+		if(map.contains("friction"))
+			self->friction = std::stof(map.at("friction"));
+		if(map.contains("linearDamping"))
+			self->linearDamping = std::stof(map.at("linearDamping"));
+		if(map.contains("angularDamping"))
+			self->angularDamping = std::stof(map.at("angularDamping"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
 
@@ -132,16 +152,6 @@ ClassReflection::ClassReflection(){
 		Image* self = static_cast<Image*>(selfComp);
 		if(map.contains("fileName"))
 			self->fileName = map.at("fileName");
-
-}
-	void ClassReflection::ReflectMovement(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
-		Movement* self = static_cast<Movement*>(selfComp);
-		if(map.contains("velocity"))
-			self->velocity = std::stof(map.at("velocity"));
-		if(map.contains("clampDiagonalVelocity"))
-			self->clampDiagonalVelocity = map.at("clampDiagonalVelocity") == "true" ? true : false;
-		if(map.contains("usePhysics"))
-			self->usePhysics = map.at("usePhysics") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -374,8 +384,28 @@ ClassReflection::ClassReflection(){
 			self->freezeRotation = map.at("freezeRotation") == "true" ? true : false;
 		if(map.contains("gravityScale"))
 			self->gravityScale = std::stof(map.at("gravityScale"));
+		if(map.contains("friction"))
+			self->friction = std::stof(map.at("friction"));
+		if(map.contains("linearDamping"))
+			self->linearDamping = std::stof(map.at("linearDamping"));
+		if(map.contains("angularDamping"))
+			self->angularDamping = std::stof(map.at("angularDamping"));
 		if(map.contains("layerName"))
 			self->layerName = map.at("layerName");
+
+}
+	void ClassReflection::ReflectPlatformController(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
+		PlatformController* self = static_cast<PlatformController*>(selfComp);
+		if(map.contains("velocity"))
+			self->velocity = std::stof(map.at("velocity"));
+		if(map.contains("maxVelocity"))
+			self->maxVelocity = std::stof(map.at("maxVelocity"));
+		if(map.contains("jumpForce"))
+			self->jumpForce = std::stof(map.at("jumpForce"));
+		if(map.contains("platformLayer"))
+			self->platformLayer = map.at("platformLayer");
+		if(map.contains("horizontalDamping"))
+			self->horizontalDamping = std::stof(map.at("horizontalDamping"));
 
 }
 	void ClassReflection::ReflectSoundEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -394,6 +424,16 @@ ClassReflection::ClassReflection(){
 			self->panning = std::stof(map.at("panning"));
 		if(map.contains("audibleDistance"))
 			self->audibleDistance = std::stof(map.at("audibleDistance"));
+
+}
+	void ClassReflection::ReflectTopDownController(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
+		TopDownController* self = static_cast<TopDownController*>(selfComp);
+		if(map.contains("velocity"))
+			self->velocity = std::stof(map.at("velocity"));
+		if(map.contains("clampDiagonalVelocity"))
+			self->clampDiagonalVelocity = map.at("clampDiagonalVelocity") == "true" ? true : false;
+		if(map.contains("usePhysics"))
+			self->usePhysics = map.at("usePhysics") == "true" ? true : false;
 
 }
 	void ClassReflection::ReflectTransform(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){

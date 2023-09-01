@@ -49,7 +49,6 @@ namespace ECS {
 
         void onSceneDown() override;
 
-
     publish:
 
         // Setters & getters
@@ -80,8 +79,14 @@ namespace ECS {
         void setGravityScale(float scale);
         float getGravityScale();
 
+        // Collision Manifold properties
+        Vector2D getCollisionNormal();
+
+        Vector2D getCollisionPoint();
+
         // Collision Filtering
         void setCollisionLayer(cstring layerName);
+        cstring getCollisionLayer();
 
         void setLinearVelocity(float x, float y);
         Vector2D getLinearVelocity();
@@ -115,15 +120,23 @@ namespace ECS {
         void setCollisionStay(bool stay, Entity* b);
         void setTriggerStay(bool stay, Entity* b);
 
+        void setBox2DContact(b2Contact* c);
+
+        bool collidesWith(PhysicBody* b);
+
+        static PhysicBody* GetComponentFromEntity(Entity* ent);
+
     protected:
 
         virtual void scaleShape() = 0;
 
         // Box2d
         b2World* world;
+        Physics::PhysicsManager* pm;
+        float screenToWorldFactor;
+        Transform* transform;
 
         reflect Vector2D offSet;
-
         reflect int bodyType;
 
         // Fixture properties
@@ -132,22 +145,23 @@ namespace ECS {
         reflect bool trigger;   
         reflect bool freezeRotation;
         reflect float gravityScale;
+        reflect float friction;
+        reflect float linearDamping;
+        reflect float angularDamping;
 
         // Collision Layer
         reflect std::string layerName;
-
-        float screenToWorldFactor;
 
         // Box2d properties
         b2BodyDef* bodyDef;
         b2Body* body;
         b2FixtureDef* fixtureDef;
         b2Fixture* fixture;
+        b2Contact* contact;
 
-        // Entity Components
-        Transform* transform;
-
-        Physics::PhysicsManager* pm;
+        // Contact manifold properties
+        Vector2D collisionNormal;
+        Vector2D collisionPoint;
 
     private:
 
@@ -162,4 +176,6 @@ namespace ECS {
         Entity* collisionEntity;
 
     };
+
 }
+

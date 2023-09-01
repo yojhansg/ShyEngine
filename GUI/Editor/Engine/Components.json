@@ -190,6 +190,18 @@
                 "type": "Number"
             },
             {
+                "name": "friction",
+                "type": "Number"
+            },
+            {
+                "name": "linearDamping",
+                "type": "Number"
+            },
+            {
+                "name": "angularDamping",
+                "type": "Number"
+            },
+            {
                 "name": "layerName",
                 "type": "Text"
             }
@@ -284,6 +296,18 @@
                 "type": "Number"
             },
             {
+                "name": "friction",
+                "type": "Number"
+            },
+            {
+                "name": "linearDamping",
+                "type": "Number"
+            },
+            {
+                "name": "angularDamping",
+                "type": "Number"
+            },
+            {
                 "name": "layerName",
                 "type": "Text"
             }
@@ -317,6 +341,18 @@
             },
             {
                 "name": "gravityScale",
+                "type": "Number"
+            },
+            {
+                "name": "friction",
+                "type": "Number"
+            },
+            {
+                "name": "linearDamping",
+                "type": "Number"
+            },
+            {
+                "name": "angularDamping",
                 "type": "Number"
             },
             {
@@ -434,22 +470,6 @@
                 ],
                 "name": "setFlipMode",
                 "return": "void"
-            }
-        ]
-    },
-    "Movement": {
-        "attributes": [
-            {
-                "name": "velocity",
-                "type": "Number"
-            },
-            {
-                "name": "clampDiagonalVelocity",
-                "type": "Toggle"
-            },
-            {
-                "name": "usePhysics",
-                "type": "Toggle"
             }
         ]
     },
@@ -1676,6 +1696,18 @@
                 "type": "Number"
             },
             {
+                "name": "friction",
+                "type": "Number"
+            },
+            {
+                "name": "linearDamping",
+                "type": "Number"
+            },
+            {
+                "name": "angularDamping",
+                "type": "Number"
+            },
+            {
                 "name": "layerName",
                 "type": "Text"
             }
@@ -1920,6 +1952,16 @@
                     {
                         "name": "entity",
                         "type": "Entity"
+                    }
+                ],
+                "name": "getCollisionLayer",
+                "return": "Text"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
                     },
                     {
                         "name": "x",
@@ -2061,15 +2103,27 @@
             }
         ]
     },
-    "PhysicalMovement": {
+    "PlatformController": {
         "attributes": [
             {
                 "name": "velocity",
                 "type": "Number"
             },
             {
-                "name": "clampDiagonalVelocity",
-                "type": "Toggle"
+                "name": "maxVelocity",
+                "type": "Number"
+            },
+            {
+                "name": "jumpForce",
+                "type": "Number"
+            },
+            {
+                "name": "platformLayer",
+                "type": "Text"
+            },
+            {
+                "name": "horizontalDamping",
+                "type": "Number"
             }
         ]
     },
@@ -2345,6 +2399,22 @@
                 ],
                 "name": "getAudibleDistance",
                 "return": "Number"
+            }
+        ]
+    },
+    "TopDownController": {
+        "attributes": [
+            {
+                "name": "velocity",
+                "type": "Number"
+            },
+            {
+                "name": "clampDiagonalVelocity",
+                "type": "Toggle"
+            },
+            {
+                "name": "usePhysics",
+                "type": "Toggle"
             }
         ]
     },

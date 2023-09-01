@@ -66,6 +66,10 @@ Editor::Editor() {
 	layout = nullptr;
 	anySceneOpened = false;
 	state = EDITOR_WINDOW;
+
+	ImVec2 res = ImVec2(_WindowMainSize);
+	userScreenResX = res.x;
+	userScreenResY = res.y;
 }
 
 Editor::~Editor() {}
@@ -112,7 +116,7 @@ void Editor::Loop() {
 	if (!closed) {
 		// Configure the SDL window to start the editor
 		SDL_SetWindowResizable(instance->window, SDL_TRUE);
-		SDL_SetWindowSize(instance->window, _WindowMainSize);
+		SDL_SetWindowSize(instance->window, instance->userScreenResX, instance->userScreenResY);
 		SDL_SetWindowPosition(instance->window, _Centered);
 
 		// Init the ImGUI windows in the editor
@@ -232,8 +236,17 @@ bool Editor::InitSDL() {
 		return false;
 	}
 
+	// Obtain user screen resolution
+	SDL_DisplayMode currentDisplayMode;
+	if (SDL_GetCurrentDisplayMode(0, &currentDisplayMode) != 0) {
+		ShyEditor::LogManager::LogError("Could not obtain the user screen resolution!");
+	}
+
+	// Acceder a la resolución de pantalla
+	userScreenResX = currentDisplayMode.w;
+	userScreenResY = currentDisplayMode.h;
+
 	// WINDOW
-	//SDL_WindowFlags imguiWinFlags = SDL_WindowFlags(ImGui::ImGui_ImplSDL2_GetPlatformWindowFlags());
 		// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 	window = SDL_CreateWindow("Shy Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
@@ -248,7 +261,6 @@ bool Editor::InitSDL() {
 	}
 
 	// RENDERER
-
 		// Create our renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 	if (renderer == NULL) {
@@ -571,6 +583,8 @@ void Editor::LoadWindowsData() {
 		else 
 			windows[index]->Hide();
 	}
+
+	scriptCreation->Hide();
 
 }
 

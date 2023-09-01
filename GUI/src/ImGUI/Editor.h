@@ -127,6 +127,10 @@ private:
 	// All editor windows
 	std::vector<ShyEditor::Window*> windows;
 
+	// User screen resolution
+	int userScreenResX;
+	int userScreenResY;
+
 	// Path to the last opene scene
 	std::string lastOpenedScene;
 	bool anySceneOpened;
