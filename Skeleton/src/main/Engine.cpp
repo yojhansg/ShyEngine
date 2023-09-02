@@ -190,12 +190,9 @@ void Engine::update() {
 
 void Engine::close() {
 
-	Console::Output::Print("Fin de ejecucion", "Bye!");
-
 	resourcesManager->close();
 	physicsManager->close();
 	inputManager->close();
 	rendererManager->close();
 	sceneManager->close();
-
 }

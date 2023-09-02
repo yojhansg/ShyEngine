@@ -17,8 +17,14 @@ namespace ShyEditor {
          bool shouldOpenRenamePopup;
          bool shouldOpenNewScenePopup;
 
+         float playOptionsWidth;
+
          void ShowRenamePopup(Entity* entity);
          void ShowNewScenePopup();
+
+         void Debug();
+         void Release();
+         void Stop();
 
      public:
 

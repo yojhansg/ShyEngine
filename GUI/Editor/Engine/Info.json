@@ -12,6 +12,8 @@
 
         ],
 
+        "BODY_TYPE": [ "STATIC", "KINEMATIC", "DYNAMIC" ],
+
         "Fit": [
             "Clamp", "Overflow","WrapClamp","WrapOverflow","Expand"
         ],
