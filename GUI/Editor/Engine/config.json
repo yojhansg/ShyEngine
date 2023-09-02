@@ -1,4 +1,6 @@
 {
+    "CT_Action": 11,
+    "CT_Jump": 0,
     "KB_Action": 4,
     "KB_Jump": 4,
     "KB_movements": [
@@ -7,12 +9,8 @@
         22,
         18
     ],
-    "PS4_Action": 3,
-    "PS4_Jump": 0,
-    "XBOX_Action": 2,
-    "XBOX_Jump": 0,
     "bgAlpha": 255,
-    "bgColor": "25, 25, 25",
+    "bgColor": "72, 137, 155",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -21,11 +19,14 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "Fpli",
-    "gravity": "0.000000, 9.810000",
+    "game": "Platform",
+    "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
-        "Default"
+        "Default",
+        "Player",
+        "Platform",
+        "Ball"
     ],
     "matrix": [
         [
@@ -47,8 +48,8 @@
             false
         ],
         [
-            false,
-            false,
+            true,
+            true,
             false,
             false,
             false,
@@ -65,7 +66,7 @@
             false
         ],
         [
-            false,
+            true,
             false,
             false,
             false,
@@ -317,14 +318,14 @@
             false
         ]
     ],
-    "path": "C:\\Users\\sryoj\\Documents\\ShyEngine\\FlappyBird\\Assets",
-    "projectFilePath": "C:\\Users\\sryoj\\Documents\\ShyEngine\\FlappyBird\\FlappyBird.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
-    "windowIcon": "icon.ico",
-    "windowSize": "600, 1000",
-    "windowTitle": "FlappyBird"
+    "windowIcon": "",
+    "windowSize": "1920, 1080",
+    "windowTitle": "Platform"
 }

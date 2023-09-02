@@ -214,7 +214,7 @@ namespace Input {
 		private:
 
 			InputManager();
-			InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int XBOX_Jump, int XBOX_Action, int PS4_Jump, int PS4_Action);
+			InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int CT_Jump, int CT_Action);
 
 			SDL_Scancode ConvertToScancode(const KB_LETTERS& letter);
 			SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
@@ -326,14 +326,8 @@ namespace Input {
 			std::vector<int> KB_movements;
 
 			// Controller
-
-				// XBOX
-				int XBOX_Jump;
-				int XBOX_Action;
-
-				// PS4
-				int PS4_Jump;
-				int PS4_Action;
+			int CT_Jump;
+			int CT_Action;
 
 	};
 }

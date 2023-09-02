@@ -11,19 +11,16 @@
 
 namespace Input {
 
-	InputManager::InputManager() : InputManager(true, 4, 4, std::vector<int>(), 0, 2, 0, 2) {}
+	InputManager::InputManager() : InputManager(true, 4, 4, std::vector<int>(), 0, 2) {}
 
-	InputManager::InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int XBOX_Jump, int XBOX_Action, int PS4_Jump, int PS4_Action) : closeWithEscape(closeWithEscape) {
+	InputManager::InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int CT_Jump, int CT_Action) : closeWithEscape(closeWithEscape) {
 
 		this->KB_Jump = KB_Jump;
 		this->KB_Action = KB_Action;
 		this->KB_movements = KB_movements;
 
-		this->XBOX_Jump = XBOX_Jump;
-		this->XBOX_Action = XBOX_Action;
-
-		this->PS4_Jump = PS4_Jump;
-		this->PS4_Action = PS4_Action;
+		this->CT_Jump = CT_Jump;
+		this->CT_Action = CT_Action;
 
 
 		kbState_ = SDL_GetKeyboardState(0);
@@ -393,11 +390,11 @@ namespace Input {
 	}
 
 	bool InputManager::Jump() {
-		return IsSpecialKeyPressed(KB_Jump) || IsControllerButtonPressed(PS4_Jump) || IsControllerButtonPressed(XBOX_Jump); // Problema
+		return IsSpecialKeyPressed(KB_Jump) || IsControllerButtonPressed(CT_Jump);
 	}
 
 	bool InputManager::Action() {
-		return IsLetterPressed(KB_Action) || IsControllerButtonPressed(PS4_Action) || IsControllerButtonPressed(XBOX_Action); // Problema
+		return IsLetterPressed(KB_Action) || IsControllerButtonPressed(CT_Action);
 	}
 
 
