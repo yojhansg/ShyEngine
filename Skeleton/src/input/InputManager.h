@@ -12,7 +12,7 @@
 #include <EditorExport.h>
 
 /*
-Input Manager. It has support for mouse, keyboard and multiple PS4 controllers.
+Input Manager. It has support for mouse, keyboard and multiple PS4 or XBOX controllers.
 */
 
 namespace Utilities {
@@ -26,6 +26,8 @@ namespace Input {
 		friend Singleton<InputManager>;
 
 	public:
+
+		enum class DIRECTIONS { LEFT, RIGHT, UP, DOWN };
 
 		enum class MOUSEBUTTON : uint8_t {
 			LEFT, MIDDLE, RIGHT, Count
@@ -116,6 +118,7 @@ namespace Input {
 		float VerticalMovement();
 
 		bool Jump();
+		bool Action();
 
 
 		// Mouse
@@ -211,7 +214,7 @@ namespace Input {
 		private:
 
 			InputManager();
-			InputManager(bool closeWithEscape);
+			InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int XBOX_Jump, int XBOX_Action, int PS4_Jump, int PS4_Action);
 
 			SDL_Scancode ConvertToScancode(const KB_LETTERS& letter);
 			SDL_Scancode ConvertToScancode(const KB_NUMBERS& number);
@@ -313,5 +316,24 @@ namespace Input {
 			int lastInputReceivedController;
 
 			int numControllersConnected;
+
+
+			// ------------ BINDING DATA ------------
+
+			// Keyboard
+			int KB_Jump;
+			int KB_Action;
+			std::vector<int> KB_movements;
+
+			// Controller
+
+				// XBOX
+				int XBOX_Jump;
+				int XBOX_Action;
+
+				// PS4
+				int PS4_Jump;
+				int PS4_Action;
+
 	};
 }

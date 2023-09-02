@@ -243,8 +243,8 @@ bool Editor::InitSDL() {
 	}
 
 	// Acceder a la resolución de pantalla
-	userScreenResX = currentDisplayMode.w;
-	userScreenResY = currentDisplayMode.h;
+	/*userScreenResX = currentDisplayMode.w;
+	userScreenResY = currentDisplayMode.h;*/
 
 	// WINDOW
 		// Create our window

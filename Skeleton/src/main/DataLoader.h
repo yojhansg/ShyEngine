@@ -48,6 +48,21 @@ public:
 	// Input
 	bool closeWithEscape;
 
+		// Keyboard
+		int KB_Jump;
+		int KB_Action;
+		std::vector<int> KB_movements;
+
+		// Controller
+
+			// XBOX
+			int XBOX_Jump;
+			int XBOX_Action;
+
+			// PS4
+			int PS4_Jump;
+			int PS4_Action;
+
 	// Overlay
 	float timeToDoubleClick;
 	float timeToHoldClick;

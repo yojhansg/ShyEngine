@@ -1,4 +1,16 @@
 {
+    "KB_Action": 4,
+    "KB_Jump": 4,
+    "KB_movements": [
+        0,
+        3,
+        22,
+        18
+    ],
+    "PS4_Action": 3,
+    "PS4_Jump": 0,
+    "XBOX_Action": 2,
+    "XBOX_Jump": 0,
     "bgAlpha": 255,
     "bgColor": "72, 137, 155",
     "channels": 1,

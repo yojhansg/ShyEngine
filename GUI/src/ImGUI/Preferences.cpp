@@ -1,17 +1,27 @@
 #include "Preferences.h"
 
-#include "ProjectsManager.h"
+#include "ComponentManager.h"
+#include "ResourcesManager.h"
 #include "nlohmann/json.hpp"
+#include "ProjectsManager.h"
 #include "PrefabManager.h"
 #include "LogManager.h"
+#include "Texture.h"
 #include "Editor.h"
 #include "imgui.h"
 #include "Game.h"
-#include "ProjectsManager.h"
+
 #include <fstream>
 #include <sstream>
 
 #include "CheckML.h"
+
+#define UpArrowImage "upArrow.png"
+#define DownArrowImage "downArrow.png"
+#define LeftArrowImage "leftArrow.png"
+#define RightArrowImage "rightArrow.png"
+
+#define VERTICALSPACING 10
 
 using nlohmann::json;
 using nlohmann::ordered_json;
@@ -30,11 +40,50 @@ namespace ShyEditor {
 		windowWidth = 700;
 		windowHeight = 700;
 		canBeDisplayedOnTop = true;
+
+		upArrow = ResourcesManager::GetInstance()->AddTexture(UpArrowImage, true);
+		downArrow = ResourcesManager::GetInstance()->AddTexture(DownArrowImage, true);
+		leftArrow = ResourcesManager::GetInstance()->AddTexture(LeftArrowImage, true);
+		rightArrow = ResourcesManager::GetInstance()->AddTexture(RightArrowImage, true);
+
+		// Physics attributes for ImGUI
 		updateMatrix = false;
 		showError = false;
 		errorMsg = L"Default error message";
 		defaultLayer = "Default";
 		nLayers = 1;
+
+		// Input attributes for ImGUI
+
+			// Keyboard
+
+			specialKeys = Components::ComponentManager::GetEnum("KB_SPECIALKEYS");
+			KB_jumpPreview = specialKeys[4]; // 4 is SPACE
+			KB_jumpSelected = 4;
+
+			letterKeys = Components::ComponentManager::GetEnum("KB_LETTERS");
+			KB_movementSelected = 0; // 0 is A
+
+			KB_actionSelected = 4; // 4 is E
+			KB_actionPreview = letterKeys[4];
+
+			// Controller
+
+				// XBOX
+				xboxButtons = Components::ComponentManager::GetEnum("XboxController");
+				XBOX_jumpSelected = 0; // 0 is A
+				XBOX_jumpPreview = xboxButtons[0];
+
+				XBOX_actionSelected = 2; // 2 is X
+				XBOX_actionPreview = xboxButtons[2];
+
+				// PS4
+				ps4Buttons = Components::ComponentManager::GetEnum("PS4Controller");
+				PS4_jumpSelected = 0; // 0 is X
+				PS4_jumpPreview = ps4Buttons[0];
+
+				PS4_actionSelected = 2; // 2 is SQUARE
+				PS4_actionPreview = ps4Buttons[2];
 
 		// General
 		data.initialScene = "Scene";
@@ -60,6 +109,23 @@ namespace ShyEditor {
 
 		// Input
 		data.closeWithEscape = true;
+
+			// Keyboard
+			data.KB_Jump = 4;
+			data.KB_Action = 4;
+			data.KB_movements = std::vector<int>(4, 0);
+			data.KB_movements[0] = 0; data.KB_movements[1] = 3; 
+			data.KB_movements[2] = 22; data.KB_movements[3] = 18;
+
+			// Controller
+				
+				// XBOX
+				data.XBOX_Jump = 0;
+				data.XBOX_Action = 2;
+
+				// PS4
+				data.PS4_Jump = 0;
+				data.PS4_Action = 2;
 
 		// Overlay
 		data.timeToDoubleClick = 0.5f;
@@ -137,6 +203,8 @@ namespace ShyEditor {
 		if (ImGui::InputText("##Gamename", buffer, 256))
 			data.name = buffer;
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
+
 		// Window size	TODO: Seleccionar un fichero en vez de poner la ruta
 		ImGui::Text("Game Initial Scene");
 		ImGui::SameLine();
@@ -161,6 +229,7 @@ namespace ShyEditor {
 		if (ImGui::InputText("##Gameicon", buffer, 256))
 			data.icon = buffer;
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		// Window size
 		ImGui::Text("Game Window Size");
@@ -171,17 +240,21 @@ namespace ShyEditor {
 			data.height = gameSize[1];
 		}
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
+
 		// Start fullscreen
 		ImGui::Text("Start fullscreen");
 		ImGui::SameLine();
 		ImGui::Checkbox("##fullscreen", &data.fullscreen);
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		// Start showing cursor
 		ImGui::Text("Start showing cursor");
 		ImGui::SameLine();
 		ImGui::Checkbox("##showcursor", &data.showCursor);
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		// Background Color
 		ImGui::Text("Background Color");
@@ -201,11 +274,15 @@ namespace ShyEditor {
 		ImGui::SameLine();
 		ImGui::InputInt("##frequency", &data.frequency);
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
+
 		ImGui::Text("Channels");
 		ImGui::SameLine();
 		ImGui::RadioButton("Mono", &data.channels, 0);
 		ImGui::SameLine();
 		ImGui::RadioButton("Stereo", &data.channels, 1);
+
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		ImGui::Text("Chunk Size");
 		ImGui::SameLine();
@@ -222,6 +299,202 @@ namespace ShyEditor {
 		ImGui::SameLine();
 		ImGui::Checkbox("##closewithescape", &data.closeWithEscape);
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
+
+		// KeyBoard
+		if (ImGui::CollapsingHeader("KeyBoard")) {
+
+			ImGui::Indent();
+
+			// Jump
+			ImGui::Text("Jump");
+			ImGui::SameLine();
+
+			KB_jumpPreview = specialKeys[data.KB_Jump];
+
+			if (ImGui::BeginCombo("##JumpSpecialKeys", KB_jumpPreview.c_str())) {
+
+				for (int i = 0; i < specialKeys.size(); i++) {
+
+					bool isSelected = i == KB_jumpSelected;
+
+					if (ImGui::Selectable(specialKeys[i].c_str(), isSelected)) {
+
+						KB_jumpSelected = i;
+						data.KB_Jump = KB_jumpSelected;
+					}
+
+				}
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::Dummy({ 0, VERTICALSPACING });
+
+			// Movement
+			ImGui::Text("Movement");
+
+			ImGui::Dummy({ 0, 10 });
+
+			ImGui::ImageButton(leftArrow->getSDLTexture(), ImVec2(50, 50));
+			ImGui::SameLine();
+			ComboForArrow(LEFT);
+
+			ImGui::ImageButton(rightArrow->getSDLTexture(), ImVec2(50, 50));
+			ImGui::SameLine();
+			ComboForArrow(RIGHT);
+
+			ImGui::ImageButton(upArrow->getSDLTexture(), ImVec2(50, 50));
+			ImGui::SameLine();
+			ComboForArrow(UP);
+
+			ImGui::ImageButton(downArrow->getSDLTexture(), ImVec2(50, 50));
+			ImGui::SameLine();
+			ComboForArrow(DOWN);
+
+			ImGui::Dummy({ 0, VERTICALSPACING });
+
+			// Action
+			ImGui::Text("Action");
+			ImGui::SameLine();
+
+			KB_actionPreview = letterKeys[data.KB_Action];
+
+			if (ImGui::BeginCombo("##ActionSpecialKeys", KB_actionPreview.c_str())) {
+
+				for (int i = 0; i < letterKeys.size(); i++) {
+
+					bool isSelected = i == KB_actionSelected;
+
+					if (ImGui::Selectable(letterKeys[i].c_str(), isSelected)) {
+
+						KB_actionSelected = i;
+						data.KB_Action = KB_actionSelected;
+					}
+
+				}
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::Unindent();
+
+		}
+
+		ImGui::Dummy({ 0, VERTICALSPACING });
+
+		// Controller
+		if (ImGui::CollapsingHeader("Controller")) {
+			ImGui::Indent();
+
+			if (ImGui::CollapsingHeader("Xbox One Wireless Controller")) {
+				ImGui::Indent();
+
+				ImGui::Text("Jump");
+				ImGui::SameLine();
+
+				XBOX_jumpPreview = xboxButtons[data.XBOX_Jump];
+
+				if (ImGui::BeginCombo("##JumpXboxButtons", XBOX_jumpPreview.c_str())) {
+
+					for (int i = 0; i < xboxButtons.size(); i++) {
+
+						bool isSelected = i == XBOX_jumpSelected;
+
+						if (ImGui::Selectable(xboxButtons[i].c_str(), isSelected)) {
+
+							XBOX_jumpSelected = i;
+							data.XBOX_Jump = XBOX_jumpSelected;
+						}
+
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::Dummy({ 0, VERTICALSPACING });
+
+				ImGui::Text("Action");
+				ImGui::SameLine();
+
+				XBOX_actionPreview = xboxButtons[data.XBOX_Action];
+
+				if (ImGui::BeginCombo("##ActionXboxButtons", XBOX_actionPreview.c_str())) {
+
+					for (int i = 0; i < xboxButtons.size(); i++) {
+
+						bool isSelected = i == XBOX_actionSelected;
+
+						if (ImGui::Selectable(xboxButtons[i].c_str(), isSelected)) {
+
+							XBOX_actionSelected = i;
+							data.XBOX_Action = XBOX_actionSelected;
+						}
+
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::Unindent();
+			}
+
+			if (ImGui::CollapsingHeader("Dualshock 4")) {
+				ImGui::Indent();
+
+				ImGui::Text("Jump");
+				ImGui::SameLine();
+
+				PS4_jumpPreview = ps4Buttons[data.PS4_Jump];
+
+				if (ImGui::BeginCombo("##JumpPS4Buttons", PS4_jumpPreview.c_str())) {
+
+					for (int i = 0; i < ps4Buttons.size(); i++) {
+
+						bool isSelected = i == PS4_jumpSelected;
+
+						if (ImGui::Selectable(ps4Buttons[i].c_str(), isSelected)) {
+
+							PS4_jumpSelected = i;
+							data.PS4_Jump = PS4_jumpSelected;
+						}
+
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::Dummy({ 0, VERTICALSPACING });
+
+				ImGui::Text("Action");
+				ImGui::SameLine();
+
+				PS4_actionPreview = ps4Buttons[data.PS4_Action];
+
+				if (ImGui::BeginCombo("##ActionPS4Buttons", PS4_actionPreview.c_str())) {
+
+					for (int i = 0; i < ps4Buttons.size(); i++) {
+
+						bool isSelected = i == PS4_actionSelected;
+
+						if (ImGui::Selectable(ps4Buttons[i].c_str(), isSelected)) {
+
+							PS4_actionSelected = i;
+							data.PS4_Action = PS4_actionSelected;
+						}
+
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::Unindent();
+			}
+
+			ImGui::Unindent();
+		}
+
+
 		ImGui::Unindent();
 	}
 
@@ -231,6 +504,8 @@ namespace ShyEditor {
 		ImGui::Text("Time to Double Click");
 		ImGui::SameLine();
 		ImGui::DragFloat("##timetodoubleclick", &data.timeToDoubleClick);
+
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		ImGui::Text("Time to Hold Click");
 		ImGui::SameLine();
@@ -246,12 +521,14 @@ namespace ShyEditor {
 		// Gravity
 		ImGui::Text("World Gravity");
 		ImGui::SameLine();
+
 		float gravity[2]{ data.gravity_x , data.gravity_y };
 		if (ImGui::DragFloat2("##Gravity", &gravity[0])) {
 			data.gravity_x = gravity[0];
 			data.gravity_y = gravity[1];
 		}
 
+		ImGui::Dummy({ 0, VERTICALSPACING });
 
 		char buffer[256];
 
@@ -368,6 +645,30 @@ namespace ShyEditor {
 
 	}
 
+	void Preferences::ComboForArrow(int arrowIndex) {
+
+		std::string label = "##MovementSpecialKeys" + std::to_string(arrowIndex);
+
+		if (ImGui::BeginCombo(label.c_str(), letterKeys[data.KB_movements[arrowIndex]].c_str())) {
+
+			for (int i = 0; i < letterKeys.size(); i++) {
+
+				bool isSelected = i == KB_movementSelected;
+
+				if (ImGui::Selectable(letterKeys[i].c_str(), isSelected)) {
+
+					KB_movementSelected = i;
+
+					data.KB_movements[arrowIndex] = KB_movementSelected;
+				}
+
+			}
+
+			ImGui::EndCombo();
+
+		}
+	}
+
 	ProjectData& Preferences::GetData()
 	{
 		return instance->data;
@@ -466,6 +767,22 @@ namespace ShyEditor {
 
 		// Input
 		root["closeWithEscape"] = data.closeWithEscape;
+
+			// KeyBoard
+
+			root["KB_Jump"] = data.KB_Jump;
+			root["KB_Action"] = data.KB_Action;
+			root["KB_movements"] = data.KB_movements;
+
+			// Controller
+
+				// XBOX
+				root["XBOX_Jump"] = data.XBOX_Jump;
+				root["XBOX_Action"] = data.XBOX_Action;
+
+				// PS4
+				root["PS4_Jump"] = data.PS4_Jump;
+				root["PS4_Action"] = data.PS4_Action;
 
 		// Overlay
 		root["timeToDoubleClick"] = data.timeToDoubleClick;
@@ -597,6 +914,21 @@ namespace ShyEditor {
 		// Input
 		instance->data.closeWithEscape = preferences["closeWithEscape"];
 
+			// KeyBoard
+			
+			instance->data.KB_Jump = preferences["KB_Jump"];
+			instance->data.KB_Action = preferences["KB_Action"];
+			instance->data.KB_movements = preferences["KB_movements"].get<std::vector<int>>();
+
+			// Controller
+
+				// XBOX
+				instance->data.XBOX_Jump = preferences["XBOX_Jump"];
+				instance->data.XBOX_Action = preferences["XBOX_Action"];
+
+				// PS4
+				instance->data.PS4_Jump = preferences["PS4_Jump"];
+				instance->data.PS4_Action = preferences["PS4_Action"];
 
 		// Overlay
 		instance->data.timeToDoubleClick = preferences["timeToDoubleClick"];

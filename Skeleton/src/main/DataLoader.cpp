@@ -59,6 +59,21 @@ DataLoader DataLoader::Load(std::string const& path) {
 	// Input
 	data.closeWithEscape = LoadValue("closeWithEscape", bool, true);
 
+		// Keyboard
+		data.KB_Jump = LoadValue("KB_Jump", int, 4);
+		data.KB_Action = LoadValue("KB_Action", int, 4);
+		data.KB_movements = LoadValue("KB_movements", std::vector<int>, std::vector<int>());
+
+		// Controller
+
+			// XBOX
+			data.XBOX_Jump = LoadValue("XBOX_Jump", int, 0);
+			data.XBOX_Action = LoadValue("XBOX_Action", int, 2);
+
+			// PS4
+			data.PS4_Jump = LoadValue("PS4_Jump", int, 0);
+			data.PS4_Action = LoadValue("PS4_Action", int, 2);
+
 	// Overlay
 	data.timeToHoldClick = LoadValue("timeToHoldClick", float, 0.1f);
 	data.timeToDoubleClick = LoadValue("timeToDoubleClick", float, 0.5f);

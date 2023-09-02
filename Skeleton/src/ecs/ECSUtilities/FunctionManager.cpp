@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Fri Sep  1 19:13:34 2023
+//Creation time: Sat Sep  2 15:33:53 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -228,6 +228,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("InputManager_HorizontalMovement",InputManager_HorizontalMovement);
 	map.emplace("InputManager_VerticalMovement",InputManager_VerticalMovement);
 	map.emplace("InputManager_Jump",InputManager_Jump);
+	map.emplace("InputManager_Action",InputManager_Action);
 	map.emplace("InputManager_HasMouseMoved",InputManager_HasMouseMoved);
 	map.emplace("InputManager_HasMouseWheelMoved",InputManager_HasMouseWheelMoved);
 	map.emplace("InputManager_IsMouseButtonDown",InputManager_IsMouseButtonDown);
@@ -3360,6 +3361,11 @@ Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variabl
 Scripting::Variable InputManager_Jump(std::vector<Scripting::Variable>const& vec){
 	InputManager* manager = InputManager::instance();
 	bool ret = manager->Jump();
+	return ret;
+}
+Scripting::Variable InputManager_Action(std::vector<Scripting::Variable>const& vec){
+	InputManager* manager = InputManager::instance();
+	bool ret = manager->Action();
 	return ret;
 }
 Scripting::Variable InputManager_HasMouseMoved(std::vector<Scripting::Variable>const& vec){

@@ -122,6 +122,7 @@
     <ClInclude Include="..\..\src\ImGUI\ScriptCreation.h" />
     <ClInclude Include="..\..\src\ImGUI\ScriptCreationUtilities.h" />
     <ClInclude Include="..\..\src\ImGUI\Texture.h" />
+    <ClInclude Include="..\..\src\ImGUI\Vector2.h" />
     <ClInclude Include="..\..\src\ImGUI\Window.h" />
     <ClInclude Include="..\..\src\ImGUI\WindowLayout.h" />
   </ItemGroup>
@@ -154,6 +155,7 @@
     <ClCompile Include="..\..\src\ImGUI\ScriptCreation.cpp" />
     <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Texture.cpp" />
+    <ClCompile Include="..\..\src\ImGUI\Vector2.cpp" />
     <ClCompile Include="..\..\src\ImGUI\Window.cpp" />
     <ClCompile Include="..\..\src\ImGUI\WindowLayout.cpp" />
   </ItemGroup>

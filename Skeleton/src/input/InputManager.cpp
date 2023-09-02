@@ -11,9 +11,20 @@
 
 namespace Input {
 
-	InputManager::InputManager() : InputManager(true) {}
+	InputManager::InputManager() : InputManager(true, 4, 4, std::vector<int>(), 0, 2, 0, 2) {}
 
-	InputManager::InputManager(bool closeWithEscape) : closeWithEscape(closeWithEscape) {
+	InputManager::InputManager(bool closeWithEscape, int KB_Jump, int KB_Action, std::vector<int> KB_movements, int XBOX_Jump, int XBOX_Action, int PS4_Jump, int PS4_Action) : closeWithEscape(closeWithEscape) {
+
+		this->KB_Jump = KB_Jump;
+		this->KB_Action = KB_Action;
+		this->KB_movements = KB_movements;
+
+		this->XBOX_Jump = XBOX_Jump;
+		this->XBOX_Action = XBOX_Action;
+
+		this->PS4_Jump = PS4_Jump;
+		this->PS4_Action = PS4_Action;
+
 
 		kbState_ = SDL_GetKeyboardState(0);
 
@@ -338,14 +349,14 @@ namespace Input {
 		if (InputManager::ConnectedControllersCount() > 0)
 			dir += GetLeftStickHorizontalValue();
 
-		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::LEFT) || IsLetterDown((int)KB_LETTERS::A))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::LEFT) || IsLetterDown(KB_movements[(int) DIRECTIONS::LEFT]))
 		{
 			dir += -1;
 			if (dir < -1)
 				dir = -1;
 		}
 
-		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::RIGHT) || IsLetterDown((int)KB_LETTERS::D))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::RIGHT) || IsLetterDown(KB_movements[(int) DIRECTIONS::RIGHT]))
 		{
 			dir += 1;
 			if (dir > 1)
@@ -363,14 +374,14 @@ namespace Input {
 		if (InputManager::ConnectedControllersCount() > 0)
 			dir += GetLeftStickVerticalValue();
 
-		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::DOWN) || IsLetterDown((int)KB_LETTERS::S))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::DOWN) || IsLetterDown(KB_movements[(int) DIRECTIONS::DOWN]))
 		{
 			dir += -1;
 			if (dir < -1)
 				dir = -1;
 		}
 
-		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::UP) || IsLetterDown((int)KB_LETTERS::W))
+		if (IsSpecialKeyDown((int)KB_SPECIALKEYS::UP) || IsLetterDown(KB_movements[(int) DIRECTIONS::UP]))
 		{
 			dir += 1;
 			if (dir > 1)
@@ -382,7 +393,11 @@ namespace Input {
 	}
 
 	bool InputManager::Jump() {
-		return IsSpecialKeyPressed((int)KB_SPECIALKEYS::SPACE) || IsControllerButtonPressed((int)PS4_CONTROLLER_BUTTONS::X);
+		return IsSpecialKeyPressed(KB_Jump) || IsControllerButtonPressed(PS4_Jump) || IsControllerButtonPressed(XBOX_Jump); // Problema
+	}
+
+	bool InputManager::Action() {
+		return IsLetterPressed(KB_Action) || IsControllerButtonPressed(PS4_Action) || IsControllerButtonPressed(XBOX_Action); // Problema
 	}
 
 

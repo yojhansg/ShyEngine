@@ -379,6 +379,11 @@
             },
             {
                 "input": [],
+                "name": "Action",
+                "return": "Toggle"
+            },
+            {
+                "input": [],
                 "name": "HasMouseMoved",
                 "return": "Toggle"
             },

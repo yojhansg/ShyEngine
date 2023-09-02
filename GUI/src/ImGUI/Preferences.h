@@ -1,11 +1,16 @@
 #pragma once
 
 #include "Window.h"
+#include "Vector2.h"
 
 #include <string>
 #include <nlohmann/json_fwd.hpp>
 
+struct ImVec2;
+
 namespace ShyEditor {
+
+	class Texture;
 
 	struct PreferencesColor {
 
@@ -47,6 +52,22 @@ namespace ShyEditor {
 
 		// Input
 		bool closeWithEscape;
+			
+			// Keyboard
+			int KB_Jump;
+			int KB_Action;
+			std::vector<int> KB_movements;
+
+			// Controller
+
+				// XBOX
+				int XBOX_Jump;
+				int XBOX_Action;
+
+				// PS4
+				int PS4_Jump;
+				int PS4_Action;
+
 
 		// Overlay
 		float timeToDoubleClick;
@@ -73,12 +94,60 @@ namespace ShyEditor {
 
 		ProjectData data;
 
+		// Physics
 		std::string newLayer;
 		std::string defaultLayer;
-		int nLayers;
+		std::wstring errorMsg;
 		bool updateMatrix;
 		bool showError;
-		std::wstring errorMsg;
+		int nLayers;
+
+		// Input
+		enum Arrows { LEFT, RIGHT, UP, DOWN };
+		std::vector<std::string> specialKeys;
+		std::vector<std::string> letterKeys;
+		std::vector<std::string> xboxButtons;
+		std::vector<std::string> ps4Buttons;
+		Texture* upArrow;
+		Texture* downArrow;
+		Texture* leftArrow;
+		Texture* rightArrow;
+
+			// Keyboard
+
+				// Jump
+				std::string KB_jumpPreview;
+				int KB_jumpSelected;
+
+				// Movement
+				int KB_movementSelected;
+
+				// Action
+				std::string KB_actionPreview;
+				int KB_actionSelected;
+
+			// Controller
+
+				// XBOX
+
+					// Jump
+					std::string XBOX_jumpPreview;
+					int XBOX_jumpSelected;
+
+					// Action
+					std::string XBOX_actionPreview;
+					int XBOX_actionSelected;
+
+				// PS4
+
+					// Jump
+					std::string PS4_jumpPreview;
+					int PS4_jumpSelected;
+
+					// Action
+					std::string PS4_actionPreview;
+					int PS4_actionSelected;
+
 
 		void GeneralHeader();
 		void WindowHeader();
@@ -91,6 +160,8 @@ namespace ShyEditor {
 
 		// Shows a pop-up window with an error message
 		void ShowErrorPopup(const std::wstring& errorMessage);
+
+		void ComboForArrow(int arrowIndex);
 
 	public:
 

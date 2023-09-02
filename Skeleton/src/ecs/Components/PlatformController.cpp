@@ -28,7 +28,7 @@ namespace ECS {
 		maxVelocity = 5.0f;
 		horizontalDamping = 0.0f;
 		avalaibleJumps = 1;
-		nJumps = avalaibleJumps;
+		nJumps = 0;
 	}
 
 	void PlatformController::init() {
@@ -61,9 +61,13 @@ namespace ECS {
 
 	void PlatformController::update(float dt) {
 
-		if (im->Jump() && !hasJumped && nJumps > 0) {
+		if (!hasJumped && nJumps > 0 && im->Jump()) {
 			hasJumped = true;
 			nJumps--;
+		}
+
+		if (im->Action()) {
+			Console::Output::Print("Accion!", "");
 		}
 
 	}

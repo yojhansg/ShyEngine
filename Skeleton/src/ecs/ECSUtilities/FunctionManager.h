@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Fri Sep  1 19:13:34 2023
+//Creation time : Sat Sep  2 15:33:53 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -194,6 +194,7 @@ Scripting::Variable InputManager_IsSpecialKeyReleased(std::vector<Scripting::Var
 Scripting::Variable InputManager_HorizontalMovement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_VerticalMovement(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_Jump(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable InputManager_Action(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_HasMouseMoved(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_HasMouseWheelMoved(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable InputManager_IsMouseButtonDown(std::vector<Scripting::Variable>const& vec);
