@@ -63,10 +63,14 @@ html, body {
   top: 2rem;
 }
 
+.doc__nav li {
+  position: relative;
+}
+
 .doc__nav li:hover {
   color: var(--primary-color-light);
   cursor: pointer;
-  transition: color .3s ease-in-out;
+  transition: color 0.3s ease-in-out;
 }
 
 .doc__nav .selected {
@@ -82,12 +86,48 @@ html, body {
   background-color: var(--accent-color);
   left: -1.5rem;
   top: 0.3rem;
+} 
+
+
+/* Style nested lists */
+.doc__nav .inner-list {
+  display: none;
+  list-style-type: none;
+  margin-left: 15px; /* Add some indentation */
+  cursor: pointer; /* Change cursor to pointer for better UX */
+}
+/* Style nested list items */
+.doc__nav .inner-list .js-btn {
+  font-weight: 200; /* Optional: adjust the font-weight for nested items */
+}
+
+/* Optional: Style nested list items on hover */
+.doc__nav .inner-list .js-btn:hover {
+  color: var(--primary-color-light);
 }
 
 .doc__content {
   flex-basis: 80%;
   padding: 0 0 5rem 1rem;
 }
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 10px solid black; /* Adjust the color and size as needed */
+  margin-left: 5px; /* Adjust margin to create space between the arrow and text */
+  transition: transform 0.3s;
+  transform-origin: center;
+  pointer-events: none; /* Make the arrow non-clickable */
+}
+
+.opened > .arrow {
+  transform: rotate(90deg);
+}
+
 
 @media (max-width: 750px) {
   .wrapper {
@@ -112,4 +152,5 @@ html, body {
   .doc__nav .selected:after {
     display: none;
   }
+
 }

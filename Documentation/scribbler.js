@@ -84,7 +84,7 @@ function setActiveLink(event) {
 function smoothScrollTo(i, event) {
   var element = sections[i];
   setActiveLink(event);
-
+  
   window.scrollTo({
     'behavior': 'smooth',
     'top': element.offsetTop - 20,
@@ -93,10 +93,16 @@ function smoothScrollTo(i, event) {
 }
 
 if (btns.length && sections.length > 0) {
-  for (var i = 0; i<btns.length; i++) {
-    btns[i].addEventListener('click', smoothScrollTo.bind(this,i));
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', (function(index) {
+      return function(event) {
+        event.stopPropagation();
+        smoothScrollTo(index, event);
+      };
+    })(i)); // Immediately invoke the function with the current value of i
   }
 }
+
 
 // fix menu to page-top once user starts scrolling
 window.addEventListener('scroll', function () {
@@ -128,3 +134,16 @@ window.addEventListener('load', function(){
   icon.addEventListener('click', showNav);
 });
 
+
+const toggleLists = document.querySelectorAll('.toggle-list');
+
+toggleLists.forEach(toggleList => {
+  toggleList.addEventListener('click', () => {
+    const innerList = toggleList.querySelector('.inner-list');
+    if (innerList) {
+      innerList.style.display = innerList.style.display === 'block' ? 'none' : 'block';
+
+      toggleList.classList.toggle('opened');
+    }
+  });
+});
