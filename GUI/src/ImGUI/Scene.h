@@ -125,6 +125,9 @@ namespace ShyEditor {
 		void ReceiveAssetDrop(Asset& asset) override;
 
 		ImVec2 MousePositionInScene();
+
+		ImVec2 MousePositionInUI();
+
 		bool IsMouseHoveringEntity(Entity* entity);
 
 		std::string GetPath();
