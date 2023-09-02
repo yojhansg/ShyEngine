@@ -18,5 +18,17 @@
     {
        "font": "Monocraft.otf",
        "size": 15
+    },
+    {
+       "font": "BadComic.ttf",
+       "size": 18
+    },
+    {
+       "font": "retro.ttf",
+       "size": 18
+    },
+    {
+       "font": "BloodLust.ttf",
+       "size": 18
     }
 ]

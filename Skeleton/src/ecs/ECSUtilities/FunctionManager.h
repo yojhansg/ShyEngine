@@ -16,6 +16,8 @@ typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> 
 class FunctionManager{
 public: 
 	static void CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map);
+
+	
 };
 
 

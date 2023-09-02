@@ -10,7 +10,7 @@
 #include "nlohmann/json.hpp"
 
 #include "ComponentManager.h"
-#include "ResourcesManager.h" 
+#include "ResourcesManager.h"
 #include "ProjectsManager.h"
 #include "ScriptCreation.h"
 #include "PrefabManager.h"
@@ -243,8 +243,8 @@ bool Editor::InitSDL() {
 	}
 
 	// Acceder a la resolución de pantalla
-	/*userScreenResX = currentDisplayMode.w;
-	userScreenResY = currentDisplayMode.h;*/
+	//userScreenResX = currentDisplayMode.w;
+	//userScreenResY = currentDisplayMode.h;
 
 	// WINDOW
 		// Create our window
@@ -305,11 +305,11 @@ void Editor::CreateWindows() {
 	AddWindow(scene);
 
 	// Hierarchy
-	hierarchy = new ShyEditor::Hierarchy(); 
+	hierarchy = new ShyEditor::Hierarchy();
 	AddWindow(hierarchy);
 
 	// Components
-	components = new ShyEditor::ComponentWindow(); 
+	components = new ShyEditor::ComponentWindow();
 	AddWindow(components);
 
 	// Scripting
@@ -582,7 +582,7 @@ void Editor::LoadWindowsData() {
 
 		if (windowJson["Visible"])
 			windows[index]->Show();
-		else 
+		else
 			windows[index]->Hide();
 	}
 

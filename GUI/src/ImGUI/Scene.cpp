@@ -326,7 +326,7 @@ namespace ShyEditor {
 
 		overlays.clear();
 	}
-	
+
 	void Scene::UpdateReferencesToEntity(Entity* entity) {
 		for (auto& script : *entity->GetScripts()) {
 			for (auto& attr : script.second.GetAllAttributes()) {
@@ -425,11 +425,7 @@ namespace ShyEditor {
 
 
 		bool inScene = IsMouseHoveringWindow();
-		auto mouse = MousePositionInScene();
-
-		mouse.x += Preferences::GetData().width * 0.5f;
-		mouse.y += Preferences::GetData().height * 0.5f;
-
+		auto mouse = MousePositionInUI();
 
 		float cameraScale = sceneCamera->GetScale();
 
@@ -1034,6 +1030,31 @@ namespace ShyEditor {
 		return mousepos;
 	}
 
+	ImVec2 Scene::MousePositionInUI()
+	{
+		ImVec2 mouse = ImGui::GetMousePos();
+
+		mouse.x -= windowPosX;
+		mouse.y -= windowPosY;
+
+
+		int x, y, w, h;
+		CalculateFrameRect(x, y, w, h);
+
+		mouse.x -= x;
+		mouse.y -= y;
+
+		mouse.x *= sceneScale;
+		mouse.y *= sceneScale;
+
+		float invCameraScale = 1.0f / sceneCamera->GetScale();
+
+		mouse.x *= invCameraScale;
+		mouse.y *= invCameraScale;
+
+		return mouse;
+	}
+
 	bool Scene::IsMouseHoveringEntity(Entity* entity) {
 
 		auto mousePos = MousePositionInScene();
@@ -1088,10 +1109,10 @@ namespace ShyEditor {
 
 		float invSceneScale = 1 / sceneScale;
 
-		float w_ = width  * invSceneScale;
+		float w_ = width * invSceneScale;
 		float h_ = height * invSceneScale;
 
-		x = position.x - gameSizeX * 0.5f * cameraScale + scenePosition_x * cameraScale + (width  - w_) * 0.5f;
+		x = position.x - gameSizeX * 0.5f * cameraScale + scenePosition_x * cameraScale + (width - w_) * 0.5f;
 		y = position.y - gameSizeY * 0.5f * cameraScale + scenePosition_y * cameraScale + (height - h_) * 0.5f;
 		w = w_;
 		h = h_;
