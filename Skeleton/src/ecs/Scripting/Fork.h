@@ -20,7 +20,7 @@ namespace Scripting {
 
 		void SetFork(Node* A, Node* B);
 		void SetCondition(OutputNode* node);
-		void Operate(Node*& next, int iterationIdx) override;
+		void Operate(Node*& next, int& iterationIdx) override;
 		void ForceReevaluation() override;
 	private:
 

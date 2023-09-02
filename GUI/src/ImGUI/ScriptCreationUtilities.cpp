@@ -637,8 +637,9 @@ namespace ShyEditor {
 				ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 				(
 					in.GetTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-					in.GetTypeStr() == "Any"
-					)
+					in.GetTypeStr() == "Any" ||
+					ScriptNode::currentlySelectedOutput->GetOutputTypeString() == "Any"
+				)
 
 				) {
 

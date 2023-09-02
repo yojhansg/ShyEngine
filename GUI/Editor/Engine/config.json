@@ -1,5 +1,5 @@
 {
-    "CT_Action": 11,
+    "CT_Action": 2,
     "CT_Jump": 0,
     "KB_Action": 4,
     "KB_Jump": 4,
@@ -10,7 +10,7 @@
         18
     ],
     "bgAlpha": 255,
-    "bgColor": "72, 137, 155",
+    "bgColor": "0, 0, 0",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -19,14 +19,11 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "Platform",
+    "game": "Flappy bird",
     "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
-        "Default",
-        "Player",
-        "Platform",
-        "Ball"
+        "Default"
     ],
     "matrix": [
         [
@@ -48,8 +45,8 @@
             false
         ],
         [
-            true,
-            true,
+            false,
+            false,
             false,
             false,
             false,
@@ -66,7 +63,7 @@
             false
         ],
         [
-            true,
+            false,
             false,
             false,
             false,
@@ -318,8 +315,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Assets",
-    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject",
+    "path": "C:\\Users\\sryoj\\Documents\\TFG\\Projects\\Flappy bird\\Assets",
+    "projectFilePath": "C:\\Users\\sryoj\\Documents\\TFG\\Projects\\Flappy bird\\Flappy bird.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
@@ -327,5 +324,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "Platform"
+    "windowTitle": "Flappy bird"
 }
