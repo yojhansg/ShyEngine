@@ -32,7 +32,7 @@
 
         "XboxController":[
             "A", "B", "X", "Y", "Back", "Guide", "Start", "LSB", "RSB", "LB", "RB", "Arrow up", "Arrow down",
-            "Arrow left", "Arrow right"
+            "Arrow left", "Arrow right", "Panel"
         ],
 
         "KB_LETTERS": [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", 

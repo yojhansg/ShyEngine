@@ -54,14 +54,8 @@ public:
 		std::vector<int> KB_movements;
 
 		// Controller
-
-			// XBOX
-			int XBOX_Jump;
-			int XBOX_Action;
-
-			// PS4
-			int PS4_Jump;
-			int PS4_Action;
+		int CT_Jump;
+		int CT_Action;
 
 	// Overlay
 	float timeToDoubleClick;

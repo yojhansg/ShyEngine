@@ -68,22 +68,14 @@ namespace ShyEditor {
 			KB_actionPreview = letterKeys[4];
 
 			// Controller
+			ps4Buttons = Components::ComponentManager::GetEnum("PS4Controller");
+			xboxButtons = Components::ComponentManager::GetEnum("XboxController");
 
-				// XBOX
-				xboxButtons = Components::ComponentManager::GetEnum("XboxController");
-				XBOX_jumpSelected = 0; // 0 is A
-				XBOX_jumpPreview = xboxButtons[0];
+			CT_jumpSelected = 0;
+			CT_jumpPreview = ps4Buttons[CT_jumpSelected];
 
-				XBOX_actionSelected = 2; // 2 is X
-				XBOX_actionPreview = xboxButtons[2];
-
-				// PS4
-				ps4Buttons = Components::ComponentManager::GetEnum("PS4Controller");
-				PS4_jumpSelected = 0; // 0 is X
-				PS4_jumpPreview = ps4Buttons[0];
-
-				PS4_actionSelected = 2; // 2 is SQUARE
-				PS4_actionPreview = ps4Buttons[2];
+			CT_actionSelected = 2;
+			CT_actionPreview = ps4Buttons[CT_actionSelected];
 
 		// General
 		data.initialScene = "Scene";
@@ -118,14 +110,9 @@ namespace ShyEditor {
 			data.KB_movements[2] = 22; data.KB_movements[3] = 18;
 
 			// Controller
+			data.CT_Jump = 0;
+			data.CT_Action = 2;
 				
-				// XBOX
-				data.XBOX_Jump = 0;
-				data.XBOX_Action = 2;
-
-				// PS4
-				data.PS4_Jump = 0;
-				data.PS4_Action = 2;
 
 		// Overlay
 		data.timeToDoubleClick = 0.5f;
@@ -387,111 +374,56 @@ namespace ShyEditor {
 		if (ImGui::CollapsingHeader("Controller")) {
 			ImGui::Indent();
 
-			if (ImGui::CollapsingHeader("Xbox One Wireless Controller")) {
-				ImGui::Indent();
+			ImGui::Text("Jump");
+			ImGui::SameLine();
 
-				ImGui::Text("Jump");
-				ImGui::SameLine();
+			CT_jumpPreview = ps4Buttons[data.CT_Jump] + " / " + xboxButtons[data.CT_Jump];
 
-				XBOX_jumpPreview = xboxButtons[data.XBOX_Jump];
+			if (ImGui::BeginCombo("##JumpButtons", CT_jumpPreview.c_str())) {
 
-				if (ImGui::BeginCombo("##JumpXboxButtons", XBOX_jumpPreview.c_str())) {
+				for (int i = 0; i < ps4Buttons.size(); i++) {
 
-					for (int i = 0; i < xboxButtons.size(); i++) {
+					bool isSelected = i == CT_jumpSelected;
 
-						bool isSelected = i == XBOX_jumpSelected;
+					std::string buttonName = ps4Buttons[i] + " / " + xboxButtons[i];
+					if (ImGui::Selectable(buttonName.c_str(), isSelected)) {
 
-						if (ImGui::Selectable(xboxButtons[i].c_str(), isSelected)) {
-
-							XBOX_jumpSelected = i;
-							data.XBOX_Jump = XBOX_jumpSelected;
-						}
-
+						CT_jumpSelected = i;
+						data.CT_Jump = CT_jumpSelected;
 					}
 
-					ImGui::EndCombo();
 				}
 
-				ImGui::Dummy({ 0, VERTICALSPACING });
-
-				ImGui::Text("Action");
-				ImGui::SameLine();
-
-				XBOX_actionPreview = xboxButtons[data.XBOX_Action];
-
-				if (ImGui::BeginCombo("##ActionXboxButtons", XBOX_actionPreview.c_str())) {
-
-					for (int i = 0; i < xboxButtons.size(); i++) {
-
-						bool isSelected = i == XBOX_actionSelected;
-
-						if (ImGui::Selectable(xboxButtons[i].c_str(), isSelected)) {
-
-							XBOX_actionSelected = i;
-							data.XBOX_Action = XBOX_actionSelected;
-						}
-
-					}
-
-					ImGui::EndCombo();
-				}
-
-				ImGui::Unindent();
+				ImGui::EndCombo();
 			}
 
-			if (ImGui::CollapsingHeader("Dualshock 4")) {
-				ImGui::Indent();
+			ImGui::Dummy({ 0, VERTICALSPACING });
 
-				ImGui::Text("Jump");
-				ImGui::SameLine();
+			ImGui::Text("Action");
+			ImGui::SameLine();
 
-				PS4_jumpPreview = ps4Buttons[data.PS4_Jump];
+			CT_actionPreview = ps4Buttons[data.CT_Action] + " / " + xboxButtons[data.CT_Action];
 
-				if (ImGui::BeginCombo("##JumpPS4Buttons", PS4_jumpPreview.c_str())) {
+			if (ImGui::BeginCombo("##ActionButtons", CT_actionPreview.c_str())) {
 
-					for (int i = 0; i < ps4Buttons.size(); i++) {
+				for (int i = 0; i < ps4Buttons.size(); i++) {
 
-						bool isSelected = i == PS4_jumpSelected;
+					bool isSelected = i == CT_actionSelected;
 
-						if (ImGui::Selectable(ps4Buttons[i].c_str(), isSelected)) {
+					std::string buttonName = ps4Buttons[i] + " / " + xboxButtons[i];
+					if (ImGui::Selectable(buttonName.c_str(), isSelected)) {
 
-							PS4_jumpSelected = i;
-							data.PS4_Jump = PS4_jumpSelected;
-						}
-
+						CT_actionSelected = i;
+						data.CT_Action = CT_actionSelected;
 					}
 
-					ImGui::EndCombo();
 				}
 
-				ImGui::Dummy({ 0, VERTICALSPACING });
-
-				ImGui::Text("Action");
-				ImGui::SameLine();
-
-				PS4_actionPreview = ps4Buttons[data.PS4_Action];
-
-				if (ImGui::BeginCombo("##ActionPS4Buttons", PS4_actionPreview.c_str())) {
-
-					for (int i = 0; i < ps4Buttons.size(); i++) {
-
-						bool isSelected = i == PS4_actionSelected;
-
-						if (ImGui::Selectable(ps4Buttons[i].c_str(), isSelected)) {
-
-							PS4_actionSelected = i;
-							data.PS4_Action = PS4_actionSelected;
-						}
-
-					}
-
-					ImGui::EndCombo();
-				}
-
-				ImGui::Unindent();
+				ImGui::EndCombo();
 			}
 
 			ImGui::Unindent();
+
 		}
 
 
@@ -776,13 +708,8 @@ namespace ShyEditor {
 
 			// Controller
 
-				// XBOX
-				root["XBOX_Jump"] = data.XBOX_Jump;
-				root["XBOX_Action"] = data.XBOX_Action;
-
-				// PS4
-				root["PS4_Jump"] = data.PS4_Jump;
-				root["PS4_Action"] = data.PS4_Action;
+			root["CT_Jump"] = data.CT_Jump;
+			root["CT_Action"] = data.CT_Action;
 
 		// Overlay
 		root["timeToDoubleClick"] = data.timeToDoubleClick;
@@ -915,20 +842,13 @@ namespace ShyEditor {
 		instance->data.closeWithEscape = preferences["closeWithEscape"];
 
 			// KeyBoard
-			
 			instance->data.KB_Jump = preferences["KB_Jump"];
 			instance->data.KB_Action = preferences["KB_Action"];
 			instance->data.KB_movements = preferences["KB_movements"].get<std::vector<int>>();
 
 			// Controller
-
-				// XBOX
-				instance->data.XBOX_Jump = preferences["XBOX_Jump"];
-				instance->data.XBOX_Action = preferences["XBOX_Action"];
-
-				// PS4
-				instance->data.PS4_Jump = preferences["PS4_Jump"];
-				instance->data.PS4_Action = preferences["PS4_Action"];
+			instance->data.CT_Jump = preferences["CT_Jump"];
+			instance->data.CT_Action = preferences["CT_Action"];
 
 		// Overlay
 		instance->data.timeToDoubleClick = preferences["timeToDoubleClick"];

@@ -62,7 +62,7 @@ bool Engine::init() {
 	physicsManager = Physics::PhysicsManager::init(data.gravity, data.layers, data.collisionMatrix);
 	if (!physicsManager->Valid()) return false;
 
-	inputManager = Input::InputManager::init(data.closeWithEscape, data.KB_Jump, data.KB_Action, data.KB_movements, data.XBOX_Jump, data.XBOX_Action, data.PS4_Jump, data.PS4_Action);
+	inputManager = Input::InputManager::init(data.closeWithEscape, data.KB_Jump, data.KB_Action, data.KB_movements, data.CT_Jump, data.CT_Action);
 	if (!inputManager->Valid()) return false;
 
 	if (!Sound::SoundManager::init(data.frequency, data.channels + 1, data.chunksize)->Valid()) return false;

@@ -59,15 +59,8 @@ namespace ShyEditor {
 			std::vector<int> KB_movements;
 
 			// Controller
-
-				// XBOX
-				int XBOX_Jump;
-				int XBOX_Action;
-
-				// PS4
-				int PS4_Jump;
-				int PS4_Action;
-
+			int CT_Jump;
+			int CT_Action;
 
 		// Overlay
 		float timeToDoubleClick;
@@ -106,8 +99,8 @@ namespace ShyEditor {
 		enum Arrows { LEFT, RIGHT, UP, DOWN };
 		std::vector<std::string> specialKeys;
 		std::vector<std::string> letterKeys;
-		std::vector<std::string> xboxButtons;
 		std::vector<std::string> ps4Buttons;
+		std::vector<std::string> xboxButtons;
 		Texture* upArrow;
 		Texture* downArrow;
 		Texture* leftArrow;
@@ -128,25 +121,13 @@ namespace ShyEditor {
 
 			// Controller
 
-				// XBOX
+				// Jump
+				std::string CT_jumpPreview;
+				int CT_jumpSelected;
 
-					// Jump
-					std::string XBOX_jumpPreview;
-					int XBOX_jumpSelected;
-
-					// Action
-					std::string XBOX_actionPreview;
-					int XBOX_actionSelected;
-
-				// PS4
-
-					// Jump
-					std::string PS4_jumpPreview;
-					int PS4_jumpSelected;
-
-					// Action
-					std::string PS4_actionPreview;
-					int PS4_actionSelected;
+				// Action
+				std::string CT_actionPreview;
+				int CT_actionSelected;
 
 
 		void GeneralHeader();

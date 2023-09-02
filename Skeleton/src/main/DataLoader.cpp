@@ -65,14 +65,8 @@ DataLoader DataLoader::Load(std::string const& path) {
 		data.KB_movements = LoadValue("KB_movements", std::vector<int>, std::vector<int>());
 
 		// Controller
-
-			// XBOX
-			data.XBOX_Jump = LoadValue("XBOX_Jump", int, 0);
-			data.XBOX_Action = LoadValue("XBOX_Action", int, 2);
-
-			// PS4
-			data.PS4_Jump = LoadValue("PS4_Jump", int, 0);
-			data.PS4_Action = LoadValue("PS4_Action", int, 2);
+		data.CT_Jump = LoadValue("CT_Jump", int, 0);
+		data.CT_Action = LoadValue("CT_Action", int, 2);
 
 	// Overlay
 	data.timeToHoldClick = LoadValue("timeToHoldClick", float, 0.1f);
