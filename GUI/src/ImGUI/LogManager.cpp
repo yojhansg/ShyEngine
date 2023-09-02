@@ -42,7 +42,8 @@ namespace ShyEditor {
 	void LogManager::Release() {
 
 		// Close log file
-		instance->logFile.close();
+		if (instance->logFile.is_open())
+			instance->logFile.close();
 
 		delete instance;
 		instance = nullptr;
