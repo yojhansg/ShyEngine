@@ -406,7 +406,9 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Time_ScaleWithDeltaTime",Time_ScaleWithDeltaTime);
 	map.emplace("Time_ScaleWithPhysicsDeltaTime",Time_ScaleWithPhysicsDeltaTime);
 
-};
+}
+
+;
 Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
