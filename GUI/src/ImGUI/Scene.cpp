@@ -793,9 +793,9 @@ namespace ShyEditor {
 
 		if (event->type == SDL_KEYDOWN) {
 
-			if (event->key.keysym.scancode == SDL_SCANCODE_S) {
+			if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
 
-				if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+				if (event->key.keysym.scancode == SDL_SCANCODE_S)
 					SaveScene();
 			}
 		}
