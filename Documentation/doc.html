@@ -25,24 +25,204 @@
       <aside class="doc__nav">
         <ul>
           <li class="js-btn selected">Introduction</li>
-          <li class="js-btn">Exploring the scene</li>
-          <li class="js-btn">Hierarchy</li>
-          <li class="js-btn">File explorer</li>
+          <li class="js-btn toggle-list" >
+            Exploring the scene
+            <span class="arrow"></span>
+            <ul class="inner-list">
+              <li class="js-btn">- Select entity</li>
+              <li class="js-btn">- Rotate entity</li>
+              <li class="js-btn">- Scale entity</li>
+              <li class="js-btn">- Scale maintining scale ratio</li>
+              <li class="js-btn">- Move entity</li>
+              <li class="js-btn">- Center camera</li>
+              <li class="js-btn">- Move camera</li>
+              <li class="js-btn">- Zoom camera</li>
+              <li class="js-btn">- Save scene</li>
+            </ul>
+          </li>
+          <li class="js-btn toggle-list">
+            Hierarchy
+            <span class="arrow"></span>
+            <ul class="inner-list">
+              <li class="js-btn">- Entities representation</li>
+              <li class="js-btn">- Empty entity creation</li>
+              <li class="js-btn">- Creating prefabs, adding scripts, renaming and deleting entities</li>
+              <li class="js-btn">- Establishing parent-child relationships</li>
+              <li class="js-btn">- Shortcuts</li>
+            </ul>
+          </li>
+          <li class="js-btn toggle-list">
+            File explorer
+            <span class="arrow"></span>
+            <ul class="inner-list">
+              <li class="js-btn">- Importation and deletion of assets</li>
+              <li class="js-btn">- Creating entities</li>
+              <li class="js-btn">- Loading scenes</li>
+            </ul>
+          </li>
           <li class="js-btn">Components</li>
           <li class="js-btn">Scripting</li>
         </ul>
       </aside>
+
+        <!------------------------------------------------------------ INTRODUCTION ---------------------------------------------->
+
       <article class="doc__content">
         <section class="js-section">
-          <h3 class="section__title">Introduction</h3>
+          <h1 class="section__title"><u>Introduction</u></h1>
           <p>Learn what is ShyEngine and understand the fundamental controls and content.</p>
-          <h3 class="section__title">What is ShyEngine?</h3>
+          <h4>What is ShyEngine?</h4>
           <p>       
-            Learn how to configure settings for Scribbler, such as your syntax highlighting preference and the default saving folder location.
-            By achieving self-suficiency in the engine, we aim to enable users to
-            develop their video games with minimal reliance on external tools, ensuring
-            that all the work can be done within the editor.
+            ShyEngine is a self-suficient 2D game engine with an integrated editor and node-based visual programming.
+            With the editor, our goal is to make the development process comfortable, smooth, and visually-oriented, 
+            eliminating the need for developers to communicate with the engine through programming.
+            That is achieved thanks to our node-based visual programming system.
           </p>
+        </section>
+
+
+
+         <!------------------------------------------------------------ SCENE ---------------------------------------------->
+         
+        <section class="js-section">
+          <h1 class="section__title"><u>Exploring the scene</u></h1>
+          <p>The scene is the window responsible for presenting the developer with the entities in the scene.
+            The scene can ve navigated with some basic controls:</p>
+        </section>
+          <section class="js-section">
+            <h5>Select entity</h5>
+            <p>Click on an entity and it will become selected.</p>
+            <img src="gifs/click_entity.gif" alt="Click on an entity GIF" style="max-width:40%; height: auto;">
+          </section>
+          <section class="js-section">
+            <h5 class="section__title">Rotate entity</h5>
+            <p>Shift + Click on entity + Drag to rotate the entity. This will affect children entities.</p>
+            <img src="gifs/shift_drag_rotate.gif" alt="Shift + Drag GIF"  style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Scale entity</h5>
+            <p>Alt + Click on entity + Drag to scale the entity horizontally and vertically. This will affect children entities.</p>
+            <img src="gifs/alt_drag_scale.gif" alt="Alt + Drag GIF"  style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Scale maintining scale ratio</h5>
+            <p>Alt + Ctrl + Click on entity + Drag to scale the entity without losing its scale ratio.  This will affect children entities.</p>
+            <img src="gifs/alt_ctrl_drag_scale.gif" alt="Alt + Ctrl + Drag GIF" style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Move entity</h5>
+            <p>Click on entity + Drag to move the entity in the scene.  This will affect children entities.</p>
+            <img src="gifs/drag_move_entity.gif" alt="Drag GIF" style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Center camera</h5>
+            <p>Click on entity + Space centers the camera on the selected entity.</p>
+            <img src="gifs/space_center_camera.gif" alt="Space GIF" style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Move camera</h5>
+            <p>Mouse Wheel Down and drag the mouse to move the camera.</p>
+            <img src="gifs/mouse_wheel_down_move_camera.gif" alt="Mouse Wheel Down GIF" style="max-width:40%; height: auto;">
+          </section>
+          
+          <section class="js-section">
+            <h5 class="section__title">Zoom camera</h5>
+            <p>Mouse Wheel Scroll to zoom in and out.</p>
+            <img src="gifs/mouse_wheel_scroll_zoom_camera.gif" alt="Mouse Wheel Scroll GIF"  style="max-width:40%; height: auto;">
+          </section>
+
+          <section class="js-section">
+            <h5 class="section__title">Save scene</h5>
+            <p>Ctrl + S to save the scene inside the Assets folder.</p>
+          </section>
+
+
+        <!------------------------------------------------------------ HIERARCHY ---------------------------------------------->
+
+        <section class="js-section">
+          <h1 class="section__title"><u>Hierarchy</u></h1>
+          <p>The hierarchy is the window responsible for displaying a list of entities and overlays, as well as options for renaming, deleting, creating prefabs, 
+            or establishing parent-child relationships among them. Further ahead are the various options and possibilities of the hierarchy:</p>
+        </section>   
+        
+          <section class="js-section">
+            <h5>Entities representation</h5>
+            <p>The entities are represented as white text, but there can be special cases. For instance, entities with a relationship are shown with different indentation and 
+              prefabs have a different text color.
+            </p>
+            <img src="imgs/hierarchy_representation.png" alt="Hierarchy representation"  style="max-width:40%; height: auto;">
+          </section>
+
+          <section class="js-section">
+            <h5>Empty entity creation</h5>
+            <p>Empty entities can be created by clicking on the top of the window buttons.
+            </p>
+            <img src="imgs/empty_entities_creation.png" alt="Hierarchy representation"  style="max-width:40%; height: auto;">
+          </section>
+
+          <section class="js-section">
+            <h5>Creating prefabs, adding scripts, renaming and deleting entities</h5>
+            <p>In order to open the entity menu and perform the actions of creating prefabs, adding scripts, renaming and deleting entities, an entity must be selected on
+              the hierchy and right click on it in order for the popup to open.
+            </p>
+            <img src="gifs/entities_popup.gif" alt="Entities popup"  style="max-width:40%; height: auto;">
+          </section>
+
+          <section class="js-section">
+            <h5>Establishing parent-child relationships</h5>
+            <p>In order edit the relationships between entities, entities must be dragged between them to establish the relationships between them. To delete the relationship of
+              2 entities, the child entity must be dragged into the parent entity.
+            </p>
+            <img src="gifs/entities_relationships.gif" alt="Entities relationships"  style="max-width:40%; height: auto;">
+          </section>
+
+          <section class="js-section">
+            <h5>Shortcuts</h5>
+            <p>
+              Ctrl + C: copies the selected entity. <br>
+              Ctrl + X: cuts the selected entity. <br>
+              Ctrl + V: pastes the copied or cut entity. <br>
+              Ctrl + D: duplicates the selected entity. <br>
+            </p>
+          </section>
+
+
+    <!------------------------------------------------------------ FILE EXPLORER ---------------------------------------------->
+
+      <section class="js-section">
+        <h1 class="section__title"><u>File explorer</u></h1>
+        <p>The file explorer is responsible for managing the import of assets, their removal, and the creation of entities by draggin them into the scene. Here are 
+          some examples of these functionalities:
+        </p>
+      </section>   
+        <section class="js-section">
+          <h5>Importation and deletion of assets</h5>
+          <p>
+            Assets can be imported by dragging them into the file explorer, or by moving them into the corresponding Windows folder and then clicking on refresh.
+            To delete them, the asset can be right clicked to show the Delete popup.
+          </p>
+          <img src="gifs/importation_and_deletion_assets.gif" alt="Importation and deletion of assets"  style="max-width:40%; height: auto;">
+        </section>
+
+        <section class="js-section">
+          <h5>Creating entities</h5>
+          <p>
+            Entities can be created from an image by dragging it from the file explorer onto the scene.
+          </p>
+          <img src="gifs/create_entity_file_explorer.gif" alt="Importation and deletion of assets"  style="max-width:40%; height: auto;">
+        </section>
+
+        <section class="js-section">
+          <h5>Loading scenes</h5>
+          <p>
+            Scenes are located in the file explorer and can be loaded by double clicking on them.
+          </p>
+          <img src="gifs/load_scene.gif" alt="Importation and deletion of assets"  style="max-width:40%; height: auto;">
         </section>
       </article>
     </div>

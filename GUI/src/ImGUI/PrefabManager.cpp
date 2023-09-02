@@ -32,7 +32,6 @@ namespace ShyEditor {
 		editor = Editor::GetInstance();
 		prefabText = ResourcesManager::GetInstance()->AddTexture(PrefabImage, true);
 
-		open = false;	
 		canBeDisplayedOnTop = true;
 
 		currentlySelected = 0;

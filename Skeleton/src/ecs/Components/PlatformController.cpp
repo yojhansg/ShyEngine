@@ -66,10 +66,6 @@ namespace ECS {
 			nJumps--;
 		}
 
-		if (im->Action()) {
-			Console::Output::Print("Accion!", "");
-		}
-
 	}
 
 	void PlatformController::fixedUpdate(float fixedDt) {

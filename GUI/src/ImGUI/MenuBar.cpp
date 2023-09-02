@@ -27,6 +27,8 @@ namespace ShyEditor {
 
         shouldOpenRenamePopup = false;
         shouldOpenNewScenePopup = false;
+
+        playOptionsWidth = ImGui::CalcTextSize(" Debug ").x + ImGui::CalcTextSize(" Release ").x + ImGui::CalcTextSize(" Stop ").x;
     }
 
     void MenuBar::Update()
@@ -89,36 +91,6 @@ namespace ShyEditor {
                 if (ImGui::MenuItem("Palette selector")) {
 
                     ColorPalette::Open();
-                }
-
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Game"))
-            {
-                if (ImGui::MenuItem("Run debug mode", NULL, false))
-                {
-                    Preferences::GenerateDebug();
-
-                    //Todo: guardar escena actual
-                    editor->GetScene()->SaveScene();
-                    Game::Play(true);
-                };
-
-                if (ImGui::MenuItem("Run release mode", NULL, false))
-                {
-                    Preferences::GenerateRelease();
-
-                    //Todo: guardar escena actual
-                    editor->GetScene()->SaveScene();
-                    Game::Play(false);
-                };
-
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Stop", NULL, false)) {
-
-                    Game::Stop();
                 }
 
                 ImGui::EndMenu();
@@ -222,11 +194,73 @@ namespace ShyEditor {
                 }
             }
 
+            float currentX = ImGui::GetCursorPosX();
+            float halfWidth = editor->GetMainWindowSize().x / 2.0f - playOptionsWidth / 2.0f;
+
+            if (halfWidth > currentX) {
+                ImGui::SetCursorPosX(halfWidth);
+            }
+
+            if (playOptionsWidth < editor->GetMainWindowSize().x - currentX) {
+                ImGui::Separator();
+                if (ImGui::Button("Debug")) {
+                    Debug();
+                }
+
+                ImGui::Separator();
+                if (ImGui::Button("Release")) {
+                    Release();
+                }
+
+                ImGui::Separator();
+                if (ImGui::Button("Stop")) {
+                    Stop();
+                }
+            }
+            else {
+
+                ImGui::Separator();
+                if (ImGui::BeginMenu("Game"))
+                {
+                    if (ImGui::MenuItem("Debug", NULL, false)) {
+                        Debug();
+                    };
+
+                    if (ImGui::MenuItem("Release", NULL, false)) {
+                        Release();
+                    };
+
+                    ImGui::Separator();
+
+                    if (ImGui::MenuItem("Stop", NULL, false)) {
+                        Stop();
+                    }
+
+                    ImGui::EndMenu();
+                }
+            }
+
             ImGui::EndMainMenuBar();
         }
 
         ShowRenamePopup(entity);
         ShowNewScenePopup();
+    }
+
+    void MenuBar::Debug() {
+        Preferences::GenerateDebug();
+        editor->GetScene()->SaveScene();
+        Game::Play(true);
+    }
+
+    void MenuBar::Release() {
+        Preferences::GenerateRelease();
+        editor->GetScene()->SaveScene();
+        Game::Play(false);
+    }
+
+    void MenuBar::Stop() {
+        Game::Stop();
     }
 
     void MenuBar::ShowRenamePopup(Entity* entity)

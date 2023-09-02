@@ -38,7 +38,6 @@
 using nlohmann::json;
 using nlohmann::ordered_json;
 
-
 #define _Centered SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED
 
 #define DefaultIconImage "\\Images\\shyIcon2.png"
@@ -67,9 +66,6 @@ Editor::Editor() {
 	anySceneOpened = false;
 	state = EDITOR_WINDOW;
 
-	ImVec2 res = ImVec2(_WindowMainSize);
-	userScreenResX = res.x;
-	userScreenResY = res.y;
 }
 
 Editor::~Editor() {}
@@ -83,14 +79,20 @@ Editor* Editor::GetInstance() {
 
 bool Editor::Init() {
 
-	if (!ShyEditor::LogManager::Init())
+	if (!ShyEditor::LogManager::Init()) {
+		ShyEditor::LogManager::Release();
 		return false;
+	}
 
-	if (!instance->SplashScreen())
+	if (!instance->SplashScreen()) {
+		ShyEditor::LogManager::Release();
 		return false;
+	}
 
-	if (!instance->InitImGUIAndSDL())
+	if (!instance->InitImGUIAndSDL()) {
+		ShyEditor::LogManager::Release();
 		return false;
+	}
 
 	// Components and managers reading
 	Components::ComponentManager::Initialise();
@@ -99,7 +101,6 @@ bool Editor::Init() {
 	Components::ComponentManager::ReadManagers(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\Managers.json");
 
 	ShyEditor::Game::Init(ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineDebug.exe", ShyEditor::ResourcesManager::EDITORENGINEFOLDER + "\\EngineRelease.exe");
-
 	ShyEditor::ResourcesManager::Init();
 
 	instance->layout = new ShyEditor::WindowLayout();
@@ -113,35 +114,31 @@ void Editor::Loop() {
 	// The projects management window
 	bool closed = !instance->RunProjectsWindow();
 
-	if (!closed) {
-		// Configure the SDL window to start the editor
-		SDL_SetWindowResizable(instance->window, SDL_TRUE);
-		SDL_SetWindowSize(instance->window, instance->userScreenResX, instance->userScreenResY);
-		SDL_SetWindowPosition(instance->window, _Centered);
+	if (closed) return;
 
-		// Init the ImGUI windows in the editor
-		instance->LoadImGuiINIFile();
-		instance->CreateWindows();
-		instance->LoadWindowsData();
-	}
+	// Configure the SDL window to start the editor
+	SDL_SetWindowResizable(instance->window, SDL_TRUE);
+	SDL_SetWindowSize(instance->window, _WindowMainSize);
+	SDL_SetWindowPosition(instance->window, _Centered);
+
+	// Init the ImGUI windows in the editor
+	instance->LoadImGuiINIFile();
+	instance->CreateWindows();
+	instance->LoadWindowsData();
 
 	// Editor main loop
-	while (!instance->exitEditor && !closed) {
-
+	while (!instance->exitEditor) {
 		ShyEditor::Game::CheckEnd();
 		instance->HandleInput();
 		instance->UpdateAndRenderWindows();
 	}
 
-	if (!closed) {
-
-		// Save editor information between its executions
-		ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
-		ShyEditor::Preferences::StoreData();
-		ShyEditor::PrefabManager::SavePrefabs();
-		instance->StoreImGuiINIFile();
-		instance->StoreWindowsData();
-	}
+	// Save editor information between its executions
+	ShyEditor::ProjectsManager::GetInstance()->StoreLastOpenedScene(Editor::GetInstance()->GetLastOpenedScene());
+	ShyEditor::Preferences::StoreData();
+	ShyEditor::PrefabManager::SavePrefabs();
+	instance->StoreImGuiINIFile();
+	instance->StoreWindowsData();
 
 }
 
@@ -181,10 +178,12 @@ void Editor::Close() {
 
 bool Editor::InitImGUIAndSDL() {
 
-	// ImGUI
+// SDL
 
 	if (!InitSDL())
 		return false;
+
+// IMGUI
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -192,20 +191,13 @@ bool Editor::InitImGUIAndSDL() {
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigDockingWithShift = false;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
-
-
-// SDL
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
 	ImGui_ImplSDLRenderer2_Init(renderer);
-
 
 	return true;
 }
@@ -235,16 +227,6 @@ bool Editor::InitSDL() {
 		ShyEditor::LogManager::LogError("Could not initialise SDL_image!");
 		return false;
 	}
-
-	// Obtain user screen resolution
-	SDL_DisplayMode currentDisplayMode;
-	if (SDL_GetCurrentDisplayMode(0, &currentDisplayMode) != 0) {
-		ShyEditor::LogManager::LogError("Could not obtain the user screen resolution!");
-	}
-
-	// Acceder a la resolución de pantalla
-	//userScreenResX = currentDisplayMode.w;
-	//userScreenResY = currentDisplayMode.h;
 
 	// WINDOW
 		// Create our window
@@ -332,6 +314,7 @@ bool Editor::SplashScreen() {
 
 	int ret = IMG_Init(IMG_INIT_PNG);
 	if ((ret & IMG_INIT_PNG) != IMG_INIT_PNG) {
+		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not initialise SDL_image for the SplashScreen!");
 		return false;
 	}
@@ -340,6 +323,8 @@ bool Editor::SplashScreen() {
 	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540, SDL_WINDOW_BORDERLESS);
 
 	if (window == NULL) {
+		IMG_Quit();
+		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not create the SDL Window for the SplashScreen!");
 		return false;
 	}
@@ -348,6 +333,9 @@ bool Editor::SplashScreen() {
 	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	if (renderer == NULL) {
+		SDL_DestroyWindow(window);
+		IMG_Quit();
+		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not create the SDL Renderer for the SplashScreen!");
 		return false;
 	}
@@ -359,6 +347,10 @@ bool Editor::SplashScreen() {
 	auto surf = IMG_Load(splashscreen.c_str());
 
 	if (surf == NULL) {
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		IMG_Quit();
+		SDL_Quit();
 		ShyEditor::LogManager::LogError("Could not load the necessary images for the splashscreen.");
 		return false;
 	}
@@ -366,6 +358,10 @@ bool Editor::SplashScreen() {
 	auto texture = SDL_CreateTextureFromSurface(renderer, surf);
 
 	if (texture == NULL) {
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		IMG_Quit();
+		SDL_Quit();
 		ShyEditor::LogManager::LogError(SDL_GetError());
 		return false;
 	}
@@ -374,8 +370,8 @@ bool Editor::SplashScreen() {
 	SDL_RenderClear(renderer);
 
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
-
 	SDL_RenderPresent(renderer);
+
 	SDL_Delay(1000);
 
 	SDL_FreeSurface(surf);
@@ -386,6 +382,7 @@ bool Editor::SplashScreen() {
 
 	IMG_Quit();
 	SDL_Quit();
+
 	return true;
 }
 
