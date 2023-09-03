@@ -20,6 +20,7 @@ namespace ShyEditor {
 
 	void Console::Behaviour()
 	{
+		bool newmessages = false;
 		while (Game::PendingOutput()) {
 
 			std::string str = Game::FlushOutput();
@@ -41,7 +42,7 @@ namespace ShyEditor {
 				std::string script = tipo.substr(divide);
 
 
-
+				newmessages = true;
 				messages.push_back({ {51, 153, 255}, fecha + objeto, script, fin });
 			}
 		}
@@ -51,6 +52,9 @@ namespace ShyEditor {
 
 			messages.clear();
 		}
+
+		ImGui::BeginChild("Messages", ImGui::GetContentRegionAvail());
+
 
 		int messageIdx = 0;
 		for (auto& message : messages) {
@@ -84,9 +88,17 @@ namespace ShyEditor {
 
 			//ImGui::Separator();
 
+
 			ImGui::EndChild();
 			messageIdx++;
 		}
+
+		if (newmessages) {
+
+			ImGui::SetScrollHereY(0);
+		}
+
+		ImGui::EndChild();
 	}
 
 	void Console::Print(const std::string& str)

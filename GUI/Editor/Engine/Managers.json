@@ -693,6 +693,11 @@
                 "input": [],
                 "name": "HasRightStickMoved",
                 "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "GetMouseWorldPosition",
+                "return": "Pair"
             }
         ],
         "name": "InputManager"
@@ -956,6 +961,42 @@
                     }
                 ],
                 "name": "MinusOne",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "t",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Lerp",
+                "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Number"
+                    },
+                    {
+                        "name": "y",
+                        "type": "Number"
+                    }
+                ],
+                "name": "CubicLerp",
                 "return": "Number"
             }
         ],
@@ -1970,6 +2011,42 @@
                     }
                 ],
                 "name": "Multiply",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "t",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Lerp",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "a",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "b",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "t",
+                        "type": "Number"
+                    }
+                ],
+                "name": "CubicLerp",
                 "return": "Pair"
             },
             {

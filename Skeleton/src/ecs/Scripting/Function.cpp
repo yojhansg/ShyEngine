@@ -6,7 +6,7 @@ Scripting::Function::Function(int idx, std::string const& method) : OutputNode(i
 
 }
 
-void Scripting::Function::Operate(Node*& nextNode, int iterationIdx)
+void Scripting::Function::Operate(Node*& nextNode, int& iterationIdx)
 {
 	nextNode = next;
 

@@ -20,7 +20,7 @@ void Scripting::Fork::SetCondition(OutputNode* node)
 
 //TODO: no se comprueba si tiene condition
 
-void Scripting::Fork::Operate(Node*& next, int iterationIdx)
+void Scripting::Fork::Operate(Node*& next, int& iterationIdx)
 {
 	condition->Cicle(iterationIdx);
 
@@ -28,27 +28,35 @@ void Scripting::Fork::Operate(Node*& next, int iterationIdx)
 	{
 	case Scripting::Fork::ForkType::While:
 
-		while (condition->output.value.Bool) {
+		if (A != nullptr) {
 
-			A->Cicle(iterationIdx);
+			while (condition->output.value.Bool) {
 
 
-			condition->Cicle(iterationIdx);
+				A->Cicle(++iterationIdx);
+
+
+				condition->Cicle(++iterationIdx);
+			}
 		}
 		next = B;
 
 		break;
 	case Scripting::Fork::ForkType::For:
 
+		if (A != nullptr) {
+			for (int i = 0; i < condition->output.value.Float; i++) {
 
-		for (int i = 0; i < condition->output.value.Float; i++) {
-
-			A->Cicle(iterationIdx);
+				A->Cicle(++iterationIdx);
+			}
 		}
 		next = B;
 
 		break;
 	default:
+
+
+		//If
 
 		if (condition->output.value.Bool)
 			next = A;

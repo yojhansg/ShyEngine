@@ -65,7 +65,8 @@ publish:
 	float Math_Min(float a, float b);
 	float Math_PlusOne(float a);
 	float Math_MinusOne(float a);
-
+	float Math_Lerp(float a, float b, float t);
+	float Math_CubicLerp(float a, float b, float y);
 
 	
 	// ----------------------- Logic -----------------------
@@ -100,6 +101,9 @@ publish:
 	Vector2D Vector2D_Dot(cVector2D a, cVector2D b);
 	Vector2D Vector2D_Cross(cVector2D a, cVector2D b);
 	Vector2D Vector2D_Multiply(cVector2D a, float b);
+	Vector2D Vector2D_Lerp(cVector2D a, cVector2D b, float t);
+	Vector2D Vector2D_CubicLerp(cVector2D a, cVector2D b, float t);
+
 
 	Vector2D Vector2D_Up();
 	Vector2D Vector2D_Left();
@@ -204,6 +208,10 @@ publish:
 	// ---------------------- Misc ---------------------
 
 	void OpenURL(cstring url);
+
+
+	// Mouse position
+	Vector2D InputManager_GetMouseWorldPosition();
 
 private:
 

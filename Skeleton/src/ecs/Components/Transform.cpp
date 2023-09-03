@@ -88,7 +88,7 @@ namespace ECS {
 
 	// ------------- Setters -----------------
 
-	void Transform::SetLocalPosition(Utilities::Vector2D position) {
+	void Transform::SetLocalPosition(cVector2D position) {
 		this->localPosition = position;
 	}
 
@@ -100,7 +100,7 @@ namespace ECS {
 		this->localPosition.set(localPosition.getX(), y);
 	}
 
-	void Transform::SetWorldPosition(Utilities::Vector2D position)
+	void Transform::SetWorldPosition(cVector2D position)
 	{
 		if (parent != nullptr) {
 
@@ -116,7 +116,7 @@ namespace ECS {
 		this->localPosition = position;
 	}
 
-	void Transform::SetScale(Utilities::Vector2D scale) {
+	void Transform::SetScale(cVector2D scale) {
 		this->localScale = scale;
 	}
 
@@ -128,7 +128,7 @@ namespace ECS {
 		this->localScale.set(x, localScale.getY());
 	}
 
-	void Transform::SetWorldScale(Utilities::Vector2D scale)
+	void Transform::SetWorldScale(cVector2D scale)
 	{
 		if (parent != nullptr) {
 			
@@ -155,6 +155,25 @@ namespace ECS {
 		}
 
 		this->localRotation = rotation;
+	}
+
+
+	void Transform::RotateTowards(cVector2D position)
+	{
+		Utilities::Vector2D dif = position - this->GetWorldPosition();
+
+		if (dif.x_ == 0 && dif.y_ == 0) {
+
+			this->SetWorldRotation(0);
+			return;
+		}
+
+		dif = dif.normalize();
+		
+		float rotation = std::atan2(dif.y_, dif.x_) * -(180.0 / 3.141592653589793238463);
+
+
+		this->SetWorldRotation(rotation);
 	}
 
 
@@ -188,7 +207,7 @@ namespace ECS {
 
 	// ------------ Modifiers ------------------
 
-	void Transform::Translate(Utilities::Vector2D direction) {
+	void Transform::Translate(cVector2D direction) {
 		this->localPosition += direction;
 	}
 
@@ -203,6 +222,7 @@ namespace ECS {
 	void Transform::Rotate(float rotation) {
 		this->localRotation += rotation;
 	}
+
 
 	void Transform::Scale(float scale) {
 		this->localScale *= scale;

@@ -637,8 +637,9 @@ namespace ShyEditor {
 				ImGui::IsMouseHoveringRect(ImVec2(c.x, a.y), b) &&
 				(
 					in.GetTypeStr() == ScriptNode::currentlySelectedOutput->GetOutputTypeString() ||
-					in.GetTypeStr() == "Any"
-					)
+					in.GetTypeStr() == "Any" ||
+					ScriptNode::currentlySelectedOutput->GetOutputTypeString() == "Any"
+				)
 
 				) {
 
@@ -1262,7 +1263,7 @@ namespace ShyEditor {
 
 				std::vector<std::string> events = {
 
-					"start", "update", "init", "onCollisionEnter"
+					"start", "update", "onCollisionEnter","onCollisionStay", "onCollisionExit", "onTriggerEnter", "onTriggerStay", "onTriggerExit", "onClick", "onClickBegin", "onClickHold", "onDoubleClick", "onRightClick"
 				};
 
 				for (auto& name : events) {

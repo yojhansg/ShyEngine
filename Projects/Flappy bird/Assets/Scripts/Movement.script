@@ -1,0 +1,135 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 1,
+            "name": "Speed",
+            "serialized": true,
+            "type": "float",
+            "value": 1.0,
+            "x": 1014.0,
+            "y": 602.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 12,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 1612.0,
+            "y": 777.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 1331.0,
+            "y": 715.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 8,
+            "B": -1,
+            "condition": 11,
+            "index": 9,
+            "type": 0,
+            "x": 2190.0,
+            "y": 779.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "InputManager_HorizontalMovement",
+            "index": 2,
+            "input": [],
+            "x": 426.0,
+            "y": 166.0
+        },
+        {
+            "function": "InputManager_VerticalMovement",
+            "index": 3,
+            "input": [],
+            "x": 551.0,
+            "y": 705.0
+        },
+        {
+            "function": "Vector2D_Create",
+            "index": 4,
+            "input": [
+                2,
+                3
+            ],
+            "x": 752.0,
+            "y": 155.0
+        },
+        {
+            "function": "Vector2D_Normalize",
+            "index": 5,
+            "input": [
+                4
+            ],
+            "x": 1040.0,
+            "y": 129.0
+        },
+        {
+            "function": "Vector2D_Multiply",
+            "index": 6,
+            "input": [
+                5,
+                1
+            ],
+            "x": 1297.0,
+            "y": 185.0
+        },
+        {
+            "function": "Entity",
+            "index": 7,
+            "input": [],
+            "x": 1539.0,
+            "y": -45.0
+        },
+        {
+            "function": "Transform_Translate",
+            "index": 8,
+            "input": [
+                7,
+                6
+            ],
+            "x": 2262.0,
+            "y": 382.0
+        },
+        {
+            "function": "Vector2D_Magnitude",
+            "index": 10,
+            "input": [
+                6
+            ],
+            "x": 1594.0,
+            "y": 370.0
+        },
+        {
+            "function": "Logic_Greater",
+            "index": 11,
+            "input": [
+                10,
+                12
+            ],
+            "x": 1931.0,
+            "y": 407.0
+        }
+    ],
+    "nodeCount": 13,
+    "serializedValues": [
+        {
+            "defaultValue": 1.0,
+            "name": "Speed",
+            "type": "float"
+        }
+    ],
+    "update": 9
+}

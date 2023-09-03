@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sat Sep  2 15:33:53 2023
+//Creation time : Sun Sep  3 03:26:28 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -16,8 +16,6 @@ typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> 
 class FunctionManager{
 public: 
 	static void CreateFunctionMap(std::unordered_map<std::string, CallableFunction>& map);
-
-	
 };
 
 
@@ -173,6 +171,7 @@ Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>c
 Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_RotateTowards(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec);
@@ -287,6 +286,8 @@ Scripting::Variable ScriptFunctionality_Math_Max(std::vector<Scripting::Variable
 Scripting::Variable ScriptFunctionality_Math_Min(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_PlusOne(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_MinusOne(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_Lerp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_CubicLerp(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_NotEquals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Lesser(std::vector<Scripting::Variable>const& vec);
@@ -309,6 +310,8 @@ Scripting::Variable ScriptFunctionality_Vector2D_Subtract(std::vector<Scripting:
 Scripting::Variable ScriptFunctionality_Vector2D_Dot(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Multiply(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_Lerp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Vector2D_CubicLerp(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Up(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Left(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Vector2D_Right(std::vector<Scripting::Variable>const& vec);
@@ -365,6 +368,7 @@ Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scriptin
 Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ColorBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_InputManager_GetMouseWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundManager_setChannelsCapacity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);

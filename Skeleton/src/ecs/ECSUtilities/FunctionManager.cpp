@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Sat Sep  2 15:33:53 2023
+//Creation time: Sun Sep  3 03:26:28 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -205,6 +205,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
 	map.emplace("Transform_SetLocalRotation",Transform_SetLocalRotation);
 	map.emplace("Transform_SetWorldRotation",Transform_SetWorldRotation);
+	map.emplace("Transform_RotateTowards",Transform_RotateTowards);
 	map.emplace("Transform_Translate",Transform_Translate);
 	map.emplace("Transform_TranslateX",Transform_TranslateX);
 	map.emplace("Transform_TranslateY",Transform_TranslateY);
@@ -319,6 +320,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Math_Min",ScriptFunctionality_Math_Min);
 	map.emplace("Math_PlusOne",ScriptFunctionality_Math_PlusOne);
 	map.emplace("Math_MinusOne",ScriptFunctionality_Math_MinusOne);
+	map.emplace("Math_Lerp",ScriptFunctionality_Math_Lerp);
+	map.emplace("Math_CubicLerp",ScriptFunctionality_Math_CubicLerp);
 	map.emplace("Logic_Equals",ScriptFunctionality_Logic_Equals);
 	map.emplace("Logic_NotEquals",ScriptFunctionality_Logic_NotEquals);
 	map.emplace("Logic_Lesser",ScriptFunctionality_Logic_Lesser);
@@ -341,6 +344,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Vector2D_Dot",ScriptFunctionality_Vector2D_Dot);
 	map.emplace("Vector2D_Cross",ScriptFunctionality_Vector2D_Cross);
 	map.emplace("Vector2D_Multiply",ScriptFunctionality_Vector2D_Multiply);
+	map.emplace("Vector2D_Lerp",ScriptFunctionality_Vector2D_Lerp);
+	map.emplace("Vector2D_CubicLerp",ScriptFunctionality_Vector2D_CubicLerp);
 	map.emplace("Vector2D_Up",ScriptFunctionality_Vector2D_Up);
 	map.emplace("Vector2D_Left",ScriptFunctionality_Vector2D_Left);
 	map.emplace("Vector2D_Right",ScriptFunctionality_Vector2D_Right);
@@ -397,6 +402,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Random_Color",ScriptFunctionality_Random_Color);
 	map.emplace("Random_ColorBetween",ScriptFunctionality_Random_ColorBetween);
 	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
+	map.emplace("InputManager_GetMouseWorldPosition",ScriptFunctionality_InputManager_GetMouseWorldPosition);
 	map.emplace("SoundManager_setMasterVolume",SoundManager_setMasterVolume);
 	map.emplace("SoundManager_setChannelsCapacity",SoundManager_setChannelsCapacity);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
@@ -407,9 +413,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Time_ScaleWithDeltaTime",Time_ScaleWithDeltaTime);
 	map.emplace("Time_ScaleWithPhysicsDeltaTime",Time_ScaleWithPhysicsDeltaTime);
 
-}
-
-;
+};
 Scripting::Variable Animation_ChangeAnimationPath(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -3165,6 +3169,26 @@ Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>c
 	self->SetWorldRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable Transform_RotateTowards(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	self->RotateTowards(vec[1].vector);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -3820,6 +3844,16 @@ Scripting::Variable ScriptFunctionality_Math_MinusOne(std::vector<Scripting::Var
 	float ret = manager->Math_MinusOne(vec[0].value.Float);
 	return ret;
 }
+Scripting::Variable ScriptFunctionality_Math_Lerp(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_Lerp(vec[0].value.Float, vec[1].value.Float, vec[2].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_CubicLerp(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_CubicLerp(vec[0].value.Float, vec[1].value.Float, vec[2].value.Float);
+	return ret;
+}
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	bool ret = manager->Logic_Equals(vec[0].value.Float, vec[1].value.Float);
@@ -3928,6 +3962,16 @@ Scripting::Variable ScriptFunctionality_Vector2D_Cross(std::vector<Scripting::Va
 Scripting::Variable ScriptFunctionality_Vector2D_Multiply(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	Vector2D ret = manager->Vector2D_Multiply(vec[0].vector, vec[1].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_Lerp(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_Lerp(vec[0].vector, vec[1].vector, vec[2].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Vector2D_CubicLerp(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Vector2D_CubicLerp(vec[0].vector, vec[1].vector, vec[2].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Vector2D_Up(std::vector<Scripting::Variable>const& vec){
@@ -4209,6 +4253,11 @@ Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->OpenURL(vec[0].str);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_InputManager_GetMouseWorldPosition(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->InputManager_GetMouseWorldPosition();
+	return ret;
 }
 Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec){
 	SoundManager* manager = SoundManager::instance();

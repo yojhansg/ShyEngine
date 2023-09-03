@@ -14,7 +14,7 @@ void Scripting::Node::ForceReevaluation()
 {
 }
 
-void Scripting::Node::Cicle(int iterationIdx)
+void Scripting::Node::Cicle(int& iterationIdx)
 {
 	this->iterationIdx = iterationIdx;
 

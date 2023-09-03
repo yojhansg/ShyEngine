@@ -37,33 +37,35 @@ namespace ECS {
 		Utilities::Vector2D GetLocalPosition();
 		Utilities::Vector2D GetWorldPosition();
 
-		void SetLocalPosition(Utilities::Vector2D position);
+		void SetLocalPosition(cVector2D position);
 		void SetLocalPositionX(float x);
 		void SetLocalPositionY(float y);
 
-		void SetWorldPosition(Utilities::Vector2D position);
+		void SetWorldPosition(cVector2D position);
 
 		Utilities::Vector2D GetLocalScale();
 		Utilities::Vector2D GetWorldScale();
 
-		void SetScale(Utilities::Vector2D scale);
+		void SetScale(cVector2D scale);
 		void SetScaleX(float x);
 		void SetScaleY(float y);
 
-		void SetWorldScale(Utilities::Vector2D scale);
+		void SetWorldScale(cVector2D scale);
 
 		float GetLocalRotation();
 		float GetWorldRotation();
 
 		void SetLocalRotation(float rotation);
 		void SetWorldRotation(float rotation);
+		void RotateTowards(cVector2D position);
 
-		void Translate(Utilities::Vector2D direction);
+		void Translate(cVector2D direction);
 
 		void TranslateX(float x);
 		void TranslateY(float y);
 
 		void Rotate(float rotation);
+
 		void Scale(float scale);
 
 		void SetTransformRelativeToNewParent();

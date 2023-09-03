@@ -1,0 +1,96 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 7,
+            "name": "Speed",
+            "serialized": true,
+            "type": "float",
+            "value": 1.0,
+            "x": 644.0,
+            "y": 813.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 373.0,
+            "y": 618.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Camera_SetPosition",
+            "index": 1,
+            "input": [
+                4
+            ],
+            "x": 1518.0,
+            "y": 124.0
+        },
+        {
+            "function": "Entity",
+            "index": 2,
+            "input": [],
+            "x": 356.0,
+            "y": 216.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 3,
+            "input": [
+                2
+            ],
+            "x": 656.0,
+            "y": 433.0
+        },
+        {
+            "function": "Vector2D_Lerp",
+            "index": 4,
+            "input": [
+                5,
+                3,
+                8
+            ],
+            "x": 1171.0,
+            "y": 196.0
+        },
+        {
+            "function": "Camera_GetPosition",
+            "index": 5,
+            "input": [],
+            "x": 675.0,
+            "y": 119.0
+        },
+        {
+            "function": "Time_GetDeltaTime",
+            "index": 6,
+            "input": [],
+            "x": 369.0,
+            "y": 783.0
+        },
+        {
+            "function": "Math_Multiply",
+            "index": 8,
+            "input": [
+                6,
+                7
+            ],
+            "x": 898.0,
+            "y": 708.0
+        }
+    ],
+    "nodeCount": 9,
+    "serializedValues": [
+        {
+            "defaultValue": 1.0,
+            "name": "Speed",
+            "type": "float"
+        }
+    ],
+    "update": 1
+}

@@ -95,6 +95,8 @@ namespace Input {
 
 	publish:
 
+
+
 		// Keyboard
 		bool AnyKeyPressed();
 		bool AnyKeyReleased();

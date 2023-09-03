@@ -8,7 +8,7 @@ Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val) : Scripting::O
 	originalValue = output = val;
 }
 
-void Scripting::ConstNode::Operate(Node*& next, int iterationIdx)
+void Scripting::ConstNode::Operate(Node*& next, int& iterationIdx)
 {
 	next = nullptr;
 

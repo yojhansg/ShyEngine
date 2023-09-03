@@ -1,0 +1,119 @@
+{
+    "name": "Scene",
+    "position": "-0.000000, -0.000000",
+    "scale": 1.0,
+    "objects": [
+        {
+            "name": "Character",
+            "id": 1,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, 0.000000",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Character.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Scripts/Movement": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 10.0
+                    }
+                },
+                "Scripts/PlayerRotation": [],
+                "Scripts/CameraController": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 5.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "Spider",
+            "id": 2,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "755.454285, 144.248795",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "54.200001",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Spider.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Scripts/EnemyController": {
+                    "Player": {
+                        "type": "Entity",
+                        "value": 1
+                    },
+                    "Speed": {
+                        "type": "float",
+                        "value": 1.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "Floor",
+            "id": 3,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "2253.660156, -628.070374",
+            "localScale": "4.180000, 2.500000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Floor.jpg"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ],
+    "overlays": [
+        {
+            "name": "Vignette",
+            "id": 4,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": false,
+            "placement": "1",
+            "anchor": "0.500000,0.500000",
+            "top": "0",
+            "left": "0",
+            "right": "0",
+            "bottom": "0",
+            "position": "0.000000, 0.000000",
+            "size": "100.000000, 100.000000",
+            "components": [
+                {
+                    "component": "OverlayImage",
+                    "attributes": {
+                        "path": "vignette.png"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ]
+}

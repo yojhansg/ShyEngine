@@ -25,7 +25,6 @@ namespace ShyEditor {
 		Editor* editor;
 		Texture* prefabText;
 
-		bool open;
 		int currentlySelected; // Currently selected prefab
 
 		//Key = prefab Id, Value = all its instances in the scene
