@@ -59,7 +59,7 @@ namespace ECS {
 		return &localRotation;
 	}
 
-	void Transform::SetParent(Transform* tr)
+	void Transform::SetParent(Transform* tr, bool adjustToParent)
 	{
 		localPosition = GetWorldPosition();
 		localScale = GetWorldScale();
@@ -70,7 +70,7 @@ namespace ECS {
 		}
 
 		parent = tr;
-		if (tr != nullptr) {
+		if (tr != nullptr && adjustToParent) {
 			tr->SetChildren(this);
 			SetTransformRelativeToNewParent();
 		}

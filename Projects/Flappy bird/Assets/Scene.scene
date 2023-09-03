@@ -10,7 +10,7 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.000000, 0.000000",
+            "localPosition": "-262.856934, -729.523010",
             "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
             "components": [
@@ -87,6 +87,49 @@
                 }
             ],
             "scripts": null
+        },
+        {
+            "name": "Character",
+            "id": 6,
+            "childs": [
+                {
+                    "name": "hijo",
+                    "id": 5,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "0.000000, 204.000000",
+                    "localScale": "1.000000, 1.000000",
+                    "localRotation": "0.000000",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "Character.png"
+                            }
+                        }
+                    ],
+                    "scripts": {
+                        "Scripts/PrintPosition": []
+                    }
+                }
+            ],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "600.000000, 0.000000",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Character.png"
+                    }
+                }
+            ],
+            "scripts": null
         }
     ],
     "overlays": [
@@ -99,10 +142,10 @@
             "isTransform": false,
             "placement": "1",
             "anchor": "0.500000,0.500000",
-            "top": "0",
+            "top": "1",
             "left": "0",
             "right": "0",
-            "bottom": "0",
+            "bottom": "-1",
             "position": "0.000000, 0.000000",
             "size": "100.000000, 100.000000",
             "components": [

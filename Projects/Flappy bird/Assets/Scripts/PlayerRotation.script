@@ -25,7 +25,6 @@
                 3,
                 1
             ],
-            "next": 4,
             "x": 1055.0,
             "y": 445.0
         },
@@ -35,18 +34,9 @@
             "input": [],
             "x": 772.0,
             "y": 186.0
-        },
-        {
-            "function": "Print",
-            "index": 4,
-            "input": [
-                1
-            ],
-            "x": 1525.0,
-            "y": 514.0
         }
     ],
-    "nodeCount": 5,
+    "nodeCount": 4,
     "serializedValues": [],
     "update": 2
 }
