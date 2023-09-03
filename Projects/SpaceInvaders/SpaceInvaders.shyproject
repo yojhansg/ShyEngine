@@ -21,19 +21,26 @@
                         }
                     }
                 ],
-                "scripts": null
+                "scripts": {
+                    "Scripts/Alien Horizontal Movement": {
+                        "Speed": {
+                            "type": "Vector2D",
+                            "value": "1.000000, 0.000000"
+                        }
+                    }
+                }
             }
         ],
         "prefabInstances": {
             "-1": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
                 8,
+                7,
+                6,
+                5,
+                4,
+                3,
+                2,
+                1,
                 11,
                 12,
                 13,
@@ -49,22 +56,14 @@
                 24,
                 25,
                 26,
-                27,
-                37,
-                38,
-                39,
-                40,
-                41,
-                42,
-                43,
-                44
+                27
             ]
         }
     },
     "Preferences": {
         "game": "SpaceInvaders",
         "creator": "Yojhan, Pablo e Ivan",
-        "initialScene": "Level.scene",
+        "initialScene": "",
         "splashScreen": false,
         "windowTitle": "SpaceInvaders",
         "windowIcon": "",

@@ -4,6 +4,57 @@
     "scale": 1.0,
     "objects": [
         {
+            "name": "Limits",
+            "id": 31,
+            "childs": [
+                {
+                    "name": "Right limit",
+                    "id": 29,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "850.000000, 0.000007",
+                    "localScale": "0.365464, 22.605421",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                },
+                {
+                    "name": "Left limit",
+                    "id": 28,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "-850.000000, 0.000007",
+                    "localScale": "0.365464, 22.605421",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                }
+            ],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, -0.000000",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [],
+            "scripts": {
+                "Scripts/Limits": {
+                    "Left limit": {
+                        "type": "Entity",
+                        "value": 28
+                    },
+                    "Right limit": {
+                        "type": "Entity",
+                        "value": 29
+                    }
+                }
+            }
+        },
+        {
             "name": "Aliens",
             "id": 37,
             "childs": [
@@ -29,7 +80,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -49,7 +107,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -69,7 +134,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -89,7 +161,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -109,7 +188,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -129,7 +215,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -149,7 +242,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -169,7 +269,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         }
                     ],
                     "order": 0,
@@ -203,7 +310,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -223,7 +337,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -243,7 +364,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -263,7 +391,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -283,7 +418,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -303,7 +445,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -323,7 +472,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -343,7 +499,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         }
                     ],
                     "order": 0,
@@ -377,7 +540,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -397,7 +567,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -417,7 +594,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -437,7 +621,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -457,7 +648,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -477,7 +675,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -497,7 +702,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         },
                         {
                             "name": "alien2",
@@ -517,7 +729,14 @@
                                     }
                                 }
                             ],
-                            "scripts": null
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
                         }
                     ],
                     "order": 0,
@@ -537,7 +756,14 @@
             "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
             "components": [],
-            "scripts": null
+            "scripts": {
+                "Scripts/Alien Vertical Movement": {
+                    "Jump distance": {
+                        "type": "Vector2D",
+                        "value": "0.000000, -140.000000"
+                    }
+                }
+            }
         }
     ],
     "overlays": []
