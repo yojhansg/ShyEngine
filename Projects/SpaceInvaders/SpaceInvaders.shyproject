@@ -46,9 +46,33 @@
                         "attributes": {
                             "fileName": "bullet.png"
                         }
+                    },
+                    {
+                        "component": "BoxBody",
+                        "attributes": {
+                            "size": "0.000000, 0.000000",
+                            "offSet": "0.000000, 0.000000",
+                            "bodyType": "2.000000",
+                            "mass": "1.000000",
+                            "bounciness": "0.000000",
+                            "trigger": "true",
+                            "freezeRotation": "false",
+                            "gravityScale": "0.000000",
+                            "friction": "0.000000",
+                            "linearDamping": "0.000000",
+                            "angularDamping": "0.000000",
+                            "layerName": ""
+                        }
                     }
                 ],
-                "scripts": null
+                "scripts": {
+                    "Scripts/Bullet behaviour": {
+                        "Speed": {
+                            "type": "float",
+                            "value": 5.0
+                        }
+                    }
+                }
             }
         ],
         "prefabInstances": {
