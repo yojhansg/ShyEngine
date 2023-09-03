@@ -320,7 +320,7 @@ bool Editor::SplashScreen() {
 	}
 
 	// Create Window
-	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 540, SDL_WINDOW_BORDERLESS);
+	auto window = SDL_CreateWindow("SplashScreen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 620, 300, SDL_WINDOW_BORDERLESS);
 
 	if (window == NULL) {
 		IMG_Quit();
