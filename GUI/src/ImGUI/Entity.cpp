@@ -108,6 +108,10 @@ namespace ShyEditor {
 			prefabId = entity.id;
 			PrefabManager::AddInstance(entity.id, id);
 		}
+		if (entity.IsPrefabInstance()) {
+			prefabId = entity.prefabId;
+			PrefabManager::AddInstance(entity.prefabId, id);
+		}
 
 		for (auto& pair : entity.components) {
 			Components::Component component = pair.second;
