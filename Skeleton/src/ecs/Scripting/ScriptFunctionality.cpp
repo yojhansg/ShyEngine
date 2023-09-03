@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Script.h"
 #include "Scene.h"
-#include "Utils.h"
+#include "Random.h"
 
 #include <sstream>
 #include <iomanip>
@@ -19,6 +19,7 @@
 
 #define DELTA 0.001f
 #define TIME_DIFF 1680833948
+#define PI 3.14159265f
 
 
 Scripting::ScriptFunctionality::~ScriptFunctionality() {}
@@ -725,34 +726,33 @@ void Scripting::ScriptFunctionality::Camera_SetScale(float newScale)
 
 // ------------------------------ Random -----------------------------------
 
-float Scripting::ScriptFunctionality::DegreesTo_Radians(float angle)
-{
-	return Utilities::Utils::DegreesToRadians(angle);
+float Scripting::ScriptFunctionality::DegreesTo_Radians(float angle) {
+	return angle * PI / 180.0f;
 }
 
 float Scripting::ScriptFunctionality::RadiansTo_Degrees(float angle)
 {
-	return Utilities::Utils::RadiansToDegrees(angle);
+	return angle * 180.0f / PI;
 }
 
 float Scripting::ScriptFunctionality::Random_NumberBetween(int min, int max)
 {
-	return Utilities::Utils::RandomIntBetween(min, max);
+	return Utilities::Random::RandomIntBetween(min, max);
 }
 
 float Scripting::ScriptFunctionality::Random_AngleBetween(float min, float max)
 {
-	return Utilities::Utils::RandomAngleBetween(min, max);
+	return Utilities::Random::RandomAngleBetween(min, max);
 }
 
 Color Scripting::ScriptFunctionality::Random_Color()
 {
-	return Utilities::Utils::RandomColor();
+	return Utilities::Random::RandomColor();
 }
 
 Color Scripting::ScriptFunctionality::Random_ColorBetween(cColor c1, cColor c2)
 {
-	return Utilities::Utils::RandomColorBetween(c1, c2);
+	return Utilities::Random::RandomColorBetween(c1, c2);
 }
 
 

@@ -57,7 +57,7 @@ namespace ECS {
 
 		direction = { im->HorizontalMovement(), im->VerticalMovement() };
 
-		if (clampDiagonalVelocity && direction.magnitude() > 0)
+		if (clampDiagonalVelocity)
 			direction = direction.normalize();
 
 		if (usePhysics) return;

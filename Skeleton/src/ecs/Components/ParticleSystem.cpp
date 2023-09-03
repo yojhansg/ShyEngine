@@ -8,7 +8,7 @@
 #include "Entity.h"
 #include "Texture.h"
 #include <cassert>
-#include <Utils.h>
+#include <Random.h>
 
 namespace ECS {
 
@@ -373,7 +373,7 @@ namespace ECS {
 			if (b->getCurrentTime() > b->getRate() && b->getIntervalTime() <= 0) {
 
 				// Calculate probability to burst
-				float rnd = Utilities::Utils::RandomBetween(0.0f, 1.0f);
+				float rnd = Utilities::Random::RandomBetween(0.0f, 1.0f);
 				if (b->getProbabilityToBurst() < rnd) continue;
 
 				b->decreaseCycles();

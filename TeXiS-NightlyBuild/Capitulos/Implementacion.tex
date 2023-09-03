@@ -298,3 +298,126 @@ de desarrollo más fluido y adaptativo.
 \subsection{Scripts}
 
 \textbf{\textit{TODO: Completar\ldots}}
+
+%-------------------------------------------------------------------
+\section{Motor}
+%-------------------------------------------------------------------
+\label{cap4:sec:motor}
+
+El motor esta dividio en diez proyectos de Visual Studio, todos dentro de la misma solución.
+Cada proyecto cumple una función específica de la que pueden depender otros proyectos. 
+
+A continuación se entrará en detalle sobre la función y detalles de implementación de cada
+proyecto y de las librerías asociadas al mismo, si las tiene.
+
+\subsection{Proyecto de utilidades}
+
+El objetivo de este proyecto es implementar código común que pueden necesitar el resto 
+de proyectos evitando así la duplicación de código innecesaria.
+
+Contiene clases tanto orientadas a guardar información como a implementar lógica y funcionalidad.
+
+Entre estas clases destacan las siguientes:
+
+\begin{itemize}
+
+\item Vector2D: Representa un vector bidimensional, contiene información de dos componentes e implementa 
+muchas de sus operaciones básicas. En este caso, esta clase se puede usar simplemente como un contenedor de 
+información en el que se pueden asociar dos números reales pero también se puede usar para hacer cálculos
+geométricos en dos dimensiones como rotaciones, cálculo de ángulos, etc.
+
+\item Random: Contiene métodos estáticos útiles para calcular aleatoriedad entre números enteros, 
+números reales, ángulos, y colores. En este caso esta clase solo tiene como objetivo proporcionar
+funcionalidad.
+
+\item Color: Representa un color de tres canales (Red, Green, Blue) además de métodos con algo de
+funcionalida como Lerp, que calcula un color intermedio entre otros dos dados y un porcentaje 
+que representa la influencia que tendrá cada color en el color resultante. También existen métodos
+que aportan comodidad a la hora de crear colores como Red, Green, Blue, Orange, Black, que simplemente
+construyen el color por dentro sin necesidad de conocer su valor en el modelo RGB.
+
+\item EngineTine: Por un lado, contiene información sobre el tiempo entre fotogramas del motor, 
+tiempo entre pasos físicos, tiempo transcurrido desde el inicio del programa y número de fotogramas
+hasta el momento. Por otro lado, implementa funcionalidad para conocer la tasa de frames o convertir 
+un valor de tiempo en una cadena de texto formateada. Mencionar también que esta clase es un Singleton.
+
+\item Singleton: Una plantilla para crear instancias estáticas a través de herencia. Es decir, en caso
+de querer convertir una clases en un Singleton, muy útiles para managers, simplemente hay que heredar
+de esta clases para conseguirlo. Aporta mucha comodidad ya que evita tener que implmentar la instancia
+estática de la clase y sus métodos para manejarla. Solo tiene un incoveniente y es borrar los Singletons
+en el orden adecuado si dependen entre ellos.
+
+\end{itemize}
+
+\subsection{Proyecto de recursos}
+
+El objetivo de este proyecto es proporcionar un contenedor de recursos en el que se van a guardar
+todos los recursos del videojuego. En concreto, el tipo de recursos que se pueden guardar son fuentes
+de texto, imágenes, efectos de sonido y música.
+
+El manager de recursos contiene un mapa por cada tipo de recurso donde la clave es la ruta del archivo
+y el valor un puntero a un objeto del tipo del recurso (Texture*, Font*, SoundEffect*, Music*).
+El hecho de utilizar un mapa se debe a la complejidad constante de acceder a los recursos una vez creados.
+
+Esto es importante porque uno de los objetivos del manager de recursos es reutilizar los recursos creados
+para solo tener cargada una copia de cada recurso en memoria. Por ello, a la hora de añadir un nuevo recurso
+al manager, primero comprueba si ya lo contiene y en ese caso, lo devuelve, en caso contrario, lo crea.
+
+Ya que la clave en los mapas es la ruta del archivo, los recursos pueden duplicarse en caso de tener
+el mismo archivo en diferentes directorios. El manager no contempla ese escenario ya que realmente
+el archivo también esta duplicado y es responsabilidad del desarrollador ordenar sus archivos de assets.
+
+Por último, en la destructora de la clase se borran todos los recursos de todos los mapas.
+
+
+\subsection{Proyecto de sonido}
+
+El objetivo de este proyecto es construir un envoltorio sobre la librería de audio SDLMixer para
+poder implementar posteriormente los componentes MusicEmitter y SoundEmitter.
+
+Para un mejor entendimiento de la implementación es necesario saber que SDLMixer diferencia entre
+efectos de sonido o sonidos cortos en general (WAV, MP3) y música de fondo (WAV, MP3, OGG).
+
+Para la música (MixMusic), la librería solo cuenta con un canal de reproducción por lo que es
+algo limitado pero simple a la vez ya que no hay que lidiar con número de canales al contrario
+que con los efectos de sonido (MixChunk).
+
+Este proyecto cuenta con tres clases:
+
+\begin{itemize}
+
+\item SoundEffect: Representa un efecto de sonido. Contiene la información de un MixChunk de
+SDLMixer y un identificador usado posteriormente por el componente SoundEmitter.
+
+\item MusicEffect: Representa un sonido de música de fondo. Contiene la información de un
+MixMusic de SDLMixer y un identificador usado posteriormente por el componente MusicEmitter.
+
+Estas dos clases representan también los recursos que se usan para música y sonidos en el 
+manager de recursos.
+
+\item SoundManager: Singleton encargado de implementar el envoltorio de las funciones principales 
+de SDLMixer para reproducir, parar, y detener sonidos, entre otros. Tiene dos métodos destinados
+al usuario para el modificar el volumen general y cambiar el número de canales disponibles para
+la reproducción de sonidos.
+
+\end{itemize}
+
+En cuanto a los sonidos, todos los métodos de SDLMixer necesitan un canal y un MixChunk*. 
+Esto choca con la idea del componente SoundEmitter, que visto desde la perspectiva del usuario, 
+simplemente se le establece un sonido y ya se puede reproducir, sin necesidad de conocer la existencia 
+de canales. Esto se contará más en detalle en la implementación de SoundEmitter.
+
+Las funciones disponibles para los canales de sonido son: reproducir sonido, hacer fade-in de un sonido, 
+hacer fade-out de un sonido, pausar un sonido, detener un sonido (la diferencia con pausar es que si 
+se detiene no se puede renaudar), renaudar un sonido, consultar si un canal está reproduciendo un sonido,
+establecer el sonido de un canal en específico, consultar el volumen de un canal, establecer la posicion
+en el espacio de un canal y establecer el paneo de un canal.
+
+En cuanto a la música, los métodos de SDLMixer solo necesitan un MixMusic ya que solo hay un canal
+por lo que el problema de los canales desaparece. Las funciones disponibles son: reproducir, fade-in,
+fade-out, pausar, detener, renaudar, modificar el volumen de la música y rebobinar.
+
+
+\subsection{Proyecto de input}
+
+

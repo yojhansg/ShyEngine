@@ -97,7 +97,12 @@ namespace Utilities {
 
 		// Vector in the same direction of length 1
 		inline Vector2D normalize() const {
-			return *this / magnitude();
+
+			float m = magnitude();
+
+			if (m == 0) return Vector2D(0, 0);
+
+			return *this / m;
 		}
 
 		inline float area() const {

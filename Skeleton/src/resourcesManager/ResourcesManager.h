@@ -32,7 +32,6 @@ namespace Resources {
 		Sound::SoundEffect* addSound(std::string const& key);
 		Sound::Music* addMusic(std::string const& key);
 
-
 		static std::string GetResourcesPath();
 		static void SetResourcesPath(const std::string& path);
 
