@@ -1,0 +1,403 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 12,
+            "serialized": false,
+            "type": "string",
+            "value": "Speed inverted",
+            "x": 39.0,
+            "y": -828.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 13,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 19.0,
+            "y": -443.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 14,
+            "serialized": false,
+            "type": "string",
+            "value": "Speed inverted",
+            "x": 1859.0,
+            "y": -77.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 15,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1280.0,
+            "y": 89.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 16,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 1214.0,
+            "y": 833.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 20,
+            "name": "Speed",
+            "serialized": true,
+            "type": "Vector2D",
+            "value": "1.000000,0.000000",
+            "x": 2751.0,
+            "y": 212.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 33,
+            "serialized": false,
+            "type": "string",
+            "value": "Jump",
+            "x": 2048.0,
+            "y": -865.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 34,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 2071.0,
+            "y": -444.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 37,
+            "serialized": false,
+            "type": "string",
+            "value": "Left limit",
+            "x": -118.0,
+            "y": -23.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 39,
+            "serialized": false,
+            "type": "string",
+            "value": "Right limit",
+            "x": -310.0,
+            "y": 488.0
+        }
+    ],
+    "events": [
+        {
+            "index": 10,
+            "type": "update",
+            "x": 2072.0,
+            "y": 667.0
+        },
+        {
+            "index": 11,
+            "type": "start",
+            "x": -396.0,
+            "y": -571.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 25,
+            "B": -1,
+            "condition": 4,
+            "index": 5,
+            "type": 0,
+            "x": 1299.0,
+            "y": 396.0
+        },
+        {
+            "A": 26,
+            "B": -1,
+            "condition": 8,
+            "index": 9,
+            "type": 0,
+            "x": 1299.0,
+            "y": 546.0
+        },
+        {
+            "A": 22,
+            "B": 18,
+            "condition": 27,
+            "index": 17,
+            "type": 0,
+            "x": 2495.0,
+            "y": 518.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 0,
+            "input": [
+                36
+            ],
+            "x": 505.0,
+            "y": 42.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 1,
+            "input": [
+                35
+            ],
+            "x": 505.0,
+            "y": 468.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 2,
+            "input": [
+                1
+            ],
+            "x": 686.0,
+            "y": 468.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 3,
+            "input": [
+                0
+            ],
+            "x": 785.0,
+            "y": 89.0
+        },
+        {
+            "function": "Logic_LesserOrEqual",
+            "index": 4,
+            "input": [
+                2,
+                3
+            ],
+            "x": 999.0,
+            "y": 313.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 6,
+            "input": [
+                38
+            ],
+            "x": 424.0,
+            "y": 783.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 7,
+            "input": [
+                6
+            ],
+            "x": 719.0,
+            "y": 785.0
+        },
+        {
+            "function": "Logic_GreaterOrEqual",
+            "index": 8,
+            "input": [
+                2,
+                7
+            ],
+            "x": 999.0,
+            "y": 645.0
+        },
+        {
+            "function": "Transform_SetWorldPosition",
+            "index": 18,
+            "input": [
+                35,
+                21
+            ],
+            "next": 9,
+            "x": 3501.0,
+            "y": 162.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 19,
+            "input": [
+                35
+            ],
+            "x": 2707.0,
+            "y": -77.0
+        },
+        {
+            "function": "Vector2D_Add",
+            "index": 21,
+            "input": [
+                19,
+                20
+            ],
+            "x": 2860.0,
+            "y": 732.0
+        },
+        {
+            "function": "Transform_SetWorldPosition",
+            "index": 22,
+            "input": [
+                35,
+                23
+            ],
+            "next": 5,
+            "x": 3411.0,
+            "y": 595.0
+        },
+        {
+            "function": "Vector2D_Subtract",
+            "index": 23,
+            "input": [
+                19,
+                20
+            ],
+            "x": 3124.0,
+            "y": 362.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 24,
+            "input": [
+                12,
+                13
+            ],
+            "x": 414.0,
+            "y": -580.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 25,
+            "input": [
+                14,
+                15
+            ],
+            "next": 30,
+            "x": 1600.0,
+            "y": 241.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 26,
+            "input": [
+                14,
+                16
+            ],
+            "next": 28,
+            "x": 1568.0,
+            "y": 839.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 27,
+            "input": [
+                14
+            ],
+            "x": 2566.0,
+            "y": -112.0
+        },
+        {
+            "function": "Transform_SetWorldPosition",
+            "index": 28,
+            "input": [
+                35,
+                31
+            ],
+            "x": 2334.0,
+            "y": 918.0
+        },
+        {
+            "function": "Vector2D_Add",
+            "index": 29,
+            "input": [
+                19,
+                20
+            ],
+            "x": 1859.0,
+            "y": 241.0
+        },
+        {
+            "function": "Transform_SetWorldPosition",
+            "index": 30,
+            "input": [
+                35,
+                29
+            ],
+            "next": 32,
+            "x": 2167.0,
+            "y": 96.0
+        },
+        {
+            "function": "Vector2D_Add",
+            "index": 31,
+            "input": [
+                19,
+                20
+            ],
+            "x": 1922.0,
+            "y": 984.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 32,
+            "input": [
+                33,
+                34
+            ],
+            "x": 2465.0,
+            "y": -444.0
+        },
+        {
+            "function": "Entity",
+            "index": 35,
+            "input": [],
+            "x": 793.0,
+            "y": -247.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 36,
+            "input": [
+                37
+            ],
+            "x": 212.0,
+            "y": 43.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 38,
+            "input": [
+                39
+            ],
+            "x": 38.0,
+            "y": 503.0
+        }
+    ],
+    "nodeCount": 40,
+    "serializedValues": [
+        {
+            "defaultValue": "1.000000,0.000000",
+            "name": "Speed",
+            "type": "Vector2D"
+        }
+    ],
+    "start": 24,
+    "update": 17
+}

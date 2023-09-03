@@ -1,0 +1,199 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 1,
+            "name": "Jump distance",
+            "serialized": true,
+            "type": "Vector2D",
+            "value": "0.000000,-140.000000",
+            "x": 1783.0,
+            "y": 655.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 6,
+            "serialized": false,
+            "type": "string",
+            "value": "Jump",
+            "x": 648.0,
+            "y": -179.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 7,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1218.0,
+            "y": -442.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 10,
+            "serialized": false,
+            "type": "string",
+            "value": "Ignore first",
+            "x": 437.0,
+            "y": -1064.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 11,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 455.0,
+            "y": -533.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 15,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1532.0,
+            "y": -575.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 17,
+            "serialized": false,
+            "type": "string",
+            "value": "Jump",
+            "x": 1147.0,
+            "y": -1141.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 279.0,
+            "y": 254.0
+        },
+        {
+            "index": 3,
+            "type": "start",
+            "x": 348.0,
+            "y": -624.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 8,
+            "B": -1,
+            "condition": 5,
+            "index": 4,
+            "type": 0,
+            "x": 1157.0,
+            "y": 284.0
+        },
+        {
+            "A": 14,
+            "B": 2,
+            "condition": 13,
+            "index": 12,
+            "type": 0,
+            "x": 1725.0,
+            "y": 116.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Transform_Translate",
+            "index": 2,
+            "input": [
+                18,
+                1
+            ],
+            "x": 2071.0,
+            "y": 377.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 5,
+            "input": [
+                6
+            ],
+            "x": 966.0,
+            "y": -126.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 8,
+            "input": [
+                6,
+                7
+            ],
+            "next": 12,
+            "x": 1378.0,
+            "y": -128.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 9,
+            "input": [
+                10,
+                11
+            ],
+            "next": 16,
+            "x": 977.0,
+            "y": -894.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 13,
+            "input": [
+                10
+            ],
+            "x": 1348.0,
+            "y": 277.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 14,
+            "input": [
+                10,
+                15
+            ],
+            "x": 1948.0,
+            "y": -403.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 16,
+            "input": [
+                17,
+                7
+            ],
+            "x": 1474.0,
+            "y": -1144.0
+        },
+        {
+            "function": "Entity",
+            "index": 18,
+            "input": [],
+            "x": 1679.0,
+            "y": 321.0
+        }
+    ],
+    "nodeCount": 19,
+    "serializedValues": [
+        {
+            "defaultValue": "0.000000,-140.000000",
+            "name": "Jump distance",
+            "type": "Vector2D"
+        }
+    ],
+    "start": 9,
+    "update": 4
+}
