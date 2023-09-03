@@ -66,9 +66,9 @@ namespace ECS {
 			bool isTransform = pref["isTransform"].get<bool>();
 
 			if (isTransform)
-				prefabsWithOverlay.insert(std::make_pair(pref["name"].get<std::string>(), pref));
-			else
 				prefabsWithTransform.insert(std::make_pair(pref["name"].get<std::string>(), pref));
+			else
+				prefabsWithOverlay.insert(std::make_pair(pref["name"].get<std::string>(), pref));
 
 		}
 	}
@@ -84,7 +84,7 @@ namespace ECS {
 		json prefabData = prefabsWithTransform[prefabName].get<json>();
 
 		// Se crea la entidad en la escena proporcionada
-		ECS::Entity* entity = scene->createEntity(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
+		ECS::Entity* entity = scene->createEntityNoId(prefabData["name"].get<std::string>(), prefabData["order"].get<int>());
 
 
 			// Transform
@@ -167,7 +167,7 @@ namespace ECS {
 			SceneLoader::ProcessComponent(entity, compInfo);
 
 
-		if (!prefabData.contains("scritps")) {
+		if (!prefabData.contains("scripts")) {
 			Console::Output::PrintError("Instantiate prefab", "The prefab file doesnt have a valid format");
 			return;
 		}

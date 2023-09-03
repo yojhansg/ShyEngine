@@ -195,7 +195,7 @@ publish:
 	float Random_NumberBetween(int min, int max);
 	float Random_Between(float a, float b);
 	float DegreesTo_Radians(float angle);
-	float RadiansTo_Degrees(float angle);
+	float RadiansTo_Degrees(float angle); 
 	float Random_AngleBetween(float min, float max);
 	Vector2D Random_UnitVector();
 	Vector2D Random_ScaledVector(float val);

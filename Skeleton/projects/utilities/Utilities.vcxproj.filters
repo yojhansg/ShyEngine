@@ -33,7 +33,7 @@
     <ClInclude Include="..\..\src\utilities\Color.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\utilities\Utils.h">
+    <ClInclude Include="..\..\src\utilities\Random.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\utilities\EngineTime.h">
@@ -47,7 +47,7 @@
     <ClCompile Include="..\..\src\utilities\Color.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\utilities\Utils.cpp">
+    <ClCompile Include="..\..\src\utilities\Random.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\utilities\EngineTime.cpp">

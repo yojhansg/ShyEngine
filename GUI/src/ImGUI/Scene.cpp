@@ -688,10 +688,14 @@ namespace ShyEditor {
 
 	void Scene::HandleInput(SDL_Event* event) {
 
+
+		if (!focused) return;
+
 		ImVec2 mousePos = ImGui::GetMousePos();
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyEntitySelected = false;
-
+		
+		
 		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
 			for (const auto& pair : entities) {

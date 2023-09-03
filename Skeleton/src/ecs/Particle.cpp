@@ -6,9 +6,11 @@
 #include "Components/ParticleSystem.h"
 #include "Components/Transform.h"
 #include "Texture.h"
-#include "Utils.h"
+#include "Random.h"
 
 #include <iostream>
+
+#define PI 3.14159265f
 
 using namespace Utilities;
 
@@ -119,7 +121,7 @@ namespace ECS {
 		// LifeTime
 		lifeTime = system->lifeTime;
 		if (system->randomLifeTimeBetweenTwoValues)
-			lifeTime = Utils::RandomBetween(system->lifeTimeFirstValue, system->lifeTimeSecondValue);
+			lifeTime = Random::RandomBetween(system->lifeTimeFirstValue, system->lifeTimeSecondValue);
 
 		startLifeTime = lifeTime;
 
@@ -127,7 +129,7 @@ namespace ECS {
 		// Speed
 		speed = system->speed;
 		if (system->randomSpeedBetweenTwoValues)
-			speed = Utils::RandomBetween(system->speedFirstValue, system->speedSecondValue);
+			speed = Random::RandomBetween(system->speedFirstValue, system->speedSecondValue);
 
 		startSpeed = speed;
 
@@ -135,8 +137,8 @@ namespace ECS {
 		// Size
 		size = system->size;
 		if (system->randomSizeBetweenTwoValues) {
-			float x = Utils::RandomBetween(system->sizeFirstValue.getX(), system->sizeSecondValue.getX());
-			float y = Utils::RandomBetween(system->sizeFirstValue.getY(), system->sizeSecondValue.getY());
+			float x = Random::RandomBetween(system->sizeFirstValue.getX(), system->sizeSecondValue.getX());
+			float y = Random::RandomBetween(system->sizeFirstValue.getY(), system->sizeSecondValue.getY());
 
 			size = { x, y };
 		}
@@ -147,37 +149,37 @@ namespace ECS {
 		// Force
 		force = system->force;
 		if (system->randomForceBetweenTwoValues)
-			force = Utils::RandomBetween(system->forceFirstValue, system->forceSecondValue);
+			force = Random::RandomBetween(system->forceFirstValue, system->forceSecondValue);
 
 
 		// Impulse
 		impulse = system->impulse;
 		if (system->randomImpulseBetweenTwoValues)
-			impulse = Utils::RandomBetween(system->impulseFirstValue, system->impulseSecondValue);
+			impulse = Random::RandomBetween(system->impulseFirstValue, system->impulseSecondValue);
 
 
 		// Direction
 		float angle = system->angle;
 		if (system->randomAngleBetweenTwoValues)
-			angle = Utils::RandomBetween(system->angleFirstValue, system->angleSecondValue);
+			angle = Random::RandomBetween(system->angleFirstValue, system->angleSecondValue);
 
-		float radians = Utilities::Utils::DegreesToRadians(angle);
+		float radians = angle * PI / 180.0f;
 		direction = { cos(radians), sin(radians) };
 
 		// Rotation
 		rotation = system->rotation;
 		if (system->randomRotationBetweenTwoValues)
-			rotation = Utils::RandomBetween(system->rotationFirstValue, system->rotationSecondValue);
+			rotation = Random::RandomBetween(system->rotationFirstValue, system->rotationSecondValue);
 
 		// Angular Velocity
 		angularVelocity = system->angularVelocity;
 		if (system->randomAngularVelocityBetweenTwoValues)
-			angularVelocity = Utils::RandomBetween(system->angularVelocityFirstValue, system->angularVelocitySecondValue);
+			angularVelocity = Random::RandomBetween(system->angularVelocityFirstValue, system->angularVelocitySecondValue);
 
 		// Color
 		color = system->color;
 		if (system->randomColorBetweenTwoColors)
-			color = Utils::RandomColorBetween(system->colorFirstValue, system->colorSecondValue);
+			color = Random::RandomColorBetween(system->colorFirstValue, system->colorSecondValue);
 
 		startColor = color;
 
@@ -185,14 +187,14 @@ namespace ECS {
 		// Alpha
 		alpha = system->alpha;
 		if (system->randomAlphaBetweenTwoValues)
-			alpha = Utils::RandomIntBetween(system->alphaFirstValue, system->alphaSecondValue);
+			alpha = Random::RandomIntBetween(system->alphaFirstValue, system->alphaSecondValue);
 
 		startAlpha = alpha;
 
 		// Bounciness
 		bounciness = system->bounciness;
 		if (system->randomBouncinessBetweenTwoValues)
-			bounciness = Utils::RandomBetween(system->bouncinessFirstValue, system->bouncinessSecondValue);
+			bounciness = Random::RandomBetween(system->bouncinessFirstValue, system->bouncinessSecondValue);
 
 		
 		// Physics

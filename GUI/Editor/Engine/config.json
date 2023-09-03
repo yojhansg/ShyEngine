@@ -10,7 +10,7 @@
         18
     ],
     "bgAlpha": 255,
-    "bgColor": "237, 115, 115",
+    "bgColor": "0, 0, 0",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -19,15 +19,16 @@
     "debugPhysics": true,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "Flappy bird",
+    "game": "",
     "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
-        "Default"
+        "Default",
+        "plat"
     ],
     "matrix": [
         [
-            false,
+            true,
             false,
             false,
             false,
@@ -315,8 +316,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\sryoj\\Documents\\TFG\\Projects\\Flappy bird\\Assets",
-    "projectFilePath": "C:\\Users\\sryoj\\Documents\\TFG\\Projects\\Flappy bird\\Flappy bird.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\uwu\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\uwu\\uwu.shyproject",
     "showcursor": true,
     "splashScreen": false,
     "timeToDoubleClick": 0.5,
@@ -324,5 +325,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "Flappy bird"
+    "windowTitle": ""
 }
