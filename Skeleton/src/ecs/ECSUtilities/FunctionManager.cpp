@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Sun Sep  3 02:18:20 2023
+//Creation time: Sun Sep  3 03:26:28 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -205,6 +205,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Transform_GetWorldRotation",Transform_GetWorldRotation);
 	map.emplace("Transform_SetLocalRotation",Transform_SetLocalRotation);
 	map.emplace("Transform_SetWorldRotation",Transform_SetWorldRotation);
+	map.emplace("Transform_RotateTowards",Transform_RotateTowards);
 	map.emplace("Transform_Translate",Transform_Translate);
 	map.emplace("Transform_TranslateX",Transform_TranslateX);
 	map.emplace("Transform_TranslateY",Transform_TranslateY);
@@ -401,6 +402,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Random_Color",ScriptFunctionality_Random_Color);
 	map.emplace("Random_ColorBetween",ScriptFunctionality_Random_ColorBetween);
 	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
+	map.emplace("InputManager_GetMouseWorldPosition",ScriptFunctionality_InputManager_GetMouseWorldPosition);
 	map.emplace("SoundManager_setMasterVolume",SoundManager_setMasterVolume);
 	map.emplace("SoundManager_setChannelsCapacity",SoundManager_setChannelsCapacity);
 	map.emplace("Time_GetTimeSinceBegining",Time_GetTimeSinceBegining);
@@ -3167,6 +3169,26 @@ Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>c
 	self->SetWorldRotation(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable Transform_RotateTowards(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Transform* self = vec[0].value.entity->getComponent<Transform>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Transform_RotateTowards", vec[0].value.entity->getEntityName(), Transform);
+		return Scripting::Variable::Null();
+	}
+	self->RotateTowards(vec[1].vector);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -4231,6 +4253,11 @@ Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	manager->OpenURL(vec[0].str);
 	return Scripting::Variable::Null();
+}
+Scripting::Variable ScriptFunctionality_InputManager_GetMouseWorldPosition(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->InputManager_GetMouseWorldPosition();
+	return ret;
 }
 Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec){
 	SoundManager* manager = SoundManager::instance();

@@ -32,6 +32,8 @@ namespace Input {
 		clearState();
 	}
 
+	
+
 	bool InputManager::Valid() {
 		return valid;
 	}
@@ -133,7 +135,6 @@ namespace Input {
 		mousePos_.setX(mouse_x);
 		mousePos_.setY(mouse_y);
 	}
-
 
 	// --------- KB ------------
 

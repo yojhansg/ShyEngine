@@ -2665,6 +2665,20 @@
                         "type": "Entity"
                     },
                     {
+                        "name": "position",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "RotateTowards",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
                         "name": "direction",
                         "type": "Pair"
                     }

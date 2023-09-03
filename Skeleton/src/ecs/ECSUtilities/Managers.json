@@ -693,6 +693,11 @@
                 "input": [],
                 "name": "HasRightStickMoved",
                 "return": "Toggle"
+            },
+            {
+                "input": [],
+                "name": "GetMouseWorldPosition",
+                "return": "Pair"
             }
         ],
         "name": "InputManager"

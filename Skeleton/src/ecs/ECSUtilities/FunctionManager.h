@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Sun Sep  3 02:18:20 2023
+//Creation time : Sun Sep  3 03:26:28 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -171,6 +171,7 @@ Scripting::Variable Transform_GetLocalRotation(std::vector<Scripting::Variable>c
 Scripting::Variable Transform_GetWorldRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetLocalRotation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_SetWorldRotation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Transform_RotateTowards(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_Translate(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateX(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Transform_TranslateY(std::vector<Scripting::Variable>const& vec);
@@ -367,6 +368,7 @@ Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scriptin
 Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ColorBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_InputManager_GetMouseWorldPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundManager_setMasterVolume(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SoundManager_setChannelsCapacity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Time_GetTimeSinceBegining(std::vector<Scripting::Variable>const& vec);

@@ -28,7 +28,13 @@
                         "value": 10.0
                     }
                 },
-                "Scripts/CameraController": []
+                "Scripts/PlayerRotation": [],
+                "Scripts/CameraController": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 5.0
+                    }
+                }
             }
         },
         {
@@ -38,9 +44,9 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "-689.233032, 284.615875",
+            "localPosition": "755.454285, 144.248795",
             "localScale": "1.000000, 1.000000",
-            "localRotation": "0.000000",
+            "localRotation": "54.200001",
             "components": [
                 {
                     "component": "Image",
@@ -69,7 +75,7 @@
             "order": -1,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "-29.010117, 198.573334",
+            "localPosition": "2253.660156, -628.070374",
             "localScale": "4.180000, 2.500000",
             "localRotation": "0.000000",
             "components": [
@@ -83,5 +89,31 @@
             "scripts": null
         }
     ],
-    "overlays": []
+    "overlays": [
+        {
+            "name": "Vignette",
+            "id": 4,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": false,
+            "placement": "1",
+            "anchor": "0.500000,0.500000",
+            "top": "0",
+            "left": "0",
+            "right": "0",
+            "bottom": "0",
+            "position": "0.000000, 0.000000",
+            "size": "100.000000, 100.000000",
+            "components": [
+                {
+                    "component": "OverlayImage",
+                    "attributes": {
+                        "path": "vignette.png"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ]
 }

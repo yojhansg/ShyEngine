@@ -20,8 +20,8 @@
             "serialized": true,
             "type": "float",
             "value": 1.0,
-            "x": 1178.0,
-            "y": 765.0
+            "x": 1183.0,
+            "y": 755.0
         }
     ],
     "events": [
@@ -47,8 +47,8 @@
             "input": [
                 1
             ],
-            "x": 537.0,
-            "y": 119.0
+            "x": 595.0,
+            "y": 98.0
         },
         {
             "function": "Transform_GetWorldPosition",
@@ -66,7 +66,7 @@
                 3,
                 4
             ],
-            "x": 837.0,
+            "x": 844.0,
             "y": 436.0
         },
         {
@@ -75,7 +75,7 @@
             "input": [
                 5
             ],
-            "x": 1175.0,
+            "x": 1183.0,
             "y": 458.0
         },
         {
@@ -85,15 +85,16 @@
                 8,
                 10
             ],
-            "x": 1665.0,
-            "y": 262.0
+            "next": 11,
+            "x": 1808.0,
+            "y": -90.0
         },
         {
             "function": "Entity",
             "index": 8,
             "input": [],
-            "x": 1126.0,
-            "y": 115.0
+            "x": 1225.0,
+            "y": -113.0
         },
         {
             "function": "Vector2D_Multiply",
@@ -102,11 +103,21 @@
                 6,
                 9
             ],
-            "x": 1427.0,
-            "y": 350.0
+            "x": 1470.0,
+            "y": 271.0
+        },
+        {
+            "function": "Transform_RotateTowards",
+            "index": 11,
+            "input": [
+                8,
+                3
+            ],
+            "x": 2117.0,
+            "y": 331.0
         }
     ],
-    "nodeCount": 11,
+    "nodeCount": 12,
     "serializedValues": [
         {
             "defaultValue": 0,

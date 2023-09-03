@@ -209,6 +209,10 @@ publish:
 
 	void OpenURL(cstring url);
 
+
+	// Mouse position
+	Vector2D InputManager_GetMouseWorldPosition();
+
 private:
 
 	int GetRealTime(int time);

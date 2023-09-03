@@ -2,7 +2,41 @@
     "Creation Date": "2023-09-02 22:46:59",
     "Last Opened Scene": "Scene.scene",
     "Prefabs": {
-        "prefabs": [],
+        "prefabs": [
+            {
+                "name": "Character",
+                "id": -1,
+                "childs": [],
+                "order": 0,
+                "prefabId": 0,
+                "isTransform": true,
+                "localPosition": "0.000000, 0.000000",
+                "localScale": "1.000000, 1.000000",
+                "localRotation": "0.000000",
+                "components": [
+                    {
+                        "component": "Image",
+                        "attributes": {
+                            "fileName": "Character.png"
+                        }
+                    }
+                ],
+                "scripts": {
+                    "Scripts/Movement": {
+                        "Speed": {
+                            "type": "float",
+                            "value": 10.0
+                        }
+                    },
+                    "Scripts/CameraController": {
+                        "Speed": {
+                            "type": "float",
+                            "value": 5.0
+                        }
+                    }
+                }
+            }
+        ],
         "prefabInstances": null
     },
     "Preferences": {

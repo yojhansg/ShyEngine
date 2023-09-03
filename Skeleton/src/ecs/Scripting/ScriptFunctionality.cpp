@@ -4,6 +4,7 @@
 #include "ScriptManager.h"
 #include "PrefabManager.h"
 #include "SceneManager.h"
+#include "InputManager.h"
 #include "StringTrim.h"
 #include "Entity.h"
 #include "Script.h"
@@ -722,7 +723,17 @@ std::string Scripting::ScriptFunctionality::RealTime_Since(int time, int now)
 
 Utilities::Vector2D Scripting::ScriptFunctionality::Camera_GetPosition()
 {
-	return Renderer::RendererManager::instance()->CameraPosition();
+	Vector2D vec = Renderer::RendererManager::instance()->CameraPosition();
+	/*
+		La posicion de la camara no funciona como una entidad sino que tiene las coordenadas invertidas
+		Por eso hay que invertir la posicion x antes de pasarsela al renderer y a la escena
+
+		La posicion y no es necesario invertirla porque el renderer invierte la posicion de las entidades
+
+		Haciendo esto mantenemos una consistencia entre la posicion del renderizado y la posicion de las entidades
+	*/
+	vec.x_ *= -1;
+	return vec;
 }
 
 void Scripting::ScriptFunctionality::Camera_SetPosition(cVector2D newPosition)
@@ -808,6 +819,28 @@ Utilities::Vector2D Scripting::ScriptFunctionality::Random_UnitVector()
 Utilities::Vector2D Scripting::ScriptFunctionality::Random_ScaledVector(float val)
 {
 	return Random_UnitVector() * val;
+}
+
+Utilities::Vector2D Scripting::ScriptFunctionality::InputManager_GetMouseWorldPosition() {
+
+	auto mousepos = Input::InputManager::instance()->GetMousePosition();
+
+	auto width = Renderer::RendererManager::instance()->getWidth();
+	auto height = Renderer::RendererManager::instance()->getHeight();
+
+	float cameraScale = Camera_GetScale();
+
+	mousepos.x_ -= width * 0.5f;
+	mousepos.y_ -= height * 0.5f;
+
+	mousepos.y_ *= -1;
+
+	auto cameraPos = Camera_GetPosition();
+	mousepos.x_ += cameraPos.x_;
+	mousepos.y_ += cameraPos.y_;
+
+
+	return mousepos;
 }
 
 
