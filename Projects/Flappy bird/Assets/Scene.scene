@@ -4,24 +4,83 @@
     "scale": 1.0,
     "objects": [
         {
-            "name": "Empty entity",
+            "name": "Character",
             "id": 1,
             "childs": [],
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.000000, -0.000000",
+            "localPosition": "0.000000, 0.000000",
             "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
-            "components": [],
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Character.png"
+                    }
+                }
+            ],
             "scripts": {
-                "Scripts/SumaAnteriores": {
-                    "Initial": {
+                "Scripts/Movement": {
+                    "Speed": {
                         "type": "float",
-                        "value": 5.0
+                        "value": 10.0
+                    }
+                },
+                "Scripts/CameraController": []
+            }
+        },
+        {
+            "name": "Spider",
+            "id": 2,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "-689.233032, 284.615875",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Spider.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Scripts/EnemyController": {
+                    "Player": {
+                        "type": "Entity",
+                        "value": 1
+                    },
+                    "Speed": {
+                        "type": "float",
+                        "value": 1.0
                     }
                 }
             }
+        },
+        {
+            "name": "Floor",
+            "id": 3,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "-29.010117, 198.573334",
+            "localScale": "4.180000, 2.500000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Floor.jpg"
+                    }
+                }
+            ],
+            "scripts": null
         }
     ],
     "overlays": []

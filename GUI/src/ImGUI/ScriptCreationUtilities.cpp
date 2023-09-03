@@ -1263,7 +1263,7 @@ namespace ShyEditor {
 
 				std::vector<std::string> events = {
 
-					"start", "update", "init", "onCollisionEnter"
+					"start", "update", "onCollisionEnter","onCollisionStay", "onCollisionExit", "onTriggerEnter", "onTriggerStay", "onTriggerExit", "onClick", "onClickBegin", "onClickHold", "onDoubleClick", "onRightClick"
 				};
 
 				for (auto& name : events) {

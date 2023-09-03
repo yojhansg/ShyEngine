@@ -140,6 +140,17 @@ float Scripting::ScriptFunctionality::Math_MinusOne(float a)
 	return a - 1;
 }
 
+float Scripting::ScriptFunctionality::Math_Lerp(float a, float b, float t)
+{
+	return std::lerp(a, b, t);
+}
+
+float Scripting::ScriptFunctionality::Math_CubicLerp(float a, float b, float t)
+{
+	float t_ = 1 - t;
+	return Math_Lerp(a, b, 1 - t_ * t_ * t_);
+}
+
 
 
 
@@ -273,14 +284,25 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_Multiply(cVector2D a, float b)
 	return a * b;
 }
 
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_Lerp(cVector2D a, cVector2D b, float t) {
+
+	return Vector2D(Math_Lerp(a.x_, b.x_, t), Math_Lerp(a.y_, b.y_, t));
+}
+
+Vector2D Scripting::ScriptFunctionality::Vector2D_CubicLerp(cVector2D a, cVector2D b, float t) {
+
+	return Vector2D(Math_CubicLerp(a.x_, b.x_, t), Math_CubicLerp(a.y_, b.y_, t));
+}
+
 Vector2D Scripting::ScriptFunctionality::Vector2D_Up()
 {
-	return Vector2D(0, -1);
+	return Vector2D(0, 1);
 }
 
 Vector2D Scripting::ScriptFunctionality::Vector2D_Down()
 {
-	return Vector2D(0, 1);
+	return Vector2D(0, -1);
 }
 
 Vector2D Scripting::ScriptFunctionality::Vector2D_Left()
@@ -705,8 +727,20 @@ Utilities::Vector2D Scripting::ScriptFunctionality::Camera_GetPosition()
 
 void Scripting::ScriptFunctionality::Camera_SetPosition(cVector2D newPosition)
 {
-	Renderer::RendererManager::instance()->SetCameraPosition(newPosition);
-	ECS::SceneManager::instance()->SetCameraPosition(newPosition);
+	Vector2D modifiedPosition = Vector2D(-newPosition.x_, newPosition.y_);
+
+	/*
+		La posicion de la camara no funciona como una entidad sino que tiene las coordenadas invertidas
+		Por eso hay que invertir la posicion x antes de pasarsela al renderer y a la escena
+
+		La posicion y no es necesario invertirla porque el renderer invierte la posicion de las entidades
+
+		Haciendo esto mantenemos una consistencia entre la posicion del renderizado y la posicion de las entidades
+	*/
+
+
+	Renderer::RendererManager::instance()->SetCameraPosition(modifiedPosition);
+	ECS::SceneManager::instance()->SetCameraPosition(modifiedPosition);
 }
 
 float Scripting::ScriptFunctionality::Camera_GetScale()

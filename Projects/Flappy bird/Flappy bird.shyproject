@@ -16,7 +16,7 @@
         "vsync": true,
         "fullScreen": false,
         "showcursor": true,
-        "bgColor": "0, 0, 0",
+        "bgColor": "237, 115, 115",
         "bgAlpha": 255,
         "gravity": "0.000000, -9.810000",
         "layers": [

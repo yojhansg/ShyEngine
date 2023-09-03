@@ -1,0 +1,53 @@
+{
+    "comments": [],
+    "consts": [],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 916.0,
+            "y": 674.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Camera_SetPosition",
+            "index": 1,
+            "input": [
+                3
+            ],
+            "next": 4,
+            "x": 1294.0,
+            "y": 263.0
+        },
+        {
+            "function": "Entity",
+            "index": 2,
+            "input": [],
+            "x": 356.0,
+            "y": 216.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 3,
+            "input": [
+                2
+            ],
+            "x": 727.0,
+            "y": 168.0
+        },
+        {
+            "function": "Print",
+            "index": 4,
+            "input": [
+                3
+            ],
+            "x": 1279.0,
+            "y": 620.0
+        }
+    ],
+    "nodeCount": 5,
+    "serializedValues": [],
+    "update": 1
+}

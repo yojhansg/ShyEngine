@@ -1,0 +1,123 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 1,
+            "name": "Player",
+            "serialized": true,
+            "type": "Entity",
+            "value": 0,
+            "x": 305.0,
+            "y": 93.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 9,
+            "name": "Speed",
+            "serialized": true,
+            "type": "float",
+            "value": 1.0,
+            "x": 1178.0,
+            "y": 765.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 1565.0,
+            "y": 700.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Entity",
+            "index": 2,
+            "input": [],
+            "x": 306.0,
+            "y": 416.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 3,
+            "input": [
+                1
+            ],
+            "x": 537.0,
+            "y": 119.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 4,
+            "input": [
+                2
+            ],
+            "x": 538.0,
+            "y": 427.0
+        },
+        {
+            "function": "Vector2D_Subtract",
+            "index": 5,
+            "input": [
+                3,
+                4
+            ],
+            "x": 837.0,
+            "y": 436.0
+        },
+        {
+            "function": "Vector2D_Normalize",
+            "index": 6,
+            "input": [
+                5
+            ],
+            "x": 1175.0,
+            "y": 458.0
+        },
+        {
+            "function": "Transform_Translate",
+            "index": 7,
+            "input": [
+                8,
+                10
+            ],
+            "x": 1665.0,
+            "y": 262.0
+        },
+        {
+            "function": "Entity",
+            "index": 8,
+            "input": [],
+            "x": 1126.0,
+            "y": 115.0
+        },
+        {
+            "function": "Vector2D_Multiply",
+            "index": 10,
+            "input": [
+                6,
+                9
+            ],
+            "x": 1427.0,
+            "y": 350.0
+        }
+    ],
+    "nodeCount": 11,
+    "serializedValues": [
+        {
+            "defaultValue": 0,
+            "name": "Player",
+            "type": "Entity"
+        },
+        {
+            "defaultValue": 1.0,
+            "name": "Speed",
+            "type": "float"
+        }
+    ],
+    "update": 7
+}
