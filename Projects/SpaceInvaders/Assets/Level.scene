@@ -4,6 +4,26 @@
     "scale": 1.0,
     "objects": [
         {
+            "name": "background",
+            "id": 30,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "6.071921, -9.311968",
+            "localScale": "2.475634, 2.076642",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "background.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
             "name": "Limits",
             "id": 31,
             "childs": [
@@ -50,6 +70,39 @@
                     "Right limit": {
                         "type": "Entity",
                         "value": 29
+                    }
+                }
+            }
+        },
+        {
+            "name": "ship",
+            "id": 32,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, -435.384857",
+            "localScale": "0.205861, 0.236604",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "ship.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Scripts/Bullet Cooldown": {
+                    "Cooldown": {
+                        "type": "float",
+                        "value": 0.5
+                    }
+                },
+                "Scripts/Shoot": {
+                    "Bullet": {
+                        "type": "Entity",
+                        "value": -2
                     }
                 }
             }

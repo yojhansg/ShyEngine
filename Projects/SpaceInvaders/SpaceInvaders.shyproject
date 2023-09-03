@@ -63,7 +63,7 @@
     "Preferences": {
         "game": "SpaceInvaders",
         "creator": "Yojhan, Pablo e Ivan",
-        "initialScene": "",
+        "initialScene": "Level.scene",
         "splashScreen": false,
         "windowTitle": "SpaceInvaders",
         "windowIcon": "",
