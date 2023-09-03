@@ -1,0 +1,93 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 1,
+            "name": "Right limit",
+            "serialized": true,
+            "type": "Entity",
+            "value": 0,
+            "x": 1431.0,
+            "y": 256.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 2,
+            "name": "Left limit",
+            "serialized": true,
+            "type": "Entity",
+            "value": 0,
+            "x": 347.0,
+            "y": 337.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 4,
+            "serialized": false,
+            "type": "string",
+            "value": "Left limit",
+            "x": 304.0,
+            "y": 45.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 6,
+            "serialized": false,
+            "type": "string",
+            "value": "Right limit",
+            "x": 1436.0,
+            "y": 686.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "start",
+            "x": 479.0,
+            "y": 748.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 3,
+            "input": [
+                4,
+                2
+            ],
+            "next": 5,
+            "x": 664.0,
+            "y": 309.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 5,
+            "input": [
+                6,
+                1
+            ],
+            "x": 1193.0,
+            "y": 347.0
+        }
+    ],
+    "nodeCount": 7,
+    "serializedValues": [
+        {
+            "defaultValue": 0,
+            "name": "Right limit",
+            "type": "Entity"
+        },
+        {
+            "defaultValue": 0,
+            "name": "Left limit",
+            "type": "Entity"
+        }
+    ],
+    "start": 3
+}

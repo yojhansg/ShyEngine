@@ -1,0 +1,181 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 3,
+            "serialized": false,
+            "type": "string",
+            "value": "Cooldown",
+            "x": 494.0,
+            "y": -124.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 4,
+            "name": "Cooldown",
+            "serialized": true,
+            "type": "float",
+            "value": 0.5,
+            "x": 709.0,
+            "y": -203.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 10,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1211.0,
+            "y": -208.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 11,
+            "serialized": false,
+            "type": "string",
+            "value": "ResetCooldown",
+            "x": 1226.0,
+            "y": 179.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 15,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1806.0,
+            "y": 338.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "start",
+            "x": 252.0,
+            "y": 274.0
+        },
+        {
+            "index": 1,
+            "type": "update",
+            "x": 308.0,
+            "y": 964.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 14,
+            "B": -1,
+            "condition": 13,
+            "index": 12,
+            "type": 0,
+            "x": 1747.0,
+            "y": 1057.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 2,
+            "input": [
+                3,
+                4
+            ],
+            "next": 9,
+            "x": 856.0,
+            "y": 240.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 5,
+            "input": [
+                3,
+                7
+            ],
+            "next": 12,
+            "x": 1238.0,
+            "y": 903.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 6,
+            "input": [
+                3
+            ],
+            "x": 594.0,
+            "y": 776.0
+        },
+        {
+            "function": "Math_Subtract",
+            "index": 7,
+            "input": [
+                6,
+                8
+            ],
+            "x": 975.0,
+            "y": 903.0
+        },
+        {
+            "function": "Time_GetDeltaTime",
+            "index": 8,
+            "input": [],
+            "x": 519.0,
+            "y": 1189.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 9,
+            "input": [
+                11,
+                10
+            ],
+            "x": 1452.0,
+            "y": 77.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 13,
+            "input": [
+                11
+            ],
+            "x": 1433.0,
+            "y": 568.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 14,
+            "input": [
+                11,
+                15
+            ],
+            "next": 16,
+            "x": 1814.0,
+            "y": 677.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 16,
+            "input": [
+                3,
+                4
+            ],
+            "x": 2149.0,
+            "y": 554.0
+        }
+    ],
+    "nodeCount": 17,
+    "serializedValues": [
+        {
+            "defaultValue": 0.5,
+            "name": "Cooldown",
+            "type": "float"
+        }
+    ],
+    "start": 2,
+    "update": 5
+}
