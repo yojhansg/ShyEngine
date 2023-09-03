@@ -65,12 +65,12 @@
             "enum": false,
             "enumStr": "",
             "index": 18,
-            "name": "Bullet",
+            "name": "PrefabName",
             "serialized": true,
-            "type": "Entity",
-            "value": 0,
-            "x": 696.0,
-            "y": -53.0
+            "type": "string",
+            "value": "bullet",
+            "x": 1087.0,
+            "y": 87.0
         }
     ],
     "events": [
@@ -106,7 +106,7 @@
             "function": "Create_EntityWithTransform",
             "index": 2,
             "input": [
-                19
+                18
             ],
             "next": 13,
             "x": 1443.0,
@@ -185,23 +185,14 @@
             ],
             "x": -244.0,
             "y": 233.0
-        },
-        {
-            "function": "Entity_Name",
-            "index": 19,
-            "input": [
-                18
-            ],
-            "x": 932.0,
-            "y": 82.0
         }
     ],
-    "nodeCount": 20,
+    "nodeCount": 19,
     "serializedValues": [
         {
-            "defaultValue": 0,
-            "name": "Bullet",
-            "type": "Entity"
+            "defaultValue": "bullet",
+            "name": "PrefabName",
+            "type": "string"
         }
     ],
     "update": 1

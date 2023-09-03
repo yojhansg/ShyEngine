@@ -10,7 +10,7 @@
             "order": -1,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "6.071921, -9.311968",
+            "localPosition": "2.995003, 49.149494",
             "localScale": "2.475634, 2.076642",
             "localRotation": "0.000000",
             "components": [
@@ -97,6 +97,20 @@
                     "Cooldown": {
                         "type": "float",
                         "value": 0.5
+                    }
+                },
+                "Scripts/Ship movement": {
+                    "Left Limit": {
+                        "type": "Entity",
+                        "value": 28
+                    },
+                    "Right Limit": {
+                        "type": "Entity",
+                        "value": 29
+                    },
+                    "Speed": {
+                        "type": "Vector2D",
+                        "value": "5.000000, 0.000000"
                     }
                 },
                 "Scripts/Shoot": {

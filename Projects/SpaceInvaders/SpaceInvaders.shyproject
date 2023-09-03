@@ -29,6 +29,26 @@
                         }
                     }
                 }
+            },
+            {
+                "name": "bullet",
+                "id": -2,
+                "childs": [],
+                "order": 0,
+                "prefabId": 0,
+                "isTransform": true,
+                "localPosition": "1.538243, -293.845825",
+                "localScale": "0.195575, 0.195575",
+                "localRotation": "0.000000",
+                "components": [
+                    {
+                        "component": "Image",
+                        "attributes": {
+                            "fileName": "bullet.png"
+                        }
+                    }
+                ],
+                "scripts": null
             }
         ],
         "prefabInstances": {
