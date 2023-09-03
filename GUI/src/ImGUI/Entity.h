@@ -37,7 +37,7 @@ namespace ShyEditor {
 		static int lastId;
 
 		Entity(std::string& path, bool isTransform);
-		Entity(const Entity& entity);
+		Entity(const Entity& entity, bool isPasting = false);
 
 		~Entity();
 

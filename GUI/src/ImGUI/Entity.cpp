@@ -94,7 +94,7 @@ namespace ShyEditor {
 	}
 
 	//Copy constructor
-	Entity::Entity(const Entity& entity)
+	Entity::Entity(const Entity& entity, bool isPasting)
 	{
 		editor = entity.editor;
 
@@ -157,7 +157,7 @@ namespace ShyEditor {
 		for (auto pair : entity.children) {
 			Entity* child = new Entity(*pair.second);
 
-			child->SetParent(this);
+			child->SetParent(this, isPasting);
 
 			children.emplace(child->GetId(), child);
 		}
