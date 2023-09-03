@@ -23,7 +23,7 @@ namespace ECS {
 		//TODO: que esto no devuelva un puntero o hacer otro metodo para las fisicas
 		const double* getRotationPointer();
 
-		void SetParent(Transform* tr);
+		void SetParent(Transform* tr, bool adjustToParent = true);
 
 	private:
 		void SetChildren(Transform* tr);
