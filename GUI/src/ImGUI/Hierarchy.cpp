@@ -223,9 +223,11 @@ namespace ShyEditor {
 
 					if (entityToPaste->IsTransform()) {
 						scene->AddEntity(entityToPaste);
+						scene->AddEntityChildsToScene(entityToPaste);
 					}
 					else {
 						scene->AddOverlay(entityToPaste);
+						scene->AddOverlayChildsToScene(entityToPaste);
 					}
 
 					if (copiedEntity != nullptr) {
@@ -242,9 +244,11 @@ namespace ShyEditor {
 
 					if (entityToDuplicate->IsTransform()) {
 						scene->AddEntity(entityToDuplicate);
+						scene->AddEntityChildsToScene(entityToDuplicate);
 					}
 					else {
 						scene->AddOverlay(entityToDuplicate);
+						scene->AddOverlayChildsToScene(entityToDuplicate);
 					}
 				}
 

@@ -280,7 +280,7 @@ Scripting::ScriptManager::ScriptNodes Scripting::ScriptManager::LoadScript(std::
 				continue;
 			}
 
-			forks.push_back({ nodeIdx, A, B });
+			//forks.push_back({ nodeIdx, A, B });
 			Fork* forkNode = new Fork(nodeIdx, (Fork::ForkType)forkType);
 			allScriptNodes[nodeIdx] = forkNode;
 

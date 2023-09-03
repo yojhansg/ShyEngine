@@ -278,6 +278,7 @@ namespace ShyEditor {
         if (ImGui::Button("Open Project", ImVec2(w / 2.0f, h / 15.0f))) {
 
             // Input validation
+
             bool valid = ValidateInputOnOpenProject();
 
             if (valid) {
