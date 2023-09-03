@@ -107,7 +107,7 @@ namespace ShyEditor {
 		void ToDelete();
 
 		// Entity children and parent logic
-		void SetParent(Entity* entity);
+		void SetParent(Entity* entity, bool adjustToParent = true);
 		Entity* GetParent();
 		void RemoveChild(Entity* entity);
 		void AddChild(Entity* entity);

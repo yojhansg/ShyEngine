@@ -546,13 +546,15 @@ namespace ShyEditor {
 
 	// --------------------------------- Entity children and parent logic ------------------------------------
 
-	void Entity::SetParent(Entity* entity) {
+	void Entity::SetParent(Entity* entity, bool adjustToParent) {
 
 		SetTransformToWorldValues();
 
 		parent = entity;
 
-		SetTransformRelativeToNewParent();
+		if (adjustToParent) {
+			SetTransformRelativeToNewParent();
+		}
 	}
 
 	Entity* Entity::GetParent() {
@@ -1120,6 +1122,10 @@ namespace ShyEditor {
 
 		entity->prefabId = jsonData["prefabId"];
 
+		if (entity->prefabId != 0) {
+			PrefabManager::AddInstance(entity->prefabId, entity->id);
+		}
+
 		if (!jsonData.contains("id")) {
 			LogManager::LogError(errorMsg);
 			return nullptr;
@@ -1223,8 +1229,7 @@ namespace ShyEditor {
 			Entity* child = Entity::FromJson(childJson);
 
 			entity->AddChild(child);
-			child->SetParent(entity);
-
+			child->SetParent(entity, false);
 		}
 
 		return entity;
