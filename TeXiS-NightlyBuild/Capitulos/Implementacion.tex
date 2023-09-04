@@ -22,6 +22,14 @@ de guardar y cargar escenas desde archivos en formato JSON, así como también la 
 elementos presentes en la escena. La clase \texttt{Scene} incluye una cámara virtual que se integra en la escena y permite al usuario explorar y visualizar el entorno 
 desde diferentes perspectivas.
 
+\subsubsection{Renderizado de las entidades y cámara virtual}
+Para renderizar la escena, la cámara virtual contiene una textura de destino (texture target) donde se renderizarán todas las entidades utilizando la biblioteca SDL.
+Este proceso tiene en cuenta la posición, tamaño y nivel de zoom de la cámara virtual. Una vez que todas las entidades se han renderizado en esta textura, se utiliza 
+una ventana de ImGUI para renderizar esa textura target y mostrar la escena completa en la ventana principal del editor. Esto proporciona una representación visual 
+precisa de la escena, permitiendo al usuario ver todos los elementos presentes en la misma.
+
+Es importante destacar que las entidades y las superposiciones (overlays) no se manejan de la misma manera en el proceso de renderizado, como se habla en  (REFERENCIA).
+
 \subsubsection{Métodos relevantes de la clase \texttt{Scene}}
 
 \begin{itemize}
@@ -64,10 +72,6 @@ desde diferentes perspectivas.
 
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
-
-\medskip
-
-\textbf{\textit{TODO: Mostrar imagenes de las distintas escenas ¿?\ldots}}
 
 %------------------------------------------------ ENTIDADES --------------------------------------------
 
@@ -137,12 +141,12 @@ relativos.
 \subsubsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
 
 \begin{itemize}
-    \item \texttt{AddChild()}: Este método permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
+    \item \texttt{AddChild()}: permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
     
-    \item \texttt{RemoveChild()}: Usando \texttt{RemoveChild()}, es posible eliminar una entidad de la lista de hijos de la entidad actual, rompiendo la relación 
+    \item \texttt{RemoveChild()}: permite eliminar una entidad de la lista de hijos de la entidad actual, rompiendo la relación 
     jerárquica.
     
-    \item \texttt{SetParent()}: El método \texttt{SetParent()} se encarga de establecer la entidad padre de la entidad actual, ajustando sus valores locales de 
+    \item \texttt{SetParent()}: se encarga de establecer la entidad padre de la entidad actual, ajustando sus valores locales de 
     transformación de acuerdo con la jerarquía. También es posible llamar al método con \textit{nullptr} establecer que la entidad carece de padre.
     
 \end{itemize}
@@ -150,33 +154,33 @@ relativos.
 \subsubsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
 
 \begin{itemize}
-    \item \texttt{GetWorldPosition()}: Con \texttt{GetWorldPosition()}, se obtiene la posición global de la entidad, considerando la transformación jerárquica 
+    \item \texttt{GetWorldPosition()}: se obtiene la posición global de la entidad, considerando la transformación jerárquica 
     en la estructura.
-    \item \texttt{GetWorldScale()}: Al utilizar \texttt{GetWorldScale()}, se obtiene la escala global de la entidad, considerando la estructura jerárquica.
+    \item \texttt{GetWorldScale()}: se obtiene la escala global de la entidad, considerando la estructura jerárquica.
     
-    \item \texttt{GetWorldRotation()}: \texttt{GetWorldRotation()} devuelve la rotación global de la entidad, teniendo en cuenta la jerarquía en la transformación.
+    \item \texttt{GetWorldRotation()}:devuelve la rotación global de la entidad, teniendo en cuenta la jerarquía en la transformación.
 
-    \item \texttt{SetWorldPosition()}: \texttt{SetWorldPosition()} permite establecer la posición global de la entidad, ajustando sus valores locales y considerando 
+    \item \texttt{SetWorldPosition()}: permite establecer la posición global de la entidad, ajustando sus valores locales y considerando 
     la jerarquía.
     
-    \item \texttt{SetWorldScale()}: Con \texttt{SetWorldScale()}, es posible establecer la escala global de la entidad, ajustando sus valores locales y 
+    \item \texttt{SetWorldScale()}: permite establecer la escala global de la entidad, ajustando sus valores locales y 
     respetando la jerarquía.
 
     \item \texttt{SetWorldRotation()}: Este método, \texttt{SetWorldRotation()}, se utiliza para establecer la rotación global de la entidad, considerando 
     la jerarquía y ajustando sus valores locales.
 
 
-    \item \texttt{GetLocalPosition()}: \texttt{GetLocalPosition()} devuelve la posición local de la entidad, que es relativa a su entidad padre en la jerarquía.
+    \item \texttt{GetLocalPosition()}: devuelve la posición local de la entidad, que es relativa a su entidad padre en la jerarquía.
     
-    \item \texttt{GetLocalScale()}: \texttt{GetLocalScale()} devuelve la escala local de la entidad, que se relaciona con su entidad padre en la jerarquía.
+    \item \texttt{GetLocalScale()}: devuelve la escala local de la entidad, que se relaciona con su entidad padre en la jerarquía.
 
-    \item \texttt{GetLocalRotation()}: \texttt{GetLocalRotation()} devuelve la rotación local de la entidad, en relación con su entidad padre en la jerarquía.
+    \item \texttt{GetLocalRotation()}: devuelve la rotación local de la entidad, en relación con su entidad padre en la jerarquía.
 
-    \item \texttt{SetLocalPosition()}: \texttt{SetLocalPosition()} permite establecer la posición local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalPosition()}: permite establecer la posición local de la entidad, considerando su entidad padre en la jerarquía.
     
-    \item \texttt{SetLocalScale()}: \texttt{SetLocalScale()} permite establecer la escala local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalScale()}: permite establecer la escala local de la entidad, considerando su entidad padre en la jerarquía.
     
-    \item \texttt{SetLocalRotation()}: \texttt{SetLocalRotation()} permite establecer la rotación local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalRotation()}: permite establecer la rotación local de la entidad, considerando su entidad padre en la jerarquía.
 
 \end{itemize}
 
@@ -293,10 +297,37 @@ En resumen, los componentes y su relación con las entidades en el motor permiten
 precisa de la funcionalidad de cada elemento en el mundo virtual, enriqueciendo la experiencia del usuario y posibilitando un proceso 
 de desarrollo más fluido y adaptativo.
 
+\subsection{Ejecución del juego, estructura de carpetas y build del motor}
+\subsubsection{Ejecución del juego y redirección de la salida mediante tuberías}
+La ejecución del juego en nuestro editor se maneja a través de dos botones ubicados en la parte superior, que permiten ejecutar el juego en modo de 
+depuración (\textit{debug}) o en modo de lanzamiento (\textit{release}). Estos botones invocan el método \texttt{play()} de la clase \texttt{Game}. 
+El método \texttt{play()} se encarga de configurar una tubería para redirigir la salida del juego hacia el editor, y ser mostrado así en la consola. 
+Además, inicia un hilo que se encarga de capturar y guardar los datos provenientes de esa tubería. Cuando el juego se cierra, se llama al método 
+\texttt{stop()}, que cierra el hilo y finaliza el proceso del juego de manera ordenada.
+
+\subsubsection{Estructura de carpetas}
+En cuanto a la estructura de carpetas, en la solución del Editor se encuentra una carpeta Editor dedicada para almacenar los (\textit{assets}) y 
+configuraciones necesarios para el proyecto. Dentro de esta carpeta, se encuentra otra denominada Engine que alberga los ejecutables y recursos generados a partir 
+de la (\textit{build}) del motor del juego.Por otro lado, al ejecutar el editor, se creará una carpeta adicional a través del Project Manager que contendrá exclusivamente 
+los recursos específicos de nuestro proyecto de videojuego.
+
+IMAGEN
+
+\subsubsection{Build del motor}
+Para realizar la construcción del motor, es esencial configurar el directorio de salida en la ubicación mencionada anteriormente. Además, se requiere 
+copiar los archivos Components.json y Managers.json desde la carpeta ecs/ECSUtilities hacia esta misma carpeta, asegurando que todos los recursos necesarios 
+estén disponibles para el funcionamiento adecuado del motor.
+
+En resumen, la ejecución del juego se gestiona mediante botones en el editor, con un sistema que redirige la salida y captura los datos del juego. 
+La estructura de carpetas está organizada de manera que los activos y configuraciones se encuentren separados de los recursos generados por la construcción del motor, 
+facilitando así la gestión del proyecto.
+
 
 \subsection{Scripts}
 
 \textbf{\textit{TODO: Completar\ldots}}
+
+
 
 %-------------------------------------------------------------------
 \section{Motor}
@@ -649,7 +680,7 @@ Estos métodos son los siguientes:
 
 \item OnSceneDown: Método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
 
-\item OnDestory: Método llamado cuando el componente es eliminado.
+\item OnDestroy: Método llamado cuando el componente es eliminado.
 
 \end{itemize}
 

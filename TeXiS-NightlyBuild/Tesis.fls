@@ -323,6 +323,10 @@ INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi6.
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
+INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 OUTPUT Tesis.toc
 INPUT .\Capitulos\Introduccion.tex
 INPUT .\Capitulos\Introduccion.tex
@@ -330,10 +334,6 @@ OUTPUT Capitulos\Introduccion.aux
 INPUT .\Capitulos\Introduccion.tex
 INPUT .\Capitulos\Introduccion.tex
 INPUT Capitulos\Introduccion.tex
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\tex\latex\base\t1cmtt.fd
-INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1095.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbi1095.tfm
 INPUT C:\Users\Ivanof18\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
 INPUT .\Capitulos\EstadoDelArte.tex
