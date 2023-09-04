@@ -20,6 +20,7 @@ Scripting::ScriptManager::ScriptManager()
 {
 	nodeIteration = 0;
 	currentScript = nullptr;
+	collidedEntity = nullptr;
 	FunctionManager::CreateFunctionMap(functionMap);
 }
 
@@ -48,6 +49,16 @@ Scripting::Variable Scripting::ScriptManager::GetGlobal(std::string const& name)
 	}
 
 	return globalAttributes[name];
+}
+
+void Scripting::ScriptManager::SetCollidedEntity(ECS::Entity* entity)
+{
+	collidedEntity = entity;
+}
+
+ECS::Entity* Scripting::ScriptManager::GetCollidedEntity()
+{
+	return collidedEntity;
 }
 
 void Scripting::ScriptManager::CollectionCreate(cstring name, int size)

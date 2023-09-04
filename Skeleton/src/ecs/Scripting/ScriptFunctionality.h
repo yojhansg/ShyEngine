@@ -45,6 +45,8 @@ publish:
 	std::string Entity_Name(ECS::Entity* ent);
 	std::string Entity_CurrentName();
 
+	ECS::Entity* Entity_Collided();
+
 	// TODO: No me convence el nombre
 	void Event_EntityEvent(ECS::Entity* ent, cstring name);
 	void Event_GlobalEvent(cstring name);
