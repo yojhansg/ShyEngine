@@ -1,0 +1,60 @@
+{
+    "name": "Win",
+    "position": "-0.000000, -0.000000",
+    "scale": 1.0,
+    "objects": [
+        {
+            "name": "background",
+            "id": 1,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "-5.789233, 5.000108",
+            "localScale": "2.458814, 2.012642",
+            "localRotation": "0.000003",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "background.png"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ],
+    "overlays": [
+        {
+            "name": "Win text",
+            "id": 2,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": false,
+            "placement": "0",
+            "anchor": "0.500000,0.500000",
+            "top": "88",
+            "left": "328",
+            "right": "-328",
+            "bottom": "-88",
+            "position": "933.748535, 536.999146",
+            "size": "912.499268, 297.999695",
+            "components": [
+                {
+                    "component": "OverlayText",
+                    "attributes": {
+                        "text": "YOU WIN",
+                        "font": "Default.ttf",
+                        "fontSize": "206.000000",
+                        "horizontalAlignment": "0.000000",
+                        "verticalAlignment": "1.000000",
+                        "fit": "0.000000",
+                        "lineSpacing": "0.000000"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ]
+}

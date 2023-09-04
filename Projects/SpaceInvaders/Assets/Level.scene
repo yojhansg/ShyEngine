@@ -1,5 +1,5 @@
 {
-    "name": "Scene",
+    "name": "Level",
     "position": "-0.000000, -0.000000",
     "scale": 1.0,
     "objects": [
@@ -14,7 +14,7 @@
                     "order": 0,
                     "prefabId": 0,
                     "isTransform": true,
-                    "localPosition": "-850.000000, 0.000000",
+                    "localPosition": "-850.000000, -0.000000",
                     "localScale": "0.430000, 16.540001",
                     "localRotation": "0.000000",
                     "components": [
@@ -126,16 +126,16 @@
                 }
             ],
             "scripts": {
-                "Scripts/Ship movement": {
-                    "Speed": {
-                        "type": "float",
-                        "value": 5.0
-                    }
-                },
                 "Scripts/Shoot": {
                     "PrefabName": {
                         "type": "string",
                         "value": "bullet"
+                    }
+                },
+                "Scripts/Ship movement": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 5.0
                     }
                 },
                 "Scripts/Bullet Cooldown": {
@@ -153,7 +153,7 @@
             "order": -2,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "-13.333836, -4.762376",
+            "localPosition": "6.696740, 27.598717",
             "localScale": "2.445358, 2.014811",
             "localRotation": "0.000000",
             "components": [
@@ -167,14 +167,14 @@
             "scripts": null
         },
         {
-            "name": "Right limit",
-            "id": 25,
+            "name": "DeathZone",
+            "id": 27,
             "childs": [],
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "850.000000, -0.000000",
-            "localScale": "0.434764, 16.544149",
+            "localPosition": "0.000000, -444.000000",
+            "localScale": "19.400000, 1.040000",
             "localRotation": "0.000000",
             "components": [
                 {
@@ -185,48 +185,24 @@
                         "bodyType": "0.000000",
                         "mass": "1.000000",
                         "bounciness": "0.000000",
-                        "trigger": "false",
+                        "trigger": "true",
                         "freezeRotation": "false",
-                        "gravityScale": "0.000000",
+                        "gravityScale": "1.000000",
                         "friction": "0.000000",
                         "linearDamping": "0.000000",
                         "angularDamping": "0.000000",
-                        "layerName": "Limits"
+                        "layerName": "DeathZone"
                     }
                 }
             ],
-            "scripts": null
-        },
-        {
-            "name": "Right limit",
-            "id": 26,
-            "childs": [],
-            "order": 0,
-            "prefabId": 0,
-            "isTransform": true,
-            "localPosition": "850.000000, -0.000000",
-            "localScale": "0.434764, 16.544149",
-            "localRotation": "0.000000",
-            "components": [
-                {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "1.000000, 1.000000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "0.000000",
-                        "mass": "1.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "false",
-                        "gravityScale": "0.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": "Limits"
+            "scripts": {
+                "Scripts/DeathZone": {
+                    "Lose scene": {
+                        "type": "string",
+                        "value": "Lose.scene"
                     }
                 }
-            ],
-            "scripts": null
+            }
         },
         {
             "name": "Aliens",
@@ -236,50 +212,6 @@
                     "name": "Row 1",
                     "id": 12,
                     "childs": [
-                        {
-                            "name": "alien",
-                            "id": 3,
-                            "childs": [],
-                            "order": 0,
-                            "prefabId": -1,
-                            "isTransform": true,
-                            "localPosition": "-540.000000, 440.000000",
-                            "localScale": "1.000000, 1.000000",
-                            "localRotation": "0.000000",
-                            "components": [
-                                {
-                                    "component": "Image",
-                                    "attributes": {
-                                        "fileName": "alien2.png"
-                                    }
-                                },
-                                {
-                                    "component": "BoxBody",
-                                    "attributes": {
-                                        "size": "0.000000, 0.000000",
-                                        "offSet": "0.000000, 0.000000",
-                                        "bodyType": "2.000000",
-                                        "mass": "1.000000",
-                                        "bounciness": "0.000000",
-                                        "trigger": "false",
-                                        "freezeRotation": "false",
-                                        "gravityScale": "1.000000",
-                                        "friction": "0.000000",
-                                        "linearDamping": "0.000000",
-                                        "angularDamping": "0.000000",
-                                        "layerName": "Alien"
-                                    }
-                                }
-                            ],
-                            "scripts": {
-                                "Scripts/Alien Horizontal Movement": {
-                                    "Speed": {
-                                        "type": "float",
-                                        "value": 2.0
-                                    }
-                                }
-                            }
-                        },
                         {
                             "name": "alien",
                             "id": 11,
@@ -319,7 +251,51 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien",
+                            "id": 3,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-540.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                },
+                                {
+                                    "component": "BoxBody",
+                                    "attributes": {
+                                        "size": "0.000000, 0.000000",
+                                        "offSet": "0.000000, 0.000000",
+                                        "bodyType": "2.000000",
+                                        "mass": "1.000000",
+                                        "bounciness": "0.000000",
+                                        "trigger": "false",
+                                        "freezeRotation": "false",
+                                        "gravityScale": "1.000000",
+                                        "friction": "0.000000",
+                                        "linearDamping": "0.000000",
+                                        "angularDamping": "0.000000",
+                                        "layerName": "Alien"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "float",
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -363,7 +339,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -407,7 +383,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -451,7 +427,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -495,7 +471,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -539,7 +515,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -583,7 +559,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -641,7 +617,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -685,7 +661,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -729,7 +705,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -773,7 +749,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -817,7 +793,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -861,7 +837,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -905,7 +881,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -949,7 +925,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1007,7 +983,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1051,7 +1027,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1095,7 +1071,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1139,7 +1115,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1183,7 +1159,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1227,7 +1203,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1271,7 +1247,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1315,7 +1291,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 2.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1335,10 +1311,20 @@
             "prefabId": 0,
             "isTransform": true,
             "localPosition": "0.000000, 7.499991",
-            "localScale": "0.314026, 0.314026",
+            "localScale": "0.310000, 0.310000",
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
+                "Scripts/AlienManager": {
+                    "Alien count": {
+                        "type": "float",
+                        "value": 24.0
+                    },
+                    "Win Scene": {
+                        "type": "string",
+                        "value": "Win.scene"
+                    }
+                },
                 "Scripts/Alien Vertical Movement": {
                     "Jump distance": {
                         "type": "Vector2D",
