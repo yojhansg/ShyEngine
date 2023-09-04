@@ -14,8 +14,8 @@
                     "order": 0,
                     "prefabId": 0,
                     "isTransform": true,
-                    "localPosition": "-850.000000, -0.000000",
-                    "localScale": "0.434764, 16.544149",
+                    "localPosition": "-850.000000, 0.000000",
+                    "localScale": "0.430000, 16.540001",
                     "localRotation": "0.000000",
                     "components": [
                         {
@@ -23,16 +23,16 @@
                             "attributes": {
                                 "size": "1.000000, 1.000000",
                                 "offSet": "0.000000, 0.000000",
-                                "bodyType": "1.000000",
-                                "mass": "0.000000",
+                                "bodyType": "0.000000",
+                                "mass": "1.000000",
                                 "bounciness": "0.000000",
-                                "trigger": "true",
+                                "trigger": "false",
                                 "freezeRotation": "false",
-                                "gravityScale": "1.000000",
+                                "gravityScale": "0.000000",
                                 "friction": "0.000000",
                                 "linearDamping": "0.000000",
                                 "angularDamping": "0.000000",
-                                "layerName": "Default"
+                                "layerName": "Limits"
                             }
                         }
                     ],
@@ -54,16 +54,16 @@
                             "attributes": {
                                 "size": "1.000000, 1.000000",
                                 "offSet": "0.000000, 0.000000",
-                                "bodyType": "1.000000",
-                                "mass": "0.000000",
+                                "bodyType": "0.000000",
+                                "mass": "1.000000",
                                 "bounciness": "0.000000",
-                                "trigger": "true",
+                                "trigger": "false",
                                 "freezeRotation": "false",
-                                "gravityScale": "1.000000",
+                                "gravityScale": "0.000000",
                                 "friction": "0.000000",
                                 "linearDamping": "0.000000",
                                 "angularDamping": "0.000000",
-                                "layerName": "Default"
+                                "layerName": "Limits"
                             }
                         }
                     ],
@@ -106,27 +106,36 @@
                     "attributes": {
                         "fileName": "ship.png"
                     }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "1.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Ship"
+                    }
                 }
             ],
             "scripts": {
+                "Scripts/Ship movement": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 5.0
+                    }
+                },
                 "Scripts/Shoot": {
                     "PrefabName": {
                         "type": "string",
                         "value": "bullet"
-                    }
-                },
-                "Scripts/Ship movement": {
-                    "Left Limit": {
-                        "type": "Entity",
-                        "value": 1
-                    },
-                    "Right Limit": {
-                        "type": "Entity",
-                        "value": 6
-                    },
-                    "Speed": {
-                        "type": "Vector2D",
-                        "value": "4.000000, 0.000000"
                     }
                 },
                 "Scripts/Bullet Cooldown": {
@@ -144,7 +153,7 @@
             "order": -2,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "-7.619555, 2.856665",
+            "localPosition": "-13.333836, -4.762376",
             "localScale": "2.445358, 2.014811",
             "localRotation": "0.000000",
             "components": [
@@ -152,6 +161,68 @@
                     "component": "Image",
                     "attributes": {
                         "fileName": "background.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "Right limit",
+            "id": 25,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "850.000000, -0.000000",
+            "localScale": "0.434764, 16.544149",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "1.000000, 1.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "0.000000",
+                        "mass": "1.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Limits"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "Right limit",
+            "id": 26,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "850.000000, -0.000000",
+            "localScale": "0.434764, 16.544149",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "1.000000, 1.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "0.000000",
+                        "mass": "1.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Limits"
                     }
                 }
             ],
@@ -196,7 +267,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -240,7 +311,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -284,7 +355,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -328,7 +399,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -372,7 +443,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -416,7 +487,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -460,7 +531,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -504,7 +575,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -562,7 +633,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -606,7 +677,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -650,7 +721,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -694,7 +765,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -738,7 +809,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -782,7 +853,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -826,7 +897,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -870,7 +941,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -928,7 +999,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -972,7 +1043,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1016,7 +1087,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1060,7 +1131,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1104,7 +1175,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1148,7 +1219,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1192,7 +1263,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1236,7 +1307,7 @@
                                         "friction": "0.000000",
                                         "linearDamping": "0.000000",
                                         "angularDamping": "0.000000",
-                                        "layerName": "Default"
+                                        "layerName": "Alien"
                                     }
                                 }
                             ],
@@ -1263,8 +1334,8 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.000000, 0.000000",
-            "localScale": "1.000000, 1.000000",
+            "localPosition": "0.000000, 7.499991",
+            "localScale": "0.314026, 0.314026",
             "localRotation": "0.000000",
             "components": [],
             "scripts": {

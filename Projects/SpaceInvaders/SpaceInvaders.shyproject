@@ -34,7 +34,7 @@
                             "friction": "0.000000",
                             "linearDamping": "0.000000",
                             "angularDamping": "0.000000",
-                            "layerName": "Default"
+                            "layerName": "Alien"
                         }
                     }
                 ],
@@ -54,8 +54,8 @@
                 "order": 0,
                 "prefabId": 0,
                 "isTransform": true,
-                "localPosition": "-0.000000, -306.666229",
-                "localScale": "0.200141, 0.200141",
+                "localPosition": "0.000000, -339.549988",
+                "localScale": "0.155393, 0.080000",
                 "localRotation": "0.000000",
                 "components": [
                     {
@@ -67,9 +67,9 @@
                     {
                         "component": "BoxBody",
                         "attributes": {
-                            "size": "0.000000, 0.000000",
+                            "size": "0.500000, 0.500000",
                             "offSet": "0.000000, 0.000000",
-                            "bodyType": "2.000000",
+                            "bodyType": "1.000000",
                             "mass": "1.000000",
                             "bounciness": "0.000000",
                             "trigger": "true",
@@ -78,7 +78,7 @@
                             "friction": "0.000000",
                             "linearDamping": "0.000000",
                             "angularDamping": "0.000000",
-                            "layerName": "Default"
+                            "layerName": "Bullet"
                         }
                     }
                 ],
