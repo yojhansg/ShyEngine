@@ -34,6 +34,8 @@ namespace ShyEditor {
 
 	Preferences::Preferences() : Window("Preferences", 0)
 	{
+		canBeDisplayedOnTop = true;
+
 		instance = this;
 
 		open = false;
