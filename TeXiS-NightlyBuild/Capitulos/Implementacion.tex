@@ -600,3 +600,142 @@ para el usuario y una serie de managers como el de escenas, prefabs, referencias
 
 Para empezar, la idea un sistema de componentes y entidades es la siguiente: 
 
+Es un patrón de diseño utilizado en el desarrollo de videojuegos y otros sistemas interactivos para organizar y gestionar la lógica
+y la funcionalidad de los objetos dentro del juego. En lugar de utilizar una jerarquía de clases tradicional o un sistema basado en 
+objetos, el ECS descompone los elementos del juego en dos partes principales: entidades y componentes.
+
+\begin{itemize}
+
+\item Entidades: Las entidades son objetos vacíos que actúan como contenedores para componentes. Cada entidad representa un objeto o 
+entidad en el juego, como un personaje, un enemigo, un objeto interactivo, etc. Las entidades no tienen lógica o comportamiento en sí mismas,
+simplemente contienen uno o más componentes.
+
+\item Componentes: Los componentes son bloques de datos y lógica que contienen información específica sobre el comportamiento o las propiedades de una
+entidad en el juego. Cada componente se enfoca en una única funcionalidad o característica del objeto. Por ejemplo, puedes tener un componente 
+de "Posición" para almacenar la posición de una entidad en el mundo, un componente de "Renderizado" para pintar la entidad en la escena, un 
+componente de "Física" para gestionar su comportamiento físico, etc.
+
+\end{itemize}
+
+Para llevar a cabo la implementación de este sistema es imprescindible el uso de programación orientada a objetos (POO) junto con herencia
+y polimorfismo.
+
+En cuanto a las clases implementadas: 
+
+- Component: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o
+eliminado. Desde un componente se puede acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y 
+eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados por los componentes que hereden de esta clase.
+
+Estos métodos son los siguientes:
+
+\begin{itemize}
+
+\item Init: Método reservado para el motor donde se realiza toda la inicialización que necesita el componente para funcionar correctamente.
+
+\item Start: Método llamado inmediatamente después del Init donde el usuario puede realizar su propia inicialización. 
+
+\item Update: Método llamado en cada vuelta del bucle principal.
+
+\item LateUpdate: Método llamado en cada vuelta del bucle principal inmediatamente después del Update.
+
+\item Render: Método llamado después del Update y LateUpdate. Destinado a implementar el renderizado del componente.
+
+\item FixedUpdate: Método llamado en un intervalo de tiempo fijo denominado paso físico. Destinado a implementar la física del componente.
+
+\item OnActive: Método llamado cuando se activa el componente.
+
+\item OnDeactive: Método llamado cuando se desactiva el componente.
+
+\item OnSceneUp: Método llamado cuando el componente se encuentra en la escena que se acaba de empezar a actualizar.
+
+\item OnSceneDown: Método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
+
+\item OnDestory: Método llamado cuando el componente es eliminado.
+
+\end{itemize}
+
+Métodos para el manejo de colisiones: 
+
+\begin{itemize}
+
+\item OnCollisionEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad.
+
+\item OnCollisionStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad.
+
+\item OnCollisionExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad.
+
+\item OnTriggerEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad y, o bien 
+el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+\item OnTriggerStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad y, o bien 
+el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+\item OnTriggerExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad y, 
+o bien el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+Métodos para el Overlay (UI):
+
+\item OnClickBegin: Método llamado cuando se hace click sobre un elemento del componente Overlay de la entidad.
+
+\item OnClickHold: Método llamado cuando se mantiene clickado un elemento del componente Overlay de la entidad.
+
+\item OnDoubleClick: Método llamado cuando se hace doble click sobre un elemento del componente Overlay de la entidad.
+
+\item OnRightClick: Método llamado cuando se hace click derecho sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseEnter: Método llamado cuando el ratón entra sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseHover: Método llamado cuando el ratón se encuentra sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseExit: Método llamado cuando el ratón sale de un elemento del componente Overlay de la entidad.
+
+\end{itemize}
+
+- Entity: Clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de 
+componentes y otra de scripts asociados a esta entidad. Tiene información sobre el nombre de la entidad, su estado, activa y
+eliminada, un identificador y su orden de renderizado.
+
+En cuanto a funcionalidad, contiene los mismos métodos que los componentes pero con implementación. Esta implementación
+simplemente consiste en llamar a los métodos de todos los componentes asociados a la entidad. Por ejemplo, el método 
+Render de la entidad recorre la lista de componentes asociados y llama al método Render de cada uno. Aquí es donde
+entra la importancia de la herencia y el polimorfismo. Para crear un componente con funcionalidad, se debe heredar
+de la clase Componente e implementar los métodos virtuales disponibles. De esta manera, serán llamados por la entidad
+que contenga el componente creado.
+
+Además de los métodos de los componentes, las entidades tiene métodos para añadir componentes, consultar si contienen
+un componente, eliminar componentes y obtenerlos. Estos métodos hacen uso de templates de C++ con un tipo genérico 
+T y una restricción para asegurar que el T debe ser de tipo componente. Además, los parámetros de éstos métodos reciben
+un paquete de parámetros variados de categoria RValue, por lo que dentro se utiliza la función std::forward para preservar
+esa categoría y evitar así copias innecesarias y garantizar un comportamiento predecible.
+
+Por último mencionar que las entidades también tienen métodos para añadir scripts. La diferencia entre scripts y componentes
+es que, ambos definen lógica para el videojuego pero los componentes son comportamiento, en la mayoría de casos, fundamental 
+y genérico, que proporciona el motor al usuario y los scripts son piezas de lógica que construye el usuario a partir del
+sistema de scripting visual y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
+
+- Scene: La última pieza que compone este ECS son las escenas. Una escena es un conjunto de entidades. Es un concepto 
+importante en los videojuegos ya que normalmente se quiere dividir el juego en estados como menús, gameplay, inventario,
+pantallas de carga, mapa, etc. Contiene información sobre su nombre, la posición y escala de la cámara, y bastantes métodos
+comunes a las entidades y componentes. No todos porque hay algunos que no tienen sentido en las escenas, como los de físicas
+o los de UI. Al igual que las entidades, estos métodos cuentan con funcionalidad y simplemente se dedican a llamar al método
+correspondiente de cada una de las entidades que contiene. Por ejemplo, cuando se actualiza una escena, el método Update
+de la escena lo único que hace es llamar al Update de sus entidades comprobando si el estado de la entidad le permite actualizarse,
+es decir, que esté activa y no esté eliminada.
+
+Además, las escenas cuentan con métodos para crear entidades con identificador y sin identificador, buscar entidades por nombre, 
+y eliminar entidades.
+
+
+\subsubsection{Managers}
+
+- SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
+La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
+
+1.- Operación PUSH: Cuando se cambia una escena y se especifica está operación, añade la escena al top de la pila, por lo que la escena
+añadida pasa a ser la que se actualiza en el juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está 
+actualmente en el top para avisar de que esa escena va a dejar de actualizarse. Posteriormente, una vez añadida al top...
+
+
+
+
+
