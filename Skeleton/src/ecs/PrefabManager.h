@@ -41,9 +41,8 @@ namespace ECS {
 		// Informacion del JSON parseado
 		std::unordered_map<std::string, nlohmann::json> prefabsWithTransform;
 
-		std::unordered_map<std::string, nlohmann::json> prefabsWithOverlay;
+		std::unordered_map<std::string, nlohmann::json> prefabsWithOverlay;	
 
-		// TODO IDs a los prefabs
 	};
 
 }
