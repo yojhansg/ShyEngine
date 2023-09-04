@@ -11,7 +11,55 @@
 %-------------------------------------------------------------------
 \label{cap4:sec:editor}
 
+
+
+
+
 %------------------------------------------------ GESTION DE ESCENAS --------------------------------------------
+
+\subsection{ImGUI}
+
+ImGui es una biblioteca de interfaz de usuario (UI) que se destaca por su enfoque inmediato, generando la interfaz de usuario de manera efímera 
+en cada fotograma en lugar de mantener objetos de UI a largo plazo. Esto simplifica el desarrollo y es ampliamente utilizado en la creación de ventanas, 
+popups, botones, campos de texto y más. ImGui es de código abierto y está disponible en varios lenguajes de programación, lo que lo hace accesible para una 
+amplia gama de desarrolladores.
+
+Además, en nuestro proyecto, hemos aprovechado la funcionalidad de docking de ImGui, que permite conectar ventanas entre sí de manera flexible. 
+Esto significa que los usuarios pueden organizar y anclar ventanas según sus preferencias, lo que facilita la personalización de la interfaz de usuario del editor. 
+
+
+\subsubsection{Ventanas y Popups}
+ImGui facilita la creación de ventanas y popups de manera intuitiva y eficaz. Esto permite organizar y presentar información de manera clara y ordenada 
+en la interfaz del editor. Los métodos de ImGui, como Begin(), End(), OpenPopup(), y CloseCurrentPopup(), son utilizados para gestionar ventanas y 
+popups de manera dinámica.
+
+\subsubsection{Selección y Dropdowns}
+La biblioteca ImGui proporciona elementos interactivos como espacios con texto seleccionables y dropdowns. Los espacios con texto seleccionables permiten a 
+los usuarios interactuar con información específica, mientras que los dropdowns ofrecen opciones ocultas que se despliegan cuando el usuario lo requiere, 
+mejorando la experiencia de usuario y la organización de la información.
+
+\subsubsection{Inputs}
+Para la entrada de datos, ImGui ofrece una variedad de métodos útiles. InputText(), por ejemplo, permite a los usuarios ingresar texto en campos designados. 
+Además, se pueden utilizar otros métodos como InputInt(), InputFloat(), y InputDouble() para gestionar diferentes tipos de datos de entrada.
+
+\subsubsection{Recepción y Envío de Assets Entre Ventanas}
+ImGui es especialmente útil para recibir y enviar activos (assets) entre ventanas del editor. Esto se logra mediante la implementación de 
+ventanas de ImGui que permiten la interacción del usuario para cargar, modificar o eliminar activos. Por ejemplo, se puede utilizar ImGui para agregar
+assets al explorador de archivos o para crear entidades arrastrando y soltando imágenes en la escena.
+
+\subsubsection{Inicialización}
+Para inicializar ImGUI con SDL hemos seguido un procedimiento específico. Primero, se debe iniciar SDL, 
+que es la biblioteca Simple DirectMedia Layer utilizada para la gestión de ventanas y gráficos. Luego, se crea el contexto de ImGui utilizando
+ImGui::CreateContext(). Finalmente, se configuran las conexiones con la plataforma y el renderizador utilizando las funciones correspondientes, como:
+
+\begin{verbatim}
+ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+ImGui_ImplSDLRenderer2_Init(renderer);
+\end{verbatim}
+
+Este proceso asegura que ImGui funcione de manera efectiva junto con SDL en el proyecto.
+
+
 
 \subsection{Gestión de Escenas}
 
