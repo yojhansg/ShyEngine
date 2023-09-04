@@ -6,13 +6,6 @@
 
 \chapter{Motor}
 
-En este capítulo...
-
-%-------------------------------------------------------------------
-\section{Motor}
-%-------------------------------------------------------------------
-\label{cap4:sec:motor}
-
 El motor esta dividio en diez proyectos de Visual Studio, todos dentro de la misma solución.
 Cada proyecto cumple una función específica de la que pueden depender otros proyectos. 
 
@@ -21,7 +14,7 @@ Todo el código está escrito en C++.
 A continuación se entrará en detalle sobre la función y detalles de implementación de cada
 proyecto y de las librerías asociadas al mismo, si las tiene.
 
-\subsection{Proyecto de utilidades}
+\section{Utilidades}
 
 El objetivo de este proyecto es implementar código común que pueden necesitar el resto 
 de proyectos evitando así la duplicación de código innecesaria.
@@ -60,7 +53,7 @@ en el orden adecuado si dependen entre ellos.
 
 \end{itemize}
 
-\subsection{Proyecto de recursos}
+\section{Recursos}
 
 El objetivo de este proyecto es proporcionar un contenedor de recursos en el que se van a guardar
 todos los recursos del videojuego. En concreto, el tipo de recursos que se pueden guardar son fuentes
@@ -81,7 +74,7 @@ el archivo también esta duplicado y es responsabilidad del desarrollador ordenar
 Por último, en la destructora de la clase se borran todos los recursos de todos los mapas.
 
 
-\subsection{Proyecto de sonido}
+\section{Sonido}
 
 El objetivo de este proyecto es construir un envoltorio sobre la librería de audio SDLMixer para
 poder implementar posteriormente los componentes MusicEmitter y SoundEmitter.
@@ -128,7 +121,7 @@ por lo que el problema de los canales desaparece. Las funciones disponibles son:
 fade-out, pausar, detener, renaudar, modificar el volumen de la música y rebobinar.
 
 
-\subsection{Proyecto de input}
+\section{Input}
 
 Este proyecto tiene como objetivo implementar un manager, también Singleton, que contendrá la información del
 estado de las teclas/botones de los dispositivos de entrada. En concreto, cuenta con soporte para teclado,
@@ -198,7 +191,7 @@ salto o acción. Estos métodos usan la información que se haya establecido en el 
 que se desean usar para moverse, saltar o realizar una acción.
 
 
-\subsection{Proyecto de consola}
+\section{Consola}
 
 Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada
 con el mostrado de la salida estándar por la consola.
@@ -211,7 +204,7 @@ consola del editor. Se utiliza una tubería o pipe para conectar la consola del m
 se cuenta más en detalle en el apartado de editor.
 
 
-\subsection{Proyecto de físicas}
+\section{Físicas}
 
 Este proyecto tiene como objetivo implementar un envoltorio sobre la librería de físicas Box2D para proporcionar
 una API sencilla para el usuario y para desarrollar los componentes de colisión y movimiento físico necesarios.
@@ -278,7 +271,7 @@ dibujar polígonos, círculos, segmentos y puntos. El dibujado se realiza con SDL 
 \end{itemize}
 
 
-\subsection{Proyecto de renderer}
+\section{Renderer}
 
 Este proyecto tiene como objetivo iniciar la librería de SDL y SDLImage.
 
@@ -304,7 +297,7 @@ Al igual que SoundEffect y MusicEffect, Font y Texture representan los recursos 
 para almacenar fuentes de texto e imágenes.
 
 
-\subsection{Proyecto de Entity-Component-System}
+\section{Entity-Component-System}
 
 Este es el proyecto más importante del motor. Implementa el sistema de entidades y componentes, componentes fundamentales
 para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
@@ -437,7 +430,7 @@ Además, las escenas cuentan con métodos para crear entidades con identificador y
 y eliminar entidades.
 
 
-\subsubsection{Managers}
+\subsection{Managers}
 
 - SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
 La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
@@ -470,7 +463,7 @@ poder elegir elegir el orden en el que se renderizan las entidades. Esto también
 - ReferencesManager: Encargado de manejar una relación entre las entidades y sus identificadores. // TODO Se va a cambiar
 
 
-\subsubsection{Componentes}
+\subsection{Componentes}
 
 - Transform: Contiene la información sobre la posición, rotación y escala de la entidad. Además implementa algunos métodos
 para rotar, escalar y mover la entidad.
@@ -499,14 +492,14 @@ las partículas con el motor de físicas Box2D.
 
 - PlatformController: Componente encargado de implmentar un movimiento de tipo plataformas.
 
-Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitar al usuario tener que implementarlos
+Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitan al usuario tener que implementarlos
 usando el sistema de scripting, lo que puede ser algo avanzado.
 
 //TODO Componentes de Overlay
 
 
 
-\section{Proyecto principal}
+\section{Main}
 
 Este proyecto implementa la clase Engine, encargada de inicializar el motor, ejecutar su bucle principal y cerrarlo una vez terminado.
 
