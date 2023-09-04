@@ -335,7 +335,7 @@ Vector2D Scripting::ScriptFunctionality::Vector2D_One()
 
 bool Scripting::ScriptFunctionality::Text_Equals(cstring a, cstring b)
 {
-	return a == b;
+	return strcmp(a.c_str(), b.c_str()) == 0;
 }
 
 std::string Scripting::ScriptFunctionality::Text_Concatenate(cstring a, cstring b)
@@ -851,4 +851,9 @@ Utilities::Vector2D Scripting::ScriptFunctionality::InputManager_GetMouseWorldPo
 void Scripting::ScriptFunctionality::OpenURL(cstring url) {
 
 	ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
+}
+
+ECS::Entity* Scripting::ScriptFunctionality::Entity_Collided()
+{
+	return Scripting::ScriptManager::instance()->GetCollidedEntity();
 }

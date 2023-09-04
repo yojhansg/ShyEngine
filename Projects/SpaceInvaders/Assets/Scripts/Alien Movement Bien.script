@@ -1,0 +1,370 @@
+{
+    "comments": [
+        {
+            "comment": "Collided entity = left limit?",
+            "h": 75.0,
+            "index": 6,
+            "w": 275.0,
+            "x": 1436.0,
+            "y": 939.0
+        },
+        {
+            "comment": "Collided entity = right limit?",
+            "h": 101.0,
+            "index": 7,
+            "w": 286.0,
+            "x": 1068.0,
+            "y": 985.0
+        },
+        {
+            "comment": "ON TRIGGER ENTER",
+            "h": 99.0,
+            "index": 14,
+            "w": 284.0,
+            "x": 42.0,
+            "y": 1572.0
+        },
+        {
+            "comment": "Speed inverted?",
+            "h": 101.0,
+            "index": 17,
+            "w": 286.0,
+            "x": 902.0,
+            "y": 2399.0
+        }
+    ],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 9,
+            "serialized": false,
+            "type": "string",
+            "value": "Speed inverted",
+            "x": 1293.0,
+            "y": 1952.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 11,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 1122.0,
+            "y": 1271.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 12,
+            "serialized": false,
+            "type": "bool",
+            "value": false,
+            "x": 1481.0,
+            "y": 1271.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 21,
+            "name": "Speed",
+            "serialized": true,
+            "type": "float",
+            "value": 5.0,
+            "x": 699.0,
+            "y": 3063.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 23,
+            "serialized": false,
+            "type": "float",
+            "value": -1.0,
+            "x": 721.0,
+            "y": 2659.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 25,
+            "serialized": false,
+            "type": "string",
+            "value": "Left limit",
+            "x": 69.0,
+            "y": 734.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 26,
+            "serialized": false,
+            "type": "string",
+            "value": "Right limit",
+            "x": 14.0,
+            "y": 1122.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 30,
+            "serialized": false,
+            "type": "string",
+            "value": "Speed inverted",
+            "x": 450.0,
+            "y": 3438.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 31,
+            "serialized": false,
+            "type": "bool",
+            "value": true,
+            "x": 462.0,
+            "y": 3803.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 33,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 1773.0,
+            "y": 2895.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 37,
+            "serialized": false,
+            "type": "string",
+            "value": "uygliyfhyi",
+            "x": 393.0,
+            "y": 1667.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "onTriggerEnter",
+            "x": 367.0,
+            "y": 1604.0
+        },
+        {
+            "index": 13,
+            "type": "update",
+            "x": 256.0,
+            "y": 2601.0
+        },
+        {
+            "index": 28,
+            "type": "start",
+            "x": 1104.0,
+            "y": 3734.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 10,
+            "B": -1,
+            "condition": 5,
+            "index": 4,
+            "type": 0,
+            "x": 1526.0,
+            "y": 1103.0
+        },
+        {
+            "A": 18,
+            "B": 19,
+            "condition": 15,
+            "index": 16,
+            "type": 0,
+            "x": 966.0,
+            "y": 2488.0
+        },
+        {
+            "A": 8,
+            "B": 4,
+            "condition": 2,
+            "index": 32,
+            "type": 0,
+            "x": 1159.0,
+            "y": 1103.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Entity_Collided",
+            "index": 1,
+            "input": [],
+            "x": 1064.0,
+            "y": 567.0
+        },
+        {
+            "function": "Text_Equals",
+            "index": 2,
+            "input": [
+                35,
+                3
+            ],
+            "x": 790.0,
+            "y": 888.0
+        },
+        {
+            "function": "Entity_Name",
+            "index": 3,
+            "input": [
+                1
+            ],
+            "x": 1062.0,
+            "y": 696.0
+        },
+        {
+            "function": "Text_Equals",
+            "index": 5,
+            "input": [
+                34,
+                3
+            ],
+            "x": 731.0,
+            "y": 1167.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 8,
+            "input": [
+                9,
+                11
+            ],
+            "x": 1139.0,
+            "y": 1572.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 10,
+            "input": [
+                9,
+                12
+            ],
+            "x": 1475.0,
+            "y": 1572.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 15,
+            "input": [
+                9
+            ],
+            "x": 1016.0,
+            "y": 1952.0
+        },
+        {
+            "function": "PhysicBody_setLinearVelocity",
+            "index": 18,
+            "input": [
+                20,
+                22,
+                33
+            ],
+            "x": 1461.0,
+            "y": 2461.0
+        },
+        {
+            "function": "PhysicBody_setLinearVelocity",
+            "index": 19,
+            "input": [
+                20,
+                21,
+                33
+            ],
+            "x": 1468.0,
+            "y": 2944.0
+        },
+        {
+            "function": "Entity",
+            "index": 20,
+            "input": [],
+            "x": 1814.0,
+            "y": 2550.0
+        },
+        {
+            "function": "Math_Multiply",
+            "index": 22,
+            "input": [
+                23,
+                21
+            ],
+            "x": 1087.0,
+            "y": 2683.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 24,
+            "input": [
+                25
+            ],
+            "x": 302.0,
+            "y": 729.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 27,
+            "input": [
+                26
+            ],
+            "x": 227.0,
+            "y": 1128.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 29,
+            "input": [
+                30,
+                31
+            ],
+            "x": 758.0,
+            "y": 3663.0
+        },
+        {
+            "function": "Entity_Name",
+            "index": 34,
+            "input": [
+                24
+            ],
+            "x": 517.0,
+            "y": 745.0
+        },
+        {
+            "function": "Entity_Name",
+            "index": 35,
+            "input": [
+                27
+            ],
+            "x": 425.0,
+            "y": 1126.0
+        },
+        {
+            "function": "Print",
+            "index": 36,
+            "input": [
+                37
+            ],
+            "x": 719.0,
+            "y": 1622.0
+        }
+    ],
+    "nodeCount": 38,
+    "onTriggerEnter": 36,
+    "serializedValues": [
+        {
+            "defaultValue": 5.0,
+            "name": "Speed",
+            "type": "float"
+        }
+    ],
+    "start": 29,
+    "update": 16
+}

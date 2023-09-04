@@ -64,6 +64,8 @@ namespace Scripting {
 		void SetGlobal(std::string const& name, Scripting::Variable const& val);
 		Scripting::Variable GetGlobal(std::string const& name);
 
+		void SetCollidedEntity(ECS::Entity* entity);
+		ECS::Entity* GetCollidedEntity();
 
 		void CollectionCreate(cstring name, int size);
 		void CollectionDestroy(cstring name);
@@ -82,6 +84,7 @@ namespace Scripting {
 
 		int nodeIteration;
 		ECS::Script* currentScript;
+		ECS::Entity* collidedEntity;
 
 		std::vector<Node*> allNodes;
 		std::unordered_map<std::string, ScriptNodes> scripts;

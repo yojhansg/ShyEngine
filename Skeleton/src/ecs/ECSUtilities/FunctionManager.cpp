@@ -307,6 +307,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Destroy_Entity",ScriptFunctionality_Destroy_Entity);
 	map.emplace("Entity_Name",ScriptFunctionality_Entity_Name);
 	map.emplace("Entity_CurrentName",ScriptFunctionality_Entity_CurrentName);
+	map.emplace("Entity_Collided",ScriptFunctionality_Entity_Collided);
 	map.emplace("Event_EntityEvent",ScriptFunctionality_Event_EntityEvent);
 	map.emplace("Event_GlobalEvent",ScriptFunctionality_Event_GlobalEvent);
 	map.emplace("Graph",ScriptFunctionality_Graph);
@@ -3777,6 +3778,11 @@ Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Varia
 Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	std::string ret = manager->Entity_CurrentName();
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Entity_Collided(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	ECS::Entity* ret = manager->Entity_Collided();
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Event_EntityEvent(std::vector<Scripting::Variable>const& vec){

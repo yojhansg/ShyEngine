@@ -1,0 +1,45 @@
+{
+    "name": "Scene",
+    "position": "-0.000000, -0.000000",
+    "scale": 1.0,
+    "objects": [
+        {
+            "name": "background",
+            "id": 6,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "193.332657, 683.200012",
+            "localScale": "16.540001, 1.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "background.png"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "0.000000",
+                        "mass": "0.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "true",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Default"
+                    }
+                }
+            ],
+            "scripts": null
+        }
+    ],
+    "overlays": []
+}

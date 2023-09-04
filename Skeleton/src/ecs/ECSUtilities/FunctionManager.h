@@ -273,6 +273,7 @@ Scripting::Variable ScriptFunctionality_Create_EntityWithOverlay(std::vector<Scr
 Scripting::Variable ScriptFunctionality_Destroy_Entity(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_Name(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Entity_CurrentName(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Entity_Collided(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Event_EntityEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Event_GlobalEvent(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Graph(std::vector<Scripting::Variable>const& vec);

@@ -15,33 +15,44 @@ void ECS::Script::update(float dt)
 
 void ECS::Script::onCollisionEnter(Entity* entity)
 {
-	//TODO: ver una forma de saber con que objeto he colisionado
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
 	Iteration(nodes.onCollisionEnter);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onCollisionStay(Entity* entity)
 {
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
 	Iteration(nodes.onCollisionStay);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onCollisionExit(Entity* entity)
 {
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
 	Iteration(nodes.onCollisionExit);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onTriggerEnter(Entity* entity)
 {
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
  	Iteration(nodes.onTriggerEnter);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onTriggerStay(Entity* entity)
 {
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
 	Iteration(nodes.onTriggerStay);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onTriggerExit(Entity* entity)
 {
+	Scripting::ScriptManager::instance()->SetCollidedEntity(entity);
 	Iteration(nodes.onTriggerExit);
+	Scripting::ScriptManager::instance()->SetCollidedEntity(nullptr);
 }
 
 void ECS::Script::onClick()

@@ -1,113 +1,16 @@
 {
-    "Creation Date": "2023-09-03 20:34:02",
-    "Last Opened Scene": "Level.scene",
+    "Creation Date": "2023-09-03 23:32:31",
+    "Last Opened Scene": "Scene.scene",
     "Prefabs": {
-        "prefabs": [
-            {
-                "name": "alien2",
-                "id": -1,
-                "childs": [],
-                "order": 0,
-                "prefabId": 0,
-                "isTransform": true,
-                "localPosition": "-301.500000, -93.500000",
-                "localScale": "1.000000, 1.000000",
-                "localRotation": "0.000000",
-                "components": [
-                    {
-                        "component": "Image",
-                        "attributes": {
-                            "fileName": "alien2.png"
-                        }
-                    }
-                ],
-                "scripts": {
-                    "Scripts/Alien Horizontal Movement": {
-                        "Speed": {
-                            "type": "Vector2D",
-                            "value": "1.000000, 0.000000"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "bullet",
-                "id": -2,
-                "childs": [],
-                "order": 0,
-                "prefabId": 0,
-                "isTransform": true,
-                "localPosition": "1.538243, -293.845825",
-                "localScale": "0.195575, 0.195575",
-                "localRotation": "0.000000",
-                "components": [
-                    {
-                        "component": "Image",
-                        "attributes": {
-                            "fileName": "bullet.png"
-                        }
-                    },
-                    {
-                        "component": "BoxBody",
-                        "attributes": {
-                            "size": "0.000000, 0.000000",
-                            "offSet": "0.000000, 0.000000",
-                            "bodyType": "2.000000",
-                            "mass": "1.000000",
-                            "bounciness": "0.000000",
-                            "trigger": "true",
-                            "freezeRotation": "false",
-                            "gravityScale": "0.000000",
-                            "friction": "0.000000",
-                            "linearDamping": "0.000000",
-                            "angularDamping": "0.000000",
-                            "layerName": ""
-                        }
-                    }
-                ],
-                "scripts": {
-                    "Scripts/Bullet behaviour": {
-                        "Speed": {
-                            "type": "float",
-                            "value": 5.0
-                        }
-                    }
-                }
-            }
-        ],
-        "prefabInstances": {
-            "-1": [
-                8,
-                7,
-                6,
-                5,
-                4,
-                3,
-                2,
-                1,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27
-            ]
-        }
+        "prefabs": [],
+        "prefabInstances": null
     },
+    "Project Name": "SpaceInvaders",
+    "Project Path": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\SpaceInvaders.shyproject",
     "Preferences": {
         "game": "SpaceInvaders",
         "creator": "Yojhan, Pablo e Ivan",
-        "initialScene": "Level.scene",
+        "initialScene": "Scene.scene",
         "splashScreen": false,
         "windowTitle": "SpaceInvaders",
         "windowIcon": "",
@@ -117,13 +20,13 @@
         "showcursor": true,
         "bgColor": "0, 0, 0",
         "bgAlpha": 255,
-        "gravity": "0.000000, -9.810000",
+        "gravity": "-9.000000, 0.000000",
         "layers": [
             "Default"
         ],
         "matrix": [
             [
-                false,
+                true,
                 false,
                 false,
                 false,
@@ -429,7 +332,5 @@
         "frequency": 44100,
         "channels": 1,
         "chuncksize": 2048
-    },
-    "Project Name": "SpaceInvaders",
-    "Project Path": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\SpaceInvaders.shyproject"
+    }
 }
