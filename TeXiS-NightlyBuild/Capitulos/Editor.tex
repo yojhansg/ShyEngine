@@ -476,3 +476,116 @@ estén disponibles para el funcionamiento adecuado del motor.
 En resumen, la ejecución del juego se gestiona mediante botones en el editor, con un sistema que redirige la salida y captura los datos del juego. 
 La estructura de carpetas está organizada de manera que los activos y configuraciones se encuentren separados de los recursos generados por la construcción del motor, 
 facilitando así la gestión del proyecto.
+
+
+
+%------------------------------------------------ PROYECT MANAGER --------------------------------------------
+
+
+\section{Gestión de proyectos con ProyectManager}
+
+El `ProjectManager`, o gestor de proyectos, es una clase esencial en nuestro editor que permite una organización eficiente de varios proyectos de videojuegos. 
+Su funcionalidad incluye la creación y administración de directorios dedicados para cada proyecto, donde se almacenan todos los recursos relacionados con 
+ese juego en particular. Además, el gestor serializa información esencial de cada proyecto en un archivo con extensión `.shyproject`. Esta información incluye 
+detalles como prefabricados (`prefabs`), la última fecha de apertura del proyecto, el directorio del proyecto y las preferencias específicas.
+
+Una característica destacada es la capacidad de cargar proyectos existentes a partir de archivos `.shyproject`. Esto facilita el acceso a proyectos previamente 
+creados y su restauración con toda su configuración previa.
+
+El `ProjectManager` también implementa una funcionalidad de historial que almacena una lista de proyectos recientes. Esto permite a los usuarios acceder 
+rápidamente a proyectos que han sido abiertos anteriormente. El historial se gestiona mediante la creación de un archivo en el directorio 
+(`AppData`) que contiene los directorios de los últimos proyectos abiertos.
+
+Entre los métodos relevantes en la clase `ProjectManager`, se encuentran:
+
+\begin{itemize}
+    \item `NewProject()`: Inicia la creación de un nuevo proyecto, creando un directorio dedicado y serializando la información esencial en un archivo `.shyproject`.
+    
+    \item `OpenProject()`: Permite cargar proyectos existentes a partir de archivos `.shyproject`, restaurando toda la configuración y recursos asociados al proyecto.
+    
+    \item `SaveProject()`: Guarda los cambios y la información esencial del proyecto actual, asegurando que las últimas modificaciones se 
+    reflejen en el archivo `.shyproject`.
+\end{itemize}
+
+El `ProjectManager` desempeña un papel fundamental en la administración y organización de proyectos de videojuegos en nuestro editor, lo que mejora 
+la eficiencia y la comodidad para los desarrolladores.
+
+
+%------------------------------------------------ RESOURCE MANAGER --------------------------------------------
+
+
+\section{Gestión de recursos con ResourceManager}
+
+El `ResourceManager`, o gestor de recursos, es un componente crucial en nuestro editor que se encarga de gestionar recursos como texturas y fuentes de 
+manera eficiente. Se implementa como un patrón Singleton para garantizar que una única instancia gestione todos los recursos del editor de manera centralizada.
+
+La funcionalidad principal del `ResourceManager` se basa en la utilización de dos mapas, donde las texturas y fuentes se almacenan como valores asociados a sus 
+respectivos nombres clave. Esto permite que una misma imagen o fuente se reutilice en todo el editor sin necesidad de crear instancias adicionales cada 
+vez que se requieran. Cuando se llama a métodos como `AddTexture` o `AddFont`, el gestor de recursos verifica si el recurso ya existe en el mapa. 
+Si existe, no se crea una nueva instancia, lo que ahorra recursos y mejora la eficiencia.
+
+Algunos de los métodos relevantes en la clase `ResourceManager` incluyen:
+
+\begin{itemize}
+    \item `AddTexture()`: Agrega una textura al mapa de recursos. Si la textura no existe, se devuelve la instancia existente; de lo contrario, se crea y 
+    almacena en el mapa. Además devuelve dicha textura.
+    
+    \item `AddFont()`: Similar a `AddTexture`, este método agrega una fuente al mapa de recursos y verifica si ya existe antes de crearla. Además duelve la fuente.
+    
+    \item `GetInstance()`: Para acceder al gestor de recursos, se utiliza el método `GetInstance()`, que garantiza que solo exista una instancia de la clase 
+    `ResourceManager` en todo el editor.
+\end{itemize}
+
+El `ResourceManager` contribuye significativamente a la eficiencia y la gestión de recursos en el editor al permitir la reutilización de texturas y fuentes, 
+lo que es fundamental para un flujo de trabajo fluido y una interfaz de usuario rica en detalles.
+
+%------------------------------------------------ PREFERENCES AND COLORPALETTE --------------------------------------------
+
+\section{Configuración de preferencias y paletas de colores}
+
+Dentro de la opción Edit en la barra de menú de nuestro editor se encuentra la ventana de Preference" (Preferencias). La clase `Preferences` se encarga de 
+almacenar información relacionada con la configuración del editor. Esto incluye detalles como las capas de colisión, la escena inicial, las opciones de audio, 
+el mapeo de controladores o teclado y la ubicación para generar la compilación final del proyecto.
+
+Una característica destacada es la capacidad de personalización que ofrece `Preferences`, permitiendo a los usuarios adaptar el entorno del 
+editor según sus preferencias y necesidades de desarrollo.
+
+Además, en nuestro editor contamos con la clase `ColorPalette`, que desempeña un papel esencial en la gestión de paletas de colores. Para ello, hace uso de la 
+clase `Palette`, que almacena distintos colores para una variedad de elementos y opciones dentro del editor. Estos colores pueden variar desde el fondo 
+de la interfaz hasta los colores de las flechas utilizadas en la representación visual de nodos en el scripting.
+
+Para una gestión eficiente de múltiples paletas de colores, `ColorPalette` almacena las paletas en un mapa, utilizando el nombre de cada paleta como 
+clave. Esto permite una fácil selección y cambio de paletas según las necesidades del usuario y el contexto de trabajo en el editor.
+
+En conjunto, las clases `Preferences` y `ColorPalette` contribuyen a la versatilidad y personalización de nuestro editor al proporcionar opciones de 
+configuración y una gestión de colores flexible y adaptable.
+
+
+%------------------------------------------------ Build del juego --------------------------------------------
+
+
+\section{Generación de build del jerárquicauego}
+
+Dentro del editor, una funcionalidad crucial es la capacidad de generar una build ejecutable del juego. Esto permite a los desarrolladores crear una versión 
+independiente del juego que puede ser distribuida y ejecutada por los usuarios finales. Para llevar a cabo esta tarea, utilizamos la clase `Build`.
+
+El método principal en la clase `Build` es `GenerateBuild()`, que se encarga de iniciar la generación de la build del juego. Para asegurar que este 
+proceso no afecte negativamente la interacción con el editor, se ejecuta en un hilo separado para evitar bloqueos y mantener la fluidez del entorno de desarrollo.
+
+Dentro de `GenerateBuild()`, se llama al método `BuildThread()` mediante un hilo, que es responsable de realizar las operaciones de copiado necesarias para construir 
+la versión del juego. Esto incluye la copia de archivos esenciales como activos (assets), bibliotecas de enlace dinámico (DLL) y cualquier otro recurso 
+requerido para la ejecución del juego.
+
+Entre los métodos relevantes en la clase `Build`, se encuentran:
+\begin{itemize}
+    \item `GenerateBuild()`: Inicia el proceso de generación de la build del juego, ejecutando `BuildThread()` en un hilo separado.
+    
+    \item `BuildThread()`: Este método se encarga de copiar los archivos esenciales necesarios para la build del juego. La ejecución en un hilo separado 
+    garantiza que el proceso no afecte la experiencia del usuario en el editor.
+    
+    \item `Copy()`: Método utilizado para copiar archivos desde el directorio de desarrollo del proyecto a la ubicación de la build, asegurando que 
+    todos los recursos necesarios estén disponibles para la ejecución del juego.
+\end{itemize}
+
+La capacidad de generar builds del juego es esencial para la distribución y prueba de los proyectos de desarrollo, y la clase `Build` en nuestro 
+editor simplifica este proceso, permitiendo a los desarrolladores crear versiones jugables del juego de manera eficiente.
