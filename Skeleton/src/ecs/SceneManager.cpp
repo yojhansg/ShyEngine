@@ -7,6 +7,7 @@
 #include "SplashScene.h"
 #include "Components/Overlay.h"
 #include "Components/OverlayImage.h"
+#include "ResourcesManager.h"
 
 namespace ECS {
 
@@ -40,7 +41,8 @@ namespace ECS {
 
 
 	void SceneManager::ChangeScene(std::string scene, int m) {
-		currentScenePath = scene;
+
+		currentScenePath = Resources::ResourcesManager::instance()->GetResourcesPath() + scene;
 		mode = (LOAD_MODE) m;
 		change = true;
 	}

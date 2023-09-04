@@ -1,0 +1,138 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 2,
+            "name": "Alien count",
+            "serialized": true,
+            "type": "float",
+            "value": 24.0,
+            "x": 482.0,
+            "y": 46.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 4,
+            "serialized": false,
+            "type": "string",
+            "value": "AlienCount",
+            "x": 852.0,
+            "y": 301.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 8,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 471.0,
+            "y": 1061.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 10,
+            "serialized": false,
+            "type": "float",
+            "value": 3.0,
+            "x": 1113.0,
+            "y": 1060.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 11,
+            "name": "Win Scene",
+            "serialized": true,
+            "type": "string",
+            "value": "win",
+            "x": 1153.0,
+            "y": 607.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "start",
+            "x": 250.0,
+            "y": 261.0
+        },
+        {
+            "index": 1,
+            "type": "update",
+            "x": 278.0,
+            "y": 878.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 9,
+            "B": -1,
+            "condition": 7,
+            "index": 5,
+            "type": 0,
+            "x": 973.0,
+            "y": 843.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 3,
+            "input": [
+                4,
+                2
+            ],
+            "x": 1015.0,
+            "y": -80.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 6,
+            "input": [
+                4
+            ],
+            "x": 609.0,
+            "y": 680.0
+        },
+        {
+            "function": "Logic_LesserOrEqual",
+            "index": 7,
+            "input": [
+                6,
+                8
+            ],
+            "x": 712.0,
+            "y": 1061.0
+        },
+        {
+            "function": "SceneManager_ChangeScene",
+            "index": 9,
+            "input": [
+                11,
+                10
+            ],
+            "x": 1485.0,
+            "y": 745.0
+        }
+    ],
+    "nodeCount": 12,
+    "serializedValues": [
+        {
+            "defaultValue": 24.0,
+            "name": "Alien count",
+            "type": "float"
+        },
+        {
+            "defaultValue": "win",
+            "name": "Win Scene",
+            "type": "string"
+        }
+    ],
+    "start": 3,
+    "update": 5
+}

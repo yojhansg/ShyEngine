@@ -31,7 +31,7 @@ ECS::Scene* ECS::SceneLoader::LoadScene(std::string const& scenePath)
 	if (!fileStream.good())
 	{
 		Console::Output::PrintError("Scene loading", "Cannot open scene <" + scenePath + ">");
-		return nullptr;
+		return nullptr; 
 	}
 
 	if (!json::accept(fileStream))

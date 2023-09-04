@@ -20,7 +20,7 @@
             "type": "float",
             "value": 5.0,
             "x": 503.0,
-            "y": 512.0
+            "y": 530.0
         },
         {
             "enum": false,
@@ -30,7 +30,7 @@
             "type": "string",
             "value": "ShipPos",
             "x": 674.0,
-            "y": -125.0
+            "y": -120.0
         },
         {
             "enum": false,
@@ -39,8 +39,8 @@
             "serialized": false,
             "type": "string",
             "value": "TimeDestroy",
-            "x": 2160.0,
-            "y": 827.0
+            "x": 2147.0,
+            "y": 839.0
         },
         {
             "enum": false,
@@ -49,7 +49,7 @@
             "serialized": false,
             "type": "float",
             "value": 5.0,
-            "x": 2163.0,
+            "x": 2139.0,
             "y": 1335.0
         },
         {
@@ -70,7 +70,27 @@
             "type": "float",
             "value": 0.0,
             "x": 844.0,
-            "y": 1865.0
+            "y": 1848.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 35,
+            "serialized": false,
+            "type": "string",
+            "value": "AlienCount",
+            "x": 1849.0,
+            "y": 2149.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 36,
+            "serialized": false,
+            "type": "float",
+            "value": 1.0,
+            "x": 1879.0,
+            "y": 2785.0
         }
     ],
     "events": [
@@ -78,7 +98,7 @@
             "index": 0,
             "type": "start",
             "x": 250.0,
-            "y": 340.0
+            "y": 375.0
         },
         {
             "index": 16,
@@ -90,7 +110,7 @@
             "index": 29,
             "type": "onTriggerEnter",
             "x": 423.0,
-            "y": 2829.0
+            "y": 2810.0
         }
     ],
     "forks": [
@@ -114,14 +134,14 @@
                 3
             ],
             "next": 5,
-            "x": 844.0,
-            "y": 379.0
+            "x": 857.0,
+            "y": 398.0
         },
         {
             "function": "Entity",
             "index": 4,
             "input": [],
-            "x": 1003.0,
+            "x": 1016.0,
             "y": 1092.0
         },
         {
@@ -142,7 +162,7 @@
                 7
             ],
             "x": 1314.0,
-            "y": 379.0
+            "y": 386.0
         },
         {
             "function": "Transform_GetWorldPosition",
@@ -160,7 +180,7 @@
                 8
             ],
             "x": 1376.0,
-            "y": 827.0
+            "y": 839.0
         },
         {
             "function": "Vector2D_Right",
@@ -177,7 +197,7 @@
                 6
             ],
             "x": 1700.0,
-            "y": 329.0
+            "y": 330.0
         },
         {
             "function": "Vector2D_Up",
@@ -204,7 +224,7 @@
                 13
             ],
             "x": 1934.0,
-            "y": 379.0
+            "y": 386.0
         },
         {
             "function": "Attribute_SetLocal",
@@ -225,7 +245,7 @@
             ],
             "next": 24,
             "x": 1053.0,
-            "y": 1456.0
+            "y": 1492.0
         },
         {
             "function": "Attribute_GetLocal",
@@ -244,13 +264,13 @@
                 23
             ],
             "x": 782.0,
-            "y": 1335.0
+            "y": 1333.0
         },
         {
             "function": "Time_GetDeltaTime",
             "index": 23,
             "input": [],
-            "x": 323.0,
+            "x": 340.0,
             "y": 1436.0
         },
         {
@@ -261,7 +281,7 @@
                 26
             ],
             "x": 1107.0,
-            "y": 1744.0
+            "y": 1797.0
         },
         {
             "function": "Destroy_Entity",
@@ -276,8 +296,8 @@
             "function": "Entity",
             "index": 28,
             "input": [],
-            "x": 1377.0,
-            "y": 1921.0
+            "x": 1391.0,
+            "y": 1915.0
         },
         {
             "function": "Destroy_Entity",
@@ -293,14 +313,14 @@
             "function": "Entity",
             "index": 31,
             "input": [],
-            "x": 571.0,
+            "x": 583.0,
             "y": 2204.0
         },
         {
             "function": "Entity_Collided",
             "index": 32,
             "input": [],
-            "x": 1139.0,
+            "x": 1148.0,
             "y": 2296.0
         },
         {
@@ -309,11 +329,41 @@
             "input": [
                 32
             ],
-            "x": 1488.0,
+            "next": 34,
+            "x": 1501.0,
             "y": 2408.0
+        },
+        {
+            "function": "Attribute_SetGlobal",
+            "index": 34,
+            "input": [
+                35,
+                38
+            ],
+            "x": 2357.0,
+            "y": 2405.0
+        },
+        {
+            "function": "Attribute_GetGlobal",
+            "index": 37,
+            "input": [
+                35
+            ],
+            "x": 1862.0,
+            "y": 2478.0
+        },
+        {
+            "function": "Math_Subtract",
+            "index": 38,
+            "input": [
+                37,
+                36
+            ],
+            "x": 2116.0,
+            "y": 2581.0
         }
     ],
-    "nodeCount": 34,
+    "nodeCount": 39,
     "onTriggerEnter": 30,
     "serializedValues": [
         {
