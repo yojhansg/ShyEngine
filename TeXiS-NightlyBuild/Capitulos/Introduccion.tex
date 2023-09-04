@@ -98,75 +98,39 @@ El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visua
 El trabajo se divide en tres partes: el desarrollo del motor, el desarrollo del editor y el desarrollo del sistema
 de scripting visual basado en nodos.
 
-\medskip
+La primera fase del trabajo consistirá en el desarrollo del núcleo de cada una de las tres partes por separado: 
 
-- El motor consta de varios proyectos de Visual Studio donde se dividen las partes fundamentales del mismo:
+- Motor: Para la parte del motor esta fase consistirá en la investigación de posibles librerías a utilizar, integración y 
+funcionamiento básico en el entorno de trabajo de las librerías elegidas, implementación del sistema de entidades
+y componentes y desarrollo de componentes fundamentales. 
 
-\begin{itemize}
+- Editor: Para la parte del editor esta fase consistirá en
 
-\item \texttt{Proyecto principal}: Este proyecto implementa el bucle principal del motor y de generar el ejecutable
-de juego.
+- Sistema de scripting: Para la parte del scripting esta fase consistirá en
 
-\item \texttt{Proyecto de físicas}: Implementa un manager con el que acceder a la configuración del mundo físico.
+La segunda fase del trabajo consistirá en la integración de las tres partes, posible reimplementación de funcionalidad
+no compatible y continuación con el desarrollo por separado: 
 
-\item \texttt{Proyecto de gráficos}: Implementa un manager con el que acceder a la configuración de renderizado 
-de SDL, como la ventana de juego o la cámara.
+- Motor: Para la parte del motor esta fase consistirá en el desarrollo del bucle principal, funcionalidad requerida para la 
+comunicación motor-editor y terminar con el desarrollo de componentes y managers fundamentales.
 
-\item \texttt{Proyecto de recursos}: Implementa un manager para el guardado de recursos, como imágenes o fuentes
-de texto.
+- Editor: Para la parte del editor esta fase consistirá en
 
-\item \texttt{Proyecto de sonido}: Implementa un manager para cargar, reproducir o detener efectos de sonido
-o música.
+- Sistema de scripting: Para la parte del scripting esta fase consistirá en
 
-\item \texttt{Proyecto de utilidades}: Implementa varias clases genéricas útiles para el resto de proyectos.
+La tercera fase del trabajo consistirá en mejorar el editor para conseguir una experiencia de usuario satisfactoria, 
+desarrollar algún que otro minijuego y realizar pruebas con usuarios:
 
-\item \texttt{Proyecto de input}: Implementa un manager para manejar el input del usuario, tanto de teclado y ratón
-como de mando, con soporte para Dualshock 4.
+- Motor: Para la parte del motor esta fase consistirá en realizar pruebas desde el editor y sistema de scripting para 
+comprobar el correcto funcionamiento de todas las partes del motor y arreglar lo necesario.
 
-\item \texttt{Proyecto de Entity-Component-System}: Implementa el ECS y contiene todos los componentes proporcionados
-por el motor.
+- Editor: Para la parte del editor esta fase consistirá en
 
-\item \texttt{Proyecto de Consola}: Implementa funcionalidad para imprimir información por consola. Útil para 
-el desarrollo y la consola de debug del editor.
-
-\item \texttt{Proyecto de Scripting}: Implementa funcionalidad leer y crear clases en C++. Explicada en detalle
-posteriormente.
-
-\end{itemize}
-
-
-- El Editor consiste en 2 proyectos de Visual Studio:
-
-\begin{itemize}
-
-    \item \texttt{Proyecto de componentes}: Este proyecto tiene la responsabilidad de gestionar la adquisición y procesamiento de scripts y 
-    componentes procedentes del motor subyacente. Estos elementos son preparados para su utilización posterior en el editor.
-
-    \item \texttt{Proyecto de ImGUI}:  En este proyecto se encuentra toda la funcionalidad relativa al editor, haciendo uso de la biblioteca ImGUI. 
-    Aquí se engloba la creación y manejo de ventanas, cuadros de diálogo emergentes, menús desplegables, renderización de la escena en edición, así 
-    como la gestión de archivos, entre otras características.
-
-    \item \texttt{Proyecto main}: Este proyecto ejecuta el bucle principal del editor y genera el ejecutable.
-
-\end{itemize}
-
-\textbf{\textit{TODO: Scripting\ldots}}
-
-\medskip
-
-- La integración entre el editor y el motor se materializa mediante un flujo de intercambio de datos. Inicialmente, el motor lleva a cabo la serialización de 
-los componentes disponibles en un formato JSON. Posteriormente, el editor se encarga de leer y procesar estos componentes serializados, permitiendo su asignación a las 
-diferentes entidades en desarrollo.
-Una vez que el proceso de desarrollo del videojuego ha concluido, el editor toma la iniciativa de serializar la escena completa. Esto abarca las entidades presentes en
-la escena, junto con sus respectivos componentes y scripts asociados. Con la escena debidamente serializada, el editor ejecuta el archivo
-ejecutable (.exe) del motor. En este punto, es el motor el que asume la responsabilidad de interpretar y cargar las escenas previamente serializadas por el editor.
-
-Este enfoque de intercambio de datos entre el editor y el motor permite una sincronización efectiva de la información esencial para la construcción y ejecución del 
-videojuego, al tiempo que mantiene una clara separación de las tareas y roles entre las dos entidades.
-
-\medskip
+- Sistema de scripting: Para la parte del scripting esta fase consistirá en 
 
 \textbf{\textit{TODO: Fase de prueba con usuarios\ldots}}
+
+
 
 
 %---------------------------------------------------------------------
