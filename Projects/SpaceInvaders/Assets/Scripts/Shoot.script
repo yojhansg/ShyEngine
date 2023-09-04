@@ -4,17 +4,7 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 3,
-            "serialized": false,
-            "type": "string",
-            "value": "bullet",
-            "x": 761.0,
-            "y": 104.0
-        },
-        {
-            "enum": false,
-            "enumStr": "",
-            "index": 5,
+            "index": 4,
             "serialized": false,
             "type": "string",
             "value": "ShipPos",
@@ -24,17 +14,17 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 11,
+            "index": 10,
             "serialized": false,
             "type": "string",
             "value": "Cooldown",
-            "x": 25.0,
+            "x": 26.0,
             "y": 67.0
         },
         {
             "enum": false,
             "enumStr": "",
-            "index": 13,
+            "index": 12,
             "serialized": false,
             "type": "float",
             "value": 0.0,
@@ -44,7 +34,7 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 15,
+            "index": 14,
             "serialized": false,
             "type": "string",
             "value": "ResetCooldown",
@@ -54,22 +44,33 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 16,
+            "index": 15,
             "serialized": false,
             "type": "bool",
             "value": true,
             "x": 1361.0,
-            "y": 60.0
+            "y": 62.0
         },
         {
             "enum": true,
             "enumStr": "KB_SPECIALKEYS",
-            "index": 18,
+            "index": 17,
             "serialized": false,
             "type": "float",
             "value": 4.0,
             "x": -626.0,
             "y": 120.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 18,
+            "name": "PrefabName",
+            "serialized": true,
+            "type": "string",
+            "value": "bullet",
+            "x": 1087.0,
+            "y": 87.0
         }
     ],
     "events": [
@@ -82,19 +83,19 @@
     ],
     "forks": [
         {
-            "A": 9,
+            "A": 8,
             "B": -1,
-            "condition": 17,
+            "condition": 16,
             "index": 1,
             "type": 0,
             "x": 62.0,
             "y": 601.0
         },
         {
-            "A": 4,
+            "A": 3,
             "B": -1,
-            "condition": 12,
-            "index": 9,
+            "condition": 11,
+            "index": 8,
             "type": 0,
             "x": 690.0,
             "y": 563.0
@@ -105,88 +106,94 @@
             "function": "Create_EntityWithTransform",
             "index": 2,
             "input": [
-                3
+                18
             ],
-            "next": 14,
+            "next": 13,
             "x": 1443.0,
             "y": 507.0
         },
         {
             "function": "Attribute_SetGlobal",
-            "index": 4,
+            "index": 3,
             "input": [
-                5,
-                7
+                4,
+                6
             ],
             "next": 2,
             "x": 1246.0,
-            "y": 882.0
+            "y": 868.0
         },
         {
             "function": "Transform_GetWorldPosition",
-            "index": 6,
+            "index": 5,
             "input": [
-                8
+                7
             ],
             "x": 761.0,
             "y": 948.0
         },
         {
             "function": "Vector2D_X",
-            "index": 7,
+            "index": 6,
             "input": [
-                6
+                5
             ],
             "x": 981.0,
             "y": 918.0
         },
         {
             "function": "Entity",
-            "index": 8,
+            "index": 7,
             "input": [],
             "x": 174.0,
             "y": 1035.0
         },
         {
             "function": "Attribute_GetGlobal",
-            "index": 10,
+            "index": 9,
             "input": [
-                11
+                10
             ],
             "x": 334.0,
             "y": 128.0
         },
         {
             "function": "Logic_Lesser",
-            "index": 12,
+            "index": 11,
             "input": [
-                10,
-                13
+                9,
+                12
             ],
-            "x": 392.0,
+            "x": 402.0,
             "y": 507.0
         },
         {
             "function": "Attribute_SetGlobal",
-            "index": 14,
+            "index": 13,
             "input": [
-                15,
-                16
+                14,
+                15
             ],
             "x": 1893.0,
             "y": 366.0
         },
         {
             "function": "InputManager_IsSpecialKeyDown",
-            "index": 17,
+            "index": 16,
             "input": [
-                18
+                17
             ],
-            "x": -246.0,
+            "x": -244.0,
             "y": 233.0
         }
     ],
     "nodeCount": 19,
-    "serializedValues": [],
+    "serializedValues": [
+        {
+            "defaultValue": "bullet",
+            "name": "PrefabName",
+            "type": "string"
+        }
+    ],
     "update": 1
 }

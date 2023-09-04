@@ -187,6 +187,11 @@
                 "input": [],
                 "name": "CurrentName",
                 "return": "Text"
+            },
+            {
+                "input": [],
+                "name": "Collided",
+                "return": "Entity"
             }
         ],
         "name": "Entity"

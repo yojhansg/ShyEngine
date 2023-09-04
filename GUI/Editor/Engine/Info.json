@@ -48,6 +48,52 @@
 
     },
 
+    "BoxBody" : {
+       "layerName": {
+        "default": "Default"
+        },
+
+      "gravityScale": {
+        "default": "1"
+      },
+
+      "size": {
+        "info": "In case this entity has an image component, leave this field with the x or y at 0 so that the collider takes on the size of the image. Otherwise, leaving this field at 0 will create an empty collider. Hence, it is recommended to provide a size for it.",
+        "default": "0, 0"
+      }
+
+    },
+
+     "CircleBody" : {
+
+       "layerName": {
+          "default": "Default"
+        },
+
+       "gravityScale" :  "1",
+
+      "radius": {
+        "info": "In case this entity has an image component, leave this field at 0 so that the collider takes on the size of the image. Otherwise, leaving this field at 0 will create an empty collider. Hence, it is recommended to provide a size for it.",
+        "default": "0"
+      }
+
+    },
+
+     "EdgeBody" : {
+
+       "layerName": {
+          "default": "Default"
+        },
+
+       "xAxis" : "true",
+
+       "size" :  "0",
+
+
+       "gravityScale" :  "1"
+
+    },
+
     "OverlayText" : {
 
         "info": {

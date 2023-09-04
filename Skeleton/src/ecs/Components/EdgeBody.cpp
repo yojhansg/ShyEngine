@@ -11,7 +11,8 @@ namespace ECS {
 
 		shape = nullptr;
 
-		size = { 1, 1 };
+		size = 0;
+		xAxis = true;
 
 		vertex1 = { 0, 0 };
 		vertex2 = { 0, 0 };
@@ -26,11 +27,16 @@ namespace ECS {
 		Image* image = this->getEntity()->getComponent<Image>();
 
 		// Collider radius = max between imagen width and height if exists
-		if (image != nullptr)
-			size.set(image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor);
+		if (image != nullptr) {
+			if (size == 0) {
+				if (xAxis)
+					size = image->getTextureWidth() / screenToWorldFactor;
+				else
+					size = image->getTextureHeight() / screenToWorldFactor;
+			}
+		}
 
-		vertex1 = { -size.getX() / 2, 0 };
-		vertex2 = { size.getX() / 2, 0 };
+		scaleShape();
 
 		shape->m_vertex1 = vertex1;
 		shape->m_vertex2 = vertex2;
@@ -62,18 +68,22 @@ namespace ECS {
 
 	}
 
-	Vector2D EdgeBody::getSize() {
+	float EdgeBody::getSize() {
 		return size;
 	}
 
 	void EdgeBody::scaleShape() {
 		auto scale = transform->GetWorldScale();
 
-		shape->m_vertex1.x = vertex1.x * scale.getX();
-		shape->m_vertex1.y = vertex1.y * scale.getY();
-											  
-		shape->m_vertex2.x = vertex2.x * scale.getX();
-		shape->m_vertex2.y = vertex2.y * scale.getY();
+		if (xAxis) {
+			shape->m_vertex1 = { -size / 2 * scale.getX(), 0 };
+			shape->m_vertex2 = { size / 2 * scale.getX(), 0 };
+		}
+		else {
+			shape->m_vertex1 = { 0, -size / 2 * scale.getY() };
+			shape->m_vertex2 = { 0, size / 2 * scale.getY() };
+		}
+
 	}
 
 }

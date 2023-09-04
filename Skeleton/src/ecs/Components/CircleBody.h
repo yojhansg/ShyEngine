@@ -28,13 +28,13 @@ namespace ECS {
         float calculateRadius();
 
         reflect float radius;
+        reflect bool shorterAxis;
 
-        bool shorterAxis;
+        Vector2D size;
 
         // Box2d circleShape
         b2CircleShape* shape;
 
-        Vector2D size;
 
     };
 

@@ -19,6 +19,7 @@ namespace Physics {
 		void DrawTransform(const b2Transform& xf) override;
 
 	private:
+
 		SDL_Renderer* renderer;
 
 	};

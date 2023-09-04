@@ -11,7 +11,7 @@ namespace ECS {
 	BoxBody::BoxBody() {
 	
 		shape = nullptr;
-		size = { 1, 1 };
+		size = { 0, 0 };
 	}
 
 	void BoxBody::init() {
@@ -27,11 +27,11 @@ namespace ECS {
 
 			Utilities::Vector2D imageSize = { image->getTextureWidth() / screenToWorldFactor, image->getTextureHeight() / screenToWorldFactor };
 
-			if (size.getX() == 0 && size.getY() == 0)
+			if (size.getX() == 0 || size.getY() == 0)
 				size.set(imageSize);
 		}
 
-		shape->SetAsBox(size.getX() / 2.0f, size.getY() / 2.0f);
+		shape->SetAsBox(size.getX() / 2.0f * transform->GetWorldScale().getX(), size.getY() / 2.0f * transform->GetWorldScale().getY());
 
 		bodyDef->type = b2_staticBody;
 		bodyDef->position.Set(0, 0);

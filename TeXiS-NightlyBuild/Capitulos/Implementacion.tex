@@ -379,7 +379,7 @@ Para un mejor entendimiento de la implementación es necesario saber que SDLMixer
 efectos de sonido o sonidos cortos en general (WAV, MP3) y música de fondo (WAV, MP3, OGG).
 
 Para la música (MixMusic), la librería solo cuenta con un canal de reproducción por lo que es
-algo limitado pero simple a la vez ya que no hay que lidiar con número de canales al contrario
+algo limitado pero simple a la vez ya que no hay que lidiar con número de canales, al contrario
 que con los efectos de sonido (MixChunk).
 
 Este proyecto cuenta con tres clases:
@@ -395,10 +395,10 @@ MixMusic de SDLMixer y un identificador usado posteriormente por el componente M
 Estas dos clases representan también los recursos que se usan para música y sonidos en el 
 manager de recursos.
 
-\item SoundManager: Singleton encargado de implementar el envoltorio de las funciones principales 
-de SDLMixer para reproducir, parar, y detener sonidos, entre otros. Tiene dos métodos destinados
-al usuario para el modificar el volumen general y cambiar el número de canales disponibles para
-la reproducción de sonidos.
+\item SoundManager: Manager singleton encargado de implementar el envoltorio de las funciones principales 
+de SDLMixer para reproducir, parar, y detener sonidos, entre otros. Tiene dos métodos destinados al 
+usuario para el modificar el volumen general y cambiar el número de canales disponibles para la reproducción
+de efectos de sonidos.
 
 \end{itemize}
 
@@ -407,11 +407,10 @@ Esto choca con la idea del componente SoundEmitter, que visto desde la perspecti
 simplemente se le establece un sonido y ya se puede reproducir, sin necesidad de conocer la existencia 
 de canales. Esto se contará más en detalle en la implementación de SoundEmitter.
 
-Las funciones disponibles para los canales de sonido son: reproducir sonido, hacer fade-in de un sonido, 
-hacer fade-out de un sonido, pausar un sonido, detener un sonido (la diferencia con pausar es que si 
-se detiene no se puede renaudar), renaudar un sonido, consultar si un canal está reproduciendo un sonido,
-establecer el sonido de un canal en específico, consultar el volumen de un canal, establecer la posicion
-en el espacio de un canal y establecer el paneo de un canal.
+Las funciones disponibles para los canales de sonido son: reproducir, fade-in, fade-out, pausar, detener 
+(la diferencia con pausar es que si se detiene no se puede renaudar), renaudar, consultar si un canal está
+reproduciendo un sonido, establecer el sonido de un canal, consultar el volumen de un canal, establecer la posicion
+en el espacio 2D de un canal y establecer el paneo de un canal.
 
 En cuanto a la música, los métodos de SDLMixer solo necesitan un MixMusic ya que solo hay un canal
 por lo que el problema de los canales desaparece. Las funciones disponibles son: reproducir, fade-in,
@@ -419,5 +418,324 @@ fade-out, pausar, detener, renaudar, modificar el volumen de la música y rebobin
 
 
 \subsection{Proyecto de input}
+
+Este proyecto tiene como objetivo implementar un manager, también Singleton, que contendrá la información del
+estado de las teclas/botones de los dispositivos de entrada. En concreto, cuenta con soporte para teclado,
+ratón y mando.
+
+En el manager, las teclas/botones pueden pasar por diferentes estados los cuales se establecen al recibir determinados
+eventos de SDL y se actualizan debidamente.
+
+Estos estados se dividen en:
+
+- Down: Una tecla esta siendo pulsada.
+- Up: Una tecla no esta siendo pulsada.
+- Pressed: Una tecla acaba de ser pulsada.
+- Released: Una tecla acaba de ser soltada.
+
+\begin{itemize} 
+
+\item Teclado: Guarda la información sobre la mayoría de teclas importantes de un teclado. Letras, números y teclas especiales. 
+Para ello, el manager cuenta con tres enumerados que contienen el nombre de cada una de las teclas para cada tipo. Con estos
+enumerados se crean posteriormente arrays con la información del estado de cada tecla.
+
+Los eventos de SDL relacionados con el teclado son KEYDOWN y KEYUP. 
+El manager implementa métodos de usuario para conocer si se ha pulsado o soltado alguna tecla o si una tecla está pulsada,
+acaba de ser pulsada, acaba de ser soltada o no está pulsada.
+
+\item Ratón: Guarda la información de la posición del ratón, del estado del clic izquierdo, clic central (de la rueda), clic 
+derecho y movimiento de la rueda. Para ello, el manager cuenta con un Vector2D para la posición, booleanos para el estado de 
+pulsado/no pulsado de los botones y un número entero para representar si la rueda del ratón está haciendo scroll hacia abajo 
+o hacia arriba. 
+
+Los eventos de SDL relacionados con el ratón son MOUSEWHEEL, MOUSEMOTION,  MOUSEBUTTONDOWN y MOUSEBUTTONUP.
+El manager implementa métodos de usuario para conocer si ha habido algún movimiento con el ratón o con la rueda, si se ha
+pulsado o soltado algún botón, la posición del ratón y el scroll actual de la rueda.
+
+\item Mando: Cuenta con soporte para múltiples mandos y cada uno de ellos guarda la siguiente información:  
+
+- Referencia al GameController creado por SDL.
+- Id del GameController creado por SDL.
+- Nombre del GameController.
+- Estado de cada uno de los botones del GameController.
+- Información del movimiento de los triggers del GameController.
+- Información del movimiento de los joysticks del GameController.
+
+El manager tiene sporte además para conexiones y desconexiones durante la ejecución.
+Debido a la posibilidad de tener varios mandos conectados el manager diferencia entre métodos con identificador
+y métodos sin identificador. Los métodos con identificador reciben el identificador del mando del que se quiere
+consultar el estado y los métodos sin identificador devuelven la información del estado del último mando que 
+registró input. De esa manera, si se quiere desarrollar un singleplayer, el usuario no tendrá que preocuparse
+por la posibilidad de múltiples mandos teniendo que indicar que identificador tiene su mando. 
+
+Los eventos de SDL relacionados con el ratón son CONTROLLERDEVICEADDED, CONTROLLERDEVICEREMOVED, JOYBUTTONDOWN,
+JOYBUTTONUP, JOYAXISMOTION. El manager implementa métodos de usuario para conocer el número de mandos conectados,
+si algún mando ha pulsado o soltado algún botón, si algún mando ha movido los joysticks o los triggers y si ha
+habido alguna conexión o desconexión.
+
+Comentar también que, antes de esta implementación, el manager usaba SDLJoystick para el manejo de los mandos
+pero debido a cierta incomodidad con los eventos se hizo el cambio a SDLGameController. La diferencia entre
+ambos es que SDLJoystick es la API más antigua de SDL para manejar mandos y joysticks y proporciona una interfaz
+de bajo nivel para interactuar con dispositivos de entrada mientras que SDLGameController proporciona una abstracción
+de más alto nivel para interactuar con mandos, lo que facilita la detección de mandos y el acceso a sus entradas y 
+es la opción recomendada para la mayoría de los desarrolladores.
+
+\end{itemize}
+
+Por último, el manager implementa métodos de lógica para el usuario como movimiento horizontal y vertical,
+salto o acción. Estos métodos usan la información que se haya establecido en el editor de las teclas y botones
+que se desean usar para moverse, saltar o realizar una acción.
+
+
+\subsection{Proyecto de consola}
+
+Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada
+con el mostrado de la salida estándar por la consola.
+
+Tiene métodos para imprimir por consola con los colores por defecto, imprimir una advertencia, con color 
+amarillo e imprimir un error, con color rojo, entre otros.
+
+Además de ser útil para el desarrollo, sirve también para dar formato a los mensajes que aparecen por la 
+consola del editor. Se utiliza una tubería o pipe para conectar la consola del motor y la del editor. Esto
+se cuenta más en detalle en el apartado de editor.
+
+
+\subsection{Proyecto de físicas}
+
+Este proyecto tiene como objetivo implementar un envoltorio sobre la librería de físicas Box2D para proporcionar
+una API sencilla para el usuario y para desarrollar los componentes de colisión y movimiento físico necesarios.
+
+Antes de nada, al igual que con SDLMixer, algunos comentarios sobre la librería: 
+
+\begin{itemize}
+
+\item Mundo físico: La librería tiene una clase b2World que representa un mundo físico donde se pueden crear
+cuerpos físicos. Esta clase tiene un método fundamental Step(), al que se debe llamar para realizar un paso físico,
+lo que actualiza la simulación al avanzar el tiempo en un intervalo fijo, realiza cálculo de colisiones, resuelve 
+restricciones y actualiza posiciones y velocidades. 
+
+\item Unidades: Box2D trabaja con números de punto flotante y es necesario tener en cuenta alguna restricciones
+para que Box2D funcione correctamente. Estas restricciones han sido ajustadas para funcionar bien con unidades de 
+metros-kilogramos-segundos (MKS). En particular, Box2D ha sido ajustado para funcionar adecuadamente con formas en
+movimiento que tienen dimensiones entre 0.1 y 10 metros.
+
+\item Pixeles: Es tentador usar pixeles como unidades para los tamaños, posiciones, fuerzas o velocidades pero 
+desafortunadamente, esto llevaría a una simulación ineficiente y posiblemente a un comportamiento extraño. 
+En la propia documentación de Box2D comentan que un objeto de 200 píxeles de longitud sería visto por Box2D como el 
+tamaño de un edificio de 45 pisos.
+
+Para resolver el problema de los pixeles, el manager declara una variable 'screenToWorldFactor'  usada para convertir
+de pixeles a unidades físicas y viceversa. Por lo tanto, a la hora de crear cuerpos físicos se convierte el tamaño
+en pixeles deseado por el usuario a unidades físicas utilizando ese factor de escala.
+
+\end{itemize}
+
+Las clases que tiene este proyecto son las siguientes:
+
+\begin{itemize}
+
+\item PhysicsManager: Clase, Singleton, que contiene la funcionalidad necesariara para manejar el filtrado de 
+colisiones e información sobre gravedad del mundo físico así como la matriz de colisiones y capas existentes.
+
+En cuanto al filtrado de colisiones, Box2D proporciona los CategoryBits y los MaskBits para ello. Los CategoryBits
+especifican la capa en la que se encuentra un objeto y los MaskBits las capas con las que colisiona. Para que se 
+produzca una colisión, los cuerpos deben cumplir una condición, y es que, la capa del cuerpo A debe de estar marcada
+para que colisione con la del cuerpo B y viceversa.
+
+Tanto los CategoryBits como los MaskBits se representan en hexadecimal y el su valor por defecto es 0x0001 en caso
+de los CategoryBits y 0xFFFF en caso de los MaskBits. 
+
+La comprobación de colisión tiene este aspecto:
+
+bool colision = (bodyA.maskBits AND bobyB.categoryBits) == 0 Y (bodyA.categoryBits AND bobyB.maskBits) == 0
+
+Por lo tanto, por defecto, todos los cuerpo creados va a estar en la capa 0x0001 y van a colisionar con todas las capas.
+
+El manager guarda un mapa para las capas donde la clave es el nombre de la capa y el valor un indice que la representa.
+Cuando se crea un nuevo cuerpo físico, se calcula su CategoryBits a partir de ese indice.
+
+Para calcular sus MaskBits entra en juego otro funcionalidad que es la matriz de colisiones. En ella se ajustan
+la colisión entre las capas existentes y posteriormente se calculan los MaskBits de una capa dada.
+
+Como métodos al usuario, el manager proporciona pdoer cambiar la gravedad del mundo físico, añadir o eliminar capas, 
+establecer colisión entre capas y consultar si dos capas colisionan.
+
+\item DebugDraw: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede
+dibujar polígonos, círculos, segmentos y puntos. El dibujado se realiza con SDL y antes de dibujar, se utiliza el 
+'screenToWorldFactor' para devolver la escala a los cuerpos, es decir, de unidades físicas a pixeles.
+
+\end{itemize}
+
+
+\subsection{Proyecto de renderer}
+
+Este proyecto tiene como objetivo iniciar la librería de SDL y SDLImage.
+
+Las clases que tiene este proyecto son las siguientes:
+
+\begin{itemize}
+
+\item RendererManager: Clase, singleton, encargada de inicializar y cerrar la librería de SDL, SDLImage y SDLTTF.
+Contiene información y funcionalidad relacionada con la ventana como su tamaño, borde, icono, cursor, nombre y 
+modo pantalla completa. Además, tiene la información de la cámara como su posición y escala. Proporciona los métodos renderizar y para 
+limpiar la pantalla.
+
+\item Font: Representa una fuente de texto y tiene la funcionalidad de crear una a partir de una fichero con .ttf
+como extensión. Tiene también la funcionalidad de crear un texto o un texto ajustado mediante la creación de una textura.
+
+\item Texture: Representa una textura y tiene la funcionalidad de crear una a partir de un fichero con una extensión de 
+imagen como .png o .jpg. Tiene métodos para obtener la textura de SDL (SDLTexuture*) y para consultar el ancho y el alto
+de la misma.
+
+\end{itemize}
+
+Al igual que SoundEffect y MusicEffect, Font y Texture representan los recursos utilizado en el manager de recursos
+para almacenar fuentes de texto e imágenes.
+
+
+\subsection{Proyecto de Entity-Component-System}
+
+Este es el proyecto más importante del motor. Implementa el sistema de entidades y componentes, componentes fundamentales
+para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
+
+Para empezar, la idea un sistema de componentes y entidades es la siguiente: 
+
+Es un patrón de diseño utilizado en el desarrollo de videojuegos y otros sistemas interactivos para organizar y gestionar la lógica
+y la funcionalidad de los objetos dentro del juego. En lugar de utilizar una jerarquía de clases tradicional o un sistema basado en 
+objetos, el ECS descompone los elementos del juego en dos partes principales: entidades y componentes.
+
+\begin{itemize}
+
+\item Entidades: Las entidades son objetos vacíos que actúan como contenedores para componentes. Cada entidad representa un objeto o 
+entidad en el juego, como un personaje, un enemigo, un objeto interactivo, etc. Las entidades no tienen lógica o comportamiento en sí mismas,
+simplemente contienen uno o más componentes.
+
+\item Componentes: Los componentes son bloques de datos y lógica que contienen información específica sobre el comportamiento o las propiedades de una
+entidad en el juego. Cada componente se enfoca en una única funcionalidad o característica del objeto. Por ejemplo, puedes tener un componente 
+de "Posición" para almacenar la posición de una entidad en el mundo, un componente de "Renderizado" para pintar la entidad en la escena, un 
+componente de "Física" para gestionar su comportamiento físico, etc.
+
+\end{itemize}
+
+Para llevar a cabo la implementación de este sistema es imprescindible el uso de programación orientada a objetos (POO) junto con herencia
+y polimorfismo.
+
+En cuanto a las clases implementadas: 
+
+- Component: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o
+eliminado. Desde un componente se puede acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y 
+eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados por los componentes que hereden de esta clase.
+
+Estos métodos son los siguientes:
+
+\begin{itemize}
+
+\item Init: Método reservado para el motor donde se realiza toda la inicialización que necesita el componente para funcionar correctamente.
+
+\item Start: Método llamado inmediatamente después del Init donde el usuario puede realizar su propia inicialización. 
+
+\item Update: Método llamado en cada vuelta del bucle principal.
+
+\item LateUpdate: Método llamado en cada vuelta del bucle principal inmediatamente después del Update.
+
+\item Render: Método llamado después del Update y LateUpdate. Destinado a implementar el renderizado del componente.
+
+\item FixedUpdate: Método llamado en un intervalo de tiempo fijo denominado paso físico. Destinado a implementar la física del componente.
+
+\item OnActive: Método llamado cuando se activa el componente.
+
+\item OnDeactive: Método llamado cuando se desactiva el componente.
+
+\item OnSceneUp: Método llamado cuando el componente se encuentra en la escena que se acaba de empezar a actualizar.
+
+\item OnSceneDown: Método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
+
+\item OnDestory: Método llamado cuando el componente es eliminado.
+
+\end{itemize}
+
+Métodos para el manejo de colisiones: 
+
+\begin{itemize}
+
+\item OnCollisionEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad.
+
+\item OnCollisionStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad.
+
+\item OnCollisionExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad.
+
+\item OnTriggerEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad y, o bien 
+el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+\item OnTriggerStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad y, o bien 
+el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+\item OnTriggerExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad y, 
+o bien el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+
+Métodos para el Overlay (UI):
+
+\item OnClickBegin: Método llamado cuando se hace click sobre un elemento del componente Overlay de la entidad.
+
+\item OnClickHold: Método llamado cuando se mantiene clickado un elemento del componente Overlay de la entidad.
+
+\item OnDoubleClick: Método llamado cuando se hace doble click sobre un elemento del componente Overlay de la entidad.
+
+\item OnRightClick: Método llamado cuando se hace click derecho sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseEnter: Método llamado cuando el ratón entra sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseHover: Método llamado cuando el ratón se encuentra sobre un elemento del componente Overlay de la entidad.
+
+\item OnMouseExit: Método llamado cuando el ratón sale de un elemento del componente Overlay de la entidad.
+
+\end{itemize}
+
+- Entity: Clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de 
+componentes y otra de scripts asociados a esta entidad. Tiene información sobre el nombre de la entidad, su estado, activa y
+eliminada, un identificador y su orden de renderizado.
+
+En cuanto a funcionalidad, contiene los mismos métodos que los componentes pero con implementación. Esta implementación
+simplemente consiste en llamar a los métodos de todos los componentes asociados a la entidad. Por ejemplo, el método 
+Render de la entidad recorre la lista de componentes asociados y llama al método Render de cada uno. Aquí es donde
+entra la importancia de la herencia y el polimorfismo. Para crear un componente con funcionalidad, se debe heredar
+de la clase Componente e implementar los métodos virtuales disponibles. De esta manera, serán llamados por la entidad
+que contenga el componente creado.
+
+Además de los métodos de los componentes, las entidades tiene métodos para añadir componentes, consultar si contienen
+un componente, eliminar componentes y obtenerlos. Estos métodos hacen uso de templates de C++ con un tipo genérico 
+T y una restricción para asegurar que el T debe ser de tipo componente. Además, los parámetros de éstos métodos reciben
+un paquete de parámetros variados de categoria RValue, por lo que dentro se utiliza la función std::forward para preservar
+esa categoría y evitar así copias innecesarias y garantizar un comportamiento predecible.
+
+Por último mencionar que las entidades también tienen métodos para añadir scripts. La diferencia entre scripts y componentes
+es que, ambos definen lógica para el videojuego pero los componentes son comportamiento, en la mayoría de casos, fundamental 
+y genérico, que proporciona el motor al usuario y los scripts son piezas de lógica que construye el usuario a partir del
+sistema de scripting visual y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
+
+- Scene: La última pieza que compone este ECS son las escenas. Una escena es un conjunto de entidades. Es un concepto 
+importante en los videojuegos ya que normalmente se quiere dividir el juego en estados como menús, gameplay, inventario,
+pantallas de carga, mapa, etc. Contiene información sobre su nombre, la posición y escala de la cámara, y bastantes métodos
+comunes a las entidades y componentes. No todos porque hay algunos que no tienen sentido en las escenas, como los de físicas
+o los de UI. Al igual que las entidades, estos métodos cuentan con funcionalidad y simplemente se dedican a llamar al método
+correspondiente de cada una de las entidades que contiene. Por ejemplo, cuando se actualiza una escena, el método Update
+de la escena lo único que hace es llamar al Update de sus entidades comprobando si el estado de la entidad le permite actualizarse,
+es decir, que esté activa y no esté eliminada.
+
+Además, las escenas cuentan con métodos para crear entidades con identificador y sin identificador, buscar entidades por nombre, 
+y eliminar entidades.
+
+
+\subsubsection{Managers}
+
+- SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
+La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
+
+1.- Operación PUSH: Cuando se cambia una escena y se especifica está operación, añade la escena al top de la pila, por lo que la escena
+añadida pasa a ser la que se actualiza en el juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está 
+actualmente en el top para avisar de que esa escena va a dejar de actualizarse. Posteriormente, una vez añadida al top...
+
+
+
 
 

@@ -98,6 +98,8 @@ ClassReflection::ClassReflection(){
 		CircleBody* self = static_cast<CircleBody*>(selfComp);
 		if(map.contains("radius"))
 			self->radius = std::stof(map.at("radius"));
+		if(map.contains("shorterAxis"))
+			self->shorterAxis = map.at("shorterAxis") == "true" ? true : false;
 		if(map.contains("offSet"))
 			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))
@@ -124,6 +126,10 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectEdgeBody(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		EdgeBody* self = static_cast<EdgeBody*>(selfComp);
+		if(map.contains("xAxis"))
+			self->xAxis = map.at("xAxis") == "true" ? true : false;
+		if(map.contains("size"))
+			self->size = std::stof(map.at("size"));
 		if(map.contains("offSet"))
 			self->offSet = map.at("offSet");
 		if(map.contains("bodyType"))

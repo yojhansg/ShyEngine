@@ -1,0 +1,38 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 1,
+            "serialized": false,
+            "type": "string",
+            "value": "teteeet",
+            "x": 439.0,
+            "y": 190.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "onTriggerEnter",
+            "x": 388.0,
+            "y": 602.0
+        }
+    ],
+    "forks": [],
+    "functions": [
+        {
+            "function": "Print",
+            "index": 2,
+            "input": [
+                1
+            ],
+            "x": 714.0,
+            "y": 461.0
+        }
+    ],
+    "nodeCount": 3,
+    "onTriggerEnter": 2,
+    "serializedValues": []
+}

@@ -1,16 +1,17 @@
 #include "DebugDraw.h"
+
 #include <RendererManager.h>
 #include "PhysicsManager.h"
-#include <SDL.h>
-#include <vector>
 
 #include <iostream>
+#include <vector>
+#include <SDL.h>
+
 
 namespace Physics {
 
 	DebugDraw::DebugDraw() {
 		renderer = Renderer::RendererManager::instance()->getRenderer();
-
 	}
 
 	void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) {
@@ -90,7 +91,6 @@ namespace Physics {
 
 		float screenToWorldFactor = PhysicsManager::instance()->getScreenToWorldFactor();
 
-		//SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		auto red = b2Color(0, 1, 0);
 
 		for (int i = 1; i < vertexCount; i++) {
@@ -99,36 +99,12 @@ namespace Physics {
 
 			DrawSegment(v1, v2, red);
 
-			//v1 *= screenToWorldFactor;
-			//v2 *= screenToWorldFactor;
-
-
-			//int ax = v1.x;
-			//int ay = v1.y;
-			//int bx = v2.x;
-			//int by = v2.y;
-
-			//Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
-			//Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
-
-			//SDL_RenderDrawLine(renderer, ax, ay, bx, by);
 		}
 
 		b2Vec2 v1 = vertices[vertexCount - 1];
 		b2Vec2 v2 = vertices[0];
 
 		DrawSegment(v1, v2, red);
-		/*v1 *= screenToWorldFactor;
-		v2 *= screenToWorldFactor;
-
-		int ax = v1.x;
-		int ay = v1.y;
-		int bx = v2.x;
-		int by = v2.y;
-
-		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
-		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
-		SDL_RenderDrawLine(renderer, ax, ay, bx, by);*/
 
 	}
 
@@ -146,14 +122,10 @@ namespace Physics {
 		int bx = b.x;
 		int by = b.y;
 
-		//std::cout << ax << " " << ay << ", " << bx << " " << by << std::endl;
-
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&ax, &ay, NULL, NULL);
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&bx, &by, NULL, NULL);
 
 		SDL_RenderDrawLine(renderer, ax, ay, bx, by);
-
-		//std::cout << ax << " " << ay << ", " << bx << " " << by << std::endl << std::endl;
 
 	}
 

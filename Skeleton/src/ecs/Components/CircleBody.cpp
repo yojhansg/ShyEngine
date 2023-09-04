@@ -12,9 +12,9 @@ namespace ECS {
 
 		shape = nullptr;
 
-		radius = 0.5f;
+		radius = 0.0f;
 
-		size = { 1, 1 };
+		size = { 0, 0 };
 
 		shorterAxis = false;
 
@@ -36,10 +36,10 @@ namespace ECS {
 			if (radius == 0)
 				size.set(imageSize);
 		}
-
-
-		auto scale = transform->GetWorldScale();
-		radius = std::max(size.getX() * scale.getX(), size.getY() * scale.getY()) / 2;
+		else {
+			auto scale = transform->GetWorldScale();
+			radius = std::max(radius * scale.getX(), radius * scale.getY()) / 2;
+		}
 
 		shape->m_radius = radius;
 
@@ -92,8 +92,17 @@ namespace ECS {
 	float CircleBody::calculateRadius() {
 		auto scale = transform->GetWorldScale();
 
-		float scaledX = size.getX() * scale.getX();
-		float scaledY = size.getY() * scale.getY();
+		float scaledX = 0;
+		float scaledY = 0;
+
+		if (radius != 0) {
+			scaledX = radius * scale.getX();
+			scaledY = radius * scale.getY();
+		}
+		else {
+			scaledX = size.getX() * scale.getX();
+			scaledY = size.getY() * scale.getY();
+		}
 
 		if (shorterAxis)
 			return std::min(scaledX, scaledY) / 2;

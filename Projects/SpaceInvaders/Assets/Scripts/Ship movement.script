@@ -2,9 +2,9 @@
     "comments": [
         {
             "comment": "Moves the ship",
-            "h": 119.0,
-            "index": 8,
-            "w": 234.0,
+            "h": 117.0,
+            "index": 7,
+            "w": 232.0,
             "x": 1205.0,
             "y": 445.0
         }
@@ -13,29 +13,18 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 2,
-            "name": "Ship",
-            "serialized": true,
-            "type": "Entity",
-            "value": 0,
-            "x": -28.0,
-            "y": -7.0
-        },
-        {
-            "enum": false,
-            "enumStr": "",
-            "index": 6,
+            "index": 5,
             "name": "Speed",
             "serialized": true,
             "type": "Vector2D",
             "value": "10.000000,0.000000",
-            "x": -150.0,
-            "y": 830.0
+            "x": -137.0,
+            "y": 816.0
         },
         {
             "enum": false,
             "enumStr": "",
-            "index": 9,
+            "index": 8,
             "name": "Left Limit",
             "serialized": true,
             "type": "Entity",
@@ -46,7 +35,7 @@
         {
             "enum": false,
             "enumStr": "",
-            "index": 10,
+            "index": 9,
             "name": "Right Limit",
             "serialized": true,
             "type": "Entity",
@@ -67,11 +56,11 @@
         {
             "A": -1,
             "B": 1,
-            "condition": 13,
-            "index": 19,
+            "condition": 12,
+            "index": 18,
             "type": 0,
             "x": 2182.0,
-            "y": 863.0
+            "y": 901.0
         }
     ],
     "functions": [
@@ -79,94 +68,103 @@
             "function": "Transform_SetWorldPosition",
             "index": 1,
             "input": [
-                2,
-                4
+                19,
+                3
             ],
             "x": 1227.0,
             "y": 587.0
         },
         {
             "function": "Transform_GetWorldPosition",
-            "index": 3,
+            "index": 2,
             "input": [
-                2
+                19
             ],
             "x": -11.0,
             "y": 264.0
         },
         {
             "function": "Vector2D_Add",
-            "index": 4,
+            "index": 3,
             "input": [
-                3,
-                5
+                2,
+                4
             ],
             "x": 904.0,
-            "y": 1114.0
+            "y": 1109.0
         },
         {
             "function": "Vector2D_Multiply",
-            "index": 5,
+            "index": 4,
             "input": [
-                6,
-                7
+                5,
+                6
             ],
             "x": 194.0,
             "y": 787.0
         },
         {
             "function": "InputManager_HorizontalMovement",
-            "index": 7,
+            "index": 6,
             "input": [],
-            "x": -150.0,
+            "x": -137.0,
             "y": 563.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 10,
+            "input": [
+                9
+            ],
+            "x": 2574.0,
+            "y": 1488.0
         },
         {
             "function": "Transform_GetWorldPosition",
             "index": 11,
             "input": [
-                10
-            ],
-            "x": 2574.0,
-            "y": 1494.0
-        },
-        {
-            "function": "Transform_GetWorldPosition",
-            "index": 12,
-            "input": [
-                9
+                8
             ],
             "x": 2322.0,
             "y": 1524.0
         },
         {
             "function": "Logic_Or",
-            "index": 13,
+            "index": 12,
             "input": [
-                14,
-                18
+                13,
+                17
             ],
             "x": 1840.0,
             "y": 1600.0
         },
         {
             "function": "Logic_GreaterOrEqual",
-            "index": 14,
+            "index": 13,
             "input": [
-                15,
-                16
+                14,
+                15
             ],
             "x": 1799.0,
             "y": 1235.0
         },
         {
             "function": "Vector2D_X",
-            "index": 15,
+            "index": 14,
             "input": [
-                4
+                3
             ],
             "x": 1402.0,
             "y": 1358.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 15,
+            "input": [
+                10
+            ],
+            "x": 2586.0,
+            "y": 1184.0
         },
         {
             "function": "Vector2D_X",
@@ -174,36 +172,29 @@
             "input": [
                 11
             ],
-            "x": 2586.0,
-            "y": 1184.0
-        },
-        {
-            "function": "Vector2D_X",
-            "index": 17,
-            "input": [
-                12
-            ],
             "x": 2313.0,
             "y": 1188.0
         },
         {
             "function": "Logic_LesserOrEqual",
-            "index": 18,
+            "index": 17,
             "input": [
-                15,
-                17
+                14,
+                16
             ],
             "x": 1592.0,
             "y": 1907.0
+        },
+        {
+            "function": "Entity",
+            "index": 19,
+            "input": [],
+            "x": 725.0,
+            "y": 199.0
         }
     ],
     "nodeCount": 20,
     "serializedValues": [
-        {
-            "defaultValue": 0,
-            "name": "Ship",
-            "type": "Entity"
-        },
         {
             "defaultValue": "10.000000,0.000000",
             "name": "Speed",
@@ -220,5 +211,5 @@
             "type": "Entity"
         }
     ],
-    "update": 19
+    "update": 18
 }

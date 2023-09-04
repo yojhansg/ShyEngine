@@ -14,7 +14,7 @@ namespace ECS {
 
         void setEdgeVertices(const Vector2D& v1, const Vector2D& v2);
 
-        Vector2D getSize();
+        float getSize();
 
     private:
 
@@ -26,13 +26,15 @@ namespace ECS {
 
         void setBodyType(BODY_TYPE t) {};
 
+        reflect bool xAxis;
+        reflect float size;
+
         // Box2d circleShape
         b2EdgeShape* shape;
 
         b2Vec2 vertex1;
         b2Vec2 vertex2;
 
-        Vector2D size;
 
     };
 

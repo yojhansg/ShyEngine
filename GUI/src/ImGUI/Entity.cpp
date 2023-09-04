@@ -94,7 +94,7 @@ namespace ShyEditor {
 	}
 
 	//Copy constructor
-	Entity::Entity(const Entity& entity)
+	Entity::Entity(const Entity& entity, bool isPasting)
 	{
 		editor = entity.editor;
 
@@ -154,10 +154,10 @@ namespace ShyEditor {
 
 		parent = nullptr;
 
-		for (auto pair : entity.children) {
-			Entity* child = new Entity(*pair.second);
+		for (auto& pair : entity.children) {
+			Entity* child = new Entity(*pair.second, isPasting);
 
-			child->SetParent(this);
+			child->SetParent(this, isPasting);
 
 			children.emplace(child->GetId(), child);
 		}
@@ -421,12 +421,21 @@ namespace ShyEditor {
 
 	void Entity::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
 	{
-		this->components = components;
+		this->components.clear();
+		
+		for (auto& component : components) {
+			this->components.emplace(component.first, component.second);
+		}
+
 	}
 
 	void Entity::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
 	{
-		this->scripts = scripts;
+		this->scripts.clear();
+
+		for (auto& script : scripts) {
+			this->scripts.emplace(script.first, script.second);
+		}
 	}
 
 

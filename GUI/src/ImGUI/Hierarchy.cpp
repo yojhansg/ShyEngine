@@ -205,7 +205,7 @@ namespace ShyEditor {
 						delete copiedEntity;
 					}
 		
-					copiedEntity = new Entity(*selectedEntity);
+					copiedEntity = new Entity(*selectedEntity, false);
 					cutEntity = nullptr;
 
 				}
@@ -231,7 +231,7 @@ namespace ShyEditor {
 					}
 
 					if (copiedEntity != nullptr) {
-						copiedEntity = new Entity(*copiedEntity);
+						copiedEntity = new Entity(*copiedEntity, false);
 					}
 					
 					cutEntity = nullptr;
@@ -240,7 +240,7 @@ namespace ShyEditor {
 				if (event->key.keysym.scancode == SDL_SCANCODE_D) {
 					if (selectedEntity == nullptr) return;
 
-					Entity* entityToDuplicate = new Entity(*selectedEntity);
+					Entity* entityToDuplicate = new Entity(*selectedEntity, false);
 
 					if (entityToDuplicate->IsTransform()) {
 						scene->AddEntity(entityToDuplicate);
@@ -260,7 +260,7 @@ namespace ShyEditor {
 						delete cutEntity;
 					}
 
-					cutEntity = new Entity(*selectedEntity);
+					cutEntity = new Entity(*selectedEntity, false);
 					copiedEntity = nullptr;
 
 					if (selectedEntity->IsTransform()) {
