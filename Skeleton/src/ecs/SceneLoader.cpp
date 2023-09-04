@@ -150,7 +150,7 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 
 
 	ClassReflection::instance()->ReflectTransform(transform, map);
-	transform->SetParent(parent);
+	transform->SetParent(parent, false);
 
 
 	if (!obj.contains("components")) {

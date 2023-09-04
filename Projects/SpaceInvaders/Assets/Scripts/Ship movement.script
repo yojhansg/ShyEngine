@@ -1,0 +1,215 @@
+{
+    "comments": [
+        {
+            "comment": "Moves the ship",
+            "h": 117.0,
+            "index": 7,
+            "w": 232.0,
+            "x": 1205.0,
+            "y": 445.0
+        }
+    ],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 5,
+            "name": "Speed",
+            "serialized": true,
+            "type": "Vector2D",
+            "value": "10.000000,0.000000",
+            "x": -137.0,
+            "y": 816.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 8,
+            "name": "Left Limit",
+            "serialized": true,
+            "type": "Entity",
+            "value": 0,
+            "x": 2295.0,
+            "y": 1836.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 9,
+            "name": "Right Limit",
+            "serialized": true,
+            "type": "Entity",
+            "value": 0,
+            "x": 2577.0,
+            "y": 1804.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 1849.0,
+            "y": 766.0
+        }
+    ],
+    "forks": [
+        {
+            "A": -1,
+            "B": 1,
+            "condition": 12,
+            "index": 18,
+            "type": 0,
+            "x": 2182.0,
+            "y": 901.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Transform_SetWorldPosition",
+            "index": 1,
+            "input": [
+                19,
+                3
+            ],
+            "x": 1227.0,
+            "y": 587.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 2,
+            "input": [
+                19
+            ],
+            "x": -11.0,
+            "y": 264.0
+        },
+        {
+            "function": "Vector2D_Add",
+            "index": 3,
+            "input": [
+                2,
+                4
+            ],
+            "x": 904.0,
+            "y": 1109.0
+        },
+        {
+            "function": "Vector2D_Multiply",
+            "index": 4,
+            "input": [
+                5,
+                6
+            ],
+            "x": 194.0,
+            "y": 787.0
+        },
+        {
+            "function": "InputManager_HorizontalMovement",
+            "index": 6,
+            "input": [],
+            "x": -137.0,
+            "y": 563.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 10,
+            "input": [
+                9
+            ],
+            "x": 2574.0,
+            "y": 1488.0
+        },
+        {
+            "function": "Transform_GetWorldPosition",
+            "index": 11,
+            "input": [
+                8
+            ],
+            "x": 2322.0,
+            "y": 1524.0
+        },
+        {
+            "function": "Logic_Or",
+            "index": 12,
+            "input": [
+                13,
+                17
+            ],
+            "x": 1840.0,
+            "y": 1600.0
+        },
+        {
+            "function": "Logic_GreaterOrEqual",
+            "index": 13,
+            "input": [
+                14,
+                15
+            ],
+            "x": 1799.0,
+            "y": 1235.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 14,
+            "input": [
+                3
+            ],
+            "x": 1402.0,
+            "y": 1358.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 15,
+            "input": [
+                10
+            ],
+            "x": 2586.0,
+            "y": 1184.0
+        },
+        {
+            "function": "Vector2D_X",
+            "index": 16,
+            "input": [
+                11
+            ],
+            "x": 2313.0,
+            "y": 1188.0
+        },
+        {
+            "function": "Logic_LesserOrEqual",
+            "index": 17,
+            "input": [
+                14,
+                16
+            ],
+            "x": 1592.0,
+            "y": 1907.0
+        },
+        {
+            "function": "Entity",
+            "index": 19,
+            "input": [],
+            "x": 725.0,
+            "y": 199.0
+        }
+    ],
+    "nodeCount": 20,
+    "serializedValues": [
+        {
+            "defaultValue": "10.000000,0.000000",
+            "name": "Speed",
+            "type": "Vector2D"
+        },
+        {
+            "defaultValue": 0,
+            "name": "Left Limit",
+            "type": "Entity"
+        },
+        {
+            "defaultValue": 0,
+            "name": "Right Limit",
+            "type": "Entity"
+        }
+    ],
+    "update": 18
+}

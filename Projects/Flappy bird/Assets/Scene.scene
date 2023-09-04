@@ -10,7 +10,7 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.000000, 0.000000",
+            "localPosition": "-372.059998, 129.080002",
             "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
             "components": [
@@ -28,13 +28,13 @@
                         "value": 10.0
                     }
                 },
-                "Scripts/PlayerRotation": [],
                 "Scripts/CameraController": {
                     "Speed": {
                         "type": "float",
                         "value": 5.0
                     }
-                }
+                },
+                "Scripts/PlayerRotation": []
             }
         },
         {
@@ -75,7 +75,7 @@
             "order": -1,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "2253.660156, -628.070374",
+            "localPosition": "45.839607, 61.709236",
             "localScale": "4.180000, 2.500000",
             "localRotation": "0.000000",
             "components": [
@@ -83,6 +83,23 @@
                     "component": "Image",
                     "attributes": {
                         "fileName": "Floor.jpg"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "0.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": ""
                     }
                 }
             ],
@@ -99,10 +116,10 @@
             "isTransform": false,
             "placement": "1",
             "anchor": "0.500000,0.500000",
-            "top": "0",
-            "left": "0",
-            "right": "0",
-            "bottom": "0",
+            "top": "1",
+            "left": "1",
+            "right": "-1",
+            "bottom": "-1",
             "position": "0.000000, 0.000000",
             "size": "100.000000, 100.000000",
             "components": [

@@ -481,7 +481,6 @@ namespace ShyEditor {
 							
 							prefab->AddScript(script);
 
-
 							// If a script is added we update the prefab instances
 							UpdatePrefabInstances();
 						};

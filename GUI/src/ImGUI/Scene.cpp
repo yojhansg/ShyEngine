@@ -688,10 +688,22 @@ namespace ShyEditor {
 
 	void Scene::HandleInput(SDL_Event* event) {
 
+		if (event->type == SDL_KEYDOWN) {
+
+			if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+
+				if (event->key.keysym.scancode == SDL_SCANCODE_S)
+					SaveScene();
+			}
+		}
+
+		if (!focused) return;
+
 		ImVec2 mousePos = ImGui::GetMousePos();
 		bool insideWindow = IsMouseHoveringWindow();
 		bool anyEntitySelected = false;
-
+		
+		
 		if (insideWindow && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT)
 		{
 			for (const auto& pair : entities) {
@@ -788,15 +800,6 @@ namespace ShyEditor {
 					sceneCamera->SetPosition(pos.x * camScale, pos.y * camScale);
 
 				}
-			}
-		}
-
-		if (event->type == SDL_KEYDOWN) {
-
-			if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
-
-				if (event->key.keysym.scancode == SDL_SCANCODE_S)
-					SaveScene();
 			}
 		}
 

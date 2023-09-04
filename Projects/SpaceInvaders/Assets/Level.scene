@@ -1,0 +1,837 @@
+{
+    "name": "Level",
+    "position": "-0.000000, -0.000000",
+    "scale": 1.0,
+    "objects": [
+        {
+            "name": "background",
+            "id": 30,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "6.071921, 46.072575",
+            "localScale": "2.475634, 2.076642",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "background.png"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "Limits",
+            "id": 31,
+            "childs": [
+                {
+                    "name": "Right limit",
+                    "id": 29,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "850.000000, 0.000007",
+                    "localScale": "0.365464, 22.605421",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                },
+                {
+                    "name": "Left limit",
+                    "id": 28,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "-850.000000, 0.000007",
+                    "localScale": "0.365464, 22.605421",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                }
+            ],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, -0.000000",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [],
+            "scripts": {
+                "Scripts/Limits": {
+                    "Left limit": {
+                        "type": "Entity",
+                        "value": 28
+                    },
+                    "Right limit": {
+                        "type": "Entity",
+                        "value": 29
+                    }
+                }
+            }
+        },
+        {
+            "name": "ship",
+            "id": 32,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, -435.384857",
+            "localScale": "0.205861, 0.236604",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "ship.png"
+                    }
+                }
+            ],
+            "scripts": {
+                "Scripts/Bullet Cooldown": {
+                    "Cooldown": {
+                        "type": "float",
+                        "value": 0.5
+                    }
+                },
+                "Scripts/Ship movement": {
+                    "Left Limit": {
+                        "type": "Entity",
+                        "value": 28
+                    },
+                    "Right Limit": {
+                        "type": "Entity",
+                        "value": 29
+                    },
+                    "Speed": {
+                        "type": "Vector2D",
+                        "value": "5.000000, 0.000000"
+                    }
+                },
+                "Scripts/Shoot": {
+                    "Bullet": {
+                        "type": "Entity",
+                        "value": -2
+                    }
+                }
+            }
+        },
+        {
+            "name": "Aliens",
+            "id": 37,
+            "childs": [
+                {
+                    "name": "Row1",
+                    "id": 9,
+                    "childs": [
+                        {
+                            "name": "alien2",
+                            "id": 8,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "440.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 7,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "300.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 6,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "160.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 5,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "20.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 4,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-120.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 3,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-260.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 2,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-400.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 1,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-540.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "0.000000, -0.000000",
+                    "localScale": "1.000000, 1.000000",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                },
+                {
+                    "name": "Row2",
+                    "id": 10,
+                    "childs": [
+                        {
+                            "name": "alien2",
+                            "id": 11,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "440.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 12,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "300.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 13,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "160.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 14,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "20.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 15,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-120.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 16,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-260.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 17,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-400.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 18,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-540.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "0.000000, -140.000000",
+                    "localScale": "1.000000, 1.000000",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                },
+                {
+                    "name": "Row3",
+                    "id": 19,
+                    "childs": [
+                        {
+                            "name": "alien2",
+                            "id": 20,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "440.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 21,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "300.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 22,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "160.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 23,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "20.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 24,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-120.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 25,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-260.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 26,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-400.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien2",
+                            "id": 27,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-540.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "Vector2D",
+                                        "value": "1.000000, 0.000000"
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "order": 0,
+                    "prefabId": 0,
+                    "isTransform": true,
+                    "localPosition": "0.000000, -280.000000",
+                    "localScale": "1.000000, 1.000000",
+                    "localRotation": "0.000000",
+                    "components": [],
+                    "scripts": null
+                }
+            ],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "0.000000, -0.000000",
+            "localScale": "1.000000, 1.000000",
+            "localRotation": "0.000000",
+            "components": [],
+            "scripts": {
+                "Scripts/Alien Vertical Movement": {
+                    "Jump distance": {
+                        "type": "Vector2D",
+                        "value": "0.000000, -140.000000"
+                    }
+                }
+            }
+        }
+    ],
+    "overlays": []
+}
