@@ -95,8 +95,6 @@ namespace Input {
 
 	publish:
 
-
-
 		// Keyboard
 		bool AnyKeyPressed();
 		bool AnyKeyReleased();
@@ -282,7 +280,6 @@ namespace Input {
 
 			struct ControllerData {
 				SDL_GameController* controller;
-				SDL_Joystick* joystick;
 				SDL_JoystickID id;
 				std::string name;
 				std::vector<ButtonState> buttonsStates;

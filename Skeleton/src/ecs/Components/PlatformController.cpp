@@ -61,6 +61,8 @@ namespace ECS {
 
 	void PlatformController::update(float dt) {
 
+		direction = im->HorizontalMovement();
+
 		if (!hasJumped && nJumps > 0 && im->Jump()) {
 			hasJumped = true;
 			nJumps--;
@@ -69,8 +71,6 @@ namespace ECS {
 	}
 
 	void PlatformController::fixedUpdate(float fixedDt) {
-
-		direction = im->HorizontalMovement();
 
 		// Salto
 		if (hasJumped) {

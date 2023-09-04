@@ -130,45 +130,42 @@ namespace ECS {
 
 		if (onCollisonStay)
 			getEntity()->onCollisionStay(collisionEntity);
-		else if (onTriggerStay)
+		if (onTriggerStay)
 			getEntity()->onTriggerStay(collisionEntity);
 
-		if (bodyType != (int) BODY_TYPE::STATIC) {
+		// Position
+		Vector2D trPosOffSet = position - lastPositionSync;
 
-			// Position
-			Vector2D trPosOffSet = position - lastPositionSync;
+		Vector2D bodyPosOffSet = { body->GetPosition().x * screenToWorldFactor - offSet.getX() - lastPositionSync.getX(),
+									body->GetPosition().y * screenToWorldFactor - offSet.getY() - lastPositionSync.getY()};
 
-			Vector2D bodyPosOffSet = { body->GetPosition().x * screenToWorldFactor - offSet.getX() - lastPositionSync.getX(),
-									  body->GetPosition().y * screenToWorldFactor - offSet.getY() - lastPositionSync.getY()};
+		Vector2D newPos = lastPositionSync + trPosOffSet + bodyPosOffSet;
 
-			Vector2D newPos = lastPositionSync + trPosOffSet + bodyPosOffSet;
+		lastPositionSync = newPos;
 
-			lastPositionSync = newPos;
+		// Rotation
+		float trRotOffSet = rotation - lastRotationSync;
 
-			// Rotation
-			float trRotOffSet = rotation - lastRotationSync;
+		float bodyRotOffSet = body->GetAngle() * (180 / b2_pi) - lastRotationSync;
 
-			float bodyRotOffSet = body->GetAngle() * (180 / b2_pi) - lastRotationSync;
+		float newRotation = lastRotationSync + trRotOffSet + bodyRotOffSet;
 
-			float newRotation = lastRotationSync + trRotOffSet + bodyRotOffSet;
+		lastRotationSync = newRotation;
 
-			lastRotationSync = newRotation;
-
-			// Scale
-			if (lastScaleInfo != scale) {
-				scaleShape();
-				lastScaleInfo = scale;
-			}
-
-			// Body
-			body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor + offSet.getX() / screenToWorldFactor, 
-				newPos.getY() / screenToWorldFactor + offSet.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
-
-			// Transform
-			transform->SetWorldPosition(newPos);
-			transform->SetWorldRotation(-newRotation);
-
+		// Scale
+		if (lastScaleInfo != scale) {
+			scaleShape();
+			lastScaleInfo = scale;
 		}
+
+		// Body
+		body->SetTransform(b2Vec2(newPos.getX() / screenToWorldFactor + offSet.getX() / screenToWorldFactor, 
+			newPos.getY() / screenToWorldFactor + offSet.getY() / screenToWorldFactor), newRotation * (b2_pi / 180));
+
+		// Transform
+		transform->SetWorldPosition(newPos);
+		transform->SetWorldRotation(-newRotation);
+
 
 	}
 

@@ -540,7 +540,6 @@ namespace Input {
 		// Controller Data
 		ControllerData data;
 		data.controller = sdlController;
-		data.joystick = joystick;
 		data.id = id;
 		data.name = name;
 		data.buttonsStates = std::vector<ButtonState>((int)PS4_CONTROLLER_BUTTONS::Count, ButtonState::None);
