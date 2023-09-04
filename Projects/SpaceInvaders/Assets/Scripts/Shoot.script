@@ -9,7 +9,7 @@
             "type": "string",
             "value": "ShipPos",
             "x": 1092.0,
-            "y": 518.0
+            "y": 542.0
         },
         {
             "enum": false,
@@ -19,7 +19,7 @@
             "type": "string",
             "value": "Cooldown",
             "x": 26.0,
-            "y": 67.0
+            "y": 113.0
         },
         {
             "enum": false,
@@ -28,8 +28,8 @@
             "serialized": false,
             "type": "float",
             "value": 0.0,
-            "x": 162.0,
-            "y": 717.0
+            "x": 164.0,
+            "y": 780.0
         },
         {
             "enum": false,
@@ -39,7 +39,7 @@
             "type": "string",
             "value": "ResetCooldown",
             "x": 1678.0,
-            "y": -5.0
+            "y": 12.0
         },
         {
             "enum": false,
@@ -48,8 +48,8 @@
             "serialized": false,
             "type": "bool",
             "value": true,
-            "x": 1361.0,
-            "y": 62.0
+            "x": 1365.0,
+            "y": 169.0
         },
         {
             "enum": true,
@@ -70,14 +70,14 @@
             "type": "string",
             "value": "bullet",
             "x": 1087.0,
-            "y": 87.0
+            "y": 169.0
         }
     ],
     "events": [
         {
             "index": 0,
             "type": "update",
-            "x": -234.0,
+            "x": -229.0,
             "y": 650.0
         }
     ],
@@ -110,7 +110,7 @@
             ],
             "next": 13,
             "x": 1443.0,
-            "y": 507.0
+            "y": 542.0
         },
         {
             "function": "Attribute_SetGlobal",
@@ -121,7 +121,7 @@
             ],
             "next": 2,
             "x": 1246.0,
-            "y": 868.0
+            "y": 910.0
         },
         {
             "function": "Transform_GetWorldPosition",
@@ -139,14 +139,14 @@
                 5
             ],
             "x": 981.0,
-            "y": 918.0
+            "y": 937.0
         },
         {
             "function": "Entity",
             "index": 7,
             "input": [],
-            "x": 174.0,
-            "y": 1035.0
+            "x": 267.0,
+            "y": 1061.0
         },
         {
             "function": "Attribute_GetGlobal",
@@ -154,8 +154,8 @@
             "input": [
                 10
             ],
-            "x": 334.0,
-            "y": 128.0
+            "x": 346.0,
+            "y": 169.0
         },
         {
             "function": "Logic_Lesser",
@@ -165,7 +165,7 @@
                 12
             ],
             "x": 402.0,
-            "y": 507.0
+            "y": 542.0
         },
         {
             "function": "Attribute_SetGlobal",
@@ -174,7 +174,7 @@
                 14,
                 15
             ],
-            "x": 1893.0,
+            "x": 1886.0,
             "y": 366.0
         },
         {
@@ -183,8 +183,8 @@
             "input": [
                 17
             ],
-            "x": -244.0,
-            "y": 233.0
+            "x": -229.0,
+            "y": 268.0
         }
     ],
     "nodeCount": 19,

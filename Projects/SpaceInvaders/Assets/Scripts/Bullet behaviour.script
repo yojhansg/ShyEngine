@@ -8,8 +8,8 @@
             "serialized": false,
             "type": "float",
             "value": 0.0,
-            "x": 264.0,
-            "y": 644.0
+            "x": 270.0,
+            "y": 674.0
         },
         {
             "enum": false,
@@ -20,7 +20,7 @@
             "type": "float",
             "value": 5.0,
             "x": 503.0,
-            "y": 466.0
+            "y": 512.0
         },
         {
             "enum": false,
@@ -30,7 +30,7 @@
             "type": "string",
             "value": "ShipPos",
             "x": 674.0,
-            "y": -200.0
+            "y": -147.0
         },
         {
             "enum": false,
@@ -39,8 +39,8 @@
             "serialized": false,
             "type": "string",
             "value": "TimeDestroy",
-            "x": 2175.0,
-            "y": 772.0
+            "x": 2160.0,
+            "y": 827.0
         },
         {
             "enum": false,
@@ -49,8 +49,8 @@
             "serialized": false,
             "type": "float",
             "value": 5.0,
-            "x": 2190.0,
-            "y": 1220.0
+            "x": 2163.0,
+            "y": 1335.0
         },
         {
             "enum": false,
@@ -59,8 +59,8 @@
             "serialized": false,
             "type": "string",
             "value": "TimeDestroy",
-            "x": 549.0,
-            "y": 933.0
+            "x": 556.0,
+            "y": 1022.0
         },
         {
             "enum": false,
@@ -69,8 +69,8 @@
             "serialized": false,
             "type": "float",
             "value": 0.0,
-            "x": 841.0,
-            "y": 1840.0
+            "x": 844.0,
+            "y": 1856.0
         }
     ],
     "events": [
@@ -78,13 +78,19 @@
             "index": 0,
             "type": "start",
             "x": 250.0,
-            "y": 302.0
+            "y": 340.0
         },
         {
             "index": 16,
             "type": "update",
-            "x": 180.0,
-            "y": 1334.0
+            "x": 197.0,
+            "y": 1354.0
+        },
+        {
+            "index": 29,
+            "type": "onTriggerEnter",
+            "x": 426.0,
+            "y": 2572.0
         }
     ],
     "forks": [
@@ -94,8 +100,8 @@
             "condition": 25,
             "index": 24,
             "type": 0,
-            "x": 1335.0,
-            "y": 1430.0
+            "x": 1338.0,
+            "y": 1485.0
         }
     ],
     "functions": [
@@ -109,14 +115,14 @@
             ],
             "next": 5,
             "x": 844.0,
-            "y": 296.0
+            "y": 339.0
         },
         {
             "function": "Entity",
             "index": 4,
             "input": [],
-            "x": 1022.0,
-            "y": 955.0
+            "x": 1003.0,
+            "y": 1092.0
         },
         {
             "function": "Transform_SetWorldPosition",
@@ -127,7 +133,7 @@
             ],
             "next": 15,
             "x": 2262.0,
-            "y": 333.0
+            "y": 339.0
         },
         {
             "function": "Attribute_GetGlobal",
@@ -136,7 +142,7 @@
                 7
             ],
             "x": 1314.0,
-            "y": 296.0
+            "y": 339.0
         },
         {
             "function": "Transform_GetWorldPosition",
@@ -144,8 +150,8 @@
             "input": [
                 4
             ],
-            "x": 1114.0,
-            "y": 684.0
+            "x": 1269.0,
+            "y": 711.0
         },
         {
             "function": "Vector2D_Y",
@@ -153,15 +159,15 @@
             "input": [
                 8
             ],
-            "x": 1373.0,
-            "y": 772.0
+            "x": 1376.0,
+            "y": 827.0
         },
         {
             "function": "Vector2D_Right",
             "index": 10,
             "input": [],
             "x": 1518.0,
-            "y": -162.0
+            "y": -102.0
         },
         {
             "function": "Vector2D_Multiply",
@@ -171,14 +177,14 @@
                 6
             ],
             "x": 1700.0,
-            "y": 234.0
+            "y": 329.0
         },
         {
             "function": "Vector2D_Up",
             "index": 12,
             "input": [],
-            "x": 1380.0,
-            "y": 1048.0
+            "x": 1383.0,
+            "y": 1092.0
         },
         {
             "function": "Vector2D_Multiply",
@@ -188,7 +194,7 @@
                 9
             ],
             "x": 1677.0,
-            "y": 684.0
+            "y": 733.0
         },
         {
             "function": "Vector2D_Add",
@@ -198,7 +204,7 @@
                 13
             ],
             "x": 1934.0,
-            "y": 333.0
+            "y": 348.0
         },
         {
             "function": "Attribute_SetLocal",
@@ -208,7 +214,7 @@
                 18
             ],
             "x": 2518.0,
-            "y": 684.0
+            "y": 711.0
         },
         {
             "function": "Attribute_SetLocal",
@@ -218,8 +224,8 @@
                 22
             ],
             "next": 24,
-            "x": 1038.0,
-            "y": 1400.0
+            "x": 1053.0,
+            "y": 1435.0
         },
         {
             "function": "Attribute_GetLocal",
@@ -227,8 +233,8 @@
             "input": [
                 20
             ],
-            "x": 549.0,
-            "y": 1469.0
+            "x": 556.0,
+            "y": 1493.0
         },
         {
             "function": "Math_Subtract",
@@ -237,15 +243,15 @@
                 21,
                 23
             ],
-            "x": 766.0,
-            "y": 1341.0
+            "x": 782.0,
+            "y": 1335.0
         },
         {
             "function": "Time_GetDeltaTime",
             "index": 23,
             "input": [],
             "x": 311.0,
-            "y": 1407.0
+            "y": 1434.0
         },
         {
             "function": "Logic_Lesser",
@@ -254,8 +260,8 @@
                 21,
                 26
             ],
-            "x": 1104.0,
-            "y": 1730.0
+            "x": 1107.0,
+            "y": 1731.0
         },
         {
             "function": "Destroy_Entity",
@@ -263,18 +269,35 @@
             "input": [
                 28
             ],
-            "x": 1687.0,
+            "x": 1690.0,
             "y": 1637.0
         },
         {
             "function": "Entity",
             "index": 28,
             "input": [],
-            "x": 1898.0,
-            "y": 1776.0
+            "x": 1377.0,
+            "y": 1921.0
+        },
+        {
+            "function": "Destroy_Entity",
+            "index": 30,
+            "input": [
+                31
+            ],
+            "x": 813.0,
+            "y": 2545.0
+        },
+        {
+            "function": "Entity",
+            "index": 31,
+            "input": [],
+            "x": 571.0,
+            "y": 2204.0
         }
     ],
-    "nodeCount": 29,
+    "nodeCount": 32,
+    "onTriggerEnter": 30,
     "serializedValues": [
         {
             "defaultValue": 5.0,
