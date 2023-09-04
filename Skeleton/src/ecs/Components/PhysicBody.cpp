@@ -58,7 +58,7 @@ namespace ECS {
 	}
 
 	void PhysicBody::onDestroy() {
-		//world->DestroyBody(body);
+		world->DestroyBody(body);
 	}
 
 	void PhysicBody::init() {
