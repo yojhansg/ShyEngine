@@ -421,6 +421,8 @@ namespace ShyEditor {
 
 	void Entity::SetComponents(std::unordered_map<std::string, ::Components::Component> components)
 	{
+		this->components.clear();
+		
 		for (auto& component : components) {
 			this->components.emplace(component.first, component.second);
 		}
@@ -429,6 +431,8 @@ namespace ShyEditor {
 
 	void Entity::SetScripts(std::unordered_map<std::string, Components::Script> scripts)
 	{
+		this->scripts.clear();
+
 		for (auto& script : scripts) {
 			this->scripts.emplace(script.first, script.second);
 		}
