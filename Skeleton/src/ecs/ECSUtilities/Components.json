@@ -2441,6 +2441,14 @@
     "TopDownController": {
         "attributes": [
             {
+                "name": "blockXAxis",
+                "type": "Toggle"
+            },
+            {
+                "name": "blockYAxis",
+                "type": "Toggle"
+            },
+            {
                 "name": "velocity",
                 "type": "Number"
             },

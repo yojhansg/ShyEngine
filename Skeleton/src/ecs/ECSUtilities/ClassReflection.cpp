@@ -436,6 +436,10 @@ ClassReflection::ClassReflection(){
 }
 	void ClassReflection::ReflectTopDownController(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
 		TopDownController* self = static_cast<TopDownController*>(selfComp);
+		if(map.contains("blockXAxis"))
+			self->blockXAxis = map.at("blockXAxis") == "true" ? true : false;
+		if(map.contains("blockYAxis"))
+			self->blockYAxis = map.at("blockYAxis") == "true" ? true : false;
 		if(map.contains("velocity"))
 			self->velocity = std::stof(map.at("velocity"));
 		if(map.contains("clampDiagonalVelocity"))

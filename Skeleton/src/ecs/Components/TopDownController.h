@@ -32,6 +32,8 @@ namespace ECS {
 
 		Utilities::Vector2D direction;
 
+		reflect bool blockXAxis;
+		reflect bool blockYAxis;
 		reflect float velocity;
 		reflect bool clampDiagonalVelocity;
 		reflect bool usePhysics;

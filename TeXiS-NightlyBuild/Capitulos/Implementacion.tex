@@ -731,9 +731,12 @@ y eliminar entidades.
 - SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
 La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
 
-1.- Operación PUSH: Cuando se cambia una escena y se especifica está operación, añade la escena al top de la pila, por lo que la escena
-añadida pasa a ser la que se actualiza en el juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está 
-actualmente en el top para avisar de que esa escena va a dejar de actualizarse. Posteriormente, una vez añadida al top...
+1.- Operación PUSH: Cuando se cambia una escena y se especifica está operación, carga la escena y la añade al top de la pila, por 
+lo que la escena añadida pasa a ser la que se actualiza en el juego. Antes de añadirla al top, llama al método OnSceneDown de la 
+escena que está actualmente en el top para avisar de que esa escena va a dejar de actualizarse. Posteriormente, una vez añadida al top,
+se llama al Start para la inicialización de la escena.
+
+2.- Operación 
 
 
 
