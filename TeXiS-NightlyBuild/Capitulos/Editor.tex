@@ -6,7 +6,7 @@
 
 \chapter{Editor}
 
-%------------------------------------------------ GESTION DE ESCENAS --------------------------------------------
+%------------------------------------------------ IMGUI --------------------------------------------
 
 \section{ImGUI}
 
@@ -19,26 +19,26 @@ Además, en nuestro proyecto, hemos aprovechado la funcionalidad de docking de Im
 Esto significa que los usuarios pueden organizar y anclar ventanas según sus preferencias, lo que facilita la personalización de la interfaz de usuario del editor. 
 
 
-\section{Ventanas y Popups}
+\subsection{Ventanas y Popups}
 ImGui facilita la creación de ventanas y popups de manera intuitiva y eficaz. Esto permite organizar y presentar información de manera clara y ordenada 
 en la interfaz del editor. Los métodos de ImGui, como Begin(), End(), OpenPopup(), y CloseCurrentPopup(), son utilizados para gestionar ventanas y 
 popups de manera dinámica.
 
-\section{Selección y Dropdowns}
+\subsection{Selección y Dropdowns}
 La biblioteca ImGui proporciona elementos interactivos como espacios con texto seleccionables y dropdowns. Los espacios con texto seleccionables permiten a 
 los usuarios interactuar con información específica, mientras que los dropdowns ofrecen opciones ocultas que se despliegan cuando el usuario lo requiere, 
 mejorando la experiencia de usuario y la organización de la información.
 
-\section{Inputs}
+\subsection{Inputs}
 Para la entrada de datos, ImGui ofrece una variedad de métodos útiles. InputText(), por ejemplo, permite a los usuarios ingresar texto en campos designados. 
 Además, se pueden utilizar otros métodos como InputInt(), InputFloat(), y InputDouble() para gestionar diferentes tipos de datos de entrada.
 
-\section{Recepción y Envío de Assets Entre Ventanas}
+\subsection{Recepción y Envío de Assets Entre Ventanas}
 ImGui es especialmente útil para recibir y enviar activos (assets) entre ventanas del editor. Esto se logra mediante la implementación de 
 ventanas de ImGui que permiten la interacción del usuario para cargar, modificar o eliminar activos. Por ejemplo, se puede utilizar ImGui para agregar
 assets al explorador de archivos o para crear entidades arrastrando y soltando imágenes en la escena.
 
-\section{Inicialización}
+\subsection{Inicialización}
 Para inicializar ImGUI con SDL hemos seguido un procedimiento específico. Primero, se debe iniciar SDL, 
 que es la biblioteca Simple DirectMedia Layer utilizada para la gestión de ventanas y gráficos. Luego, se crea el contexto de ImGui utilizando
 ImGui::CreateContext(). Finalmente, se configuran las conexiones con la plataforma y el renderizador utilizando las funciones correspondientes, como:
@@ -51,6 +51,7 @@ ImGui_ImplSDLRenderer2_Init(renderer);
 Este proceso asegura que ImGui funcione de manera efectiva junto con SDL en el proyecto.
 
 
+%------------------------------------------------ GESTION DE ESCENAS --------------------------------------------
 
 \section{Gestión de Escenas}
 
@@ -61,7 +62,8 @@ de guardar y cargar escenas desde archivos en formato JSON, así como también la 
 elementos presentes en la escena. La clase \texttt{Scene} incluye una cámara virtual que se integra en la escena y permite al usuario explorar y visualizar el entorno 
 desde diferentes perspectivas.
 
-\section{Renderizado de las entidades y cámara virtual}
+
+\subsection{Renderizado de las entidades y cámara virtual}
 Para renderizar la escena, la cámara virtual contiene una textura de destino (texture target) donde se renderizarán todas las entidades utilizando la biblioteca SDL.
 Este proceso tiene en cuenta la posición, tamaño y nivel de zoom de la cámara virtual. Una vez que todas las entidades se han renderizado en esta textura, se utiliza 
 una ventana de ImGUI para renderizar esa textura target y mostrar la escena completa en la ventana principal del editor. Esto proporciona una representación visual 
@@ -69,7 +71,7 @@ precisa de la escena, permitiendo al usuario ver todos los elementos presentes e
 
 Es importante destacar que las entidades y las superposiciones (overlays) no se manejan de la misma manera en el proceso de renderizado, como se habla en  (REFERENCIA).
 
-\section{Métodos relevantes de la clase \texttt{Scene}}
+\subsection{Métodos relevantes de la clase \texttt{Scene}}
 
 \begin{itemize}
     \item \texttt{AddEntity()}: Este método permite añadir una nueva entidad a la lista de objetos de la escena. Las entidades representan elementos visuales 
@@ -112,7 +114,7 @@ Es importante destacar que las entidades y las superposiciones (overlays) no se 
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
-
+%------------------------------------------------ GESTION DE VENTANAS --------------------------------------------
 
 \section{Gestión de Ventanas}
 Las ventanas en nuestro editor se gestionan a través de un vector de la clase Window que se encuentra dentro de la clase Editor. El editor tiene la responsabilidad 
@@ -152,6 +154,74 @@ comunes para todas las ventanas. Algunos de los métodos relevantes incluyen:
 
 Esta estructura permite una gestión flexible y coherente de las ventanas en el editor, lo que facilita la creación de una interfaz de usuario rica y eficiente.
 
+
+%------------------------------------------------ LA CLASE EDITOR Y WINDOWLAYOUT --------------------------------------------
+
+
+\section{La clase Editor y WindowLayout}
+
+\subsection{La Clase Editor y sus Estados}
+
+La clase `Editor` desempeña un papel fundamental en la estructura de nuestro proyecto. Esta clase centraliza la gestión de las ventanas y su estado en el editor. 
+Una característica destacada es la presencia de una pila de estados, que permite alternar entre dos estados principales: la ventana de scripting y el propio 
+entorno del editor. Esta funcionalidad proporciona una forma eficaz de cambiar el contexto de trabajo y facilita la programación y el diseño visual en el editor.
+
+El `Editor` también incluye métodos cruciales para guardar y cargar el estado de las distintas ventanas, determinando si están visibles o no. Los métodos 
+`StoreWindowsData` y `LoadWindowsData` permiten mantener la configuración de la interfaz de usuario persistente entre sesiones del editor.
+
+\subsection{Window Layout y su utilidad}
+
+El proceso de renderizado de las ventanas en el editor se beneficia de la clase `Window Layout`. Esta clase juega un papel importante al administrar diferentes diseños (layouts) de ventanas. Los diseños se gestionan utilizando `ImGui::Dockbuilder`, lo que permite una organización flexible de las ventanas en el espacio de trabajo.
+
+Los métodos de `Window Layout`, como `Update()` y `GetAllLayouts()`, facilitan la gestión y selección de diseños específicos para las ventanas. Cuando el usuario selecciona un diseño, este se aplica automáticamente al renderizar, lo que permite una experiencia de usuario personalizada y adaptable según las necesidades de cada tarea en el editor. La capacidad de cambiar rápidamente entre diseños de ventanas mejora la eficiencia y la comodidad en el flujo de trabajo del usuario.
+
+
+%------------------------------------------------ FILE EXPLORER--------------------------------------------
+
+\section{Navegación y gestión de archivos con FileExplorer}
+
+La clase FileExplorer desempeña un papel crucial en nuestro editor al gestionar la ventana del explorador de archivos. Esta clase se encarga de controlar 
+y mostrar el contenido de los directorios, así como de interactuar con los archivos y directorios presentes en el sistema de archivos del proyecto.
+
+FileExplorer utiliza una variable auxiliar llamada Entry para almacenar información detallada sobre un archivo o directorio, incluyendo su ruta, 
+nombre y extensión. Además, mantiene una cola de ficheros que representan el contenido del directorio actual. Esta cola se actualiza dinámicamente al 
+cambiar de directorio o al activar la función de actualización (refresh) para reflejar el contenido más reciente.
+
+Para navegar por los directorios y obtener información sobre ellos, FileExplorer hace uso de la biblioteca filesystem, que proporciona acceso a las 
+clases path y directory iterator para la manipulación de rutas y la exploración de directorios.Entre los métodos relevantes de la clase FileExplorer, se encuentran:
+
+\begin{itemize}
+    \item `ProcessPath()`: Este método se encarga de procesar la ruta del directorio actual y actualizar la cola de ficheros para reflejar su contenido. 
+    Facilita la navegación y actualización del explorador de archivos.
+    
+    \item `DrawList()`: Controla la representación visual de la lista de archivos y directorios en la ventana del explorador. Este método se encarga de 
+    mostrar el contenido de manera legible y accesible para el usuario.
+    
+    \item `OnItemSelected()`: Establece las acciones a realizar al seleccionar un elemento en la lista. Además, define comportamientos específicos para las 
+    extensiones de archivo, como `.scene` o `.script`, cuando se realiza doble clic sobre ellos, lo que facilita la interacción y edición de archivos relevantes
+    en el proyecto.
+\end{itemize}
+
+La clase `FileExplorer` mejora la eficiencia y la comodidad del flujo de trabajo del usuario al proporcionar una interfaz intuitiva para la navegación y 
+gestión de archivos y directorios en el proyecto del editor.
+
+
+%------------------------------------------------ PASO DE ASSETS ENTRE ESCENAS --------------------------------------------
+
+\section{Paso de Assets entre escenas}
+
+Una funcionalidad esencial de nuestro editor es la capacidad de transferir activos (assets) entre escenas de manera eficiente. Para lograr esto, 
+hacemos uso de las capacidades de arrastrar y soltar (drag-and-drop) proporcionadas por ImGui, específicamente a través de las funciones `BeginDragAndDropSource`,
+ `SetDragDropPayload`, y BeginDragAndDropTarget.
+ 
+Hemos desarrollado una clase auxiliar llamada `Asset` que desempeña un papel crucial en este proceso. La clase `Asset` contiene información detallada sobre un activo, 
+incluyendo su nombre, extensión, ruta, ruta relativa, indicador de si es un prefab y su identificador de prefab. Esta información es esencial para garantizar que
+los activos se transfieran de manera precisa y coherente entre las escenas.
+
+Además, cada ventana en el editor, como parte de la clase `Window`, implementa el método `ReceiveAssetDrop`. Este método es responsable de procesar un activo 
+recibido, y cada ventana puede personalizar su propia lógica para manejar activos específicos según sus necesidades. Por ejemplo, una ventana de 
+escena podría procesar activos gráficos, mientras que una ventana de lógica podría manejar scripts. La capacidad de personalizar el comportamiento de la 
+transferencia de activos es fundamental para adaptarse a las necesidades de cada ventana y facilitar la manipulación de activos en el proyecto.
 
 
 %------------------------------------------------ ENTIDADES --------------------------------------------
@@ -219,7 +289,7 @@ padre, lo que garantiza que los movimientos y ajustes de transformación sean coh
 Para gestionar estos aspectos, la clase \texttt{Transform} se encarga de proporcionar métodos para obtener y establecer tanto los valores globales como los 
 relativos.
 
-\section{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
+\subsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
 
 \begin{itemize}
     \item \texttt{AddChild()}: permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
@@ -232,7 +302,7 @@ relativos.
     
 \end{itemize}
 
-\section{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
+\subsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
 
 \begin{itemize}
     \item \texttt{GetWorldPosition()}: se obtiene la posición global de la entidad, considerando la transformación jerárquica 
@@ -320,9 +390,8 @@ y manipulación coherente de la escena en el editor. Para su diferenciación visua
 en la figura \ref{fig:instancia_prefab}.
 
 
-
 %------------------------------------------------ COMPONENTES Y SCRIPTS --------------------------------------------
-\subsection{Componentes}
+\section{Componentes}
 
 En el contexto del sistema descrito, los componentes juegan un papel fundamental al definir el comportamiento y las propiedades de las entidades en el motor. 
 Los componentes son leídos desde un archivo JSON del motor, el cual contiene información sobre cada componente, sus atributos y funciones.
@@ -378,7 +447,12 @@ En resumen, los componentes y su relación con las entidades en el motor permiten
 precisa de la funcionalidad de cada elemento en el mundo virtual, enriqueciendo la experiencia del usuario y posibilitando un proceso 
 de desarrollo más fluido y adaptativo.
 
+
+
+%------------------------------------------------ EJECUCION, CARPETAS, Y BUILD --------------------------------------------
+
 \section{Ejecución del juego, estructura de carpetas y build del motor}
+
 \subsection{Ejecución del juego y redirección de la salida mediante tuberías}
 La ejecución del juego en nuestro editor se maneja a través de dos botones ubicados en la parte superior, que permiten ejecutar el juego en modo de 
 depuración (\textit{debug}) o en modo de lanzamiento (\textit{release}). Estos botones invocan el método \texttt{play()} de la clase \texttt{Game}. 
