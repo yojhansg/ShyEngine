@@ -126,16 +126,16 @@
                 }
             ],
             "scripts": {
-                "Scripts/Ship movement": {
-                    "Speed": {
-                        "type": "float",
-                        "value": 5.0
-                    }
-                },
                 "Scripts/Shoot": {
                     "PrefabName": {
                         "type": "string",
                         "value": "bullet"
+                    }
+                },
+                "Scripts/Ship movement": {
+                    "Speed": {
+                        "type": "float",
+                        "value": 5.0
                     }
                 },
                 "Scripts/Bullet Cooldown": {
@@ -153,7 +153,7 @@
             "order": -2,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.666151, 29.237591",
+            "localPosition": "6.696740, 27.598717",
             "localScale": "2.445358, 2.014811",
             "localRotation": "0.000000",
             "components": [
@@ -214,50 +214,6 @@
                     "childs": [
                         {
                             "name": "alien",
-                            "id": 3,
-                            "childs": [],
-                            "order": 0,
-                            "prefabId": -1,
-                            "isTransform": true,
-                            "localPosition": "-540.000000, 440.000000",
-                            "localScale": "1.000000, 1.000000",
-                            "localRotation": "0.000000",
-                            "components": [
-                                {
-                                    "component": "Image",
-                                    "attributes": {
-                                        "fileName": "alien2.png"
-                                    }
-                                },
-                                {
-                                    "component": "BoxBody",
-                                    "attributes": {
-                                        "size": "0.000000, 0.000000",
-                                        "offSet": "0.000000, 0.000000",
-                                        "bodyType": "2.000000",
-                                        "mass": "1.000000",
-                                        "bounciness": "0.000000",
-                                        "trigger": "false",
-                                        "freezeRotation": "false",
-                                        "gravityScale": "1.000000",
-                                        "friction": "0.000000",
-                                        "linearDamping": "0.000000",
-                                        "angularDamping": "0.000000",
-                                        "layerName": "Alien"
-                                    }
-                                }
-                            ],
-                            "scripts": {
-                                "Scripts/Alien Horizontal Movement": {
-                                    "Speed": {
-                                        "type": "float",
-                                        "value": 5.0
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "name": "alien",
                             "id": 11,
                             "childs": [],
                             "order": 0,
@@ -295,7 +251,51 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "alien",
+                            "id": 3,
+                            "childs": [],
+                            "order": 0,
+                            "prefabId": -1,
+                            "isTransform": true,
+                            "localPosition": "-540.000000, 440.000000",
+                            "localScale": "1.000000, 1.000000",
+                            "localRotation": "0.000000",
+                            "components": [
+                                {
+                                    "component": "Image",
+                                    "attributes": {
+                                        "fileName": "alien2.png"
+                                    }
+                                },
+                                {
+                                    "component": "BoxBody",
+                                    "attributes": {
+                                        "size": "0.000000, 0.000000",
+                                        "offSet": "0.000000, 0.000000",
+                                        "bodyType": "2.000000",
+                                        "mass": "1.000000",
+                                        "bounciness": "0.000000",
+                                        "trigger": "false",
+                                        "freezeRotation": "false",
+                                        "gravityScale": "1.000000",
+                                        "friction": "0.000000",
+                                        "linearDamping": "0.000000",
+                                        "angularDamping": "0.000000",
+                                        "layerName": "Alien"
+                                    }
+                                }
+                            ],
+                            "scripts": {
+                                "Scripts/Alien Horizontal Movement": {
+                                    "Speed": {
+                                        "type": "float",
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -339,7 +339,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -383,7 +383,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -427,7 +427,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -471,7 +471,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -515,7 +515,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -559,7 +559,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -617,7 +617,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -661,7 +661,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -705,7 +705,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -749,7 +749,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -793,7 +793,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -837,7 +837,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -881,7 +881,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -925,7 +925,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -983,7 +983,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1027,7 +1027,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1071,7 +1071,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1115,7 +1115,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1159,7 +1159,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1203,7 +1203,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1247,7 +1247,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1291,7 +1291,7 @@
                                 "Scripts/Alien Horizontal Movement": {
                                     "Speed": {
                                         "type": "float",
-                                        "value": 5.0
+                                        "value": 3.0
                                     }
                                 }
                             }
@@ -1315,12 +1315,6 @@
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
-                "Scripts/Alien Vertical Movement": {
-                    "Jump distance": {
-                        "type": "Vector2D",
-                        "value": "0.000000, -70.000000"
-                    }
-                },
                 "Scripts/AlienManager": {
                     "Alien count": {
                         "type": "float",
@@ -1329,6 +1323,12 @@
                     "Win Scene": {
                         "type": "string",
                         "value": "Win.scene"
+                    }
+                },
+                "Scripts/Alien Vertical Movement": {
+                    "Jump distance": {
+                        "type": "Vector2D",
+                        "value": "0.000000, -70.000000"
                     }
                 }
             }
