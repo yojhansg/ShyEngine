@@ -121,6 +121,48 @@ Es importante destacar que las entidades y las superposiciones (overlays) no se 
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
+
+
+\subsection{Gestión de Ventanas}
+Las ventanas en nuestro editor se gestionan a través de un vector de la clase Window que se encuentra dentro de la clase Editor. El editor tiene la responsabilidad 
+de renderizar y manejar la entrada (input) de estas ventanas de manera centralizada. 
+
+La clase Window sirve como la clase base para cada ventana en el editor, y todas las ventanas heredan de ella. Esta clase base proporciona funcionalidades 
+comunes para todas las ventanas. Algunos de los métodos relevantes incluyen:
+
+\begin{itemize}
+    \item `IsFocused()`: Este método permite verificar si la ventana está enfocada o activa, lo que puede ser útil para determinar la interacción del usuario.
+    
+    \item `IsDocked()`: Verifica si la ventana está acoplada a otra ventana o se encuentra en modo flotante, lo que puede afectar su diseño y ubicación.
+    
+    \item `ReceiveAssetDrop()`: Gestiona la recepción de activos que se arrastran y sueltan en la ventana, permitiendo la incorporación de recursos 
+    a la ventana de manera eficiente.
+
+    \item `GetPosition()`: Obtiene la posición actual de la ventana.
+    
+    \item `SetPosition()`: Establece la posición de la ventana.
+    
+    \item `GetSize()`: Obtiene el tamaño actual de la ventana.
+    
+    \item `SetSize()`: Establece el tamaño de la ventana.
+    
+    \item `Hide()` y `Show()`: Controlan la visibilidad de la ventana, lo que puede ser útil para mostrar u ocultar paneles según las necesidades del usuario.
+    
+    \item `IsMouseHoveringWindow()`: Determina si el cursor del mouse se encuentra sobre la ventana en ese momento, lo que puede ser relevante para eventos de interacción.
+    
+    \item `HandleInput()`: Se encarga de gestionar la entrada de usuario, lo que incluye la capacidad de responder a eventos como clics de ratón y pulsaciones de teclas.
+    
+    \item `Behaviour()`: Este método se encarga de inicializar la ventana y establecer su tamaño utilizando las funciones de ImGui, como `ImGui::Begin()`, 
+    `ImGui::End()`, `ImGui::SetNextWindowSize()`, y `ImGui::SetNextWindowPos()`. En medio de este método, se llama a `Behaviour()`, que define el comportamiento 
+    específico de cada ventana que hereda de la clase `Window`. Por ejemplo, las ventanas de jerarquía (`Hierarchy`) o componentes (`Components`) tendrán sus 
+    propios comportamientos personalizados para interactuar con el usuario de manera adecuada.
+
+\end{itemize}
+
+Esta estructura permite una gestión flexible y coherente de las ventanas en el editor, lo que facilita la creación de una interfaz de usuario rica y eficiente.
+
+
+
 %------------------------------------------------ ENTIDADES --------------------------------------------
 
 \subsection{Entidades}
