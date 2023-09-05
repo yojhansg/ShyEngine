@@ -55,7 +55,12 @@ namespace ECS {
 
 	void TopDownController::update(float dt) {
 
-		direction = { im->HorizontalMovement(), im->VerticalMovement() };
+		if (blockXAxis)
+			direction = { 0, im->VerticalMovement() };
+		else if (blockYAxis)
+			direction = { im->HorizontalMovement(), 0 };
+		else
+			direction = { im->HorizontalMovement(), im->VerticalMovement() };
 
 		if (clampDiagonalVelocity)
 			direction = direction.normalize();

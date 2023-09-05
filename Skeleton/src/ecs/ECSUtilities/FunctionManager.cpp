@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Sep  4 03:05:02 2023
+//Creation time: Mon Sep  4 17:13:14 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -3722,7 +3722,7 @@ Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const
 }
 Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>const& vec){
 	SceneManager* manager = SceneManager::instance();
-	manager->ChangeScene(vec[0].str, vec[1].value.Float);
+	manager->ChangeScene(vec[0].str , vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec){

@@ -11,7 +11,55 @@
 %-------------------------------------------------------------------
 \label{cap4:sec:editor}
 
+
+
+
+
 %------------------------------------------------ GESTION DE ESCENAS --------------------------------------------
+
+\subsection{ImGUI}
+
+ImGui es una biblioteca de interfaz de usuario (UI) que se destaca por su enfoque inmediato, generando la interfaz de usuario de manera efímera 
+en cada fotograma en lugar de mantener objetos de UI a largo plazo. Esto simplifica el desarrollo y es ampliamente utilizado en la creación de ventanas, 
+popups, botones, campos de texto y más. ImGui es de código abierto y está disponible en varios lenguajes de programación, lo que lo hace accesible para una 
+amplia gama de desarrolladores.
+
+Además, en nuestro proyecto, hemos aprovechado la funcionalidad de docking de ImGui, que permite conectar ventanas entre sí de manera flexible. 
+Esto significa que los usuarios pueden organizar y anclar ventanas según sus preferencias, lo que facilita la personalización de la interfaz de usuario del editor. 
+
+
+\subsubsection{Ventanas y Popups}
+ImGui facilita la creación de ventanas y popups de manera intuitiva y eficaz. Esto permite organizar y presentar información de manera clara y ordenada 
+en la interfaz del editor. Los métodos de ImGui, como Begin(), End(), OpenPopup(), y CloseCurrentPopup(), son utilizados para gestionar ventanas y 
+popups de manera dinámica.
+
+\subsubsection{Selección y Dropdowns}
+La biblioteca ImGui proporciona elementos interactivos como espacios con texto seleccionables y dropdowns. Los espacios con texto seleccionables permiten a 
+los usuarios interactuar con información específica, mientras que los dropdowns ofrecen opciones ocultas que se despliegan cuando el usuario lo requiere, 
+mejorando la experiencia de usuario y la organización de la información.
+
+\subsubsection{Inputs}
+Para la entrada de datos, ImGui ofrece una variedad de métodos útiles. InputText(), por ejemplo, permite a los usuarios ingresar texto en campos designados. 
+Además, se pueden utilizar otros métodos como InputInt(), InputFloat(), y InputDouble() para gestionar diferentes tipos de datos de entrada.
+
+\subsubsection{Recepción y Envío de Assets Entre Ventanas}
+ImGui es especialmente útil para recibir y enviar activos (assets) entre ventanas del editor. Esto se logra mediante la implementación de 
+ventanas de ImGui que permiten la interacción del usuario para cargar, modificar o eliminar activos. Por ejemplo, se puede utilizar ImGui para agregar
+assets al explorador de archivos o para crear entidades arrastrando y soltando imágenes en la escena.
+
+\subsubsection{Inicialización}
+Para inicializar ImGUI con SDL hemos seguido un procedimiento específico. Primero, se debe iniciar SDL, 
+que es la biblioteca Simple DirectMedia Layer utilizada para la gestión de ventanas y gráficos. Luego, se crea el contexto de ImGui utilizando
+ImGui::CreateContext(). Finalmente, se configuran las conexiones con la plataforma y el renderizador utilizando las funciones correspondientes, como:
+
+\begin{verbatim}
+ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+ImGui_ImplSDLRenderer2_Init(renderer);
+\end{verbatim}
+
+Este proceso asegura que ImGui funcione de manera efectiva junto con SDL en el proyecto.
+
+
 
 \subsection{Gestión de Escenas}
 
@@ -21,6 +69,14 @@ Cada instancia de esta clase contiene listas de objetos y superposiciones (\text
 de guardar y cargar escenas desde archivos en formato JSON, así como también la gestión tanto de la interfaz de usuario como de la representación visual de los 
 elementos presentes en la escena. La clase \texttt{Scene} incluye una cámara virtual que se integra en la escena y permite al usuario explorar y visualizar el entorno 
 desde diferentes perspectivas.
+
+\subsubsection{Renderizado de las entidades y cámara virtual}
+Para renderizar la escena, la cámara virtual contiene una textura de destino (texture target) donde se renderizarán todas las entidades utilizando la biblioteca SDL.
+Este proceso tiene en cuenta la posición, tamaño y nivel de zoom de la cámara virtual. Una vez que todas las entidades se han renderizado en esta textura, se utiliza 
+una ventana de ImGUI para renderizar esa textura target y mostrar la escena completa en la ventana principal del editor. Esto proporciona una representación visual 
+precisa de la escena, permitiendo al usuario ver todos los elementos presentes en la misma.
+
+Es importante destacar que las entidades y las superposiciones (overlays) no se manejan de la misma manera en el proceso de renderizado, como se habla en  (REFERENCIA).
 
 \subsubsection{Métodos relevantes de la clase \texttt{Scene}}
 
@@ -65,9 +121,47 @@ desde diferentes perspectivas.
 En conjunto, estos métodos permiten que la clase \texttt{Scene} desempeñe una función esencial en la creación y manipulación de escenas dentro del 
 editor, garantizando una experiencia interactiva y eficiente para los usuarios.
 
-\medskip
 
-\textbf{\textit{TODO: Mostrar imagenes de las distintas escenas ¿?\ldots}}
+
+\subsection{Gestión de Ventanas}
+Las ventanas en nuestro editor se gestionan a través de un vector de la clase Window que se encuentra dentro de la clase Editor. El editor tiene la responsabilidad 
+de renderizar y manejar la entrada (input) de estas ventanas de manera centralizada. 
+
+La clase Window sirve como la clase base para cada ventana en el editor, y todas las ventanas heredan de ella. Esta clase base proporciona funcionalidades 
+comunes para todas las ventanas. Algunos de los métodos relevantes incluyen:
+
+\begin{itemize}
+    \item `IsFocused()`: Este método permite verificar si la ventana está enfocada o activa, lo que puede ser útil para determinar la interacción del usuario.
+    
+    \item `IsDocked()`: Verifica si la ventana está acoplada a otra ventana o se encuentra en modo flotante, lo que puede afectar su diseño y ubicación.
+    
+    \item `ReceiveAssetDrop()`: Gestiona la recepción de activos que se arrastran y sueltan en la ventana, permitiendo la incorporación de recursos 
+    a la ventana de manera eficiente.
+
+    \item `GetPosition()`: Obtiene la posición actual de la ventana.
+    
+    \item `SetPosition()`: Establece la posición de la ventana.
+    
+    \item `GetSize()`: Obtiene el tamaño actual de la ventana.
+    
+    \item `SetSize()`: Establece el tamaño de la ventana.
+    
+    \item `Hide()` y `Show()`: Controlan la visibilidad de la ventana, lo que puede ser útil para mostrar u ocultar paneles según las necesidades del usuario.
+    
+    \item `IsMouseHoveringWindow()`: Determina si el cursor del mouse se encuentra sobre la ventana en ese momento, lo que puede ser relevante para eventos de interacción.
+    
+    \item `HandleInput()`: Se encarga de gestionar la entrada de usuario, lo que incluye la capacidad de responder a eventos como clics de ratón y pulsaciones de teclas.
+    
+    \item `Behaviour()`: Este método se encarga de inicializar la ventana y establecer su tamaño utilizando las funciones de ImGui, como `ImGui::Begin()`, 
+    `ImGui::End()`, `ImGui::SetNextWindowSize()`, y `ImGui::SetNextWindowPos()`. En medio de este método, se llama a `Behaviour()`, que define el comportamiento 
+    específico de cada ventana que hereda de la clase `Window`. Por ejemplo, las ventanas de jerarquía (`Hierarchy`) o componentes (`Components`) tendrán sus 
+    propios comportamientos personalizados para interactuar con el usuario de manera adecuada.
+
+\end{itemize}
+
+Esta estructura permite una gestión flexible y coherente de las ventanas en el editor, lo que facilita la creación de una interfaz de usuario rica y eficiente.
+
+
 
 %------------------------------------------------ ENTIDADES --------------------------------------------
 
@@ -137,12 +231,12 @@ relativos.
 \subsubsection{Métodos relevantes de la clase \texttt{Entidad} para la gestión de la jerarquía}
 
 \begin{itemize}
-    \item \texttt{AddChild()}: Este método permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
+    \item \texttt{AddChild()}: permite agregar una entidad como hijo de la entidad actual, estableciendo así una relación jerárquica entre ambas.
     
-    \item \texttt{RemoveChild()}: Usando \texttt{RemoveChild()}, es posible eliminar una entidad de la lista de hijos de la entidad actual, rompiendo la relación 
+    \item \texttt{RemoveChild()}: permite eliminar una entidad de la lista de hijos de la entidad actual, rompiendo la relación 
     jerárquica.
     
-    \item \texttt{SetParent()}: El método \texttt{SetParent()} se encarga de establecer la entidad padre de la entidad actual, ajustando sus valores locales de 
+    \item \texttt{SetParent()}: se encarga de establecer la entidad padre de la entidad actual, ajustando sus valores locales de 
     transformación de acuerdo con la jerarquía. También es posible llamar al método con \textit{nullptr} establecer que la entidad carece de padre.
     
 \end{itemize}
@@ -150,40 +244,39 @@ relativos.
 \subsubsection{Métodos relevantes de la clase \texttt{Transform} para la gestión de la jerarquía}
 
 \begin{itemize}
-    \item \texttt{GetWorldPosition()}: Con \texttt{GetWorldPosition()}, se obtiene la posición global de la entidad, considerando la transformación jerárquica 
+    \item \texttt{GetWorldPosition()}: se obtiene la posición global de la entidad, considerando la transformación jerárquica 
     en la estructura.
-    \item \texttt{GetWorldScale()}: Al utilizar \texttt{GetWorldScale()}, se obtiene la escala global de la entidad, considerando la estructura jerárquica.
+    \item \texttt{GetWorldScale()}: se obtiene la escala global de la entidad, considerando la estructura jerárquica.
     
-    \item \texttt{GetWorldRotation()}: \texttt{GetWorldRotation()} devuelve la rotación global de la entidad, teniendo en cuenta la jerarquía en la transformación.
+    \item \texttt{GetWorldRotation()}:devuelve la rotación global de la entidad, teniendo en cuenta la jerarquía en la transformación.
 
-    \item \texttt{SetWorldPosition()}: \texttt{SetWorldPosition()} permite establecer la posición global de la entidad, ajustando sus valores locales y considerando 
+    \item \texttt{SetWorldPosition()}: permite establecer la posición global de la entidad, ajustando sus valores locales y considerando 
     la jerarquía.
     
-    \item \texttt{SetWorldScale()}: Con \texttt{SetWorldScale()}, es posible establecer la escala global de la entidad, ajustando sus valores locales y 
+    \item \texttt{SetWorldScale()}: permite establecer la escala global de la entidad, ajustando sus valores locales y 
     respetando la jerarquía.
 
     \item \texttt{SetWorldRotation()}: Este método, \texttt{SetWorldRotation()}, se utiliza para establecer la rotación global de la entidad, considerando 
     la jerarquía y ajustando sus valores locales.
 
 
-    \item \texttt{GetLocalPosition()}: \texttt{GetLocalPosition()} devuelve la posición local de la entidad, que es relativa a su entidad padre en la jerarquía.
+    \item \texttt{GetLocalPosition()}: devuelve la posición local de la entidad, que es relativa a su entidad padre en la jerarquía.
     
-    \item \texttt{GetLocalScale()}: \texttt{GetLocalScale()} devuelve la escala local de la entidad, que se relaciona con su entidad padre en la jerarquía.
+    \item \texttt{GetLocalScale()}: devuelve la escala local de la entidad, que se relaciona con su entidad padre en la jerarquía.
 
-    \item \texttt{GetLocalRotation()}: \texttt{GetLocalRotation()} devuelve la rotación local de la entidad, en relación con su entidad padre en la jerarquía.
+    \item \texttt{GetLocalRotation()}: devuelve la rotación local de la entidad, en relación con su entidad padre en la jerarquía.
 
-    \item \texttt{SetLocalPosition()}: \texttt{SetLocalPosition()} permite establecer la posición local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalPosition()}: permite establecer la posición local de la entidad, considerando su entidad padre en la jerarquía.
     
-    \item \texttt{SetLocalScale()}: \texttt{SetLocalScale()} permite establecer la escala local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalScale()}: permite establecer la escala local de la entidad, considerando su entidad padre en la jerarquía.
     
-    \item \texttt{SetLocalRotation()}: \texttt{SetLocalRotation()} permite establecer la rotación local de la entidad, considerando su entidad padre en la jerarquía.
+    \item \texttt{SetLocalRotation()}: permite establecer la rotación local de la entidad, considerando su entidad padre en la jerarquía.
 
 \end{itemize}
 
 Estos métodos, en conjunto, permiten establecer y mantener la jerarquía entre entidades y gestionar sus transformaciones de manera coherente, garantizando la organización 
 precisa y eficiente de la escena en el editor. En cuanto a su visualizción, la jerarquía se representa mediante indentaciones y 
-dropdowns en el editor. \ref{fig:instancia_prefab}
-
+dropdowns en el editor.
 
 
 %------------------------------------------------ PREFABS --------------------------------------------
@@ -294,10 +387,37 @@ En resumen, los componentes y su relación con las entidades en el motor permiten
 precisa de la funcionalidad de cada elemento en el mundo virtual, enriqueciendo la experiencia del usuario y posibilitando un proceso 
 de desarrollo más fluido y adaptativo.
 
+\subsection{Ejecución del juego, estructura de carpetas y build del motor}
+\subsubsection{Ejecución del juego y redirección de la salida mediante tuberías}
+La ejecución del juego en nuestro editor se maneja a través de dos botones ubicados en la parte superior, que permiten ejecutar el juego en modo de 
+depuración (\textit{debug}) o en modo de lanzamiento (\textit{release}). Estos botones invocan el método \texttt{play()} de la clase \texttt{Game}. 
+El método \texttt{play()} se encarga de configurar una tubería para redirigir la salida del juego hacia el editor, y ser mostrado así en la consola. 
+Además, inicia un hilo que se encarga de capturar y guardar los datos provenientes de esa tubería. Cuando el juego se cierra, se llama al método 
+\texttt{stop()}, que cierra el hilo y finaliza el proceso del juego de manera ordenada.
+
+\subsubsection{Estructura de carpetas}
+En cuanto a la estructura de carpetas, en la solución del Editor se encuentra una carpeta Editor dedicada para almacenar los (\textit{assets}) y 
+configuraciones necesarios para el proyecto. Dentro de esta carpeta, se encuentra otra denominada Engine que alberga los ejecutables y recursos generados a partir 
+de la (\textit{build}) del motor del juego.Por otro lado, al ejecutar el editor, se creará una carpeta adicional a través del Project Manager que contendrá exclusivamente 
+los recursos específicos de nuestro proyecto de videojuego.
+
+IMAGEN
+
+\subsubsection{Build del motor}
+Para realizar la construcción del motor, es esencial configurar el directorio de salida en la ubicación mencionada anteriormente. Además, se requiere 
+copiar los archivos Components.json y Managers.json desde la carpeta ecs/ECSUtilities hacia esta misma carpeta, asegurando que todos los recursos necesarios 
+estén disponibles para el funcionamiento adecuado del motor.
+
+En resumen, la ejecución del juego se gestiona mediante botones en el editor, con un sistema que redirige la salida y captura los datos del juego. 
+La estructura de carpetas está organizada de manera que los activos y configuraciones se encuentren separados de los recursos generados por la construcción del motor, 
+facilitando así la gestión del proyecto.
+
 
 \subsection{Scripts}
 
 \textbf{\textit{TODO: Completar\ldots}}
+
+
 
 %-------------------------------------------------------------------
 \section{Motor}
@@ -306,6 +426,8 @@ de desarrollo más fluido y adaptativo.
 
 El motor esta dividio en diez proyectos de Visual Studio, todos dentro de la misma solución.
 Cada proyecto cumple una función específica de la que pueden depender otros proyectos. 
+
+Todo el código está escrito en C++. 
 
 A continuación se entrará en detalle sobre la función y detalles de implementación de cada
 proyecto y de las librerías asociadas al mismo, si las tiene.
@@ -650,7 +772,7 @@ Estos métodos son los siguientes:
 
 \item OnSceneDown: Método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
 
-\item OnDestory: Método llamado cuando el componente es eliminado.
+\item OnDestroy: Método llamado cuando el componente es eliminado.
 
 \end{itemize}
 
@@ -731,10 +853,103 @@ y eliminar entidades.
 - SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
 La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
 
-1.- Operación PUSH: Cuando se cambia una escena y se especifica está operación, añade la escena al top de la pila, por lo que la escena
-añadida pasa a ser la que se actualiza en el juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está 
-actualmente en el top para avisar de que esa escena va a dejar de actualizarse. Posteriormente, una vez añadida al top...
+1.- Operación PUSH: Carga la escena y la añade al top de la pila, por lo que la escena añadida pasa a ser la que se actualiza en el
+juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está actualmente en el top para avisar de que esa escena
+va a dejar de actualizarse. Posteriormente, una vez añadida al top, se llama al Start para la inicialización de la escena.
 
+2.- Operación POP: Elimina la escena en el top de la pila y avisa, a la escena por debajo del top, si la hay, que va a empezar
+a actualizarse.
+
+3.- Operación POPANDPUSH: Realiza una operación POP y posteriormente una operación PUSH.
+
+4.- Operación CLEARANDPUSH: Vacia la pila de escenas y añade una nueva al top de la pila que va a empezar a ejecutarse.
+
+5.- Operación CLEAR: Vacia la pila de escenas.
+
+Por último comentar que para evitar problemas de ejecución, realmente el cambio de escenas se produce al final del bucle principal.
+Por lo que el método de cambiar escenas simplemente marca que escena se va a cambiar y al final del bucle principal se cambia.
+
+
+- PrefabsManager: Encargado de cargar la información de los prefabs creados en el editor e implementar métodos para instanciar 
+entidades a partir de la información de esos prefabs. Se diferencia entre prefabs con Transform y prefabs con Overlay. Esto se 
+comenta en el apartado de componentes del motor pero todas las entidades contienen al menos un componente, Transform u Overlay.
+El Overlay lo contienen aquellas entidades destinadas a ser parte de la interfaz y el Transform todo el resto de entidades.
+
+- RenderManager: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar en juego es deseable
+poder elegir elegir el orden en el que se renderizan las entidades. Esto también se conoce como profundidad o z-order.
+
+- ReferencesManager: Encargado de manejar una relación entre las entidades y sus identificadores. // TODO Se va a cambiar
+
+
+\subsubsection{Componentes}
+
+- Transform: Contiene la información sobre la posición, rotación y escala de la entidad. Además implementa algunos métodos
+para rotar, escalar y mover la entidad.
+
+- Image: Componente encargado de cargar una imagen y renderizarla en pantalla en la posición indicada por el transform de la entidad. 
+Por ello, tanto este componente como todos los que requieran componente Transform para su correcto funcionamiento. Para cargar la imagen
+hace uso del manager de recursos para reutilizar la imagen en caso de estar ya creada por otra entidad. 
+
+- PhysicBody: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcinalidad de sincronizar posición, rotación
+y escala del Transform de la entidad al cuerpo físico. Contiene la información sobre bastante propiedades físicas como si es trigger,
+la fricción que genera, el rebote, el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad. De esta clase
+heredan BoxBody, CircleBody y EdgeBody, que son cuerpos físicos cuyos colisionadores tienen formas especiales.
+
+- SoundEmitter: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó
+anteriomente, SDLMixer dispone de un conjunto de canales para reproducir sonidos pero este componente es abstrae la necesidad de canales desde 
+la perspectiva del usuario. 
+
+- MusicEmitter: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
+
+- ParticleSystem: Componente encargado de implementar un sistema de partículas configurable. Tiene soporte para cargar texturas y mover
+las partículas con el motor de físicas Box2D.
+
+- Animation: Componente encargado de implementar la lógica de reproducción de animaciones a partir de una hoja de Sprites.
+
+- TopDownController: Componente encargado de implementar un movimiento tipo Top-Down. 
+
+- PlatformController: Componente encargado de implmentar un movimiento de tipo plataformas.
+
+Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitar al usuario tener que implementarlos
+usando el sistema de scripting, lo que puede ser algo avanzado.
+
+//TODO Componentes de Overlay
+
+
+
+\section{Proyecto principal}
+
+Este proyecto implementa la clase Engine, encargada de inicializar el motor, ejecutar su bucle principal y cerrarlo una vez terminado.
+
+En cuanto al bucle principal, tiene la siguiente estructura:
+
+\begin{center}
+\includegraphics[scale=0.3]{Imagenes/Vectorial/EstructuraBuclePrincipal}
+\end{center}
+
+Además, de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el DeltaTime, tiempo transcurrido desde
+el inicio de la ejecución del programa o el número de frames/actualizaciones hasta el momento. El DeltaTime es una medida de tiempo, 
+generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
+
+Algo a comentar es la diferencia entre el Paso físico y la Actualización. La lbrería de físicas Box2D, y todas en general, requieren
+que la actualización del mundo físico se realice en intervalos de tiempo fijo, sobretodo por motivos de estabilidad. Por ello, es 
+necesario hacer cálculos adicionales para saber en que momentos se debe ejecutar el Paso Físico ya que no se puede llamar en cada
+frame, a diferencia de la Actualización.
+
+La potencia del hardware de la computadora y la carga de trabajo afectan directamente al número de actualizaciones por segundo
+que se producen en el bucle principal de un videojuego. Por lo tanto, la llamada al método Actualización se puede dar con mucha
+irregularidad. Sin embargo, el motor de física necesita intervalos de tiempo fijo.
+
+Esto se explica mejor con el siguiente diagrama:
+
+\begin{center}
+    \includegraphics[scale=0.3]{Imagenes/Vectorial/UpdateVsFixed}
+\end{center}
+
+Como se puede apreciar, el Paso físico, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Para llevar esto
+acabo se necesitan dos contadores de tiempo, uno para la Actualización y otro para el Paso físico. Mientras que el contador de 
+tiempo para el Paso físico esté por detras temporalmente que el de Actualización, se llama al método Paso físico y se suma
+al contador el tiempo fijo. El tiempo fijo es un valor que se puede modificar en base a las necesidades del videojuego.
 
 
 

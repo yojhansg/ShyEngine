@@ -7,118 +7,152 @@
 \chapter{Estado del arte}
 \label{cap3:estado_del_arte}
 
-% \begin{resumen}
-    % En este capítulo se explica qué son los motores de video-
-    % juegos 2D y cuáles hemos tomado como referencia para desarrollar el
-    % nuestro. Asimismo, se expondrán las librerías que hemos decidido emplear en nuestro proyecto y se 
-    % justificará la elección de cada una. Además, se menciona la diferencia entre el desarrollo de un
-    % videojuego a través de scripting y programación. Por último, se habla sobre
-    % el papel que juegan los motores en el mercado actual de los
-    % videojuegos.
-% \end{resumen}
+\begin{resumen}
+En este capítulo se explica qué son los motores de videojuegos 2D, sus partes esenciales y se mencionan aquellos que hemos tomado como referencia.
+También se hablará de la importancia de los editores en el desarrollo
+\end{resumen}
+
 
 %-------------------------------------------------------------------
 \section{Motores de videojuegos 2D}
 \label{cap3:sec:motores}
 
-Un motor de videojuegos 2D se refiere a un sistema de software integral diseñado para facilitar el desarrollo, diseño y ejecución de 
-videojuegos que se desarrollan en un entorno bidimensional. Este componente tecnológico proporciona un conjunto de herramientas y 
-funcionalidades predefinidas que permiten a los desarrolladores crear juegos visuales en dos dimensiones de manera eficiente y efectiva. 
-Los motores de videojuegos 2D son esenciales para el proceso de producción de juegos, ya que simplifican tareas técnicas complejas y permiten 
-a los creadores centrarse en la creatividad y la jugabilidad.
+Un motor de videojuegos 2D es a un sistema de software integral diseñado para facilitar el desarrollo, diseño y ejecución de videojuegos que se 
+desarrollan en un entorno bidimensional. Este componente tecnológico proporciona un conjunto de herramientas y funcionalidades predefinidas que 
+permiten a los desarrolladores crear juegos visuales en dos dimensiones de manera eficiente y efectiva. Los motores de videojuegos 2D son esenciales
+para el proceso de producción de juegos, ya que simplifican tareas técnicas complejas y permiten a los creadores centrarse en la creatividad y la
+jugabilidad.
 
-Los puntos clave que caracterizan un motor de videojuegos 2D incluyen:
+\subsection{Partes de un motor de videojuegos}
+
+Un motor de videojuegos consta de varias partes esenciales que trabajan en conjunto para facilitar el desarrollo de videojuegos. Estas partes clave incluyen:
 
 \begin{itemize}
-
-    \item \texttt{Gestión de Gráficos y Renderizado}: El motor maneja la representación visual de los elementos del juego, 
-    como personajes, escenarios y objetos, asegurando la colocación precisa y la superposición adecuada de estos componentes 
-    en el espacio bidimensional. Proporciona herramientas para el dibujo, la animación y el manejo de capas gráficas.
-
-    \item \texttt{Física y Colisiones}: Los motores 2D permiten simular efectos físicos realistas, como gravedad, movimiento 
-    y colisiones entre objetos. Esto permite que los elementos del juego interactúen de manera coherente y creíble, mejorando la 
-    experiencia de juego.
-
-    \item \texttt{Entrada del Usuario}: Los motores de videojuegos 2D ofrecen una interfaz para capturar y procesar la entrada del jugador, 
-    como pulsaciones de teclas y movimientos del mouse. Estos datos se utilizan para controlar la interacción del jugador con el juego.
+    \item \textbf{Motor gráfico:} Responsable de la representación visual de los elementos del juego, como objetos o interfaz, garantizando su 
+    adecuada superposición en el espacio bidimensional. 
     
-    \item \texttt{Lógica del Juego}: Incluye el conjunto de reglas, mecánicas y comportamientos que definen la jugabilidad del videojuego. 
-    El motor facilita la implementación de esta lógica y proporciona estructuras para gestionar eventos y estados del juego.
-
-    \item \texttt{Gestión de Escenas y Niveles}: Los motores 2D permiten la creación y gestión de múltiples escenas o niveles dentro de 
-    un juego. Esto posibilita la transición suave entre diferentes partes del juego y la estructuración efectiva de la experiencia del jugador.
+    \item \textbf{Motor físico:} Simula efectos físicos realistas, como gravedad, movimiento y colisiones entre objetos, para que los elementos del juego interactúen 
+    de manera coherente y realista, mejorando la experiencia del jugador.
     
-    \item \texttt{Sonido y Música}:  Los motores de videojuegos 2D permiten la integración de efectos de sonido y música para enriquecer la 
-    atmósfera del juego y proporcionar retroalimentación auditiva al jugador.
-
-
+    \item \textbf{Sistema de Input:} Captura y procesa la entrada del jugador, como pulsaciones de teclas y movimientos del ratón, permitiendo controlar 
+    la interacción del jugador con el juego.
+    
+    \item \textbf{Gestión de escenas:} Permite la creación y gestión de múltiples escenas o niveles dentro del juego, facilitando la transición entre 
+    partes del juego como menús, gameplay, inventario, mapa, etc.
+    
+    \item \textbf{Motor de audio:} Reproduce efectos de sonido y música para enriquecer la atmósfera del juego y proporcionar retroalimentación 
+    auditiva al jugador, lo que puede mejorar la inmersión y la retroalimentación.
 \end{itemize}
+
+Estas partes esenciales trabajan en conjunto para proporcionar un entorno de desarrollo completo y eficiente para juegos en 2D, permitiendo a los desarrolladores
+centrarse en la creatividad y la jugabilidad en lugar de crear todas estas funcionalidades desde cero.
 
 %-------------------------------------------------------------------
 \section{Editores en motores de videojuegos}
 \label{cap3:sec:editores}
 
-Un editor de videojuegos es una herramienta de software que facilita la creación, modificación y organización de diversos 
-elementos que componen un videojuego. Este componente tecnológico proporciona una interfaz visual y funcionalidades específicas que 
-permiten a los desarrolladores y diseñadores trabajar en la construcción y edición de contenido de juegos de manera eficiente y efectiva. 
-Los editores de videojuegos son esenciales en el proceso de producción, ya que permiten la creación y personalización de niveles, personajes, 
-escenarios y otros componentes visuales y jugables.
+Un editor de videojuegos es una herramienta de software que facilita la creación, modificación y organización de diversos elementos que de un videojuego. 
+Este componente tecnológico proporciona una interfaz visual y funcionalidades específicas que permiten a los desarrolladores y diseñadores trabajar en la 
+construcción y edición de contenido de juegos de manera eficiente y efectiva. Los editores de videojuegos son esenciales en el proceso de producción, ya que 
+permiten la creación y personalización de niveles, personajes, escenarios y otros componentes visuales.
 
 \begin{itemize}
 
-    \item \texttt{Creación de Escenarios y Niveles}: Los editores de videojuegos \\
-    ofrecen herramientas para diseñar y crear los entornos jugables en los \\
-    que se desenvuelven los juegos. Esto incluye la disposición de elementos, \\
-    la configuración de obstáculos y la definición de rutas. 
+    \item \textbf{Creación de Escenas y Niveles}: Los editores de videojuegos ofrecen herramientas para diseñar y crear los entornos de juego. Esto incluye 
+    la disposición de elementos, creación de geometría del nivel, etc.
 
-    \item \texttt{Diseño de Personajes y Objetos}: Los editores permiten la creación \\
-    y personalización de personajes jugables, personajes no jugables (PNJ),\\
-    enemigos, objetos y elementos interactivos. Esto puede incluir la \\ 
-    definición de apariencia, comportamiento y habilidades.
+    \item \textbf{Diseño de Personajes y Objetos}: Los editores permiten la creación y personalización de personajes jugables, personajes no jugables (PNJ),
+    enemigos, objetos y elementos interactivos. Esto puede incluir la definición de apariencia, comportamiento y habilidades.
 
-    \item \texttt{Gestión de Recursos Multimedia}: Los editores de videojuegos \\ 
-    facilitan la importación y organización de gráficos, sonidos, música y otros \\ 
+    \item \textbf{Gestión de Recursos Multimedia}: Los editores de videojuegos facilitan la importación y organización de gráficos, sonidos, música y otros
     activos multimedia que se utilizarán en el juego.
     
-    \item \texttt{Asignación de Comportamientos y Lógica}: Los editores permiten \\ 
-    definir el comportamiento de los elementos del juego mediante la \\
-    asignación de reglas, scripts y lógica programada. Esto incluye la \\
-    configuración de interacciones y eventos.
+    \item \textbf{Asignación de Comportamientos y Lógica}: Los editores permiten definir el comportamiento de los elementos del juego mediante la asignación de 
+    reglas, scripts y lógica programada. Esto incluye la configuración de interacciones y eventos.
 
-    \item \texttt{Edición de Eventos y Secuencias}: Los editores posibilitan la \\
-    creación y edición de eventos específicos del juego, así como secuencias de \\
-    eventos que pueden desencadenar acciones en el juego en respuesta a \\
-    las acciones del jugador.
-    
-    \item \texttt{Personalización de Interfaz de Usuario}: Algunos editores \\
-    permiten la adaptación de la interfaz de usuario del juego, lo que incluye la \\
-    disposición de elementos de la pantalla, el diseño de menús y la \\
-    presentación visual general.
+    \item \textbf{Personalización de Interfaz de Usuario}: Algunos editores permiten la adaptación de la interfaz de usuario del juego, lo que incluye la 
+    disposición de elementos de la pantalla, el diseño de menús y la presentación visual general.
    
-    \item \texttt{Pruebas y Depuración}:  Los editores de videojuegos a menudo \\
-    incluyen herramientas de prueba y depuración que permiten a los \\
-    desarrolladores evaluar y ajustar el comportamiento del juego durante el proceso \\ 
-    de creación.
+    \item \textbf{Pruebas y Depuración}:  Los editores de videojuegos a menudo incluyen herramientas de prueba y depuración que permiten a los desarrolladores 
+    evaluar y ajustar el comportamiento del juego durante el proceso de creación.
 
-    \item \texttt{Exportación y Distribución}: Una función esencial de los editores \\ 
-    es la capacidad de exportar el juego en un formato que pueda ser \\
-    ejecutado por el motor de videojuegos correspondiente. Esto permite \\
-    la distribución y el acceso al juego final.
+    \item \textbf{Exportación y Distribución}: Una función esencial de los editores es la capacidad de exportar el juego en un formato que pueda ser ejecutado 
+    por el motor de videojuegos correspondiente. Esto permite la distribución y el acceso al juego final.
 
 \end{itemize}
 
+// TODO Esto no va aqui
 A pesar de no abarcar todas las características de forma exhaustiva, nuestro editor está diseñado para proporcionar un conjunto de herramientas eficientes y 
 efectivas para el desarrollo de juegos. Por ejemplo, nuestro editor ofrece funcionalidades como la creación de escenarios y niveles mediante escenas, 
 la gestión de assets a través del explorador de archivos, la personalización de la interfaz de usuario con overlays, 
 pruebas en modo de depuración para facilitar la detección de errores, exportación en modo release para la distribución final
 y un sistema de scripting basado en nodos que permite asignar comportamientos y lógica a las entidades del juego.
+
+
+\section{Diferencia entre editor y motor}
+
+En la industria, es frecuente observar que ambos términos estén estrechamente vinculados ya que el editor y el motor de videojuegos desempeñan roles complementarios 
+esenciales en el proceso de desarrollo de videojuegos al permitir un flujo de trabajo eficiente. Su sinergia constituye un pilar fundamental en el proceso de desarrollo 
+de videojuegos, facilitando la creación y optimización de experiencias de juego únicas y atractivas.
+
+El motor de videojuegos representa el núcleo tecnológico que sustenta el juego, encargándose de tareas críticas como la gestión de gráficos, física, sonido y lógica. 
+Puede considerarse como el "corazón" del juego, sin el cual la mayoría de los juegos simplemente no podrían existir.
+
+Por su parte, el editor de videojuegos se posiciona como una herramienta de creación y diseño que colabora estrechamente con el motor. Su principal función radica 
+en permitir a los desarrolladores y diseñadores de juegos crear y modificar contenido mucho más rapida y comodamente que si tuvieran que hacerlo a través del código directamente. 
+Esto simplifica la personalización del mundo del juego y la configuración de sus componentes. En el editor se definen diversos datos, como escenas, componentes y entidades, que el 
+motor posteriormente leerá para su procesamiento y ejecución.
+
+\subsection{El flujo de trabajo en el desarrollo de videojuegos}
+
+El flujo de trabajo en el desarrollo de videojuegos sigue típicamente un patrón colaborativo entre el editor y el motor. Los diseñadores y desarrolladores utilizan 
+el editor para crear y ajustar los elementos del juego, especificando cómo se verán y se comportarán en el mundo virtual. Posteriormente, el motor interpreta estos 
+datos y los utiliza para dar vida al juego en tiempo real. Este proceso iterativo permite a los equipos de desarrollo perfeccionar gradualmente la experiencia de juego, 
+realizando ajustes y corrigiendo errores a medida que avanzan en el proyecto.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DiffEditorEngine.png}
+    \caption{Difference between editor and engine}
+    \label{fig:example}
+\end{figure}
+
+
+\section{Importancia de los motores y editores de videojuegos}
+
+Los motores y editores de desarrollo desempeñan un papel fundamental en la industria actual al proporcionar las herramientas esenciales que permiten dar vida a 
+la creatividad y la innovación en el mundo digital. Estas plataformas no solo simplifican el proceso de creación, reduciendo los obstáculos técnicos para los 
+desarrolladores, sino que también fomentan la experimentación y el descubrimiento de nuevas formas de contar historias, entretener y educar. Además, promueven 
+la colaboración entre equipos multidisciplinarios al ofrecer un entorno unificado para diseñadores, artistas, programadores y otros profesionales. Los motores y 
+editores también impulsan la producción más eficiente, lo que es crucial en una industria que requiere un equilibrio entre calidad y tiempo de desarrollo. 
+
+\subsection{Unity}
+
+Unity es un motor de desarrollo de videojuegos altamente influyente debido a su accesibilidad y versatilidad. Utiliza un motor gráfico propio que es conocido por 
+permitir a desarrolladores de todos los niveles de experiencia crear juegos y aplicaciones interactivas para una amplia variedad de plataformas, desde PC y consolas
+hasta dispositivos móviles y realidad virtual. Su característica distintiva es su capacidad para facilitar el desarrollo multiplataforma, lo que lo convierte en una
+elección sólida para proyectos que buscan llegar a una audiencia diversa. 
+
+Además, Unity utiliza el motor de físicas NVIDIA PhysX, que es ampliamente reconocido por su capacidad para simular efectos físicos realistas en los juegos. 
+La combinación del motor gráfico Unity Graphics y el motor de físicas NVIDIA PhysX proporciona a los desarrolladores las herramientas necesarias para crear 
+experiencias visuales y físicas inmersivas en sus juegos. 
+
+\subsection{Unreal Engine}
+
+Unreal Engine, por otro lado, se destaca por su impresionante potencia gráfica y capacidades en 3D. Utiliza su propio motor gráfico altamente avanzado que es la elección 
+preferida para desarrolladores que buscan crear experiencias visuales de alta calidad, como juegos de acción, aventuras y experiencias de realidad virtual inmersivas. 
+Sus gráficos fotorrealistas, motor de física avanzada y sistema de partículas robusto lo convierten en una herramienta esencial para proyectos de vanguardia. 
+
+Además, Unreal Engine incorpora su propio motor de física llamado Chaos.
+
+
 %-------------------------------------------------------------------
 \section{Scripting vs programación}
 \label{cap3:sec:scripting}
 
 El desarrollo de videojuegos puede llevarse a cabo utilizando diferentes enfoques, entre los que se destacan el scripting por nodos y 
 la programación tradicional. Estos enfoques influyen en la manera en que se construye la lógica y la funcionalidad del juego. Además, existen 
-sistemas específicos de scripting que simplifican la creación de videojuegos, como los Blueprints de Unreal Engine y Scratch. A continuación, 
+sistemas específicos de scripting que simplifican la creación de videojuegos, como los Blueprints de Unreal Engine o Scratch. A continuación, 
 se explorarán las diferencias entre ambos enfoques y se describirán los sistemas investigados.
 
 \subsection{Scripting por Nodos vs. Programación}
@@ -126,18 +160,89 @@ se explorarán las diferencias entre ambos enfoques y se describirán los sistemas
 
 \begin{itemize}
 
-    \item \texttt{Scripting por Nodos}: Este enfoque utiliza interfaces visuales y gráficas para representar la lógica del juego mediante 
+    \item \textbf{Scripting por Nodos}: Este enfoque utiliza interfaces visuales y gráficas para representar la lógica del juego mediante 
     nodos interconectados. Los desarrolladores ensamblan estos nodos para definir el flujo de control, las interacciones y las acciones del 
     juego. No se requiere conocimiento profundo de programación, lo que lo hace más accesible para principiantes. Es común en herramientas 
     como Unreal Engine y Scratch.
 
-    \item \texttt{Programación}: La programación tradicional implica escribir código en lenguajes de programación como C++, CSharp, 
+    \item \textbf{Programación}: La programación tradicional implica escribir código en lenguajes de programación como C++, CSharp, 
     Python o JavaScript. Los desarrolladores crean instrucciones detalladas para definir el comportamiento del juego. Este enfoque es 
     más poderoso y versátil, pero puede requerir un nivel más alto de experiencia en programación.
 
 \end{itemize}
 
-\subsection{Sistemas de Scripting Investigados}
+\subsection{Ejemplo de scripting por nodos: Blueprints de Unreal Engine}
+
+Los Blueprints en Unreal Engine representan una implementación destacable del enfoque de Scripting por Nodos en el desarrollo de videojuegos. Esta herramienta 
+esencial permite a los desarrolladores crear la lógica del juego utilizando una interfaz visual basada en nodos, lo que facilita enormemente la creación de juegos 
+sin la necesidad de escribir código en lenguajes tradicionales como C++.
+
+\subsubsection{Funcionamiento de los Blueprints}
+
+\begin{enumerate}
+    \item \textbf{Interfaz Visual Intuitiva:} Los Blueprints de Unreal Engine proporcionan a los desarrolladores una interfaz gráfica intuitiva y amigable. 
+    En lugar de escribir líneas de código, los diseñadores y desarrolladores pueden crear lógica utilizando una colección de nodos predefinidos, que representan acciones, 
+    eventos y operaciones lógicas.
+
+    \item \textbf{Nodos Interconectados:} La lógica del juego se construye interconectando estos nodos de manera visual. Los nodos pueden representar eventos, 
+    como la pulsación de un botón o la colisión de objetos, así como acciones, como mover un personaje o cambiar la iluminación de una escena. Al conectar estos 
+    nodos de manera apropiada, se define el flujo de control y el comportamiento del juego.
+
+    \item \textbf{Personalización y Reutilización:} Los Blueprints permiten una alta personalización y reutilización de la lógica. Los desarrolladores pueden 
+    crear sus propios nodos personalizados y guardarlos para utilizarlos en futuros proyectos, acelerando así el desarrollo y manteniendo un alto nivel de consistencia.
+
+    \item \textbf{Facilita la Colaboración:} Dado que la interfaz de Blueprints es visual y gráfica, facilita la colaboración entre diseñadores y programadores. 
+    Los diseñadores pueden crear la lógica del juego de manera más independiente, lo que permite a los programadores centrarse en tareas más técnicas.
+
+    \item \textbf{Combinación con C++:} Unreal Engine permite una integración fluida entre Blueprints y código C++. Esto significa que los desarrolladores pueden 
+    utilizar Blueprints para definir el comportamiento general del juego y luego recurrir a C++ para implementar funciones específicas o mejorar el rendimiento cuando 
+    sea necesario.
+
+    \item \textbf{Depuración y Visualización:} Los Blueprints ofrecen herramientas de depuración visuales que permiten a los desarrolladores rastrear y solucionar 
+    problemas en la lógica del juego de manera efectiva. Esto incluye la capacidad de ver el flujo de ejecución de los nodos y detectar posibles errores.
+\end{enumerate}
+
+En resumen, los Blueprints de Unreal Engine son una herramienta poderosa que democratiza el desarrollo de videojuegos al permitir que una amplia gama de profesionales, 
+desde diseñadores hasta programadores, colaboren en la creación de experiencias interactivas sin la necesidad de una programación profunda. Esta versatilidad y 
+accesibilidad los convierten en una elección popular en la industria del desarrollo de videojuegos.
+
+
+\subsection{Ejemplo de scripting por programación: MonoBehaviour de Unity  }
+
+Unity, una de las plataformas líderes en desarrollo de videojuegos, se destaca por su enfoque en la programación tradicional a través de su componente llamado 
+MonoBehaviour. A diferencia del enfoque de Scripting por Nodos, que hemos discutido previamente, MonoBehaviour permite a los desarrolladores utilizar lenguajes de
+programación como CSharp para definir la lógica y la funcionalidad del juego de manera más programática y detallada.
+
+El uso de MonoBehaviour en Unity se basa en los siguientes conceptos:
+
+\begin{enumerate}
+    \item \textbf{Componentes en GameObjects:} En Unity, los objetos en el juego se representan como GameObjects, y cada GameObject puede tener uno o más componentes 
+    MonoBehaviour adjuntos. Estos componentes representan la funcionalidad y el comportamiento del GameObject.
+
+    \item \textbf{Programación en CSharp:} Para definir la lógica y el comportamiento de un GameObject, los desarrolladores utilizan el lenguaje de programación CSharp en 
+    combinación con MonoBehaviour. Escriben scripts que heredan de la clase MonoBehaviour y anexan estos scripts como componentes a los GameObjects correspondientes.
+
+    \item \textbf{Métodos y Eventos:} Los scripts de MonoBehaviour pueden implementar métodos que se ejecutan en momentos específicos durante la vida útil del 
+    GameObject, como Start() para la inicialización y Update() para la actualización continua. Además, pueden responder a eventos como colisiones, clics del mouse 
+    o entradas del teclado.
+
+    \item \textbf{Flexibilidad y Control:} El uso de programación con MonoBehaviour brinda a los desarrolladores un alto grado de flexibilidad y control sobre la 
+    lógica del juego. Pueden definir comportamientos precisos y detallados para los elementos del juego.
+
+    \item \textbf{Personalización y Extensibilidad:} Unity permite la creación de scripts personalizados que se pueden reutilizar en múltiples objetos o proyectos. 
+    Esto facilita la extensibilidad y la personalización de la funcionalidad del juego.
+
+    \item \textbf{Combinación con Assets y Gráficos:} Los scripts de MonoBehaviour pueden interactuar con recursos gráficos, modelos 3D, sonidos y otros assets del 
+    juego, lo que permite una integración completa de la programación con los elementos visuales y auditivos del juego.
+
+\end{enumerate}
+
+En resumen, mientras que el "Scripting por Nodos" simplifica la creación de videojuegos a través de interfaces visuales, MonoBehaviour en Unity representa un enfoque 
+más programático que brinda a los desarrolladores un alto nivel de control y flexibilidad sobre la lógica y la funcionalidad del juego. Esto lo convierte en una 
+opción preferida para proyectos que requieren una programación detallada y un mayor control sobre la interacción del juego.
+
+
+\subsection{Sistemas de Scripting Investigados (MOVER A OTRO APARTADO)}
 \label{cap3:sec:scripting:sec:scriptinginvestigados}
 
 En el proceso de investigación y desarrollo, optamos por no basarnos en sistemas de scripting preexistentes, ya que nuestro 
@@ -169,8 +274,8 @@ Diseñamos nuestro propio sistema de scripting con el propósito de cumplir con la
 \end{itemize}
 
 %-------------------------------------------------------------------
-\section{Librerias utilizadas}
-\label{cap3:sec:librerias}
+\section{Librerias utilizadas (MOVER A OTRO APARTADO)}
+\label{cap3:sec:librerias} 
 
 Hemos seleccionado cuidadosamente un conjunto de librerías para respaldar el desarrollo de nuestro sistema de scripting personalizado. 
 Entre estas librerías, ImgUI, SDL y Box2D han sido esenciales debido a sus características y ventajas específicas:
