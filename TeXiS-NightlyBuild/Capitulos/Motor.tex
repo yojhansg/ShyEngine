@@ -528,9 +528,10 @@ y eliminar entidades.
     Por último comentar que para evitar problemas de ejecución, realmente el cambio de escenas se produce al final del bucle principal.
     Por lo que el método de cambiar escenas simplemente marca que escena se va a cambiar y al final del bucle principal se cambia.
 
-- SceneLoader: Clase encargado de leer la información de la escenas creadas en el editor. A la hora de construir la entidades diferencia
-entre entidades con \textt{Transform} y entidades con \textt{Overlay}. Para construir los componentes de las entidades se usa la clase 
-ClassReflection, que es un \textt{Singleton} encargado de guardar en un mapa la información de los componentes donde la clave es 
+
+\item \textit{SceneLoader}: Clase encargado de leer la información de la escenas creadas en el editor. A la hora de construir la entidades diferencia
+entre entidades con \texttt{Transform} y entidades con \texttt{Overlay}. Para construir los componentes de las entidades se usa la clase 
+ClassReflection, que es un \texttt{Singleton} encargado de guardar en un mapa la información de los componentes donde la clave es 
 el nombre del atributo de los componentes y el valor es el propio valor del atributo.
 
 \item \textit{PrefabsManager}: Encargado de cargar la información de los prefabs creados en el editor e implementar métodos para instanciar 
