@@ -57,6 +57,7 @@ namespace ECS {
 		scene->init();
 		scene->start();
 
+		scenes.top()->onSceneDown();
 		scenes.push(scene);
 	}
 

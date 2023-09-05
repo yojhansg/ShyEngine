@@ -313,10 +313,6 @@ namespace ShyEditor {
 			destination->RemoveChild(source);
 
 			source->SetParent(destination->GetParent());
-			
-			// If we break the hierarchy, then this is not an instance of the prefab anymore
-			source->SetPrefabId(0);
-			PrefabManager::RemoveInstance(source);
 
 			if (source->GetParent() != nullptr) {
 				source->GetParent()->AddChild(source);

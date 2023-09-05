@@ -370,6 +370,7 @@ namespace ShyEditor {
 	void Scene::RenderChildEntities(Entity* entity)
 	{
 		for (auto& pair : entity->GetChildren()) {
+
 			RenderChildEntities(pair.second);
 			pair.second->RenderTransform(renderer, sceneCamera);
 		}
@@ -385,7 +386,7 @@ namespace ShyEditor {
 
 		std::sort(sortedEntities.begin(), sortedEntities.end(), CompareEntitiesRenderOrder);
 
-		for (auto entity : sortedEntities) {
+		for (auto& entity : sortedEntities) {
 			entity->RenderTransform(renderer, sceneCamera);
 			RenderChildEntities(entity);
 		}
