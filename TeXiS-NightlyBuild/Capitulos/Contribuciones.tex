@@ -64,7 +64,47 @@ de gestión de proyectos para poder eliminar proyectos y ordenar los proyectos po
 \section{Yojhan García Peña}
 %-------------------------------------------------------------------
 
-Contribuciones de Yojhan García Peña
+Mi principales tareas fueron el desarrollo del lenguaje de scripting, incluyendo su implementación tanto en el editor y en el motor, y también
+la unión entre el editor y el motor.
+
+\medskip
+
+Inicialmente tuve que crear un proyecto vacío de Visual Studio para empezar a prototipar el lenguaje. No quería utilizar ninguna biblioteca externa
+que implementase la lógica para un editor de nodos, pues prefería poder desarrollarlo desde cero. Tampoco he querido mirar en profundidad el  funcionamiento del lenguaje de scripting de otros motores como Unity o Unreal porque no queríamos copiar descaradamente su forma de uso y queríamos desarrollar un lenguaje propio
+que se adaptase a las necesidades concretas de nuestro motor. \\
+
+Fue un proceso iterativo donde poco a poco se iba añadiendo funcionalidad, y cuando finalmente conseguí una implementación que me parecía robusta fue
+cuando decidímos juntar los dos primeros proyectos del TFG, siendo el motor y el scripting. Para poder llevar a cabo la integración tuve que hacer
+la clase Script, que junto con las clases relacionadas con los nodos ya permitían enlazar los nodos con el bucle de juego principal del motor. También fue necesaria la creación de la clase ScriptFunctionality para poder dotar al lenguaje de funcionalidad básica como sumas, restas y operaciones genéricas
+para la entrada. \\
+
+Llegados a este punto pospuse un poco el desarrollo del scripting y empezé a centrarme en cómo sería la unión entre el editor y el motor. Tras varios
+intentos fallidos finalmente terminé de desarrollar la clase ECSReader, con la cual se puede leer el contenido del motor gracias a unas marcas que
+se pueden ir añadiéndo en el código. Y tras añadir al proyecto la biblioteca de lectura de JSON de nlohmann, toda la información relevantes del motor
+pasaba a estar serializada en fichero en disco, siendo la idea que el motor pueda leer los valores desde ese fichero. \\
+Aprovechando que el ECSReader ya estaba creado, fue usado para muchos más usos además de generar ficheros JSON. Finalmente terminamos utilizando el
+ECSReader para generar código en c++ que pueda leer el motor, de esta forma, automatizando bastante muchos aspectos tediosos. El ECSReader genera tres
+ficheros diferentes: ClassReflection, que permite serializar los atributos de una clase y poder dotarles de valor desde fuera conociendo el nombre de la
+variable; ComponentFactory, que con el nombre de un componente en formato string crea un componente de ese tipo, siendo una especie de factoría; y FunctionManager, el cual genera una función para cada método de los componentes y luego los agrupa en un mapa.\\
+
+
+\medskip
+Con esto, ya estaba hecha la reflexión con la que queríamos dotar al motor, y siendo la persona que más avanzada iba con su parte decidí ayudar a mis compañeros con algunas tareas. Empezando por el motor y gracias a mi experiencia con serialización de JSON, hice serialización de escenas y entidades, seguido de la implementación del sistema de Overlays y sus componenetes asociados (Image, Button y Text), la Splash Screen y la serialización de información del proyecto, como tamaño de la ventana o el icono usado.
+
+
+\medskip
+
+Cuando el editor iba más avanzado me puse a implementar el editor visual de nodos en el editor. Terminando todo lo relacionado con el editor, y la 
+serialización. Con mi parte terminada en gran medida, fue cuando me puse a hacer la lectura de los ficheros generados por el ECSReader en el Editor, por lo que tuve hacer la clase ComponentReader y ComponentManager. Con todo casi terminado, me puse a hacer cambios en el editor, haciendo una refactorización de cómo se dibujan las ventanas para incluir la rama de Dockind de Imgui en el editor, \
+Para terminar, me puse a crear distintas ventanas de utilidades del editor, como el editor de la paleta de colores, la consola creando un PIPE que lee la salida del programa; la clase Game, que permite ejecutar el exe del motor y controlar el proceso pudiendo detenerlo en cualquier momento haciendo uso 
+de la api de windows; el esqueleto de la clase de preferencias, el manejador del docking para poder cambiar la disposición de las ventanas y el renderizado de la ventana tanto para las entidades físicas como para la interfaz
+
+\medskip
+
+Por último, estuve implementando funcionalidad que se haya quedado sin implementar y corrigiendo errores 
+
+
+
 
 %-------------------------------------------------------------------
 \section{Iván Sánchez Míguez}

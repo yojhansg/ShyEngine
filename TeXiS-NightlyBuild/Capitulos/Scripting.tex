@@ -1,11 +1,333 @@
-%---------------------------------------------------------------------
-%
-%                          Scripting
-%
-%---------------------------------------------------------------------
-
 \chapter{Scripting}
 
-En este capítulo
+\section{Diseño del lenguaje}
 
-\textbf{\textit{TODO: Completar\ldots}}
+Nosotros nunca habíamos utilizado ninguna herramienta para programar usando nodos y flechas, y lo más parecido que habíamos 
+usado era Construct 2 el cual es un motor en el que se programa usando bloques. Pero pese a nuestra inexperiencia en este ámbito no 
+queríamos basarnos en editores programación de nodos ya existentes como Unity o Unreal, ni usar ninguna biblioteca ya existente 
+de visual scripting, sino desarrollar nuestra propia herramienta y adaptarla a las necesidades de nuestro motor.
+
+\medskip
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.3]{Imagenes/Vectorial/ComunicacionMotorEditor.png}
+%     \caption{Comunicación motor-editor}
+%     \label{fig:example}
+% \end{figure}
+
+
+Inicialmente teníamos una idea muy sencilla y simplificada de cómo sería nuestro sistema de nodos. Se basa en una serie de nodos, 
+representados mediante cajas con muescas a la izquierda y a la derecha. Cada nodo representaría una función (o método) dentro del 
+motor siendo las muescas de la izquierda los parámetros que recibiría dicha función y a la derecha el valor de salida. 
+
+\medskip
+
+Rápidamente nos dimos cuenta de las limitaciones de este sistema, siendo principalmente el hecho de que no permite introducir 
+valores o variables, y solo permite operar mediante el uso de funciones. Entonces decidimos dividir los nodos por tipos según su 
+función. Estaría el nodo que represente métodos (el mencionado anteriormente) y un nuevo tipo de nodo el cual representaría un valor 
+constante, que podría ser usado para pasarse a la entrada de nodo método. En este nodo, el usuario podría decidir de qué tipo es el 
+valor que quiere usar y asignar el valor correspondiente. Fue en este momento cuando tuvimos que decidir qué cuales eran los tipos 
+que querríamos que soporte este lenguaje, y al estar pensado principalmente para programadores nos decantamos por los 
+siguientes: Números, vectores, cadenas de texto, letras, booleanos, colores y entidades.
+
+\medskip
+
+Sobre los tipos hay que mencionar que decidimos decantarnos por un conjunto de números para conseguir mayor simplicidad, no teniendo 
+que distinguir entre distintos tipos como int, uint, float, double\ldots y agruparlos todos en un conjunto números a secas, parecido al 
+funcionamiento de javascript. Este nuevo tipo de nodo no tendría muescas de entrada al tratarse de un valor constante, y únicamente 
+contaría con la muesca de salida para poder conectar el valor a un método. Estos nodos, como se esperaría no ejecutan nada dentro 
+del motor y solo devuelven el valor asociado.
+
+\medskip
+
+Con esto ya conseguimos tener un lenguaje funcional y procedimos con los primeros prototipos, hechos en Unity. Podíamos ejecutar 
+programas simples y nos funcionaba correctamente para la depuración, pero entonces nos encontramos con el segundo bloqueo importante, 
+siendo el control del flujo de los nodos, o más bien su ausencia. 
+
+\medskip
+
+Por control de flujo nos referimos a la posibilidad de ejecutar varios nodos función de forma consecutiva, ya que actualmente sólo 
+se ejecuta el nodo inicial y sus nodos de entrada de forma recursiva, pero por ejemplo no podríamos ejecutar dos funciones 
+independientes una detrás de la otra, ni tampoco tendríamos una forma de controlar el orden en que ejecutar estas funciones. 
+
+\medskip
+
+Para solucionar se creó un nuevo tipo de flecha. De esta forma cada nodo tendría una conexión de flujo con el nodo que se ejecutará 
+inmediatamente después. Cuando un nodo está siendo ejecutado se dice que tiene el flujo actual.
+
+\medskip
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.3]{Imagenes/Vectorial/ComunicacionMotorEditor.png}
+%     \caption{Comunicación motor-editor}
+%     \label{fig:example}
+% \end{figure}
+
+Para ejecutar el nodo A, primero se ejecutan todos sus nodos entrada, que a su vez ejecuta sus propios nodos entrada y así 
+sucesivamente hasta llegar o a un nodo de valor constante o a un nodo función sin nodos de entrada. Cuando toda la entrada haya 
+sido procesada, se ejecuta el propio nodo y luego el flujo pasa al nodo siguiente. Este proceso se ejecutará constantemente hasta 
+que el nodo siguiente del nodo con el flujo actual sea inexistente.
+
+\medskip
+
+De este sistema cabe mencionar que un nodo de entrada no puede tener conexión con el nodo siguiente y además si en el proceso de 
+ejecutar los nodos de entrada alguno de ellos tiene un nodo siguiente esa conexión será ignorada pues ninguno de esos métodos tiene 
+el flujo actual.
+
+\medskip
+
+Ahora con el flujo hecho el siguiente paso para mejorar el scripting es añadir funcionalidad para poder modificarlo. Para 
+hacerlo hemos tenido que implementar en el lenguaje condicionales y bucles como nuevos tipos de nodos, al que llamamos bifuración. 
+Este tipo de nodos tiene un nodo de entrada con la condición para el control del flujo, y tiene dos salidas de flujo que tendrán 
+una función dependiendo del tipo de controlador que sea. 
+
+\medskip
+
+Existen tres tipos de controladores:
+
+\begin{itemize}
+
+    \item \textit{If}: Este tipo de controlador recibe como entrada un tipo booleano, y dependiendo del valor de la condición el flujo continuará 
+    por el primer flujo de salida o por el segundo.
+
+    \item \textit{While}: Este tipo de controlador recibe como entrada un tipo booleano, y mientras la condición sea cierta ejecutará el primer flujo de 
+    salida. Cuando este flujo haya terminado, se vuelve a procesar la entrada para ver si es necesario ejecutar una nueva iteración. 
+    Procesar la entrada significa volver a ejecutar ese nodo (y todos sus nodos entrada) por si el valor hubiera cambiado. Cuando el 
+    resultado devuelto sea falso el flujo continuará por el segundo flujo de salida.
+
+    \item \textit{Repeat}: Este tipo de controlador recibe como entrada un número, y ejecutará esa cantidad de veces el primer flujo de salida. El valor
+    de la entrada no se procesa en cada iteración por lo que solo se tendrá en cuenta el valor inicial. Cuando se haya completado el 
+    número de vueltas el flujo continúa por el segundo flujo de salida.
+
+\end{itemize}
+
+Para terminar, uno de los cambios imprescindibles que faltaba por añadir es la adición de eventos. Actualmente, el scripting le da el 
+flujo al primer nodo que encuentra, pero esto no es ni lo deseable ni lo óptimo. Entonces diseñamos un nuevo tipo de nodo, que es el 
+nodo de eventos. Este nodo no tiene valor de entrada ni de salida y solo cuenta con una conexión de flujo de salida. Los valores de 
+eventos que haya dependerán de las necesidades del motor, pero los dos esenciales serían el evento de inicio y el evento de refresco, 
+los cuales serán ejecutados desde el motor al inicio del programa y en cada fotograma siguiente respectivamente.
+
+\medskip
+
+Este fue el desarrollo principal del lenguaje de scripting, aunque más adelante se fueron añadiendo mejoras y modificaciones a la 
+idea inicial. El resultado final cuenta con los siguientes elementos y características:
+
+\begin{itemize}
+
+    \item \textit{Nodo función}: Ejecuta una función dentro del motor. Puede recibir un número indeterminado de nodos como entrada y puede tener un 
+    valor de salida, puede recibir y pasar el flujo y puede tener nombre. Cuando un nodo tiene nombre puede ser ejecutado desde otro 
+    script (como si se tratase de un método en un lenguaje de programación convencional).
+
+    \item \textit{Nodo valor constante}: Tiene un tipo determinado y tiene un valor asociado a ese tipo. No tiene valor de entrada, pero siempre tiene 
+    uno de salida. No puede interactuar con el flujo del script. Puede ser serializado poniéndole un nombre. De esta forma, el valor 
+    puede modificarse desde fuera. Esto es útil pues de esta forma se puede modificar el valor del nodo desde 
+    fuera (por ejemplo, el editor) evitando tener que repetir el script entero para modificar únicamente un valor.
+
+    \item \textit{Nodo evento}: Representa cada evento del motor, no tiene nodos de entrada ni valor de salida. Es el elemento que empieza el flujo 
+    en el script, pero luego no puede recibir el flujo.
+
+    \item \textit{Nodo bifurcación}: Puede modificar el flujo del script, seleccionando la ruta en la que continúa el flujo o repitiendo en bucle 
+    partes del script. Recibe un único nodo de entrada, pero no tiene nodo de salida. Hay tres tipos de nodos de bifurcación, 
+    permitiendo bifurcar el flujo, repetir una sección del script en bucle determinado por una condición o repetir una sección un 
+    número determinado de veces.
+
+    \item \textit{Nodo comentario}: Este nodo no tiene efecto en la ejecución del script, pero es para proporcionar una mayor claridad al usuario 
+    permitiéndole escribir aclaraciones sobre los nodos.
+
+    \item \textit{Nodo enumerado}: Este nodo es un caso especial del nodo de valor. Permite seleccionar un tipo dentro de una lista de enumerados, y 
+    luego seleccionar un valor dentro de ese enumerado. La función de este nodo también es para proporcionar una mayor claridad al 
+    usuario y no tener que memorizar la asociación de algunos valores a un número.
+
+\end{itemize}
+
+\subsection*{El lenguaje}
+
+Este lenguaje no es \textit{'Turing'} completo, principalmente porque está pensado para un entorno de videojuegos más que propósito general, 
+por lo que el manejo de memoria y recursos es muy limitado. Pero obviando eso, otro motivo importante por el que el lenguaje no tiene 
+completitud \textit{'Turing'} es porque no tiene una de las características fundamentales para ello, la recursión. Esto no es por error ya que 
+este comportamiento es el esperado por dos motivos, el primero es que no creemos que este lenguaje sea el idóneo para usar reflexión, 
+y permitir enlazar nodos de esa forma puede llegar a ser bastante confuso. El segundo motivo es que gracias a prohibir la recursión 
+hay varias partes del lenguaje que pueden ser optimizadas.
+
+\medskip
+
+Otras cosas adicionales que permite el lenguaje con ayuda del motor es poder crear y modificar variables, arrays, crear e invocar 
+eventos globales y operaciones básicas para manipular los distintos atributos, entre otros. 
+
+ 
+% ------------------------------------------------------------------ EDITOR ------------------------------------------------
+
+\section{Implementación del scripting en el editor: edición de nodos}
+
+El scripting ocurre en su propia ventana del editor. Esta ventana es especial pues esta ocupa el tamaño completo de la ventana. El editor cuenta con una 
+máquina de estados interna para saber cuándo se está en estado de edición de nodos. Cuando el editor entra en estado de scripting, las demás ventanas 
+dejan de poder actualizarse y renderizarse hasta que se cierre el editor de nodos. Esta ventana será referida como ventana de scripting o de editor de nodos.
+La lógica de esta ventana está manejada en parte por el editor que es quien se encarga de mantener los valores de la máquina de estados, y por otro lado la 
+clase \texttt{ScriptCreation} que hereda de \texttt{Window}. Esta clase se encarga de representar la ventana de scripting, así como la información del script que se quiere editar. El punto de entrada de esta clase es el mismo que el de otras ventanas del editor, el método \texttt{Behaviour} heredado de las ventanas. 
+
+\subsection*{Inicialización}
+
+Cuando se decide cambiar el estado del editor del estado por defecto al estado de edición de nodos no se cambia exclusivamente el valor de la máquina de 
+estados, también se modifica el valor del nombre del script que se está editando (representado mediante un string), dependiendo de la forma en la que se haya 
+abierto el editor nodos. Esto se debe a que el editor cuenta con varias formas de abrir el editor de nodos, pero se pueden dividir en dos categorías: la creación 
+de un script nuevo y la edición de un script existente. En el momento en el que la máquina de estados cambia de valor al estado de edición de nodos se llamará al 
+método público \texttt{Load()}, donde en el caso de que la cadena proporcionada para el nombre no esté vacía, se cargará de memoria el valor de ese 
+script (ver apartado Serialización y deserialización). En el caso de que el nombre esté vacío o que la lectura del fichero falle, se procederá a crear 
+un nuevo fichero de scripting. Un fichero recién creado de scripting contará con dos nodos representando el evento de inicialización y el evento de 
+actualización en cada fotograma (\texttt{Start()} y \texttt{Update()}).
+
+\medskip
+
+Una vez hecho este proceso el editor de nodos está listo para utilizarse.
+
+\subsection*{Behaviour}
+
+Esta función, heredada de la clase \texttt{Window}, es la encargada de brindar la funcionalidad principal a la ventana de scripting. Esta función es llamada en cada 
+fotograma y se encarga de una gran funcionalidad de la ventana, en este orden:
+
+\begin{enumerate}
+
+    \item Garantizar que la ventana se encuentra ocupando la completitud de la ventana de SDL .
+
+    \item Acceder a los datos de la paleta de colores para cambiar los valores y colores correspondientes (pe. Grosor y color de las líneas, color del fondo, tamaño de las muescas de arrastre, entre otros)
+
+    \item Manejar el desplazamiento de la \texttt{cámara}. La ventana cuenta con una posición ficticia, la cual es usada para saber dónde posicionar los distintos nodos y 
+    elementos de la ventana. De este modo, se simula que el usuario tiene la opción de desplazarse a través de un espacio infinito. Se puede controlar la posición de 
+    dos formas, siendo la más común moviendo el ratón mientras se mantiene presionado el botón de la rueda. La otra forma de mover la cámara es haciendo uso de 
+    un interpolado. Esto ocurre cuando el usuario decide situarse sobre un nodo en concreto desde la barra de menú (explicado más adelante). El control del 
+    interpolado está dividido en dos métodos: \texttt{Lerp()} y \texttt{ManageLerp()}. El primero se encarga de inicializar los valores necesarios para llevar a cabo el interpolado, guardando la posición inicial y la posición final del movimiento. Además, se recibe como parámetro un valor adicional, siendo la duración del proceso. Por otro lado,  el método \texttt{ManageLerp()} es el encargado de calcular y posicionar el valor actual de la cámara en cada fotograma que esté activo el interpolado. Para procesar el  interpolado adecuadamente se guarda un valor adicional en la clase \texttt{ScriptCreation} encargado de llevar la cuenta del tiempo, incrementando su valor en cada fotograma haciendo uso del valor \texttt{DeltaTime} proporcionado por ImGui. Una vez se haya superado el tiempo máximo, se desactiva el proceso de interpolado. Para calcular la posición de la cámara en cada iteración, se hace uso de una combinación de un interpolado lineal clásico, junto con un interpolado cúbico. El interpolado cúbico recibe como parámetro exclusivamente el valor \texttt{t} (calculado como tiempo actual dividido entre el tiempo máximo) y devuelve el valor \texttt{'suavizado'}, de forma que el movimiento de la cámara aparenta tener aceleración al principio y deceleración al llegar al final del recorrido. Mientras el interpolado está en movimiento, el  usuario pierde el control de la cámara para evitar comportamientos indeseados.
+    Esta cámara no tiene soporte para alejarse y acercase, por lo que el tamaño de los elementos será siempre constante. 
+
+    \item Dibujado de gráficos: Se pinta el color de fondo de la ventana con el color aportado por la paleta de colores, después se pinta por encima una cuadrícula. 
+    La cuadrícula está hecha con fines estéticos y para ayudar con la orientación al usuario, pues mover la cámara sin tener ningún punto de referencia puede resultar confuso. Por ello, la cuadrícula también tiene que ajustarse a la posición de la cámara para simular que también se mueve cuando se mueve la cámara. Para implementar la cuadrícula se ha hecho uso del api de ImGui, basándose además en su implementación para que su uso se asemeje al uso de otras partes del 
+    api de ImGui. La clase \texttt{Grid} está compuesta por una serie de variables estáticos que representan la información de la cuadrícula, como su posición, grosor o desplazamiento. Para modificar o acceder a estos valores la clase cuenta con otros métodos estáticos \texttt{Getters} y \texttt{Setters} para manipular el estado de la cuadrícula. Todo esto culmina con el método \texttt{Draw}, que dibuja sobre la ventana actual de ImGui la cuadrícula con la configuración establecida. Para el dibujado, se hace uso de la clase DrawList de ImGui, que proporciona la capacidad de pintar sobre la ventana geometría básica. Otra clase que se ha implementado de forma similar es la clase \texttt{Bezier}. Esta clase dibuja una curva bezier cuadrática entre dos puntos dados. Al igual que la 
+    \texttt{Grid}, se implementa mediante valores estáticos y llamadas a métodos estáticos que cambien sus valores internos. Para calcular la lógica de la línea bezier, se establecen como punto inicial y final los puntos dados, 
+
+    \item Dibujado de nodos: En este punto, se dibujan y actualizan todos los nodos que contiene el script. Este proceso se explicará en más detalle más adelante. 
+    Cabe destacar, que durante la iteración por cada nodo se comprueba si alguno ha sido marcado para ser eliminado. Si eso es así, ese nodo se elimina cuando 
+    todos los nodos hayan sido actualizados. Como cada nodo cuenta con un identificador único ascendente y la lista de nodos permanece siempre 
+    ordenada (los nuevos nodos se añaden al final), para evitar que el identificador de los nodos crezca de forma innecesaria, cuando un nodo es 
+    eliminado se reduce en uno el valor de los identificadores de los nodos siguientes. Por cómo está implementado este sistema, no es posible eliminar 
+    dos nodos en la misma iteración, aunque tampoco supone un problema porque no sería posible pulsar varios botones de cierre de nodos simultáneamente.
+
+    \item Dibujado del desplegable de nodos:  Esta clase auxiliar se encarga de manejar el desplegable que aparece al pulsar el clic derecho. Este desplegable contiene la lista con todas las funciones disponibles por el motor. La clase controla el input, y en caso de haber pulsado muestra el desplegable usando funciones de ImGui. El desplegable muestra información de métodos tanto para los componentes como para los managers. Si se ha hecho clic sobre alguno de los elementos, se creará un nuevo nodo de tipo función asociado a esa función donde el usuario hubiera hecho clic para abrir el desplegable.
+
+    \item Dibujado de la barra de menú: En la parte superior de la ventana, aparece funcionalidad adicional necesaria para el editor de scripts. Desde la barra 
+    se permite al usuario poder cambiar el nombre del script, crear nodos para cada tipo de variable constante,  crear los nodos para manejar la lógica y el 
+    control del flujo, crear nodos para los distintos eventos proporcionados por el motor, un botón para guardar el script, un botón para cerrar la ventana de 
+    scripting y volver a la ventana principal del editor, una barra de búsqueda para buscar funciones del desplegable de nodos mostrando los resultados en un 
+    desplegable, un desplegable con la lista de nodos creados, lo cual comenzará la secuencia de interpolado de la cámara hacia ese nodo en concreto; un botón 
+    para crear un nodo comentario y por último, un botón que abre la consola, útil en el caso de que se esté depurando un script y ver los mensajes que se hayan 
+    escrito sin tener que cerrar la ventana de scripting. Además, proporciona la lógica para mostrar una ventana emergente en caso de que se quiera cerrar el editor 
+    de nodos, pero haya cambios sin guardar.
+
+\end{enumerate}
+
+\subsection*{Serialización y deserialización}
+
+Para la serialización y deserialización se hace uso de la biblioteca de procesamiento de JSON de \textit{'nlohmann'}. 
+
+\begin{itemize}
+    \item \textit{Serialización}: Ocurre en el método \texttt{Save()} cuando el usuario pulsa el botón de guardar un script. Para serializar se distingue cada nodo por tipos, agrupando cada tipo en un array diferente. Cada tipo de nodo tiene funcionalidad para generar un fichero JSON con su información, simplificando el proceso para la ventana. Además de guardar la información necesaria para el correcto funcionamiento del motor, se guarda información como la posición y tamaño del nodo para que todo permanezca igual tras volver a abrir el script para su edición. Una particularidad de la serialización de los nodos ocurre con los nodos de tipo valor constante, ya que estos pueden ser serializados. En este caso, ese nodo es también incluido en otro vector con todos los valores serializados. Cuando todos los nodos han sido serializados, todos los vectores se añaden a la raíz de JSON para ser guardado en disco. Por defecto, el editor guarda todos los scripts en una carpeta \textit{'Scripts'} dentro de assets, aunque no es necesario que un script esté en esa carpeta para su lectura por el motor o el editor.
+    Una vez terminada la serialización, se actualizan los scripts del \texttt{ComponentManager} del editor, para poder utilizar el nuevo script en las escenas.
+
+    \item \textit{Deserialización}: Ocurre en el método Load, el cual se llama cuando el editor pasa al estado de edición de nodos. Se comprueba la validez del nombre y del fichero a leer, y en caso de que el nombre esté vacío o que la lectura falle se creará un script vacío con ese nombre. Para de serializar un script, se va leyendo cada nodo del fichero, y creando nodo del tipo correspondiente según los datos dentro del propio JSON. Una vez todos los nodos han sido creados, se crean las uniones entre ellos. Dichas uniones también se extraen del propio JSON. Las uniones incluyen las conexiones de entrada y salida de valores, y las conexiones de flujo.
+\end{itemize}
+
+\subsection*{Nodos}
+
+Para entender el funcionamiento de los nodos en el editor primero es conveniente entender la jerarquía de clases que los representa.
+
+\medskip
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.3]{Imagenes/Vectorial/ComunicacionMotorEditor.png}
+%     \caption{Comunicación motor-editor}
+%     \label{fig:example}
+% \end{figure}
+
+La clase principal sería la clase \texttt{ScriptNode}. Esta clase contiene la lógica para el funcionamiento de la ventana de cada nodo, conociendo su tamaño y posición, distintos controles de la ventana como la posibilidad de cambiar su tamaño y un botón para poder cerrarlo. Además del funcionamiento general, también se encarga de manejar el valor de salida de los nodos, pero como no todos los nodos tienen valor de salida cuenta también con un flag para ignorar este valor y no mostrar nada al usuario. De esta clase heredan otras cuatro clases usadas para representar distintos tipos de nodos: \texttt{ScriptFork}, \texttt{ScriptEvent}, \texttt{ScriptFunction}, \texttt{ScriptInput} y \texttt{ScriptComment}.
+
+\medskip
+
+Como en el editor los scripts no se llegan a ejecutar, la lógica para implementar cada tipo de nodo es bastante sencilla, pues cada nodo solo tiene que almacenar los valores necesarios para cada tipo de nodo. 
+
+\begin{itemize}
+ 
+    \item \textit{ScriptFork} almacena su valor de entrada y sus dos nodos de salida de flujo. 
+   
+    \item \textit{ScriptEvent} almacena el nombre del evento y su nodo de salida de flujo.
+    
+    \item \textit{ScriptFunction} almacena un vector para sus nodos de entrada y el nombre de la función. En la constructora recibe como parámetro un puntero a una clase \texttt{Function} con toda la información asociada al método, como el nombre de la función, el número de nodos de entrada que necesita, el tipo y nombre asociado a cada nodo de entrada y tipo del valor de salida. Además de eso, también almacena el nodo de salida de flujo.
+    
+    \item \textit{ScriptInput} almacena tanto el tipo del nodo como su valor. En la constructora recibe el tipo asociado al nodo y éste no puede ser cambiado. Dependiendo del tipo del nodo, al usuario le aparecerán distintos inputs para almacenar los distintos tipos de entrada.  Tiene además un botón para serializar el valor, de esta forma, el valor del script se puede modificar desde el editor. \texttt{ScriptInput} no tiene un nodo de salida de flujo ya que no puede recibirlo.
+   
+    \item \textit{ScriptComment} almacena un mensaje de texto editable por el usuario. Este nodo es completamente auxiliar y su única función es que el usuario pueda ir dejando mensajes por los nodos para poder documentarlo y dejar aclaraciones.
+    
+    \item \textit{ScriptFlow} sirve para poder manejar la salida de flujo. Esta clase se asocia a un nodo, y tiene funcionalidad para controlar el flujo del script. Esto se hace uniendo las muescas del flujo (representadas mediante rombos), arrastrando la salida del flujo hasta la ventana del nodo que se quiere que se ejecute después. Si la ventana soporte el manejo de flujo aparecerá coloreada cuando se arrastre el ratón por encima mientras se arrastra un flujo de salido. Un nodo solo puede tener como máximo una entrada y una salida, con la excepción de \texttt{ScriptFunction} que puede tener hasta dos salidas. Para eliminar una conexión de flujo basta con hacer doble clic sobre el inicio o final del nodo. La muesca de entrada de un nodo por defecto no se dibuja, hasta que se cree una conexión con otro nodo. 
+    \item 
+\end{itemize}
+
+La unión entre dos nodos vendrá representada mediante una línea hecha usando la clase \texttt{Bezier}.
+
+\medskip
+
+La conexión de entrada y salida de un nodo se comporta de forma similar al flujo. Para crear una conexión se debe arrastrar sobre la muesca de salida de un nodo (representado mediante un triángulo apuntando hacia la derecha) y se soltará sobre el nodo de entrada (representado mediante un triángulo apuntando hacia la izquierda). Si la conexión ha resultado exitosa, ambos triángulos pasarán a estar coloreados. Un nodo de salida puede tener varias conexiones, mientras que un nodo de entrada puede tener solo una, por ello, si se conecta un nodo de salida diferente a un nodo de entrada, se eliminará la conexión anterior y se creará una nueva con los nuevos nodos. Una condición para que se pueda crear la conexión es que tanto la salida como la entrada deben de ser del mismo tipo. Se puede consultar el tipo de una entrada posando el ratón encima del texto con el nombre de la entrada, y se puede consultar el tipo de la salida posando el ratón sobre el triángulo de salida.
+
+\medskip
+
+Para eliminar una conexión se puede hacer doble clic sobre el nodo de entrada. Las conexiones se representan haciendo uso de una línea hecha usando la clase \texttt{Bezier}. Cuando se elimina un nodo, haciendo uso de llamadas virtuales, se notifica a cada clase de la inminente destrucción. Esto es importante, por las conexiones se almacenan en ambos sentidos, es decir, el nodo de entrada guarda un puntero al nodo de salida y viceversa. Por ello, cuando se elimina un nodo, hay que notificar a todas las conexiones para que los punteros se liberen correctamente y pasen a ser \textit{'nullptr'}. Esto es cierto tanto para las conexiones de entrada y salida como las conexiones de flujo.
+
+ 
+% ------------------------------------------------------------------ MOTOR ------------------------------------------------
+
+\section{Implementación del scripting en el motor}
+
+El punto de conexión entre el motor y el scripting es a partir del componente \texttt{Script}. La función de esta clase es principalmente recibir las llamadas a los distintos eventos desde el motor y se las redirigirlas a los eventos del propio script. Además, también funciona como clase para almacenar distintos valores que se pueden utilizar en los scripts, aunque de esto se entrará en profundidad más adelante. 
+La clase contiene una estructura de datos, en los que hay punteros a los distintos nodos de eventos del script. Si un script no tiene un evento en concreto su valor será \textit{'nullptr'} y ese evento en cuestión se omitirá.
+
+\medskip
+
+La clase script no contiene el script y sus nodos como tal, pues esto podría suponer una gran cantidad de datos repetidos en el momento en el que varias entidades compartieran el mismo script. Para ello existe la clase \texttt{ScriptManager}. Esta clase es un \texttt{Singleton} que carga y almacena todos los scripts que se vayan utilizando a lo largo de la ejecución del juego. De esta forma, cuando varias entidades usen el mismo script no tendrá que leerse el fichero nuevamente en memoria y se evitan tener duplicados. Además de almacenar los scripts, también se encarga se manejar la lógica básica de los nodos.
+Pero antes de seguir explicando el \texttt{ScriptManager}, expliquemos el funcionamiento de los nodos.
+
+\medskip
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.3]{Imagenes/Vectorial/ComunicacionMotorEditor.png}
+%     \caption{Comunicación motor-editor}
+%     \label{fig:example}
+% \end{figure}
+
+
+La clase nodo es una clase abstracta que contiene el identificador único del script, métodos virtuales para proporcionar funcionalidad, un identificador de iteración y el método \texttt{Cycle()}. Este método, no virtual, maneja el flujo de los nodos y lo que hace es llamar al método virtual \texttt{Operate())}. \texttt{Operate()} proporciona un puntero al siguiente nodo a ejecutar, y si este puntero es válido (distinto de \textit{'nullptr'}) se llama al método \texttt{Cycle()} del nuevo nodo. Por lo tanto, este método se ejecutará de manera recursiva hasta que se hayan ejecutado todos los nodos del flujo. Este proceso, en el que se llama por primera vez a \texttt{Cycle()} desde el script mánager hasta que termina su ejecución en todos los nodos es lo que llamamos iteración. 
+
+\medskip
+
+Al hacer la llamada desde el \texttt{ScriptManager} hay que proporcionar un entero, que contiene el índice de la iteración actual, que se guarda dentro de la clase \texttt{Node}. Esto es importante pues optimiza enormemente la velocidad del lenguaje ya que, si la salida de una función es usada por varios nodos, no queremos tener que recalcular tanto los valores de entrada de forma recursiva y la función de nuevo, por lo que al comienzo del método se comprueba si ambos índices, el guardado por el nodo y el recibido como entrada al método, son distintos. En caso de ser distintos sabemos que el nodo no ha sido ejecutado esta iteración y procedemos a la ejecución normal, pero en caso de ser iguales, este nodo ya ha sido procesado y procesarlo de nuevo sería innecesario.
+
+\medskip
+No hay que confundir una iteración con un fotograma dentro del juego, ya que si varios scripts se ejecutan en el mismo fotograma tendrán identificadores de iteración diferentes. 
+
+\medskip
+De la clase \texttt{Node} hereda la clase \texttt{OutputNode}. Esta clase, también abstracta está pensada para los distintos nodos que tienen un valor de salida, siendo los nodos de función, y los nodos de valor constante. Por ello, esta clase proporciona esencialmente un atributo nuevo de tipo \texttt{Variable}, usado para almacenar el valor devuelto por el nodo.
+
+\medskip
+
+Ahora es un buen momento para explicar la clase \texttt{Variable}. Esta clase está pensada para poder tomar cualquier valor utilizado desde el scripting, independientemente del tipo. Para ello se hace uso de un tipo enumerado indicando el valor de la clase, y una unión con cada tipo disponible para el scripting. La motivación para usar esta clase es simplicidad, ya que por ejemplo de esta forma podemos hacer que las funciones del scripting tengan siempre la misma entrada y salida (de entrada, un vector de variables y de salida una variable) y poder almacenar todo en un único mapa, aunque esto se explicará en más detalle más adelante.
+Volviendo a los nodos, de la clase \texttt{OutputNode} heredan otras dos clases: \texttt{ConstNode} y \texttt{Function}. 
+
+\medskip
+\begin{enumerate}
+    \item La primera es la encargada de almacenar los valores constantes del scripting, siendo por ejemplo números, vectores o cadenas de texto. El nombre de la clase viene ya que para el usuario el valor dado al nodo es inmutable. Podemos distinguir dos casos de uso para esta clase, el primero siendo únicamente un valor dado desde el script, en cuyo caso el método \texttt{Operate} es bastante simple ya que únicamente se encarga de hacer que el siguiente nodo sea \textit{'nullptr'}. El otro caso de uso es cuando el valor ha sido serializado, por esto nos referimos a que el usuario tiene la posibilidad de modificar el valor del nodo, por ejemplo, desde el editor, pudiendo de esta manera reutilizar el script con valores diferentes. Para este caso de uso la clase \texttt{ConstNode} cuenta dos atributos adicionales, uno de tipo \textit{'string'} que representa el nombre de la variable, y otro de tipo \texttt{Variable} que representa el valor original que tenía el nodo antes de la serialización. La diferencia entre ambos casos de uso reside esencialmente en el método \texttt{Operate}, donde comprobamos si la variable está serializada (podemos saber esto si tiene un nombre asociado, es decir, distinto de nulo), en cuyo caso accederíamos a uno de los valores que mencionamos anteriormente que almacenaba la clase \texttt{Script}, siendo el valor de la variable serializada. Si el valor asociado a ese nombre que almacena la clase es válido, entonces ese será el nuevo valor devuelto. En caso de no ser válido, porque no se haya asignado un valor a todas las entidades que usen el script, se usará el valor por defecto que es el motivo por el que se guardaba.
+
+
+    \item La otra clase que hereda de \texttt{OutputNode} es \texttt{Function}. Esta clase es la encargada de ejecutar las funciones del editor. Contiene un puntero al siguiente nodo, el nombre del método y un vector de \texttt{OutputNode} con todos los inputs de la función. El método \texttt{Operate()} se encarga de generar el vector para la entrada de la función. Esto lo hace iterando por cada nodo de entrada, llamando a su método \texttt{Cycle()} y luego obteniendo el valor guardado que se guarde en \textit{'output'}. Para la llamada al método se hace a través del \texttt{ScriptManager}, el cual contiene un mapa con todas las funciones del motor, accediendo a la función con un string con su nombre. Este mapa de funciones se genera haciendo uso del \texttt{FunctionManager}, clase la cual tiene un método para generar por completo el mapa, añadiendo uno a uno cada función del motor con su nombre asociado. Estas funciones, también incluidas en el mismo fichero que \texttt{FunctionManager} se encargan de llamar a cada método del motor, recibiendo como entrada un vector de tipo \texttt{Variable} y devolviendo un valor de tipo \texttt{Variable} (Variable tiene soporte para devolver null en caso de que la función no devuelva nada). 
+
+\end{enumerate}
+
+El último tipo de nodo es la clase \texttt{Fork}. Esta clase representa la lógica condicional y bucles que se pueden implementar en el scripting, pudiendo ser de tres tipos: un condicional \textit{'if'}, un bucle \textit{'while'}, y un tipo de bucle que repite el contenido un número determinado de veces al que llamaremos \textit{'for'} aunque realmente no lo sea. Este nodo contiene un puntero a otros dos nodos, llamados A y B, que tienen uso diferente en caso de ser un condicional o un bucle. Si es un condicional, si el valor de entrada es A, el nodo que se marque como next será A, en caso contrario será B. Si se trata de un bucle A es el contenido inicial del bucle, y el nodo B es el nodo siguiente a la terminación del bucle. Una peculiaridad de este nodo es que es el único que modifica el índice de iteración. Esto es así pues queremos que los nodos de dentro del bucle se puedan ejecutar varias veces dentro de la misma iteración, por lo que se incrementa el índice de iteración en cada vuelta del bucle.
