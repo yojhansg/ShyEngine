@@ -29,19 +29,19 @@ jugabilidad.
 Un motor de videojuegos consta de varias partes esenciales que trabajan en conjunto para facilitar el desarrollo de videojuegos. Estas partes clave incluyen:
 
 \begin{itemize}
-    \item \textbf{Motor gráfico:} Responsable de la representación visual de los elementos del juego, como objetos o interfaz, garantizando su 
+    \item \textit{Motor gráfico}: Responsable de la representación visual de los elementos del juego, como objetos o interfaz, garantizando su 
     adecuada superposición en el espacio bidimensional. 
     
-    \item \textbf{Motor físico:} Simula efectos físicos realistas, como gravedad, movimiento y colisiones entre objetos, para que los elementos del juego interactúen 
+    \item \textit{Motor físico}: Simula efectos físicos realistas, como gravedad, movimiento y colisiones entre objetos, para que los elementos del juego interactúen 
     de manera coherente y realista, mejorando la experiencia del jugador.
     
-    \item \textbf{Sistema de Input:} Captura y procesa la entrada del jugador, como pulsaciones de teclas y movimientos del ratón, permitiendo controlar 
+    \item \textit{Sistema de Input}: Captura y procesa la entrada del jugador, como pulsaciones de teclas y movimientos del ratón, permitiendo controlar 
     la interacción del jugador con el juego.
     
-    \item \textbf{Gestión de escenas:} Permite la creación y gestión de múltiples escenas o niveles dentro del juego, facilitando la transición entre 
+    \item \textit{Gestión de escenas}: Permite la creación y gestión de múltiples escenas o niveles dentro del juego, facilitando la transición entre 
     partes del juego como menús, gameplay, inventario, mapa, etc.
     
-    \item \textbf{Motor de audio:} Reproduce efectos de sonido y música para enriquecer la atmósfera del juego y proporcionar retroalimentación 
+    \item \textit{Motor de audio}: Reproduce efectos de sonido y música para enriquecer la atmósfera del juego y proporcionar retroalimentación 
     auditiva al jugador, lo que puede mejorar la inmersión y la retroalimentación.
 \end{itemize}
 
@@ -59,25 +59,25 @@ permiten la creación y personalización de niveles, personajes, escenarios y otro
 
 \begin{itemize}
 
-    \item \textbf{Creación de Escenas y Niveles}: Los editores de videojuegos ofrecen herramientas para diseñar y crear los entornos de juego. Esto incluye 
+    \item \textit{Creación de Escenas y Niveles}: Los editores de videojuegos ofrecen herramientas para diseñar y crear los entornos de juego. Esto incluye 
     la disposición de elementos, creación de geometría del nivel, etc.
 
-    \item \textbf{Diseño de Personajes y Objetos}: Los editores permiten la creación y personalización de personajes jugables, personajes no jugables (PNJ),
+    \item \textit{Diseño de Personajes y Objetos}: Los editores permiten la creación y personalización de personajes jugables, personajes no jugables (PNJ),
     enemigos, objetos y elementos interactivos. Esto puede incluir la definición de apariencia, comportamiento y habilidades.
 
-    \item \textbf{Gestión de Recursos Multimedia}: Los editores de videojuegos facilitan la importación y organización de gráficos, sonidos, música y otros
+    \item \textit{Gestión de Recursos Multimedia}: Los editores de videojuegos facilitan la importación y organización de gráficos, sonidos, música y otros
     activos multimedia que se utilizarán en el juego.
     
-    \item \textbf{Asignación de Comportamientos y Lógica}: Los editores permiten definir el comportamiento de los elementos del juego mediante la asignación de 
+    \item \textit{Asignación de Comportamientos y Lógica}: Los editores permiten definir el comportamiento de los elementos del juego mediante la asignación de 
     reglas, scripts y lógica programada. Esto incluye la configuración de interacciones y eventos.
 
-    \item \textbf{Personalización de Interfaz de Usuario}: Algunos editores permiten la adaptación de la interfaz de usuario del juego, lo que incluye la 
+    \item \textit{Personalización de Interfaz de Usuario}: Algunos editores permiten la adaptación de la interfaz de usuario del juego, lo que incluye la 
     disposición de elementos de la pantalla, el diseño de menús y la presentación visual general.
    
-    \item \textbf{Pruebas y Depuración}:  Los editores de videojuegos a menudo incluyen herramientas de prueba y depuración que permiten a los desarrolladores 
+    \item \textit{Pruebas y Depuración}:  Los editores de videojuegos a menudo incluyen herramientas de prueba y depuración que permiten a los desarrolladores 
     evaluar y ajustar el comportamiento del juego durante el proceso de creación.
 
-    \item \textbf{Exportación y Distribución}: Una función esencial de los editores es la capacidad de exportar el juego en un formato que pueda ser ejecutado 
+    \item \textit{Exportación y Distribución}: Una función esencial de los editores es la capacidad de exportar el juego en un formato que pueda ser ejecutado 
     por el motor de videojuegos correspondiente. Esto permite la distribución y el acceso al juego final.
 
 \end{itemize}
@@ -88,19 +88,27 @@ En la industria, es frecuente observar que ambos términos estén estrechamente vi
 esenciales en el proceso de desarrollo de videojuegos al permitir un flujo de trabajo eficiente. Su sinergia constituye un pilar fundamental en el proceso de desarrollo 
 de videojuegos, facilitando la creación y optimización de experiencias de juego únicas y atractivas.
 
+\medskip
+
 El motor de videojuegos representa el núcleo tecnológico que sustenta el juego, encargándose de tareas críticas como la gestión de gráficos, física, sonido o lógica. 
-Puede considerarse como el "corazón" del juego, sin el cual la mayoría de los juegos simplemente no podrían existir.
+Puede considerarse como el corazón del juego, sin el cual la mayoría de los juegos simplemente no podrían existir.
+
+\medskip
 
 Por su parte, el editor de videojuegos se posiciona como una herramienta de creación y diseño que colabora estrechamente con el motor. Su principal función radica en 
 permitir a los desarrolladores y diseñadores de juegos crear y modificar contenido mucho más rapida y comodamente que si tuvieran que hacerlo a través del código directamente. 
 Esto simplifica la personalización del mundo del juego y la configuración de sus componentes. En el editor se definen diversos datos, como escenas, componentes y entidades, 
 que el motor posteriormente leerá para su procesamiento y ejecución.
 
-\subsection{Comunicación motor-editor}
+\subsection*{Comunicación motor-editor}
 
 Durante el proceso de creación de un videojuegos a través de un motor de videojuegos con editor, todas las acciones de los desarrolladores se producen en el editor.
 Con todas estas acciones, el editor genera unos datos que serán leídos posteriormente por el motor para poder ejecutar el videojuego. Este proceso iterativo permite a 
 los equipos de desarrollo perfeccionar gradualmente la experiencia de juego, realizando ajustes y corrigiendo errores a medida que avanzan en el proyecto.
+
+\medskip
+
+La comunicación entre el motor y el editor se ilustra en la Figura \ref{fig:example}.
 
 \begin{figure}[h]
     \centering
@@ -110,32 +118,34 @@ los equipos de desarrollo perfeccionar gradualmente la experiencia de juego, rea
 \end{figure}
 
 
-\subsection{Motor de física}
+\subsection*{Motor de física}
 
 Un motor de física en el desarrollo de videojuegos es un software o una biblioteca de programación que simula y calcula el comportamiento físico de objetos dentro del 
 mundo virtual del juego. Estos motores permiten que los objetos en un videojuego interactúen con realismo según las leyes de la física, lo que añade un nivel de realismo
 y jugabilidad a la experiencia del jugador. 
 
+\medskip
+
 Algunas de las funciones que un motor de física puede proporcionar incluyen:
 
 \begin{itemize}
 
-    \item \textbf{Simulación de colisiones}: Los motores de física pueden detectar y manejar colisiones entre objetos en el juego, calculando cómo se deben comportar los
+    \item \textit{Simulación de colisiones}: Los motores de física pueden detectar y manejar colisiones entre objetos en el juego, calculando cómo se deben comportar los
      objetos cuando chocan entre sí, rebotan, se deslizan o se detienen.
 
-    \item \textbf{Gravedad}: Los motores de física pueden aplicar la fuerza de la gravedad a los objetos en el juego, lo que significa que los objetos caen hacia abajo 
+    \item \textit{Gravedad}: Los motores de física pueden aplicar la fuerza de la gravedad a los objetos en el juego, lo que significa que los objetos caen hacia abajo 
     y pueden rebotar o interactuar de manera realista con el entorno.
 
-    \item \textbf{Gravedad}: Cinemática inversa: Los motores de física a veces incluyen herramientas para calcular automáticamente animaciones realistas de personajes y
+    \item \textit{Cinemática inversa}: Los motores de física a veces incluyen herramientas para calcular automáticamente animaciones realistas de personajes y
     objetos en función de las acciones del jugador. Esto es útil para animaciones de personajes en juegos, como caminar, correr o saltar.
 
-    \item \textbf{Simulación de fluidos y partículas}: Algunos motores de física avanzados pueden simular efectos de fluidos, como agua o fuego, así como partículas, 
+    \item \textit{Simulación de fluidos y partículas}: Algunos motores de física avanzados pueden simular efectos de fluidos, como agua o fuego, así como partículas, 
     como humo o chispas.
 
-    \item \textbf{Simulación de fluidos y partículas}: Los motores de física permiten aplicar fuerzas a los objetos para simular movimientos, como la aplicación de una 
+    \item \textit{Simulación de movimientos}: Los motores de física permiten aplicar fuerzas a los objetos para simular movimientos, como la aplicación de una 
     fuerza para lanzar un objeto o empujarlo.
 
-    \item \textbf{Restricciones y articulaciones}: Estos motores también pueden gestionar restricciones y articulaciones que definen cómo los objetos pueden moverse y girar
+    \item \textit{Restricciones y articulaciones}: Estos motores también pueden gestionar restricciones y articulaciones que definen cómo los objetos pueden moverse y girar
     entre sí, lo que es útil para simular conexiones como bisagras, ruedas o articulaciones de personajes.
 
 \end{itemize}
@@ -144,40 +154,47 @@ Algunos ejemplos de motores de física populares en la industria de los videojueg
 ofrecen diferentes características y niveles de realismo, lo que permite a los desarrolladores elegir el más adecuado para sus necesidades específicas.
 
 
-\subsection{Unity}
+\subsection*{Unity}
 
 Unity es un motor de desarrollo de videojuegos altamente influyente debido a su accesibilidad y versatilidad. Utiliza un motor gráfico propio que es conocido por 
 permitir a desarrolladores de todos los niveles de experiencia crear juegos y aplicaciones interactivas para una amplia variedad de plataformas, desde PC y consolas
 hasta dispositivos móviles y realidad virtual. Su característica distintiva es su capacidad para facilitar el desarrollo multiplataforma, lo que lo convierte en una
 elección sólida para proyectos que buscan llegar a una audiencia diversa. 
 
+\medskip
+
 Como motor físico, Unity utiliza el motor de físicas NVIDIA PhysX, que es ampliamente reconocido por su capacidad para simular efectos físicos realistas en los juegos. 
 La combinación del motor gráfico Unity Graphics y el motor de físicas NVIDIA PhysX proporciona a los desarrolladores las herramientas necesarias para crear experiencias 
 visuales y físicas inmersivas en sus juegos. 
 
-% TODO La imagen se coloca donde quiere
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[scale=0.25]{Imagenes/Vectorial/unity-editor.jpg}
-%     \caption{Editor del motor de videojuegos Unity}
-% \end{figure}
-
-
-\subsection{Unreal Engine}
+\subsection*{Unreal Engine}
 
 Unreal Engine, por otro lado, se destaca por su impresionante potencia gráfica y capacidades en 3D. Utiliza su propio motor gráfico altamente avanzado que es la elección 
 preferida para desarrolladores que buscan crear experiencias visuales de alta calidad, como juegos de acción, aventuras y experiencias de realidad virtual inmersivas. 
 Sus gráficos fotorrealistas, motor de física avanzada y sistema de partículas robusto lo convierten en una herramienta esencial para proyectos de vanguardia. 
 
+\medskip
+
 Además, Unreal Engine incorpora su propio motor de física llamado Chaos.
 
-% TODO La imagen se coloca donde quiere
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[scale=0.3]{Imagenes/Vectorial/unreal-editor.png}
-%     \caption{Editor del motor de videojuegos Unity}
-%     \label{fig:example}
-% \end{figure}    
+\medskip
+
+En la las siguientes imagenes se muestran el editor del motor de videojuegos Unity \ref{fig:unity} y el editor del motor de videojuegos Unreal Engine \ref{fig:unreal}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.2]{Imagenes/Vectorial/unity-editor.jpg}
+    \caption{Editor del motor de videojuegos Unity}
+    \label{fig:unity}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.255]{Imagenes/Vectorial/unreal-editor.png}
+    \caption{Editor del motor de videojuegos Unreal Engine}
+    \label{fig:unreal}
+\end{figure}    
+
 
 
 %-------------------------------------------------------------------
@@ -189,123 +206,93 @@ la programación tradicional. Estos enfoques influyen en la manera en que se cons
 sistemas específicos de scripting que simplifican la creación de videojuegos, como los Blueprints de Unreal Engine o Scratch. A continuación, 
 se explorarán las diferencias entre ambos enfoques y se describirán los sistemas investigados.
 
-\subsection{Scripting por Nodos vs. Programación}
+\subsection*{Scripting por Nodos vs. Programación}
 \label{cap3:sec:scripting:sec:scriptingvsprogramacion}
 
 \begin{itemize}
 
-    \item \textbf{Scripting por Nodos}: Este enfoque utiliza interfaces visuales y gráficas para representar la lógica del juego mediante 
+    \item \textit{Scripting por Nodos}: Este enfoque utiliza interfaces visuales y gráficas para representar la lógica del juego mediante 
     nodos interconectados. Los desarrolladores ensamblan estos nodos para definir el flujo de control, las interacciones y las acciones del 
     juego. No se requiere conocimiento profundo de programación, lo que lo hace más accesible para principiantes. Es común en herramientas 
     como Unreal Engine y Scratch.
 
-    \item \textbf{Programación}: La programación tradicional implica escribir código en lenguajes de programación como C++, CSharp, 
+    \item \textit{Programación}: La programación tradicional implica escribir código en lenguajes de programación como C++, CSharp, 
     Python o JavaScript. Los desarrolladores crean instrucciones detalladas para definir el comportamiento del juego. Este enfoque es 
     más poderoso y versátil, pero puede requerir un nivel más alto de experiencia en programación.
 
 \end{itemize}
 
-\subsection{Ejemplo de scripting por nodos: Blueprints de Unreal Engine}
+\subsection*{Ejemplo de scripting por nodos: Blueprints de Unreal Engine}
 
 Los Blueprints en Unreal Engine representan una implementación destacable del enfoque de Scripting por Nodos en el desarrollo de videojuegos. Esta herramienta 
 esencial permite a los desarrolladores crear la lógica del juego utilizando una interfaz visual basada en nodos, lo que facilita enormemente la creación de juegos 
 sin la necesidad de escribir código en lenguajes tradicionales como C++.
 
-\subsubsection{Funcionamiento de los Blueprints}
+\subsubsection*{Funcionamiento de los Blueprints}
 
-\begin{enumerate}
-    \item \textbf{Interfaz Visual Intuitiva:} Los Blueprints de Unreal Engine proporcionan a los desarrolladores una interfaz gráfica intuitiva y amigable. 
+\begin{itemize}
+    \item \textit{Interfaz Visual Intuitiva:} Los Blueprints de Unreal Engine proporcionan a los desarrolladores una interfaz gráfica intuitiva y amigable. 
     En lugar de escribir líneas de código, los diseñadores y desarrolladores pueden crear lógica utilizando una colección de nodos predefinidos, que representan acciones, 
     eventos y operaciones lógicas.
 
-    \item \textbf{Nodos Interconectados:} La lógica del juego se construye interconectando estos nodos de manera visual. Los nodos pueden representar eventos, 
+    \item \textit{Nodos Interconectados:} La lógica del juego se construye interconectando estos nodos de manera visual. Los nodos pueden representar eventos, 
     como la pulsación de un botón o la colisión de objetos, así como acciones, como mover un personaje o cambiar la iluminación de una escena. Al conectar estos 
     nodos de manera apropiada, se define el flujo de control y el comportamiento del juego.
 
-    \item \textbf{Personalización y Reutilización:} Los Blueprints permiten una alta personalización y reutilización de la lógica. Los desarrolladores pueden 
+    \item \textit{Personalización y Reutilización:} Los Blueprints permiten una alta personalización y reutilización de la lógica. Los desarrolladores pueden 
     crear sus propios nodos personalizados y guardarlos para utilizarlos en futuros proyectos, acelerando así el desarrollo y manteniendo un alto nivel de consistencia.
 
-    \item \textbf{Facilita la Colaboración:} Dado que la interfaz de Blueprints es visual y gráfica, facilita la colaboración entre diseñadores y programadores. 
+    \item \textit{Facilita la Colaboración:} Dado que la interfaz de Blueprints es visual y gráfica, facilita la colaboración entre diseñadores y programadores. 
     Los diseñadores pueden crear la lógica del juego de manera más independiente, lo que permite a los programadores centrarse en tareas más técnicas.
 
-    \item \textbf{Combinación con C++:} Unreal Engine permite una integración fluida entre Blueprints y código C++. Esto significa que los desarrolladores pueden 
+    \item \textit{Combinación con C++:} Unreal Engine permite una integración fluida entre Blueprints y código C++. Esto significa que los desarrolladores pueden 
     utilizar Blueprints para definir el comportamiento general del juego y luego recurrir a C++ para implementar funciones específicas o mejorar el rendimiento cuando 
     sea necesario.
 
-    \item \textbf{Depuración y Visualización:} Los Blueprints ofrecen herramientas de depuración visuales que permiten a los desarrolladores rastrear y solucionar 
+    \item \textit{Depuración y Visualización:} Los Blueprints ofrecen herramientas de depuración visuales que permiten a los desarrolladores rastrear y solucionar 
     problemas en la lógica del juego de manera efectiva. Esto incluye la capacidad de ver el flujo de ejecución de los nodos y detectar posibles errores.
-\end{enumerate}
+\end{itemize}
 
 En resumen, los Blueprints de Unreal Engine son una herramienta poderosa que democratiza el desarrollo de videojuegos al permitir que una amplia gama de profesionales, 
 desde diseñadores hasta programadores, colaboren en la creación de experiencias interactivas sin la necesidad de una programación profunda. Esta versatilidad y 
 accesibilidad los convierten en una elección popular en la industria del desarrollo de videojuegos.
 
 
-\subsection{Ejemplo de scripting por programación: MonoBehaviour de Unity  }
+\subsection*{Ejemplo de scripting por programación: MonoBehaviour de Unity  }
 
 Unity, una de las plataformas líderes en desarrollo de videojuegos, se destaca por su enfoque en la programación tradicional a través de su componente llamado 
 MonoBehaviour. A diferencia del enfoque de Scripting por Nodos, que hemos discutido previamente, MonoBehaviour permite a los desarrolladores utilizar lenguajes de
 programación como CSharp para definir la lógica y la funcionalidad del juego de manera más programática y detallada.
 
+\medskip
+
 El uso de MonoBehaviour en Unity se basa en los siguientes conceptos:
 
-\begin{enumerate}
-    \item \textbf{Componentes en GameObjects:} En Unity, los objetos en el juego se representan como GameObjects, y cada GameObject puede tener uno o más componentes 
+\begin{itemize}
+    \item \textit{Componentes en GameObjects}: En Unity, los objetos en el juego se representan como GameObjects, y cada GameObject puede tener uno o más componentes 
     MonoBehaviour adjuntos. Estos componentes representan la funcionalidad y el comportamiento del GameObject.
 
-    \item \textbf{Programación en CSharp:} Para definir la lógica y el comportamiento de un GameObject, los desarrolladores utilizan el lenguaje de programación CSharp en 
+    \item \textit{Programación en CSharp}: Para definir la lógica y el comportamiento de un GameObject, los desarrolladores utilizan el lenguaje de programación CSharp en 
     combinación con MonoBehaviour. Escriben scripts que heredan de la clase MonoBehaviour y anexan estos scripts como componentes a los GameObjects correspondientes.
 
-    \item \textbf{Métodos y Eventos:} Los scripts de MonoBehaviour pueden implementar métodos que se ejecutan en momentos específicos durante la vida útil del 
-    GameObject, como Start() para la inicialización y Update() para la actualización continua. Además, pueden responder a eventos como colisiones, clics del mouse 
+    \item \textit{Métodos y Eventos}: Los scripts de MonoBehaviour pueden implementar métodos que se ejecutan en momentos específicos durante la vida útil del 
+    GameObject, como \texttt{Start()} para la inicialización y \texttt{Update()} para la actualización continua. Además, pueden responder a eventos como colisiones, clics del mouse 
     o entradas del teclado.
 
-    \item \textbf{Flexibilidad y Control:} El uso de programación con MonoBehaviour brinda a los desarrolladores un alto grado de flexibilidad y control sobre la 
+    \item \textit{Flexibilidad y Control}: El uso de programación con MonoBehaviour brinda a los desarrolladores un alto grado de flexibilidad y control sobre la 
     lógica del juego. Pueden definir comportamientos precisos y detallados para los elementos del juego.
 
-    \item \textbf{Personalización y Extensibilidad:} Unity permite la creación de scripts personalizados que se pueden reutilizar en múltiples objetos o proyectos. 
+    \item \textit{Personalización y Extensibilidad}: Unity permite la creación de scripts personalizados que se pueden reutilizar en múltiples objetos o proyectos. 
     Esto facilita la extensibilidad y la personalización de la funcionalidad del juego.
 
-    \item \textbf{Combinación con Assets y Gráficos:} Los scripts de MonoBehaviour pueden interactuar con recursos gráficos, modelos 3D, sonidos y otros assets del 
+    \item \textit{Combinación con Assets y Gráficos}: Los scripts de MonoBehaviour pueden interactuar con recursos gráficos, modelos 3D, sonidos y otros assets del 
     juego, lo que permite una integración completa de la programación con los elementos visuales y auditivos del juego.
 
-\end{enumerate}
+\end{itemize}
 
-En resumen, mientras que el "Scripting por Nodos" simplifica la creación de videojuegos a través de interfaces visuales, MonoBehaviour en Unity representa un enfoque 
+En resumen, mientras que el scripting por nodos simplifica la creación de videojuegos a través de interfaces visuales, MonoBehaviour en Unity representa un enfoque 
 más programático que brinda a los desarrolladores un alto nivel de control y flexibilidad sobre la lógica y la funcionalidad del juego. Esto lo convierte en una 
 opción preferida para proyectos que requieren una programación detallada y un mayor control sobre la interacción del juego.
-
-
-\subsection{Sistemas de Scripting Investigados (MOVER A OTRO APARTADO)}
-\label{cap3:sec:scripting:sec:scriptinginvestigados}
-
-En el proceso de investigación y desarrollo, optamos por no basarnos en sistemas de scripting preexistentes, ya que nuestro 
-objetivo era crear una solución propia que se ajustara a nuestras necesidades particulares. Sin embargo, en cuanto a la interfaz visual del 
-scripting, hemos tomado referencia de la conocida herramienta de modelado y animación 3D Blender, ya que consideramos que atractiva.  
-Diseñamos nuestro propio sistema de scripting con el propósito de cumplir con las siguientes características clave:
-
-\begin{itemize}
-
-    \item \texttt{Flexibilidad y comodidad para no desarrolladores}: \\
-    Reconociendo la amplia variedad de habilidades entre los usuarios, \\
-    hemos eliminado la necesidad de conocimientos en programación. Nuestro \\ 
-    enfoque visual y basado en nodos significa que no es necesario escribir \\
-    código. Los usuarios pueden construir interacciones y comportamientos \\
-    simplemente conectando bloques visuales.
-    
-    \item \texttt{Aprendizaje Sencillo}: Valoramos la importancia de una curva de \\ 
-    aprendizaje suave. Hemos diseñado nuestro sistema con claridad en \\ 
-    mente, asegurándonos de que los conceptos sean fáciles de entender. \\ 
-    Esto permite a los usuarios adquirir rápidamente la confianza necesaria \\
-    para utilizar el sistema y plasmar sus ideas en el juego.
-    
-    \item \texttt{Enfoque Visualmente Intuitivo}: Inspirados en los principios de \\ 
-    diseño de interfaz de usuario, hemos creado un entorno visualmente \\ 
-    atractivo y fácil de navegar. Los usuarios pueden interactuar con \\
-    elementos gráficos que representan conceptos y funciones de juego, \\ 
-    lo que facilita la creación de lógica y la toma de decisiones.
-
-\end{itemize}
 
 % %-------------------------------------------------------------------
 % \section*{\NotasBibliograficas}
