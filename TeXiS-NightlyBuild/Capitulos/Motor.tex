@@ -7,9 +7,10 @@
 \chapter{Motor}
 
 El motor esta dividio en diez proyectos de Visual Studio, todos dentro de la misma solución.
-Cada proyecto cumple una función específica de la que pueden depender otros proyectos. 
+Cada proyecto cumple una función específica de la que pueden depender otros proyectos y todo el código está escrito
+en C++
 
-Todo el código está escrito en C++. 
+\medskip
 
 A continuación se entrará en detalle sobre la función y detalles de implementación de cada
 proyecto y de las librerías asociadas al mismo, si las tiene.
@@ -17,39 +18,40 @@ proyecto y de las librerías asociadas al mismo, si las tiene.
 \section{Utilidades}
 
 El objetivo de este proyecto es implementar código común que pueden necesitar el resto 
-de proyectos evitando así la duplicación de código innecesaria.
+de proyectos evitando así la duplicación de código innecesaria. Contiene clases tanto orientadas a guardar información como a 
+implementar lógica y funcionalidad.
 
-Contiene clases tanto orientadas a guardar información como a implementar lógica y funcionalidad.
+\medskip
 
 Entre estas clases destacan las siguientes:
 
 \begin{itemize}
 
-\item Vector2D: Representa un vector bidimensional, contiene información de dos componentes e implementa 
-muchas de sus operaciones básicas. En este caso, esta clase se puede usar simplemente como un contenedor de 
-información en el que se pueden asociar dos números reales pero también se puede usar para hacer cálculos
-geométricos en dos dimensiones como rotaciones, cálculo de ángulos, etc.
+    \item \texttt{Vector2D}: Representa un vector bidimensional, contiene información de dos componentes e implementa 
+    muchas de sus operaciones básicas. En este caso, esta clase se puede usar simplemente como un contenedor de 
+    información en el que se pueden asociar dos números reales pero también se puede usar para hacer cálculos
+    geométricos en dos dimensiones como rotaciones, cálculo de ángulos, etc.
 
-\item Random: Contiene métodos estáticos útiles para calcular aleatoriedad entre números enteros, 
-números reales, ángulos, y colores. En este caso esta clase solo tiene como objetivo proporcionar
-funcionalidad.
+    \item \texttt{Random}: Contiene métodos estáticos útiles para calcular aleatoriedad entre números enteros, 
+    números reales, ángulos, y colores. En este caso esta clase solo tiene como objetivo proporcionar
+    funcionalidad.
 
-\item Color: Representa un color de tres canales (Red, Green, Blue) además de métodos con algo de
-funcionalida como Lerp, que calcula un color intermedio entre otros dos dados y un porcentaje 
-que representa la influencia que tendrá cada color en el color resultante. También existen métodos
-que aportan comodidad a la hora de crear colores como Red, Green, Blue, Orange, Black, que simplemente
-construyen el color por dentro sin necesidad de conocer su valor en el modelo RGB.
+    \item \texttt{Color}: Representa un color de tres canales (Red, Green, Blue) además de métodos con algo de
+    funcionalida como \texttt{Lerp}, que calcula un color intermedio entre otros dos dados y un porcentaje 
+    que representa la influencia que tendrá cada color en el color resultante. También existen métodos
+    que aportan comodidad a la hora de crear colores como Red, Green, Blue, Orange, Black, que simplemente
+    construyen el color por dentro sin necesidad de conocer su valor en el modelo RGB.
 
-\item EngineTine: Por un lado, contiene información sobre el tiempo entre fotogramas del motor, 
-tiempo entre pasos físicos, tiempo transcurrido desde el inicio del programa y número de fotogramas
-hasta el momento. Por otro lado, implementa funcionalidad para conocer la tasa de frames o convertir 
-un valor de tiempo en una cadena de texto formateada. Mencionar también que esta clase es un Singleton.
+    \item \texttt{EngineTine}: Por un lado, contiene información sobre el tiempo entre fotogramas del motor, 
+    tiempo entre pasos físicos, tiempo transcurrido desde el inicio del programa y número de fotogramas
+    hasta el momento. Por otro lado, implementa funcionalidad para conocer la tasa de frames o convertir 
+    un valor de tiempo en una cadena de texto formateada. Mencionar también que esta clase es un \texttt{Singleton}.
 
-\item Singleton: Una plantilla para crear instancias estáticas a través de herencia. Es decir, en caso
-de querer convertir una clases en un Singleton, muy útiles para managers, simplemente hay que heredar
-de esta clases para conseguirlo. Aporta mucha comodidad ya que evita tener que implmentar la instancia
-estática de la clase y sus métodos para manejarla. Solo tiene un incoveniente y es borrar los Singletons
-en el orden adecuado si dependen entre ellos.
+    \item \texttt{Singleton}: Una plantilla para crear instancias estáticas a través de herencia. Es decir, en caso
+    de querer convertir una clases en un \texttt{Singleton}, muy útiles para managers, simplemente hay que heredar
+    de esta clases para conseguirlo. Aporta mucha comodidad ya que evita tener que implmentar la instancia
+    estática de la clase y sus métodos para manejarla. Solo tiene un incoveniente y es borrar los \texttt{Singleton}
+    en el orden adecuado si dependen entre ellos.
 
 \end{itemize}
 
@@ -59,111 +61,134 @@ El objetivo de este proyecto es proporcionar un contenedor de recursos en el que
 todos los recursos del videojuego. En concreto, el tipo de recursos que se pueden guardar son fuentes
 de texto, imágenes, efectos de sonido y música.
 
+\medskip
+
 El manager de recursos contiene un mapa por cada tipo de recurso donde la clave es la ruta del archivo
-y el valor un puntero a un objeto del tipo del recurso (Texture*, Font*, SoundEffect*, Music*).
+y el valor un puntero a un objeto del tipo del recurso (\texttt{Texture*}, \texttt{Font*}, \texttt{SoundEffect*}, \texttt{Music*}).
 El hecho de utilizar un mapa se debe a la complejidad constante de acceder a los recursos una vez creados.
+
+\medskip
 
 Esto es importante porque uno de los objetivos del manager de recursos es reutilizar los recursos creados
 para solo tener cargada una copia de cada recurso en memoria. Por ello, a la hora de añadir un nuevo recurso
 al manager, primero comprueba si ya lo contiene y en ese caso, lo devuelve, en caso contrario, lo crea.
 
+\medskip
+
 Ya que la clave en los mapas es la ruta del archivo, los recursos pueden duplicarse en caso de tener
 el mismo archivo en diferentes directorios. El manager no contempla ese escenario ya que realmente
 el archivo también esta duplicado y es responsabilidad del desarrollador ordenar sus archivos de assets.
+
+\medskip
 
 Por último, en la destructora de la clase se borran todos los recursos de todos los mapas.
 
 
 \section{Sonido}
 
-El objetivo de este proyecto es construir un envoltorio sobre la librería de audio SDLMixer para
-poder implementar posteriormente los componentes MusicEmitter y SoundEmitter.
+El objetivo de este proyecto es construir un envoltorio sobre la librería de audio \texttt{SDLMixer} para
+poder implementar posteriormente los componentes \texttt{MusicEmitter} y \texttt{SoundEmitter}.
 
-Para un mejor entendimiento de la implementación es necesario saber que SDLMixer diferencia entre
+\medskip
+
+Para un mejor entendimiento de la implementación es necesario saber que \texttt{SDLMixer} diferencia entre
 efectos de sonido o sonidos cortos en general (WAV, MP3) y música de fondo (WAV, MP3, OGG).
 
-Para la música (MixMusic), la librería solo cuenta con un canal de reproducción por lo que es
+\medskip
+
+Para la música \texttt{MixMusic}, la librería solo cuenta con un canal de reproducción por lo que es
 algo limitado pero simple a la vez ya que no hay que lidiar con número de canales, al contrario
-que con los efectos de sonido (MixChunk).
+que con los efectos de sonido \texttt{MixChunk}.
+
+\medskip
 
 Este proyecto cuenta con tres clases:
 
 \begin{itemize}
 
-\item SoundEffect: Representa un efecto de sonido. Contiene la información de un MixChunk de
-SDLMixer y un identificador usado posteriormente por el componente SoundEmitter.
+\item \texttt{SoundEffect}: Representa un efecto de sonido. Contiene la información de un MixChunk de
+SDLMixer y un identificador usado posteriormente por el componente \texttt{SoundEmitter}.
 
-\item MusicEffect: Representa un sonido de música de fondo. Contiene la información de un
-MixMusic de SDLMixer y un identificador usado posteriormente por el componente MusicEmitter.
+\item \texttt{MusicEffect}: Representa un sonido de música de fondo. Contiene la información de un
+\texttt{MixMusic} de \texttt{SDLMixer} y un identificador usado posteriormente por el componente \texttt{MusicEmitter}.
 
 Estas dos clases representan también los recursos que se usan para música y sonidos en el 
 manager de recursos.
 
-\item SoundManager: Manager singleton encargado de implementar el envoltorio de las funciones principales 
-de SDLMixer para reproducir, parar, y detener sonidos, entre otros. Tiene dos métodos destinados al 
+\item \texttt{SoundManager}: Manager \texttt{Singleton} encargado de implementar el envoltorio de las funciones principales 
+de \texttt{SDLMixer} para reproducir, parar, y detener sonidos, entre otros. Tiene dos métodos destinados al 
 usuario para el modificar el volumen general y cambiar el número de canales disponibles para la reproducción
 de efectos de sonidos.
 
 \end{itemize}
 
-En cuanto a los sonidos, todos los métodos de SDLMixer necesitan un canal y un MixChunk*. 
-Esto choca con la idea del componente SoundEmitter, que visto desde la perspectiva del usuario, 
+En cuanto a los sonidos, todos los métodos de \texttt{SDLMixer} necesitan un canal y un \texttt{MixChunk*}. 
+Esto choca con la idea del componente \texttt{SoundEmitter}, que visto desde la perspectiva del usuario, 
 simplemente se le establece un sonido y ya se puede reproducir, sin necesidad de conocer la existencia 
-de canales. Esto se contará más en detalle en la implementación de SoundEmitter.
+de canales. Esto se contará más en detalle en la implementación de \texttt{SoundEmitter}.
 
 Las funciones disponibles para los canales de sonido son: reproducir, fade-in, fade-out, pausar, detener 
 (la diferencia con pausar es que si se detiene no se puede renaudar), renaudar, consultar si un canal está
 reproduciendo un sonido, establecer el sonido de un canal, consultar el volumen de un canal, establecer la posicion
 en el espacio 2D de un canal y establecer el paneo de un canal.
 
-En cuanto a la música, los métodos de SDLMixer solo necesitan un MixMusic ya que solo hay un canal
+En cuanto a la música, los métodos de \texttt{SDLMixer} solo necesitan un MixMusic ya que solo hay un canal
 por lo que el problema de los canales desaparece. Las funciones disponibles son: reproducir, fade-in,
 fade-out, pausar, detener, renaudar, modificar el volumen de la música y rebobinar.
 
 
 \section{Input}
 
-Este proyecto tiene como objetivo implementar un manager, también Singleton, que contendrá la información del
+Este proyecto tiene como objetivo implementar un manager, también \texttt{Singleton}, que contendrá la información del
 estado de las teclas/botones de los dispositivos de entrada. En concreto, cuenta con soporte para teclado,
 ratón y mando.
+
+\medskip
 
 En el manager, las teclas/botones pueden pasar por diferentes estados los cuales se establecen al recibir determinados
 eventos de SDL y se actualizan debidamente.
 
+\medskip
+
 Estos estados se dividen en:
 
-- Down: Una tecla esta siendo pulsada.
-- Up: Una tecla no esta siendo pulsada.
-- Pressed: Una tecla acaba de ser pulsada.
-- Released: Una tecla acaba de ser soltada.
+\begin{enumerate} 
+    \item \textit{Down}: Una tecla esta siendo pulsada. 
+    \item \textit{Up}: Una tecla no esta siendo pulsada. 
+    \item \textit{Pressed}: Una tecla acaba de ser pulsada. 
+    \item \textit{Released}: Una tecla acaba de ser soltada. 
+\end{enumerate} 
 
 \begin{itemize} 
 
-\item Teclado: Guarda la información sobre la mayoría de teclas importantes de un teclado. Letras, números y teclas especiales. 
+\item \textit{Teclado}: Guarda la información sobre la mayoría de teclas importantes de un teclado. Letras, números y teclas especiales. 
 Para ello, el manager cuenta con tres enumerados que contienen el nombre de cada una de las teclas para cada tipo. Con estos
 enumerados se crean posteriormente arrays con la información del estado de cada tecla.
 
-Los eventos de SDL relacionados con el teclado son KEYDOWN y KEYUP. 
+Los eventos de SDL relacionados con el teclado son \texttt{KEYDOWN} y \texttt{KEYUP}. 
 El manager implementa métodos de usuario para conocer si se ha pulsado o soltado alguna tecla o si una tecla está pulsada,
 acaba de ser pulsada, acaba de ser soltada o no está pulsada.
 
-\item Ratón: Guarda la información de la posición del ratón, del estado del clic izquierdo, clic central (de la rueda), clic 
+\item \textit{Ratón}: Guarda la información de la posición del ratón, del estado del clic izquierdo, clic central (de la rueda), clic 
 derecho y movimiento de la rueda. Para ello, el manager cuenta con un Vector2D para la posición, booleanos para el estado de 
 pulsado/no pulsado de los botones y un número entero para representar si la rueda del ratón está haciendo scroll hacia abajo 
 o hacia arriba. 
 
-Los eventos de SDL relacionados con el ratón son MOUSEWHEEL, MOUSEMOTION,  MOUSEBUTTONDOWN y MOUSEBUTTONUP.
+\medskip
+Los eventos de SDL relacionados con el ratón son \texttt{MOUSEWHEEL}, \texttt{MOUSEMOTION}, \texttt{MOUSEBUTTONDOWN} y \texttt{MOUSEBUTTONUP}.
 El manager implementa métodos de usuario para conocer si ha habido algún movimiento con el ratón o con la rueda, si se ha
 pulsado o soltado algún botón, la posición del ratón y el scroll actual de la rueda.
 
-\item Mando: Cuenta con soporte para múltiples mandos y cada uno de ellos guarda la siguiente información:  
+\item \textit{Mando}: Cuenta con soporte para múltiples mandos y cada uno de ellos guarda la siguiente información:  
 
-- Referencia al GameController creado por SDL.
-- Id del GameController creado por SDL.
-- Nombre del GameController.
-- Estado de cada uno de los botones del GameController.
-- Información del movimiento de los triggers del GameController.
-- Información del movimiento de los joysticks del GameController.
+\begin{enumerate} 
+    \item Referencia al GameController creado por SDL.
+    \item Id del GameController creado por SDL.
+    \item Nombre del GameController.
+    \item Estado de cada uno de los botones del GameController.
+    \item Información del movimiento de los triggers del GameController.
+    \item Información del movimiento de los joysticks del GameController.
+\end{enumerate}
 
 El manager tiene sporte además para conexiones y desconexiones durante la ejecución.
 Debido a la posibilidad de tener varios mandos conectados el manager diferencia entre métodos con identificador
@@ -172,15 +197,19 @@ consultar el estado y los métodos sin identificador devuelven la información del
 registró input. De esa manera, si se quiere desarrollar un singleplayer, el usuario no tendrá que preocuparse
 por la posibilidad de múltiples mandos teniendo que indicar que identificador tiene su mando. 
 
-Los eventos de SDL relacionados con el ratón son CONTROLLERDEVICEADDED, CONTROLLERDEVICEREMOVED, JOYBUTTONDOWN,
-JOYBUTTONUP, JOYAXISMOTION. El manager implementa métodos de usuario para conocer el número de mandos conectados,
+\medskip
+
+Los eventos de SDL relacionados con el ratón son \texttt{CONTROLLERDEVICEADDED}, \texttt{CONTROLLERDEVICEREMOVED}, \texttt{JOYBUTTONDOWN},
+\texttt{JOYBUTTONUP}, \texttt{JOYAXISMOTION}. El manager implementa métodos de usuario para conocer el número de mandos conectados,
 si algún mando ha pulsado o soltado algún botón, si algún mando ha movido los joysticks o los triggers y si ha
 habido alguna conexión o desconexión.
 
-Comentar también que, antes de esta implementación, el manager usaba SDLJoystick para el manejo de los mandos
-pero debido a cierta incomodidad con los eventos se hizo el cambio a SDLGameController. La diferencia entre
-ambos es que SDLJoystick es la API más antigua de SDL para manejar mandos y joysticks y proporciona una interfaz
-de bajo nivel para interactuar con dispositivos de entrada mientras que SDLGameController proporciona una abstracción
+\medskip
+
+Comentar también que, antes de esta implementación, el manager usaba \texttt{SDLJoystick} para el manejo de los mandos
+pero debido a cierta incomodidad con los eventos se hizo el cambio a \texttt{SDLGameController}. La diferencia entre
+ambos es que \texttt{SDLJoystick} es la API más antigua de SDL para manejar mandos y joysticks y proporciona una interfaz
+de bajo nivel para interactuar con dispositivos de entrada mientras que \texttt{SDLGameController} proporciona una abstracción
 de más alto nivel para interactuar con mandos, lo que facilita la detección de mandos y el acceso a sus entradas y 
 es la opción recomendada para la mayoría de los desarrolladores.
 
@@ -196,8 +225,12 @@ que se desean usar para moverse, saltar o realizar una acción.
 Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada
 con el mostrado de la salida estándar por la consola.
 
+\medskip
+
 Tiene métodos para imprimir por consola con los colores por defecto, imprimir una advertencia, con color 
 amarillo e imprimir un error, con color rojo, entre otros.
+
+\medskip
 
 Además de ser útil para el desarrollo, sirve también para dar formato a los mensajes que aparecen por la 
 consola del editor. Se utiliza una tubería o pipe para conectar la consola del motor y la del editor. Esto
@@ -209,26 +242,30 @@ se cuenta más en detalle en el apartado de editor.
 Este proyecto tiene como objetivo implementar un envoltorio sobre la librería de físicas Box2D para proporcionar
 una API sencilla para el usuario y para desarrollar los componentes de colisión y movimiento físico necesarios.
 
-Antes de nada, al igual que con SDLMixer, algunos comentarios sobre la librería: 
+\medskip
+
+Antes de nada, al igual que con \texttt{SDLMixer}, algunos comentarios sobre la librería: 
 
 \begin{itemize}
 
-\item Mundo físico: La librería tiene una clase b2World que representa un mundo físico donde se pueden crear
-cuerpos físicos. Esta clase tiene un método fundamental Step(), al que se debe llamar para realizar un paso físico,
+\item \textit{Mundo físico}: La librería tiene una clase b2World que representa un mundo físico donde se pueden crear
+cuerpos físicos. Esta clase tiene un método fundamental \texttt{Step()}, al que se debe llamar para realizar un paso físico,
 lo que actualiza la simulación al avanzar el tiempo en un intervalo fijo, realiza cálculo de colisiones, resuelve 
 restricciones y actualiza posiciones y velocidades. 
 
-\item Unidades: Box2D trabaja con números de punto flotante y es necesario tener en cuenta alguna restricciones
+\item \textit{Unidades}: Box2D trabaja con números de punto flotante y es necesario tener en cuenta alguna restricciones
 para que Box2D funcione correctamente. Estas restricciones han sido ajustadas para funcionar bien con unidades de 
 metros-kilogramos-segundos (MKS). En particular, Box2D ha sido ajustado para funcionar adecuadamente con formas en
 movimiento que tienen dimensiones entre 0.1 y 10 metros.
 
-\item Pixeles: Es tentador usar pixeles como unidades para los tamaños, posiciones, fuerzas o velocidades pero 
+\item \textit{Pixeles}: Es tentador usar pixeles como unidades para los tamaños, posiciones, fuerzas o velocidades pero 
 desafortunadamente, esto llevaría a una simulación ineficiente y posiblemente a un comportamiento extraño. 
 En la propia documentación de Box2D comentan que un objeto de 200 píxeles de longitud sería visto por Box2D como el 
 tamaño de un edificio de 45 pisos.
 
-Para resolver el problema de los pixeles, el manager declara una variable 'screenToWorldFactor'  usada para convertir
+\medskip 
+
+Para resolver el problema de los pixeles, el manager declara una variable \textit{'screenToWorldFactor'}  usada para convertir
 de pixeles a unidades físicas y viceversa. Por lo tanto, a la hora de crear cuerpos físicos se convierte el tamaño
 en pixeles deseado por el usuario a unidades físicas utilizando ese factor de escala.
 
@@ -238,35 +275,49 @@ Las clases que tiene este proyecto son las siguientes:
 
 \begin{itemize}
 
-\item PhysicsManager: Clase, Singleton, que contiene la funcionalidad necesariara para manejar el filtrado de 
+\item \textit{PhysicsManager}: Clase, \texttt{Singleton}, que contiene la funcionalidad necesariara para manejar el filtrado de 
 colisiones e información sobre gravedad del mundo físico así como la matriz de colisiones y capas existentes.
 
-En cuanto al filtrado de colisiones, Box2D proporciona los CategoryBits y los MaskBits para ello. Los CategoryBits
+\medskip
+
+En cuanto al filtrado de colisiones, Box2D proporciona los \texttt{CategoryBits} y los \texttt{MaskBits} para ello. Los CategoryBits
 especifican la capa en la que se encuentra un objeto y los MaskBits las capas con las que colisiona. Para que se 
 produzca una colisión, los cuerpos deben cumplir una condición, y es que, la capa del cuerpo A debe de estar marcada
 para que colisione con la del cuerpo B y viceversa.
 
-Tanto los CategoryBits como los MaskBits se representan en hexadecimal y el su valor por defecto es 0x0001 en caso
-de los CategoryBits y 0xFFFF en caso de los MaskBits. 
+\medskip 
 
+Tanto los \texttt{CategoryBits} como los \texttt{MaskBits} se representan en hexadecimal y el su valor por defecto es \textit{'0x0001'} en caso
+de los \texttt{CategoryBits} y \textit{'0xFFFF'} en caso de los \texttt{MaskBits}. 
+
+\medskip
 La comprobación de colisión tiene este aspecto:
 
-bool colision = (bodyA.maskBits AND bobyB.categoryBits) == 0 Y (bodyA.categoryBits AND bobyB.maskBits) == 0
+\begin{verbatim}
+    bool colision = (bodyA.maskBits AND bobyB.categoryBits) == 0 
+    && (bodyA.categoryBits AND bobyB.maskBits) == 0
+\end{verbatim}
 
-Por lo tanto, por defecto, todos los cuerpo creados va a estar en la capa 0x0001 y van a colisionar con todas las capas.
+Por lo tanto, por defecto, todos los cuerpo creados va a estar en la capa \textit{'0x0001'} y van a colisionar con todas las capas.
+
+\medskip
 
 El manager guarda un mapa para las capas donde la clave es el nombre de la capa y el valor un indice que la representa.
 Cuando se crea un nuevo cuerpo físico, se calcula su CategoryBits a partir de ese indice.
 
+\medskip
+
 Para calcular sus MaskBits entra en juego otro funcionalidad que es la matriz de colisiones. En ella se ajustan
 la colisión entre las capas existentes y posteriormente se calculan los MaskBits de una capa dada.
+
+\medskip
 
 Como métodos al usuario, el manager proporciona pdoer cambiar la gravedad del mundo físico, añadir o eliminar capas, 
 establecer colisión entre capas y consultar si dos capas colisionan.
 
-\item DebugDraw: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede
+\item \textit{DebugDraw}: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede
 dibujar polígonos, círculos, segmentos y puntos. El dibujado se realiza con SDL y antes de dibujar, se utiliza el 
-'screenToWorldFactor' para devolver la escala a los cuerpos, es decir, de unidades físicas a pixeles.
+\textit{'screenToWorldFactor'} para devolver la escala a los cuerpos, es decir, de unidades físicas a pixeles.
 
 \end{itemize}
 
@@ -279,30 +330,33 @@ Las clases que tiene este proyecto son las siguientes:
 
 \begin{itemize}
 
-\item RendererManager: Clase, singleton, encargada de inicializar y cerrar la librería de SDL, SDLImage y SDLTTF.
+\item \textit{RendererManager}: Clase, \texttt{Singleton}, encargada de inicializar y cerrar la librería de SDL, SDLImage y SDLTTF.
 Contiene información y funcionalidad relacionada con la ventana como su tamaño, borde, icono, cursor, nombre y 
 modo pantalla completa. Además, tiene la información de la cámara como su posición y escala. Proporciona los métodos renderizar y para 
 limpiar la pantalla.
 
-\item Font: Representa una fuente de texto y tiene la funcionalidad de crear una a partir de una fichero con .ttf
+\item \textit{Font}: Representa una fuente de texto y tiene la funcionalidad de crear una a partir de una fichero con \textit{'.ttf'}
 como extensión. Tiene también la funcionalidad de crear un texto o un texto ajustado mediante la creación de una textura.
 
-\item Texture: Representa una textura y tiene la funcionalidad de crear una a partir de un fichero con una extensión de 
-imagen como .png o .jpg. Tiene métodos para obtener la textura de SDL (SDLTexuture*) y para consultar el ancho y el alto
+\item \textit{Texture}: Representa una textura y tiene la funcionalidad de crear una a partir de un fichero con una extensión de 
+imagen como \textit{'.png'} o \textit{'.jpg'}. Tiene métodos para obtener la \texttt{SDLTexture*} y para consultar el ancho y el alto
 de la misma.
 
 \end{itemize}
 
-Al igual que SoundEffect y MusicEffect, Font y Texture representan los recursos utilizado en el manager de recursos
+Al igual que \texttt{SoundEffect} y \texttt{MusicEffect}, \texttt{Font} y \texttt{Texture} representan los recursos utilizado en el manager de recursos
 para almacenar fuentes de texto e imágenes.
-
 
 \section{Entity-Component-System}
 
 Este es el proyecto más importante del motor. Implementa el sistema de entidades y componentes, componentes fundamentales
 para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
 
+\medskip
+
 Para empezar, la idea un sistema de componentes y entidades es la siguiente: 
+
+\medskip
 
 Es un patrón de diseño utilizado en el desarrollo de videojuegos y otros sistemas interactivos para organizar y gestionar la lógica
 y la funcionalidad de los objetos dentro del juego. En lugar de utilizar una jerarquía de clases tradicional o un sistema basado en 
@@ -310,198 +364,229 @@ objetos, el ECS descompone los elementos del juego en dos partes principales: en
 
 \begin{itemize}
 
-\item Entidades: Las entidades son objetos vacíos que actúan como contenedores para componentes. Cada entidad representa un objeto o 
+\item \textit{Entidades}: Las entidades son objetos vacíos que actúan como contenedores para componentes. Cada entidad representa un objeto o 
 entidad en el juego, como un personaje, un enemigo, un objeto interactivo, etc. Las entidades no tienen lógica o comportamiento en sí mismas,
 simplemente contienen uno o más componentes.
 
-\item Componentes: Los componentes son bloques de datos y lógica que contienen información específica sobre el comportamiento o las propiedades de una
+\item \textit{Componentes}: Los componentes son bloques de datos y lógica que contienen información específica sobre el comportamiento o las propiedades de una
 entidad en el juego. Cada componente se enfoca en una única funcionalidad o característica del objeto. Por ejemplo, puedes tener un componente 
-de "Posición" para almacenar la posición de una entidad en el mundo, un componente de "Renderizado" para pintar la entidad en la escena, un 
-componente de "Física" para gestionar su comportamiento físico, etc.
+de \textit{Posición} para almacenar la posición de una entidad en el mundo, un componente de \textit{Renderizado} para pintar la entidad en la escena, un 
+componente de \textit{Física} para gestionar su comportamiento físico, etc.
 
 \end{itemize}
 
 Para llevar a cabo la implementación de este sistema es imprescindible el uso de programación orientada a objetos (POO) junto con herencia
 y polimorfismo.
 
+\medskip
+
 En cuanto a las clases implementadas: 
 
-- Component: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o
-eliminado. Desde un componente se puede acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y 
-eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados por los componentes que hereden de esta clase.
+\begin{enumerate}
+    \item \textit{Component}: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o
+    eliminado. Desde un componente se puede acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y 
+    eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados por los componentes que hereden de esta clase.
 
-Estos métodos son los siguientes:
+    \medskip
 
-\begin{itemize}
+    Estos métodos son los siguientes:
 
-\item Init: Método reservado para el motor donde se realiza toda la inicialización que necesita el componente para funcionar correctamente.
+    \begin{itemize}
 
-\item Start: Método llamado inmediatamente después del Init donde el usuario puede realizar su propia inicialización. 
+        \item \textit{Init()}: método reservado para el motor donde se realiza toda la inicialización que necesita el componente para funcionar correctamente.
 
-\item Update: Método llamado en cada vuelta del bucle principal.
+        \item \textit{Start()}: método llamado inmediatamente después del Init donde el usuario puede realizar su propia inicialización. 
 
-\item LateUpdate: Método llamado en cada vuelta del bucle principal inmediatamente después del Update.
+        \item \textit{Update()}: método llamado en cada vuelta del bucle principal.
 
-\item Render: Método llamado después del Update y LateUpdate. Destinado a implementar el renderizado del componente.
+        \item \textit{LateUpdate()}: método llamado en cada vuelta del bucle principal inmediatamente después del Update.
 
-\item FixedUpdate: Método llamado en un intervalo de tiempo fijo denominado paso físico. Destinado a implementar la física del componente.
+        \item \textit{Render()}: método llamado después del Update y LateUpdate. Destinado a implementar el renderizado del componente.
 
-\item OnActive: Método llamado cuando se activa el componente.
+        \item \textit{FixedUpdate()}: método llamado en un intervalo de tiempo fijo denominado paso físico. Destinado a implementar la física del componente.
 
-\item OnDeactive: Método llamado cuando se desactiva el componente.
+        \item \textit{OnActive()}: método llamado cuando se activa el componente.
 
-\item OnSceneUp: Método llamado cuando el componente se encuentra en la escena que se acaba de empezar a actualizar.
+        \item \textit{OnDeactive()}: método llamado cuando se desactiva el componente.
 
-\item OnSceneDown: Método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
+        \item \textit{OnSceneUp()}: método llamado cuando el componente se encuentra en la escena que se acaba de empezar a actualizar.
 
-\item OnDestroy: Método llamado cuando el componente es eliminado.
+        \item \textit{OnSceneDown()}: método llamado cuando el componente se encuentra en la escena que se ha dejado de actualizar.
 
-\end{itemize}
+        \item \textit{OnDestroy()}: método llamado cuando el componente es eliminado.
 
-Métodos para el manejo de colisiones: 
+    \end{itemize}
 
-\begin{itemize}
+    Métodos para el manejo de colisiones: 
 
-\item OnCollisionEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad.
+    \begin{itemize}
 
-\item OnCollisionStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad.
+        \item \textit{OnCollisionEnter()}: método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad.
+        
+        \item \textit{OnCollisionStay()}: método llamado cuando la entidad que contiene este componente está colisionando con otra entidad.
+        
+        \item \textit{OnCollisionExit()}: método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad.
+        
+        \item \textit{OnTriggerEnter()}: método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad y, o bien 
+        el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+        
+        \item \textit{OnTriggerStay()}: método llamado cuando la entidad que contiene este componente está colisionando con otra entidad y, o bien 
+        el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+        
+        \item \textit{OnTriggerExit()}: método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad y, 
+        o bien el componente físico de esta entidad o bien el de la otra están marcados como trigger.
 
-\item OnCollisionExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad.
+    \end{itemize}
 
-\item OnTriggerEnter: Método llamado cuando la entidad que contiene este componente ha colisionado con otra entidad y, o bien 
-el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+    Métodos para el Overlay (UI):
 
-\item OnTriggerStay: Método llamado cuando la entidad que contiene este componente está colisionando con otra entidad y, o bien 
-el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+    \begin{itemize}
 
-\item OnTriggerExit: Método llamado cuando la entidad que contiene este componente ha dejado de colisionar con otra entidad y, 
-o bien el componente físico de esta entidad o bien el de la otra están marcados como trigger.
+        \item \textit{OnClickBegin()}: método llamado cuando se hace click sobre un elemento del componente \texttt{Overlay} de la entidad.
 
-Métodos para el Overlay (UI):
+        \item \textit{OnClickHold()}: método llamado cuando se mantiene clickado un elemento del componente \texttt{Overlay} de la entidad.
 
-\item OnClickBegin: Método llamado cuando se hace click sobre un elemento del componente Overlay de la entidad.
+        \item \textit{OnDoubleClick()}: método llamado cuando se hace doble click sobre un elemento del componente \texttt{Overlay} de la entidad.
 
-\item OnClickHold: Método llamado cuando se mantiene clickado un elemento del componente Overlay de la entidad.
+        \item \textit{OnRightClick()}: método llamado cuando se hace click derecho sobre un elemento del componente \texttt{Overlay} de la entidad.
 
-\item OnDoubleClick: Método llamado cuando se hace doble click sobre un elemento del componente Overlay de la entidad.
+        \item \textit{OnMouseEnter()}: método llamado cuando el ratón entra sobre un elemento del componente \texttt{Overlay} de la entidad.
 
-\item OnRightClick: Método llamado cuando se hace click derecho sobre un elemento del componente Overlay de la entidad.
+        \item \textit{OnMouseHover()}: método llamado cuando el ratón se encuentra sobre un elemento del componente \texttt{Overlay} de la entidad.
 
-\item OnMouseEnter: Método llamado cuando el ratón entra sobre un elemento del componente Overlay de la entidad.
+        \item \textit{OnMouseExit()}: método llamado cuando el ratón sale de un elemento del componente Overlay de la entidad.
 
-\item OnMouseHover: Método llamado cuando el ratón se encuentra sobre un elemento del componente Overlay de la entidad.
+    \end{itemize}
 
-\item OnMouseExit: Método llamado cuando el ratón sale de un elemento del componente Overlay de la entidad.
-
-\end{itemize}
-
-- Entity: Clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de 
+\item \textit{Entity}: clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de 
 componentes y otra de scripts asociados a esta entidad. Tiene información sobre el nombre de la entidad, su estado, activa y
 eliminada, un identificador y su orden de renderizado.
 
+\medskip 
+
 En cuanto a funcionalidad, contiene los mismos métodos que los componentes pero con implementación. Esta implementación
 simplemente consiste en llamar a los métodos de todos los componentes asociados a la entidad. Por ejemplo, el método 
-Render de la entidad recorre la lista de componentes asociados y llama al método Render de cada uno. Aquí es donde
+\texttt{Render()} de la entidad recorre la lista de componentes asociados y llama al método \texttt{Render()} de cada uno. Aquí es donde
 entra la importancia de la herencia y el polimorfismo. Para crear un componente con funcionalidad, se debe heredar
 de la clase Componente e implementar los métodos virtuales disponibles. De esta manera, serán llamados por la entidad
 que contenga el componente creado.
 
+\medskip
+
 Además de los métodos de los componentes, las entidades tiene métodos para añadir componentes, consultar si contienen
 un componente, eliminar componentes y obtenerlos. Estos métodos hacen uso de templates de C++ con un tipo genérico 
-T y una restricción para asegurar que el T debe ser de tipo componente. Además, los parámetros de éstos métodos reciben
-un paquete de parámetros variados de categoria RValue, por lo que dentro se utiliza la función std::forward para preservar
+\texttt{T} y una restricción para asegurar que el \texttt{T} debe ser de tipo componente. Además, los parámetros de éstos métodos reciben
+un paquete de parámetros variados de categoria \texttt{RValue}, por lo que dentro se utiliza la función \texttt{std::forward} para preservar
 esa categoría y evitar así copias innecesarias y garantizar un comportamiento predecible.
+
+\medskip
 
 Por último mencionar que las entidades también tienen métodos para añadir scripts. La diferencia entre scripts y componentes
 es que, ambos definen lógica para el videojuego pero los componentes son comportamiento, en la mayoría de casos, fundamental 
 y genérico, que proporciona el motor al usuario y los scripts son piezas de lógica que construye el usuario a partir del
 sistema de scripting visual y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
 
-- Scene: La última pieza que compone este ECS son las escenas. Una escena es un conjunto de entidades. Es un concepto 
+\medskip
+
+\item \textit{Scene}: La última pieza que compone este ECS son las escenas. Una escena es un conjunto de entidades. Es un concepto 
 importante en los videojuegos ya que normalmente se quiere dividir el juego en estados como menús, gameplay, inventario,
 pantallas de carga, mapa, etc. Contiene información sobre su nombre, la posición y escala de la cámara, y bastantes métodos
 comunes a las entidades y componentes. No todos porque hay algunos que no tienen sentido en las escenas, como los de físicas
 o los de UI. Al igual que las entidades, estos métodos cuentan con funcionalidad y simplemente se dedican a llamar al método
-correspondiente de cada una de las entidades que contiene. Por ejemplo, cuando se actualiza una escena, el método Update
-de la escena lo único que hace es llamar al Update de sus entidades comprobando si el estado de la entidad le permite actualizarse,
+correspondiente de cada una de las entidades que contiene. Por ejemplo, cuando se actualiza una escena, el método \texttt{Update}
+de la escena lo único que hace es llamar al \texttt{Update} de sus entidades comprobando si el estado de la entidad le permite actualizarse,
 es decir, que esté activa y no esté eliminada.
+
+\medskip
 
 Además, las escenas cuentan con métodos para crear entidades con identificador y sin identificador, buscar entidades por nombre, 
 y eliminar entidades.
 
+\end{enumerate}
 
 \subsection{Managers}
 
-- SceneManager: Encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
-La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
+\begin{enumerate}
+    \item \textit{SceneManager}: encargado de manjear las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
+    La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
 
-1.- Operación PUSH: Carga la escena y la añade al top de la pila, por lo que la escena añadida pasa a ser la que se actualiza en el
-juego. Antes de añadirla al top, llama al método OnSceneDown de la escena que está actualmente en el top para avisar de que esa escena
-va a dejar de actualizarse. Posteriormente, una vez añadida al top, se llama al Start para la inicialización de la escena.
+    \begin{itemize}
+        \item \textit{Operación PUSH}: carga la escena y la añade al top de la pila, por lo que la escena añadida pasa a ser la que se actualiza en el
+        juego. Antes de añadirla al top, llama al método \texttt{OnSceneDown()} de la escena que está actualmente en el top para avisar de que esa escena
+        va a dejar de actualizarse. Posteriormente, una vez añadida al top, se llama al \texttt{Start()} para la inicialización de la escena.
 
-2.- Operación POP: Elimina la escena en el top de la pila y avisa, a la escena por debajo del top, si la hay, que va a empezar
-a actualizarse.
+        \item \textit{Operación POP}: elimina la escena en el top de la pila y avisa, a la escena por debajo del top, si la hay, que va a empezar
+        a actualizarse.
 
-3.- Operación POPANDPUSH: Realiza una operación POP y posteriormente una operación PUSH.
+        \item \textit{Operación POPANDPUSH}: realiza una operación \texttt{POP} y posteriormente una operación \texttt{PUSH}.
 
-4.- Operación CLEARANDPUSH: Vacia la pila de escenas y añade una nueva al top de la pila que va a empezar a ejecutarse.
+        \item \textit{Operación CLEARANDPUSH}: vacia la pila de escenas y añade una nueva al top de la pila que va a empezar a ejecutarse.
 
-5.- Operación CLEAR: Vacia la pila de escenas.
+        \item \textit{Operación CLEAR}: vacia la pila de escenas.
+    \end{itemize}
 
-Por último comentar que para evitar problemas de ejecución, realmente el cambio de escenas se produce al final del bucle principal.
-Por lo que el método de cambiar escenas simplemente marca que escena se va a cambiar y al final del bucle principal se cambia.
+    Por último comentar que para evitar problemas de ejecución, realmente el cambio de escenas se produce al final del bucle principal.
+    Por lo que el método de cambiar escenas simplemente marca que escena se va a cambiar y al final del bucle principal se cambia.
 
+- SceneLoader: Clase encargado de leer la información de la escenas creadas en el editor. A la hora de construir la entidades diferencia
+entre entidades con \textt{Transform} y entidades con \textt{Overlay}. Para construir los componentes de las entidades se usa la clase 
+ClassReflection, que es un \textt{Singleton} encargado de guardar en un mapa la información de los componentes donde la clave es 
+el nombre del atributo de los componentes y el valor es el propio valor del atributo.
 
-- PrefabsManager: Encargado de cargar la información de los prefabs creados en el editor e implementar métodos para instanciar 
-entidades a partir de la información de esos prefabs. Se diferencia entre prefabs con Transform y prefabs con Overlay. Esto se 
-comenta en el apartado de componentes del motor pero todas las entidades contienen al menos un componente, Transform u Overlay.
-El Overlay lo contienen aquellas entidades destinadas a ser parte de la interfaz y el Transform todo el resto de entidades.
+\item \textit{PrefabsManager}: Encargado de cargar la información de los prefabs creados en el editor e implementar métodos para instanciar 
+entidades a partir de la información de esos prefabs. Se diferencia entre prefabs con \texttt{Transform} y prefabs con \texttt{Overlay}. Esto se 
+comenta en el apartado de componentes del motor pero todas las entidades contienen al menos un componente, \texttt{Transform} u \texttt{Overlay}.
+El \texttt{Overlay} lo contienen aquellas entidades destinadas a ser parte de la interfaz y el \texttt{Transform} todo el resto de entidades.
 
-- RenderManager: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar en juego es deseable
+\item \textit{RenderManager}: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar en juego es deseable
 poder elegir elegir el orden en el que se renderizan las entidades. Esto también se conoce como profundidad o z-order.
 
-- ReferencesManager: Encargado de manejar una relación entre las entidades y sus identificadores. // TODO Se va a cambiar
-
+\item \textit{ReferencesManager}: Encargado de manejar una relación entre las entidades y sus identificadores. 
+\end{enumerate}
 
 \subsection{Componentes}
 
-- Transform: Contiene la información sobre la posición, rotación y escala de la entidad. Además implementa algunos métodos
-para rotar, escalar y mover la entidad.
 
-- Image: Componente encargado de cargar una imagen y renderizarla en pantalla en la posición indicada por el transform de la entidad. 
-Por ello, tanto este componente como todos los que requieran componente Transform para su correcto funcionamiento. Para cargar la imagen
-hace uso del manager de recursos para reutilizar la imagen en caso de estar ya creada por otra entidad. 
+\begin{enumerate}
 
-- PhysicBody: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcinalidad de sincronizar posición, rotación
-y escala del Transform de la entidad al cuerpo físico. Contiene la información sobre bastante propiedades físicas como si es trigger,
-la fricción que genera, el rebote, el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad. De esta clase
-heredan BoxBody, CircleBody y EdgeBody, que son cuerpos físicos cuyos colisionadores tienen formas especiales.
+    \item \textit{Transform}: Contiene la información sobre la posición, rotación y escala de la entidad. Además implementa algunos métodos
+    para rotar, escalar y mover la entidad.
 
-- SoundEmitter: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó
-anteriomente, SDLMixer dispone de un conjunto de canales para reproducir sonidos pero este componente es abstrae la necesidad de canales desde 
-la perspectiva del usuario. 
+    \item \textit{Image}: Componente encargado de cargar una imagen y renderizarla en pantalla en la posición indicada por el transform de la entidad. 
+    Por ello, tanto este componente como todos los que requieran componente \texttt{Transform} para su correcto funcionamiento. Para cargar la imagen
+    hace uso del manager de recursos para reutilizar la imagen en caso de estar ya creada por otra entidad. 
 
-- MusicEmitter: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
+    \item \textit{PhysicBody}: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcinalidad de sincronizar posición, rotación
+    y escala del \texttt{Transform} de la entidad al cuerpo físico. Contiene la información sobre bastante propiedades físicas como si es \textit{'trigger'},
+    la fricción que genera, el rebote, el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad. De esta clase
+    heredan \texttt{BoxBody}, \texttt{CircleBody} y \texttt{EdgeBody}, que son cuerpos físicos cuyos colisionadores tienen formas especiales.
 
-- ParticleSystem: Componente encargado de implementar un sistema de partículas configurable. Tiene soporte para cargar texturas y mover
-las partículas con el motor de físicas Box2D.
+    \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó
+    anteriomente, SDLMixer dispone de un conjunto de canales para reproducir sonidos pero este componente es abstrae la necesidad de canales desde 
+    la perspectiva del usuario. 
 
-- Animation: Componente encargado de implementar la lógica de reproducción de animaciones a partir de una hoja de Sprites.
+    \item \textit{MusicEmitter}: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
 
-- TopDownController: Componente encargado de implementar un movimiento tipo Top-Down. 
+    \item \textit{ParticleSystem}: Componente encargado de implementar un sistema de partículas configurable. Tiene soporte para cargar texturas y mover
+    las partículas con el motor de físicas Box2D.
 
-- PlatformController: Componente encargado de implmentar un movimiento de tipo plataformas.
+    \item \textit{Animation}: Componente encargado de implementar la lógica de reproducción de animaciones a partir de una hoja de \texttt{Sprites}.
 
-Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitan al usuario tener que implementarlos
-usando el sistema de scripting, lo que puede ser algo avanzado.
+    \item \textit{TopDownController}: Componente encargado de implementar un movimiento tipo Top-Down. 
 
-//TODO Componentes de Overlay
+    \item \textit{PlatformController}: Componente encargado de implmentar un movimiento de tipo plataformas.
 
+    Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitan al usuario tener que implementarlos
+    usando el sistema de scripting, lo que puede ser algo avanzado.
+
+\end{enumerate}
 
 
 \section{Main}
 
-Este proyecto implementa la clase Engine, encargada de inicializar el motor, ejecutar su bucle principal y cerrarlo una vez terminado.
+Este proyecto implementa la clase \texttt{Engine}, encargada de inicializar el motor, ejecutar su bucle principal y cerrarlo una vez terminado.
+
+\medskip
 
 En cuanto al bucle principal, tiene la siguiente estructura:
 
@@ -509,18 +594,24 @@ En cuanto al bucle principal, tiene la siguiente estructura:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/EstructuraBuclePrincipal}
 \end{center}
 
-Además, de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el DeltaTime, tiempo transcurrido desde
-el inicio de la ejecución del programa o el número de frames/actualizaciones hasta el momento. El DeltaTime es una medida de tiempo, 
+Además, de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, tiempo transcurrido desde
+el inicio de la ejecución del programa o el número de frames/actualizaciones hasta el momento. El \texttt{DeltaTime} es una medida de tiempo, 
 generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
 
-Algo a comentar es la diferencia entre el Paso físico y la Actualización. La lbrería de físicas Box2D, y todas en general, requieren
+\medskip
+
+Algo a comentar es la diferencia entre el \texttt{Paso físico} y la \texttt{Actualización}. La lbrería de físicas Box2D, y todas en general, requieren
 que la actualización del mundo físico se realice en intervalos de tiempo fijo, sobretodo por motivos de estabilidad. Por ello, es 
 necesario hacer cálculos adicionales para saber en que momentos se debe ejecutar el Paso Físico ya que no se puede llamar en cada
-frame, a diferencia de la Actualización.
+frame, a diferencia de la \texttt{Actualización}.
+
+\medskip
 
 La potencia del hardware de la computadora y la carga de trabajo afectan directamente al número de actualizaciones por segundo
-que se producen en el bucle principal de un videojuego. Por lo tanto, la llamada al método Actualización se puede dar con mucha
+que se producen en el bucle principal de un videojuego. Por lo tanto, la llamada al método \texttt{Actualización} se puede dar con mucha
 irregularidad. Sin embargo, el motor de física necesita intervalos de tiempo fijo.
+
+\medskip
 
 Esto se explica mejor con el siguiente diagrama:
 
@@ -528,7 +619,7 @@ Esto se explica mejor con el siguiente diagrama:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/UpdateVsFixed}
 \end{center}
 
-Como se puede apreciar, el Paso físico, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Para llevar esto
-acabo se necesitan dos contadores de tiempo, uno para la Actualización y otro para el Paso físico. Mientras que el contador de 
-tiempo para el Paso físico esté por detras temporalmente que el de Actualización, se llama al método Paso físico y se suma
+Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Para llevar esto
+acabo se necesitan dos contadores de tiempo, uno para la \texttt{Actualización} y otro para el \texttt{Paso físico}. Mientras que el contador de 
+tiempo para el \texttt{Paso físico} esté por detras temporalmente que el de \texttt{Actualización}, se llama al método \texttt{Paso físico} y se suma
 al contador el tiempo fijo. El tiempo fijo es un valor que se puede modificar en base a las necesidades del videojuego.

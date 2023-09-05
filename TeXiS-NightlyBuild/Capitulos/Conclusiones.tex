@@ -6,4 +6,88 @@
 
 \chapter{Conclusiones}
 
+El objetivo de este TFG era desarrollar un motor de videojuegos 2D para no programadores.
+Hemos cumplido con lo propuesto. Nuestro motor le abre las puestas a aquellos desarrolladores
+con poca experiencia en programación y a la vez cuenta con la suficiente funcionalidad como
+para desarrollar videojueos 2D competentes. 
+
+\medskip
+
+Como aplicaciones prácticas, nuestro motor se puede usar en el mundo del desarrollo de videojuegos
+indie o incluso a nivel didáctico.
+
+\medskip
+
+A nivel técnico, hemos sacado en conclusión una serie de aspectos:
+
+\begin{itemize}
+
+    \item Con la implementación actual, las ventanas de ImGUI no se puede mover fuera de la ventana
+    principal de SDL, lo que genera incomodidad en algunas situaciones como al implementar un script,
+    donde seguramente sea intersante visualizar la escena o algún parametro del editor para tomar 
+    decisiones.
+
+    \item Hemos tenido que implementar reflexión en C++. Hubiera sido más cómodo escoger un lenguaje
+    con reflexión e incluso nos hubiera dado más flexibilidad.
+
+\end{itemize}
+
+Como trabajo futuro pensamos en la siguiente funcinalidad:
+
+\begin{itemize}
+
+    \item Poder lanzar el juego en el propio editor y no en una ventana separada. 
+        
+    \item Cambiar la implementación actual del editor para poder mover las ventanas de ImGUI fuera
+    de la ventana principal de SDL.
+
+    \item Añadir un sistema de animación y dibujado para disminuir la dependenia de herramientas 
+    externas.
+
+    \item Abstraer al usuario de rutas de ficheros y directorios conviertiendo los ficheros en
+    objetos del motor.
+
+    \item Poder profundizar más en el scripting, añadir funcionalidad más compleja que permita
+    al usuario una mayor expresividad, por ejemplo, añadiendo arrays editables desde el editor, 
+    creación de clases, recursión, temporizadores, corutinas, depuración de los nodos en ejecución.
+
+\end{itemize}
+
 \chapter{Conclusions}
+
+The aim of this final degree project was to develop a 2D game engine for non-programmers. We have successfully
+achieved the proposed goal. Our engine opens the doors to developers with little programming experience while
+providing enough functionality to create competent 2D video games.
+
+In practical applications, our engine can be used in the indie game development world or even for educational purposes.
+
+From a technical perspective, we have reached the following conclusions:
+
+\begin{itemize}
+
+    \item With the current implementation, ImGUI windows cannot be moved outside the main SDL window, which can be 
+    inconvenient in some situations, such as when implementing a script where it's essential to view the scene or some 
+    editor parameters to make decisions.
+
+    \item We had to implement reflection in C++. It would have been more convenient to choose a language with reflection, 
+    which would have provided us with greater flexibility.
+
+\end{itemize}
+
+As for future work, we are considering the following functionalities:
+
+\begin{itemize}
+
+    \item Enabling the game to be launched within the editor itself rather than in a separate window.
+
+    \item Modifying the current editor implementation to allow the movement of ImGUI windows outside the main SDL window.
+
+    \item Adding an animation and rendering system to reduce the dependence on external tools.
+
+    \item Abstracting the user from file paths and directories by converting files into engine objects.
+
+    \item To delve deeper into scripting, adding more complex functionality that allows the user greater expressiveness, 
+    for example, by adding editable arrays from the editor, class creation, recursion, timers, coroutines, and debugging 
+    of running nodes.
+
+\end{itemize}
