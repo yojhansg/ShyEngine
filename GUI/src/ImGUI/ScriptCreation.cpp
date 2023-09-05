@@ -469,15 +469,6 @@ namespace ShyEditor {
 		ImGui::SetWindowPos(ImVec2(0, 0));
 
 
-		auto background = ImGui::GetWindowDrawList();
-
-		auto& palette = ColorPalette::GetCurrentPalette().scripting;
-		auto color = palette.background;
-		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
-
-		auto lineColor = palette.line;
-		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
-
 		if (lerping) {
 
 			ManageLerp();
@@ -502,6 +493,14 @@ namespace ShyEditor {
 			}
 		}
 
+		auto background = ImGui::GetWindowDrawList();
+
+		auto& palette = ColorPalette::GetCurrentPalette().scripting;
+		auto color = palette.background;
+		background->AddRectFilled(ImVec2(0, 0), ImGui::GetWindowSize(), ColorPalette2ImColor(color));
+
+		auto lineColor = palette.line;
+		ScriptCreationUtilities::Bezier::SetColor(ColorPaletteParams(lineColor));
 
 		auto gridColor = palette.grid;
 
@@ -548,6 +547,9 @@ namespace ShyEditor {
 
 		if (eraseNode)
 		{
+			//Marcamos scrolled como true para forzar el reposicionamiento
+			//de los nodos, ya que puede ocurrir que se descoloquen debido
+			//a los identificadores de ImGui
 			scrolled = true;
 			nodes[nodeIdx]->OnRemoved();
 			delete nodes[nodeIdx];

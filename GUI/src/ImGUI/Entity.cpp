@@ -190,7 +190,7 @@ namespace ShyEditor {
 	void Entity::RenderTransform(SDL_Renderer* renderer, Camera* camera) {
 
 		ImVec2 position = GetAdjustedPosition();
-
+		
 		ImVec2 cameraPosition = camera->GetPosition();
 		float cameraScale = camera->GetScale();
 
@@ -205,8 +205,9 @@ namespace ShyEditor {
 		SDL_Rect dst = { worldPosition.x, worldPosition.y, width, height };
 
 		// Image render
-		if (visible && texture != NULL)
+		if (visible && texture != nullptr) {
 			SDL_RenderCopyEx(renderer, texture->getSDLTexture(), NULL, &dst, GetWorldRotation(), NULL, SDL_FLIP_NONE);
+		}
 
 		else
 
@@ -281,7 +282,6 @@ namespace ShyEditor {
 				}
 			}
 		}
-
 		else {
 
 
@@ -443,7 +443,7 @@ namespace ShyEditor {
 	// --------------------------------- Tranform attributes getters/setters -----------------------------------
 
 
-	ImVec2& Entity::GetAdjustedPosition() {
+	ImVec2 Entity::GetAdjustedPosition() {
 
 		ImVec2 position = GetWorldPosition();
 
@@ -457,30 +457,30 @@ namespace ShyEditor {
 		return position;
 	}
 
-	ImVec2& Entity::GetLocalPosition() {
+	ImVec2 Entity::GetLocalPosition() {
 		return transform->GetLocalPosition();
 	}
 
-	ImVec2& Entity::GetWorldPosition()
+	ImVec2 Entity::GetWorldPosition()
 	{
 
 		return transform->GetWorldPosition();
 	}
 
-	float& Entity::GetLocalRotation() {
+	float Entity::GetLocalRotation() {
 		return transform->GetLocalRotation();
 	}
 
-	float& Entity::GetWorldRotation()
+	float Entity::GetWorldRotation()
 	{
 		return transform->GetWorldRotation();
 	}
 
-	ImVec2& Entity::GetLocalScale() {
+	ImVec2 Entity::GetLocalScale() {
 		return transform->GetLocalScale();
 	}
 
-	ImVec2& Entity::GetWorldScale()
+	ImVec2 Entity::GetWorldScale()
 	{
 		return transform->GetWorldScale();
 	}
@@ -1110,6 +1110,7 @@ namespace ShyEditor {
 		return j.dump(2);
 	}
 
+
 	Entity* Entity::FromJson(nlohmann::ordered_json& jsonData) {
 
 		std::string errorMsg = "The JSON entity has not the correct format.";
@@ -1170,15 +1171,23 @@ namespace ShyEditor {
 			std::string localRotation = jsonData["localRotation"];
 
 			// Parse localPosition and localScale
-			sscanf_s(localPositionStr.c_str(), "%f, %f", &entity->GetLocalPosition().x, &entity->GetLocalPosition().y);
-			sscanf_s(localScaleStr.c_str(), "%f, %f", &entity->GetLocalScale().x, &entity->GetLocalScale().y);
+			ImVec2 localPos;
+			ImVec2 localScale;
+
+			sscanf_s(localPositionStr.c_str(), "%f, %f", &localPos.x, &localPos.y);
+			sscanf_s(localScaleStr.c_str(), "%f, %f", &localScale.x, &localScale.y);
+
 
 			//La y se maneja internamente en el editor por comodidad de forma invertida -> hacia abajo es positivo, hacia arriba negativo
 			//Por ello al serializar o deserializar invertimos su valor (el motor usa el eje invertido)
 
-			entity->GetLocalPosition().y *= -1;
+			localPos.y *= -1;
+			entity->SetLocalPosition(localPos);
+			entity->SetLocalScale(localScale);
+
 
 			entity->SetLocalRotation(std::stof(localRotation));
+
 		}
 		else {
 
@@ -1233,6 +1242,7 @@ namespace ShyEditor {
 			LogManager::LogError(errorMsg);
 			return entity;
 		}
+
 
 		for (auto& childJson : jsonData["childs"]) {
 			Entity* child = Entity::FromJson(childJson);
@@ -1640,12 +1650,12 @@ namespace ShyEditor {
 		position = nullptr;
 	}
 
-	ImVec2& Transform::GetLocalPosition()
+	ImVec2 Transform::GetLocalPosition()
 	{
 		return *position;
 	}
 
-	ImVec2& Transform::GetWorldPosition()
+	ImVec2 Transform::GetWorldPosition()
 	{
 		Entity* parent = obj->GetParent();
 
@@ -1664,12 +1674,12 @@ namespace ShyEditor {
 		return GetLocalPosition();
 	}
 
-	float& Transform::GetLocalRotation()
+	float Transform::GetLocalRotation()
 	{
 		return rotation;
 	}
 
-	float& Transform::GetWorldRotation()
+	float Transform::GetWorldRotation()
 	{
 		Entity* parent = obj->GetParent();
 
@@ -1682,12 +1692,12 @@ namespace ShyEditor {
 		return GetLocalRotation();
 	}
 
-	ImVec2& Transform::GetLocalScale()
+	ImVec2 Transform::GetLocalScale()
 	{
 		return *scale;
 	}
 
-	ImVec2& Transform::GetWorldScale()
+	ImVec2 Transform::GetWorldScale()
 	{
 		Entity* parent = obj->GetParent();
 

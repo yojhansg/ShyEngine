@@ -34,6 +34,7 @@ namespace ShyEditor {
         bool lerping;
         float lerp_t;
         float lerpDuration;
+
         int initialx, initialy;
         int finalx, finaly;
 

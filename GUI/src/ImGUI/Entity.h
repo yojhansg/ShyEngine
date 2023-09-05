@@ -79,15 +79,15 @@ namespace ShyEditor {
 		void SetScripts(std::unordered_map<std::string, Components::Script> scripts);
 
 		// Tranform attributes getters/setters
-		ImVec2& GetAdjustedPosition();
-		ImVec2& GetLocalPosition();
-		ImVec2& GetWorldPosition();
+		ImVec2 GetAdjustedPosition();
+		ImVec2 GetLocalPosition();
+		ImVec2 GetWorldPosition();
 
-		float& GetLocalRotation();
-		float& GetWorldRotation();
+		float GetLocalRotation();
+		float GetWorldRotation();
 
-		ImVec2& GetLocalScale();
-		ImVec2& GetWorldScale();
+		ImVec2 GetLocalScale();
+		ImVec2 GetWorldScale();
 
 		void SetLocalPosition(ImVec2& newPos);
 		void SetWorldPosition(ImVec2& pos);
@@ -217,14 +217,14 @@ namespace ShyEditor {
 		Transform(const Transform& tr, Entity* obj);
 		~Transform();
 		
-		ImVec2& GetLocalPosition();
-		ImVec2& GetWorldPosition();
+		ImVec2 GetLocalPosition();
+		ImVec2 GetWorldPosition();
 
-		float& GetLocalRotation();
-		float& GetWorldRotation();
+		float GetLocalRotation();
+		float GetWorldRotation();
 
-		ImVec2& GetLocalScale();
-		ImVec2& GetWorldScale();
+		ImVec2 GetLocalScale();
+		ImVec2 GetWorldScale();
 
 		void SetLocalPosition(ImVec2& newPos);
 		void SetWorldPosition(ImVec2& pos);
