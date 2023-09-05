@@ -224,71 +224,38 @@ Finally, for task organization, we have used the Trello project management tool.
 \section{Work Plan}
 \label{cap2:sec:workplan}
 
-The work is divided into three parts: the engine development, the editor development, and the development of 
-the node-base visual scripting system.
+The work is divided into three main parts: engine development, editor development, and the development of a visual node-based
+scripting system.
 
-- The engine consists of several Visual Studio projects where its fundamental parts are divided:
+The first phase of the work will involve the development of the core of each of the three parts separately:
 
-\begin{itemize}
+- Engine: For the engine part, this phase will involve researching potential libraries to use, integrating and ensuring basic
+functionality within the chosen library's working environment, implementing the entity and component system, and developing 
+essential components.
 
-\item \texttt{Main Project}: This project implements the main loop of the engine and generates the game executable.
+- Editor: For the editor part, this phase will consist of...
 
-\item \texttt{Physics Project}: Implements a manager to access the physical world's configuration.
+- Scripting System: For the scripting part, this phase will consist of...
 
-\item \texttt{Graphics Project}: Implements a manager to access SDL rendering configuration, such as the game 
-window or the camera.
+The second phase of the work will focus on integrating the three parts, potentially reimplementing incompatible functionality, 
+and continuing with separate development:
 
-\item \texttt{Resources Project}: Implements a manager to handle resources such as images or text fonts.
+- Engine: For the engine part, this phase will involve developing the main loop, the required functionality for engine-editor 
+communication, and completing the development of essential components and managers.
 
-\item \texttt{Sound Project}: Implements a manager to load, play, or stop sound effects or music.
+- Editor: For the editor part, this phase will consist of...
 
-\item \texttt{Utilities Project}: Implements various generic classes useful for the rest of the projects.
+- Scripting System: For the scripting part, this phase will consist of...
 
-\item \texttt{Input Project}: Implements a manager to handle user input, including keyboard, mouse, and controller
-input, with support for Dualshock 4.
+The third phase of the work will aim to improve the editor for a satisfactory user experience, develop some mini-games, and
+conduct user testing:
 
-\item \texttt{Entity-Component-System Project}: Implements the ECS and contains all the components provided by the engine.
+- Engine: For the engine part, this phase will involve conducting tests from the editor and scripting system to verify the correct
+functioning of all engine parts and making necessary fixes.
 
-\item \texttt{Console Project}: Implements functionality to print information through the console, useful for 
-development and debugging within the editor.
+- Editor: For the editor part, this phase will consist of...
 
-\item \texttt{Scripting Project}: Implements functionality to read and create C++ classes. Detailed explanation
-follows later.
-
-\end{itemize}
-
-
-- The Editor consists of 2 Visual Studio projects:
-
-\begin{itemize}
-
-    \item \texttt{Componentes project}: This project is responsible for managing the acquisition and processing of scripts and components 
-    from the underlying engine. 
-
-    \item \texttt{ImGUI project}:  In this project you will find all the functionality related to the editor, making use of the ImGUI library. 
-    This includes the creation and management of windows, pop-up dialog boxes, drop-down menus, rendering of the editing scene, as well as file management, among other features. 
-    as well as file management, among other features.
-
-    \item \texttt{main project}: This project implements the main loop of the editor and generates the executable.
-
-\end{itemize}
-
-
-\textbf{\textit{TODO: Scripting\ldots}}
-
-\medskip
-
-
-- The integration between the editor and the engine takes the form of a data exchange flow. Initially, the engine performs the serialization of the available components in a JSON format.components available in a JSON format. Subsequently, the editor is in charge of reading and processing these serialized components, allowing their assignment to the different entities under development. 
-different entities under development.
-Once the video game development process has been completed, the editor takes the initiative to serialize the entire scene. This encompasses the entities present in
-the scene, along with their respective components and associated scripts. With the scene duly serialized, the editor runs the executable file (.exe) 
-to the engine. At this point, it is the engine that assumes responsibility for interpreting and loading the scenes previously serialized by the editor.
-
-This approach to data exchange between the editor and the engine allows for effective synchronization of the information essential for the construction and execution of the 
-while maintaining a clear separation of tasks and roles between the two entities.
-
-\medskip
+- Scripting System: For the scripting part, this phase will consist of...
 
 
 \textbf{\textit{TODO: Fase de prueba con usuarios\ldots}}
@@ -310,17 +277,6 @@ while maintaining a clear separation of tasks and roles between the two entities
 
 % Ten en cuenta que si no quieres acrónimos (o no quieres que te falle la compilación en ``release'' mientras
 % no tengas ninguno) basta con que no definas la constante \verb+\acronimosEnRelease+ (en \texttt{config.tex}).
-
-%-------------------------------------------------------------------
-\section*{\ProximoCapitulo}\TocProximoCapitulo
-
-En  capítulo \hyperref[cap3:estado_del_arte]{\textit{3 Estado del Arte}} se explica qué son los motores de video-
-juegos 2D y cuáles hemos tomado como referencia para desarrollar el
-nuestro. Asimismo, se expondrán las librerías que hemos decidido emplear en nuestro proyecto y se 
-justificará la elección de cada una. Además, se menciona la diferencia entre el desarrollo de un
-videojuego a través de scripting y programación. Por último, se habla sobre
-el papel que juegan los motores en el mercado actual de los
-videojuegos.
 
 % Variable local para emacs, para  que encuentre el fichero maestro de
 % compilación y funcionen mejor algunas teclas rápidas de AucTeX
