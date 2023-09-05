@@ -106,7 +106,9 @@ La primera fase del trabajo consistirá en el desarrollo del núcleo de cada una d
 funcionamiento básico en el entorno de trabajo de las librerías elegidas, implementación del sistema de entidades
 y componentes y desarrollo de componentes fundamentales. 
 
-- Editor: Para la parte del editor esta fase consistirá en
+- Editor: Para la parte del editor esta fase consistirá en  en investigar librerías gráficas, con especial énfasis en aquellas adecuadas para la interfaz de usuario (UI). 
+Además, incluirá la implementación de una escena navegable de carácter básico, la creación y manipulación de entidades dentro de dicha escena, así como la modificación de su \texttt{Transform}, 
+seguida de la correspondiente serialización de estos elementos.
 
 - Sistema de scripting: Para la parte del scripting esta fase consistirá en
 
@@ -116,9 +118,10 @@ no compatible y continuación con el desarrollo por separado:
 - Motor: Para la parte del motor esta fase consistirá en el desarrollo del bucle principal, funcionalidad requerida para la 
 comunicación motor-editor y terminar con el desarrollo de componentes y managers fundamentales.
 
-- Editor: Para la parte del editor esta fase consistirá en
+- Editor: Para la parte del editor esta fase consistirá en la lectura de los componentes del motor, su visualización y edición, así como en la serialización y lectura de las escenas,
+abordando además otros aspectos fundamentales para un editor, tales como la implementación de la ventana de jerarquía y el explorador de archivos.
 
-- Sistema de scripting: Para la parte del scripting esta fase consistirá en
+- Sistema de scripting: Para la parte del scripting esta fase consistirá en 
 
 La tercera fase del trabajo consistirá en mejorar el editor para conseguir una experiencia de usuario satisfactoria, 
 desarrollar algún que otro minijuego y realizar pruebas con usuarios:
@@ -126,7 +129,10 @@ desarrollar algún que otro minijuego y realizar pruebas con usuarios:
 - Motor: Para la parte del motor esta fase consistirá en realizar pruebas desde el editor y sistema de scripting para 
 comprobar el correcto funcionamiento de todas las partes del motor y arreglar lo necesario.
 
-- Editor: Para la parte del editor esta fase consistirá en
+- Editor: Para la parte del editor esta fase consistirá en la implementación de una jerarquía entre entidades, la implementación de prefabs, la lectura de escenas serializadas, 
+la ejecución de las escenas en el motor, así como el arreglo de fallos y la incorporación de otras mejoras destinadas a aumentar la comodidad del desarrollador. Algún ejemplo de estas 
+mejoras es la capacidad de arrastrar imágenes directamente desde el sistema operativo Windows hasta el editor, la depuración de errores a través de una consola, la creación de paletas, 
+y muchas otras.
 
 - Sistema de scripting: Para la parte del scripting esta fase consistirá en 
 
@@ -237,7 +243,9 @@ The first phase of the work will involve the development of the core of each of 
 functionality within the chosen library's working environment, implementing the entity and component system, and developing 
 essential components.
 
-- Editor: For the editor part, this phase will consist of...
+- Editor: For the editor part, this phase will consist of researching graphic libraries, with special emphasis on those suitable for the user interface (UI). 
+In addition, it will include the implementation of a basic navigable scene, the creation and manipulation of entities within this scene, as well as the modification of its \texttt{Transform}, 
+followed by the corresponding serialization of these elements.
 
 - Scripting System: For the scripting part, this phase will consist of...
 
@@ -247,7 +255,8 @@ and continuing with separate development:
 - Engine: For the engine part, this phase will involve developing the main loop, the required functionality for engine-editor 
 communication, and completing the development of essential components and managers.
 
-- Editor: For the editor part, this phase will consist of...
+- Editor: For the editor part this phase will consist of reading the engine components, displaying and editing them, as well as serializing and reading the scenes,
+and other fundamental aspects for an editor, such as the implementation of the hierarchy window and the file explorer.
 
 - Scripting System: For the scripting part, this phase will consist of...
 
@@ -257,7 +266,10 @@ conduct user testing:
 - Engine: For the engine part, this phase will involve conducting tests from the editor and scripting system to verify the correct
 functioning of all engine parts and making necessary fixes.
 
-- Editor: For the editor part, this phase will consist of...
+- Editor: For the editor part this phase will consist of the implementation of a hierarchy between entities, the implementation of prefabs, the reading of serialized scenes, 
+the execution of the scenes in the engine, as well as bug fixing and the incorporation of other improvements aimed at increasing the developer's comfort. Some examples of these 
+improvements are the ability to drag images directly from the Windows operating system to the editor, debugging errors through a console, palette creation, and many others, 
+and many others.
 
 - Scripting System: For the scripting part, this phase will consist of...
 
