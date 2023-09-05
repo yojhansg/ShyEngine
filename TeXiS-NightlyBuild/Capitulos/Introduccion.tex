@@ -16,6 +16,8 @@ tuvimos que salir de la zona de comfort y aprender que hay detrás de las herrami
 el grado desarrollando así un motor de videojuegos 3D usando OGRE como motor gráfico, BulletPhysics como motor físico, 
 FMOD como librería de sonido y Lua como lenguaje de scripting.
 
+\medskip
+
 Con esta experiencia nos dimos cuenta de varias cosas. Es más comodo trabajar con un motor que cuenta 
 con un editor integrado en vez de acceder a él directamente a través de programación. Además, la forma 
 de programar los scripts, queson fragmentos de código que definen comportamientos específicos para las entidades, 
@@ -26,17 +28,17 @@ grado sería un motor con la siguientes características:
 
 \begin{itemize}
 
-\item \texttt{Autosuficiencia}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
+\item \textit{Autosuficiencia}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
 y objetos desde el editor y cuenta con la creación de ejecutables finales del juego para su distribución. 
 Además, el motor podrá mostrar la ejecución del juego directamente en el editor durante su desarrollo. 
 Obviamente no tiene toda la funcionalidad necesaria como para no depender de ninguna herrmienta externa 
 durante el desarrollo pero si aporta lo básico para el ciclo de desarrollo de un videojuego 2D.
 
-\item \texttt{Editor integrado}: La principal herramienta de un motor autosuficiente es el editor, encargado 
+\item \textit{Editor integrado}: La principal herramienta de un motor autosuficiente es el editor, encargado 
 de comunicar al motor las accciones del desarrollador. No teníamos experiencia en desarrollo de aplicaciones 
 de escritorio, ya que para el motor de tercero no hicimos editor (por lo que sabíamos que podía ser un reto).
 
-\item \texttt{Programación visual basada en nodos}: Esta es la parte a destacar de nuestro motor. Debido a la 
+\item \textit{Programación visual basada en nodos}: Esta es la parte a destacar de nuestro motor. Debido a la 
 complejidad que presentan algunos motores de la actualidad para desarrolladores principiantes o inexpertos, 
 la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
 videojuego. Sabíamos que podía ser desafiante a nivel técnico pero aportaría mucha comodidad, fluidez y por 
@@ -60,8 +62,12 @@ cualquier tipo de videojuego 2D.
 Con la autosuficiencia del motor queremos conseguir que los usuarios puedan desarrollar sus videojuegos con la mínima
 dependencia posible de herramientas externas de tal forma que todo el trabajo pase por el editor.
 
+\medskip
+
 Con el editor queremos conseguir que el desarrollo sea cómodo, fluido y visual evitando así que el desarrollador se 
 tenga que comnunicar con el motor vía programación.
+
+\medskip
 
 Con el sistema de programación visual basada en nodos queremos conseguir abrir las puertas de nuestro motor a
 desarrolladores inexpertos o con bajos cononcimientos en programación para que así puedan desarrollar sus videojuegos.
@@ -74,6 +80,8 @@ Además, supone un reto a nivel técnico que nos aportará experiencia y conocimien
 Para comenzar, se ha utilizado Git como sistema de control de versiones a través de la aplicación de escritorio
 GitHub Desktop. Todo el código implementado se ha subido a un repositorio dividiendo el trabajo en ramas. En concreto,
 tal y como se cuenta en el plan de trabajo, el proyecto se ha dividido en motor, editor y programación visual.
+
+\medskip
 
 Enlace al repositorio: \url{https://github.com/ivasan07/ShyEngine}
 
@@ -100,41 +108,53 @@ El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visua
 El trabajo se divide en tres partes: el desarrollo del motor, el desarrollo del editor y el desarrollo del sistema
 de scripting visual basado en nodos.
 
+\subsection*{Etapa 1: Desarrollo Inicial}
+
 La primera fase del trabajo consistirá en el desarrollo del núcleo de cada una de las tres partes por separado: 
 
-- Motor: Para la parte del motor esta fase consistirá en la investigación de posibles librerías a utilizar, integración y 
-funcionamiento básico en el entorno de trabajo de las librerías elegidas, implementación del sistema de entidades
-y componentes y desarrollo de componentes fundamentales. 
+\begin{itemize}
+    \item \textit{Motor}: Para la parte del motor esta fase consistirá en la investigación de posibles librerías a utilizar, integración y 
+    funcionamiento básico en el entorno de trabajo de las librerías elegidas, implementación del sistema de entidades
+    y componentes y desarrollo de componentes fundamentales. 
+    
+    \item \textit{Editor}: Para la parte del editor esta fase consistirá en  en investigar librerías gráficas, con especial énfasis en aquellas adecuadas para la interfaz de usuario (UI). 
+    Además, incluirá la implementación de una escena navegable de carácter básico, la creación y manipulación de entidades dentro de dicha escena, así como la modificación de su \texttt{Transform}, 
+    seguida de la correspondiente serialización de estos elementos.
+    
+    \item \textit{Sistema de Scripting}: TODO
+\end{itemize}
 
-- Editor: Para la parte del editor esta fase consistirá en  en investigar librerías gráficas, con especial énfasis en aquellas adecuadas para la interfaz de usuario (UI). 
-Además, incluirá la implementación de una escena navegable de carácter básico, la creación y manipulación de entidades dentro de dicha escena, así como la modificación de su \texttt{Transform}, 
-seguida de la correspondiente serialización de estos elementos.
-
-- Sistema de scripting: Para la parte del scripting esta fase consistirá en
+\subsection*{Etapa 2: Integración}
 
 La segunda fase del trabajo consistirá en la integración de las tres partes, posible reimplementación de funcionalidad
 no compatible y continuación con el desarrollo por separado: 
 
-- Motor: Para la parte del motor esta fase consistirá en el desarrollo del bucle principal, funcionalidad requerida para la 
-comunicación motor-editor y terminar con el desarrollo de componentes y managers fundamentales.
+\begin{itemize}
+    \item \textit{Motor}: Para la parte del motor esta fase consistirá en el desarrollo del bucle principal, funcionalidad requerida para la 
+    comunicación motor-editor y terminar con el desarrollo de componentes y managers fundamentales.
+    
+    \item \textit{Editor}: Para la parte del editor esta fase consistirá en la lectura de los componentes del motor, su visualización y edición, así como en la serialización y lectura de las escenas,
+    abordando además otros aspectos fundamentales para un editor, tales como la implementación de la ventana de jerarquía y el explorador de archivos.
 
-- Editor: Para la parte del editor esta fase consistirá en la lectura de los componentes del motor, su visualización y edición, así como en la serialización y lectura de las escenas,
-abordando además otros aspectos fundamentales para un editor, tales como la implementación de la ventana de jerarquía y el explorador de archivos.
+    \item \textit{Sistema de Scripting}: TODO
+\end{itemize}
 
-- Sistema de scripting: Para la parte del scripting esta fase consistirá en 
+\subsection*{Etapa 3: Mejoras y Pruebas}
 
 La tercera fase del trabajo consistirá en mejorar el editor para conseguir una experiencia de usuario satisfactoria, 
 desarrollar algún que otro minijuego y realizar pruebas con usuarios:
 
-- Motor: Para la parte del motor esta fase consistirá en realizar pruebas desde el editor y sistema de scripting para 
-comprobar el correcto funcionamiento de todas las partes del motor y arreglar lo necesario.
+\begin{itemize}
+    \item \textit{Motor}: Para la parte del motor esta fase consistirá en realizar pruebas desde el editor y sistema de scripting para 
+    comprobar el correcto funcionamiento de todas las partes del motor y arreglar lo necesario.    
+    
+    \item \textit{Editor}: Para la parte del editor esta fase consistirá en la implementación de una jerarquía entre entidades, la implementación de prefabs, la lectura de escenas serializadas, 
+    la ejecución de las escenas en el motor, así como el arreglo de fallos y la incorporación de otras mejoras destinadas a aumentar la comodidad del desarrollador. Algún ejemplo de estas 
+    mejoras es la capacidad de arrastrar imágenes directamente desde el sistema operativo Windows hasta el editor, la depuración de errores a través de una consola, la creación de paletas, 
+    y muchas otras.
 
-- Editor: Para la parte del editor esta fase consistirá en la implementación de una jerarquía entre entidades, la implementación de prefabs, la lectura de escenas serializadas, 
-la ejecución de las escenas en el motor, así como el arreglo de fallos y la incorporación de otras mejoras destinadas a aumentar la comodidad del desarrollador. Algún ejemplo de estas 
-mejoras es la capacidad de arrastrar imágenes directamente desde el sistema operativo Windows hasta el editor, la depuración de errores a través de una consola, la creación de paletas, 
-y muchas otras.
-
-- Sistema de scripting: Para la parte del scripting esta fase consistirá en 
+    \item \textit{Sistema de Scripting}: TODO
+\end{itemize}
 
 \textbf{\textit{TODO: Fase de prueba con usuarios\ldots}}
 
@@ -159,9 +179,13 @@ we had to step out of our comfort zone and learn what's behind the tools provide
 This led us to develop a 3D game engine using OGRE as the graphics engine, BulletPhysics as the physics engine, 
 FMOD as the sound library, and Lua as the scripting language.
 
+\medskip
+
 Through this experience, we realized several things. It's more convenient to work with an engine that has an 
 integrated editor rather than accessing it directly through programming. Additionally, scripting should be 
 comfortable and intuitive since it's the task that will take up the most time for the developer.
+
+\medskip
 
 In the fourth year, with the recent experience of developing a game engine, we decided that the proposal for our
 final degree project would be an engine with the following characteristics:
@@ -200,8 +224,12 @@ editor and node-based visual programming. With this, users will have a tool to d
 By achieving self-sufficiency in the engine, we aim to enable users to develop their video games with minimal 
 reliance on external tools, ensuring that all the work can be done within the editor.
 
+\medskip
+
 With the editor, our goal is to make the development process comfortable, smooth, and visually-oriented, eliminating
 the need for developers to communicate with the engine through programming.
+
+\medskip
 
 With the node-based visual programming system, we aim to open the doors of our engine to inexperienced developers
 or those with limited programming knowledge, allowing them to develop their videogames. In addition, it represents 
@@ -215,6 +243,8 @@ To start with, Git has been used as the version control system through the GitHu
 implemented code has been uploaded to a repository, dividing the work into branches. Specifically, as outlined 
 in the work plan, the project has been divided into engine, editor, and visual programming.
 
+\medskip
+
 Repository link: \url{https://github.com/ivasan07/ShyEngine}
 
 \medskip
@@ -223,7 +253,9 @@ For the development of the engine, the SDL (Simple DirectMedia Layer) library ha
 SDL Image has been used for graphics, SDL Mixer for audio, and SDL TTF for TrueType font rendering. The Box2D 
 library has also been used for 2D physics simulation and collision handling.
 
-For the development of the editor, the ImGUI (Immediate Mode Graphical User Interface) library has been used.
+\medskip
+
+For the development of the editor, the ImGUI library has been used.
 
 \medskip
 
@@ -237,44 +269,55 @@ Finally, for task organization, we have used the Trello project management tool.
 The work is divided into three main parts: engine development, editor development, and the development of a visual node-based
 scripting system.
 
+\subsection*{Phase 1: Inital development}
+
 The first phase of the work will involve the development of the core of each of the three parts separately:
 
-- Engine: For the engine part, this phase will involve researching potential libraries to use, integrating and ensuring basic
-functionality within the chosen library's working environment, implementing the entity and component system, and developing 
-essential components.
+\begin{itemize}
+    \item \textit{Engine}: For the engine part, this phase will involve researching potential libraries to use, integrating and ensuring basic
+    functionality within the chosen library's working environment, implementing the entity and component system, and developing 
+    essential components.
+    
+    \item \textit{Editor}: For the editor part, this phase will consist of researching graphic libraries, with special emphasis on those suitable for the user interface (UI). 
+    In addition, it will include the implementation of a basic navigable scene, the creation and manipulation of entities within this scene, as well as the modification of its \texttt{Transform}, 
+    followed by the corresponding serialization of these elements.
 
-- Editor: For the editor part, this phase will consist of researching graphic libraries, with special emphasis on those suitable for the user interface (UI). 
-In addition, it will include the implementation of a basic navigable scene, the creation and manipulation of entities within this scene, as well as the modification of its \texttt{Transform}, 
-followed by the corresponding serialization of these elements.
+    \item \textit{Scripting System}: TODO
+\end{itemize}
 
-- Scripting System: For the scripting part, this phase will consist of...
+\subsection*{Phase 2: Integration}
 
 The second phase of the work will focus on integrating the three parts, potentially reimplementing incompatible functionality, 
 and continuing with separate development:
 
-- Engine: For the engine part, this phase will involve developing the main loop, the required functionality for engine-editor 
-communication, and completing the development of essential components and managers.
+\begin{itemize}
+    \item \textit{Engine}: For the engine part, this phase will involve developing the main loop, the required functionality for engine-editor 
+    communication, and completing the development of essential components and managers.
+    
+    \item \textit{Editor}: For the editor part this phase will consist of reading the engine components, displaying and editing them, as well as serializing and reading the scenes,
+    and other fundamental aspects for an editor, such as the implementation of the hierarchy window and the file explorer.
 
-- Editor: For the editor part this phase will consist of reading the engine components, displaying and editing them, as well as serializing and reading the scenes,
-and other fundamental aspects for an editor, such as the implementation of the hierarchy window and the file explorer.
+    \item \textit{Scripting System}: TODO
+\end{itemize}
 
-- Scripting System: For the scripting part, this phase will consist of...
+\subsection*{Phase 3: Improvements and debugging}
 
 The third phase of the work will aim to improve the editor for a satisfactory user experience, develop some mini-games, and
 conduct user testing:
 
-- Engine: For the engine part, this phase will involve conducting tests from the editor and scripting system to verify the correct
-functioning of all engine parts and making necessary fixes.
+\begin{itemize}
+    \item \textit{Engine}: For the engine part, this phase will involve conducting tests from the editor and scripting system to verify the correct
+    functioning of all engine parts and making necessary fixes.
+    
+    \item \textit{Editor}: For the editor part this phase will consist of the implementation of a hierarchy between entities, the implementation of prefabs, the reading of serialized scenes, 
+    the execution of the scenes in the engine, as well as bug fixing and the incorporation of other improvements aimed at increasing the developer's comfort. Some examples of these 
+    improvements are the ability to drag images directly from the Windows operating system to the editor, debugging errors through a console, palette creation, and many others, 
+    and many others.
 
-- Editor: For the editor part this phase will consist of the implementation of a hierarchy between entities, the implementation of prefabs, the reading of serialized scenes, 
-the execution of the scenes in the engine, as well as bug fixing and the incorporation of other improvements aimed at increasing the developer's comfort. Some examples of these 
-improvements are the ability to drag images directly from the Windows operating system to the editor, debugging errors through a console, palette creation, and many others, 
-and many others.
+    \item \textit{Scripting System}: TODO
+\end{itemize}
 
-- Scripting System: For the scripting part, this phase will consist of...
-
-
-\textbf{\textit{TODO: Fase de prueba con usuarios\ldots}}
+\textbf{\textit{TODO: User testing phase\ldots}}
 
 
 
