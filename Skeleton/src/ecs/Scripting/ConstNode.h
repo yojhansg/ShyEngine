@@ -21,6 +21,7 @@ namespace Scripting {
 	private:
 
 		std::string name;
+		Scripting::Variable originalValue;
 	};
 
 }

@@ -13,7 +13,7 @@ void Scripting::Function::Operate(Node*& nextNode, int& iterationIdx)
 	for (auto& in : input) {
 
 		if (in->iterationIdx != iterationIdx)
-			in->Cicle(iterationIdx);
+			in->Cycle(iterationIdx);
 	}
 
 	std::vector<Scripting::Variable> inputVariable;
