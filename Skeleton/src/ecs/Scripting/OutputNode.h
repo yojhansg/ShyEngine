@@ -8,13 +8,12 @@ namespace Scripting {
 
 	class OutputNode: public Node {
 
-	public:
-
+	protected:
 		OutputNode(int idx);
 
+	public:
 
 		Scripting::Variable output;
-		Scripting::Variable originalValue;
 	};
 
 }

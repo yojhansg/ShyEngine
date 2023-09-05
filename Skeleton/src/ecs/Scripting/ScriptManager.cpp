@@ -403,7 +403,7 @@ Scripting::ScriptManager::ScriptNodes::ScriptNodes()
 void Scripting::ScriptManager::NewIteration(ECS::Script* script, Node* beginNode)
 {
 	currentScript = script;
-	beginNode->Cicle(nodeIteration);
+	beginNode->Cycle(nodeIteration);
 	nodeIteration += 1;
 
 	currentScript = nullptr;
