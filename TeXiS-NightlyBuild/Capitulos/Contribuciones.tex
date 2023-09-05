@@ -6,23 +6,67 @@
 
 \chapter{Contribuciones}
 
-%-------------------------------------------------------------------
-\section{Contribuciones de Pablo}
-%-------------------------------------------------------------------
-\label{cap5:sec:pablo}
-
-Contribuciones de Pablo Fernández Álvarez
+Como se comentó en el plan de trabajo, este TFG esta divido en tres partes fundamentales. Debido a que la carga
+de trabajo de cada parte es similar, hemos asignado una parte a cada integrante del grupo. A pesar de esta división,
+sobretodo durante la recta final del trabajo, se han dado contribuciones de todos los integrantes en cada una de las
+tres partes, aunque eso sí, en menor medida.
 
 %-------------------------------------------------------------------
-\section{Contribuciones de Yojhan}
+\section{Pablo Fernández Álvarez}
 %-------------------------------------------------------------------
-\label{cap5:sec:yojhan}
+
+Yo me he encargado de la parte del motor. Al principio me dediqué a investigar posibles librerías tanto de físicas
+como de audio, para integrar al motor. En cuanto a librería de gráficos tuvimos claro desde el principio que íbamos
+a usar SDL, debido a que la hemos usado bastante durante el grado y estamos acostumbrados, además de que no tiene
+ninguna limitación para el desarrollo de videojuegos 2D. 
+
+Una vez escogidas la librerías, Box2D como motor de física y SDLMixer como motor de audio, comencé a montar el proyecto
+usando Visual Studio 2022. Organicé la solución en varios proyectos, física, audio, input, render, y fui implementando
+cada uno de ellos. Empecé con el proyecto de Input, el cuál me llevó algo de tiempo ya que implementé soporte para teclado,
+mando y múltiples mandos. Una vez terminado, fue el turno del proyecto de sonido/audio. Con la ayuda de la documentación
+de SDLMixer, implementé soporte para la reproducción de efectos de sonido/sonidos cortos y música. Posteriormente comencé
+con el proyecto de físicas. En este caso tuve que dedicar bastante más tiempo a aprender sobre la librería, leer artículos
+y documentación, ya que es más compleja. Investigué también la opción de poder visualizar los colisionadores de los cuerpos
+físicos ya que supondría una gran ayuda tanto para el desarrollo del motor como para el usuario. En la documentación de Box2D
+encontré algunos ejemplos pero usaban el OpenGL para el dibujado y el motor usa SDL por lo que tuve que implementar esas
+funciones de dibujado con SDL.
+
+Luego llegó el momento de implementar el proyecto del ECS (Entity-Component-System), fundamental para realizar pruebas y 
+visualizar las primeras escenas. Para ello además, implementé el bucle principal del motor con un intervalo de tiempo
+fijo para el mundo físico. En este momento, con los proyectos principales implmentados, comencé a implementar los primeros
+componentes básicos, como son el Transform, Image, PhyiscBody y SoundEmitter.
+
+Durante un tiempo simplemente me dediqué a ampliar y probar los componentes y la funcionalidad implementada en los proyectos.
+Por ejemplo, añadí una matriz de colisiones al proyecto de físicas para manejar el filtrado de colisiones, implementé distintos
+tipos de PhyiscBody (colisionadores con formas especiales), sincronicé los cuerpos físicos con las transformaciones de la entidad,
+detección de colisiones, conversión de píxeles a unidades físicas, nuevo componente ParticleSystem para sistemas de partículas, 
+implementé un gestor de recursos para evitar cargar recursos duplicados, mejoré los componentes de sonido para añadir paneo 
+horizontal y sonido 2D, entre otros. 
+
+Con la parte del editor más avanzada, implementé la lógica necesaria para leer los datos que genera el editor, como
+escenas o prefabs. Además, implementé la ventana de gestión de proyectos del editor, añadí control de errores en todo el motor, 
+para conseguir una ejecución continua y esperable, imprimiendo los errores por la salida estándar. Añadí también control de 
+errores en el editor, a través de un fichero de log, con la información de los errores durante la ejecución. Creé una estructura
+de directorios para el editor y motor haciendo más cómodo el ciclo de desarrollo. Implementé una ventana de preferencias donde
+ajustar parámetros del motor, como gravedad del mundo físico, frecuencia del motor de audio, tamaño de la ventana de juego, entre
+muchos otros. Implementé el flujo de escenas, es decir, guardar la última escena abierta, mostrar el viewport de una forma especial
+en caso de que no haya ninguna escena abierta y mostrar en el viewport el nombre de la escena actual junto con su contenido
+correspondiente. 
+
+Por último, cambié el uso que se hacía de SDL para la implementación de mando en el Input, de SDLJoystick a SDLGameController ya
+que está más preparada para mando y SDLJoystick es una interfaz de más bajo nivel preparada para cualquier tipo de dispositivo.
+Añadí más parámetros a la ventana de preferencias, sobretodo para Input, bindeo de teclas rápidas. 
+
+
+
+%-------------------------------------------------------------------
+\section{Yojhan García Peña}
+%-------------------------------------------------------------------
 
 Contribuciones de Yojhan García Peña
 
 %-------------------------------------------------------------------
-\section{Contribuciones de Iván}
+\section{Iván Sánchez Míguez}
 %-------------------------------------------------------------------
-\label{cap5:sec:ivan}
 
 Contribuciones de Iván Sánchez Míguez

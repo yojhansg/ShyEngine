@@ -8,8 +8,9 @@
 \label{cap3:estado_del_arte}
 
 \begin{resumen}
-En este capítulo se explica qué son los motores de videojuegos 2D, sus partes esenciales y se mencionan aquellos que hemos tomado como referencia.
-También se hablará de la importancia de los editores en el desarrollo
+En este capítulo se explica qué son los motores de videojuegos 2D, las partes que contienen y los principales motores de videojuegos a día de hoy. 
+Por otro lado se hablará de qué es un editor, que relación tienen con los motores y su importancia en el desarrollo. Por último se explica en qué
+consiste el scripting visual, que tipos de scripting visual hay y en concreto qué características tiene el tipo basado en nodos.
 \end{resumen}
 
 
@@ -17,13 +18,13 @@ También se hablará de la importancia de los editores en el desarrollo
 \section{Motores de videojuegos 2D}
 \label{cap3:sec:motores}
 
-Un motor de videojuegos 2D es a un sistema de software integral diseñado para facilitar el desarrollo, diseño y ejecución de videojuegos que se 
+Un motor de videojuegos 2D es a un sistema de software diseñado para facilitar el desarrollo, diseño y ejecución de videojuegos que se 
 desarrollan en un entorno bidimensional. Este componente tecnológico proporciona un conjunto de herramientas y funcionalidades predefinidas que 
 permiten a los desarrolladores crear juegos visuales en dos dimensiones de manera eficiente y efectiva. Los motores de videojuegos 2D son esenciales
 para el proceso de producción de juegos, ya que simplifican tareas técnicas complejas y permiten a los creadores centrarse en la creatividad y la
 jugabilidad.
 
-\subsection{Partes de un motor de videojuegos}
+\section{Partes de un motor de videojuegos}
 
 Un motor de videojuegos consta de varias partes esenciales que trabajan en conjunto para facilitar el desarrollo de videojuegos. Estas partes clave incluyen:
 
@@ -51,9 +52,9 @@ centrarse en la creatividad y la jugabilidad en lugar de crear todas estas funci
 \section{Editores en motores de videojuegos}
 \label{cap3:sec:editores}
 
-Un editor de videojuegos es una herramienta de software que facilita la creación, modificación y organización de diversos elementos que de un videojuego. 
+Un editor de videojuegos es una herramienta de software que facilita la creación, modificación y organización de diversos elementos de un videojuego. 
 Este componente tecnológico proporciona una interfaz visual y funcionalidades específicas que permiten a los desarrolladores y diseñadores trabajar en la 
-construcción y edición de contenido de juegos de manera eficiente y efectiva. Los editores de videojuegos son esenciales en el proceso de producción, ya que 
+construcción y edición de contenido de juegos de manera eficiente. Los editores de videojuegos son esenciales en el proceso de producción, ya que 
 permiten la creación y personalización de niveles, personajes, escenarios y otros componentes visuales.
 
 \begin{itemize}
@@ -81,50 +82,67 @@ permiten la creación y personalización de niveles, personajes, escenarios y otro
 
 \end{itemize}
 
-// TODO Esto no va aqui
-A pesar de no abarcar todas las características de forma exhaustiva, nuestro editor está diseñado para proporcionar un conjunto de herramientas eficientes y 
-efectivas para el desarrollo de juegos. Por ejemplo, nuestro editor ofrece funcionalidades como la creación de escenarios y niveles mediante escenas, 
-la gestión de assets a través del explorador de archivos, la personalización de la interfaz de usuario con overlays, 
-pruebas en modo de depuración para facilitar la detección de errores, exportación en modo release para la distribución final
-y un sistema de scripting basado en nodos que permite asignar comportamientos y lógica a las entidades del juego.
-
-
 \section{Diferencia entre editor y motor}
 
 En la industria, es frecuente observar que ambos términos estén estrechamente vinculados ya que el editor y el motor de videojuegos desempeñan roles complementarios 
 esenciales en el proceso de desarrollo de videojuegos al permitir un flujo de trabajo eficiente. Su sinergia constituye un pilar fundamental en el proceso de desarrollo 
 de videojuegos, facilitando la creación y optimización de experiencias de juego únicas y atractivas.
 
-El motor de videojuegos representa el núcleo tecnológico que sustenta el juego, encargándose de tareas críticas como la gestión de gráficos, física, sonido y lógica. 
+El motor de videojuegos representa el núcleo tecnológico que sustenta el juego, encargándose de tareas críticas como la gestión de gráficos, física, sonido o lógica. 
 Puede considerarse como el "corazón" del juego, sin el cual la mayoría de los juegos simplemente no podrían existir.
 
-Por su parte, el editor de videojuegos se posiciona como una herramienta de creación y diseño que colabora estrechamente con el motor. Su principal función radica 
-en permitir a los desarrolladores y diseñadores de juegos crear y modificar contenido mucho más rapida y comodamente que si tuvieran que hacerlo a través del código directamente. 
-Esto simplifica la personalización del mundo del juego y la configuración de sus componentes. En el editor se definen diversos datos, como escenas, componentes y entidades, que el 
-motor posteriormente leerá para su procesamiento y ejecución.
+Por su parte, el editor de videojuegos se posiciona como una herramienta de creación y diseño que colabora estrechamente con el motor. Su principal función radica en 
+permitir a los desarrolladores y diseñadores de juegos crear y modificar contenido mucho más rapida y comodamente que si tuvieran que hacerlo a través del código directamente. 
+Esto simplifica la personalización del mundo del juego y la configuración de sus componentes. En el editor se definen diversos datos, como escenas, componentes y entidades, 
+que el motor posteriormente leerá para su procesamiento y ejecución.
 
-\subsection{El flujo de trabajo en el desarrollo de videojuegos}
+\subsection{Comunicación motor-editor}
 
-El flujo de trabajo en el desarrollo de videojuegos sigue típicamente un patrón colaborativo entre el editor y el motor. Los diseñadores y desarrolladores utilizan 
-el editor para crear y ajustar los elementos del juego, especificando cómo se verán y se comportarán en el mundo virtual. Posteriormente, el motor interpreta estos 
-datos y los utiliza para dar vida al juego en tiempo real. Este proceso iterativo permite a los equipos de desarrollo perfeccionar gradualmente la experiencia de juego, 
-realizando ajustes y corrigiendo errores a medida que avanzan en el proyecto.
+Durante el proceso de creación de un videojuegos a través de un motor de videojuegos con editor, todas las acciones de los desarrolladores se producen en el editor.
+Con todas estas acciones, el editor genera unos datos que serán leídos posteriormente por el motor para poder ejecutar el videojuego. Este proceso iterativo permite a 
+los equipos de desarrollo perfeccionar gradualmente la experiencia de juego, realizando ajustes y corrigiendo errores a medida que avanzan en el proyecto.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DiffEditorEngine.png}
-    \caption{Difference between editor and engine}
+    \includegraphics[scale=0.3]{Imagenes/Vectorial/ComunicacionMotorEditor.png}
+    \caption{Comunicación motor-editor}
     \label{fig:example}
 \end{figure}
 
 
-\section{Importancia de los motores y editores de videojuegos}
+\subsection{Motor de física}
 
-Los motores y editores de desarrollo desempeñan un papel fundamental en la industria actual al proporcionar las herramientas esenciales que permiten dar vida a 
-la creatividad y la innovación en el mundo digital. Estas plataformas no solo simplifican el proceso de creación, reduciendo los obstáculos técnicos para los 
-desarrolladores, sino que también fomentan la experimentación y el descubrimiento de nuevas formas de contar historias, entretener y educar. Además, promueven 
-la colaboración entre equipos multidisciplinarios al ofrecer un entorno unificado para diseñadores, artistas, programadores y otros profesionales. Los motores y 
-editores también impulsan la producción más eficiente, lo que es crucial en una industria que requiere un equilibrio entre calidad y tiempo de desarrollo. 
+Un motor de física en el desarrollo de videojuegos es un software o una biblioteca de programación que simula y calcula el comportamiento físico de objetos dentro del 
+mundo virtual del juego. Estos motores permiten que los objetos en un videojuego interactúen con realismo según las leyes de la física, lo que añade un nivel de realismo
+y jugabilidad a la experiencia del jugador. 
+
+Algunas de las funciones que un motor de física puede proporcionar incluyen:
+
+\begin{itemize}
+
+    \item \textbf{Simulación de colisiones}: Los motores de física pueden detectar y manejar colisiones entre objetos en el juego, calculando cómo se deben comportar los
+     objetos cuando chocan entre sí, rebotan, se deslizan o se detienen.
+
+    \item \textbf{Gravedad}: Los motores de física pueden aplicar la fuerza de la gravedad a los objetos en el juego, lo que significa que los objetos caen hacia abajo 
+    y pueden rebotar o interactuar de manera realista con el entorno.
+
+    \item \textbf{Gravedad}: Cinemática inversa: Los motores de física a veces incluyen herramientas para calcular automáticamente animaciones realistas de personajes y
+    objetos en función de las acciones del jugador. Esto es útil para animaciones de personajes en juegos, como caminar, correr o saltar.
+
+    \item \textbf{Simulación de fluidos y partículas}: Algunos motores de física avanzados pueden simular efectos de fluidos, como agua o fuego, así como partículas, 
+    como humo o chispas.
+
+    \item \textbf{Simulación de fluidos y partículas}: Los motores de física permiten aplicar fuerzas a los objetos para simular movimientos, como la aplicación de una 
+    fuerza para lanzar un objeto o empujarlo.
+
+    \item \textbf{Restricciones y articulaciones}: Estos motores también pueden gestionar restricciones y articulaciones que definen cómo los objetos pueden moverse y girar
+    entre sí, lo que es útil para simular conexiones como bisagras, ruedas o articulaciones de personajes.
+
+\end{itemize}
+
+Algunos ejemplos de motores de física populares en la industria de los videojuegos incluyen Unity Physics, NVIDIA PhysX, Havok y Bullet Physics, entre otros. Estos motores
+ofrecen diferentes características y niveles de realismo, lo que permite a los desarrolladores elegir el más adecuado para sus necesidades específicas.
+
 
 \subsection{Unity}
 
@@ -133,9 +151,17 @@ permitir a desarrolladores de todos los niveles de experiencia crear juegos y ap
 hasta dispositivos móviles y realidad virtual. Su característica distintiva es su capacidad para facilitar el desarrollo multiplataforma, lo que lo convierte en una
 elección sólida para proyectos que buscan llegar a una audiencia diversa. 
 
-Además, Unity utiliza el motor de físicas NVIDIA PhysX, que es ampliamente reconocido por su capacidad para simular efectos físicos realistas en los juegos. 
-La combinación del motor gráfico Unity Graphics y el motor de físicas NVIDIA PhysX proporciona a los desarrolladores las herramientas necesarias para crear 
-experiencias visuales y físicas inmersivas en sus juegos. 
+Como motor físico, Unity utiliza el motor de físicas NVIDIA PhysX, que es ampliamente reconocido por su capacidad para simular efectos físicos realistas en los juegos. 
+La combinación del motor gráfico Unity Graphics y el motor de físicas NVIDIA PhysX proporciona a los desarrolladores las herramientas necesarias para crear experiencias 
+visuales y físicas inmersivas en sus juegos. 
+
+% TODO La imagen se coloca donde quiere
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.25]{Imagenes/Vectorial/unity-editor.jpg}
+%     \caption{Editor del motor de videojuegos Unity}
+% \end{figure}
+
 
 \subsection{Unreal Engine}
 
@@ -144,6 +170,14 @@ preferida para desarrolladores que buscan crear experiencias visuales de alta ca
 Sus gráficos fotorrealistas, motor de física avanzada y sistema de partículas robusto lo convierten en una herramienta esencial para proyectos de vanguardia. 
 
 Además, Unreal Engine incorpora su propio motor de física llamado Chaos.
+
+% TODO La imagen se coloca donde quiere
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[scale=0.3]{Imagenes/Vectorial/unreal-editor.png}
+%     \caption{Editor del motor de videojuegos Unity}
+%     \label{fig:example}
+% \end{figure}    
 
 
 %-------------------------------------------------------------------
@@ -272,37 +306,6 @@ Diseñamos nuestro propio sistema de scripting con el propósito de cumplir con la
     lo que facilita la creación de lógica y la toma de decisiones.
 
 \end{itemize}
-
-%-------------------------------------------------------------------
-\section{Librerias utilizadas (MOVER A OTRO APARTADO)}
-\label{cap3:sec:librerias} 
-
-Hemos seleccionado cuidadosamente un conjunto de librerías para respaldar el desarrollo de nuestro sistema de scripting personalizado. 
-Entre estas librerías, ImgUI, SDL y Box2D han sido esenciales debido a sus características y ventajas específicas:
-
-\subsection{ImGUI}
-\label{cap3:sec:librerias:sec:imgui}
-
-Optamos por ImgUI para potenciar la interfaz de usuario de nuestro editor. Su flexibilidad y capacidad para personalización han sido 
-especialmente valiosas, permitiéndonos crear ventanas, cuadros emergentes y controles altamente adaptables para nuestras necesidades 
-específicas. La documentación detallada y la amplia gama de ejemplos proporcionados han facilitado la implementación de soluciones de 
-interfaz visualmente atractivas y funcionales.
-
-\subsection{SDL (Simple DirectMedia Layer)}
-\label{cap3:sec:librerias:sec:sdl}
-
-La elección de SDL se ha extendido a ambos componentes, el editor y el motor, debido a su versatilidad y amplias capacidades. 
-Para el editor, SDL ha proporcionado una forma eficiente de gestionar elementos multimedia, como fuentes y renderización, mejorando la 
-calidad visual y la interacción del usuario. En el motor, SDL se ha empleado para lograr la misma calidad visual, gestionar elementos 
-multimedia y para facilitar la interacción con el usuario en la ejecución del juego.
-
-\subsection{Box2D}
-\label{cap3:sec:librerias:sec:box2D}
-
-Hemos decidido implementar Box2D para el motor del videojuego. Box2D se ha utilizado para gestionar las simulaciones físicas que 
-queríamos lograr en el entorno de juego. Esta librería ha sido especialmente útil para crear interacciones físicas precisas y realistas 
-entre los elementos del juego. Si bien no se ha aplicado en el editor, su incorporación en el motor ha enriquecido la experiencia de juego
-al agregar un componente realista de movimiento y colisiones.
 
 % %-------------------------------------------------------------------
 % \section*{\NotasBibliograficas}
