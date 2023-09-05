@@ -333,14 +333,18 @@ en la figura \ref{fig:instancia_prefab}.
 %------------------------------------------------ COMPONENTES Y SCRIPTS --------------------------------------------
 \subsection{Componentes}
 
-En el contexto del sistema descrito, los componentes juegan un papel fundamental al definir el comportamiento y las propiedades de las entidades en el motor. 
-Los componentes son leídos desde un archivo JSON del motor, el cual contiene información sobre cada componente, sus atributos y funciones.
+En el contexto del sistema descrito, los componentes desempeñan un papel fundamental al definir el comportamiento y las propiedades de las entidades en 
+el motor. Estos componentes se leen desde el proyecto Components haciendo uso de las clases ComponentManager y ComponentReader.
 
-La estructura de un componente se organiza en clases que facilitan su manejo y uso en el motor. Cada componente se compone de atributos y funciones que 
-definen su comportamiento y propiedades. La información sobre atributos y funciones se almacena en clases específicas \texttt{Attribute} y \texttt{Function}, 
-y todo esto se agrupa bajo la clase \texttt{Component}.
+ComponentManager asume la responsabilidad de almacenar tanto los componentes como los scripts que se leen a través de ComponentReader. 
+ComponentReader, por su parte, tiene la tarea específica de leer los componentes en formato JSON y transformarlos en objetos de las clases 
+Component, Script, Attribute, y Function.
 
-La clase \texttt{Entidad} desempeña un papel esencial en la gestión de componentes. Cada entidad contiene una lista de componentes que define sus características 
+La estructura de un componente se organiza en clases que facilitan su manejo y uso en el motor. Cada componente se compone de atributos y 
+funciones que definen su comportamiento y propiedades. La información sobre atributos y funciones se almacena en clases específicas, es decir, 
+Attribute y Function, y todo esto se agrupa bajo la clase Component.
+
+La clase Entidad desempeña un papel esencial en la gestión de componentes, ya que cada entidad contiene una lista de componentes que define sus características 
 y comportamientos. Los componentes se serializan junto a la entidad a la que pertenecen.
 
 \subsubsection{Métodos relevantes de la clase \texttt{Attribute} }
