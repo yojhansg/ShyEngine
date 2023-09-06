@@ -111,7 +111,10 @@ namespace ECS {
 		auto other = PhysicBody::GetComponentFromEntity(ent);
 
 		if (body->collidesWith(other) && other->getCollisionLayer() == platformLayer) {
-			if (body->getCollisionNormal().getY() > 0.5f) {
+
+			Console::Output::Print(std::to_string(body->getCollisionNormal().getX()), "   " +  std::to_string(body->getCollisionNormal().getY()));
+
+			if (std::abs(body->getCollisionNormal().getY()) == 1.0f && body->getLinearVelocity().getY() < 0) {
 				onGround = true;
 				nJumps = avalaibleJumps;
 			}

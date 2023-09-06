@@ -300,6 +300,13 @@ namespace ECS {
 		return collisionPoint;
 	}
 
+	Vector2D PhysicBody::getPositionPixelUnits() {
+		return Vector2D(body->GetPosition().x * screenToWorldFactor, body->GetPosition().y * screenToWorldFactor);
+	}
+
+	Vector2D PhysicBody::getPositionWorldUnits() {
+		return Vector2D(body->GetPosition().x, body->GetPosition().y);
+	}
 
 	float PhysicBody::getMass() {
 		return mass;

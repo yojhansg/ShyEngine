@@ -84,6 +84,10 @@ namespace ECS {
 
         Vector2D getCollisionPoint();
 
+        Vector2D getPositionWorldUnits();
+
+        Vector2D getPositionPixelUnits();
+
         // Collision Filtering
         void setCollisionLayer(cstring layerName);
         cstring getCollisionLayer();
@@ -115,7 +119,7 @@ namespace ECS {
         
         virtual float getArea() = 0;
         float getAngle();
-
+        
         // Collison/Trigger Stay
         void setCollisionStay(bool stay, Entity* b);
         void setTriggerStay(bool stay, Entity* b);
