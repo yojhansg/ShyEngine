@@ -31,6 +31,7 @@ namespace ECS {
 	public:
 
 		friend class Engine;
+		friend class SplashSceneManager;
 
 		enum LOAD_MODE : uint8_t {
 
@@ -58,14 +59,6 @@ namespace ECS {
 		// Creates, starts and adds a scene to the stack
 		Scene* createScene(const std::string& sce_name = "New Scene");
 		ECS::Scene* LoadScene(std::string const& scenePath);
-
-
-		//TODO: esto es temporal
-
-		void SetScene(ECS::Scene* scene);
-		
-
-		void SplashScreen();
 
 	publish:
 

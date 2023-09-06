@@ -14,7 +14,7 @@ void Scripting::Node::ForceReevaluation()
 {
 }
 
-void Scripting::Node::Cycle(int& iterationIdx)
+void Scripting::Node::Cicle(int& iterationIdx)
 {
 	this->iterationIdx = iterationIdx;
 
@@ -22,6 +22,6 @@ void Scripting::Node::Cycle(int& iterationIdx)
 	Operate(next, iterationIdx);
 
 	if (next)
-		next->Cycle(iterationIdx);
+		next->Cicle(iterationIdx);
 
 }

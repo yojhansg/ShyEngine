@@ -1,13 +1,14 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-#include "SceneLoader.h"
-#include "RendererManager.h"
-#include "Entity.h"
-#include "SplashScene.h"
-#include "Components/Overlay.h"
 #include "Components/OverlayImage.h"
+#include "Components/Overlay.h"
 #include "ResourcesManager.h"
+#include "RendererManager.h"
+#include "ConsoleManager.h"
+#include "SplashScene.h"
+#include "SceneLoader.h"
+#include "Entity.h"
 
 namespace ECS {
 
@@ -46,21 +47,6 @@ namespace ECS {
 		mode = (LOAD_MODE) m;
 		change = true;
 	}
-
-	//TODO: llevar esto al fichero splash screen que sino queda feote
-	void SceneManager::SplashScreen() {
-
-		Scene* scene = new Scene("SplashScreen");
-	
-		SplashScene::CreateSplashScreen(scene);
-
-		scene->init();
-		scene->start();
-
-		scenes.top()->onSceneDown();
-		scenes.push(scene);
-	}
-
 
 	void SceneManager::ResetScene() {
 		
@@ -144,16 +130,13 @@ namespace ECS {
 	{
 		Scene* scene = SceneLoader::LoadScene(scenePath);
 
-		if (scene == nullptr)
+		if (scene == nullptr) {
+			Console::Output::PrintError("Critical error", "The engine could not load the scene with path: <" + scenePath + ">");
 			return nullptr;
+		}
 
 		scene->init();
 		return scene;
-	}
-
-	void SceneManager::SetScene(ECS::Scene* scene) {
-		scenes.push(scene);
-		scene->start();
 	}
 
 	void SceneManager::EndGame() {

@@ -24,6 +24,7 @@
 #include <filesystem>
 #include <Scene.h>
 #include <chrono>
+
 using namespace std::chrono;
 
 Engine::Engine() {
@@ -73,9 +74,10 @@ bool Engine::init() {
 
 	resourcesManager = Resources::ResourcesManager::init();
 
+	// Engine Assets Path
 	resourcesManager->SetResourcesPath("Assets\\");
 
-	ECS::SplashScene::LoadResources();
+	ECS::SplashSceneManager::Instance()->LoadConfigurationData(data.initialScene);
 
 	ECS::ContactListener::init();
 
@@ -87,7 +89,7 @@ bool Engine::init() {
 
 	ComponentFactory::init();
 
-	overlayManager = ECS::OverlayManager::init(data.debugFramerate, data.timeToDoubleClick, data.timeToHoldClick); //TODO: debug frame rate
+	overlayManager = ECS::OverlayManager::init(data.debugFramerate, data.timeToDoubleClick, data.timeToHoldClick);
 
 
 
@@ -102,18 +104,20 @@ bool Engine::init() {
 
 	physicsManager->enableDebugDraw(data.debugPhysics);
 
-	Resources::ResourcesManager::SetResourcesPath(data.resourcesPath);
+	if (data.useSplashScreen) {
+		ECS::SplashSceneManager::LoadSplashScreen();
 
-	sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
-	sceneManager->manageScenes();
+		// Project Assets Path
+		resourcesManager->SetResourcesPath(data.resourcesPath);
+	}
+	else {
+		// Project Assets Path
+		resourcesManager->SetResourcesPath(data.resourcesPath);
 
-	if (sceneManager->getNumberOfScenes() == 0) {
-		Console::Output::PrintError("Critical error", "The engine could not load the initial scene");
-		return false;
+		sceneManager->ChangeScene(data.initialScene, (int)ECS::SceneManager::PUSH);
+		sceneManager->manageScenes();
 	}
 
-	if (data.useSplashScreen)
-		sceneManager->SplashScreen();
 
 	return true;
 }
@@ -187,6 +191,7 @@ void Engine::update() {
 
 void Engine::close() {
 
+	ECS::SplashSceneManager::Release();
 	resourcesManager->close();
 	inputManager->close();
 	rendererManager->close();

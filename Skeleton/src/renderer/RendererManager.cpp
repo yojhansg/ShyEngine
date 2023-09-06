@@ -251,6 +251,7 @@ namespace Renderer {
 		}
 
 		SDL_SetWindowIcon(window, icon);
+
 	}
 
 	void RendererManager::SetRenderTarget(bool renderOnTarget) {
@@ -263,6 +264,23 @@ namespace Renderer {
 		if (SDL_SetRenderTarget(renderer, texture) < 0) 
 			Console::Output::PrintError("Render target error", SDL_GetError());
 
+	}
+
+	void RendererManager::setWindowBordered(bool border) {
+		SDL_SetWindowBordered(window, (SDL_bool)border);
+	}
+
+	void RendererManager::centerWindow() {
+		SDL_Rect rect;
+		SDL_GetDisplayBounds(0, &rect);
+
+		int windowWidth, windowHeight;
+		SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+
+		int x = (rect.w / 2  - windowWidth / 2 );
+		int y = (rect.h / 2  - windowHeight / 2 );
+
+		SDL_SetWindowPosition(window, x, y);
 	}
 
 }
