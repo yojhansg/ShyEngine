@@ -300,4 +300,8 @@ namespace ECS {
 		bursts.push_back(newBurst);
 	}
 
+	void ParticleSystem::setSpawnPosition(cVector2D pos) {
+		spawnPosition = pos;
+	}
+
 }

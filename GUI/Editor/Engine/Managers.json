@@ -1003,6 +1003,16 @@
                 ],
                 "name": "CubicLerp",
                 "return": "Number"
+            },
+            {
+                "input": [
+                    {
+                        "name": "f",
+                        "type": "Number"
+                    }
+                ],
+                "name": "Abs",
+                "return": "Number"
             }
         ],
         "name": "Math"

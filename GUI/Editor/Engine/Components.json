@@ -1444,6 +1444,10 @@
                 "type": "Number"
             },
             {
+                "name": "spawnPosition",
+                "type": "Pair"
+            },
+            {
                 "name": "position",
                 "type": "Pair"
             },
@@ -1721,6 +1725,20 @@
                     }
                 ],
                 "name": "addBurst",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    },
+                    {
+                        "name": "pos",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "setSpawnPosition",
                 "return": "void"
             }
         ]

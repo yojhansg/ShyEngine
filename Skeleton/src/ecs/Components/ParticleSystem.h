@@ -105,6 +105,8 @@ namespace ECS {
 
         void addBurst(float time, int particles, int cycles, float rate, float probability);
 
+        void setSpawnPosition(cVector2D pos);
+
     private:
 
         // General system configuration
@@ -142,6 +144,7 @@ namespace ECS {
             reflect float angleSecondValue;
 
             // Position
+            reflect Utilities::Vector2D spawnPosition;
             reflect Utilities::Vector2D position;
             reflect bool randomPositionBetweenTwoValues;
             reflect Utilities::Vector2D positionFirstValue;

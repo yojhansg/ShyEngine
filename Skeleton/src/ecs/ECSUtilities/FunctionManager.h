@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Thu Sep  7 04:36:41 2023
+//Creation time : Thu Sep  7 15:15:45 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -105,6 +105,7 @@ Scripting::Variable ParticleSystem_stopEmitting(std::vector<Scripting::Variable>
 Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_loadTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_setSpawnPosition(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_isTrigger(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setFriction(std::vector<Scripting::Variable>const& vec);
@@ -295,6 +296,7 @@ Scripting::Variable ScriptFunctionality_Math_PlusOne(std::vector<Scripting::Vari
 Scripting::Variable ScriptFunctionality_Math_MinusOne(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_Lerp(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Math_CubicLerp(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Math_Abs(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_NotEquals(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Logic_Lesser(std::vector<Scripting::Variable>const& vec);

@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Thu Sep  7 04:36:41 2023
+//Creation time: Thu Sep  7 15:15:45 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -139,6 +139,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("ParticleSystem_isEmitting",ParticleSystem_isEmitting);
 	map.emplace("ParticleSystem_loadTexture",ParticleSystem_loadTexture);
 	map.emplace("ParticleSystem_addBurst",ParticleSystem_addBurst);
+	map.emplace("ParticleSystem_setSpawnPosition",ParticleSystem_setSpawnPosition);
 	map.emplace("PhysicBody_setTrigger",PhysicBody_setTrigger);
 	map.emplace("PhysicBody_isTrigger",PhysicBody_isTrigger);
 	map.emplace("PhysicBody_setFriction",PhysicBody_setFriction);
@@ -329,6 +330,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Math_MinusOne",ScriptFunctionality_Math_MinusOne);
 	map.emplace("Math_Lerp",ScriptFunctionality_Math_Lerp);
 	map.emplace("Math_CubicLerp",ScriptFunctionality_Math_CubicLerp);
+	map.emplace("Math_Abs",ScriptFunctionality_Math_Abs);
 	map.emplace("Logic_Equals",ScriptFunctionality_Logic_Equals);
 	map.emplace("Logic_NotEquals",ScriptFunctionality_Logic_NotEquals);
 	map.emplace("Logic_Lesser",ScriptFunctionality_Logic_Lesser);
@@ -1980,6 +1982,26 @@ Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>cons
 		return Scripting::Variable::Null();
 	}
 	self->addBurst(vec[1].value.Float, vec[2].value.Float, vec[3].value.Float, vec[4].value.Float, vec[5].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable ParticleSystem_setSpawnPosition(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_setSpawnPosition", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Vector2D){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_setSpawnPosition", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_setSpawnPosition", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	self->setSpawnPosition(vec[1].vector);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable PhysicBody_setTrigger(std::vector<Scripting::Variable>const& vec){
@@ -3940,6 +3962,11 @@ Scripting::Variable ScriptFunctionality_Math_Lerp(std::vector<Scripting::Variabl
 Scripting::Variable ScriptFunctionality_Math_CubicLerp(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	float ret = manager->Math_CubicLerp(vec[0].value.Float, vec[1].value.Float, vec[2].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Math_Abs(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	float ret = manager->Math_Abs(vec[0].value.Float);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Logic_Equals(std::vector<Scripting::Variable>const& vec){

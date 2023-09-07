@@ -69,6 +69,7 @@ publish:
 	float Math_MinusOne(float a);
 	float Math_Lerp(float a, float b, float t);
 	float Math_CubicLerp(float a, float b, float y);
+	float Math_Abs(float f);
 
 	
 	// ----------------------- Logic -----------------------
