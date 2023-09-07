@@ -103,6 +103,10 @@ void ECS::Animation::SetAnimation(int idx)
 	ChangeAnimationFrame();
 }
 
+void ECS::Animation::SetAnimationSpeed(float speed) {
+	this->speed = speed;
+}
+
 int ECS::Animation::GetFrame()
 {
 	return currentFrame;

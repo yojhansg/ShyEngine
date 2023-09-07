@@ -10,20 +10,23 @@
         18
     ],
     "bgAlpha": 255,
-    "bgColor": "0, 0, 0",
+    "bgColor": "170, 233, 255",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
     "creator": "Yojhan, Pablo e Ivan",
-    "debugFrameRate": true,
-    "debugPhysics": true,
+    "debugFrameRate": false,
+    "debugPhysics": false,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "Dinero",
+    "game": "Platform",
     "gravity": "0.000000, -9.810000",
     "initialScene": "Scene.scene",
     "layers": [
-        "Default"
+        "Default",
+        "Player",
+        "Platform",
+        "PARTICLE"
     ],
     "matrix": [
         [
@@ -46,6 +49,24 @@
         ],
         [
             false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        [
+            true,
             false,
             false,
             false,
@@ -63,25 +84,7 @@
             false
         ],
         [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        ],
-        [
-            false,
+            true,
             false,
             false,
             false,
@@ -315,14 +318,14 @@
             false
         ]
     ],
-    "path": "C:\\Users\\sryoj\\Desktop\\Nueva carpeta\\Dinero\\Assets",
-    "projectFilePath": "C:\\Users\\sryoj\\Desktop\\Nueva carpeta\\Dinero\\Dinero.shyproject",
+    "path": "Assets",
+    "projectFilePath": "Platform.shyproject",
     "showcursor": true,
-    "splashScreen": false,
+    "splashScreen": true,
     "timeToDoubleClick": 0.5,
     "timeToHoldClick": 0.10000000149011612,
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "Dinero"
+    "windowTitle": "Platform"
 }

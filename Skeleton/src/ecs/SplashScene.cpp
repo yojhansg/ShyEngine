@@ -1,94 +1,80 @@
 #include "SplashScene.h"
+
+#include "ResourcesManager.h"
+#include "RendererManager.h"
 #include "SceneManager.h"
+
+#include "Components/Image.h"
+#include "Components/Transform.h"
+#include "Components/Overlay.h"
+#include "Components/OverlayImage.h"
 #include "Scene.h"
 #include "Entity.h"
-#include "Components/Overlay.h"
-#include "Components/OverlayText.h"
-#include "Components/OverlayImage.h"
-#include "RendererManager.h"
-#include "ResourcesManager.h"
+#include "SDL_video.h"
 
-#define Main_Font "Cute Notes.ttf"
-#define Secondary_Font "Default.ttf"
-#define Background "fondoWindows.jpg"
+#define Background "ShyLogo.png"
+
+namespace ECS {
 
 
-ECS::SplashScene::SplashScene()
-{
-	timer = 0;
-	maxTime = 3;
-}
+	// ------------ SplashSceneManager --------------
 
-ECS::SplashScene::~SplashScene()
-{
-}
+	SplashSceneManager* SplashSceneManager::instance = nullptr;
 
-void ECS::SplashScene::update(float dt)
-{
-	timer += dt;
+	SplashSceneManager* SplashSceneManager::Instance() {
 
-	if (timer > maxTime) {
+		if (instance == nullptr)
+			instance = new SplashSceneManager();
 
-		SceneManager::instance()->ChangeScene("", SceneManager::POP);
+		return instance;
 	}
-}
 
-void ECS::SplashScene::SetMaxtTime(float time)
-{
-	maxTime = time;
-}
+	void SplashSceneManager::Release() {
+		delete instance;
+		instance = nullptr;
+	}
 
-void ECS::SplashScene::CreateSplashScreen(Scene* scene)
-{
-	Entity* manager = scene->createEntityNoId("Manager");
-	manager->addComponent<ECS::SplashScene>();
+	void SplashSceneManager::LoadSplashScreen() {
 
-	auto overlay = manager->addComponent<ECS::Overlay>();
+		Scene* scene = new Scene("SplashScreen");
 
-	overlay->SetStreched(0, 0, 0, 0);
-	auto img = manager->addComponent<ECS::OverlayImage>();
-	img->path = Background;
+		Entity* manager = scene->createEntityNoId("Manager");
+		manager->addComponent<ECS::SplashScene>();
 
+		auto overlay = manager->addComponent<ECS::Overlay>();
 
-	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
-	float sizey = size / 1.5f;
+		overlay->SetStreched(0, 0, 0, 0);
+		auto img = manager->addComponent<ECS::OverlayImage>();
+		img->path = Background;
 
-	std::string fit = "Overflow";
-	std::string centerAlign = "CENTER";
+		scene->init();
+		scene->start();
 
-	Entity* center = scene->createEntityNoId("text");
-	auto textOverlay = center->addComponent<ECS::Overlay>();
-	textOverlay->SetPositioned({ 0, 0 }, { size, sizey });
-	textOverlay->SetParent(overlay);
-	auto text = center->addComponent<ECS::OverlayText>();
-	text->SetText("shy");
-	text->SetFit(fit);
-	text->SetPointSize(size / 4);
-	text->SetFont(Main_Font);
-	text->SetHorizontalAlignment(centerAlign);
-	text->SetVerticalAlignment(centerAlign);
+		SceneManager::instance()->scenes.push(scene);
+	}
+
+	void SplashSceneManager::LoadConfigurationData(const std::string& initialScene) {
+		instance->initialScene = initialScene;
+	}
 
 
-	center = scene->createEntityNoId("text");
-	textOverlay = center->addComponent<ECS::Overlay>();
-	textOverlay->SetPositioned({ 0, size / 5.4f }, { size, sizey });
-	textOverlay->SetParent(overlay);
-	text = center->addComponent<ECS::OverlayText>();
-	text->SetText("game engine");
-	text->SetFit(fit);
-	text->SetPointSize(size / 10);
-	text->SetFont(Secondary_Font);
-	text->SetHorizontalAlignment(centerAlign);
-	text->SetVerticalAlignment(centerAlign);
-}
+	// ------------ SplashScene --------------
 
+	SplashScene::SplashScene() {
+		timer = 0;
+		maxTime = 1;
+	}
 
-//TODO: cambiar el nombre de estos recursos
-void ECS::SplashScene::LoadResources()
-{
-	float size = Renderer::RendererManager::instance()->getWidth() / 3.2f;
-	
-	Resources::ResourcesManager::instance()->addFont(Main_Font, size / 4);
-	Resources::ResourcesManager::instance()->addFont(Secondary_Font, size / 10);
-	Resources::ResourcesManager::instance()->addTexture(Background);
+	SplashScene::~SplashScene() {}
+
+	void SplashScene::update(float dt) {
+
+		timer += dt;
+
+		if (timer > maxTime) {
+
+			SceneManager::instance()->ChangeScene(SplashSceneManager::Instance()->initialScene, SceneManager::POP_AND_PUSH);
+		}
+	}
+
 }

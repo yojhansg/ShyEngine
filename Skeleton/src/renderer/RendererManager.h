@@ -60,6 +60,8 @@ namespace Renderer {
 		void resizeWindow(int w, int h);
 		void renameWindow(cString name);
 		void repositionWindow(int x, int y);
+		void centerWindow();
+		void setWindowBordered(bool border);
 		bool SetWindowIcon(cString path);
 
 	private:

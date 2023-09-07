@@ -97,6 +97,8 @@ namespace ECS {
 
         void startEmitting();
 
+        void stopEmitting();
+
         bool isEmitting();
 
         void loadTexture(cstring texturePath);
@@ -138,6 +140,12 @@ namespace ECS {
             reflect bool randomAngleBetweenTwoValues;
             reflect float angleFirstValue;
             reflect float angleSecondValue;
+
+            // Position
+            reflect Utilities::Vector2D position;
+            reflect bool randomPositionBetweenTwoValues;
+            reflect Utilities::Vector2D positionFirstValue;
+            reflect Utilities::Vector2D positionSecondValue;
         
             // Rotation
             reflect float rotation;
@@ -245,11 +253,6 @@ namespace ECS {
 
         // Box2D
         b2World* world;
-
-
-        //TODO ANIMATOR
-
-        //TODO TRAILS
 
     };
 

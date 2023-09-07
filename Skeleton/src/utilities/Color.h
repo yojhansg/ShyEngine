@@ -9,11 +9,11 @@ namespace Utilities {
 
 	public:
 
-		static Color CreateColor(int r, int g, int b);
+		static Color CreateColor(float r, float g, float b);
 		static Color CreateColor(std::string const& str);
 		static Color Lerp(const Color& startColor, const Color& endColor, float t);
 
-		int r, g, b;
+		float r, g, b;
 
 		static Color Red();
 		static Color Green();
@@ -27,11 +27,15 @@ namespace Utilities {
 		static Color DarkGrey();
 
 		operator std::string() const;
+
 	};
 
 	// Needed for printing a value of tyep Vector2D with std::cout.
 	// The definition is in .cpp
 	std::ostream& operator<<(std::ostream& os, const Color& v);
+
+	// Mul operator
+	Color operator*(const Color& v, int n);
 
 }
 

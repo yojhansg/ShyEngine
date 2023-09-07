@@ -1199,6 +1199,20 @@
                 "return": "Pair"
             },
             {
+                "input": [
+                    {
+                        "name": "v1",
+                        "type": "Pair"
+                    },
+                    {
+                        "name": "v2",
+                        "type": "Pair"
+                    }
+                ],
+                "name": "VectorBetween",
+                "return": "Pair"
+            },
+            {
                 "input": [],
                 "name": "Color",
                 "return": "Color"
@@ -1457,6 +1471,21 @@
                     }
                 ],
                 "name": "repositionWindow",
+                "return": "void"
+            },
+            {
+                "input": [],
+                "name": "centerWindow",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "border",
+                        "type": "Toggle"
+                    }
+                ],
+                "name": "setWindowBordered",
                 "return": "void"
             },
             {

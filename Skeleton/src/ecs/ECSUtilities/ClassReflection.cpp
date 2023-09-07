@@ -158,6 +158,10 @@ ClassReflection::ClassReflection(){
 		Image* self = static_cast<Image*>(selfComp);
 		if(map.contains("fileName"))
 			self->fileName = map.at("fileName");
+		if(map.contains("flipmode"))
+			self->flipmode = std::stoi(map.at("flipmode"));
+		if(map.contains("rotationPoint"))
+			self->rotationPoint = map.at("rotationPoint");
 
 }
 	void ClassReflection::ReflectMusicEmitter(ECS::Component* selfComp, std::unordered_map<std::string, std::string> const& map){
@@ -278,6 +282,14 @@ ClassReflection::ClassReflection(){
 			self->angleFirstValue = std::stof(map.at("angleFirstValue"));
 		if(map.contains("angleSecondValue"))
 			self->angleSecondValue = std::stof(map.at("angleSecondValue"));
+		if(map.contains("position"))
+			self->position = map.at("position");
+		if(map.contains("randomPositionBetweenTwoValues"))
+			self->randomPositionBetweenTwoValues = map.at("randomPositionBetweenTwoValues") == "true" ? true : false;
+		if(map.contains("positionFirstValue"))
+			self->positionFirstValue = map.at("positionFirstValue");
+		if(map.contains("positionSecondValue"))
+			self->positionSecondValue = map.at("positionSecondValue");
 		if(map.contains("rotation"))
 			self->rotation = std::stof(map.at("rotation"));
 		if(map.contains("randomRotationBetweenTwoValues"))

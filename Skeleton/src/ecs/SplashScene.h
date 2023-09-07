@@ -2,15 +2,35 @@
 
 #include "Component.h"
 
-namespace ECS {
+#include <string>
+#include <Vector2D.h>
 
-	// TODO Cambiar splahscreen a la del editor (Hay que meter todos los recursos necesarios en Assets, 
-	// ojo la carpeta Assets del motor, no la del editor, que esta en el mismo directorio que el exe del motor)
+namespace ECS {
 
 	class Entity;
 	class Scene;
 
-	//Es importante que esten en lineas diferentes para que el ECS reader no lo reconozca como componente
+	class SplashSceneManager {
+
+		friend class SplashScene;
+
+	public:
+
+		static SplashSceneManager* Instance();
+		static void Release();
+
+		static void LoadSplashScreen();
+		static void LoadConfigurationData(const std::string& initialScene);
+
+	private:
+
+		static SplashSceneManager* instance;
+
+		std::string initialScene;
+
+	};
+
+	// Es importante que esten en lineas diferentes para que el ECS reader no lo reconozca como componente
 
 	class SplashScene
 		: public Component {
@@ -22,16 +42,13 @@ namespace ECS {
 
 		void update(float dt) override;
 
-		void SetMaxtTime(float time);
-
-		static void CreateSplashScreen(Scene* scene);
-		static void LoadResources();
-
 	private:
 
 		float timer;
 		float maxTime;
 
 	};
+
+
 }
 

@@ -41,4 +41,7 @@ namespace Utilities {
 		return c;
 	}
 
+	Vector2D Random::RandomVectorBetween(cVector2D v1, cVector2D v2) {
+		return Vector2D(RandomBetween(v1.getX(), v2.getX()), RandomBetween(v1.getY(), v2.getY()));
+	}
 }

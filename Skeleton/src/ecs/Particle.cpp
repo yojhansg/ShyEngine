@@ -48,14 +48,15 @@ namespace ECS {
 
 		if (lifeTime <= 0)
 			system->unusedParticles.push_back(this);
+		
+		if (system->gravityScale > 0) {
+			// Position
+			position = { body->GetPosition().x * system->screenToWorldFactor, body->GetPosition().y * system->screenToWorldFactor };
 
-		//body->SetLinearVelocity({ direction.getX() * speed * fixedDeltaTime, direction.getY() * speed * fixedDeltaTime });
-
-		// Position
-		position = { body->GetPosition().x * system->screenToWorldFactor, body->GetPosition().y * system->screenToWorldFactor };
-
-		// Rotation
-		rotation = body->GetAngle() * (180 / b2_pi);
+			// Rotation
+			rotation = body->GetAngle() * (180 / b2_pi);
+		}
+		else body->SetLinearVelocity({ direction.getX() * speed * fixedDeltaTime, direction.getY() * speed * fixedDeltaTime });
 
 	}
 
@@ -82,6 +83,7 @@ namespace ECS {
 		SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 		SDL_SetTextureAlphaMod(texture, alpha);
 		SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, rotation, &rotationPoint, (SDL_RendererFlip) system->flipmode);
+
 	}
 
 	int Particle::getIdx() {
@@ -115,7 +117,9 @@ namespace ECS {
 
 
 		// Position
-		position = system->tr->GetLocalPosition();
+		position = system->tr->GetLocalPosition() + system->position;
+		if (system->randomPositionBetweenTwoValues)
+			position = system->tr->GetLocalPosition() + Random::RandomVectorBetween(system->positionFirstValue, system->positionSecondValue);
 
 
 		// LifeTime
@@ -177,9 +181,9 @@ namespace ECS {
 			angularVelocity = Random::RandomBetween(system->angularVelocityFirstValue, system->angularVelocitySecondValue);
 
 		// Color
-		color = system->color;
+		color = system->color * 255;
 		if (system->randomColorBetweenTwoColors)
-			color = Random::RandomColorBetween(system->colorFirstValue, system->colorSecondValue);
+			color = Random::RandomColorBetween(system->colorFirstValue * 255, system->colorSecondValue * 255);
 
 		startColor = color;
 
@@ -227,7 +231,7 @@ namespace ECS {
 
 		// Color
 		if (system->overLifeTimeColor) 
-			color = Color::Lerp(startColor, system->endColor, lifePercentage);
+			color = Color::Lerp(startColor * 255, system->endColor * 255, lifePercentage);
 
 		// Size 
 		if (system->overLifeTimeSize) {

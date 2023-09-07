@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "ConsoleManager.h"
 
-//Creation time: Mon Sep  4 17:13:14 2023
+//Creation time: Thu Sep  7 04:36:41 2023
 
 #define _Console(info, value) Console::Output::PrintError( info , value )
 #define _ErrorInfo(entity, script, function, title) entity + ": " + script + ": " + function + ": " + title + ": "
@@ -59,6 +59,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Animation_AdvanceAnimation",Animation_AdvanceAnimation);
 	map.emplace("Animation_SetFrame",Animation_SetFrame);
 	map.emplace("Animation_SetAnimation",Animation_SetAnimation);
+	map.emplace("Animation_SetAnimationSpeed",Animation_SetAnimationSpeed);
 	map.emplace("Animation_GetFrame",Animation_GetFrame);
 	map.emplace("Animation_GetAnimation",Animation_GetAnimation);
 	map.emplace("Animation_SetAnimationLenght",Animation_SetAnimationLenght);
@@ -134,6 +135,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("OverlayText_GetPointSize",OverlayText_GetPointSize);
 	map.emplace("OverlayText_SetPointSize",OverlayText_SetPointSize);
 	map.emplace("ParticleSystem_startEmitting",ParticleSystem_startEmitting);
+	map.emplace("ParticleSystem_stopEmitting",ParticleSystem_stopEmitting);
 	map.emplace("ParticleSystem_isEmitting",ParticleSystem_isEmitting);
 	map.emplace("ParticleSystem_loadTexture",ParticleSystem_loadTexture);
 	map.emplace("ParticleSystem_addBurst",ParticleSystem_addBurst);
@@ -157,6 +159,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("PhysicBody_getGravityScale",PhysicBody_getGravityScale);
 	map.emplace("PhysicBody_getCollisionNormal",PhysicBody_getCollisionNormal);
 	map.emplace("PhysicBody_getCollisionPoint",PhysicBody_getCollisionPoint);
+	map.emplace("PhysicBody_getPositionWorldUnits",PhysicBody_getPositionWorldUnits);
+	map.emplace("PhysicBody_getPositionPixelUnits",PhysicBody_getPositionPixelUnits);
 	map.emplace("PhysicBody_setCollisionLayer",PhysicBody_setCollisionLayer);
 	map.emplace("PhysicBody_getCollisionLayer",PhysicBody_getCollisionLayer);
 	map.emplace("PhysicBody_setLinearVelocity",PhysicBody_setLinearVelocity);
@@ -284,6 +288,8 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("RendererManager_resizeWindow",RendererManager_resizeWindow);
 	map.emplace("RendererManager_renameWindow",RendererManager_renameWindow);
 	map.emplace("RendererManager_repositionWindow",RendererManager_repositionWindow);
+	map.emplace("RendererManager_centerWindow",RendererManager_centerWindow);
+	map.emplace("RendererManager_setWindowBordered",RendererManager_setWindowBordered);
 	map.emplace("RendererManager_SetWindowIcon",RendererManager_SetWindowIcon);
 	map.emplace("SaveManager_SaveAll",SaveManager_SaveAll);
 	map.emplace("SaveManager_Save",SaveManager_Save);
@@ -400,6 +406,7 @@ void FunctionManager::CreateFunctionMap(std::unordered_map<std::string, Callable
 	map.emplace("Random_AngleBetween",ScriptFunctionality_Random_AngleBetween);
 	map.emplace("Random_UnitVector",ScriptFunctionality_Random_UnitVector);
 	map.emplace("Random_ScaledVector",ScriptFunctionality_Random_ScaledVector);
+	map.emplace("Random_VectorBetween",ScriptFunctionality_Random_VectorBetween);
 	map.emplace("Random_Color",ScriptFunctionality_Random_Color);
 	map.emplace("Random_ColorBetween",ScriptFunctionality_Random_ColorBetween);
 	map.emplace("OpenURL",ScriptFunctionality_OpenURL);
@@ -523,6 +530,26 @@ Scripting::Variable Animation_SetAnimation(std::vector<Scripting::Variable>const
 		return Scripting::Variable::Null();
 	}
 	self->SetAnimation(vec[1].value.Float);
+	return Scripting::Variable::Null();
+}
+Scripting::Variable Animation_SetAnimationSpeed(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Animation_SetAnimationSpeed", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	if(vec[1].type != Scripting::Variable::Type::Float){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Animation_SetAnimationSpeed", std::to_string(1), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	Animation* self = vec[0].value.entity->getComponent<Animation>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "Animation_SetAnimationSpeed", vec[0].value.entity->getEntityName(), Animation);
+		return Scripting::Variable::Null();
+	}
+	self->SetAnimationSpeed(vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& vec){
@@ -1865,6 +1892,21 @@ Scripting::Variable ParticleSystem_startEmitting(std::vector<Scripting::Variable
 	self->startEmitting();
 	return Scripting::Variable::Null();
 }
+Scripting::Variable ParticleSystem_stopEmitting(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_stopEmitting", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	ParticleSystem* self = vec[0].value.entity->getComponent<ParticleSystem>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "ParticleSystem_stopEmitting", vec[0].value.entity->getEntityName(), ParticleSystem);
+		return Scripting::Variable::Null();
+	}
+	self->stopEmitting();
+	return Scripting::Variable::Null();
+}
 Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec){
 
 	if(vec[0].type != Scripting::Variable::Type::Entity){
@@ -2288,6 +2330,36 @@ Scripting::Variable PhysicBody_getCollisionPoint(std::vector<Scripting::Variable
 		return Scripting::Variable::Null();
 	}
 	Vector2D ret = self->getCollisionPoint();
+	return ret;
+}
+Scripting::Variable PhysicBody_getPositionWorldUnits(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getPositionWorldUnits", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getPositionWorldUnits", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getPositionWorldUnits();
+	return ret;
+}
+Scripting::Variable PhysicBody_getPositionPixelUnits(std::vector<Scripting::Variable>const& vec){
+
+	if(vec[0].type != Scripting::Variable::Type::Entity){
+		DebugInvalidInputError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getPositionPixelUnits", std::to_string(0), std::string(""),  ""); 
+		return Scripting::Variable::Null();
+	}
+
+	PhysicBody* self = vec[0].value.entity->getComponent<PhysicBody>();
+	if(self == nullptr){
+		DebugComponentError(ScriptFunctionality_Entity_CurrentName({}).str, ScriptFunctionality_Graph({}).str, "PhysicBody_getPositionPixelUnits", vec[0].value.entity->getEntityName(), PhysicBody);
+		return Scripting::Variable::Null();
+	}
+	Vector2D ret = self->getPositionPixelUnits();
 	return ret;
 }
 Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec){
@@ -3665,6 +3737,16 @@ Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Vari
 	manager->repositionWindow(vec[0].value.Float, vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
+Scripting::Variable RendererManager_centerWindow(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->centerWindow();
+	return Scripting::Variable::Null();
+}
+Scripting::Variable RendererManager_setWindowBordered(std::vector<Scripting::Variable>const& vec){
+	RendererManager* manager = RendererManager::instance();
+	manager->setWindowBordered(vec[0].value.Bool);
+	return Scripting::Variable::Null();
+}
 Scripting::Variable RendererManager_SetWindowIcon(std::vector<Scripting::Variable>const& vec){
 	RendererManager* manager = RendererManager::instance();
 	bool ret = manager->SetWindowIcon(vec[0].str);
@@ -3722,7 +3804,7 @@ Scripting::Variable SaveManager_DeleteSave(std::vector<Scripting::Variable>const
 }
 Scripting::Variable SceneManager_ChangeScene(std::vector<Scripting::Variable>const& vec){
 	SceneManager* manager = SceneManager::instance();
-	manager->ChangeScene(vec[0].str , vec[1].value.Float);
+	manager->ChangeScene(vec[0].str, vec[1].value.Float);
 	return Scripting::Variable::Null();
 }
 Scripting::Variable SceneManager_ResetScene(std::vector<Scripting::Variable>const& vec){
@@ -4243,6 +4325,11 @@ Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting:
 Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec){
 	ScriptFunctionality* manager = ScriptFunctionality::instance();
 	Vector2D ret = manager->Random_ScaledVector(vec[0].value.Float);
+	return ret;
+}
+Scripting::Variable ScriptFunctionality_Random_VectorBetween(std::vector<Scripting::Variable>const& vec){
+	ScriptFunctionality* manager = ScriptFunctionality::instance();
+	Vector2D ret = manager->Random_VectorBetween(vec[0].vector, vec[1].vector);
 	return ret;
 }
 Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec){

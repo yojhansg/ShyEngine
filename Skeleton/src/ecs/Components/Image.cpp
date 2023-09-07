@@ -11,14 +11,14 @@
 namespace ECS {
 
 	Image::Image(const std::string& fileName) {
-		renderer = nullptr; texture = nullptr; transform = nullptr; rotationPoint = nullptr;
+		renderer = nullptr; texture = nullptr; transform = nullptr; point = nullptr;
 		srcX = srcY = srcWidth = srcHeight = 0; flipmode = 0;
 
 		this->fileName = fileName;
 	}
 
 	Image::~Image() {
-		delete rotationPoint;
+		delete point;
 	}
 
 	void Image::init() {
@@ -36,17 +36,24 @@ namespace ECS {
 		loadTexture(fileName);
 
 		// Rotation point
-		rotationPoint = new SDL_Point({ srcWidth / 2, srcHeight / 2 });
+		point = new SDL_Point({ srcWidth / 2, srcHeight / 2 });
 
 		entity->AddToRenderSet();
+	}
+
+	void Image::start() {
+
+		point->x = rotationPoint.getX();
+		point->y = rotationPoint.getY();
+
 	}
 
 	void Image::render() {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
 
-		int width = texture->getWidth();
-		int height = texture->getHeight();
+		int width = srcRect.w;
+		int height = srcRect.h;
 
 		auto trPos = transform->GetWorldPosition();
 		auto trScale = transform->GetWorldScale();
@@ -61,10 +68,7 @@ namespace ECS {
 
 		dstRect = { x, y, w, h };
 
-		rotationPoint->x = w / 2;
-		rotationPoint->y = h / 2;
-
-		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), rotationPoint, (SDL_RendererFlip) flipmode);
+		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), point, (SDL_RendererFlip) flipmode);
 	}
 
 	int Image::getTextureWidth() {
@@ -81,8 +85,8 @@ namespace ECS {
 	}
 
 	void Image::setRotaionPoint(int x, int y) {
-		rotationPoint->x = x;
-		rotationPoint->y = y;
+		point->x = x;
+		point->y = y;
 	}
 
 	Utilities::Vector2D Image::scaledSize() {
