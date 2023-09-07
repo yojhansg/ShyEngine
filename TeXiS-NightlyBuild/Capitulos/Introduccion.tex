@@ -10,70 +10,36 @@
 \section{Motivación}
 \label{cap1:sec:motivacion}
 
-En lo relacionado a motores de videojuegos durante el grado, en primero aprendimos las bases de Unity, en segundo
-desarrollamos videojuegos 2D sencillos con SDL con una capa de abstracción para facilitar el aprendizaje y en tercero
-tuvimos que salir de la zona de comfort y aprender que hay detrás de las herramientas que nos proporcionaban durante
-el grado desarrollando así un motor de videojuegos 3D usando OGRE como motor gráfico, BulletPhysics como motor físico, 
-FMOD como librería de sonido y Lua como lenguaje de scripting.
+La programación de videojuegos ha sido históricamente un proceso sumamente complejo y laborioso. En sus primeros días, los desarrolladores se enfrentaban al desafío de crear juegos desde cero, construyendo cada elemento y funcionalidad de manera manual. Además, dependían en gran medida de librerías externas para acceder a recursos esenciales. Este enfoque, aunque recompensador en términos de control y personalización, limitaba significativamente la accesibilidad al mundo de la creación de videojuegos.
 
 \medskip
 
-Con esta experiencia nos dimos cuenta de varias cosas. Es más comodo trabajar con un motor que cuenta 
-con un editor integrado en vez de acceder a él directamente a través de programación. Además, la forma 
-de programar los scripts, queson fragmentos de código que definen comportamientos específicos para las entidades, 
-debe ser cómoda e intuible ya que es la tarea que más más tiempo va a ocupar al desarrollaor.
+En contraste, en la actualidad hemos sido testigos de una revolución en la industria del desarrollo de videojuegos. La creación de videojuegos se ha vuelto considerablemente más accesible gracias al surgimiento de potentes editores y motores de desarrollo. Estos editores ofrecen una gama de herramientas y recursos que simplifican en gran medida el proceso de creación, permitiendo a los desarrolladores concentrarse en la creatividad y la jugabilidad en lugar de preocuparse por detalles técnicos abrumadores.
 
-Por último, en cuarto y con la reciente experiencia de desarrollo de un motor decidimos que la propuesta del trabajo de fin de 
-grado sería un motor con la siguientes características:
+\medskip
 
-\begin{itemize}
-
-\item \textit{Autosuficiencia}: Esto siginifca que aporta funcionalidad para manejar recursos, crear escenas 
-y objetos desde el editor y cuenta con la creación de ejecutables finales del juego para su distribución. 
-Además, el motor podrá mostrar la ejecución del juego directamente en el editor durante su desarrollo. 
-Obviamente no tiene toda la funcionalidad necesaria como para no depender de ninguna herrmienta externa 
-durante el desarrollo pero si aporta lo básico para el ciclo de desarrollo de un videojuego 2D.
-
-\item \textit{Editor integrado}: La principal herramienta de un motor autosuficiente es el editor, encargado 
-de comunicar al motor las accciones del desarrollador. No teníamos experiencia en desarrollo de aplicaciones 
-de escritorio, ya que para el motor de tercero no hicimos editor (por lo que sabíamos que podía ser un reto).
-
-\item \textit{Programación visual basada en nodos}: Esta es la parte a destacar de nuestro motor. Debido a la 
-complejidad que presentan algunos motores de la actualidad para desarrolladores principiantes o inexpertos, 
-la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
-videojuego. Sabíamos que podía ser desafiante a nivel técnico pero aportaría mucha comodidad, fluidez y por 
-supuesto abriría las puertas de nuestro motor a muchos desarrolladores con poca experiencia en programación.
-
-\end{itemize}
-
-Por último, optamos por el 2D debido a la experiencia obtenida durante la carrera. Además, supone menor 
-complejidad a nivel técnico durante el desarrollo del motor.
+A pesar de la accesibilidad que ofrecen los editores modernos, la curva de aprendizaje puede ser empinada, especialmente para aquellos que son nuevos en el mundo de la programación y el desarrollo de videojuegos. Este trabajo se centra en la posibilidad de crear un 
+motor y un editor que permita desarrollar juegos simples, pero que a la vez tenga una curva de aprendizaje más accesible para gente
+sin experiencia en este ámbito.
 
 %-------------------------------------------------------------------
 \section{Objetivos}
 \label{cap1:sec:objetivos}
 
-El objetivo principal del trabajo de fin de grado es desarrollar el motor de videojuegos 2D autosuficiente con editor
-integrado y programación visual basada en nodos. Con esto, los usuarios dispondrán de una herramienta para desarrollar
-cualquier tipo de videojuego 2D.
+El objetivo principal es desarrollar un motor de videojuegos 2D autosuficiente con editor
+integrado y una programación de comportamientos visual basada en nodos. Con esto, los usuarios dispondrán de una herramienta para desarrollar cualquier tipo de videojuego 2D y con una complejidad no muy elevada.
 
 \medskip
 
-Con la autosuficiencia del motor queremos conseguir que los usuarios puedan desarrollar sus videojuegos con la mínima
-dependencia posible de herramientas externas de tal forma que todo el trabajo pase por el editor.
+Los pasos para conseguir dicho objetivo son los siguientes:
 
-\medskip
-
-Con el editor queremos conseguir que el desarrollo sea cómodo, fluido y visual evitando así que el desarrollador se 
-tenga que comnunicar con el motor vía programación.
-
-\medskip
-
-Con el sistema de programación visual basada en nodos queremos conseguir abrir las puertas de nuestro motor a
-desarrolladores inexpertos o con bajos cononcimientos en programación para que así puedan desarrollar sus videojuegos.
-Además, supone un reto a nivel técnico que nos aportará experiencia y conocimiento.
+\begin{itemize}
+    \item La creación de un motor y un editor de videojuegos en 2D
+    \item La creación de un sistema de scripting por nodos que sea fácil para gente inexperta.
+\end{itemize}
 
 %-------------------------------------------------------------------
+
 \section{Herramientas}
 \label{cap1:sec:herramientas}
 
@@ -87,77 +53,37 @@ Enlace al repositorio: \url{https://github.com/ivasan07/ShyEngine}
 
 \medskip
 
-Para el desarrollo del motor se ha hecho uso de la librería de SDL (Simple DirectMedia Layer). En concreto, se ha 
-utilizado SDL Image como sistema de gráficos, SDL Mixer como sistema de audio y SDL TTF como sistema de fuentes 
-TrueType para renderizar texto. También se ha utilizado la librería Box2D para la simulación física y manejo de 
-colisiones 2D.
-
-\medskip
-
-Para el desarrollo del editor se ha hecho uso de la librería de interfaz gráfica ImGUI.
-
-\medskip
-
 El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visual Studio 2022 y escrito en C++. Por 
 último, para la organización de tareas hemos usado la herramienta de gestión de proyectos Trello.
+
+\medskip
+
+Por último, la gestión de tareas la hemos llevado a cabo a traves del sistema de gestión de proyectos Trello.
+
 
 %-------------------------------------------------------------------
 \section{Plan de trabajo}
 \label{cap1:sec:plandetrabajo}
 
-El trabajo se divide en tres partes: el desarrollo del motor, el desarrollo del editor y el desarrollo del sistema
-de scripting visual basado en nodos.
+Nuestro proyecto se dividirá en tres grandes bloques: motor, editor y scripting visual.
 
-\subsection*{Etapa 1: Desarrollo Inicial}
+\medskip
 
-La primera fase del trabajo consistirá en el desarrollo del núcleo de cada una de las tres partes por separado: 
-
-\begin{itemize}
-    \item \textit{Motor}: Para la parte del motor esta fase consistirá en la investigación de posibles librerías a utilizar, integración y 
-    funcionamiento básico en el entorno de trabajo de las librerías elegidas, implementación del sistema de entidades
-    y componentes y desarrollo de componentes fundamentales. 
-    
-    \item \textit{Editor}: Para la parte del editor esta fase consistirá en  en investigar librerías gráficas, con especial énfasis en aquellas adecuadas para la interfaz de usuario (UI). 
-    Además, incluirá la implementación de una escena navegable de carácter básico, la creación y manipulación de entidades dentro de dicha escena, así como la modificación de su \texttt{Transform}, 
-    seguida de la correspondiente serialización de estos elementos.
-    
-    \item \textit{Sistema de Scripting}: TODO
-\end{itemize}
-
-\subsection*{Etapa 2: Integración}
-
-La segunda fase del trabajo consistirá en la integración de las tres partes, posible reimplementación de funcionalidad
-no compatible y continuación con el desarrollo por separado: 
+A su vez, el trabajo lo dividiremos en cinco fases: investigación, desarrollo inicial, integración de los 3 proyectos,
+cierre del desarrollo y pruebas con usuarios.
 
 \begin{itemize}
-    \item \textit{Motor}: Para la parte del motor esta fase consistirá en el desarrollo del bucle principal, funcionalidad requerida para la 
-    comunicación motor-editor y terminar con el desarrollo de componentes y managers fundamentales.
-    
-    \item \textit{Editor}: Para la parte del editor esta fase consistirá en la lectura de los componentes del motor, su visualización y edición, así como en la serialización y lectura de las escenas,
-    abordando además otros aspectos fundamentales para un editor, tales como la implementación de la ventana de jerarquía y el explorador de archivos.
+    \item \textit{Investigación}: 
+    La primera fase del trabajo consistirá en investigar distintos motores y editores de videojuegos para comprender su funcionamiento y sus distintas arquitecturas. Además, buscaremos librerías que se puedan adaptar a nuestro desarrollo y nos lo facilite. 
 
-    \item \textit{Sistema de Scripting}: TODO
+    \item \textit{Desarrollo inicial}: Para esta fase, desarrollaremos el núcleo de cada proyecto. De esta manera, tendremos un pequeño enfoque para planificar su posterior integración.
+
+    \item \textit{Integración}: Una vez desarrollo el núcleo de cada proyecto, los integraremos de manera que tengamos un flujo funcional entre los tres.
+
+    \item \textit{Cierre del desarrollo}: Con los tres proyectos integrados, continuaremos el desarrollo de las funcionalidades comunes para dejarlo lo más pulido posible antes de las pruebas con usuarios.
+
+    \item \textit{Pruebas con usuarios}: Se realizarán pruebas con usuarios de diferentes contextos: usuarios con experiencia en programación y usuarios sin experiencia. De esta manera, aprovecharemos su feedback para arreglar posibles errores y pulir detalles que mejoren la experiencia de los usuarios.
 \end{itemize}
-
-\subsection*{Etapa 3: Mejoras y Pruebas}
-
-La tercera fase del trabajo consistirá en mejorar el editor para conseguir una experiencia de usuario satisfactoria, 
-desarrollar algún que otro minijuego y realizar pruebas con usuarios:
-
-\begin{itemize}
-    \item \textit{Motor}: Para la parte del motor esta fase consistirá en realizar pruebas desde el editor y sistema de scripting para 
-    comprobar el correcto funcionamiento de todas las partes del motor y arreglar lo necesario.    
-    
-    \item \textit{Editor}: Para la parte del editor esta fase consistirá en la implementación de una jerarquía entre entidades, la implementación de prefabs, la lectura de escenas serializadas, 
-    la ejecución de las escenas en el motor, así como el arreglo de fallos y la incorporación de otras mejoras destinadas a aumentar la comodidad del desarrollador. Algún ejemplo de estas 
-    mejoras es la capacidad de arrastrar imágenes directamente desde el sistema operativo Windows hasta el editor, la depuración de errores a través de una consola, la creación de paletas, 
-    y muchas otras.
-
-    \item \textit{Sistema de Scripting}: TODO
-\end{itemize}
-
-\textbf{\textit{TODO: Fase de prueba con usuarios\ldots}}
-
 
 
 
@@ -173,151 +99,74 @@ desarrollar algún que otro minijuego y realizar pruebas con usuarios:
 \section{Motivation}
 \label{cap2:sec:motivation}
 
-Regarding game engines during our degree, in the first year, we learned the basics of Unity, in the second year, 
-we developed simple 2D games with SDL using an abstraction layer to facilitate learning, and in the third year, 
-we had to step out of our comfort zone and learn what's behind the tools provided to us during the degree. 
-This led us to develop a 3D game engine using OGRE as the graphics engine, BulletPhysics as the physics engine, 
-FMOD as the sound library, and Lua as the scripting language.
+Video game programming has historically been an extremely complex and laborious process. In its early days, developers faced the challenge of creating games from scratch, building each element and functionality manually. In addition, they relied heavily on external libraries to access essential resources. This approach, while rewarding in terms of control and customization, significantly limited accessibility to the world of game creation.
 
 \medskip
 
-Through this experience, we realized several things. It's more convenient to work with an engine that has an 
-integrated editor rather than accessing it directly through programming. Additionally, scripting should be 
-comfortable and intuitive since it's the task that will take up the most time for the developer.
+In contrast, today we have witnessed a revolution in the game development industry. The creation of video games has become considerably more accessible thanks to the emergence of powerful editors and development engines. These editors offer a range of tools and resources that greatly simplify the creation process, allowing developers to concentrate on creativity and gameplay rather than worrying about overwhelming technical details.
 
 \medskip
 
-In the fourth year, with the recent experience of developing a game engine, we decided that the proposal for our
-final degree project would be an engine with the following characteristics:
-
-\begin{itemize}
-
-\item \texttt{Self-sufficient}: This means it provides functionality to manage resources, create scenes 
-and objects from the editor, and can generate final game executables for distribution. Obviously, it doesn't 
-have all the necessary functionality to be completely independent of any external tools during development, 
-but it does provide the basics for the development cycle of a 2D game.
-
-\item \texttt{Integrated Editor}: The main tool of a self-sufficient engine is its editor, responsible for 
-communicating the developer's actions to the engine. We had no experience in developing desktop 
-applications, as we didn't create an editor for the third-year engine, so we knew it could be a challenge..
-
-\item \texttt{Visual Node-Based Programming}: This is the highlight of our engine. Due to the complexity 
-that some modern engines present for beginner or inexperienced developers, visual programming is a very 
-useful and intuitive tool for creating logic and behavior in the game. We knew it could be a technical 
-challenge, but it would provide great convenience, fluidity, and, of course, open the doors of our engine 
-to many developers with little programming experience.
-
-\end{itemize}
-
-Finally, we chose to focus on 2D due to the experience gained during our studies. Additionally, it 
-involves less technical complexity during the development of the engine.
+Despite the accessibility offered by modern editors, the learning curve can be steep, especially for those who are new to the world of video game programming and development. This paper focuses on the possibility of creating an engine and editor to 
+engine and editor that allows to develop simple games, but at the same time has a learning curve more accessible to people with no experience in this field.
 
 %-------------------------------------------------------------------
 \section{Goals}
 \label{cap2:sec:goals}
 
-The main objective of the final degree project is to develop a self-sufficient 2D game engine with an integrated 
-editor and node-based visual programming. With this, users will have a tool to develop any type of 2D video game.
+The main objective is to develop a self-contained 2D game engine with integrated editor and node-based visual behavior programming.
+integrated editor and node-based visual behavior programming. With this, users will have a tool to develop any kind of 2D videogame with a not very high complexity.
 
 \medskip
 
-By achieving self-sufficiency in the engine, we aim to enable users to develop their video games with minimal 
-reliance on external tools, ensuring that all the work can be done within the editor.
+The steps to achieve this goal are the following:
 
-\medskip
-
-With the editor, our goal is to make the development process comfortable, smooth, and visually-oriented, eliminating
-the need for developers to communicate with the engine through programming.
-
-\medskip
-
-With the node-based visual programming system, we aim to open the doors of our engine to inexperienced developers
-or those with limited programming knowledge, allowing them to develop their videogames. In addition, it represents 
-a technical challenge that will provide us with experience and knowledge.
+\begin{enumerate}
+    \item The creation of an engine and an editor for 2D videogames.
+    \item The creation of a node-based scripting system that is easy for inexperienced people.
+\end{enumerate}
 
 %-------------------------------------------------------------------
-\section{Project Management}
-\label{cap2:sec:projectmanagement}
-
-To start with, Git has been used as the version control system through the GitHub Desktop application. All the 
-implemented code has been uploaded to a repository, dividing the work into branches. Specifically, as outlined 
-in the work plan, the project has been divided into engine, editor, and visual programming.
+To begin with, Git has been used as a version control system through the desktop application
+GitHub Desktop. All the implemented code has been uploaded to a repository dividing the work into branches. Specifically,
+as stated in the work plan, the project has been divided into engine, editor and visual programming.
 
 \medskip
 
-Repository link: \url{https://github.com/ivasan07/ShyEngine}
+Link to the repository: \url{https://github.com/ivasan07/ShyEngine}
 
 \medskip
 
-For the development of the engine, the SDL (Simple DirectMedia Layer) library has been used. In particular, 
-SDL Image has been used for graphics, SDL Mixer for audio, and SDL TTF for TrueType font rendering. The Box2D 
-library has also been used for 2D physics simulation and collision handling.
+The code has been developed in the Visual Studio 2022 integrated development environment (IDE) and written in C++. For 
+Finally, for task organization we have used the project management tool Trello.
 
 \medskip
 
-For the development of the editor, the ImGUI library has been used.
-
-\medskip
-
-The code has been developed in the Visual Studio 2022 Integrated Development Environment (IDE) and written in C++. 
-Finally, for task organization, we have used the Trello project management tool.
+Finally, the task management has been carried out through the project management system Trello.
 
 %-------------------------------------------------------------------
 \section{Work Plan}
 \label{cap2:sec:workplan}
 
-The work is divided into three main parts: engine development, editor development, and the development of a visual node-based
-scripting system.
+Our project will be divided into three main blocks: engine, editor and visual scripting.
 
-\subsection*{Phase 1: Inital development}
+\medskip
 
-The first phase of the work will involve the development of the core of each of the three parts separately:
+In turn, the work will be divided into five phases: research, initial development, integration of the 3 projects,
+development closure and user testing.
 
-\begin{itemize}
-    \item \textit{Engine}: For the engine part, this phase will involve researching potential libraries to use, integrating and ensuring basic
-    functionality within the chosen library's working environment, implementing the entity and component system, and developing 
-    essential components.
-    
-    \item \textit{Editor}: For the editor part, this phase will consist of researching graphic libraries, with special emphasis on those suitable for the user interface (UI). 
-    In addition, it will include the implementation of a basic navigable scene, the creation and manipulation of entities within this scene, as well as the modification of its \texttt{Transform}, 
-    followed by the corresponding serialization of these elements.
+\begin{enumerate}
+    \item \textit{Research}: 
+    The first phase of the work will consist of researching different game engines and editors to understand how they work and their different architectures. In addition, we will look for libraries that can be adapted to our development and make it easier for us. 
 
-    \item \textit{Scripting System}: TODO
-\end{itemize}
+    \item \textit{Initial development}: For this phase, we will develop the core of each project. In this way, we will have a small approach to plan its later integration.
 
-\subsection*{Phase 2: Integration}
+    \item \textit{Integration}: Once the core of each project is developed, we will integrate them so that we have a functional flow between the three.
 
-The second phase of the work will focus on integrating the three parts, potentially reimplementing incompatible functionality, 
-and continuing with separate development:
+    \item \textit{Closing the development}: With the three projects integrated, we will continue the development of the common functionalities to leave it as polished as possible before testing with users.
 
-\begin{itemize}
-    \item \textit{Engine}: For the engine part, this phase will involve developing the main loop, the required functionality for engine-editor 
-    communication, and completing the development of essential components and managers.
-    
-    \item \textit{Editor}: For the editor part this phase will consist of reading the engine components, displaying and editing them, as well as serializing and reading the scenes,
-    and other fundamental aspects for an editor, such as the implementation of the hierarchy window and the file explorer.
-
-    \item \textit{Scripting System}: TODO
-\end{itemize}
-
-\subsection*{Phase 3: Improvements and debugging}
-
-The third phase of the work will aim to improve the editor for a satisfactory user experience, develop some mini-games, and
-conduct user testing:
-
-\begin{itemize}
-    \item \textit{Engine}: For the engine part, this phase will involve conducting tests from the editor and scripting system to verify the correct
-    functioning of all engine parts and making necessary fixes.
-    
-    \item \textit{Editor}: For the editor part this phase will consist of the implementation of a hierarchy between entities, the implementation of prefabs, the reading of serialized scenes, 
-    the execution of the scenes in the engine, as well as bug fixing and the incorporation of other improvements aimed at increasing the developer's comfort. Some examples of these 
-    improvements are the ability to drag images directly from the Windows operating system to the editor, debugging errors through a console, palette creation, and many others, 
-    and many others.
-
-    \item \textit{Scripting System}: TODO
-\end{itemize}
-
-\textbf{\textit{TODO: User testing phase\ldots}}
+    \item \textit{User testing}: We will test with users from different contexts: users with programming experience and inexperienced users. In this way, we will take advantage of their feedback to fix possible bugs and polish details that will improve the user experience.
+\end{enumerate}
 
 
 
