@@ -90,143 +90,6 @@ namespace ECS {
 
 		tr = nullptr;
 
-		// General system configuration
-		duration = 10.0f;
-		maxParticles = 1000;
-		loop = true;
-		delay = 0.0f;
-		playOnStart = true;
-
-		// Particles START configuration
-		lifeTime = 5.0f;
-		randomLifeTimeBetweenTwoValues = false;
-
-		speed = 50.0f;
-		randomSpeedBetweenTwoValues = false;
-
-		size = { 30.0f, 30.0f };
-		randomSizeBetweenTwoValues = false;
-
-		angle = 0.0f;
-		randomAngleBetweenTwoValues = false;
-
-		rotation = 0.0f;
-		randomRotationBetweenTwoValues = false;
-
-		color = { 255, 255, 255 };
-		randomColorBetweenTwoColors = false;
-
-		alpha = 255;
-		randomAlphaBetweenTwoValues = false;
-
-		force = 0;
-		randomForceBetweenTwoValues = false;
-
-		angularVelocity = 0;
-		randomAngularVelocityBetweenTwoValues = false;
-
-		bounciness = 1;
-		randomBouncinessBetweenTwoValues = false;
-
-		impulse = 0;
-		randomImpulseBetweenTwoValues = false;
-
-		// Physics particles configuration
-		sensor = false;
-		layerName = "Particles";
-		gravityScale = 0;
-		angularVelocity = 0;
-
-		// Render configuration
-		alpha = 255;
-		flipmode = 0;
-		srcX = 0;
-		srcY = 0;
-
-		// Emission coniguration
-		emissionRateOverTime = 1;
-		emissionRateOverDistance = 0;
-
-		// Over lifetime configuration
-		overLifeTimeSpeed = false;
-		endSpeed = speed;
-
-		overLifeTimeColor = false;
-		endColor = color;
-
-		overLifeTimeSize = false;
-		endSize = size;
-
-		overLifeTimeAlpha = false;
-		endAlpha = alpha;
-
-
-
-		// Custom values
-
-		/*duration = 20.0f;
-		playOnStart = true;
-		loop = true;
-
-		layerName = "Particles";
-		gravityScale = 1;
-		sensor = false;
-
-		fileName = "images/pluma.png";
-
-		changeTexture(fileName);
-
-		emissionRateOverTime = 0.0f;
-
-		color = { 255, 0, 0 };
-
-		randomLifeTimeBetweenTwoValues = true;
-		lifeTimeFirstValue = 1.0f;
-		lifeTimeSecondValue = 3.0f;
-
-		randomAngleBetweenTwoValues = true;
-		angleFirstValue = 0.0f;
-		angleSecondValue = 360.0f;
-
-		randomSpeedBetweenTwoValues = true;
-		speedFirstValue = 30.0f;
-		speedSecondValue = 100.0f;
-
-		randomSizeBetweenTwoValues = true;
-		sizeFirstValue = { 30.0f, 30.0f };
-		sizeSecondValue = { 50.0f, 50.0f };
-
-		randomRotationBetweenTwoValues = true;
-		rotationFirstValue = 0.0f;
-		rotationSecondValue = 360.0f;
-
-		randomForceBetweenTwoValues = false;
-		forceFirstValue = 50.0f;
-		forceSecondValue = 100.0f;
-
-		randomAngularVelocityBetweenTwoValues = true;
-		angularVelocityFirstValue = 5.0f;
-		angularVelocitySecondValue = 10.0f;
-
-		randomBouncinessBetweenTwoValues = true;
-		bouncinessFirstValue = 0.0f;
-		bouncinessSecondValue = 1.0f;
-
-		randomImpulseBetweenTwoValues = true;
-		impulseFirstValue = 5.0f;
-		impulseSecondValue = 10.0f;
-
-		overLifeTimeSpeed = true;
-		endSpeed = 0.0f;
-
-		overLifeTimeSize = false;
-		endSize = { 0.0f, 0.0f };
-
-		overLifeTimeAlpha = true;
-		endAlpha = 0;
-
-		addBurst(2, 50, 5, 4, 1); */
-
 	}
 
 	ParticleSystem::~ParticleSystem() {
@@ -252,6 +115,8 @@ namespace ECS {
 	void ParticleSystem::start() {
 
 		prevPosition = tr->GetLocalPosition();
+
+		loadTexture(fileName);
 
 		if (playOnStart)
 			emitting = true;
@@ -413,6 +278,10 @@ namespace ECS {
 
 	void ParticleSystem::startEmitting() {
 		emitting = true;
+	}
+
+	void ParticleSystem::stopEmitting() {
+		emitting = false;
 	}
 
 	bool ParticleSystem::isEmitting() {

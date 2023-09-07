@@ -62,7 +62,7 @@ namespace ECS {
 
 	SplashScene::SplashScene() {
 		timer = 0;
-		maxTime = 3;
+		maxTime = 1;
 	}
 
 	SplashScene::~SplashScene() {}

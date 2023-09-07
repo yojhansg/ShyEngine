@@ -8,7 +8,7 @@
 
 
 #define ECSfunc_Version 1.0
-//Creation time : Mon Sep  4 17:13:14 2023
+//Creation time : Thu Sep  7 04:36:41 2023
 
 
 typedef Scripting::Variable(*CallableFunction)(std::vector<Scripting::Variable> const&);
@@ -25,6 +25,7 @@ Scripting::Variable Animation_AdvanceFrame(std::vector<Scripting::Variable>const
 Scripting::Variable Animation_AdvanceAnimation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_SetFrame(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_SetAnimation(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable Animation_SetAnimationSpeed(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_GetFrame(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_GetAnimation(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable Animation_SetAnimationLenght(std::vector<Scripting::Variable>const& vec);
@@ -100,6 +101,7 @@ Scripting::Variable OverlayText_SetText(std::vector<Scripting::Variable>const& v
 Scripting::Variable OverlayText_GetPointSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable OverlayText_SetPointSize(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_startEmitting(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ParticleSystem_stopEmitting(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_isEmitting(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_loadTexture(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ParticleSystem_addBurst(std::vector<Scripting::Variable>const& vec);
@@ -123,6 +125,8 @@ Scripting::Variable PhysicBody_setGravityScale(std::vector<Scripting::Variable>c
 Scripting::Variable PhysicBody_getGravityScale(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getCollisionNormal(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getCollisionPoint(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getPositionWorldUnits(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable PhysicBody_getPositionPixelUnits(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_getCollisionLayer(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable PhysicBody_setLinearVelocity(std::vector<Scripting::Variable>const& vec);
@@ -250,6 +254,8 @@ Scripting::Variable RendererManager_showCursor(std::vector<Scripting::Variable>c
 Scripting::Variable RendererManager_resizeWindow(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable RendererManager_renameWindow(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable RendererManager_repositionWindow(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_centerWindow(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable RendererManager_setWindowBordered(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable RendererManager_SetWindowIcon(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_SaveAll(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable SaveManager_Save(std::vector<Scripting::Variable>const& vec);
@@ -366,6 +372,7 @@ Scripting::Variable ScriptFunctionality_RadiansTo_Degrees(std::vector<Scripting:
 Scripting::Variable ScriptFunctionality_Random_AngleBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_UnitVector(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ScaledVector(std::vector<Scripting::Variable>const& vec);
+Scripting::Variable ScriptFunctionality_Random_VectorBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_Color(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_Random_ColorBetween(std::vector<Scripting::Variable>const& vec);
 Scripting::Variable ScriptFunctionality_OpenURL(std::vector<Scripting::Variable>const& vec);

@@ -25,6 +25,8 @@ namespace ECS {
 
 		void init() override;
 
+		void start() override;
+
 		void render() override;
 
 	publish:
@@ -54,6 +56,8 @@ namespace ECS {
 		Transform* transform;
 
 		reflect std::string fileName;
+		reflect int flipmode;
+		reflect Utilities::Vector2D rotationPoint;
 
 		SDL_Rect srcRect;
 		SDL_Rect dstRect;
@@ -61,9 +65,8 @@ namespace ECS {
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;
 			
-		int flipmode;
 
-		SDL_Point* rotationPoint;
+		SDL_Point* point;
 	};
 
 }

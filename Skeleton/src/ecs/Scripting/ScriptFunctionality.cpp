@@ -821,6 +821,11 @@ Utilities::Vector2D Scripting::ScriptFunctionality::Random_ScaledVector(float va
 	return Random_UnitVector() * val;
 }
 
+Utilities::Vector2D Scripting::ScriptFunctionality::Random_VectorBetween(cVector2D v1, cVector2D v2)
+{
+	return Utilities::Random::RandomVectorBetween(v1, v2);
+}
+
 Utilities::Vector2D Scripting::ScriptFunctionality::InputManager_GetMouseWorldPosition() {
 
 	auto mousepos = Input::InputManager::instance()->GetMousePosition();

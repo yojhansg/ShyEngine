@@ -201,6 +201,7 @@ publish:
 	float Random_AngleBetween(float min, float max);
 	Vector2D Random_UnitVector();
 	Vector2D Random_ScaledVector(float val);
+	Vector2D Random_VectorBetween(cVector2D v1, cVector2D v2);
 	Color Random_Color();
 	Color Random_ColorBetween(cColor c1, cColor c2);
 

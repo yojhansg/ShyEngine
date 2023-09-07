@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Color.h"
+#include "Vector2D.h"
 
 namespace Utilities {
 
@@ -22,6 +23,9 @@ namespace Utilities {
 
 		// Generates a random color among the given ones.
 		static Color RandomColorBetween(cColor c1, cColor c2);
+
+		// Generates a random color among the given ones.
+		static Vector2D RandomVectorBetween(cVector2D v1, cVector2D v2);
 
 	};
 

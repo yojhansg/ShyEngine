@@ -17,6 +17,10 @@ namespace ECS {
 
 	class ParticleSystem;
 
+	struct FloatColor {
+		float r, g, b;
+	};
+
 	class Particle {
 
 	public:

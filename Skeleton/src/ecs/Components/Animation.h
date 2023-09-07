@@ -33,6 +33,8 @@ namespace ECS {
 		void SetFrame(int idx);
 		void SetAnimation(int idx);
 
+		void SetAnimationSpeed(float speed);
+
 		int GetFrame();
 		int GetAnimation();
 

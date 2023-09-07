@@ -114,6 +114,20 @@
                     {
                         "name": "entity",
                         "type": "Entity"
+                    },
+                    {
+                        "name": "speed",
+                        "type": "Number"
+                    }
+                ],
+                "name": "SetAnimationSpeed",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
                     }
                 ],
                 "name": "GetFrame",
@@ -378,6 +392,14 @@
             {
                 "name": "fileName",
                 "type": "Text"
+            },
+            {
+                "name": "flipmode",
+                "type": "Number"
+            },
+            {
+                "name": "rotationPoint",
+                "type": "Pair"
             }
         ],
         "methods": [
@@ -1422,6 +1444,22 @@
                 "type": "Number"
             },
             {
+                "name": "position",
+                "type": "Pair"
+            },
+            {
+                "name": "randomPositionBetweenTwoValues",
+                "type": "Toggle"
+            },
+            {
+                "name": "positionFirstValue",
+                "type": "Pair"
+            },
+            {
+                "name": "positionSecondValue",
+                "type": "Pair"
+            },
+            {
                 "name": "rotation",
                 "type": "Number"
             },
@@ -1619,6 +1657,16 @@
                     }
                 ],
                 "name": "startEmitting",
+                "return": "void"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "stopEmitting",
                 "return": "void"
             },
             {
@@ -1963,6 +2011,26 @@
                     }
                 ],
                 "name": "getCollisionPoint",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getPositionWorldUnits",
+                "return": "Pair"
+            },
+            {
+                "input": [
+                    {
+                        "name": "entity",
+                        "type": "Entity"
+                    }
+                ],
+                "name": "getPositionPixelUnits",
                 "return": "Pair"
             },
             {
