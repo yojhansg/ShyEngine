@@ -1,0 +1,69 @@
+- INTRODUCCION: 
+
+	+ MOTIVACIÓN: Hacer un juego es una tarea complicada, las herramientas de hoy en día requieren una curva de aprendizaje elevada,
+	la motivación es resolver esa brecha con una herramienta para videojuegos y sencillos sin necesidad de conocimientos en programación.
+	+ OBJETIVOS: Motor de videojuegos 2D...
+	+ HERRAMIENTAS: Utilizadas en la gestión del trabajo, GitHub, Visual Studio...
+	+ PLAN DE TRABAJO: Reestructurarlo, con la visión desde septiembre/octubre (5 FASES: investigación, desarrollo inicial, integracion de los proyectos individuales,
+	mejoras y cierre del desarrollo, pruebas con usuarios).
+
+- ESTADO DEL ARTE:
+	+ QUÉ ES UN JUEGO
+	+ CÓMO SE HACE UN JUEGO
+	+ QUE ES UN JUEGO DIRIGIDO POR DATOS
+	+ QUÉ ES UN MOTOR
+	+ CÓMO FUNCIONA UN MOTOR Y SUS PARTES
+	+ QUÉ ES UNA ARQUITECTURA EN EL CONTEXTO DEL DESARROLLO DE VIDEOJUEGOS
+	+ QUE ES UNA ARQUITECTURA BASADA EN ENTIDADES Y COMPONENTES (ECS)
+	+ QUÉ ES UN EDITOR
+	+ UN POCO DE HISTORIA DE LOS EDITORES
+	+ QUÉ IMPORTANCIA TIENEN LOS EDITORES EN EL DESARROLLO
+	+ CÓMO FUNCIONAN EN LA ACTUALIDAD (INTEGRADOS)
+	+ CÓMO FUNCIONA LA COMUNICACIÓN MOTOR-EDITOR (A ALTO NIVEL)
+	+ QUÉ ES EL SCRIPTING
+		+ TIPOS DE SCRIPTING
+		+ RELACIÓN CON EL DESARROLLO DE VIDEOJUEGOS
+		+ SCRIPTING TIPO VISUAL VS SCRIPTING TIPO PROGRAMADO
+		+ SCRIPTING POR NODOS (Más en detalle)
+	+ UNITY
+		+ QUE ARQUITECTURA USA, CÓMO ES LA COMUNIACIÓN MOTOR-EDITOR, QUE SISTEMA DE SCRIPTING USA (C#), MULTIPLATAFORMA (Incluyendo imágenes)
+	+ UNREAL
+		+ QUE ARQUITECTURA USA, CÓMO ES LA COMUNIACIÓN MOTOR-EDITOR, QUE SISTEMA DE SCRIPTING USA (Blueprints), MULTIPLATAFORMA (Incluyendo imágenes)
+	+ GODOT
+ 		+ QUE ARQUITECTURA USA, CÓMO ES LA COMUNIACIÓN MOTOR-EDITOR, QUE SISTEMA DE SCRIPTING USA (GDScript), MULTIPLATAFORMA (Incluyendo imágenes)
+
+- VISION GENERAL
+	+ CÓMO FUNCIONA NUESTRO MOTOR (Que arquitectura usa, porque 2D y que implicaciones tiene 2D, etc) 
+	+ CÓMO FUNCIONA EL EDITOR (Sistema de ventanas, lectura de datos del motor (aún sin especificar en detalle))
+	+ PORQUÉ HEMOS DECIDIDO SEPARA MOTOR-EDITOR Y NO EDITOR INTEGRADO
+	+ CÓMO COMUNICAMOS EL MOTOR CON EL EDITOR (Diagramas con la estructura, cómo dividimos la información) (hablamos aquí algo más en detalle debido a que se necesita
+	de cara a los siguientes capítulos)
+ 
+
+- IMPLEMENTACIÓN (MOTOR):
+	+ CÓMO FUNCIONA, DECISIONES Y EL POR QUÉ, COMO ESTÁ DIVIDIDO, BUCLE PRINCIPAL, ARQUITECTURA ECS ETC..
+	+ CÓMO GENERAMOS LA INFORMACIÓN DE LOS SCRIPTS Y DE LOS COMPONENTES QUE RECIBIRÁ EL EDITOR
+	+ CÓMO SE GENERA EL JUEGO A PARTIR DE LA LECTURA DE DATOS DEL EDITOR
+	+ CÓMO FUNCIONA EL SCRIPTING POR NODOS Y TODO LO QUE LE RODEA PARA QUE FUNCIONE (REFLEXIÓN)
+ 
+- IMPLEMENTACIÓN DEL EDITOR:
+	+ CÓMO FUNCIONA, ARQUITECTURA, VENTANAS
+	+ CÓMO SE IMPLEMENTA EL SCRIPTING Y LOS COMPONENTES A PARTIR DE LOS DATOS DEL MOTOR
+	+ CÓMO SE GENERAN LOS DATOS PARA EL MOTOR
+	+ USO PROPIO
+	+ PRUEBA CON USUARIO
+	+ CONCLUSIONES DE USO
+
+- PRUEBAS CON USUARIOS
+	+ MUESTRAS DE JUEGOS DESARROLLADOS POR NOSOTROS
+	+ PRUEBAS CON USUARIOS
+		+ PLAN DE PRUEBAS
+		+ CONCLUSIONES DE LAS PRUEBAS
+
+- CONTRIBUCIONES
+
+- CONCLUSIONES
+
+- BIBLIOGRAFÍA (Con enlaces en los capítulos)
+
+Como comentario general, cambiar a la generación del pdf a release y dar el formato necesario.
