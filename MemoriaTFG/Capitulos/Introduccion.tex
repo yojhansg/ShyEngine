@@ -1,0 +1,161 @@
+%---------------------------------------------------------------------
+%
+%                          Introduccion
+%
+%---------------------------------------------------------------------
+
+\chapter{Introducción}
+
+%-------------------------------------------------------------------
+\section{Motivación}
+\label{cap1:sec:motivacion}
+
+El desarrollo de videojuegos ha supuesto un reto técnico y organizativo desde sus inicios. Especialmente a nivel técnico, requiere de la experiencia de
+ingenieros informáticos capaces de desarrollar la tecnología necesaria que puede demandar un videojuego. Las empresas desarrolladoras pueden escoger
+entre desarrollar las tecnologías necesarias para desarrollar un videojuego u obtener esas tecnologías ya desarrolladas y comenzar directamente con el
+desarrollo.
+
+\medskip
+
+En el primer caso, el incoveniente reside en desarrollar dichas tecnologías de forma dependiente al videojuego para el que se esté desarrollando, es decir,
+atendiendo a sus características concretas de tal forma que no se pueda reutilizar para el desarrollo de otro tipo de videojuego.
+
+\medskip
+
+En el segundo caso, el incoveniente reside en la forma de obtener dichas tecnologías, licencias o costes. A la hora de desarrollar esas tecnologías los
+equipos deben trazar la línea que separa lo que son las tecnologías para desarrollar un videojuego y el propio desarrollo del videojuego. Ésta separación
+en necesaria para garantizar la reutilización de las tecnologías.   
+
+\medskip
+
+A estas tecnologías se las conoce como motores de ejecución. En general suelen estar constituidas de varias librerías dedicadas a un fin específico como 
+puede ser los gráficos, el audio, las físicas, el input, etc.
+
+\medskip
+
+En algunos casos, además del motor de ejecución, las empresas desarrolladoras de motores incluyen editores. Los editores son herramientas que simplifican
+el desarrollo comunicando las acciones del desarrollador al motor. Entre alguna de sus funciones claves destacan la definición de comportamientos, la 
+creación de assets y elementos en el juego, depuración y generación de versiones ejecutables para distintas plataformas.
+
+\medskip
+
+Existen en el mercado diferentes motores con distintas licencias y características. Los más cómodos para el desarrollo son los que tienen editor, pero un
+editor es muy costoso de desarrollar, por lo que los motores que lo proporcionan son aquellos que tienen una masa crítica de uso muy grande, como para que
+merezca la pena el esfuerzo de desarrollo del editor. Esto solo ocurre en motores generalistas que permiten realizar juegos de muchos tipos y con muy buena
+calidad. El precio a pagar por usar esos motores es complejidad, tanto en el uso del editor como en el motor en tiempo de ejecución. Esto no es un problema
+si el juego desarrollado hace uso de todas las características punteras, pero si se quiere hacer un juego modesto donde se ponga a prueba la jugabilidad y
+no tanto la tecnología, el peaje a pagar es alto. Esto además supone una brecha para los perfiles con poca experiencia en desarrollo o programción.
+
+\medskip
+
+La alternativa para hacer juegos más pequeños es hacer uso de motores más simples, pero normalmente no traen editor y eso alarga el proceso de desarrollo.
+En este punto es donde entra nuestro nuestro trabajo de fin de grado. Vamos a hacer un motor con su editor para hacer juegos pequeños en los que la experiencia
+de desarrollo sea equivalente a la vivida con editores de motores más grandes, pero que esté centrado en el desarrollo de juegos 2D mucho más pequeños. Esto 
+simplifica el uso del editor y también el tamaño de las versiones ejecutables realizadas.
+
+Las características del motor que queremos hacer son:
+
+\begin{itemize}
+    \item \textit{Ejecución del juego desde el editor}: Esto significa la posibilidad de lanzar el juego desde el editor sin tener que hacer una versión 
+    ejecutable o buscar el archivo ejecutable a mano. Además, se podrá imprimir información por consola visible desde el editor ya sea para depurar o 
+    consultar errores.
+
+    \item \textit{Autosuficiencia}: Aporta funcionalidad para manejar recursos, crear escenas y objetos desde el editor y permite la creación de ejecutables
+    finales del juego para su distribución. Con esta característica se busca la mínima dependencia de herramientas externas. 
+
+    \item \textit{Programación visual}: Esta es la parte a destacar de nuestro motor. Debido a la complejidad que presentan algunos motores de la actualidad 
+    para desarrolladores principiantes o inexpertos, la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
+    videojuego.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\section{Objetivos}
+\label{cap1:sec:objetivos}
+
+El objetivo principal es desarrollar un motor de videojuegos 2D autosuficiente con editor integrado y una programación visual basada en nodos.
+Además, se podrá pobrar y ver el progreso del videojuego que se esté desarrollando directamente desde el editor y generar versiones ejecutables. 
+
+\medskip
+
+Con esto, los usuarios dispondrán de una herramienta para desarrollar cualquier tipo de videojuego 2D con un nivel de complejidad accesible y 
+una experiencia de usuario agradable e intuitiva.
+
+%-------------------------------------------------------------------
+
+\section{Herramientas}
+\label{cap1:sec:herramientas}
+
+Para comenzar, se ha utilizado Git como sistema de control de versiones a través de la aplicación de escritorio GitHub Desktop. Todo el código
+implementado se ha subido a un repositorio.
+
+\medskip
+
+Enlace al repositorio: \url{https://github.com/ivasan07/ShyEngine}
+
+\medskip
+
+El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visual Studio 2022 y escrito en C++.
+
+\medskip
+
+Por último, hemos llevado a cabo la gestión de tareas a través del sistema de gestión de proyectos Trello.
+
+
+%-------------------------------------------------------------------
+\section{Plan de trabajo}
+\label{cap1:sec:plandetrabajo}
+
+Nuestro proyecto se dividirá en tres grandes bloques: motor, editor y scripting visual.
+
+\medskip
+
+A su vez, el trabajo lo dividiremos en cinco fases: investigación y planificación, desarrollo inicial, núcleo del desarrollo, cierre del desarrollo y pruebas con usuarios. 
+
+\begin{itemize}
+    \item \textit{Investigación y planificación}: 
+    La primera fase del trabajo consistirá en investigar distintos motores y editores de videojuegos para comprender su funcionamiento y sus distintas
+    arquitecturas. Buscaremos también librerías que se ajusten a las demandas de nuestro proyecto para conseguir un desarrollo cómodo y eficiente.
+    Por último planificaremos la división del trabajo así como la futura integración continua de cada una de las partes.
+
+    \item \textit{Desarrollo inicial}: Para esta fase, desarrollaremos el núcleo de cada proyecto. En cuanto al motor, se llevarán a cabo
+    las primeras pruebas de las librerías que se vayan a utilizar y se implementará la arquitectura de juego básica. En cuanto al editor, se creará el proyecto
+    en el que se integrará la librería de interfaces gráfica seleccionada para probar su funcionamiento. Y en cuanto al scripting visual, se comenzará a prototipar
+    el lenguaje. Además se llevará a cabo un proceso de integración continua a medida que avanza esta fase para evitar posibles incompatibilidades en la siguiente
+    fase. Esto conllevará la definición de un formato de fichero de intercambio que será el punto de unión entre el editor y el motor. Se definirá el tipo de
+    información, su estructura básica y cómo se van a referenciar los assets.
+
+    \item \textit{Núcleo del desarrollo}: Durante esta fase, siendo la más duradera, añadiremos nuevas funcionalidades en cada una de las partes, como nuevos
+    componentes en caso del editor, sistema de ventanas y docking para el editor, etc. Ampliaremos la información de intercambio entre motor y editor de manera
+    que continuamos integrando y se creará el sistema de scripts visual en el editor para generar los primeros scripts y la lógica para almacenarlos e interpretarlos
+    en el motor.
+
+    \item \textit{Cierre del desarrollo}: Con los proyectos terminados e completamente integrados, continuaremos el desarrollo de las funcionalidades comunes para
+    dejarlo lo más pulido posible antes de las pruebas con usuarios. Esto conllevará las pruebas/desarrollo de algún juego para detectar posibles errores y corregirlos.
+
+    \item \textit{Pruebas con usuarios}: Se realizarán pruebas con usuarios de diferentes contextos: usuarios con experiencia en programación y usuarios
+    sin experiencia. De esta manera, aprovecharemos su feedback para arreglar posibles errores y pulir detalles que mejoren la experiencia de los usuarios.
+\end{itemize}
+
+
+% %-------------------------------------------------------------------
+% \section*{\NotasBibliograficas}
+% %-------------------------------------------------------------------
+% \TocNotasBibliograficas
+
+% Citamos algo para que aparezca en la bibliografía\ldots
+% \citep{ldesc2e}
+
+% \medskip
+
+% Y también ponemos el acrónimo \ac{CVS} para que no cruja.
+
+% Ten en cuenta que si no quieres acrónimos (o no quieres que te falle la compilación en ``release'' mientras
+% no tengas ninguno) basta con que no definas la constante \verb+\acronimosEnRelease+ (en \texttt{config.tex}).
+
+% Variable local para emacs, para  que encuentre el fichero maestro de
+% compilación y funcionen mejor algunas teclas rápidas de AucTeX
+%%%
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../Tesis.tex"
+%%% End:

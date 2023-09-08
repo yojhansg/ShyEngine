@@ -1,0 +1,104 @@
+%---------------------------------------------------------------------
+%
+%                          Estado del arte
+%
+%---------------------------------------------------------------------
+
+\chapter{Estado del arte}
+\label{cap3:estado_del_arte}
+
+\begin{resumen}
+En este capítulo se proporcionará el contexto necesario para entender en los próximos capítulos cómo ha sido el desarrollo de nuestro trabajo.
+El capítulo se centra en los videojuegos, cómo se desarrollan, qué herramientas se pueden utilizar para desarrollarlos y ejemplos de las más 
+utilizadas hoy en día. Además, se explicará qué es un motor de videojuegos, qué partes fundamentales lo contienen y las formas que existen
+para generar comportamiento en los videojuegos.
+\end{resumen}
+
+\section{Qué es un videojuego}
+
+Un videojuego es un juego electrónico en el que uno o más jugadores interactúan mediante un controlador con un dispositivo electrónico que muestra
+imágenes de video. Este dispositivo, comúnmente conocido como "plataforma", puede ser una computadora, una máquina de arcade, una consola de 
+videojuegos o teléfono móvil, tableta o una consola de videojuegos portátil.
+
+Típicamente, los videojuegos recrean entornos y situaciones virtuales en los que el jugador puede controlar a uno o varios personajes para conseguir
+un objetivo dentro de unas reglas determinadas. Dependiendo del videojuego, una partida pueden disputarla una o varias personas contra la máquina o bien
+múltiples jugadores a través de una red LAN o en línea vía Internet. El género de un videojuego se refiere a una categoría o clasificación que se utiliza
+para describir su estilo, mecánicas de juego, temas y elementos característicos. Algunos de los géneros más representativos son los videojuegos de acción,
+rol, estrategia, simulación, deportes o aventura.
+
+Un videojuego se ejecuta gracias a un programa de software que es procesado por una máquina que cuenta con dispositivos de entrada y de salida. El programa
+contiene toda la información, instrucciones, imágenes y audio que componen el videojuego. Va grabado en cartuchos, discos ópticos, discos magnéticos, tarjetas
+de memoria especiales para videojuegos, o bien se descarga directamente a través de Internet.
+
+\section{Cómo se hace un juego}
+
+La creación de videojuegos es una actividad llevada a cabo por las empresas desarrolladoras de videojuegos. Estas se encargan de diseñar y programar el videojuego,
+desde el concepto inicial hasta el videojuego en su versión final. Esta es una actividad multidisciplinaria, que involucra profesionales de la informática,
+el diseño, el sonido, la actuación, etc. El proceso es similar a la creación de software en general, aunque difiere en la gran cantidad de aportes creativos
+necesarios. El desarrollo también varía en función de la plataforma objetivo, el género y la forma de visualización (2d, 2.5d y 3d).
+
+El desarrollo ha pasado por muchas fases hasta el estado en el que se ecuentra en la actualidad. En las primeras décadas a partir del nacimiento de los videojuegos,
+los desarrolladores tenían que diseñar hardware específico para ejecutar los juegos. A partir de la década de 2000 en adelante, la mayoría de los juegos se desarrollan
+digitalmente, lo que significa que el código y los activos se crean en computadoras en lugar de hardware dedicado.
+
+Normalmente el desarrollo de un videojuego sigue las siguientes fases:
+
+\begin{itemize}
+    \item \textit{Concepto}: En esta fase se tiene una idea a partir de la cual se conformarán los aspectos fundamentales. Se determina el género o géneros
+    del videojuego, cómo será el proceso de juego, y también se constituye un guión gráfico en el que se tratan todo tipo de ideas preconcebidas que pueden
+    ir adaptándose, como por ejemplo el estilo de los personajes, el ambiente, la música, etc. Una vez se sabe qué hacer entonces es el momento de diseñar.
+    
+    \item \textit{Diseño}: Se empieza definiendo los elementos que componen el juego. Se desarrolla la historia, se crean bocetos de guiones para determinar
+    los objetivos, se deciden los personajes principales, el contexto, etc. El objetivo de esta fase es como objetivo generar el Documento de Diseño (GDD) 
+    que especificará el arte, las mecánicas y las dinámicas del videojuego.
+    
+    \item \textit{Planificación}: Esta etapa tiene como objetivo identificar las diferentes tareas para desarrollar el videojuego. Se reparte el trabajo 
+    entre los distintos componentes del equipo de desarrollo, se fijan plazos de entregas, se planifican reuniones de seguimiento, etc. Normalmente se suele
+    seguir una metodología de desarrollo como Scrum, en cascada (Waterfall), Kanban, desarrollo Lean, etc.
+    
+    \item \textit{Preproducción}: En esta fase se desarrollan prototipos de juego muy sencillos, personajes, entornos, interfaces, esquemas de control y 
+    otros elementos en el juego para validar las ideas y conceptos clave.
+
+    \item \textit{Producción}: Se llevan por tanto a cabo todas las tareas de la fase de planificación teniendo como guía el documento de diseño: programación,
+    ilustración, desarrollo de interfaces, animación,  modelado, desarrollo del sonidos, etc. Si finalmente se logra ensamblar correctamente todas las piezas
+    entonces esta fase culmina. Sin embargo, al igual que en el desarrollo de software tradicional, es muy difícil que todo salga bien a la primera, por lo que
+    se entra en una fase para probar a fondo el videojuego.
+    
+    \item \textit{Pruebas}: En esta etapa se corrigen los errores del proceso de programación y se mejora la jugabilidad a medida que se prueba el juego.
+    Generalmente encontraremos dos tipos: las pruebas alpha, realizadas por un pequeño grupo de personas generalmente involucradas en el desarrollo, y las pruebas 
+    beta, realizadas por un equipo externo de jugadores. Las primeras tienen el objetivo de corregir defectos graves y mejorar características fundamentales no 
+    contempladas en el documento de diseño, mientras que las segundas se enfocan en detectar fallos menores y perfilar la experiencia de usuario.
+
+    \item \textit{Distribución/Marketing}: En esta fase se crean las copias del juego ya finalizado y se lleva a las tiendas (ya sean físicas o digitales) para que
+    los jugadores comprarlo.
+
+    \item \textit{Postproducción/Mantenimiento}: Pese a que el juego esté finalizado y en las manos de los jugadores, su ciclo de vida aún está lejos de terminar.
+    La fase de mantenimiento es el momento de arreglar nuevos errores, mejorarlo, etc. Ésto se hace sacando parches o actualizaciones al mercado.
+\end{itemize}
+
+
+\section{Qué es un juego dirigido por datos}
+
+
+\section{Qué es un motor de videojuegos}
+
+El término "motor de juego" surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el increíblemente popular Doom de id Software.
+Doom fue diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de
+detección de colisiones o el sistema de audio) y los activos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta
+separación se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos activos artísticos,
+diseños de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del "motor".
+
+Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la "modificación". Los motores se hicieron
+altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria viable
+para los desarrolladores que los crearon.   
+
+La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos. 
+En un juego, el código de renderizado podría "saber" específicamente cómo dibujar un orco. En otro juego, el motor de renderizado podría proporcionar facilidades de material y sombreado
+de propósito general, y la "orquidad" podría definirse completamente en datos. Ningún estudio logra una separación perfectamente clara entre el juego y el motor, lo cual es comprensible
+considerando que las definiciones de estos dos componentes a menudo cambian a medida que el diseño del juego se solidifica.
+
+Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego de un software que es un juego pero no un motor. Cuando un juego contiene lógica o 
+reglas de juego codificadas en duro, o utiliza código de casos especiales para representar tipos específicos de objetos de juego, se vuelve difícil o imposible reutilizar ese software
+para crear un juego diferente. Probablemente deberíamos reservar el término "motor de juego" para el software que es extensible y puede utilizarse como base para muchos juegos diferentes
+sin modificaciones importantes.
+
