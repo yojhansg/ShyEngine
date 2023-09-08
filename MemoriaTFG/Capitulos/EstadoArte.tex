@@ -19,9 +19,13 @@ Un videojuego es un juego electrónico en el que uno o más jugadores interactúan 
 imágenes de video. Este dispositivo, comúnmente conocido como "plataforma", puede ser una computadora, una máquina de arcade, una consola de 
 videojuegos o teléfono móvil, tableta o una consola de videojuegos portátil.
 
+\medskip
+
 Se puede entender como un programa software que es procesado por una máquina que cuenta con dispositivos de entrada y de salida. El programa contiene 
 toda la información, instrucciones, imágenes y audio que componen el videojuego. Va grabado en cartuchos, discos ópticos, discos magnéticos, tarjetas de 
 memoria especiales para videojuegos, o bien se descarga directamente a través de Internet.
+
+\medskip
 
 Típicamente, los videojuegos recrean entornos y situaciones virtuales en los que el jugador puede controlar a uno o varios personajes para conseguir
 un objetivo dentro de unas reglas determinadas. Dependiendo del videojuego, una partida pueden disputarla una o varias personas contra la máquina o bien
@@ -36,12 +40,18 @@ desde el concepto inicial hasta el videojuego en su versión final. Esta es una a
 el diseño, el sonido, la actuación, etc. El proceso es similar a la creación de software en general, aunque difiere en la gran cantidad de aportes creativos
 necesarios. El desarrollo también varía en función de la plataforma objetivo, el género y la forma de visualización (2d, 2.5d y 3d).
 
+\medskip
+
 El desarrollo ha pasado por muchas fases hasta el estado en el que se ecuentra en la actualidad. En las primeras décadas a partir del nacimiento de los videojuegos,
 los desarrolladores tenían que diseñar hardware específico para ejecutar los juegos. A partir de la década de 2000 en adelante, la mayoría de los juegos se desarrollan
 digitalmente, lo que significa que el código y los recursos se crean en computadoras en lugar de hardware dedicado.
 
+\medskip
+
 La idea fundamental de crear videojuegos se divide en programar el comportamiento, reglas y lógica del juego y crear los recursos (imágenes, audio, mapas, etc) que se
 quiera cargar en el juego.
+
+\medskip
 
 Sin entrar mucho en detalle, las etapas que sigue un desarrollo profesional son las siguientes: concepto, diseño, planificación, preproducción, producción, pruebas,
 distribución y mantenimiento.
@@ -83,72 +93,126 @@ distribución y mantenimiento.
 
 \subsection{Qué es un juego dirigido por datos}
 
-Debido al concepto de dividir los videojuegos en programación y recursos, el concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
-de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. Esto se puede entender como una cafetera a la cuál se le puede hechar
-distintos tipos de café y el resultado cambia dependiendo del tipo, pero siempré será un café. En este caso la cafetera sería la programación del videojuego, que solo es
-necesario construir una vez y los tipos de café representan los recursos que utilizados para el videojuego. (¿Buena analogía?)
+Con el concepto de videojuego como división de programación y recursos en mente, el concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
+de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. 
+
+\medskip
 
 Algunos ejemplos de juegos que siguen esta filosofía son las aventuras gráficas desarrolladas por Lucasfilm Games:
 
 \begin{figure}[t]
     \centering
     %
-    \subfloat[<ParaElIndice1>][<Caption1>]{
-    % Contenido para este "subelemento" (podrá ser una
-    % figura, una tabla, o cualquier otra cosa).
-    \includegraphics[width=5cm]{Imagenes/Vectorial/indianajones.jpg}
-    \label{fig:etiqueta1}
-    }
+    \begin{SubFloat}
+    {\label{fig:cap2:maniac}%
+    Maniac Mansion (1987)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/maniacmansion}%
+    \end{SubFloat}
     \qquad
-    \subfloat[<ParaElIndice2>][<Caption2>]{
-    % Contenido para este "subelemento" (podrá ser una
-    % figura, una tabla, o cualquier otra cosa).
-    \includegraphics[width=5cm]{Imagenes/Vectorial/maniacmansion.jpg}
-    \label{fig:etiqueta2}
-    }
+    \begin{SubFloat}
+    {\label{fig:cap2:indiana}%
+    Indiana Jones and the Last Crusade: The Graphic Adventure (1989)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/indianajones}%
+    \end{SubFloat}
+
+    % Siguiente linea
+
+    \begin{SubFloat}
+    {\label{fig:cap2:loom}%
+    Loom (1990)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/loom}%
+    \end{SubFloat}
+    \qquad
+    \begin{SubFloat}
+    {\label{fig:cap2:samandmax}%
+    Sam and Max Hit the Road (1993)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/samandmax}%
+    \end{SubFloat}
+
+    \caption{Juegos desarrollados por Lucasfilm Games.%
+    \label{fig:cap2:LucasfilmGames}}
 \end{figure}
+
+Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y el Half-Life, desarrollados por idSoftware y Valve Corporation, respectivamente.
 
 \begin{figure}[t]
     \centering
-    \subfloat[<ParaElIndice3>][<Caption3>]{
-    % Contenido para este "subelemento" (podrá ser una
-    % figura, una tabla, o cualquier otra cosa).
-    \includegraphics[width=5cm]{Imagenes/Vectorial/loom.jpg}
-    \label{fig:etiqueta3}
+    %
+    \subfloat[][Quake II (1997)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/quake2}
+    \label{fig:etiqueta1}
     }
     \qquad
-    \subfloat[<ParaElIndice4>][<Caption4>]{
-    % Contenido para este "subelemento" (podrá ser una
-    % figura, una tabla, o cualquier otra cosa).
-    \includegraphics[width=5cm]{Imagenes/Vectorial/samandmax.jpg}
-    \label{fig:etiqueta4}
+    \subfloat[][Half-Life (1998)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/halflife}
+    \label{fig:etiqueta2}
     }
-    \caption{Descripción global para la figura}
+    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos}
     \label{Etiqueta para toda la figura}
-\end{figure}
+\end{figure}  
 
+En todos ellos, se creaban nuevos datos/recursos para desarrollarlos.
 
 \section{Qué es un motor de videojuegos}
 
-El término "motor de juego" surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el increíblemente popular Doom de id Software.
-Doom fue diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de
-detección de colisiones o el sistema de audio) y los recursos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta
-separación se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos recursos artísticos,
-diseños de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del "motor".
+Un motor de videojuego, es un entorno de desarrollo que proporciona herramientas para la creación de videojuegos. Su función principal es dotar al videojuego de un motor para
+renderizar gráficos 2D y 3D, un motor físico que simule las leyes de la física y detección de colisiones, y herramientas para poder crear las animaciones, scripts, sonidos, 
+inteligencia artificial, redes, gestión de memoria, y demás sistemas del videojuego.
+
+\medskip
+
+El término "motor de juego" surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el popular Doom de id Software. Doom fue 
+diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de detección
+de colisiones o el sistema de audio) y los recursos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta separación
+se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos recursos artísticos, diseños 
+de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del "motor".
+
+\medskip
 
 Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la "modificación". Los motores se hicieron
-altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria viable
-para los desarrolladores que los crearon.   
+altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria
+viable para los desarrolladores que los crearon. 
 
-La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos. 
-En un juego, el código de renderizado podría "saber" específicamente cómo dibujar un orco. En otro juego, el motor de renderizado podría proporcionar facilidades de material y sombreado
-de propósito general, y la "orquidad" podría definirse completamente en datos. Ningún estudio logra una separación perfectamente clara entre el juego y el motor, lo cual es comprensible
-considerando que las definiciones de estos dos componentes a menudo cambian a medida que el diseño del juego se solidifica.
+\subsection{División entre motor y gameplay}
 
-Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego de un software que es un juego pero no un motor. Cuando un juego contiene lógica o 
-reglas de juego codificadas en duro, o utiliza código de casos especiales para representar tipos específicos de objetos de juego, se vuelve difícil o imposible reutilizar ese software
-para crear un juego diferente. Probablemente deberíamos reservar el término "motor de juego" para el software que es extensible y puede utilizarse como base para muchos juegos diferentes
-sin modificaciones importantes.
+La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos.
+
+En esta imagen se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
+personajes, modelos, escenas, lógica y comportamiento. Y por otro lado tenemos el motor, encargado de cargar toda esa información. 
+
+\begin{figure}[t]
+\centering
+    \includegraphics[width=0.9\textwidth]{Imagenes/Vectorial/Motor-Gameplay}
+\caption{División de juego en motor y gameplay.%
+    \label{fig:cap2:motor-gameplay}}
+\end{figure}
+
+En realidad aquí surge un problema. Los recursos obvios son imágenes y audio pero el gameplay también tiene mapas donde se colocan los elementos del juego y, sobre todo, comportamiento
+que hay que crear y proporcionar al motor. Como veremos más adelante, hay varias formas de conseguir convertir en datos ese comportamiento (que en realidad es programación). 
+
+\medskip
+
+Otro aspecto intersante a comentar es la "altitud" a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
+y hay que crear poco comportamiento en el gameplay. Eso hace que el motor esté muy focalizado en un tipo de juegos concretos por lo que si el género o tipo del videojuego a desarrollar no es
+compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo.
+
+\begin{figure}[t]
+    \centering
+        \includegraphics[width=0.9\textwidth]{Imagenes/Vectorial/MotorSobreGameplay}
+    \caption{Motor aporta funcionalidad al gameplay.%
+        \label{fig:cap2:motorSobreGameplay}}
+    \end{figure}
+
+\medskip
+
+En el libro de Game Engine Arquitecture \cite{GameEngineArchitecture} se cita lo siguiente: "Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
+de un software que es un juego, pero no un motor. Cuando un juego contiene lógica o reglas de juego codificadas a mano, o utiliza código de casos especiales para representar tipos específicos
+de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término "motor de juego" para el software que es
+extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes."
 
 \section{¿Qué es un editor?}
 \label{cap3:sec:motores}
