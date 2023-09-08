@@ -23,6 +23,7 @@ En cuanto a su funcionamiento, el editor se compone de tres secciones principale
 \end{enumerate}
 
 El flujo de trabajo del editor comienza con la ventana del gestor de proyectos. Después se traslada a una pila de estados, que determina qué ventana se debe mostrar y manejar en un momento dado, ya sea la ventana de edición de scripts o el editor principal.
+Todas las operaciones en el editor se gestionan a través de un bucle principal que se encarga de manejar la entrada del usuario, actualizar el estado de las ventanas y renderizarlas.
 
 \medskip
 
@@ -30,7 +31,9 @@ En el dibujo \ref{fig:funcionamientoEditor} podemos ver dicho flujo.
 
 \medskip
 
-Todas las operaciones en el editor se gestionan a través de un bucle principal que se encarga de manejar la entrada del usuario, actualizar el estado de las ventanas y renderizarlas. Cada ventana del editor hereda de una clase padre que proporciona el funcionamiento básico necesario en ImGui y que sirve como base para definir el comportamiento específico de cada ventana de la escena.
+En cuanto al funcionamiento de las ventanas, cada ventana del editor hereda de una clase padre que proporciona el funcionamiento básico necesario en ImGui y que sirve como base para definir el comportamiento específico de cada ventana de la escena.
+
+\medskip
 
 En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura.
 
@@ -41,7 +44,10 @@ En cuanto a la gestión de entidades, cada una de ellas se identifica mediante un
 \medskip
 
 Un aspecto importante del sistema de IDs es que también se utiliza para diferenciar las entidades normales de los prefabs\footnotemark. 
-Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única. Para identificar una entidad como una instancia de un prefab, se modifica el atributo ``PrefabId"  de la entidad, asignándole el ID negativo correspondiente al prefab al que está relacionada.
+
+\medskip
+
+Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única. Para identificar una entidad como una instancia de un prefab, se modifica el atributo ``PrefabId'' de la entidad, asignándole el ID negativo correspondiente al prefab al que está relacionada.
 
 \begin{figure}[h]
     \centering
@@ -58,10 +64,6 @@ Los prefabs se distinguen por tener un ID negativo, lo que les permite ser ident
     \label{fig:arquitecturaVentanas}
 \end{figure}
 
-
-\footnotetext{Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.} 
-
-
 \section{Ventana de scripting en el editor}
 
 TODO
@@ -73,7 +75,7 @@ Como se mencionó anteriormente en (añadir referencia al apartado del motor que h
 
 \medskip
 
-Los datos en formato JSON se interpretan y se utilizan para construir objetos de tipo ``Component"  en el editor. Cada objeto ``Component"  contiene un vector de objetos llamados ``Attribute", y estos a su vez almacenan un valor que se ajusta al tipo de atributo leído en el archivo JSON (int, float, Vector2...). Las entidades contienen un vector con los componentes que se le hayan añadido y sus valores se pueden modificar desde la ventana Components del editor.
+Los datos en formato JSON se interpretan y se utilizan para construir objetos de tipo ``Component'' en el editor. Cada objeto ``Component'' contiene un vector de objetos llamados ``Attribute'', y estos a su vez almacenan un valor que se ajusta al tipo de atributo leído en el archivo JSON (int, float, Vector2...). Las entidades contienen un vector con los componentes que se le hayan añadido y sus valores se pueden modificar desde la ventana Components del editor.
 
 \medskip
 
@@ -82,9 +84,13 @@ En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lec
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/LecturaComponentesEditor.png}
-    \caption{Lectura de componentes del motor en el editors.}
+    \caption{Lectura de componentes del motor en el editor.}
     \label{fig:datosEditor}
 \end{figure}
+
+
+\footnotetext{Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.} 
+
 %------------------------------------------------  --------------------------------------------
 
 
