@@ -6,7 +6,7 @@
 
 \chapter{Editor}
 
-\subsection{Funcionamiento y arquitectura}
+\section{Funcionamiento y arquitectura}
 
 El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGui, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor.
 
@@ -61,6 +61,30 @@ Los prefabs se distinguen por tener un ID negativo, lo que les permite ser ident
 
 \footnotetext{Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.} 
 
+
+\section{Ventana de scripting en el editor}
+
+TODO
+
+
+\section{Como se leen los componentes a partir de los datos del motor}
+
+Como se mencionó anteriormente en (añadir referencia al apartado del motor que hable sobre esto), el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
+
+\medskip
+
+Los datos en formato JSON se interpretan y se utilizan para construir objetos de tipo ``Component"  en el editor. Cada objeto ``Component"  contiene un vector de objetos llamados ``Attribute", y estos a su vez almacenan un valor que se ajusta al tipo de atributo leído en el archivo JSON (int, float, Vector2...). Las entidades contienen un vector con los componentes que se le hayan añadido y sus valores se pueden modificar desde la ventana Components del editor.
+
+\medskip
+
+En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lectura.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/LecturaComponentesEditor.png}
+    \caption{Lectura de componentes del motor en el editors.}
+    \label{fig:datosEditor}
+\end{figure}
 %------------------------------------------------  --------------------------------------------
 
 
