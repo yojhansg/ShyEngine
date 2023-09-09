@@ -415,15 +415,13 @@ En este enfoque, lo que se crea visualmente se traduce aún en datos que el motor
 La interacción entre el motor del juego y el sistema de scripting en lo que respecta al gameplay es una consideración central en el proceso de desarrollo de videojuegos en tiempo real. Dado que el motor del juego conoce  los eventos que suceden en el juego, como el fin de una partida o colisiones entre entidades, surge la interrogante de cómo las entidades del juego adquieren conocimiento de estos eventos. En este contexto, se emplean principalmente dos enfoques: el sistema de eventos y el método de encuestas:
 
 \begin{itemize}
-    \item \textit{Eventos}: El sistema de eventos podría dividirse en cuatro partes:
+    \item \textit{Eventos}: El sistema de eventos podría dividirse en tres partes:
         \begin{enumerate}
             \item \textit{Generación de eventos}: El motor del juego genera eventos cuando ocurren acciones o situaciones relevantes en el juego. Estos eventos pueden ser muy variados y pueden incluir cosas como colisiones entre objetos, la finalización de una partida, la recolección de un objeto, etc.
 
             \item \textit{Registro de eventos}: Las entidades del juego pueden registrarse para escuchar eventos específicos. Por ejemplo, un personaje podría registrarse para recibir un evento cuando colisiona con un enemigo.
 
             \item \textit{Manejadores de eventos}: Cuando se produce un evento, el motor del juego busca a todas las entidades registradas que estén interesadas en ese evento particular y llama a los manejadores de eventos correspondientes en esas entidades. Estos manejadores de eventos son funciones que se ejecutan para reaccionar al evento de una manera determinada.
-
-            \item \textit{Reacción de las entidades}: Las entidades pueden realizar acciones específicas en respuesta a un evento. Por ejemplo, un personaje podría recibir un evento de colisión y responder moviéndose hacia atrás o perdiendo puntos de salud.
         \end{enumerate}
 
     \item \textit{Encuestas}: El método de encuestas implica que las entidades del juego consulten activamente el estado del juego y los eventos relevantes en lugar de esperar a ser notificadas de ellos. En este enfoque, cada entidad del juego, de manera periódica o en respuesta a ciertos eventos de tiempo, realiza una encuesta o consulta al estado actual del juego, y reacciona en base a ello.
