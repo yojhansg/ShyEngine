@@ -153,6 +153,12 @@ float Scripting::ScriptFunctionality::Math_CubicLerp(float a, float b, float t)
 	return Math_Lerp(a, b, 1 - t_ * t_ * t_);
 }
 
+float Scripting::ScriptFunctionality::Math_Abs(float f)
+{
+	return std::abs(f);
+}
+
+
 
 
 

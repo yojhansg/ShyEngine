@@ -117,9 +117,9 @@ namespace ECS {
 
 
 		// Position
-		position = system->tr->GetLocalPosition() + system->position;
+		position = system->tr->GetLocalPosition() + system->position + system->spawnPosition;
 		if (system->randomPositionBetweenTwoValues)
-			position = system->tr->GetLocalPosition() + Random::RandomVectorBetween(system->positionFirstValue, system->positionSecondValue);
+			position = system->tr->GetLocalPosition() + system->spawnPosition + Random::RandomVectorBetween(system->positionFirstValue, system->positionSecondValue);
 
 
 		// LifeTime

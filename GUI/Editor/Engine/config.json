@@ -84,7 +84,7 @@
             false
         ],
         [
-            true,
+            false,
             false,
             false,
             false,
@@ -318,8 +318,8 @@
             false
         ]
     ],
-    "path": "Assets",
-    "projectFilePath": "Platform.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject",
     "showcursor": true,
     "splashScreen": true,
     "timeToDoubleClick": 0.5,

@@ -282,6 +282,8 @@ ClassReflection::ClassReflection(){
 			self->angleFirstValue = std::stof(map.at("angleFirstValue"));
 		if(map.contains("angleSecondValue"))
 			self->angleSecondValue = std::stof(map.at("angleSecondValue"));
+		if(map.contains("spawnPosition"))
+			self->spawnPosition = map.at("spawnPosition");
 		if(map.contains("position"))
 			self->position = map.at("position");
 		if(map.contains("randomPositionBetweenTwoValues"))

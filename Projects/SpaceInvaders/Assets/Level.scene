@@ -73,7 +73,7 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "0.000000, -0.000000",
+            "localPosition": "-4.000000, -6.000000",
             "localScale": "1.000000, 1.000000",
             "localRotation": "0.000000",
             "components": [],
@@ -104,7 +104,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "ship.png"
+                        "fileName": "ship.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 },
                 {
@@ -126,16 +128,16 @@
                 }
             ],
             "scripts": {
-                "Scripts/Shoot": {
-                    "PrefabName": {
-                        "type": "string",
-                        "value": "bullet"
-                    }
-                },
                 "Scripts/Ship movement": {
                     "Speed": {
                         "type": "float",
                         "value": 5.0
+                    }
+                },
+                "Scripts/Shoot": {
+                    "PrefabName": {
+                        "type": "string",
+                        "value": "bullet"
                     }
                 },
                 "Scripts/Bullet Cooldown": {
@@ -160,7 +162,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "background.png"
+                        "fileName": "background.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 }
             ],
@@ -214,19 +218,21 @@
                     "childs": [
                         {
                             "name": "alien",
-                            "id": 11,
+                            "id": 3,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
-                            "localPosition": "440.000000, 440.000000",
+                            "localPosition": "-540.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
                             "localRotation": "0.000000",
                             "components": [
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -258,19 +264,21 @@
                         },
                         {
                             "name": "alien",
-                            "id": 3,
+                            "id": 11,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
-                            "localPosition": "-540.000000, 440.000000",
+                            "localPosition": "440.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
                             "localRotation": "0.000000",
                             "components": [
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -305,7 +313,7 @@
                             "id": 10,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "300.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -314,7 +322,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -349,7 +359,7 @@
                             "id": 9,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "160.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -358,7 +368,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -393,7 +405,7 @@
                             "id": 8,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "20.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -402,7 +414,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -437,7 +451,7 @@
                             "id": 7,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-120.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -446,7 +460,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -481,7 +497,7 @@
                             "id": 5,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-260.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -490,7 +506,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -525,7 +543,7 @@
                             "id": 4,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-400.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -534,7 +552,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -583,7 +603,7 @@
                             "id": 14,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-540.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -592,7 +612,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -627,7 +649,7 @@
                             "id": 15,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "440.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -636,7 +658,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -671,7 +695,7 @@
                             "id": 16,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "300.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -680,7 +704,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -715,7 +741,7 @@
                             "id": 17,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "160.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -724,7 +750,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -759,7 +787,7 @@
                             "id": 18,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "20.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -768,7 +796,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -803,7 +833,7 @@
                             "id": 19,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-120.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -812,7 +842,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -847,7 +879,7 @@
                             "id": 20,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-260.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -856,7 +888,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -891,7 +925,7 @@
                             "id": 21,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-400.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -900,7 +934,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -949,7 +985,7 @@
                             "id": 31,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-540.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -958,7 +994,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -993,7 +1031,7 @@
                             "id": 32,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "440.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1002,7 +1040,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1037,7 +1077,7 @@
                             "id": 33,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "300.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1046,7 +1086,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1081,7 +1123,7 @@
                             "id": 34,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "160.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1090,7 +1132,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1125,7 +1169,7 @@
                             "id": 35,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "20.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1134,7 +1178,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1169,7 +1215,7 @@
                             "id": 36,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-120.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1178,7 +1224,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1213,7 +1261,7 @@
                             "id": 37,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-260.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1222,7 +1270,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1257,7 +1307,7 @@
                             "id": 38,
                             "childs": [],
                             "order": 0,
-                            "prefabId": -1,
+                            "prefabId": 0,
                             "isTransform": true,
                             "localPosition": "-400.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
@@ -1266,7 +1316,9 @@
                                 {
                                     "component": "Image",
                                     "attributes": {
-                                        "fileName": "alien2.png"
+                                        "fileName": "alien2.png",
+                                        "flipmode": "0.000000",
+                                        "rotationPoint": "0.000000, 0.000000"
                                     }
                                 },
                                 {
@@ -1315,6 +1367,12 @@
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
+                "Scripts/Alien Vertical Movement": {
+                    "Jump distance": {
+                        "type": "Vector2D",
+                        "value": "0.000000, -70.000000"
+                    }
+                },
                 "Scripts/AlienManager": {
                     "Alien count": {
                         "type": "float",
@@ -1323,12 +1381,6 @@
                     "Win Scene": {
                         "type": "string",
                         "value": "Win.scene"
-                    }
-                },
-                "Scripts/Alien Vertical Movement": {
-                    "Jump distance": {
-                        "type": "Vector2D",
-                        "value": "0.000000, -70.000000"
                     }
                 }
             }

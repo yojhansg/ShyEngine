@@ -1,0 +1,203 @@
+%---------------------------------------------------------------------
+%
+%                          Parte 3
+%
+%---------------------------------------------------------------------
+%
+% Parte3.tex
+% Copyright 2009 Marco Antonio Gomez-Martin, Pedro Pablo Gomez-Martin
+%
+% This file belongs to the TeXiS manual, a LaTeX template for writting
+% Thesis and other documents. The complete last TeXiS package can
+% be obtained from http://gaia.fdi.ucm.es/projects/texis/
+%
+% Although the TeXiS template itself is distributed under the 
+% conditions of the LaTeX Project Public License
+% (http://www.latex-project.org/lppl.txt), the manual content
+% uses the CC-BY-SA license that stays that you are free:
+%
+%    - to share & to copy, distribute and transmit the work
+%    - to remix and to adapt the work
+%
+% under the following conditions:
+%
+%    - Attribution: you must attribute the work in the manner
+%      specified by the author or licensor (but not in any way that
+%      suggests that they endorse you or your use of the work).
+%    - Share Alike: if you alter, transform, or build upon this
+%      work, you may distribute the resulting work only under the
+%      same, similar or a compatible license.
+%
+% The complete license is available in
+% http://creativecommons.org/licenses/by-sa/3.0/legalcode
+%
+%---------------------------------------------------------------------
+
+% Definición de la última parte del manual, los apéndices
+
+\partTitle{Apéndices}
+
+%---------------------------------------------------------------------
+%
+%                          Resumen EN
+%
+%---------------------------------------------------------------------
+
+\section{Abstract}
+\cabeceraEspecial{Abstract}
+
+The development of video games is a field that has undergone significant evolution over the years. Initially, video games were simple
+programs with basic behavior and very limited graphics, which generally provided little entertainment value. Over time, and partly due
+to technological advancements, they have considerably increased in complexity and scope. Nowadays, video game development involves the 
+creation of interactive virtual worlds that can encompass a wide variety of genres and platforms, from mobile games to high-end titles
+for consoles and computers.
+
+\medskip
+
+Hence, the most commonly used and powerful tools for game development today require a notable knowledge base in development and have a
+steep learning curve. Therefore, they pose a barrier for those individuals who want to get started in the world of development or who
+simply want to create their first simple video game without the necessary knowledge or experience.
+
+\medskip
+
+With this project, we aim to simplify the game development process for individuals inexperienced in programming or development in general.
+This involves in-depth study of what a video game is, how they are created, the various 2D game engines available and their architectures,
+as well as the different ways to program the behavior of game elements. All of this is done with the goal of designing a game editor and 
+engine that make game creation accessible and easy to understand for those who lack experience in the field.
+
+
+
+%---------------------------------------------------------------------
+%
+%                          Introduccion EN
+%
+%---------------------------------------------------------------------
+
+%-------------------------------------------------------------------
+\section{Motivation}
+\label{cap2:sec:motivation}
+
+Video game programming has historically been an extremely complex and laborious process. In its early days, developers faced the challenge of creating 
+games from scratch, building each element and functionality manually. In addition, they relied heavily on external libraries to access essential resources.
+This approach, while rewarding in terms of control and customization, significantly limited accessibility to the world of game creation.    
+
+\medskip
+
+In contrast, today we have witnessed a revolution in the game development industry. The creation of video games has become considerably more accessible 
+thanks to the emergence of powerful editors and development engines. These editors offer a range of tools and resources that greatly simplify the creation
+process, allowing developers to concentrate on creativity and gameplay rather than worrying about overwhelming technical details.
+
+\medskip
+
+Despite the accessibility provided by modern editors, the learning curve can be steep, especially for those who are new to the world of programming and
+game development. This project focuses on creating an engine and editor that allow for the development of simple games while also having a more accessible
+learning curve for individuals without experience in this field.
+
+%-------------------------------------------------------------------
+\section{Goals}
+\label{cap2:sec:goals}
+
+The main goal is to develop a self-contained 2D game engine with an integrated editor and visual node-based programming. Additionally, it will be possible
+to test and view the progress of the game being developed directly from the editor and generate executable versions.
+
+\medskip
+
+With this, users will have a tool to develop any type of 2D game with an accessible level of complexity and a pleasant and intuitive user experience.
+
+\section{Tools}
+\label{cap2:sec:tools}
+
+%-------------------------------------------------------------------
+To start, Git has been used as a version control system through the GitHub Desktop application. All implemented code has been uploaded to a repository,
+with the work divided into branches.
+
+\medskip
+
+Link to the repository: \url{https://github.com/ivasan07/ShyEngine}
+
+\medskip
+
+The code has been developed in the Visual Studio 2022 integrated development environment (IDE) and written in C++.
+
+\medskip
+
+Lastly, we have managed tasks using the Trello project management system.
+
+%-------------------------------------------------------------------
+\section{Work Plan}
+\label{cap2:sec:workplan}
+
+Our project will be divided into three main blocks: engine, editor and visual scripting.
+
+\medskip
+
+Additionally, the work will be divided into five phases: research and planning, initial development, integration of the projects and developemente core,
+improvements and development closure, and user testing.
+
+\begin{enumerate}
+    \item \textit{Research and planning}: The first phase of the work will involve researching various game engines and editors to understand their 
+    functionality and different architectures. We will also look for libraries that fit the demands of our project to achieve comfortable and efficient
+    development. Finally, we will plan the division of tasks and the future integration of each part.
+
+    \item \textit{Initial development}: For this phase, we will develop the core of each project. Concerning the engine, we will create initial projects
+    to test the libraries to be used and implement the basic game architecture. Regarding the editor, we will create the project in which the selected
+    graphical interface library will be integrated to test its functionality. As for visual scripting, we will begin prototyping the language.
+
+    \item \textit{Integration and developement core}: Once the core of each project is developed, we will integrate them in a way that we have a functional
+    flow between the three. In other words, we will implement a straightforward development flow in which logic is created from the editor and can be executed
+    in the engine.
+
+    \item \textit{Improvements and development closure}: With the three projects integrated, we will continue the development of common functionalities 
+    to make it as polished as possible before user testing. This will involve testing/developing a game to identify any potential errors and correct them.
+
+    \item \textit{User testing}: User testing will be conducted with individuals from different backgrounds: users with programming experience and users 
+    without experience. This way, we will leverage their feedback to fix potential errors and refine details that enhance the user experience.
+\end{enumerate}
+
+
+
+%---------------------------------------------------------------------
+%
+%                          Conclusiones EN
+%
+%---------------------------------------------------------------------
+
+The aim of this final degree project was to develop a 2D game engine for non-programmers. We have successfully
+achieved the proposed goal. Our engine opens the doors to developers with little programming experience while
+providing enough functionality to create competent 2D video games.
+
+In practical applications, our engine can be used in the indie game development world or even for educational purposes.
+
+From a technical perspective, we have reached the following conclusions:
+
+\begin{itemize}
+
+    \item With the current implementation, ImGUI windows cannot be moved outside the main SDL window, which can be 
+    inconvenient in some situations, such as when implementing a script where it's essential to view the scene or some 
+    editor parameters to make decisions.
+
+    \item We had to implement reflection in C++. It would have been more convenient to choose a language with reflection, 
+    which would have provided us with greater flexibility.
+
+\end{itemize}
+
+As for future work, we are considering the following functionalities:
+
+\begin{itemize}
+
+    \item Enabling the game to be launched within the editor itself rather than in a separate window.
+
+    \item Modifying the current editor implementation to allow the movement of ImGUI windows outside the main SDL window.
+
+    \item Adding an animation and rendering system to reduce the dependence on external tools.
+
+    \item Abstracting the user from file paths and directories by converting files into engine objects.
+
+    \item To delve deeper into scripting, adding more complex functionality that allows the user greater expressiveness, 
+    for example, by adding editable arrays from the editor, class creation, recursion, timers, coroutines, and debugging 
+    of running nodes.
+
+\end{itemize}
+
+
+\makepart

@@ -110,7 +110,7 @@ namespace ECS {
 
 		auto other = PhysicBody::GetComponentFromEntity(ent);
 
-		if (body->collidesWith(other) && other->getCollisionLayer() == platformLayer) {
+		if (other->getCollisionLayer() == platformLayer) {
 
 			if (std::abs(body->getCollisionNormal().getY()) == 1.0f && body->getLinearVelocity().getY() < 0) {
 				onGround = true;
@@ -124,7 +124,7 @@ namespace ECS {
 
 		auto other = PhysicBody::GetComponentFromEntity(ent);
 
-		if (body->collidesWith(other) && other->getCollisionLayer() == platformLayer) {
+		if (other->getCollisionLayer() == platformLayer) {
 			onGround = false;
 			hasJumped = false;
 		}

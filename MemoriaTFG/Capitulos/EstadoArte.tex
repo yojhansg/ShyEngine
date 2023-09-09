@@ -1,0 +1,373 @@
+%---------------------------------------------------------------------
+%
+%                          Estado del arte
+%
+%---------------------------------------------------------------------
+
+\chapter{Estado del arte}
+\label{cap3:estado_del_arte}
+
+\begin{resumen}
+Este capítulo se centra en los videojuegos, cómo se desarrollan, qué es un motor de videojuegos, cuáles son sus partes fundamentales, cuáles son los
+más utilizados hoy en día y sus características, qué es un editor y porque se usan para el desarrollo, qué significa el scripting y las formas que 
+existen para generar comportamiento en los videojuegos.
+\end{resumen}
+
+\section{Qué es un videojuego}
+
+Un videojuego es un juego electrónico en el que uno o más jugadores interactúan mediante un controlador con un dispositivo electrónico que muestra
+imágenes de video. Este dispositivo, comúnmente conocido como "plataforma", puede ser una computadora, una máquina de arcade, una consola de 
+videojuegos o teléfono móvil, tableta o una consola de videojuegos portátil.
+
+\medskip
+
+Se puede entender como un programa software que es procesado por una máquina que cuenta con dispositivos de entrada y de salida. El programa contiene 
+toda la información, instrucciones, imágenes y audio que componen el videojuego. Va grabado en cartuchos, discos ópticos, discos magnéticos, tarjetas de 
+memoria especiales para videojuegos, o bien se descarga directamente a través de Internet.
+
+\medskip
+
+Típicamente, los videojuegos recrean entornos y situaciones virtuales en los que el jugador puede controlar a uno o varios personajes para conseguir
+un objetivo dentro de unas reglas determinadas. Dependiendo del videojuego, una partida pueden disputarla una o varias personas contra la máquina o bien
+múltiples jugadores a través de una red LAN o en línea vía Internet. El género de un videojuego se refiere a una categoría o clasificación que se utiliza
+para describir su estilo, mecánicas de juego, temas y elementos característicos. Algunos de los géneros más representativos son los videojuegos de acción,
+rol, estrategia, simulación, deportes o aventura.
+
+\subsection{Cómo se hace un juego}
+
+La creación de videojuegos es una actividad llevada a cabo por las empresas desarrolladoras de videojuegos. Estas se encargan de diseñar y programar el videojuego,
+desde el concepto inicial hasta el videojuego en su versión final. Esta es una actividad multidisciplinaria, que involucra profesionales de la informática,
+el diseño, el sonido, la actuación, etc. El proceso es similar a la creación de software en general, aunque difiere en la gran cantidad de aportes creativos
+necesarios. El desarrollo también varía en función de la plataforma objetivo, el género y la forma de visualización (2d, 2.5d y 3d).
+
+\medskip
+
+El desarrollo ha pasado por muchas fases hasta el estado en el que se ecuentra en la actualidad. En las primeras décadas a partir del nacimiento de los videojuegos,
+los desarrolladores tenían que diseñar hardware específico para ejecutar los juegos. A partir de la década de 2000 en adelante, la mayoría de los juegos se desarrollan
+digitalmente, lo que significa que el código y los recursos se crean en computadoras en lugar de hardware dedicado.
+
+\medskip
+
+La idea fundamental de crear videojuegos se divide en programar el comportamiento, reglas y lógica del juego y crear los recursos (imágenes, audio, mapas, etc) que se
+quiera cargar en el juego.
+
+\medskip
+
+Sin entrar mucho en detalle, las etapas que sigue un desarrollo profesional son las siguientes: concepto, diseño, planificación, preproducción, producción, pruebas,
+distribución y mantenimiento.
+
+
+% \begin{itemize}
+%     \item \textit{Concepto}: En esta fase se tiene una idea a partir de la cual se conformarán los aspectos fundamentales. Se determina el género o géneros
+%     del videojuego, cómo será el proceso de juego, y también se constituye un guión gráfico en el que se tratan todo tipo de ideas preconcebidas que pueden
+%     ir adaptándose, como por ejemplo el estilo de los personajes, el ambiente, la música, etc. Una vez se sabe qué hacer entonces es el momento de diseñar.
+    
+%     \item \textit{Diseño}: Se empieza definiendo los elementos que componen el juego. Se desarrolla la historia, se crean bocetos de guiones para determinar
+%     los objetivos, se deciden los personajes principales, el contexto, etc. El objetivo de esta fase es como objetivo generar el Documento de Diseño (GDD) 
+%     que especificará el arte, las mecánicas y las dinámicas del videojuego.
+    
+%     \item \textit{Planificación}: Esta etapa tiene como objetivo identificar las diferentes tareas para desarrollar el videojuego. Se reparte el trabajo 
+%     entre los distintos componentes del equipo de desarrollo, se fijan plazos de entregas, se planifican reuniones de seguimiento, etc. Normalmente se suele
+%     seguir una metodología de desarrollo como Scrum, en cascada (Waterfall), Kanban, desarrollo Lean, etc.
+    
+%     \item \textit{Preproducción}: En esta fase se desarrollan prototipos de juego muy sencillos, personajes, entornos, interfaces, esquemas de control y 
+%     otros elementos en el juego para validar las ideas y conceptos clave.
+
+%     \item \textit{Producción}: Se llevan por tanto a cabo todas las tareas de la fase de planificación teniendo como guía el documento de diseño: programación,
+%     ilustración, desarrollo de interfaces, animación,  modelado, desarrollo del sonidos, etc. Si finalmente se logra ensamblar correctamente todas las piezas
+%     entonces esta fase culmina. Sin embargo, al igual que en el desarrollo de software tradicional, es muy difícil que todo salga bien a la primera, por lo que
+%     se entra en una fase para probar a fondo el videojuego.
+    
+%     \item \textit{Pruebas}: En esta etapa se corrigen los errores del proceso de programación y se mejora la jugabilidad a medida que se prueba el juego.
+%     Generalmente encontraremos dos tipos: las pruebas alpha, realizadas por un pequeño grupo de personas generalmente involucradas en el desarrollo, y las pruebas 
+%     beta, realizadas por un equipo externo de jugadores. Las primeras tienen el objetivo de corregir defectos graves y mejorar características fundamentales no 
+%     contempladas en el documento de diseño, mientras que las segundas se enfocan en detectar fallos menores y perfilar la experiencia de usuario.
+
+%     \item \textit{Distribución/Marketing}: En esta fase se crean las copias del juego ya finalizado y se lleva a las tiendas (ya sean físicas o digitales) para que
+%     los jugadores comprarlo.
+
+%     \item \textit{Postproducción/Mantenimiento}: Pese a que el juego esté finalizado y en las manos de los jugadores, su ciclo de vida aún está lejos de terminar.
+%     La fase de mantenimiento es el momento de arreglar nuevos errores, mejorarlo, etc. Ésto se hace sacando parches o actualizaciones al mercado.
+% \end{itemize}
+
+
+\subsection{Qué es un juego dirigido por datos}
+
+Con el concepto de videojuego como división de programación y recursos en mente, el concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
+de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. 
+
+\medskip
+
+Algunos ejemplos de juegos que siguen esta filosofía son las aventuras gráficas desarrolladas por Lucasfilm Games:
+
+\begin{figure}[t]
+    \centering
+    %
+    \begin{SubFloat}
+    {\label{fig:cap2:maniac}%
+    Maniac Mansion (1987)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/maniacmansion}%
+    \end{SubFloat}
+    \qquad
+    \begin{SubFloat}
+    {\label{fig:cap2:indiana}%
+    Indiana Jones and the Last Crusade: The Graphic Adventure (1989)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/indianajones}%
+    \end{SubFloat}
+
+    % Siguiente linea
+
+    \begin{SubFloat}
+    {\label{fig:cap2:loom}%
+    Loom (1990)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/loom}%
+    \end{SubFloat}
+    \qquad
+    \begin{SubFloat}
+    {\label{fig:cap2:samandmax}%
+    Sam and Max Hit the Road (1993)}%
+    \includegraphics[width=0.45\textwidth]%
+    {Imagenes/Vectorial/samandmax}%
+    \end{SubFloat}
+
+    \caption{Juegos desarrollados por Lucasfilm Games.%
+    \label{fig:cap2:LucasfilmGames}}
+\end{figure}
+
+Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y el Half-Life, desarrollados por idSoftware y Valve Corporation, respectivamente.
+
+\begin{figure}[t]
+    \centering
+    %
+    \subfloat[][Quake II (1997)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/quake2}
+    \label{fig:etiqueta1}
+    }
+    \qquad
+    \subfloat[][Half-Life (1998)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/halflife}
+    \label{fig:etiqueta2}
+    }
+    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos}
+    \label{Etiqueta para toda la figura}
+\end{figure}  
+
+En todos ellos, se creaban nuevos datos/recursos para desarrollarlos.
+
+\section{Qué es un motor de videojuegos}
+
+Un motor de videojuego, es un entorno de desarrollo que proporciona herramientas para la creación de videojuegos. Su función principal es dotar al videojuego de un motor para
+renderizar gráficos 2D y 3D, un motor físico que simule las leyes de la física y detección de colisiones, y herramientas para poder crear las animaciones, scripts, sonidos, 
+inteligencia artificial, redes, gestión de memoria, y demás sistemas del videojuego.
+
+\medskip
+
+El término "motor de juego" surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el popular Doom de id Software. Doom fue 
+diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de detección
+de colisiones o el sistema de audio) y los recursos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta separación
+se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos recursos artísticos, diseños 
+de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del "motor".
+
+\medskip
+
+Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la "modificación". Los motores se hicieron
+altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria
+viable para los desarrolladores que los crearon. 
+
+\subsection{División entre motor y gameplay}
+
+La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos.
+
+En esta imagen se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
+personajes, modelos, escenas, lógica y comportamiento. Y por otro lado tenemos el motor, encargado de cargar toda esa información. 
+
+\begin{figure}[t]
+\centering
+    \includegraphics[width=0.9\textwidth]{Imagenes/Vectorial/Motor-Gameplay}
+\caption{División de juego en motor y gameplay.%
+    \label{fig:cap2:motor-gameplay}}
+\end{figure}
+
+En realidad aquí surge un problema. Los recursos obvios son imágenes y audio pero el gameplay también tiene mapas donde se colocan los elementos del juego y, sobre todo, comportamiento
+que hay que crear y proporcionar al motor. Como veremos más adelante, hay varias formas de conseguir convertir en datos ese comportamiento (que en realidad es programación). 
+
+\medskip
+
+Otro aspecto intersante a comentar es la "altitud" a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
+y hay que crear poco comportamiento en el gameplay. Eso hace que el motor esté muy focalizado en un tipo de juegos concretos por lo que si el género o tipo del videojuego a desarrollar no es
+compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo.
+
+\begin{figure}[t]
+    \centering
+        \includegraphics[width=0.9\textwidth]{Imagenes/Vectorial/MotorSobreGameplay}
+    \caption{Motor aporta funcionalidad al gameplay.%
+        \label{fig:cap2:motorSobreGameplay}}
+    \end{figure}
+
+\medskip
+
+En el libro de Game Engine Arquitecture \cite{GameEngineArchitecture} se cita lo siguiente: "Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
+de un software que es un juego, pero no un motor. Cuando un juego contiene lógica o reglas de juego codificadas a mano, o utiliza código de casos especiales para representar tipos específicos
+de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término "motor de juego" para el software que es
+extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes."
+
+\section{¿Qué es un editor?}
+\label{cap3:sec:motores}
+
+Un editor de videojuegos es una herramienta de software diseñada para facilitar la creación, diseño y modificación de videojuegos. A lo largo de la historia de los videojuegos, los editores han evolucionado significativamente en términos de funcionalidad y facilidad de uso. 
+
+\subsection{Evolución histórica de los Editores}
+
+En sus inicios, los editores de videojuegos eran herramientas rudimentarias que requerían un conocimiento técnico profundo y estaban reservados principalmente para desarrolladores de juegos experimentados. Estos primeros editores solían centrarse en la manipulación de código y la creación de niveles o mapas, con una interfaz de usuario limitada.
+
+\medskip
+
+Con el tiempo, a medida que la industria de los videojuegos creció y se diversificó, los editores se volvieron más accesibles y versátiles. Surgieron soluciones más amigables para el usuario que permitían a diseñadores, artistas y creadores de contenido participar en el proceso de desarrollo de juegos sin necesidad de habilidades de programación avanzadas.
+
+\subsection{Importancia en el desarrollo de videojuegos}
+
+Los editores de videojuegos desempeñan un papel crucial en el proceso de desarrollo de un videojuego. Estas herramientas permiten a los desarrolladores:
+
+\begin{enumerate}
+    \item \textit{Diseñar Niveles y Escenarios}: Los editores permiten la creación y edición de entornos, niveles y escenarios. Los diseñadores pueden colocar objetos, enemigos, obstáculos y elementos interactivos en el mundo del juego.
+
+    \item \textit{Gestionar Recursos}: Los editores proporcionan una plataforma para administrar recursos del juego, como imágenes, sonidos, modelos 3D y más. Los recursos se organizan y se pueden vincular a elementos del juego.
+
+    \item \textit{Definir Comportamientos}: Los editores modernos permiten definir comportamientos de personajes y objetos mediante sistemas visuales de programación o scripts. Esto facilita la creación de interacciones y mecánicas de juego.
+
+    \item \textit{Simular y Depurar}: Los editores a menudo incluyen herramientas de simulación y depuración que ayudan a los desarrolladores a probar y solucionar problemas en tiempo real.
+\end{enumerate}
+
+\subsection{Enfoque histórico y actual de la integración entre editor y motor}
+
+En la actualidad, muchos editores de videojuegos están integrados con motores de juego, una evolución significativa con respecto a la forma en que solían operar por separado. Antes, los motores y los editores solían ser herramientas independientes, lo que requería a los desarrolladores crear contenido en el editor y luego importarlo y vincularlo manualmente al motor. Este proceso a menudo era laborioso y propenso a errores.
+
+\medskip 
+
+Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas.
+
+\medskip 
+
+Sin embargo, con la integración de editores y motores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se aplican sin necesidad de complicados procesos de compilación.
+
+\medskip 
+
+Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida. La simplicidad de este enfoque también ha abierto las puertas a diseñadores y creadores de contenido que pueden contribuir al desarrollo de juegos sin necesidad de conocimientos profundos en programación o procesos de compilación.
+
+
+\subsection{TODO: COMUNICACION MOTOR-EDITOR (NO ENTIENDO EL COMENTARIO DE PP)}
+
+
+
+% --------------------------------------------------------- SCRIPTING -------------------------------
+
+
+\section{¿Qué es el Scripting?}
+
+El scripting, en el contexto del desarrollo de videojuegos, se refiere a la capacidad de definir el comportamiento y las reglas del juego utilizando scripts o instrucciones escritas en un lenguaje específico. Estos scripts permiten controlar eventos, acciones y la interacción dentro del juego, proporcionando una forma versátil de diseñar la experiencia del jugador.
+
+\subsection{¿Como se convierte el comportamiento en datos para el motor?}
+
+Una pregunta esencial en el desarrollo de videojuegos es cómo traducir el comportamiento deseado del juego en información que el motor del juego pueda procesar. La manera en que esto se logra depende en gran medida de cómo esté estructurado el motor y del diseño del juego en sí.
+
+\medskip 
+
+Si el motor del juego está diseñado para ser muy específico y limitado en cuanto a la personalización, es posible que no sea necesario programar comportamientos adicionales. Por ejemplo, en las expansiones de Los Sims, gran parte del comportamiento ya está incorporado en el motor del juego, y los datos simplemente se utilizan para ajustar y personalizar ese comportamiento existente. En este caso, el diseñador trabaja dentro de las restricciones del motor existente y utiliza los datos para modificar cómo se comportan las entidades del juego.
+
+\medskip 
+
+En contraste, si el motor no está diseñado para ser tan específico y se requiere agregar comportamientos particulares, entonces es necesario recurrir a la programación. Es aquí donde se pueden dar distintos enfoques:
+
+\begin{enumerate}
+    \item Un enfoque común en esta situación es el uso de Dynamic Link Libraries (DLL) o bibliotecas de enlace dinámico. Aquí, los programadores escriben código en lenguajes como C++ para definir nuevos comportamientos o características del juego. Estos comportamientos se agrupan en bibliotecas (DLL) que se integran con el motor del juego.
+
+    \medskip 
+
+    Cuando un programador crea un nuevo comportamiento o entidad, como por ejemplo un atributo de agresividad en una clase C++, es esencial que este comportamiento sea accesible y configurable en el editor del juego sin necesidad de recompilar todo el motor.
+
+    \medskip 
+
+    Este enfoque de DLLs ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito en la  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
+
+
+    \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Un ejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motor del juego es simplemente un archivo de texto que contiene instrucciones.
+
+    \medskip 
+
+    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores.
+    
+    \medskip 
+
+    Sin embargo, este enfoque también presenta desafíos. Se necesita una conexión efectiva entre el mundo nativo (generalmente escrito en lenguajes como C++) y el lenguaje de script para que puedan comunicarse y llamar funciones entre sí. 
+    
+    \medskip 
+
+    A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interacción con el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen ser más accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
+
+    \medskip
+
+    TODO: AÑADIR IMAGEN DE COMO FUNCIONA UNA DLL
+
+
+\end{enumerate}
+
+Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, pueden resultar complicados para los diseñadores de juegos y, en algunos casos, pueden volverse muy verbosos dependiendo de los objetivos específicos. Una posible solución es la programación visual.
+
+\subsubsection*{Programación visual}
+
+La programación visual es una alternativa que busca hacer que la creación de comportamientos y características del juego sea más accesible para los diseñadores. En lugar de escribir líneas de código, los diseñadores pueden utilizar interfaces gráficas y elementos visuales para definir y configurar el comportamiento del juego. Esto hace que el proceso sea más intuitivo y menos dependiente de conocimientos de programación.
+
+\medskip 
+
+En este enfoque, lo que se crea visualmente se traduce aún en datos que el motor del juego puede entender. Estos datos pueden interpretarse de diversas formas. Por ejemplo, se pueden transpilar a código C++, lo que finalmente nos llevaría de nuevo al primer enfoque que mencionamos. También podrían reescribirse en un lenguaje de script como Lua, o simplemente serializarse en un formato propio y luego ejecutarse mediante un intérprete diseñado específicamente para ese formato.
+
+
+\subsection{¿Como se comunica el motor con el scripting?}
+
+La interacción entre el motor del juego y el sistema de scripting en lo que respecta al gameplay es una consideración central en el proceso de desarrollo de videojuegos en tiempo real. Dado que el motor del juego conoce  los eventos que suceden en el juego, como el fin de una partida o colisiones entre entidades, surge la interrogante de cómo las entidades del juego adquieren conocimiento de estos eventos. En este contexto, se emplean principalmente dos enfoques: el sistema de eventos y el método de encuestas:
+
+\begin{itemize}
+    \item \textit{Eventos}: El sistema de eventos podría dividirse en cuatro partes:
+        \begin{enumerate}
+            \item \textit{Generación de eventos}: El motor del juego genera eventos cuando ocurren acciones o situaciones relevantes en el juego. Estos eventos pueden ser muy variados y pueden incluir cosas como colisiones entre objetos, la finalización de una partida, la recolección de un objeto, etc.
+
+            \item \textit{Registro de eventos}: Las entidades del juego pueden registrarse para escuchar eventos específicos. Por ejemplo, un personaje podría registrarse para recibir un evento cuando colisiona con un enemigo.
+
+            \item \textit{Manejadores de eventos}: Cuando se produce un evento, el motor del juego busca a todas las entidades registradas que estén interesadas en ese evento particular y llama a los manejadores de eventos correspondientes en esas entidades. Estos manejadores de eventos son funciones que se ejecutan para reaccionar al evento de una manera determinada.
+
+            \item \textit{Reacción de las entidades}: Las entidades pueden realizar acciones específicas en respuesta a un evento. Por ejemplo, un personaje podría recibir un evento de colisión y responder moviéndose hacia atrás o perdiendo puntos de salud.
+        \end{enumerate}
+
+    \item \textit{Encuestas}: El método de encuestas implica que las entidades del juego consulten activamente el estado del juego y los eventos relevantes en lugar de esperar a ser notificadas de ellos. En este enfoque, cada entidad del juego, de manera periódica o en respuesta a ciertos eventos de tiempo, realiza una encuesta o consulta al estado actual del juego, y reacciona en base a ello.
+
+    Si bien este método puede ser más simple de implementar en algunos casos, puede resultar en un mayor uso de recursos de CPU ya que las entidades deben realizar encuestas continuas, incluso si no hay eventos relevantes en ese momento.
+
+\end{itemize}
+
+
+% --------------------------------------------------------- UNITY -------------------------------
+
+\section{Unity}
+
+Unity es uno de los motores de videojuegos más populares y ampliamente utilizados en la industria del desarrollo de videojuegos. Ofrece una plataforma versátil que permite a los desarrolladores crear juegos y experiencias interactivas para una variedad de plataformas, incluyendo PC, consolas, dispositivos móviles, realidad virtual y aumentada, entre otros. 
+
+\subsection{Arquitectura de Unity}
+
+
+\subsection{Sistema de scripting}
+
+\subsection{¿Cómo es la comunicación motor-editor}
+
+
+\section{Unreal}
+
+\subsection{Arquitectura de Unreal}
+
+\subsection{Sistema de scripting}
+
+\subsection{Blueprints}
+
+\subsection{¿Cómo es la comunicación motor-editor}
