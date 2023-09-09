@@ -312,7 +312,7 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     \medskip 
 
-    Cuando un programador crea un nuevo comportamiento o entidad, como por ejemplo un atributo de agresividad en una clase C++, es esencial que este comportamiento sea accesible y configurable en el editor del juego sin necesidad de recompilar todo el motor.
+    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutable del juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelven en tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria.
 
     \medskip 
 
@@ -324,6 +324,8 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
     \medskip 
 
     Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores.
+
+    En la figura /ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
     
     \medskip 
 
@@ -335,10 +337,14 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     \medskip
 
-    TODO: AÑADIR IMAGEN DE COMO FUNCIONA UNA DLL
-
-
 \end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DLL.png}
+    \caption{Funcionamiento de una DLL.}
+    \label{fig:arquitecturaVentanas}
+\end{figure}
 
 Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, pueden resultar complicados para los diseñadores de juegos y, en algunos casos, pueden volverse muy verbosos dependiendo de los objetivos específicos. Una posible solución es la programación visual.
 
