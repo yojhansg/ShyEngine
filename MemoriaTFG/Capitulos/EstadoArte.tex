@@ -437,13 +437,15 @@ La interacción entre el motor del juego y el sistema de scripting en lo que resp
 \end{itemize}
 
 
-% --------------------------------------------------------- UNITY -------------------------------
+% --------------------------------------------------------- EJEMPLOS DE MOTORES -------------------------------
 
-\section{Unity}
+\section{Ejemplos de motores}
+
+\subsection{Unity}
 
 Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual, que fue lanzado en 2005 por Unity Technologies Lo que distingue a Unity separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles.
 
-\subsection{Arquitectura}
+\subsubsection{Arquitectura}
 
 En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en Entidades y Componentes (EC). En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada ``GameObject'' puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
 
@@ -456,7 +458,7 @@ La familiaridad con esta arquitectura es evidente desde el propio editor de Unit
 Unity utiliza varios lenguajes de programación. Para componentes de alto rendimiento, como el motor de física, utiliza C++.
 Para el desarrollo de scripts y el propio editor, utiliza C\#.
 
-\subsection{Scripting}
+\subsubsection{Scripting}
 
 El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
 
@@ -465,7 +467,7 @@ El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del 
 En la imagen \ref{fig:unityEditor} podemos ver el editor de Unity.
 
 
-\subsection{Comunicación motor-editor}
+\subsubsection{Comunicación motor-editor}
 
 TODO
 
@@ -476,12 +478,51 @@ TODO
         \label{fig:unityEditor}}
 \end{figure}
 
-\section{Unreal}
+\subsection{Unreal}
 
-\subsection{Arquitectura de Unreal}
+Unreal Engine es un motor de videojuegos desarrollado por Epic Games. Apareció por primera vez en 1998 con el videojuego de disparos en primera persona Unreal y actualmente se encuentra en la versión 5.3. Está escrito en C++ 
+y es multiplataforma. En cuanto a la ´´altitud'' de la línea de separación entre motor y gameplay, UnrealEngine ofrece bastante pero no por ello lo convierte en un motor pensado para un tipo de videojuegos concreto. De hecho, 
+aporta tanta funcionalidad que se considera de propósito general. Es tan potente que además de videojuegos, con Unreal se puede hacer simulación, diseño de automóviles, arquitectura, e incluso vídeos y películas.
 
-\subsection{Sistema de scripting}
 
-\subsection{Blueprints}
+\medskip 
 
-\subsection{¿Cómo es la comunicación motor-editor}
+En cuanto al editor, tiene el siguiente aspecto:
+
+\begin{figure}[t]
+    \centering
+        \includegraphics[scale=0.3]{Imagenes/Vectorial/unrealeditor}
+    \caption{Editor de Unreal Engine.%
+        \label{fig:cap2:unrealeditor}}
+\end{figure}
+
+\subsubsection{Arquitectura}
+
+La arquitectura de gameplay en Unreal Engine es una mezcla de componentes y herencia. El motor utiliza una combinación de herencia de clases y la composición de componentes para crear objetos y personajes en el mundo del juego.
+
+En cuanto a la herencia de clases, Unreal Engine utiliza la herencia de clases para crear una jerarquía de objetos y personajes. Por ejemplo, puedes tener una clase base que representa un personaje jugable y luego crear subclases que hereden de la clase base para crear personajes específicos con características adicionales. Esto permite la reutilización de código y la organización de la funcionalidad común.
+
+Además de la herencia de clases, Unreal Engine hace un uso extensivo de la composición de componentes. Los componentes son módulos independientes que se adjuntan a los actores (objetos y personajes) para proporcionar funcionalidad adicional. Por ejemplo, un personaje jugable puede tener componentes para la cámara, el control de movimiento, la colisión y la animación. Los componentes se pueden agregar y eliminar de manera flexible para personalizar el comportamiento de los actores sin necesidad de crear nuevas clases.
+
+Por otra parte, Unreal Engine cuenta con los Blueprints, que permiten definir la lógica y el comportamiento de los actores y componentes de una manera visual y gráfica. Esto significa que puedes definir cómo interactúan los componentes y actores a través de conexiones visuales en lugar de escribir código. Los Blueprints se pueden utilizar tanto para heredar comportamientos como para agregar componentes y personalizarlos.
+
+\subsubsection{Sistema de scripting}
+
+En cuanto al scripting, Unreal Engine tiene dos modos distintos pero compatibles:
+
+\begin{itemize}
+    \item \textit{Programación en C++}: esta forma de scripting permite a los desarrolladores escribir código en C++ para crear la lógica del juego, personalizar el comportamiento de los actores y desarrollar características específicas. Esta opción es ideal para tareas que requieren un alto rendimiento o una manipulación más detallada de los sistemas del motor. También es cierto que la programación en C++ puede ser más compleja que el uso de Blueprints, especialmente para quienes no están familiarizados con el lenguaje.
+
+    \item \textit{Blueprints}: son una herramienta visual que permite a los desarrolladores crear la lógica del juego sin necesidad de programar en C++. Este scripting es de tipo node-based (basado en nodos) y funciona con la unión de nodos y a través de la creación flujo y lógica. Por ello, se pueden crear prototipos rápidamente y no requieren de conocimientos de programación para utilizarlos.
+\end{itemize}
+
+En cuanto a la combinación de ambos enfoques, Unreal Engine permite integrar fácilmente código C++ y Blueprints en un mismo proyecto. Esto significa que puedes utilizar C++ para las partes críticas del rendimiento o para implementar sistemas complejos, mientras que utilizas Blueprints para prototipos rápidos, lógica de juego simple y personalización de componentes y actores. Los Blueprints también pueden comunicarse con código C++ a través de interfaces definidas, lo que permite una colaboración eficaz entre programadores y diseñadores.
+
+\subsubsection{Comunicación motor-editor}
+
+En este apartado debemos diferenciar de los elementos, escenas, personajes y todo lo que se pueda crear en el editor de Unreal Engine con los Blueprints.
+
+En el primer caso, la información del editor se almacena en archivos de nivel (.umap) que contienen información sobre la ubicación de los elementos, las configuraciones de iluminación, las cámaras y más. Posteriormente, en tiempo de carga, qué sucede antes de la ejecución, Unreal Engine lee el archivo de nivel correspondiente. Este proceso implica cargar recursos desde disco, configurar la jerarquía del nivel y preparar la representación en memoria de los objetos y elementos del nivel. Por último
+
+En el segundo caso, los Blueprints en Unreal Engine generan código C++. Cuando se ejecuta el juego o la simulación en Unreal Engine, el motor utiliza este código C++ generado a partir de los Blueprints para ejecutar la lógica de juego. Esto significa que el motor puede interpretar y ejecutar los Blueprints de la misma manera que ejecutaría código C++ escrito manualmente.
+
