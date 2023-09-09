@@ -14,7 +14,7 @@
         },
         {
             "Index": 3,
-            "Visible": true
+            "Visible": false
         },
         {
             "Index": 4,
@@ -34,7 +34,7 @@
         },
         {
             "Index": 8,
-            "Visible": false
+            "Visible": true
         }
     ]
 }
