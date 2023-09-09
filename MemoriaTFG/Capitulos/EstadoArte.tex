@@ -317,19 +317,9 @@ En la actualidad, muchos editores de videojuegos están integrados con motores de
 
 \medskip 
 
-Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas.
+Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas. En la imagen \ref{fig:Worldcraft} observamos el editor WorldCraft.
 
 \medskip
-
-En la imagen \ref{fig:Worldcraft} observamos el editor WorldCraft.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/Worldcraft}
-    \caption{Editor de WorldCraft.}
-    \label{fig:Worldcraft}
-\end{figure}
-\medskip 
 
 Sin embargo, con la integración de editores y motores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se aplican sin necesidad de complicados procesos de compilación.
 
@@ -337,6 +327,13 @@ Sin embargo, con la integración de editores y motores en la actualidad, este pro
 
 Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida. La simplicidad de este enfoque también ha abierto las puertas a diseñadores y creadores de contenido que pueden contribuir al desarrollo de juegos sin necesidad de conocimientos profundos en programación o procesos de compilación.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagenes/Vectorial/Worldcraft}
+    \caption{Editor de WorldCraft.}
+    \label{fig:Worldcraft}
+\end{figure}
+\medskip 
 
 \subsection{TODO: COMUNICACION MOTOR-EDITOR (NO ENTIENDO EL COMENTARIO DE PP)}
 
@@ -379,7 +376,7 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores.
 
-    En la figura /ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
+    En la figura \ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
     
     \medskip 
 
@@ -392,13 +389,6 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
     \medskip
 
 \end{enumerate}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DLL.png}
-    \caption{Funcionamiento de una DLL.}
-    \label{fig:arquitecturaVentanas}
-\end{figure}
 
 Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, pueden resultar complicados para los diseñadores de juegos y, en algunos casos, pueden volverse muy verbosos dependiendo de los objetivos específicos. Una posible solución es la programación visual.
 
