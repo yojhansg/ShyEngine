@@ -294,30 +294,28 @@ Aquí una imagen que muestra la diferencia:
 
 \subsection{En qué consiste la arquitectura basada en Entidades y Componentes (EC)?}
 
-La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental en el desarrollo de videojuegos debido a su flexibilidad y eficiencia en el manejo de la complejidad.
+La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental en el desarrollo de videojuegos debido a su flexibilidad y eficiencia en el manejo de la complejidad. Esta basado en la idea de arquitectura centrada en propiedades.
 
-En el corazón de la arquitectura EC se encuentran dos conceptos clave: entidades y componentes:
+En el corazón de la arquitectura EC se encuentran dos conceptos clave:
 
 \begin{itemize}
-  \item \textit{Entidades}: Una entidad, también conocida como GameObject en algunos motores, representa un objeto individual en el juego. Esto podrí­a ser cualquier cosa, desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra. Las entidades en esta arquitectura son esencialmente contenedores vací­os que no contienen lógica por sí­ mismos, pero pueden tener componentes adjuntos que definen sus propiedades y comportamiento.
+  \item \textit{Entidades}: Una entidad representa un objeto individual en el juego. Esto podrí­a ser cualquier cosa, desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra pero realmente contenedores vací­os que no contienen lógica ni información por sí­ mismos y lo que les define son sus componentes.
 
-  \item \textit{Componentes}: Los componentes son módulos independientes que contienen datos y lógica específica de una entidad. Cada entidad en un juego con esta arquitectura está compuesta por uno o más componentes que definen sus atributos y comportamiento. Por ejemplo, una entidad de jugador podrí­a tener componentes como "Transform" (para la posición y la rotación), "SpriteRenderer" (para la apariencia visual), "PlayerController" (para el control del jugador), entre otros.
+  \item \textit{Componentes}: Los componentes son módulos independientes que contienen datos y lógica específica de una entidad. Cada entidad en un juego está compuesta por uno o más componentes que definen sus atributos y comportamiento. Por ejemplo, una entidad de jugador podrí­a tener componentes como ``Posición'' para representar su ubicación en el mundo, ``Imagen'' para la apariencia visual o ``Movimiento'' (para el movimiento del personaje), entre otros.
 
 \end{itemize}
 
 La principal ventaja de esta separación entre entidades y componentes es que permite una gran flexibilidad y reutilización de código. Las entidades pueden ser construidas y modificadas dinámicamente combinando diferentes componentes. Esto facilita la creación de nuevos tipos de objetos en el juego sin necesidad de escribir código especí­fico para cada uno.
 
-\section{Qué es una arquitectura basada en herencia?}
+\subsection{Qué es una arquitectura basada en herencia?}
 
-La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Aunque ha perdido popularidad frente a la arquitectura basada en entidades y componentes (EC), aíºn es importante comprender sus fundamentos y diferencias.
+La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Aunque ha perdido popularidad frente a la arquitectura basada en entidades y componentes, aún es importante comprender sus fundamentos y diferencias.
 
-\subsection{Herencia de Clases}
-
-En la arquitectura basada en herencia, los objetos en el juego se definen mediante clases que heredan caracterí­sticas y comportamientos de clases base. Por ejemplo, si estí¡s creando un juego de rol (RPG), podrí­as tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar atributos y mí©todos segíºn sea necesario.
+En la arquitectura basada en herencia, los objetos en el juego se definen mediante clases que heredan caracterí­sticas y comportamientos de clases base. Por ejemplo, si estí¡s creando un juego de rol (RPG), podrí­as tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar propiedades según sea necesario.
 
 \medskip
 
-Si bien la herencia puede ser eficaz en algunos casos, tiene limitaciones y desafí­os que han llevado a la preferencia por EC en la industria de los videojuegos. Algunas de las ventajas y desventajas clave de la arquitectura basada en herencia incluyen:
+Si bien la herencia puede ser eficaz en algunos casos, tiene limitaciones y desafí­os que han llevado a la preferencia por la arquitectura basada en entidades y componentes en la industria de los videojuegos. Algunas de las ventajas y desventajas clave de la arquitectura basada en herencia incluyen:
 
 \begin{itemize}
   \item \textit{Ventajas:}
@@ -334,11 +332,9 @@ Si bien la herencia puede ser eficaz en algunos casos, tiene limitaciones y desa
     \end{itemize}
 \end{itemize}
 
-\subsection{Comparacií³n con EC}
+En comparación con la arquitectura basada en entidades y componentes, la herencia tiende a ser menos flexible y más propensa a problemas de diseñoo a medida que los proyectos crecen en complejidad. La arquitectura basada en entidades y componentes, por otro lado, permite una mayor modularidad al separar las propiedades y el comportamiento en componentes independientes que pueden combinarse de manera más versátil en diferentes entidades.
 
-En comparacií³n con la arquitectura EC, la herencia tiende a ser menos flexible y mí¡s propensa a problemas de diseí±o a medida que los proyectos crecen en complejidad. EC, por otro lado, permite una mayor modularidad al separar las propiedades y el comportamiento en componentes independientes que pueden combinarse de manera mí¡s versí¡til en diferentes entidades.
-
-A pesar de sus desventajas, la arquitectura basada en herencia todaví­a se utiliza en algunos motores y proyectos donde su simplicidad y eficiencia se adaptan mejor a las necesidades del juego. Sin embargo, la tendencia general en la industria es adoptar enfoques mí¡s flexibles y orientados a datos, como EC, que brindan mí¡s control y reutilizacií³n en el desarrollo de videojuegos.
+A pesar de sus desventajas, la arquitectura basada en herencia todaví­a se utiliza en algunos motores y proyectos donde su simplicidad y eficiencia se adaptan mejor a las necesidades del juego. Sin embargo, la tendencia general en la industria es adoptar enfoques más flexibles que brindan más control y reutilización en el desarrollo de videojuegos.
 
 \section{¿Qué es un editor?}
 \label{cap3:sec:motores}
