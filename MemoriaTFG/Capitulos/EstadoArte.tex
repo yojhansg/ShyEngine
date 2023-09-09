@@ -57,40 +57,6 @@ Sin entrar mucho en detalle, las etapas que sigue un desarrollo profesional son 
 distribución y mantenimiento.
 
 
-% \begin{itemize}
-%     \item \textit{Concepto}: En esta fase se tiene una idea a partir de la cual se conformarán los aspectos fundamentales. Se determina el género o géneros
-%     del videojuego, cómo será el proceso de juego, y también se constituye un guión gráfico en el que se tratan todo tipo de ideas preconcebidas que pueden
-%     ir adaptándose, como por ejemplo el estilo de los personajes, el ambiente, la música, etc. Una vez se sabe qué hacer entonces es el momento de diseñar.
-    
-%     \item \textit{Diseño}: Se empieza definiendo los elementos que componen el juego. Se desarrolla la historia, se crean bocetos de guiones para determinar
-%     los objetivos, se deciden los personajes principales, el contexto, etc. El objetivo de esta fase es como objetivo generar el Documento de Diseño (GDD) 
-%     que especificará el arte, las mecánicas y las dinámicas del videojuego.
-    
-%     \item \textit{Planificación}: Esta etapa tiene como objetivo identificar las diferentes tareas para desarrollar el videojuego. Se reparte el trabajo 
-%     entre los distintos componentes del equipo de desarrollo, se fijan plazos de entregas, se planifican reuniones de seguimiento, etc. Normalmente se suele
-%     seguir una metodología de desarrollo como Scrum, en cascada (Waterfall), Kanban, desarrollo Lean, etc.
-    
-%     \item \textit{Preproducción}: En esta fase se desarrollan prototipos de juego muy sencillos, personajes, entornos, interfaces, esquemas de control y 
-%     otros elementos en el juego para validar las ideas y conceptos clave.
-
-%     \item \textit{Producción}: Se llevan por tanto a cabo todas las tareas de la fase de planificación teniendo como guía el documento de diseño: programación,
-%     ilustración, desarrollo de interfaces, animación,  modelado, desarrollo del sonidos, etc. Si finalmente se logra ensamblar correctamente todas las piezas
-%     entonces esta fase culmina. Sin embargo, al igual que en el desarrollo de software tradicional, es muy difícil que todo salga bien a la primera, por lo que
-%     se entra en una fase para probar a fondo el videojuego.
-    
-%     \item \textit{Pruebas}: En esta etapa se corrigen los errores del proceso de programación y se mejora la jugabilidad a medida que se prueba el juego.
-%     Generalmente encontraremos dos tipos: las pruebas alpha, realizadas por un pequeño grupo de personas generalmente involucradas en el desarrollo, y las pruebas 
-%     beta, realizadas por un equipo externo de jugadores. Las primeras tienen el objetivo de corregir defectos graves y mejorar características fundamentales no 
-%     contempladas en el documento de diseño, mientras que las segundas se enfocan en detectar fallos menores y perfilar la experiencia de usuario.
-
-%     \item \textit{Distribución/Marketing}: En esta fase se crean las copias del juego ya finalizado y se lleva a las tiendas (ya sean físicas o digitales) para que
-%     los jugadores comprarlo.
-
-%     \item \textit{Postproducción/Mantenimiento}: Pese a que el juego esté finalizado y en las manos de los jugadores, su ciclo de vida aún está lejos de terminar.
-%     La fase de mantenimiento es el momento de arreglar nuevos errores, mejorarlo, etc. Ésto se hace sacando parches o actualizaciones al mercado.
-% \end{itemize}
-
-
 \subsection{Qué es un juego dirigido por datos}
 
 Con el concepto de videojuego como división de programación y recursos en mente, el concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
@@ -309,36 +275,14 @@ La principal ventaja de esta separación entre entidades y componentes es que per
 
 \section{Qué es una arquitectura basada en herencia?}
 
-La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Aunque ha perdido popularidad frente a la arquitectura basada en entidades y componentes (EC), aíºn es importante comprender sus fundamentos y diferencias.
-
-\subsection{Herencia de Clases}
-
-En la arquitectura basada en herencia, los objetos en el juego se definen mediante clases que heredan caracterí­sticas y comportamientos de clases base. Por ejemplo, si estí¡s creando un juego de rol (RPG), podrí­as tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar atributos y mí©todos segíºn sea necesario.
+La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Por ejemplo, si está creando un juego de rol (RPG), se podría tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar atributos y métodos según sea necesario.
 
 \medskip
 
-Si bien la herencia puede ser eficaz en algunos casos, tiene limitaciones y desafí­os que han llevado a la preferencia por EC en la industria de los videojuegos. Algunas de las ventajas y desventajas clave de la arquitectura basada en herencia incluyen:
+La arquitectura basada en herencia presenta ciertas ventajas, especialmente en proyectos más pequeños o simples. Una de las ventajas clave es su simplicidad conceptual, ya que la herencia permite establecer relaciones claras entre clases a través de una jerarquía. Además, en situaciones donde se requiere un alto rendimiento, la herencia puede ser más eficiente, ya que las clases son estáticas y el compilador puede realizar optimizaciones específicas.
 
-\begin{itemize}
-  \item \textit{Ventajas:}
-    \begin{itemize}
-      \item \textit{Simplicidad Conceptual:} La herencia puede ser mí¡s fí¡cil de comprender y usar en proyectos pequeí±os o simples.
-      \item \textit{Optimizacií³n:} En situaciones donde se requiere un alto rendimiento, la herencia puede ser mí¡s eficiente ya que las clases son estí¡ticas y el compilador puede realizar optimizaciones.
-    \end{itemize}
-  
-  \item \textit{Desventajas:}
-    \begin{itemize}
-      \item \textit{Rigidez:} La herencia puede ser rí­gida y dificultar la adaptacií³n a cambios o la creacií³n de nuevas clases.
-      \item \textit{Jerarquí­as Complejas:} En proyectos grandes, las jerarquí­as de clases pueden volverse extremadamente complejas y difí­ciles de mantener.
-      \item \textit{Dificultad para la Reutilizacií³n:} La reutilizacií³n de cí³digo puede ser complicada, ya que es difí­cil compartir funcionalidad entre clases no relacionadas en la jerarquí­a.
-    \end{itemize}
-\end{itemize}
-
-\subsection{Comparacií³n con EC}
-
-En comparacií³n con la arquitectura EC, la herencia tiende a ser menos flexible y mí¡s propensa a problemas de diseí±o a medida que los proyectos crecen en complejidad. EC, por otro lado, permite una mayor modularidad al separar las propiedades y el comportamiento en componentes independientes que pueden combinarse de manera mí¡s versí¡til en diferentes entidades.
-
-A pesar de sus desventajas, la arquitectura basada en herencia todaví­a se utiliza en algunos motores y proyectos donde su simplicidad y eficiencia se adaptan mejor a las necesidades del juego. Sin embargo, la tendencia general en la industria es adoptar enfoques mí¡s flexibles y orientados a datos, como EC, que brindan mí¡s control y reutilizacií³n en el desarrollo de videojuegos.
+\medskip
+Sin embargo, esta arquitectura también tiene sus desventajas. Uno de los problemas más significativos es su rigidez. La herencia puede hacer que un sistema sea menos adaptable a cambios o que la creación de nuevas clases sea más complicada, ya que cualquier modificación en la clase base puede afectar a todas las clases derivadas. En proyectos grandes, las jerarquías de clases pueden volverse extremadamente complejas y difíciles de mantener, lo que puede aumentar la complejidad y el tiempo de desarrollo. Además, compartir funcionalidad entre clases no relacionadas en la jerarquía puede ser complicado, lo que dificulta la reutilización de código.
 
 \section{¿Qué es un editor?}
 \label{cap3:sec:motores}
