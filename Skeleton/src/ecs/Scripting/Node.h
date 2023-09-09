@@ -30,7 +30,7 @@ namespace Scripting {
 
 		virtual void ForceReevaluation();
 
-		void Cycle(int& iterationIdx);
+		void Cicle(int& iterationIdx);
 
 		int iterationIdx;
 	protected:

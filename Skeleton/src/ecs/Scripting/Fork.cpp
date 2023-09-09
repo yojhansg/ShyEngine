@@ -22,7 +22,7 @@ void Scripting::Fork::SetCondition(OutputNode* node)
 
 void Scripting::Fork::Operate(Node*& next, int& iterationIdx)
 {
-	condition->Cycle(iterationIdx);
+	condition->Cicle(iterationIdx);
 
 	switch (type)
 	{
@@ -33,10 +33,10 @@ void Scripting::Fork::Operate(Node*& next, int& iterationIdx)
 			while (condition->output.value.Bool) {
 
 
-				A->Cycle(++iterationIdx);
+				A->Cicle(++iterationIdx);
 
 
-				condition->Cycle(++iterationIdx);
+				condition->Cicle(++iterationIdx);
 			}
 		}
 		next = B;
@@ -47,7 +47,7 @@ void Scripting::Fork::Operate(Node*& next, int& iterationIdx)
 		if (A != nullptr) {
 			for (int i = 0; i < condition->output.value.Float; i++) {
 
-				A->Cycle(++iterationIdx);
+				A->Cicle(++iterationIdx);
 			}
 		}
 		next = B;
