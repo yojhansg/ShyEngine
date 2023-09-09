@@ -438,7 +438,7 @@ Unity es ampliamente reconocido como uno de los motores de videojuegos más popul
 
 \subsection{Arquitectura}
 
-En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en Entidades y Componentes (EC). En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada GameObject puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
+En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en Entidades y Componentes (EC). En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada ``GameObject'' puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
 
 \medskip
 
@@ -447,11 +447,11 @@ La familiaridad con esta arquitectura es evidente desde el propio editor de Unit
 \medskip
 
 Unity utiliza varios lenguajes de programación. Para componentes de alto rendimiento, como el motor de física, utiliza C++.
-Para el desarrollo de scripts y el propio editor, utiliza c\#.
+Para el desarrollo de scripts y el propio editor, utiliza C\#.
 
 \subsection{Scripting}
 
-El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente ``MonoBehaviour''. Este componente es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de ``MonoBehaviour''. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
+El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
 
 TODO: FOTO DEL EDITOR DE UNITY DONDE SE ENTIENDA BIEN EL ECS
 
