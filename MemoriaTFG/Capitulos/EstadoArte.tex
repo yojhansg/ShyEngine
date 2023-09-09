@@ -16,7 +16,7 @@ existen para generar comportamiento en los videojuegos.
 \section{Qué es un videojuego}
 
 Un videojuego es un juego electrónico en el que uno o más jugadores interactúan mediante un controlador con un dispositivo electrónico que muestra
-imágenes de video. Este dispositivo, comúnmente conocido como `plataforma', puede ser una computadora, una máquina de arcade, una consola de 
+imágenes de video. Este dispositivo, comúnmente conocido como ``plataforma'', puede ser una computadora, una máquina de arcade, una consola de 
 videojuegos o teléfono móvil, tableta o una consola de videojuegos portátil.
 
 \medskip
@@ -169,15 +169,18 @@ El término `motor de juego' surgió a mediados de la década de 1990 en referencia
 diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de detección
 de colisiones o el sistema de audio) y los recursos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta separación
 se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos recursos artísticos, diseños 
-de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del `motor'.
+de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en el software del ``motor''.
 
 \medskip
 
-Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la `modificación'. Los motores se hicieron
+Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la ``modificación''. Los motores se hicieron
 altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria
 viable para los desarrolladores que los crearon. 
 
 \subsection{División entre motor y gameplay}
+
+El gameplay se define como la experiencia general de jugar a un videojuego. Incluye las mecánicas, las reglas que gobiernan las interacciones entre los elementos en el juego, los
+objetivos del jugador, los criterios para ganar o perder, las abilidades del personaje, los NPC (Non-Playable-Characters), y el flujo general de la experiencia de juego en su conjunto.
 
 La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos.
 
@@ -196,7 +199,7 @@ que hay que crear y proporcionar al motor. Como veremos más adelante, hay varias
 
 \medskip
 
-Otro aspecto intersante a comentar es la `altitud' a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
+Otro aspecto intersante a comentar es la ``altitud'' a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
 y hay que crear poco comportamiento en el gameplay. Eso hace que el motor esté muy focalizado en un tipo de juegos concretos por lo que si el género o tipo del videojuego a desarrollar no es
 compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo.
 
@@ -206,25 +209,28 @@ compatible con el tipo de funcionalidad que aporta el motor se va a terminar exc
         \includegraphics[scale=0.5]{Imagenes/Vectorial/MotorSobreGameplay}
     \caption{Motor aporta funcionalidad al gameplay.%
         \label{fig:cap2:motorSobreGameplay}}
-    \end{figure}
+\end{figure}
 
 \medskip
 
 De esta forma, es común encontrarse con motores pensados para géneros de videojuegos concretos. Existen motores para desarrollar videojuegos de disparos en primera persona (FPS), videojuegos
 de plataformas y en tercera persona, videojuegos de lucha, videojuegos de carreras, videojuegos de estrategia en tiempo real o videojuegos multijugador online masivos, conocidos como (MMOG).
 
+Algunos ejemplos de estos motores son Scumm, desarrollado por LucasfilmGames para sus aventuras gráficas, RPG Maker desarrollado por ASCII Corporation para juegos de rol, las primeras versiones
+de Frostbite desarrollado por Electronic Arts para juegos de acción y disparos (FPS) o MUGEN desarrollado por Elecbyte para juegos de lucha en dos dimensiones.
+
 \medskip
 
-En el libro Game Engine Architecture de \cite{GameEngineArchitecture} se cita lo siguiente: `Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
+En el libro Game Engine Architecture de \cite{GameEngineArchitecture} se cita lo siguiente: ``Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
 de un software que es un juego, pero no un motor. Cuando un juego contiene lógica o reglas de juego codificadas a mano, o utiliza código de casos especiales para representar tipos específicos
 de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término `motor de juego' para el software que es
-extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes.'
+extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes.''
 
 
-\subsection{Cómo funciona un motor y de que está compuesto}
+\subsection{De que está compuesto un motor de videojuegos}
 
 Como se ha mencionado anteriormente, un motor proporciona la tecnología necesaria para desarrollar un videojuego. Esta tecnología, en realidad, es un conjunto de varías tecnologías con diferentes
-propósitos, todo necesarios para el videojuego. Estas tecnologías son las siguientes: 
+propósitos, todo necesarios para el videojuego. Para un motor de carácter general, es decir, sin implementación extra para un tipo de videojuegos concreto, estas tecnologías son las siguientes: 
 
 \begin{itemize}
     \item \textit{Motor de renderizado}: Este componente se encarga de generar los gráficos y la representación visual del juego en la pantalla. Utiliza técnicas de renderizado, como rasterización
@@ -233,10 +239,56 @@ propósitos, todo necesarios para el videojuego. Estas tecnologías son las siguie
     \item \textit{Motor de física}: La física es esencial para dar realismo y coherencia al juego. Este motor simula el movimiento de objetos, colisiones, gravedad y otros efectos físicos. Permite
     que los personajes y objetos del juego interactúen de manera creíble con el entorno y entre sí.
 
-    \item \textit{Motor de audio}: 
+    \item \textit{Motor de audio}: Gestiona la reproducción de efectos de sonido y música en el juego. Puede incluir capacidades de mezcla de audio y efectos especiales para crear una experienciaç
+    auditiva envolvente.
+
+    \item \textit{Motor de input}: Controla la interacción del usuario con el juego a través de dispositivos de entrada como teclados, mouse, controladores de juegos o pantallas táctiles.
+
+    \item \textit{Motor de animación}: Esto incluye la animación de personajes, la interpolación de movimientos y la gestión de esqueletos o huesos para modelar la anatomía de los personajes.
+
+    \item \textit{Motor de red}: Facilita el juego en línea y la comunicación entre jugadores. Administra la sincronización de datos entre los clientes y el servidor, permite el chat en línea, la
+    gestión de partidas y otros aspectos relacionados con la conectividad en línea.
+
+    \item \textit{Gestor de recursos}: Garantiza que todos los posibles recursos del videojuego se carguen y descarguen de manera eficiente en memoria durante la ejecución del juego.
+
+    \item \textit{Subsistemas de soporte}: Sistemas para iniciar y cerrar el motor, manejar la asignación de memoria, sistema de ficheros, etc.
 \end{itemize}
 
+El diagrama anterior quedaría completo de la siguiente manera:
 
+\begin{figure}[t]
+    \centering
+        \includegraphics[scale=0.3]{Imagenes/Vectorial/MotorYGameplay}
+    \caption{Partes fundamentales que componen un motor de videojuegos.%
+        \label{fig:cap2:motorYGameplay}}
+\end{figure}
+
+
+\section{Qué es una arquitectura en el contexto del desarrollo de videojuegos}
+
+Hasta ahora se hemos hablado sobre la idea de motor de videojuegos y lo que los separa del gameplay. Pero a la hora de desarrollar un videojuego existen varios patrones o arquitecturas
+que se pueden seguir para construir sus bases. Estas arquitecturas definen el comportamiento del gameplay y sirven de conexión con el motor.
+
+Un arquitectura define como se representan los diferentes tipos de entidades en el mundo junto con sus atributos y comportamientos.
+
+Existen dos tipos de arquitecturas principales:
+
+\begin{itemize}
+    \item \textit{Centrada en objetos}: Cada objeto tiene un conjunto de atributos y comportamientos que están encapsulados dentro de la clase (o clases) de la cual el objeto es una 
+    instancia. El mundo del juego es simplemente una colección de objetos del juego.
+
+    \item \textit{Centrada en propiedades}: Cada objeto tiene un identificador y un conjunto de propiedades asociadas a ese identificador. El comportamiento de un objeto del juego se 
+    define de forma implícita por la colección de propiedades de las que está compuesto.
+\end{itemize}
+
+Aquí una imagen que muestra la diferencia:
+
+\begin{figure}[t]
+    \centering
+        \includegraphics[scale=0.3]{Imagenes/Vectorial/ObjetosvsPropiedades}
+    \caption{Diferencia entre arquitectura centrada en objetos vs propiedades.%
+        \label{fig:cap2:objetosvspropiedades}}
+\end{figure}
 
 
 
