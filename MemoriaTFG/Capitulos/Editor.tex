@@ -7,6 +7,7 @@
 \chapter{Editor}
 
 \section{Funcionamiento y arquitectura}
+\label{arquitecturaEditor}
 
 El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGui, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor.
 
@@ -64,11 +65,6 @@ Los prefabs se distinguen por tener un ID negativo, lo que les permite ser ident
     \label{fig:arquitecturaVentanas}
 \end{figure}
 
-\section{Ventana de scripting en el editor}
-
-TODO
-
-
 \section{Como se leen los componentes a partir de los datos del motor}
 
 Como se mencionó anteriormente en (añadir referencia al apartado del motor que hable sobre esto), el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
@@ -88,6 +84,29 @@ En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lec
     \label{fig:datosEditor}
 \end{figure}
 
+\section{Scripting en el editor}
+
+Como hemos mencionado anteriormente, el editor contiene un estado completamente dedicado a la creación y modificación de scripts. 
+
+\medskip
+
+En el editor, los scripts se crean utilizando un sistema de programación visual [\ref{programacionVisual}] mediante nodos y conexiones. Los nodos representan acciones o eventos [\ref{comunicacionScripting}] específicos que ocurren en el juego, como el inicio de una escena, la colisión entre objetos o la activación de una trampa. Estos nodos se organizan en el espacio de trabajo del editor y se conectan entre sí para definir la secuencia y lógica del comportamiento.
+
+\medskip
+
+Por ejemplo, un nodo de evento podría desencadenar una secuencia de nodos de lógica que determinan cómo responde el juego cuando un jugador alcanza cierta puntuación. Los nodos de valores se utilizan para almacenar y manipular datos dentro del script, lo que permite a los desarrolladores realizar cálculos y tomar decisiones basadas en variables específicas.
+
+\subsection{Serialización y uso en el motor}
+
+El flujo de nodos y conexiones en el editor es una representación visual de un script, pero esta información debe serializarse en un formato que el motor del juego pueda entender y ejecutar. Para lograr esto, el editor guarda el script en un archivo en formato JSON. Este archivo contiene toda la información sobre los nodos, conexiones y sus propiedades asociadas.
+
+\medskip
+
+Cuando un juego se ejecuta utilizando el motor, este archivo JSON se interpreta y se utiliza para guiar el comportamiento del juego. Los nodos y las conexiones se transforman en acciones y eventos en tiempo real, lo que permite que el juego responda a las interacciones del jugador y otros eventos del juego de acuerdo con el script creado en el editor.
+
+\subsection{Edición de scripts}
+
+Además de crear nuevos scripts, el editor también permite la modificación de scripts existentes. Para ello, realiza una lectura e interpretación de los JSON mencionados anteriormente de manera similar a como hacen los componentes.
 
 \footnotetext{Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.} 
 
