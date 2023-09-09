@@ -1,0 +1,186 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 3,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 547.0,
+            "y": 419.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 6,
+            "serialized": false,
+            "type": "float",
+            "value": 1.0,
+            "x": 1280.0,
+            "y": 188.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 8,
+            "serialized": false,
+            "type": "string",
+            "value": "Character\\Run.png",
+            "x": 2469.0,
+            "y": -14.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 9,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 2249.0,
+            "y": -22.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 10,
+            "serialized": false,
+            "type": "float",
+            "value": 8.0,
+            "x": 2253.0,
+            "y": 843.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 11,
+            "serialized": false,
+            "type": "float",
+            "value": 1.0,
+            "x": 2478.0,
+            "y": 843.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 14,
+            "serialized": false,
+            "type": "Vector2D",
+            "value": "60.000000,0.000000",
+            "x": 2950.0,
+            "y": 773.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 17,
+            "serialized": false,
+            "type": "string",
+            "value": "OnGround",
+            "x": 1695.0,
+            "y": 31.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "update",
+            "x": 459.0,
+            "y": 813.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 5,
+            "B": -1,
+            "condition": 2,
+            "index": 1,
+            "type": 0,
+            "x": 1167.0,
+            "y": 696.0
+        },
+        {
+            "A": 7,
+            "B": -1,
+            "condition": 16,
+            "index": 15,
+            "type": 0,
+            "x": 2173.0,
+            "y": 480.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "InputManager_IsLetterPressed",
+            "index": 2,
+            "input": [
+                3
+            ],
+            "x": 780.0,
+            "y": 422.0
+        },
+        {
+            "function": "Entity",
+            "index": 4,
+            "input": [],
+            "x": 1352.0,
+            "y": 827.0
+        },
+        {
+            "function": "Image_setFlipMode",
+            "index": 5,
+            "input": [
+                4,
+                6
+            ],
+            "next": 15,
+            "x": 1616.0,
+            "y": 451.0
+        },
+        {
+            "function": "Animation_ChangeAnimationPath",
+            "index": 7,
+            "input": [
+                4,
+                8,
+                9,
+                9,
+                10,
+                11
+            ],
+            "next": 12,
+            "x": 2745.0,
+            "y": 387.0
+        },
+        {
+            "function": "ParticleSystem_setSpawnPosition",
+            "index": 12,
+            "input": [
+                13,
+                14
+            ],
+            "x": 3198.0,
+            "y": 383.0
+        },
+        {
+            "function": "Entity",
+            "index": 13,
+            "input": [],
+            "x": 2968.0,
+            "y": 38.0
+        },
+        {
+            "function": "Attribute_GetLocal",
+            "index": 16,
+            "input": [
+                17
+            ],
+            "x": 1925.0,
+            "y": 27.0
+        }
+    ],
+    "nodeCount": 18,
+    "serializedValues": [],
+    "update": 1
+}
