@@ -317,20 +317,23 @@ En la actualidad, muchos editores de videojuegos están integrados con motores de
 
 \medskip 
 
-Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas.
+Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas. En la imagen \ref{fig:Worldcraft} observamos el editor WorldCraft.
 
-TODO: IMAGEN EDITOR WorldCraft Y JUEGO DESARROLLADO CON EL
-
-\medskip 
+\medskip
 
 Sin embargo, con la integración de editores y motores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se aplican sin necesidad de complicados procesos de compilación.
-
-TODO: IMAGEN EDITOR INTEGRADO Y JUEGO DESARROLLADO CON EL
 
 \medskip 
 
 Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida. La simplicidad de este enfoque también ha abierto las puertas a diseñadores y creadores de contenido que pueden contribuir al desarrollo de juegos sin necesidad de conocimientos profundos en programación o procesos de compilación.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagenes/Vectorial/Worldcraft}
+    \caption{Editor de WorldCraft.}
+    \label{fig:Worldcraft}
+\end{figure}
+\medskip 
 
 \subsection{TODO: COMUNICACION MOTOR-EDITOR (NO ENTIENDO EL COMENTARIO DE PP)}
 
@@ -373,7 +376,7 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores.
 
-    En la figura /ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
+    En la figura \ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
     
     \medskip 
 
@@ -383,15 +386,13 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interacción con el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen ser más accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
 
-    \medskip
-
 \end{enumerate}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DLL.png}
     \caption{Funcionamiento de una DLL.}
-    \label{fig:arquitecturaVentanas}
+    \label{fig:dll}
 \end{figure}
 
 Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, pueden resultar complicados para los diseñadores de juegos y, en algunos casos, pueden volverse muy verbosos dependiendo de los objetivos específicos. Una posible solución es la programación visual.
@@ -436,7 +437,7 @@ La interacción entre el motor del juego y el sistema de scripting en lo que resp
 
 \subsection{Unity}
 
-Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual. Lo que distingue a Unity separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles.
+Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual, que fue lanzado en 2005 por Unity Technologies Lo que distingue a Unity separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles.
 
 \subsubsection{Arquitectura}
 
@@ -455,13 +456,23 @@ Para el desarrollo de scripts y el propio editor, utiliza C\#.
 
 El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
 
-TODO: FOTO DEL EDITOR DE UNITY DONDE SE ENTIENDA BIEN EL ECS
+\medskip
+
+En la imagen \ref{fig:unityEditor} podemos ver el editor de Unity.
+
 
 \subsubsection{Comunicación motor-editor}
 
 TODO
 
-\subsection{Unreal Engine}
+\begin{figure}[t]
+    \centering
+        \includegraphics[scale=0.15]{Imagenes/Vectorial/UnityEditor}
+    \caption{Editor de Unity.%
+        \label{fig:unityEditor}}
+\end{figure}
+
+\subsection{Unreal}
 
 Unreal Engine es un motor de videojuegos desarrollado por Epic Games. Apareció por primera vez en 1998 con el videojuego de disparos en primera persona Unreal y actualmente se encuentra en la versión 5.3. Está escrito en C++ 
 y es multiplataforma. En cuanto a la ´´altitud'' de la línea de separación entre motor y gameplay, UnrealEngine ofrece bastante pero no por ello lo convierte en un motor pensado para un tipo de videojuegos concreto. De hecho, 
