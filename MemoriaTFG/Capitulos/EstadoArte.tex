@@ -319,13 +319,19 @@ En la actualidad, muchos editores de videojuegos están integrados con motores de
 
 Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas.
 
-TODO: IMAGEN EDITOR WorldCraft Y JUEGO DESARROLLADO CON EL
+\medskip
 
+En la imagen \ref{fig:Worldcraft} observamos el editor WorldCraft.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/Worldcraft}
+    \caption{Editor de WorldCraft.}
+    \label{fig:Worldcraft}
+\end{figure}
 \medskip 
 
 Sin embargo, con la integración de editores y motores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se aplican sin necesidad de complicados procesos de compilación.
-
-TODO: IMAGEN EDITOR INTEGRADO Y JUEGO DESARROLLADO CON EL
 
 \medskip 
 
@@ -453,11 +459,21 @@ Para el desarrollo de scripts y el propio editor, utiliza C\#.
 
 El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
 
-TODO: FOTO DEL EDITOR DE UNITY DONDE SE ENTIENDA BIEN EL ECS
+\medskip
+
+En la imagen \ref{fig:unityEditor} podemos ver el editor de Unity.
+
 
 \subsection{Comunicación motor-editor}
 
 TODO
+
+\begin{figure}[t]
+    \centering
+        \includegraphics[scale=0.15]{Imagenes/Vectorial/UnityEditor}
+    \caption{Editor de Unity.%
+        \label{fig:unityEditor}}
+\end{figure}
 
 \section{Unreal}
 
