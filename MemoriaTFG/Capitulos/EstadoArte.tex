@@ -187,7 +187,7 @@ de Frostbite desarrollado por Electronic Arts para juegos de acción y disparos (
 
 \medskip
 
-En el libro Game Engine Architecture de \cite{GameEngineArchitecture} se cita lo siguiente: ``Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
+En el libro Game Engine Architecture \cite{GameEngineArchitecture} se cita lo siguiente: ``Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
 de un software que es un juego, pero no un motor. Cuando un juego contiene lógica o reglas de juego codificadas a mano, o utiliza código de casos especiales para representar tipos específicos
 de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término `motor de juego' para el software que es
 extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes.''
@@ -363,11 +363,11 @@ Si el motor del juego está diseñado para ser muy específico y limitado en cuanto
 En contraste, si el motor no está diseñado para ser tan específico y se requiere agregar comportamientos particulares, entonces es necesario recurrir a la programación. Es aquí donde se pueden dar distintos enfoques:
 
 \begin{enumerate}
-    \item Un enfoque común en esta situación es el uso de Dynamic Link Libraries (DLL) o bibliotecas de enlace dinámico. Aquí, losprogramadores escriben código en lenguajes como C++ para definir nuevos comportamientos o características del juego. Estoscomportamientos se agrupan en bibliotecas (DLL) que se integran con el motor del juego.
+    \item Un enfoque común en esta situación es el uso de Dynamic Link Libraries (DLL) o bibliotecas de enlace dinámico. Aquí, los programadores escriben código en lenguajes como C++ para definir nuevos comportamientos o características del juego. Estos comportamientos se agrupan en bibliotecas (DLL) que se integran con el motor del juego.
 
     \medskip 
 
-    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutabledel juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelvenen tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, loque ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades ocomportamientos sin necesidad de recompilar o modificar el código del motor. 
+    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutabledel juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelvenen tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades ocomportamientos sin necesidad de recompilar o modificar el código del motor. 
 
     \medskip 
 
