@@ -79,9 +79,7 @@ Este proyecto cuenta con tres clases para representar y manejar sonidos:
 
 \item \texttt{SoundEffect}: Representa un efecto de sonido y contiene un identificador para diferenciado de otro sonidos.
 
-\item \texttt{MusicEffect}: Representa un sonido de música de fondo. Al igual que \texttt{SoundEffect}, contiene un identificador para diferenciarse.
-
-Estas dos clases representan también los recursos que se usan para música y sonidos en el 
+\item \texttt{MusicEffect}: Representa un sonido de música de fondo. Al igual que \texttt{SoundEffect}, contiene un identificador para diferenciarse. Estas dos clases representan también los recursos que se usan para música y sonidos en el 
 manager de recursos.
 
 \item \texttt{SoundManager}: Manager \texttt{Singleton} encargado de implementar las funciones principales para reproducir, parar,
@@ -107,17 +105,19 @@ eventos.
 
 Estos estados se dividen en:
 
-\begin{enumerate} 
+\begin{itemize} 
     \item \textit{Down}: Una tecla esta siendo pulsada. 
     \item \textit{Up}: Una tecla no esta siendo pulsada. 
     \item \textit{Pressed}: Una tecla acaba de ser pulsada. 
     \item \textit{Released}: Una tecla acaba de ser soltada. 
-\end{enumerate} 
+\end{itemize} 
 
 Algo a tener en cuenta es que debido a la posibilidad de tener varios mandos conectados, el manager diferencia entre métodos
 con identificador y métodos sin identificador. Los métodos con identificador reciben el identificador del mando del que se quiere consultar el estado y los métodos sin identificador
 devuelven la información del estado del último mando que registró input. De esa manera, si se quiere desarrollar un singleplayer, el usuario no tendrá que preocuparse por la posibilidad
 de múltiples mandos teniendo que indicar que identificador tiene su mando. 
+
+\medskip
 
 Además, el manager tiene soporte además para conexiones y desconexiones durante la ejecución, e implementa métodos con lógica usada frecuentemente como lo es el movimiento horizontal para facilitar su implementación al usuario. 
 
@@ -190,7 +190,7 @@ Para llevar a cabo la implementación de la arquitectura es imprescindible el uso
 
 La partes fundamentales de esta arquitectura son las siguientes: 
 
-\begin{enumerate}
+\begin{itemize}
     \item \textit{Component}: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o eliminado. Desde un componente se puede 
     acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados
     por los componentes que hereden de esta clase.
@@ -200,7 +200,7 @@ La partes fundamentales de esta arquitectura son las siguientes:
 
     \item \textit{Scene}: La última pieza que compone esta arquitectura son las escenas. Una escena es un conjunto de entidades. Es un concepto importante en los videojuegos ya que normalmente se quiere dividir
     el juego en estados como menús, gameplay, inventario, pantallas de carga, mapa, etc. Contiene información sobre su nombre y bastantes métodos comunes a las entidades y componentes.
-\end{enumerate}
+\end{itemize}
 
 Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Por ello, las entidades únicamente se encarga de mantener 
 actualizados a todos los componentes que tengan asociados. Además de los métodos para actualizar a los componentes, las entidades tiene métodos para añadir componentes, consultar si contienen un componente y 
@@ -210,9 +210,11 @@ eliminarlos.
 
 Por otro lado, en este proyecto se implementan también los managers necesarios para el funcionamiento del motor y los componentes fundamentales que el motor va a proporcionar al usuario.
 
+\medskip
+
 En cuanto a los componentes:
 
-\begin{enumerate}
+\begin{itemize}
 
     \item \textit{Transform}: Contiene la información sobre la posición, rotación y escala de la entidad. Además implementa algunos métodos para rotar, escalar y mover la entidad.
 
@@ -245,11 +247,11 @@ En cuanto a los componentes:
     Mencionar también que es obligatorio que las entidades tengan al menos un componente, Transform u Overlay. Esto es así para poder distinguir entre entidades destinadas a la interfaz de usuario y el resto
     de entidades de la escena.
 
-\end{enumerate}
+\end{itemize}
 
 En cuanto a los managers:
 
-\begin{enumerate}
+\begin{itemize}
     \item \textit{SceneManager}: encargado de manejar las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean. La escena que se va actualizar en el juego es la que se encuentra
     en el top de la pila. 
 
@@ -257,7 +259,7 @@ En cuanto a los managers:
     
     Hay 5 operaciones que se pueden realizar:
 
-    \begin{itemize}
+    \begin{enumerate}
         \item \textit{Operación PUSH}: carga la escena y la añade al top de la pila.
 
         \item \textit{Operación POP}: elimina la escena en el top de la pila y avisa, a la escena por debajo del top, si la hay, que va a empezar
@@ -268,7 +270,7 @@ En cuanto a los managers:
         \item \textit{Operación CLEARANDPUSH}: vacia la pila de escenas y añade una nueva al top de la pila que va a empezar a actualizarse.
 
         \item \textit{Operación CLEAR}: vacia la pila de escenas.
-    \end{itemize}
+    \end{iteenumeratemize}
 
     \item \textit{SceneLoader}: Clase encargado de leer la información de la escenas creadas en el editor. A la hora de construir la entidades diferencia entre entidades con \texttt{Transform} y entidades
     con \texttt{Overlay}.
@@ -280,7 +282,7 @@ En cuanto a los managers:
     entidades. Esto también se conoce como profundidad o z-order.
 
     \item \textit{ReferencesManager}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas de referencias entre entidades.
-\end{enumerate}
+\end{itemize}
 
 
 % ----------------------------------------------- PROYECTO PRINCIPAL -------------------------------------------------
