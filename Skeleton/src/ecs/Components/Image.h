@@ -25,8 +25,6 @@ namespace ECS {
 
 		void init() override;
 
-		void start() override;
-
 		void render() override;
 
 	publish:
@@ -65,7 +63,6 @@ namespace ECS {
 		// Source Rect information
 		int srcX, srcY, srcWidth, srcHeight;
 			
-
 		SDL_Point* point;
 	};
 

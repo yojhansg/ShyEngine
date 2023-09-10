@@ -41,13 +41,6 @@ namespace ECS {
 		entity->AddToRenderSet();
 	}
 
-	void Image::start() {
-
-		point->x = rotationPoint.getX();
-		point->y = rotationPoint.getY();
-
-	}
-
 	void Image::render() {
 
 		srcRect = { srcX, srcY, srcWidth, srcHeight };
@@ -67,6 +60,9 @@ namespace ECS {
 		Renderer::RendererManager::instance()->AdjustRectToCamera(&x, &y, &w, &h);
 
 		dstRect = { x, y, w, h };
+
+		point->x = rotationPoint.getX() * w;
+		point->y = rotationPoint.getY() * h;
 
 		SDL_RenderCopyEx(renderer, texture->getSDLTexture(), &srcRect, &dstRect, transform->GetWorldRotation(), point, (SDL_RendererFlip) flipmode);
 	}
