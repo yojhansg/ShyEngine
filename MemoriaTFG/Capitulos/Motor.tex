@@ -230,20 +230,20 @@ Las clases que tiene este proyecto son las siguientes:
 
 % ----------------------------------------------- RENDERER -------------------------------------------------
 
-\subsection{Renderer}
+\subsection{Renderizado}
 
 Este proyecto hace uso de las librería de SDL, SDL\_Image y SDL\_TTF.
 
 Las clases que tiene este proyecto son las siguientes:
 
 \begin{itemize}
-    \item \textit{RendererManager}: Clase, \texttt{Singleton}, encargada de inicializar y cerrar la librería de SDL, SDLImage y SDLTTF. Contiene información y funcionalidad relacionada con la ventana como su
+    \item \textit{RendererManager}: Clase, \texttt{Singleton}, encargada de inicializar y cerrar la librería de SDL, SDL\_Image y SDL\_TTF. Contiene información y funcionalidad relacionada con la ventana como su
     tamaño, borde, icono, cursor, nombre y modo pantalla completa. Además, proporciona los métodos renderizar y para limpiar la pantalla.
 
-    \item \textit{Font}: Representa una fuente de texto y tiene la funcionalidad de crear una a partir de una fichero con \textit{'.ttf'} como extensión. Tiene también la funcionalidad de crear un texto o un
+    \item \textit{Font}: Representa una fuente de texto y tiene la funcionalidad de crear una a partir de una fichero con \textit{``.ttf''} como extensión. Tiene también la funcionalidad de crear un texto o un
     texto ajustado mediante la creación de una textura.
 
-    \item \textit{Texture}: Representa una textura y tiene la funcionalidad de crear una a partir de un fichero con una extensión de imagen como \textit{'.png'} o \textit{'.jpg'}.
+    \item \textit{Texture}: Representa una textura y tiene la funcionalidad de crear una a partir de un fichero con una extensión de imagen como \textit{``.png''} o \textit{``.jpg''}.
 \end{itemize}
 
 Al igual que \texttt{SoundEffect} y \texttt{MusicEffect}, \texttt{Font} y \texttt{Texture} representan los recursos utilizado en el manager de recursos
@@ -258,10 +258,6 @@ para almacenar fuentes de texto e imágenes.
 Como arquitectura de gameplay se ha implementado de tipo entidades y componentes.
 
 Este es el proyecto más importante del motor. Implementa la arquitectura, componentes fundamentales para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
-
-\medskip
-
-Para llevar a cabo la implementación de la arquitectura es imprescindible el uso de programación orientada a objetos (POO) junto con herencia y polimorfismo. 
 
 \medskip
 
@@ -302,7 +298,7 @@ En cuanto a los componentes:
     Contiene la información sobre bastante propiedades físicas como el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad. De esta clase heredan \texttt{BoxBody}, 
     \texttt{CircleBody} y \texttt{EdgeBody}, que son cuerpos físicos cuyos colisionadores tienen formas especiales.
 
-    \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó anteriomente, SDLMixer dispone de un conjunto de canales
+    \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó anteriomente, SDL\_Mixer dispone de un conjunto de canales
     para reproducir sonidos pero este componente es abstrae la necesidad de canales desde la perspectiva del usuario. 
 
     \item \textit{MusicEmitter}: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
@@ -324,8 +320,10 @@ En cuanto a los componentes:
 En cuanto a los managers:
 
 \begin{enumerate}
-    \item \textit{SceneManager}: encargado de manejar las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean.
-    La escena que se va actualizar en el juego es la que se encuentra en el top de la pila. Hay 5 operaciones que se pueden realizar:
+    \item \textit{SceneManager}: encargado de manejar las escenas. Para ello, cuenta con una pila en la que va almacenando las escenas que se crean. La escena que se va actualizar en el juego es la que se encuentra
+    en el top de la pila. \\
+    
+    Hay 5 operaciones que se pueden realizar:
 
     \begin{itemize}
         \item \textit{Operación PUSH}: carga la escena y la añade al top de la pila.
@@ -367,8 +365,8 @@ En cuanto al bucle principal, tiene la siguiente estructura:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/EstructuraBuclePrincipal}
 \end{center}
 
-Además de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, tiempo transcurrido desde el inicio de la ejecución del programa o el número de frames/actualizaciones
-hasta el momento. El \texttt{DeltaTime} es una medida de tiempo, generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
+Además de esos métodos, que ejecutados en orden descendiente. se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, tiempo transcurrido desde el inicio de la ejecución del programa
+o el número de frames/actualizaciones hasta el momento. El \texttt{DeltaTime} es una medida de tiempo, generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
 
 \medskip
 
