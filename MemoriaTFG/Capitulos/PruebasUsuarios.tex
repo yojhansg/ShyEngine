@@ -4,5 +4,100 @@
 %
 %---------------------------------------------------------------------
 
-\chapter{Pruebas con usuarios}
+\chapter{Uso del entorno de desarrollo}
 
+
+Es difícil comprobar la calidad de un entorno de desarrollo por sí mismo sin tener algún videojuego de ejemplo donde poder ver sus capacidades. No solo esto, sino que hacer uso del entorno de desarrollo nos permite identificar errores para poder solucionarlos más adelante, además de pulir detalles que no se tuvieron en cuenta durante el proceso de desarrollo para poder ofrecer una mejor experiencia de usuario.
+
+\section{Videojuegos de ejemplo}
+
+Haciendo uso del entorno de desarrollo hemos desarrollado varios prototipos de videojuegos a modo de ejemplo para demostrar las capacidades tanto del editor como del motor. Estos proyectos nos han permitido poner a prueba el potencial y la versatilidad de nuestro motor, así como demostrar su capacidad para crear una variedad de experiencias de juego. A continuación, destacamos algunos de los videojuegos que hemos desarrollado utilizando nuestras propias herramientas:
+
+\subsection{Space Invader}
+
+Como primer juego hemos desarrollado una simplificación del clásico videojuego de máquinas recreativas Space Invader diseñado por Tomohiro Nishikado, donde el objetivo es destruir las naves enemigas antes de que estas lleguen al suelo. 
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/SpaceInvaders.png}
+    \caption{Space Invaders desarrollado con ShyEngine.}
+    \label{fig:spaceInvaders}
+\end{figure}
+
+Con este prototipo por un lado se puede apreciar la capacidad del editor de representar entidades en la escena, agrupar entidades haciendo uso de una jerarquía, y poder crear y modificar prefabs; y por otro lado se puede apreciar la capacidad del motor de instanciar entidades mediante prefabs en tiempo de ejecución, un manejo de entrada por teclado básico, uso de físicas simples y la capacidad de cambiar de escena.
+
+\subsection{Plataformas genérico}
+
+El siguiente juego desarrollado se trata de un prototipo de videojuego de plataformas en 2D. El género de las plataformas consiste en tomar el control de un personaje y avanzar sorteando obstáculos haciendo uso de plataformas flotantes. 
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/Plataformas.png}
+    \caption{Juego de plataformas genérico desarrollado con ShyEngine.}
+    \label{fig:plataformeo}
+\end{figure}
+
+
+Con este prototipo se pueden apreciar mejor las físicas, haciendo uso de conceptos más avanzados como el uso de capas físicas y el uso de eventos físicos. En este juego, el personaje avanza sin rumbo en un mapa lleno de movimientos con la capacidad de moverse tanto hacia la izquierda como a la derecha, saltar e incluso poder realizar un doble salto.
+
+
+\section{Prueba con usuarios}
+
+Debido a nuestro amplio conocimiento en profundidad tanto del editor como del motor, no podemos dar una opinión imparcial sobre su usabilidad o comodidad. Del mismo modo, tampoco podemos decidir si el uso del entorno del trabajo es intuitivo y fácil de manejar para un usuario nuevo, sin experiencia previa en el desarrollo de videojuegos. Por ello, es importante hacer pruebas de uso con usuarios reales para poder rectificar y mejorar distintos elementos del entorno de desarrollo.
+
+
+\subsection{Objetivos}
+
+Nuestro objetivo de la prueba con usuarios es ver si el entorno de desarrollo se ajusta a las necesidades de un usuario nuevo, de forma que con unos conocimientos básicos sea capaz de desarrollar por su cuenta un prototipo de videojuego sencillo, haciendo uso de las distintas herramientas que le son proporcionadas.
+
+\subsection{Selección de usuarios}
+
+Nuestro entorno de desarrollo está pensado para que pueda ser usado alguien sin previa experiencia en el desarrollo de videojuegos, aunque sí que esperamos que se tenga un mínimo de conocimientos previos de informática y manejo de ordenadores, y conocimientos básicos sobre videojuegos. Este será nuestro principal público objetivo, aunque también es interesante hacer pruebas con usuarios más experimentados, ya bien sea programando o desarrollando videojuegos, y ver cómo se desenvuelven con las herramientas dadas, y viendo si su conocimiento previo supone una gran diferencia a la hora de hacer juegos.
+
+\medskip
+
+
+En total hemos conseguido reunir 10 personas, principalmente familiares y amigos, para participar en la prueba de usuarios. Este grupo pese a ser bastante heterogéneo en cuanto a sus conocimientos relacionados con la informática y la programación, lo podemos dividir en tres secciones principales: jugadores sin experiencia en la programación o desarrollo (4 usuarios), programadores sin experiencia en el desarrollo de videojuegos (4 usuarios) y programadores con experiencia desarrollando videojuegos en otros entornos (2 usuarios).
+
+
+\subsection{Proceso de pruebas}
+
+Las pruebas se realizan de manera individual, teniendo una duración aproximada de una hora y media en las que el usuario está acompañado por un supervisor. La prueba inicia leyendo por encima un guión preparado con anterioridad, de forma que todos los usuarios cuenten con la misma información inicial. En este guión se explica el objetivo de la prueba, así como distintos conceptos esenciales en el desarrollo de un videojuego, como qué es una entidad o qué es un componente. También se dará un breve repaso por la interfaz de usuario del editor. Una vez terminado el guión, se entrega al usuario dos ficheros diferentes, el primero conteniendo el ejecutable del editor y otro con un paquete de recursos gratuitos para disponer de material inicial y no perder tiempo en búsqueda de assets.
+
+\medskip
+
+El objetivo del investigador es tomar nota de las acciones significativas del usuario, así como ayudarle en caso de encontrar algún comportamiento inesperado o error que pueda dañar su experiencia. Quitando esas situaciones excepcionales, el investigador no deberá aportar más ayuda al usuario a no ser que éste se bloque durante un gran periodo de tiempo, pues el objetivo no es frustrarle, además de que si el usuario se bloquea no podremos conseguir información útil.
+Idealmente, la prueba tendrá lugar de forma presencial, aunque en caso de no poder acordar una fecha, se hará por comodidad de forma telemática. 
+Una vez finalizada la prueba, se realizará al usuario una breve encuesta donde podrá valorar distintos aspectos tanto del editor, motor y scripting, finalizando con una valoración abierta donde el usuario podrá aportar sus quejas, ideas y opinión general.
+
+
+\subsection{Resultados}
+
+Las pruebas se realizaron a lo largo de varios días, todas hechas por el mismo investigador.
+En cuanto a los juegos desarrollados, la mayor parte de los usuarios decidió hacer un videojuego de plataformas, usando los assets proporcionados.
+El grupo de los usuarios sin experiencia fue el que más problemas tuvo, sobre todo al principio, teniendo el investigador que acabar ayudándoles en varias ocasiones. El problema más frecuente fue el poco entendimiento del funcionamiento de los componentes. Una vez pasado este primer obstáculo, el resto de la prueba fue más fluida, utilizando principalmente los componentes predefinidos por el motor en vez de aventurarse a crear su propio script. Cabe destacar un usuario que se las ingenió para crear un script capaz de eliminar una entidad al entrar en contacto con el jugador.
+
+\medskip
+
+El segundo grupo fue bastante mejor, con menos bloqueos que el primero, con más gente atreviéndose a diseñar scripts más complejos, aunque hubo varios que tras varios fracasos se frustraron y terminaron dejándolo con el fin de no perder más tiempo de la prueba. En este grupo hubo bloqueos más variados, aunque ninguno tan fuerte como los bloqueos del primer grupo.
+El último grupo fue el que más avances hizo con diferencia, asociando rápidamente conceptos vistos en otros motores al nuestro. El único bloqueo que hubo fue por parte de usuario que no terminaba de entender el funcionamiento de los prefabs en nuestro entorno de desarrollo, aunque después de ayudarle con eso no terminó usándolos.
+ 
+\medskip
+
+En cuanto al feedback recibido, hemos recibido bastantes quejas y sugerencias principalmente sobre el editor. La mayor parte de los usuarios confiesa haberse perdido por la interfaz en algún momento, y otro considerable porcentaje considera los scripts una herramienta bastante confusa la primera vez que interactúan con ella y la mayoría considera que para realizar la prueba sería necesario aportar más información y tiempo.
+
+\medskip
+
+Por último, hay que mencionar que gracias a realizar las pruebas hemos encontrado bugs críticos tanto en el motor como en el editor, gracias principalmente a realizar las pruebas en el propio ordenador del usuario, y a usos del usuario del editor que no habíamos contemplado en un principio.
+
+
+\subsection{Conclusiones}
+
+Lo primero a mencionar es que nuestra cantidad de usuarios no es lo suficientemente grande como para sacar resultados concluyentes, pero viendo la tendencia general de todos los usuarios podemos estimar algunas conclusiones.\\
+
+Consideramos que las pruebas con usuarios han sido realmente útiles, permitiéndonos ver que conceptos que dábamos por hecho que serían intuitivos realmente no lo son, y nos han servido para tomar nota de muchos posibles cambios y mejoras que habría que implementar para mejorar la calidad de la experiencia de usuario. 
+\medskip
+
+Creemos que el principal problema con nuestro entorno de desarrollo es la falta de información que se proporciona al usuario, lo cual es especialmente negativo para los usuarios nuevos. Por ello hemos pensado en implementar varias posibles correcciones, añadiendo más información en forma de marcadores de ayuda por cada elemento del editor que consideremos oportuno en base a nuestras observaciones. Además, creemos importante el implementar una documentación donde recordar los elementos principales del editor, así como poder profundizar sobre el funcionamiento del scripting. Por último, creemos de vital importancia hacer un tutorial (ya bien en formato web o vídeo) donde crear un videojuego sencillo desde cero, que pueda ir siguiendo el usuario para que así pueda ver en acción el funcionamiento de todas las partes del editor. Con estos cambios es probable que no se solucione por completo el problema, pero sería una gran ayuda para sobrepasar la brecha de conocimiento inicial necesaria para usar el entorno de desarrollo.
