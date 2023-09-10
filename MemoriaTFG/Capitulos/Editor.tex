@@ -71,7 +71,7 @@ En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura de vent
 En relación a la gestión de entidades, cada una de ellas se identifica mediante un ID único. Este ID desempeña un papel crucial al permitir la distinción entre las distintas entidades y se utiliza, por ejemplo, para referenciarlas en scripts. Además, cada entidad puede contener una referencia a su entidad padre o a sus entidades hijas, en caso de que existan relaciones jerárquicas.
 \medskip
 
-Un aspecto importante del sistema de IDs es que también se utiliza para diferenciar las entidades normales de los prefabs\footnotemark. Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única.
+Un aspecto importante del sistema de IDs es que también se utiliza para diferenciar las entidades normales de los prefabs. Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única.
 
 \begin{figure}[h]
     \centering
@@ -107,7 +107,7 @@ En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lec
 \end{figure}
 
 
-\section{Como se trasladan los datos del editor al motor}
+\section{Como se trasladan los datos del editor al motor} 
 
 Una vez creado el juego, llega la parte de pasarle toda la información al motor. Para ello, se serializa toda la información relativa  a la escena, como su nombre y sus entidades, en un formato JSON que luego el motor se encargará de interpretar, como se menciona en (REFERENCIA).
 
@@ -151,7 +151,6 @@ Cuando un juego se ejecuta utilizando el motor, este archivo JSON se interpreta 
 
 Además de crear nuevos scripts, el editor también permite la modificación de scripts existentes. Para ello, realiza una lectura e interpretación de los JSON mencionados anteriormente de manera similar a como hacen los componentes.
 
-\footnotetext{Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.} 
 
 %------------------------------------------------  --------------------------------------------
 
