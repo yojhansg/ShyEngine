@@ -9,7 +9,9 @@
 \section{Funcionamiento y arquitectura}
 \label{arquitecturaEditor}
 
-El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGui, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor.
+El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGui, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor, como la creación de ventanas, dropdowns o checkboxes, entre otras.
+
+\medskip
 
 En la imagen \ref{fig:capturaEditor} podemos ver una imagen de nuestro editor.
 
@@ -17,7 +19,7 @@ En la imagen \ref{fig:capturaEditor} podemos ver una imagen de nuestro editor.
     \centering
     \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/capturaEditor.png}
     \caption{Captura del editor de ShyEngine.}
-    \label{fig:arquitecturaVentanas}
+    \label{fig:capturaEditor}
 \end{figure}
 
 
@@ -26,9 +28,9 @@ En la imagen \ref{fig:capturaEditor} podemos ver una imagen de nuestro editor.
 En cuanto a su funcionamiento, el editor se compone de tres secciones principales:
 
 \begin{enumerate}
-    \item \textit{Gestor de proyectos}: Esta sección es la primera en iniciarse y se encarga de crear una configuración específica y un directorio dedicado para cada videojuego que se desee crear.
+    \item \textit{Gestor de proyectos}: Esta sección es la primera en iniciarse y se encarga de crear un archivo de configuración ``.shyproject'' y un directorio dedicado para cada videojuego que se desee crear, o para cargar un proyecto mediante la lectura de su archivo de configuración.
     
-    \item \textit{Ventana de edición de scripts}: Desde esta ventana se maneja la creación y edición de scripts. Permite a los desarrolladores definir el comportamiento y la lógica del juego de manera flexible.
+    \item \textit{Ventana de edición de scripts}: Desde esta ventana se maneja la creación y edición de scripts. Permite a los desarrolladores definir el comportamiento y la lógica del juego.
     
     \item \textit{Editor principal}: El núcleo del editor es esta sección, donde se lleva a cabo la mayoría de la creación y edición de contenido. Aquí se manejan las entidades, la jerarquía, los componentes y los assets del juego.
 \end{enumerate}
@@ -42,23 +44,34 @@ En el dibujo \ref{fig:funcionamientoEditor} podemos ver dicho flujo.
 
 \medskip
 
-En cuanto al funcionamiento de las ventanas, cada ventana del editor hereda de una clase padre que proporciona el funcionamiento básico necesario en ImGui y que sirve como base para definir el comportamiento específico de cada ventana de la escena.
+En cuanto al funcionamiento de las ventanas, cada ventana del editor hereda de una clase padre que proporciona el funcionamiento básico necesario en ImGUI y que sirve como base para definir el comportamiento específico de cada ventana de la escena.
+
+\medskip 
+
+El editor cuenta con varias ventanas principales:
+
+\begin{itemize}
+    \item \textit{Scene}: Esta ventana es en la que se previsualizan todas las entidades de la escena.
+    
+    \item \textit{Hierarchy}: En esta ventana se puede ver un listado de todas las entidades que contiene la escena, así como permite gestionar la jerarquía entre ellas.
+    
+    \item \textit{Components}: Desde esta ventana se puede visualizar, modificar, y añadir componentes y scripts a las entidades.
+
+    \item \textit{File Explorer}: Esta ventana permite navegar por los directorios de nuestro proyecto para ver y manejar nuestros assets, y realizar acciones como cargar una escena guardada.
+\end{itemize}
+
+Aunque también dispone de otras ventanas secundarias como la de preferencias o la de gestión de prefabs.
 
 \medskip
 
-En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura.
+En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura de ventanas.
 
 \medskip
 
-En cuanto a la gestión de entidades, cada una de ellas se identifica mediante un ID único. Este ID desempeña un papel crucial al permitir la distinción entre las distintas entidades y se utiliza, por ejemplo, para referenciarlas en scripts. Además, cada entidad puede contener una referencia a su entidad padre o a sus entidades hijas, en caso de que existan relaciones jerárquicas.
-
+En relación a la gestión de entidades, cada una de ellas se identifica mediante un ID único. Este ID desempeña un papel crucial al permitir la distinción entre las distintas entidades y se utiliza, por ejemplo, para referenciarlas en scripts. Además, cada entidad puede contener una referencia a su entidad padre o a sus entidades hijas, en caso de que existan relaciones jerárquicas.
 \medskip
 
-Un aspecto importante del sistema de IDs es que también se utiliza para diferenciar las entidades normales de los prefabs\footnotemark. 
-
-\medskip
-
-Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única. Para identificar una entidad como una instancia de un prefab, se modifica el atributo ``PrefabId'' de la entidad, asignándole el ID negativo correspondiente al prefab al que está relacionada.
+Un aspecto importante del sistema de IDs es que también se utiliza para diferenciar las entidades normales de los prefabs\footnotemark. Los prefabs se distinguen por tener un ID negativo, lo que les permite ser identificados de manera única. Además, al modificar un prefab también se modifican todas sus instancias en la escena.
 
 \begin{figure}[h]
     \centering
@@ -76,22 +89,42 @@ Los prefabs se distinguen por tener un ID negativo, lo que les permite ser ident
 \end{figure}
 
 \section{Como se leen los componentes a partir de los datos del motor}
-
 Como se mencionó anteriormente en (añadir referencia al apartado del motor que hable sobre esto), el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
 
 \medskip
 
-Los datos en formato JSON se interpretan y se utilizan para construir objetos de tipo ``Component'' en el editor. Cada objeto ``Component'' contiene un vector de objetos llamados ``Attribute'', y estos a su vez almacenan un valor que se ajusta al tipo de atributo leído en el archivo JSON (int, float, Vector2...). Las entidades contienen un vector con los componentes que se le hayan añadido y sus valores se pueden modificar desde la ventana Components del editor.
+Los datos en formato JSON se interpretan y se utilizan para construir objetos de C++ en el editor. Estos objetos son los que se añaden a las entidades para definir su comportamiento.
 
 \medskip
 
-En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lectura.
+En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lectura de componentes.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/LecturaComponentesEditor.png}
     \caption{Lectura de componentes del motor en el editor.}
     \label{fig:datosEditor}
+\end{figure}
+
+
+\section{Como se trasladan los datos del editor al motor}
+
+Una vez creado el juego, llega la parte de pasarle toda la información al motor. Para ello, se serializa toda la información relativa  a la escena, como su nombre y sus entidades, en un formato JSON que luego el motor se encargará de interpretar, como se menciona en (REFERENCIA).
+
+\medskip
+
+Cabe destacar que hay información como las preferencias o las entidades que son prefabs se serializan en el archivo ``.shyproject'' (de igual manera que con la escena), ya que son elementos del proyecto y no de una escena en concreto.
+
+\medskip
+
+La figura \ref{fig:serializacionEditor} representa como se serializa la información que será trasladada al motor.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/SerializacionEditor.png}
+    \caption{Serialización de la información del juego.}
+    \label{fig:serializacionEditor}
 \end{figure}
 
 \section{Scripting en el editor}
@@ -108,7 +141,7 @@ Por ejemplo, un nodo de evento podría desencadenar una secuencia de nodos de lóg
 
 \subsection{Serialización y uso en el motor}
 
-El flujo de nodos y conexiones en el editor es una representación visual de un script, pero esta información debe serializarse en un formato que el motor del juego pueda entender y ejecutar. Para lograr esto, el editor guarda el script en un archivo en formato JSON. Este archivo contiene toda la información sobre los nodos, conexiones y sus propiedades asociadas.
+El flujo de nodos y conexiones en el editor es una representación visual de un script, pero esta información debe serializarse en un formato que el motor del juego pueda entender y ejecutar. Para lograr esto, el editor guarda el script en un archivo en formato JSON. Este archivo contiene toda la información sobre los nodos, conexiones y sus propiedades asociadas. Mencionar también que en la serialización de las entidades, estás contienen información sobre que scripts tienen asignado.
 
 \medskip
 
