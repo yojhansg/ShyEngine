@@ -372,7 +372,13 @@ Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en e
 \medskip 
 
 
-TODO: diagrama con el orden de ejecución de nodos
+% \begin{figure}[h]
+%     \centering
+%         \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/OrdenNodos}
+%     \caption{Orden de ejecución de nodos de un script. El número situado junto a cada nodo es el orden en el que se ejecutaría.
+%         \label{fig:cap4:OrdenNodos}}
+% \end{figure}
+
 
 \medskip 
 
@@ -409,7 +415,12 @@ para almacenar los distintos valores serializados. La clase \textit{Script} no m
 
 \medskip
 
-TODO: diagrama con el esquema de las clases
+% \begin{figure}[h]
+%     \centering
+%         \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/DiagramaNodos}
+%     \caption{Diagrama UML con la estructura de clases de los nodos del scriting
+%        \label{fig:cap4:DiagramaNodos}}
+% \end{figure}
 
 Para la implementación de la lógica del scripting, se ha creado una clase por cada tipo de nodo, siendo responsable cada uno de manejar su propia información, y entre todos creando una jerarquía de clases para poder manejar el script mediante herencia y polimorfismo.
 Para representar los valores dentro del editor, manejamos la abstracicción de una variable la cual puede tomar cualquier valor, y todo se procesa dentro de una unión (siendo una unión un tipo especial de clase en c++ que solo puede almacenar el valor de uno de sus miembros). 
@@ -417,7 +428,7 @@ El lenguaje está preparado para soportar los tipos: float, char, string, bool, u
 Con el fin de simplificar el uso, hemos decidido no distinguir entre tipos númericos (como pueden ser el int o el float) sino manejar una agrupación de ellos, algo parecido al funcionamiento de Javascript. 
 % TODO: meter una cita (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) 
 
-Con el mismo fin de simplificar las cosas, también hemos decidido descartar el uso del tipo componente. Por ello, en las llamadas a funciones donde hiciera falta el parámetro que se pasará será de tipo entidad, desde la cual se accederá al componente necesario. 
+Con el mismo fin de simplificar las cosas, también hemos decidido descartar la capacidad de almacenar un variable de tipo componente. Por ello, en las llamadas a funciones donde hiciera falta el parámetro que se pasará será de tipo entidad, desde la cual se accederá al componente necesario. 
 
 Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, sin complicaciones, pero si el valor procede de un nodo de entrada, 
  su valor deserializado tiene el valor de su identificador como número entero, por lo cual antes de poder acceder al puntero tenemos que acceder al puntero haciendo uso del \textit{ReferencesManager}.

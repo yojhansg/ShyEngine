@@ -10,10 +10,10 @@ namespace Scripting {
 				\
 				 \----> OutputNode
 				  \				\
-				   \             \----> FunctionNode
-				    \             \---> ConstNode
+				   \             \----> Function
+				    \             \---> Const
 				     \
-				      \---------------> ForkNode
+				      \---------------> Fork
 	*/
 
 	class Node {
