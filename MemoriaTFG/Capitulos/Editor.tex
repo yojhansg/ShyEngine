@@ -60,11 +60,15 @@ El editor cuenta con varias ventanas principales:
     \item \textit{File Explorer}: Esta ventana permite navegar por los directorios de nuestro proyecto para ver y manejar nuestros assets, y realizar acciones como cargar una escena guardada.
 \end{itemize}
 
-Aunque también dispone de otras ventanas secundarias como la de preferencias o la de gestión de prefabs.
+Aunque también dispone de otras ventanas secundarias como la de preferencias, la de gestión de prefabs, la de edición de la paleta de colores, o la consola.
 
 \medskip
 
 En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura de ventanas.
+
+\medskip
+
+Cabe destacar que el editor también soporta la modificación del layout de ventanas y personalización de la paleta de colores, como se ve en la imagen \ref{personalizacionEditor}.
 
 \medskip
 
@@ -88,8 +92,15 @@ Un aspecto importante del sistema de IDs es que también se utiliza para diferenc
     \label{fig:arquitecturaVentanas}
 \end{figure}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/personalizacionEditor.png}
+    \caption{Personalización del editor.}
+    \label{fig:funcionamientoEditor}
+\end{figure}
+
 \section{Como se leen los componentes a partir de los datos del motor}
-Como se mencionó anteriormente en (añadir referencia al apartado del motor que hable sobre esto), el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
+Como se mencionó anteriormente en \ref{generacionDeDatos}, el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
 
 \medskip
 
@@ -128,6 +139,7 @@ La figura \ref{fig:serializacionEditor} representa como se serializa la informac
 \end{figure}
 
 \section{Scripting en el editor}
+\label{scriptingEditor}
 
 Como hemos mencionado anteriormente, el editor contiene un estado completamente dedicado a la creación y modificación de scripts. 
 
@@ -138,6 +150,17 @@ En el editor, los scripts se crean utilizando un sistema de programación visual 
 \medskip
 
 Por ejemplo, un nodo de evento podría desencadenar una secuencia de nodos de lógica que determinan cómo responde el juego cuando un jugador alcanza cierta puntuación. Los nodos de valores se utilizan para almacenar y manipular datos dentro del script, lo que permite a los desarrolladores realizar cálculos y tomar decisiones basadas en variables específicas.
+
+\medskip
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Imagenes/Vectorial/ejemploScripting.png}
+    \caption{Ejemplo de scripting en el editor.}
+    \label{fig:ejemploScripting}
+\end{figure}
+
+La mejor manera de entender esto es con la figura \ref{fig:ejemploScripting}. En dicha figura observamos el nodo del evento \texttt{Update}, que se lanza una vez por frame. Este nodo tiene una flecha de flujo hasta el nodo \texttt{SetLinearVelocity}, que recibe como parametro de entrada otros dos nodos: la entidad y la velocidad en el eje X que se quiere aplicar. A su vez, esta velocidad proviene de una multiplicación de dos nodos de tipo númerico. Como se puede apreciar, la entrada y salida de datos viene representada con una flecha mas fina que la de flujo.
 
 \subsection{Serialización y uso en el motor}
 
@@ -154,7 +177,7 @@ Además de crear nuevos scripts, el editor también permite la modificación de scr
 
 \section{Ejecución del juego y generación de una build}
 
-Una funcionalidad a destacar del editor es la posibilidad de ejecutar el juego desde este en otra ventana. Esto se realiza ejecutando el ``.exe'' del motor a través de un hilo. Además tambien se puede generar una build ejecutable del juego. Esto permite a los desarrolladores crear una versión independiente del juego que puede ser distribuida y ejecutada por los usuarios finales. 
+Una funcionalidad a destacar del editor es la posibilidad de ejecutar el juego desde este en otra ventana. Esto se realiza ejecutando el ``.exe'' del motor mediante manejadores de procesos de Windows, para poder pararlo desde el editor y evitar varios procesos del juego simultáneamente, así como redirigir la salida del juego a la consola del editor. Además tambien se puede generar una build ejecutable del juego mediante el uso de un hilo. Para ello, se agrupan todos los assets del juego, junto con el ``.exe'' (con su correspondiente nombre e icono aportados por el usuario) y los ficheros de configuración del juego generados por el editor. Esto permite a los desarrolladores crear una versión independiente del juego que puede ser distribuida y ejecutada por los usuarios finales.  
 
 %------------------------------------------------  --------------------------------------------
 
