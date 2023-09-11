@@ -132,38 +132,38 @@ amplio conjunto de funcionalidades para la interfaz de usuario (UI).
 
 Una vez seleccionada esta biblioteca, procedí a crear el proyecto en Visual Studio 2022. Inicié con la creación de un programa simple inicial para comprender cómo se inicializa y funciona IMGUI, el cual incluía 
 un proyecto con numerosos ejemplos. Mi enfoque inicial se centró en el diseño de las ventanas principales, como la barra de menú, la jerarquía, la escena, los componentes y el explorador de archivos.
-Esto se hizo de manera rápida y provisional con el único propósito de familiarizarme rápidamente con IMGUI. Durante este proceso, descubrí la rama 'imgui dock' de IMGUI, que permitía el anclaje de ventanas entre 
+Esto se hizo de manera rápida y provisional con el único propósito de familiarizarme rápidamente con IMGUI. Durante este proceso, descubrí la rama Docking de ImGUI, que permitía el anclaje de ventanas entre 
 sí, lo que resultó ser una característica valiosa para el proyecto.
 
 \medskip
 
 Posteriormente, reestructuré dicho código para lograr una organización más intuitiva de las ventanas y facilitar la adición de nuevas ventanas. Para ello, cree la clase Window, que es la clase padre de cada 
-ventana y se encarga de incluir la funcionalidad básica de una ventana de IMGUI. Avanzando en el proyecto, me concentré en la creación de la escena, un proceso que inicialmente resultó un tanto complicado 
-debido a la complejidad en la programación, especialmente en lo que respecta al manejo de texturas y su renderización con IMGUI. Sin embargo, con el tiempo, logré comprender estos aspectos y refactorizar 
+ventana y se encarga de incluir la funcionalidad básica de una ventana de ImGUI. Avanzando en el proyecto, me concentré en la creación de la escena, un proceso que inicialmente resultó un tanto complicado 
+debido a la complejidad en la programación, especialmente en lo que respecta al manejo de texturas y su renderización con ImGUI. Sin embargo, con el tiempo, logré comprender estos aspectos y refactorizar 
 el código para obtener una forma más sencilla de renderizar la escena y sus entidades.
 
 \medskip
 
 Con la escena en funcionamiento, me dediqué a trabajar en la creación de entidades y su representación en la textura. Para ello, creé la clase Entidad, encargada de gestionar su textura y almacenar información 
-sobre su Transform, además de asignar un ID único a cada entidad para diferenciarlas entre sí. Luego, me enfoqué en la gestión de estas entidades a través de la ventana de jerarquía, incorporando un listado 
-con textos seleccionables mediante IMGUI, lo que permitió la selección de entidades. Esto también tuvo un impacto en otras ventanas, como la de componentes, que mostraba información sobre la entidad seleccionada. 
-Inicialmente, la ventana de componentes mostraba solo la información del transform con entradas de IMGUI para modificar sus valores. Finalmente, desarrollé la ventana del explorador de archivos, que aunque 
-al principio no la consideré esencial, resultó importante para la visualización de los activos del proyecto y la navegación entre directorios.
+sobre su \texttt{Transform}, además de asignar un ID único a cada entidad para diferenciarlas entre sí. Luego, me enfoqué en la gestión de estas entidades a través de la ventana de jerarquía, incorporando un listado 
+con textos seleccionables mediante ImGUI, lo que permitió la selección de entidades. Esto también tuvo un impacto en otras ventanas, como la de componentes, que mostraba información sobre la entidad seleccionada. 
+Inicialmente, la ventana de componentes mostraba solo la información del \texttt{Transform} con entradas de ImGUI para modificar sus valores. Finalmente, desarrollé la ventana del explorador de archivos, que aunque 
+al principio no la consideré esencial, resultó importante para la visualización de los assets del proyecto y la navegación entre directorios.
 
 \medskip
 
 Una vez que logramos tener una versión básica del editor, trabajé en su integración con el motor del proyecto. Esto implicó la serialización de escenas, entidades y sus transformaciones en formato JSON.
 Posteriormente, tuve que adaptar el proceso de serialización para que fuera compatible con el motor, ya que este tenía formas distintas de leer los componentes disponibles, sus atributos y el tipo de sus atributos. 
 Una vez incorporados los componentes del motor en el editor, me centré en el renderizado y la edición de estos, de modo que cada tipo de atributo tuviera su propia representación en la ventana de componentes, 
-lo que se logró de manera eficiente gracias a IMGUI. También permití la adición de dichos componentes a las entidades.
+lo que se logró de manera eficiente gracias a ImGUI. También permití la adición de dichos componentes a las entidades.
 
 \medskip
 
 Posteriormente, me dediqué a la implementación de funciones más avanzadas, como el uso de prefabs y la gestión de la jerarquía entre entidades. Esto fue un desafío significativo, ya que implicaba rehacer el 
 sistema de asignación de IDs para que los prefabs tuvieran IDs negativos y estuvieran referenciados en todas sus instancias. Además, fue necesario tener en cuenta este sistema de IDs en múltiples partes del 
 código para evitar conflictos con el uso normal de las entidades. La gestión de la jerarquía también presentó complejidades, ya que cada entidad contenía referencias a su padre y sus hijos, lo que debía 
-considerarse en numerosas partes del código. La interacción entre prefabs y la jerarquía también fue un aspecto desafiante, ya que un prefab podía tener hijos. Implementé un sistema para que las entidades 
-padre afectaran el transform de sus hijos, lo que facilitó la interacción entre ellos en la escena, como el movimiento conjunto de las entidades al mover el padre. Además, para gestionar los prefabs, 
+considerarse en numerosas partes del código. La interacción entre prefabs y la jerarquía también fue un aspecto desafiante, ya que un prefab podía tener hijos. Después, implementé un sistema para que las entidades 
+padre afectaran el \texttt{Transform} de sus hijos, lo que facilitó la interacción entre ellos en la escena, como el movimiento conjunto de las entidades al mover el padre. Además, para gestionar los prefabs, 
 creé una ventana llamada PrefabManager desde la cual se podían ver y editar los prefabs.
 
 \medskip
