@@ -6,7 +6,7 @@
 
 \chapter{Vision general}
 
-En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los editores con motor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades de desarrollo de juegos. Sin embargo, esta versatilidad puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
+En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los editores con motor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades del desarrollo de juegos. Sin embargo, esta versatilidad puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
 
 \medskip
 
@@ -25,7 +25,7 @@ En nuestro modelo, la entidad fundamental es la escena, que contiene entidades i
 
 Tanto el editor como el motor cuentan además con soporte para prefabs. Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y 
 puede reutilizarse en diferentes partes del juego para acelerar y simplificar el proceso de diseño y desarrollo, pudiendo instanciar copias de la entidad tanto desde el editor 
-(pudiendo además modificar el prefab original para modificar simultáneamente en todas las instancias) complicaciones. como desde el motor en tiempo de ejecución.
+(pudiendo además modificar el prefab original para modificar simultáneamente todas sus instancias), como desde el motor en tiempo de ejecución.
 \medskip
 
 Como se mencionó en el apartado de motivación, el objetivo es desarrollar un motor con editor que pudiera ser utilizado por gente que no sea programadora. Por ello, se ha decidido implementar un sistema de programación visual. 
@@ -34,16 +34,18 @@ De esta forma, el usuario no tendrá que estar previamente familiarizado con ning
 
 Hemos decidido que los scripts funcionen como datos en vez de como código compilado, ahorrando tiempos de compilación y evitando depender de una programa externo para compilar el código.
 
+\medskip
+
 El lenguaje permite controlar el orden de ejecución de cada nodo, otorgando legibilidad y previsibilidad a su ejecución, y el lenguaje cuenta con distintos tipos de nodos, cada tipo con una función concreta, como ejecutar una función del motor, almacenar el valor de un dato especificado por el usuario, o modificar el orden de ejecución de los nodos en tiempo real.
 \medskip
 
-Para desarrollar el scriting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos etre ellos mediante el uso de flechas para crear el comportamiento deseado. 
+Para desarrollar el scripting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos etre ellos mediante el uso de flechas para crear el comportamiento deseado. 
 Para saber de qué nodos dispone el usuario, el editor contendrá información sobre el funcionamiento del motor para conocer sus componetes, y la información esencial de cada función disponible, siendo el nombre, el valor devuelto y la entrada requerida.
 Cuando el usuario haya terminado con el proceso de creación, la información relacionada con el script será serializada en un fichero usando un formato JSON.
-Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecición del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de dato que representa el script que pueda ser accedida más adelante.
+Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecición del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de datos que representa el script y que puede ser accedida más adelante.
 Esta estructura está preparada para ejecutar el script, funcionando como un intérprete capaz de ejecutar funciones dentro del motor con la información proporcionada. Esto es gracias a que el motor cuenta con funcionalidad que, conociendo únicamente el nombre de la función que se quiera ejecutar, pueda identificar de qué función
 se trata y proceder a ejecutarla. 
-El motor da control al script mediante el uso de una serie de eventos. Estos eventos van desde los más básicos como \textit{Update} que se lanza en cada fotograma, a algunos eventos más específicos de uso como ejecutarse al detectar una colisión de la entidad, o al posicionar el ratón sobre un elemento de la interfaz.
+El motor da control al script mediante el uso de una serie de eventos. Estos eventos van desde los más básicos como \textit{Update}, que se lanza en cada fotograma, a algunos eventos más específicos de uso como ejecutarse al detectar una colisión de la entidad, o al posicionar el ratón sobre un elemento de la interfaz.
 En el editor de nodos, estos eventos son representados como un nodo adicional, haciendo que se mantenga cohesionado con resto del editor de nodos, pudiendo utilizar en el mismo script todos los eventos que se consideren oportunos.
 
 \medskip
