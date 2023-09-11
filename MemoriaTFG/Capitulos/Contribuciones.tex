@@ -49,6 +49,8 @@ detección de colisiones, conversión de píxeles a unidades físicas, nuevo compone
 implementé un gestor de recursos para evitar cargar recursos duplicados, mejoré los componentes de sonido para añadir paneo 
 horizontal y sonido 2D, entre otros. 
 
+\medskip
+
 Con la parte del editor más avanzada, implementé la lógica para leer los datos que genera el editor, como prefabs. Además, 
 implementé la ventana de gestión de proyectos del editor, añadí control de errores en todo el motor, 
 para conseguir una ejecución continua y esperable, imprimiendo los errores por la salida estándar. Añadí también control de 
@@ -79,35 +81,44 @@ la unión entre el editor y el motor.
 
 Inicialmente tuve que crear un proyecto vacío de Visual Studio para empezar a prototipar el lenguaje. No quería utilizar ninguna biblioteca externa
 que implementase la lógica para un editor de nodos, pues prefería poder desarrollarlo desde cero. Tuve que buscar información de otros motores como Unity o Unreal y cómo funciona su scripting para implementarlo en nuestro motor, aunque tampoco queríamos copiar su forma de implementar el scripting o el diseño de su estructura de nodos y queríamos desarrollar un lenguaje propio
-que se adaptase a las necesidades concretas de nuestro motor. En esta fase inicial se tuvieron que tomar las decisiones clave sobre cómo implementar el scripting, como por ejemplo hacer que el lenguaje de scripting fuese compilado a código en c++, o si debería ser interpretado.  \\
+que se adaptase a las necesidades concretas de nuestro motor. En esta fase inicial se tuvieron que tomar las decisiones clave sobre cómo implementar el scripting, como por ejemplo hacer que el lenguaje de scripting fuese compilado a código en C++ , o si debería ser interpretado. 
 
-Fue un proceso iterativo donde poco a poco se iba añadiendo funcionalidad y haciendo una variedad de prototipos, usando Unity como base para la parte gráfica. En estos prototipos fue cuando probamos a hacer que un script fuera compilado, de forma que se mejorase el rendimiento del motor. Para ello creé lógica para su traducción a código en c++, con éxito en scripts pequeños que fueron probados. 
+\medskip
+
+Fue un proceso iterativo donde poco a poco se iba añadiendo funcionalidad y haciendo una variedad de prototipos, usando Unity como base para la parte gráfica. En estos prototipos fue cuando probamos a hacer que un script fuera compilado, de forma que se mejorase el rendimiento del motor. Para ello creé lógica para su traducción a código en C++, con éxito en scripts pequeños que fueron probados. 
 El siguiente paso sería compilarlo, y después de investigar como llevar a cabo el proceso de compilación para generar una DLL la cual
 sería enlazada con el motor, no vimos ninguna solución que nos terminase de convencer, pues la mayoría requería de instalación de programas de compilación adicionales o no tenían soporte para la generación de DLLs, por lo que al final tras discutirlo los miembros del equipo decidimos que no se compilase el script sino que fuese interpretado por el motor.
 
+\medskip
 
-Cuando dimos con una implementación suficientemente robusta fue cuando decidímos juntar los dos primeros proyectos del TFG, siendo el motor y el scripting. No bastaba solo con incluir los ficheros que tenía (adaptando algunos de c\# a c++ y añadiendo la biblioteca de JSON de nlohmann), sino que para poder llevar a cabo la integración tuve que crear una serie de clases del motor 
+Cuando dimos con una implementación suficientemente robusta fue cuando decidímos juntar los dos primeros proyectos del TFG, siendo el motor y el scripting. No bastaba solo con incluir los ficheros que tenía (adaptando algunos de C\# a C++ y añadiendo la biblioteca de JSON de nlohmann) \cite{nlohmann}, sino que para poder llevar a cabo la integración tuve que crear una serie de clases del motor 
 para que funcionasen como puente para el scripting. Esto incluye clases como Script y ScriptManager imprescindibles para poder llevar a cabo la unión. Con el scripting enlazado con el bucle de juego del motor fue momento de empezar a hacer pruebas y ver que todo funcionaba como se esperaba. En este punto fue necesaria la creación de la clase ScriptFunctionality para poder dotar al lenguaje de una funcionalidad básica operaciones aritméticas o salida por
-consola para poder llevar a cabo las pruebas. \\
+consola para poder llevar a cabo las pruebas. 
 
-El scripting se encontró con un bloqueo pues no se podía acceder a la funcionalidad del motor, por lo que pospuse el desarrollo del scripting y empezé a centrarme en cómo sería la unión entre el editor y el motor. Después de investigar posibles soluciones y ver la carencias del lenguaje c++, decidimos solventar esas carencias a mano, por lo que surgió el proyecto de ECSReader,
- con el cual se puede leer el contenido del motor gracias a unas marcas que se pueden ir añadiéndo en el código. Estas marcas permiten al desarrollador decidir que partes se quieren hacer públicas para el editor. Con esta clase terminada, toda la información relevantes del motor
+\medskip
+
+El scripting se encontró con un bloqueo pues no se podía acceder a la funcionalidad del motor, por lo que pospuse el desarrollo del scripting y empezé a centrarme en cómo sería la unión entre el editor y el motor. Después de investigar posibles soluciones y ver la carencias del lenguaje C++, decidimos solventar esas carencias a mano, por lo que surgió el proyecto de ECSReader,
+con el cual se puede leer el contenido del motor gracias a unas marcas que se pueden ir añadiéndo en el código. Estas marcas permiten al desarrollador decidir que partes se quieren hacer públicas para el editor. Con esta clase terminada, toda la información relevantes del motor
 pasaba a estar serializada en un fichero en formato JSON, siendo la idea que el editor pueda leer los valores desde este fichero. Además, se usó el ECSReader ya no solo para generar ficheros JSON, sino para automatizar distintas partes del motor, ahorrando mucho tiempo de haber hecho eso a mano, como crear una factoría de componentes automática, permitir hacer reflexión sobre los atributos de un componente, y una parte fundamental
-para continuar el desarrollo del scripting, que es poder tener un mapa con todas las funciones del motor para así poder utilizar su funcionalidad desde un script. Con esto hecho, continué haciendo pruebas con los scripts, ahora manejando funcionalidad del motor y corrigiendo todos los errores que iba encontrando.\\
+para continuar el desarrollo del scripting, que es poder tener un mapa con todas las funciones del motor para así poder utilizar su funcionalidad desde un script. Con esto hecho, continué haciendo pruebas con los scripts, ahora manejando funcionalidad del motor y corrigiendo todos los errores que iba encontrando.
+
+\medskip
 
 La mejor forma de comprobar que el scripting funcionaba era utilizándolo de forma exhaustiva, por lo que comencé el desarrollo de varios juegos pequeños para ver si encontraba alguna limitación. Estos juegos eran un pequeño flappy bird y otro un reloj que daba la hora en tiempo real (realmente no se podría decirse que es un juego sino más bien una prueba). El problema
 del desarrollo de scripts es que estaba enlazado con el motor, pero aún no con el editor, lo cual significaba que cada script lo tenía que hacer a mano, modificando el propio fichero desde un editor de texto, lo cual era bastante tedioso de hacer y se complicaba mucho cuando el script crecía de tamaño. Por ello, mi idea era implementar ya la ventana de edición de scripts
 en el editor, pero debido a que el editor aún no estaba lo suficientemente avanzado decidí ayudar a Pablo en el desarrollo del motor. 
+
 \medskip
 
 Del motor terminé unas cosas que Pablo había dejado a medias y luego me puse a añadir funcionalidad adicional. Lo primero que añadí, debido a mi previa experiencia usando la biblioteca de JSON de nlohmann, fue la serialización de escenas y entidades. Con eso hecho me puse a implementar un sistema de Overlays, siendo los overlays los distintos elementos con los que cuenta
 el motor para representar la interfaz de usuario, junto con sus componentes correspondientes (OverlayImage, OverlayText y OverlayButton). Además, también hice la estructura para la deserialización de valores que carga el motor, con información como el nombre del juego o el tamaño de la ventana, dejando margen para poder ser expandido con más valores en un futuro. Implementé 
 funcionalidad para otorgar al motor de una jerarquía de entidades. También implementé lógica para dotar al motor de una splashScreen con el logo del motor.
 
-Con esto, ya estaba hecha la reflexión con la que queríamos dotar al motor, y siendo la persona que más avanzada iba con su parte decidí ayudar a mis compañeros con algunas tareas. Empezando por el motor y gracias a mi experiencia con serialización de JSON, hice serialización de escenas y entidades, seguido de la implementación del sistema de Overlays y sus componenetes asociados
- (Image, Button y Text), la Splash Screen y la serialización de información del proyecto, como tamaño de la ventana o el icono usado. Implementé la lógica para mover la cámara por la escena, al igual que para poder cambiar su escala. Hice el renderManager dentro del ECS para poder controlar el orden de renderizado de las entidades. Por último, hice también un ConsoleManager 
- para poder mostrar elementos por consola con un formato unificado, mostrando que componente o script lo ha escrito, al igual que el momento en el tiempo en el que se escribió el mensaje. Todo esto con su respectivo manejo de errores. 
+\medskip
 
+Con esto, ya estaba hecha la reflexión con la que queríamos dotar al motor, y siendo la persona que más avanzada iba con su parte decidí ayudar a mis compañeros con algunas tareas. Empezando por el motor y gracias a mi experiencia con serialización de JSON, hice serialización de escenas y entidades, seguido de la implementación del sistema de Overlays y sus componenetes asociados
+(Image, Button y Text), la Splash Screen y la serialización de información del proyecto, como tamaño de la ventana o el icono usado. Implementé la lógica para mover la cámara por la escena, al igual que para poder cambiar su escala. Hice el renderManager dentro del ECS para poder controlar el orden de renderizado de las entidades. Por último, hice también un ConsoleManager 
+para poder mostrar elementos por consola con un formato unificado, mostrando que componente o script lo ha escrito, al igual que el momento en el tiempo en el que se escribió el mensaje. Todo esto con su respectivo manejo de errores. 
 
 \medskip
 
