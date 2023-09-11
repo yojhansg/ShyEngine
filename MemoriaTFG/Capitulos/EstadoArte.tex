@@ -59,67 +59,26 @@ distribución y mantenimiento. Además se suelen utilizar metodologías ágiles de p
 
 \subsection{Qué es un juego dirigido por datos}
 
-Con el concepto de videojuego como división de programación y recursos en mente, el concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
-de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. 
+El concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
+de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y el Half-Life, desarrollados por idSoftware y Valve Corporation, respectivamente.
 
-\medskip
-
-Algunos ejemplos de juegos que siguen esta filosofía son las aventuras gráficas desarrolladas por Lucasfilm Games:
-
-\begin{figure}[t]
-    \centering
-    %
-    \begin{SubFloat}
-    {\label{fig:cap2:maniac}%
-    Maniac Mansion (1987)}%
-    \includegraphics[width=0.45\textwidth]%
-    {Imagenes/Vectorial/maniacmansion}%
-    \end{SubFloat}
-    \qquad
-    \begin{SubFloat}
-    {\label{fig:cap2:indiana}%
-    Indiana Jones and the Last Crusade: The Graphic Adventure (1989)}%
-    \includegraphics[width=0.45\textwidth]%
-    {Imagenes/Vectorial/indianajones}%
-    \end{SubFloat}
-
-    % Siguiente linea
-
-    \begin{SubFloat}
-    {\label{fig:cap2:loom}%
-    Loom (1990)}%
-    \includegraphics[width=0.45\textwidth]%
-    {Imagenes/Vectorial/loom}%
-    \end{SubFloat}
-    \qquad
-    \begin{SubFloat}
-    {\label{fig:cap2:samandmax}%
-    Sam and Max Hit the Road (1993)}%
-    \includegraphics[width=0.45\textwidth]%
-    {Imagenes/Vectorial/samandmax}%
-    \end{SubFloat}
-
-    \caption{Juegos desarrollados por Lucasfilm Games.%
-    \label{fig:cap2:LucasfilmGames}}
-\end{figure}
-
-Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y el Half-Life, desarrollados por idSoftware y Valve Corporation, respectivamente.
-
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
     %
     \subfloat[][Quake II (1997)]{
-    \includegraphics[width=5cm]{Imagenes/Vectorial/quake2}
+    \includegraphics[width=3cm]{Imagenes/Vectorial/quake2}
     \label{fig:etiqueta1}
     }
     \qquad
     \subfloat[][Half-Life (1998)]{
-    \includegraphics[width=5cm]{Imagenes/Vectorial/halflife}
+    \includegraphics[width=3cm]{Imagenes/Vectorial/halflife}
     \label{fig:etiqueta2}
     }
-    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos}
-    \label{Etiqueta para toda la figura}
+    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos.}
+    \label{fig:dirigidosdatos}
 \end{figure}  
+
+\medskip
 
 En todos ellos, se creaban nuevos datos/recursos para desarrollarlos.
 
@@ -131,7 +90,7 @@ inteligencia artificial, redes, gestión de memoria, y demás sistemas del videoju
 
 \medskip
 
-El término `motor de juego' surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el popular Doom de id Software. Doom fue 
+El término ``motor de juego'' surgió a mediados de la década de 1990 en referencia a juegos de disparos en primera persona (FPS) como el popular Doom de idSoftware. Doom fue 
 diseñado con una separación razonablemente definida entre sus componentes de software principales (como el sistema de renderizado gráfico tridimensional, el sistema de detección
 de colisiones o el sistema de audio) y los recursos artísticos, mundos de juego y reglas de juego que componían la experiencia de juego del jugador. El valor de esta separación
 se hizo evidente cuando los desarrolladores comenzaron a licenciar juegos y a adaptarlos para crear nuevos productos mediante la creación de nuevos recursos artísticos, diseños 
@@ -139,48 +98,48 @@ de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en
 
 \medskip
 
-Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la ``modificación''. Los motores se hicieron
+Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la ``modificación'' de recursos. Los motores se hicieron
 altamente personalizables mediante lenguajes de programación de scripts como el Quake C de idSoftware, y la licencia de motores comenzó a ser una corriente de ingresos secundaria
 viable para los desarrolladores que los crearon. 
 
 \subsection{División entre motor y gameplay}
 
 El gameplay se define como la experiencia general de jugar a un videojuego. Incluye las mecánicas, las reglas que gobiernan las interacciones entre los elementos en el juego, los
-objetivos del jugador, los criterios para ganar o perder, las abilidades del personaje, los NPC (Non-Playable-Characters), y el flujo general de la experiencia de juego en su conjunto.
+objetivos del jugador, los criterios para ganar o perder, las habilidades del personaje, los NPC (Non-Playable-Characters), y el flujo general de la experiencia de juego en su conjunto.
+
+\medskip
 
 La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen una distinción razonablemente clara, mientras que otros apenas hacen un intento de separar los dos.
 
-En esta imagen se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
+\medskip
+
+En la imagen \ref{fig:cap2:motor-gameplay} se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
 personajes, modelos, escenas, lógica y comportamiento. Y por otro lado tenemos el motor, encargado de cargar toda esa información. 
 
-\begin{figure}[t]
-\centering
-    \includegraphics[width=0.9\textwidth]{Imagenes/Vectorial/Motor-Gameplay}
-\caption{División de juego en motor y gameplay.%
-    \label{fig:cap2:motor-gameplay}}
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/Motor-Gameplay}
+    \caption{División de juego en motor y gameplay.%
+        \label{fig:cap2:motor-gameplay}}
 \end{figure}
+
+\medskip
 
 En realidad aquí surge un problema. Los recursos obvios son imágenes y audio pero el gameplay también tiene mapas donde se colocan los elementos del juego y, sobre todo, comportamiento
 que hay que crear y proporcionar al motor. Como veremos más adelante, hay varias formas de conseguir convertir en datos ese comportamiento (que en realidad es programación). 
 
 \medskip
 
-Otro aspecto intersante a comentar es la ``altitud'' a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
+Otro aspecto interesante a comentar es la ``altitud'' a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
 y hay que crear poco comportamiento en el gameplay. Eso hace que el motor esté muy focalizado en un tipo de juegos concretos por lo que si el género o tipo del videojuego a desarrollar no es
-compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo.
-
-
-\begin{figure}[t]
-    \centering
-        \includegraphics[scale=0.5]{Imagenes/Vectorial/MotorSobreGameplay}
-    \caption{Motor aporta funcionalidad al gameplay.%
-        \label{fig:cap2:motorSobreGameplay}}
-\end{figure}
+compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo. [\ref{fig:cap2:motorSobreGameplay}]
 
 \medskip
 
 De esta forma, es común encontrarse con motores pensados para géneros de videojuegos concretos. Existen motores para desarrollar videojuegos de disparos en primera persona (FPS), videojuegos
 de plataformas y en tercera persona, videojuegos de lucha, videojuegos de carreras, videojuegos de estrategia en tiempo real o videojuegos multijugador online masivos, conocidos como (MMOG).
+
+\medskip
 
 Algunos ejemplos de estos motores son Scumm, desarrollado por LucasfilmGames para sus aventuras gráficas, RPG Maker desarrollado por ASCII Corporation para juegos de rol, las primeras versiones
 de Frostbite desarrollado por Electronic Arts para juegos de acción y disparos (FPS) o MUGEN desarrollado por Elecbyte para juegos de lucha en dos dimensiones.
@@ -192,6 +151,12 @@ de un software que es un juego, pero no un motor. Cuando un juego contiene lógic
 de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término `motor de juego' para el software que es
 extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes.''
 
+\begin{figure}[h]
+    \centering
+        \includegraphics[scale=0.3]{Imagenes/Vectorial/MotorSobreGameplay}
+    \caption{Motor aporta funcionalidad al gameplay.%
+        \label{fig:cap2:motorSobreGameplay}}
+\end{figure}
 
 \subsection{De que está compuesto un motor de videojuegos}
 
@@ -205,10 +170,10 @@ propósitos, todo necesarios para el videojuego. Para un motor de carácter genera
     \item \textit{Motor de física}: La física es esencial para dar realismo y coherencia al juego. Este motor simula el movimiento de objetos, colisiones, gravedad y otros efectos físicos. Permite
     que los personajes y objetos del juego interactúen de manera creíble con el entorno y entre sí.
 
-    \item \textit{Motor de audio}: Gestiona la reproducción de efectos de sonido y música en el juego. Puede incluir capacidades de mezcla de audio y efectos especiales para crear una experienciaç
+    \item \textit{Motor de audio}: Gestiona la reproducción de efectos de sonido y música en el juego. Puede incluir capacidades de mezcla de audio y efectos especiales para crear una experiencia
     auditiva envolvente.
 
-    \item \textit{Motor de input}: Controla la interacción del usuario con el juego a través de dispositivos de entrada como teclados, mouse, controladores de juegos o pantallas táctiles.
+    \item \textit{Motor de input}: Controla la interacción del usuario con el juego a través de dispositivos de entrada como teclados, ratones, controladores de juegos o pantallas táctiles.
 
     \item \textit{Motor de animación}: Esto incluye la animación de personajes, la interpolación de movimientos y la gestión de esqueletos o huesos para modelar la anatomía de los personajes.
 
@@ -220,9 +185,7 @@ propósitos, todo necesarios para el videojuego. Para un motor de carácter genera
     \item \textit{Subsistemas de soporte}: Sistemas para iniciar y cerrar el motor, manejar la asignación de memoria, sistema de ficheros, etc.
 \end{itemize}
 
-El diagrama anterior quedaría completo de la siguiente manera:
-
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
         \includegraphics[scale=0.3]{Imagenes/Vectorial/MotorYGameplay}
     \caption{Partes fundamentales que componen un motor de videojuegos.%
@@ -235,7 +198,11 @@ El diagrama anterior quedaría completo de la siguiente manera:
 Hasta ahora se hemos hablado sobre la idea de motor de videojuegos y lo que los separa del gameplay. Pero a la hora de desarrollar un videojuego existen varios patrones o arquitecturas
 que se pueden seguir para construir sus bases. Estas arquitecturas definen el comportamiento del gameplay y sirven de conexión con el motor. 
 
+\medskip
+
 Un arquitectura define como se representan los diferentes tipos de entidades en el mundo junto con sus atributos y comportamientos.
+
+\medskip
 
 Existen dos tipos de arquitecturas principales:
 
@@ -249,9 +216,9 @@ Existen dos tipos de arquitecturas principales:
 
 Aquí una imagen que muestra la diferencia:
 
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
-        \includegraphics[scale=0.3]{Imagenes/Vectorial/ObjetosvsPropiedades}
+        \includegraphics[scale=0.15]{Imagenes/Vectorial/ObjetosvsPropiedades}
     \caption{Diferencia entre arquitectura centrada en objetos vs propiedades.%
         \label{fig:cap2:objetosvspropiedades}}
 \end{figure}
@@ -263,10 +230,12 @@ Aquí una imagen que muestra la diferencia:
 
 La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental en el desarrollo de videojuegos debido a su flexibilidad y eficiencia en el manejo de la complejidad. Esta basado en la idea de arquitectura centrada en propiedades.
 
+\medskip
+
 En el corazón de la arquitectura EC se encuentran dos conceptos clave:
 
 \begin{itemize}
-  \item \textit{Entidades}: Una entidad representa un objeto individual en el juego. Esto podrí­a ser cualquier cosa, desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra pero realmente son contenedores vací­os que no contienen lógica ni información por sí­ mismos y lo que les define son sus componentes.
+  \item \textit{Entidades}: Una entidad representa un objeto individual en el juego. Esto podrí­a ser cualquier cosa, desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra, pero realmente son contenedores vací­os que no contienen lógica ni información por sí­ mismos y lo que les define son sus componentes.
 
   \item \textit{Componentes}: Los componentes son módulos independientes que contienen datos y lógica. Cada entidad en un juego está compuesta por uno o más componentes que definen sus atributos y comportamiento. Por ejemplo, una entidad de jugador podrí­a tener componentes como ``Posición'' para representar su ubicación en el mundo, ``Imagen'' para la apariencia visual o ``Movimiento'' para el movimiento del personaje, entre otros.
 
@@ -302,13 +271,13 @@ Con el tiempo, a medida que la industria de los videojuegos creció y se diversif
 Los editores de videojuegos desempeñan un papel crucial en el proceso de desarrollo de un videojuego. Estas herramientas permiten a los desarrolladores:
 
 \begin{enumerate}
-    \item \textit{Diseñar Niveles y Escenarios}: Los editores permiten la creación y edición de entornos, niveles y escenarios. Los diseñadores pueden colocar objetos, enemigos, obstáculos y elementos interactivos en el mundo del juego.
+    \item \textit{Diseñar niveles y escenarios}: Los editores permiten la creación y edición de entornos, niveles y escenarios. Los diseñadores pueden colocar objetos, enemigos, obstáculos y elementos interactivos en el mundo del juego.
 
-    \item \textit{Gestionar Recursos}: Los editores proporcionan una plataforma para administrar recursos del juego, como imágenes, sonidos, modelos 3D y más. Los recursos se organizan y se pueden vincular a elementos del juego.
+    \item \textit{Gestionar recursos}: Los editores proporcionan una plataforma para administrar recursos del juego, como imágenes, sonidos, modelos 3D y más. Los recursos se organizan y se pueden vincular a elementos del juego.
 
-    \item \textit{Definir Comportamientos}: Los editores modernos permiten definir comportamientos de personajes y objetos mediante sistemas visuales de programación o scripts. Esto facilita la creación de interacciones y mecánicas de juego.
+    \item \textit{Definir comportamientos}: Los editores modernos permiten definir comportamientos de personajes y objetos mediante sistemas visuales de programación o scripts. Esto facilita la creación de interacciones y mecánicas de juego.
 
-    \item \textit{Simular y Depurar}: Los editores a menudo incluyen herramientas de simulación y depuración que ayudan a los desarrolladores a probar y solucionar problemas en tiempo real.
+    \item \textit{Simular y depurar}: Los editores a menudo incluyen herramientas de simulación y depuración que ayudan a los desarrolladores a probar y solucionar problemas en tiempo real.
 \end{enumerate}
 
 \subsection{Enfoque histórico y actual de la integración entre editor y motor}
@@ -346,7 +315,7 @@ El scripting, en el contexto del desarrollo de videojuegos, se refiere a la capa
 \subsection{¿Qué diferencia hay entre script y componente?}
 
 La diferencia entre scripts y componentes es que, ambos definen lógica para el videojuego pero los componentes son comportamiento,
-en la mayoría de casos, fundamental y genérico (por ejemplo un componente ``Imagen''), que proporciona el motor al usuario y los scripts son piezas de lógica que construye el usuario y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
+en la mayoría de casos, fundamental y genérico (por ejemplo un componente ``Imagen''), que proporciona el motor al usuario, y los scripts son piezas de lógica que construye el usuario y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
 
 \subsection{¿Como se convierte el comportamiento en datos para el motor?}
 
@@ -365,22 +334,21 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     \medskip 
 
-    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutabledel juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelvenen tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades o comportamientos sin necesidad de recompilar o modificar el código del motor. 
+    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutable del juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelven en tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades o comportamientos sin necesidad de recompilar o modificar el código del motor. 
 
     \medskip 
 
-    Este enfoque de DLLs ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito enla  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
-
-
-    \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Un ejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motordel juego es simplemente un archivo de texto que contiene instrucciones.
-
-    \medskip 
-
-    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores. \cite{de2008lua}
+    Este enfoque de DLLs ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito en la  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
 
     \medskip
 
     En la figura \ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
+
+    \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Un ejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motor del juego es simplemente un archivo de texto que contiene instrucciones.
+
+    \medskip 
+
+    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores. \cite{de2008lua}
     
     \medskip 
 
@@ -388,7 +356,7 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
     
     \medskip 
 
-    A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interaccióncon el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen sermás accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
+    A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interaccióncon el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen ser más accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
     
 \end{enumerate}
 
@@ -439,20 +407,15 @@ La interacción entre el motor del juego y el sistema de scripting en lo que resp
 
 \subsection{Unity}
 
-Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual, que fue lanzado en 2005 por Unity Technologies Lo que distingue a Unity separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles. \cite{Unity}
+Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual, que fue lanzado en 2005 por Unity Technologies. Lo que distingue a Unity es su separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles. \cite{Unity}
 
 \subsubsection{Arquitectura}
 
-En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en Entidades y Componentes (EC). En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada ``GameObject'' puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
+En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en Entidades y Componentes (EC) [\ref{ecsystem}]. En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada ``GameObject'' puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
 
 \medskip
 
-La familiaridad con esta arquitectura es evidente desde el propio editor de Unity. El proceso de desarrollo se basa en la creación de entidades (GameObjects) y la asignación de scripts (componentes) para otorgar funcionalidad al juego. Estos scripts, escritos principalmente en C\#, permiten definir cómo interactúan y responden los GameObjects en el mundo del juego.
-
-\medskip
-
-Unity utiliza varios lenguajes de programación. Para componentes de alto rendimiento, como el motor de física, utiliza C++.
-Para el desarrollo de scripts y el propio editor, utiliza C\#.
+La familiaridad con esta arquitectura es evidente desde el propio editor de Unity. El proceso de desarrollo se basa en la creación de entidades (GameObjects) y la asignación de scripts (componentes) para otorgar funcionalidad al juego. Estos scripts, escritos principalmente en C\#, permiten definir cómo interactúan y responden los ``GameObject'' en el mundo del juego.
 
 \subsubsection{Scripting}
 
@@ -462,25 +425,25 @@ El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del 
 
 En la imagen \ref{fig:unityEditor} podemos ver el editor de Unity.
 
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
-        \includegraphics[scale=0.15]{Imagenes/Vectorial/UnityEditor}
+        \includegraphics[scale=0.12]{Imagenes/Vectorial/UnityEditor}
     \caption{Editor de Unity.%
         \label{fig:unityEditor}}
 \end{figure}
 
 \subsection{Unreal}
 
-Unreal Engine es un motor de videojuegos desarrollado por Epic Games. Apareció por primera vez en 1998 con el videojuego de disparos en primera persona Unreal y actualmente se encuentra en la versión 5.3. Está escrito en C++ y es multiplataforma. En cuanto a la ´´altitud'' de la línea de separación entre motor y gameplay, UnrealEngine ofrece bastante pero no por ello lo convierte en un motor pensado para un tipo de videojuegos concreto. De hecho, aporta tanta funcionalidad que se considera de propósito general. Es tan potente que además de videojuegos, con Unreal se puede hacer simulación, diseño de automóviles, arquitectura, e incluso vídeos y películas. \cite{Unreal}
+Unreal Engine es un motor de videojuegos desarrollado por Epic Games. Apareció por primera vez en 1998 con el videojuego de disparos en primera persona Unreal y actualmente se encuentra en la versión 5.3. Está escrito en C++ y es multiplataforma. En cuanto a la ``altitud'' de la línea de separación entre motor y gameplay, Unreal Engine ofrece bastante pero no por ello lo convierte en un motor pensado para un tipo de videojuegos concreto. De hecho, aporta tanta funcionalidad que se considera de propósito general. Es tan potente que además de videojuegos, con Unreal se puede hacer simulación, diseño de automóviles, arquitectura, e incluso vídeos y películas. \cite{Unreal}
 
 
 \medskip 
 
 En cuanto al editor, tiene el siguiente aspecto:
 
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
-        \includegraphics[scale=0.2]{Imagenes/Vectorial/unrealeditor}
+        \includegraphics[scale=0.12]{Imagenes/Vectorial/unrealeditor}
     \caption{Editor de Unreal Engine.%
         \label{fig:cap2:unrealeditor}}
 \end{figure}
@@ -489,9 +452,15 @@ En cuanto al editor, tiene el siguiente aspecto:
 
 La arquitectura de gameplay en Unreal Engine es una mezcla de componentes y herencia. El motor utiliza una combinación de herencia de clases y la composición de componentes para crear objetos y personajes en el mundo del juego.
 
+\medskip
+
 En cuanto a la herencia de clases, Unreal Engine utiliza la herencia de clases para crear una jerarquía de objetos y personajes. Por ejemplo, puedes tener una clase base que representa un personaje jugable y luego crear subclases que hereden de la clase base para crear personajes específicos con características adicionales. Esto permite la reutilización de código y la organización de la funcionalidad común.
 
+\medskip
+
 Además de la herencia de clases, Unreal Engine hace un uso extensivo de la composición de componentes. Los componentes son módulos independientes que se adjuntan a los actores (objetos y personajes) para proporcionar funcionalidad adicional. Por ejemplo, un personaje jugable puede tener componentes para la cámara, el control de movimiento, la colisión y la animación. Los componentes se pueden agregar y eliminar de manera flexible para personalizar el comportamiento de los actores sin necesidad de crear nuevas clases.
+
+\medskip
 
 Por otra parte, Unreal Engine cuenta con los Blueprints, que permiten definir la lógica y el comportamiento de los actores y componentes de una manera visual y gráfica. Esto significa que puedes definir cómo interactúan los componentes y actores a través de conexiones visuales en lugar de escribir código. Los Blueprints se pueden utilizar tanto para heredar comportamientos como para agregar componentes y personalizarlos.
 
@@ -513,7 +482,7 @@ En este apartado debemos diferenciar de los elementos, escenas, personajes y tod
 
 \medskip
 
-En el primer caso, la información del editor se almacena en archivos de nivel ``.umap'' que contienen información sobre la ubicación de los elementos, las configuraciones de iluminación, las cámaras y más. Posteriormente, en tiempo de carga, qué sucede antes de la ejecución, Unreal Engine lee el archivo de nivel correspondiente. Este proceso implica cargar recursos desde disco, configurar la jerarquía del nivel y preparar la representación en memoria de los objetos y elementos del nivel. Por último
+En el primer caso, la información del editor se almacena en archivos de nivel ``.umap'' que contienen información sobre la ubicación de los elementos, las configuraciones de iluminación, las cámaras y más. Posteriormente, en tiempo de carga, qué sucede antes de la ejecución, Unreal Engine lee el archivo de nivel correspondiente. Este proceso implica cargar recursos desde disco, configurar la jerarquía del nivel y preparar la representación en memoria de los objetos y elementos del nivel.
 
 \medskip
 
