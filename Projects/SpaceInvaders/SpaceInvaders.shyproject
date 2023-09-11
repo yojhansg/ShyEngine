@@ -2,7 +2,54 @@
     "Creation Date": "2023-09-09 12:31:56",
     "Last Opened Scene": "Level.scene",
     "Prefabs": {
-        "prefabs": [],
+        "prefabs": [
+            {
+                "name": "bullet",
+                "id": -1,
+                "childs": [],
+                "order": 0,
+                "prefabId": 0,
+                "isTransform": true,
+                "localPosition": "1.739228, -341.739075",
+                "localScale": "0.194193, 0.083832",
+                "localRotation": "0.000000",
+                "components": [
+                    {
+                        "component": "Image",
+                        "attributes": {
+                            "fileName": "bullet.png",
+                            "flipmode": "0.000000",
+                            "rotationPoint": "0.000000, 0.000000"
+                        }
+                    },
+                    {
+                        "component": "BoxBody",
+                        "attributes": {
+                            "size": "0.000000, 0.000000",
+                            "offSet": "0.000000, 0.000000",
+                            "bodyType": "2.000000",
+                            "mass": "1.000000",
+                            "bounciness": "0.000000",
+                            "trigger": "true",
+                            "freezeRotation": "false",
+                            "gravityScale": "0.000000",
+                            "friction": "0.000000",
+                            "linearDamping": "0.000000",
+                            "angularDamping": "0.000000",
+                            "layerName": "Bullet"
+                        }
+                    }
+                ],
+                "scripts": {
+                    "Scripts/Bullet behaviour": {
+                        "Speed": {
+                            "type": "float",
+                            "value": 5.0
+                        }
+                    }
+                }
+            }
+        ],
         "prefabInstances": {
             "-1": null
         }
