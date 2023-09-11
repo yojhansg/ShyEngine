@@ -14,15 +14,17 @@ Por lo tanto, hemos optado por desarrollar un motor dirigido por datos específic
 
 \medskip
 
+Una decisión crítica en nuestro proyecto fue mantener el motor y el editor como entidades separadas e independientes, en lugar de estar integradas en un único proyecto. 
+Tener el editor y el motor como unidades separadas es una tarea más complicada, requiriendo de una mayor preparación inicial para la comunicación de datos, pero a cambio nos aporta una mayor flexibilidad, pudiendo hacer modificaciones sobre el ejecutable del motor de una forma cómoda. Esta flexibilidad además nos permitiría poder utilizar el editor con un motor diferente, lo cual nos puede ser de bastante utilidad para desarrollos futuros. Por último, esta separación entre editor y motor fue importante para poder acelerar el desarrollo del proyecto, pudiendo paralelizar el trabajo.
+
+\medskip
+
 En nuestro modelo, la entidad fundamental es la escena, que contiene entidades individuales. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades o recursos como imagenes. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación eficiente y legible de los objetos del juego.
 
 \medskip
 
-Una decisión crítica en nuestro proyecto fue mantener el motor y el editor como entidades separadas en lugar de integrarlos. Esto nos otorga la flexibilidad de utilizar el motor y el editor con otros sistemas si fuera necesario, con la condición de establecer una forma coherente de transferir información entre ellos. Esta independencia de un motor de juego específico nos brinda la libertad de elegir el motor más adecuado para las necesidades particulares de nuestro proyecto, un aspecto esencial cuando se trata de proyectos altamente personalizados.
+Tanto el editor como el motor cuentan además con soporte para prefabs. Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para acelerar y simplificar el proceso de diseño y desarrollo, pudiendo instanciar copias de la entidad tanto desde el editor (pudiendo además modificar el prefab original para modificar simultáneamente en todas las instancias) complicaciones. como desde el motor en tiempo de ejecución.
 
-\medskip
-
-Otro aspecto a tener en cuenta tanto en editor como en motor es el soporte de prefabs. Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para simplificar el proceso de diseño y desarrollo. Además, modificar un prefab modifica también todas sus instancias en la escena.
 
 \medskip
 
