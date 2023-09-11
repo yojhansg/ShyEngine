@@ -60,11 +60,15 @@ El editor cuenta con varias ventanas principales:
     \item \textit{File Explorer}: Esta ventana permite navegar por los directorios de nuestro proyecto para ver y manejar nuestros assets, y realizar acciones como cargar una escena guardada.
 \end{itemize}
 
-Aunque también dispone de otras ventanas secundarias como la de preferencias o la de gestión de prefabs.
+Aunque también dispone de otras ventanas secundarias como la de preferencias, la de gestión de prefabs, la de edición de la paleta de colores, o la consola.
 
 \medskip
 
 En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura de ventanas.
+
+\medskip
+
+Cabe destacar que el editor también soporta la modificación del layout de ventanas y personalización de la paleta de colores, como se ve en la imagen \ref{personalizacionEditor}.
 
 \medskip
 
@@ -86,6 +90,13 @@ Un aspecto importante del sistema de IDs es que también se utiliza para diferenc
     \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/ArquitecturaVentanas.png}
     \caption{Arquitectura de las ventanas.}
     \label{fig:arquitecturaVentanas}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/personalizacionEditor.png}
+    \caption{Personalización del editor.}
+    \label{fig:funcionamientoEditor}
 \end{figure}
 
 \section{Como se leen los componentes a partir de los datos del motor}
