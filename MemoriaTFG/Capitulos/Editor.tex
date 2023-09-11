@@ -9,7 +9,7 @@
 \section{Funcionamiento y arquitectura}
 \label{arquitecturaEditor}
 
-El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGui, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor, como la creación de ventanas, dropdowns o checkboxes, entre otras.
+El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGUI \cite{ImGui}, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor, como la creación de ventanas, dropdowns o checkboxes, entre otras.
 
 \medskip
 
@@ -109,7 +109,7 @@ En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lec
 
 \section{Como se trasladan los datos del editor al motor} 
 
-Una vez creado el juego, llega la parte de pasarle toda la información al motor. Para ello, se serializa toda la información relativa  a la escena, como su nombre y sus entidades, en un formato JSON que luego el motor se encargará de interpretar, como se menciona en (REFERENCIA).
+Una vez creado el juego, llega la parte de pasarle toda la información al motor. Para ello, se serializa toda la información relativa  a la escena, como su nombre y sus entidades, en un formato JSON que luego el motor se encargará de interpretar, como se menciona en \ref{managersycomponentes}.
 
 \medskip
 
