@@ -362,13 +362,20 @@ Si bien estos ficheros podrían ser generados a mano, esta automatización supone 
 
 \section{Funcionamiento del lenguaje de scripting}
 
-Este lenguaje está pensado para ser utilizado por un editor de programación visual, utilizando flechas y nodos. Las flechas tienen la función de transmitir valores entre nodos, para poder enlazarlos entre ellos y poder generar comportamientos más complejos. 
-Este lenguaje está pensado para funcionar mendiante eventos, de forma que se pueda seleccionar qué partes del script queremos ejecutar en respuesta al evento recibido. Estos eventos funcionan como punto de partida inicial para la ejecución del script.
-Esta ejecución funciona siguiendo un flujo. Por flujo nos referimos a la posibilidad de establecer el orden en el que se ejecutan los nodos, garantizando que el script se comporte siempre de la misma forma. Al igual que las flechas representando las conexiones de nodos entre valores,
-las conexiones de flujo también estarán representadas de forma visual, aunque esto se explicará más en detalle en el apartado del editor. TODO: referencia a la parte del editor. 
+Este lenguaje está pensado para ser utilizado por un editor de programación visual, utilizando flechas y nodos, aunque esto se explicará más en detalle en el apartado del editor \ref{scriptingEditor}.
+
+\medskip 
+
+Este lenguaje de scripting está pensado para funcionar mendiante eventos, como vemos en el apartado \ref{comunicacionScripting}, de forma que se pueda seleccionar qué partes del script queremos ejecutar en respuesta al evento recibido. Estos eventos vienen representados por nodos y funcionan como punto de partida inicial para la ejecución del script.
+Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en el que se ejecutan los nodos, garantizando que el script se comporte siempre de la misma forma. Este flujo vendrá representado por flechas.
+
+\medskip 
 
 
 TODO: diagrama con el orden de ejecución de nodos
+
+\medskip 
+
 
 La ejecución de un script sigue la siguiente estructura. Primero se ejecuta el nodo inicial marcado por el evento, y antes de procesar dicho nodo se ejecutan cada una de sus entradas. A su vez, estas entradas siguen el mismo proceso ejecutando primero sus nodos de entrada correspondientes hasta dar 
 con un nodo que no tenga entrada. Cuando todas las entradas y sub-entradas han sido procesadas es entonces cuando se ejecuta el propio, el cual pasará el flujo al siguiente. Este proceso se repite hasta dar con un nodo que no tenga ningún nodo siguiente. Durante este proceso un mismo nodo no puede

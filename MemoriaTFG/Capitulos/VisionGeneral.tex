@@ -19,12 +19,11 @@ Tener el editor y el motor como unidades separadas es una tarea más complicada, 
 
 \medskip
 
-En nuestro modelo, la entidad fundamental es la escena, que contiene entidades individuales. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades o recursos como imagenes. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación eficiente y legible de los objetos del juego.
+En nuestro modelo, la entidad fundamental es la escena, que contiene entidades individuales. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades a partir de su ID o recursos como imagenes a partir de su ruta. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación eficiente y legible de los objetos del juego.
 
 \medskip
 
 Tanto el editor como el motor cuentan además con soporte para prefabs. Un prefab es una entidad predefinida que se puede instanciar en la escena. Contiene una configuración específica y puede reutilizarse en diferentes partes del juego para acelerar y simplificar el proceso de diseño y desarrollo, pudiendo instanciar copias de la entidad tanto desde el editor (pudiendo además modificar el prefab original para modificar simultáneamente en todas las instancias) complicaciones. como desde el motor en tiempo de ejecución.
-
 
 \medskip
 
@@ -32,7 +31,23 @@ TODO:------------------------------------------
    Se decide tirar por un lenguaje visual porque el objetivo, como se dijo en el capítulo 1, era que pudieran usarlo no programadores. Vale, esta decisión ¿que nos supone a vista de pájaro, que es donde estamos ahora? Hay que ver qué queremos soportar porque hay que serializarlo/deserializarlo, crear el editor, y crear la "máquina virtual". Además hay que ver cómo se va a hacer "el puente" para que desde un dibujo (programa visual) se pueda llamar a un método de C++ del motor y al revés, sea cual sea. Y ¿vamos a usar eventos o update? Habrá que decidir qué eventos vamos a tener, cómo vamos a "dispararlos" desde el motor al gameplay y cómo vamos a "pintar" la reacción a un evento en el "código".
 
 
+\medskip
 
+En la figura \ref{fig:visionGeneral} vemos un esquema general y simplificado del proyecto.
+
+\begin{figure}[h]
+   \centering
+   \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/VisionGeneral.png}
+   \caption{Esquema general y simplificado del proyecto.}
+   \label{fig:visionGeneral}
+\end{figure}
+
+
+
+
+\medskip
+
+En los próximos apartados, analizaremos las diversas componentes de este esquema. En primer lugar, se abordará el motor, se expondrá su arquitectura, su funcionamiento y su capacidad para producir datos destinados al editor. En segundo lugar, se examinará el editor, se describirá su proceso de lectura de los datos provenientes del motor y su capacidad para generar las escenas que posteriormente serán procesadas por el motor, entre otros aspectos.
 %------------------------------------------------  --------------------------------------------
 
 
