@@ -35,7 +35,7 @@ Unos ejemplos de estas clases serían:
     \item \texttt{Color}: Representa un color de tres canales (Red, Green, Blue) además de métodos con algo de funcionalidad como \texttt{Lerp}, que calcula
     un color intermedio entre otros dos dados.
     
-    \item \texttt{Singleton}: Una plantilla para crear instancias estáticas a través de herencia. Es decir, en caso de querer convertir una clases en un 
+    \item \texttt{Singleton}: Una plantilla para crear instancias estáticas a través de herencia. Es decir, en caso de querer convertir una clase en un 
     \texttt{Singleton}, muy útiles para managers, simplemente hay que heredar de esta clase  para conseguirlo. 
     
 \end{itemize}
@@ -53,7 +53,7 @@ recursos que se pueden guardar son fuentes de texto, imágenes, efectos de sonido
 \medskip
 
 Uno de los objetivos del manager de recursos es reutilizar los recursos creados para solo tener cargada una copia de cada recurso en
-memoria. Por ello, a la hora de añadir un nuevo recurso al manager, primero comprueba si ya lo contiene y en ese caso, lo devuelve, en caso contrario, lo crea.
+memoria. Por ello, a la hora de añadir un nuevo recurso al manager, primero comprueba si ya lo contiene y en ese caso, lo devuelve; en caso contrario, lo crea.
 
 % ----------------------------------------------- SONIDO -------------------------------------------------
 
@@ -79,8 +79,7 @@ Este proyecto cuenta con tres clases para representar y manejar sonidos:
 
 \item \texttt{SoundEffect}: Representa un efecto de sonido y contiene un identificador para diferenciado de otro sonidos.
 
-\item \texttt{MusicEffect}: Representa un sonido de música de fondo. Al igual que \texttt{SoundEffect}, contiene un identificador para diferenciarse. Estas dos clases representan también los recursos que se usan para música y sonidos en el 
-manager de recursos.
+\item \texttt{MusicEffect}: Representa un sonido de música de fondo. Al igual que \texttt{SoundEffect}, contiene un identificador para diferenciarse.
 
 \item \texttt{SoundManager}: Manager \texttt{Singleton} encargado de implementar las funciones principales para reproducir, parar,
 y detener sonidos, entre otros. También métodos destinados al usuario para modificar el volumen general y cambiar el número de canales disponibles para la reproducción
@@ -119,13 +118,13 @@ de múltiples mandos teniendo que indicar que identificador tiene su mando.
 
 \medskip
 
-Además, el manager tiene soporte además para conexiones y desconexiones durante la ejecución, e implementa métodos con lógica usada frecuentemente como lo es el movimiento horizontal para facilitar su implementación al usuario. 
+Además, el manager tiene soporte para conexiones y desconexiones durante la ejecución, e implementa métodos con lógica usada frecuentemente como lo es el movimiento horizontal para facilitar su implementación al usuario. 
 
 % ----------------------------------------------- CONSOLA -------------------------------------------------
 
 \subsection{Consola}
 
-Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estandar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
+Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estándar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
 
 % ----------------------------------------------- FISICAS -------------------------------------------------
 
@@ -177,13 +176,11 @@ Las clases que se encargan de estas funciones son:
 
 \subsection{Arquitectura de gameplay}
 
-Como arquitectura de gameplay se ha implementado de tipo entidades y componentes (EC).
-
-Este es el proyecto más importante del motor. Implementa la arquitectura, componentes fundamentales para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
+Como arquitectura de gameplay se ha implementado de tipo entidades y componentes (EC) que veíamos en \ref{ecsystem}.
 
 \medskip
 
-Para llevar a cabo la implementación de la arquitectura es imprescindible el uso de programación orientada a objetos (POO) junto con herencia y polimorfismo. 
+Este es el proyecto más importante del motor. Implementa la arquitectura, componentes fundamentales para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
 
 \medskip
 
@@ -195,7 +192,7 @@ La partes fundamentales de esta arquitectura son las siguientes:
     por los componentes que hereden de esta clase.
 
     \item \textit{Entity}: clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de componentes y otra de scripts asociados a esta entidad. Tiene información 
-    sobre el nombre de la entidad, su estado, activa y eliminada, un identificador y su orden de renderizado.
+    sobre el nombre de la entidad, su estado, un identificador y su orden de renderizado.
 
     \item \textit{Scene}: La última pieza que compone esta arquitectura son las escenas. Una escena es un conjunto de entidades. Es un concepto importante en los videojuegos ya que normalmente se quiere dividir
     el juego en estados como menús, gameplay, inventario, pantallas de carga, mapa, etc. Contiene información sobre su nombre y bastantes métodos comunes a las entidades y componentes.
@@ -206,6 +203,7 @@ actualizados a todos los componentes que tengan asociados. Además de los métodos
 eliminarlos.
 
 \subsubsection{Managers y componentes}
+\label{managersycomponentes}
 
 Por otro lado, en este proyecto se implementan también los managers necesarios para el funcionamiento del motor y los componentes fundamentales que el motor va a proporcionar al usuario.
 
@@ -223,8 +221,7 @@ En cuanto a los componentes:
     reutilizar la imagen en caso de estar ya creada por otra entidad. 
 
     \item \textit{PhysicBody}: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcinalidad de sincronizar posición, rotación y escala del \texttt{Transform} de la entidad al cuerpo físico.
-    Contiene la información sobre bastante propiedades físicas como el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad. De esta clase heredan \texttt{BoxBody}, 
-    \texttt{CircleBody} y \texttt{EdgeBody}, que son cuerpos físicos cuyos colisionadores tienen formas especiales.
+    Contiene la información sobre bastante propiedades físicas como el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad.
 
     \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó anteriomente, SDLMixer dispone de un conjunto de canales
     para reproducir sonidos pero este componente es abstrae la necesidad de canales desde la perspectiva del usuario. 

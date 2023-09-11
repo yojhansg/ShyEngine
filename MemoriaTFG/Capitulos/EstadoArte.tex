@@ -259,6 +259,7 @@ Aquí una imagen que muestra la diferencia:
 
 
 \subsection{En qué consiste la arquitectura basada en Entidades y Componentes (EC)?}
+\label{ecsystem}
 
 La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental en el desarrollo de videojuegos debido a su flexibilidad y eficiencia en el manejo de la complejidad. Esta basado en la idea de arquitectura centrada en propiedades.
 
@@ -364,18 +365,18 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
 
     \medskip 
 
-    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutabledel juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelvenen tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades ocomportamientos sin necesidad de recompilar o modificar el código del motor. 
+    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutabledel juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelvenen tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades o comportamientos sin necesidad de recompilar o modificar el código del motor. 
 
     \medskip 
 
     Este enfoque de DLLs ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito enla  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
 
 
-    \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Unejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motordel juego es simplemente un archivo de texto que contiene instrucciones.
+    \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Un ejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motordel juego es simplemente un archivo de texto que contiene instrucciones.
 
     \medskip 
 
-    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilartodo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce loscostos y las barreras de entrada para los desarrolladores.
+    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores. \cite{de2008lua}
 
     \medskip
 
@@ -383,7 +384,7 @@ En contraste, si el motor no está diseñado para ser tan específico y se requiere
     
     \medskip 
 
-    Sin embargo, este enfoque también presenta desafíos. Se necesita una conexión efectiva entre el mundo nativo (generalmenteescrito en lenguajes como C++) y el lenguaje de script para que puedan comunicarse y llamar funciones entre sí. 
+    Sin embargo, este enfoque también presenta desafíos. Se necesita una conexión efectiva entre el mundo nativo (generalmente escrito en lenguajes como C++) y el lenguaje de script para que puedan comunicarse y llamar funciones entre sí. 
     
     \medskip 
 
@@ -455,16 +456,11 @@ Para el desarrollo de scripts y el propio editor, utiliza C\#.
 
 \subsubsection{Scripting}
 
-El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego.
+El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase que todos los scripts en Unity deben heredar para funcionar como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un GameObject debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda y gestione adecuadamente los scripts como parte integral de la lógica del juego. \cite{hecker2015unity}
 
 \medskip
 
 En la imagen \ref{fig:unityEditor} podemos ver el editor de Unity.
-
-
-\subsubsection{Comunicación motor-editor}
-
-TODO
 
 \begin{figure}[t]
     \centering
@@ -504,9 +500,9 @@ Por otra parte, Unreal Engine cuenta con los Blueprints, que permiten definir la
 En cuanto al scripting, Unreal Engine tiene dos modos distintos pero compatibles:
 
 \begin{itemize}
-    \item \textit{Programación en C++}: esta forma de scripting permite a los desarrolladores escribir código en C++ para crear la lógica del juego, personalizar el comportamiento de los actores y desarrollar características específicas. Esta opción es ideal para tareas que requieren un alto rendimiento o una manipulación más detallada de los sistemas del motor. También es cierto que la programación en C++ puede ser más compleja que el uso de Blueprints, especialmente para quienes no están familiarizados con el lenguaje.
+    \item \textit{Programación en C++}: esta forma de scripting permite a los desarrolladores escribir código en C++ para crear la lógica del juego, personalizar el comportamiento de los actores y desarrollar características específicas. Esta opción es ideal para tareas que requieren un alto rendimiento o una manipulación más detallada de los sistemas del motor. También es cierto que la programación en C++ puede ser más compleja que el uso de Blueprints, especialmente para quienes no están familiarizados con el lenguaje. \cite{sherif2016unreal}
 
-    \item \textit{Blueprints}: son una herramienta visual que permite a los desarrolladores crear la lógica del juego sin necesidad de programar en C++. Este scripting es de tipo node-based (basado en nodos) y funciona con la unión de nodos y a través de la creación flujo y lógica. Por ello, se pueden crear prototipos rápidamente y no requieren de conocimientos de programación para utilizarlos.
+    \item \textit{Blueprints}: son una herramienta visual que permite a los desarrolladores crear la lógica del juego sin necesidad de programar en C++. Este scripting es de tipo node-based (basado en nodos) y funciona con la unión de nodos y a través de la creación flujo y lógica. Por ello, se pueden crear prototipos rápidamente y no requieren de conocimientos de programación para utilizarlos. \cite{valcasara2015unreal}
 \end{itemize}
 
 En cuanto a la combinación de ambos enfoques, Unreal Engine permite integrar fácilmente código C++ y Blueprints en un mismo proyecto. Esto significa que puedes utilizar C++ para las partes críticas del rendimiento o para implementar sistemas complejos, mientras que utilizas Blueprints para prototipos rápidos, lógica de juego simple y personalización de componentes y actores. Los Blueprints también pueden comunicarse con código C++ a través de interfaces definidas, lo que permite una colaboración eficaz entre programadores y diseñadores.
@@ -515,7 +511,11 @@ En cuanto a la combinación de ambos enfoques, Unreal Engine permite integrar fác
 
 En este apartado debemos diferenciar de los elementos, escenas, personajes y todo lo que se pueda crear en el editor de Unreal Engine con los Blueprints.
 
-En el primer caso, la información del editor se almacena en archivos de nivel (.umap) que contienen información sobre la ubicación de los elementos, las configuraciones de iluminación, las cámaras y más. Posteriormente, en tiempo de carga, qué sucede antes de la ejecución, Unreal Engine lee el archivo de nivel correspondiente. Este proceso implica cargar recursos desde disco, configurar la jerarquía del nivel y preparar la representación en memoria de los objetos y elementos del nivel. Por último
+\medskip
+
+En el primer caso, la información del editor se almacena en archivos de nivel ``.umap'' que contienen información sobre la ubicación de los elementos, las configuraciones de iluminación, las cámaras y más. Posteriormente, en tiempo de carga, qué sucede antes de la ejecución, Unreal Engine lee el archivo de nivel correspondiente. Este proceso implica cargar recursos desde disco, configurar la jerarquía del nivel y preparar la representación en memoria de los objetos y elementos del nivel. Por último
+
+\medskip
 
 En el segundo caso, los Blueprints en Unreal Engine generan código C++. Cuando se ejecuta el juego o la simulación en Unreal Engine, el motor utiliza este código C++ generado a partir de los Blueprints para ejecutar la lógica de juego. Esto significa que el motor puede interpretar y ejecutar los Blueprints de la misma manera que ejecutaría código C++ escrito manualmente.
 
