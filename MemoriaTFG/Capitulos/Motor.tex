@@ -277,7 +277,7 @@ En cuanto a los managers:
     \item \textit{RenderManager}: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar en juego es deseable poder elegir elegir el orden en el que se renderizan las 
     entidades. Esto también se conoce como profundidad o z-order.
 
-    \item \textit{ReferencesManager}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas al accediendo a la referencia de una entidad, por ejemplo en caso de que la referencia sea errónea o dicha entidad haya sido eliminada.
+    \item \textit{ReferencesManager\label{referencesManager}}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas al accediendo a la referencia de una entidad, por ejemplo en caso de que la referencia sea errónea o dicha entidad haya sido eliminada.
 \end{itemize}
 
 
@@ -324,34 +324,39 @@ del videojuego.
 \section{Cómo se serializa la información del motor}
 
 
-El motor está hecho en c++, lo cual supone una limitación a la hora del paso información debibo a la carencia de reflexión. La reflexión es la capacidad de dotar a un lenguaje con introspección, pudiendo conocer su propia estructura o incluso modificarla en tiempo de ejecución. 
-Esta cualidad es especialmente útil pues permitiría la capacidad de conocer las distintas clases y métodos de los que dispone el motor, así como poder consultar y modificar los atributos de clases. \\
-Para solvertar esta carencia el motor cuenta con un proyecto adicional llamado \textit{ECSReader}. 
+El motor está hecho en C++, lo cual supone una limitación a la hora del paso información debibo a la carencia de reflexión. La reflexión es la capacidad de dotar a un lenguaje con introspección, pudiendo conocer su propia estructura o incluso modificarla en tiempo de ejecución. 
+Esta cualidad es especialmente útil pues permitiría la capacidad de conocer las distintas clases y métodos de los que dispone el motor, así como poder consultar y modificar los atributos de las clases. 
+
+\medskip
+
+Para solventar esta carencia el motor cuenta con un proyecto adicional llamado \texttt{ECSReader}. 
 Este proyecto tiene la función de entender la estructura de componentes para más adelante poder serializar esta información. Este proyecto no tiene utilidad durante la ejecución del motor, y se trata de una herramienta que puede ejecutar el desarrollador en cualquier momento que considere oportuno.
+
+\medskip
 
 Podemos dividir el ciclo de vida de la ejecución de este programa en dos fases: la lectura de los datos del motor y en la generación de nuevos recursos.
 
 \subsection{Lectura del motor}
 
-Dadas una rutas importantes con las ubicaciones del código fuente del motor, el programa se encarga de leer cada uno de los ficheros que se encuentren en las rutas dadas. A medida que va leyendo cada fichero, su información se va filtrando y procesando. La información que se guarda 
+Dadas las rutas con las ubicaciones del código fuente del motor, el programa se encarga de leer cada uno de los ficheros que se encuentren en las rutas dadas. A medida que va leyendo cada fichero, su información se va filtrando y procesando. La información que se guarda 
 pertenece a los métodos y atributos de componentes y managers. No es necesario guardar cada método y atributo de cada componente, sólo los que sean de interés, por lo que para poder hacer este filtrado el motor cuenta con dos etiquetas principales: la etiqueta \textit{publish} y la etiqueta \textit{reflect}.
-La primera se utiliza como un modificador de acceso en c++, y cada uno de los métodos que procedan a la etiqueta serán los que sean serializados hasta encontrar el siguiente modificador de acceso. La segunda etiqueta etiqueta está pensada para los atributos, y cada atributo que sea precedido por esa etiqueta son los que serán almacenados.
+La primera se utiliza como un modificador de acceso en C++, y cada uno de los métodos que se encuentren tras la etiqueta serán los que sean serializados hasta encontrar el siguiente modificador de acceso. La segunda etiqueta está pensada para los atributos, y cada atributo que sea precedido por esa etiqueta son los que serán almacenados.
 Este uso de las etiquetas proporciona una gran comodidad y control al desarrollador, permitiéndole controlar qué partes del motor permanecerán expuestas.
-Durante la ejecición del \textit{ECSReader}, se almacena información sobre cada componente, al igual que también se almacena los métodos y atributos requeridos, guardando información como el nombre dado o su tipo. El programa además también tiene en cuenta la herencia de componentes, proporcionando a un componente la funcionalidad de su padre.
+Durante la ejecución del \texttt{ECSReader}, se almacena información sobre cada componente, al igual que también se almacena los métodos y atributos requeridos, guardando información como el nombre dado o su tipo. El programa además también tiene en cuenta la herencia de componentes, proporcionando a un componente la funcionalidad de su padre.
 
 \subsection{Recursos generados}
 \label{generacionDeDatos}
 
-Una vez todos los ficheros dados son leídos, comienza el proceso de generación de recursos. La función de estos recursos es de vital importancia, tanto para la comunicación del motor con el editor, como para el propio funcionamiento del editor. A continuación se menciona cada fichero generado junto con su utilidad.
+Una vez todos los ficheros dados son leídos, comienza el proceso de generación de recursos. La función de estos recursos es de vital importancia, tanto para la comunicación del motor con el editor, como para el propio funcionamiento del motor. A continuación se menciona cada fichero generado junto con su utilidad.
 
 \begin{enumerate}
-    \item \textit{FunctionManager}: Se trata de un par de ficheros en c++, uno siendo el fichero de cabecera y otro de fuente. Entre estos dos ficheros se genera una función para cada método que se haya leído. Además, este fichero cuenta con funcionalidad para agrupar cada una de las funciones en una única estructura, de tal forma que se pueda acceder a cada
-    una de las funciones conociéndo únicamente su nombre. Se genera una función para método para de esta forma todas las funciones tengan la misma estructura y además poder hacer manejo de errores antes de redirigir la llamada al método original.
+    \item \textit{FunctionManager\label{recursosgenerados}}: Se trata de un par de ficheros en C++, uno siendo el fichero de cabecera y otro de fuente. Entre estos dos ficheros se genera una función para cada método que se haya leído. Además, este fichero cuenta con funcionalidad para agrupar cada una de las funciones en una única estructura, de tal forma que se pueda acceder a cada
+    una de las funciones conociéndo únicamente su nombre. Se genera una función para cada método para que de esta forma todas las funciones tengan la misma estructura y además poder hacer manejo de errores antes de redirigir la llamada al método original.
 
-    \item  \textit{ClassReflection}: Se trata de una clase en c++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase de manipular los atributos de cada componente, simulando la reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización
+    \item  \textit{ClassReflection}: Se trata de una clase en C++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase se encarga de manipular los atributos de cada componente, simulando la reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización
     de una escena.
     
-    \item  \textit{ComponentFactory}: Se trata de una clase en c++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, siendo de vital importancia para el proceso de deserialización de una escena.
+    \item  \textit{ComponentFactory}: Se trata de una clase en C++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, siendo de vital importancia para el proceso de deserialización de una escena.
 
     \item  \textit{Ficheros para el editor}: Se generan dos ficheros, uno para componentes y otro para managers, ambos en formato JSON.\@ Estos contienen toda la información relacionada con cada componente y manager, y se trata de los ficheros utilizados para la lectura de los datos del motor en el editor.
 
@@ -372,20 +377,20 @@ Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en e
 \medskip 
 
 
-% \begin{figure}[h]
-%     \centering
-%         \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/OrdenNodos}
-%     \caption{Orden de ejecución de nodos de un script. El número situado junto a cada nodo es el orden en el que se ejecutaría.
-%         \label{fig:cap4:OrdenNodos}}
-% \end{figure}
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.5\textwidth]{Imagenes/Vectorial/OrdenNodos}
+    \caption{Orden de ejecución de nodos de un script. El número situado junto a cada nodo es el orden en el que se ejecutaría.
+        \label{fig:cap4:OrdenNodos}}
+\end{figure}
 
 
 \medskip 
 
 
 La ejecución de un script sigue la siguiente estructura. Primero se ejecuta el nodo inicial marcado por el evento, y antes de procesar dicho nodo se ejecutan cada una de sus entradas. A su vez, estas entradas siguen el mismo proceso ejecutando primero sus nodos de entrada correspondientes hasta dar 
-con un nodo que no tenga entrada. Cuando todas las entradas y sub-entradas han sido procesadas es entonces cuando se ejecuta el propio, el cual pasará el flujo al siguiente. Este proceso se repite hasta dar con un nodo que no tenga ningún nodo siguiente. Durante este proceso un mismo nodo no puede
-ser ejecutado dos veces, y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje, reduciendo el número de procesado de nodos, además de mejorar su legibilidad y previsibilidad (por ejemeplo en un caso
+con un nodo que no tenga entrada. Cuando todas las entradas y sub-entradas han sido procesadas es entonces cuando se ejecuta el propio nodo, el cual pasará el flujo al nodo siguiente. Este proceso se repite hasta dar con un nodo que no tenga ningún nodo siguiente. Durante este proceso un mismo nodo no puede
+ser ejecutado dos veces, y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje, reduciendo el número de nodos procesados, además de mejorar su legibilidad y previsibilidad (por ejemeplo en un caso
 donde un nodo genere un número aleatorio, poder usar el mismo número con cada acceso al nodo), al precio de no permitir hacer programas que funcionen de forma recursiva.
 
 
@@ -407,34 +412,45 @@ Todo esto permite al usuario crear comportamientos complejos de una manera visua
 
 \section{Integración scripting en el motor}
 
-Una vez conociendo el lenguaje que ha sido diseñado para el motor, el siguiente punto interesante a tratar es cómo ha sido implementado en el motor.
-Para su integración en el motor aparece un componente nuevo, llamado \textit{Script}, junto con un nuevo manager, \textit{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \textit{ScriptManager} funciona como un manejador de recursos de tipo script de forma
-que no se generen copias innecesarias del recuros cuando el script sea reutilizado por otra entidad, al igual que se encarga de su correcta deserialización del formato JSON. Por otro lado, la clase \textit{Script} proporciona los eventos necesarios al lenguaje de scripting, redirigiendo los eventos recibidos de la clase componente, además de guardar información adicional 
-para almacenar los distintos valores serializados. La clase \textit{Script} no maneja los nodos, sino que almacena punteros al nodo inicial de cada evento, en caso de que exista.
+Una vez conociendo el lenguaje que ha sido diseñado para el motor, el siguiente punto interesante a tratar es cómo ha sido implementado.
+Para su integración en el motor aparece \texttt{Script}, un nuevo tipo de componente, junto con un nuevo manager, \texttt{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \texttt{ScriptManager} funciona como un manejador de recursos de tipo script de forma
+que no se generen copias innecesarias del recurso cuando el script sea reutilizado por otra entidad, al igual que se encarga de su correcta deserialización del formato JSON. Por otro lado, la clase \texttt{Script} proporciona los eventos necesarios al lenguaje de scripting, redirigiendo los eventos recibidos de la clase componente, además de guardar información adicional 
+para almacenar los distintos valores serializados. La clase \texttt{Script} no maneja los nodos, sino que almacena punteros al nodo inicial de cada evento, en caso de que exista.
 
 
 \medskip
 
-% \begin{figure}[h]
-%     \centering
-%         \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/DiagramaNodos}
-%     \caption{Diagrama UML con la estructura de clases de los nodos del scriting
-%        \label{fig:cap4:DiagramaNodos}}
-% \end{figure}
 
 Para la implementación de la lógica del scripting, se ha creado una clase por cada tipo de nodo, siendo responsable cada uno de manejar su propia información, y entre todos creando una jerarquía de clases para poder manejar el script mediante herencia y polimorfismo.
-Para representar los valores dentro del editor, manejamos la abstracicción de una variable la cual puede tomar cualquier valor, y todo se procesa dentro de una unión (siendo una unión un tipo especial de clase en c++ que solo puede almacenar el valor de uno de sus miembros). 
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=1.1\textwidth]{Imagenes/Vectorial/DiagramaNodos}
+    \caption{Diagrama UML con la estructura de clases de los nodos del scriting
+       \label{fig:cap4:DiagramaNodos}}
+\end{figure}
+
+\medskip
+
+Para representar los valores dentro del editor, manejamos la abstracción de una variable la cual puede tomar cualquier valor, y todo se procesa dentro de una unión (siendo una unión un tipo especial de clase en C++ que solo puede almacenar el valor de uno de sus miembros). 
 El lenguaje está preparado para soportar los tipos: float, char, string, bool, un vector bidimensional de float, una estructura para representar un color y un puntero a una entidad.
-Con el fin de simplificar el uso, hemos decidido no distinguir entre tipos númericos (como pueden ser el int o el float) sino manejar una agrupación de ellos, algo parecido al funcionamiento de Javascript. 
-% TODO: meter una cita (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) 
+Con el fin de simplificar el uso, hemos decidido no distinguir entre tipos númericos (como pueden ser el int o el float) sino manejar una agrupación de ellos, algo parecido al funcionamiento de Javascript\footnotemark.
 
-Con el mismo fin de simplificar las cosas, también hemos decidido descartar la capacidad de almacenar un variable de tipo componente. Por ello, en las llamadas a funciones donde hiciera falta el parámetro que se pasará será de tipo entidad, desde la cual se accederá al componente necesario. 
+\medskip
 
-Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, sin complicaciones, pero si el valor procede de un nodo de entrada, 
- su valor deserializado tiene el valor de su identificador como número entero, por lo cual antes de poder acceder al puntero tenemos que acceder al puntero haciendo uso del \textit{ReferencesManager}.
+Con el mismo fin de simplificar las cosas, también hemos decidido descartar la capacidad de almacenar un variable de tipo \texttt{Componente}. Por ello, en las llamadas a funciones donde hiciera falta un parámetro de tipo \texttt{Componente}, se pasará de tipo entidad, desde la cual se accederá al componente necesario. 
 
+\medskip
 
-Para la ejecución de un nodo funcion, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}. Cabe mencionar, que en caso de que la función esté asociada a un componente en lugar de un manager, el primero parámetro será siempre un puntero a la entidad.
+Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, pero si el valor procede de un nodo de entrada, 
+ su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}[\ref{referencesManager}].
 
+ \medskip
 
- Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality} con funcionalidad básica para poder usar desde el script, como puede ser escribir por consola o realizar operaciones aritméticas.
+Para la ejecución de un nodo funcion, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}[\ref{recursosgenerados}]. Cabe mencionar, que en caso de que la función esté asociada a un componente en lugar de un manager, el primer parámetro será siempre un puntero a la entidad.
+
+\medskip
+
+ Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality}, con funcionalidad básica para poder usar desde el script, como puede ser escribir por consola o realizar operaciones aritméticas.
+
+ \footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number}}
