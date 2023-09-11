@@ -20,6 +20,8 @@ como de audio, para integrar al motor. En cuanto a librería de gráficos tuvimos 
 a usar SDL, debido a que la hemos usado bastante durante el grado y estamos acostumbrados, además de que no tiene
 ninguna limitación para el desarrollo de videojuegos 2D. 
 
+\medskip
+
 Una vez escogidas la librerías, Box2D como motor de física y SDLMixer como motor de audio, comencé a montar el proyecto
 usando Visual Studio 2022. Organicé la solución en varios proyectos, física, audio, input, render, y fui implementando
 cada uno de ellos. Empecé con el proyecto de Input, el cuál me llevó algo de tiempo ya que implementé soporte para teclado,
@@ -31,10 +33,14 @@ físicos ya que supondría una gran ayuda tanto para el desarrollo del motor como 
 encontré algunos ejemplos pero usaban el OpenGL para el dibujado y el motor usa SDL por lo que tuve que implementar esas
 funciones de dibujado con SDL.
 
+\medskip
+
 Luego llegó el momento de implementar el proyecto del ECS (Entity-Component-System), fundamental para realizar pruebas y 
 visualizar las primeras escenas. Para ello además, implementé el bucle principal del motor con un intervalo de tiempo
 fijo para el mundo físico. En este momento, con los proyectos principales implmentados, comencé a implementar los primeros
 componentes básicos, como son el Transform, Image, PhyiscBody y SoundEmitter.
+
+\medskip
 
 Durante un tiempo simplemente me dediqué a ampliar y probar los componentes y la funcionalidad implementada en los proyectos.
 Por ejemplo, añadí una matriz de colisiones al proyecto de físicas para manejar el filtrado de colisiones, implementé distintos
@@ -42,6 +48,8 @@ tipos de PhyiscBody (colisionadores con formas especiales), sincronicé los cuerp
 detección de colisiones, conversión de píxeles a unidades físicas, nuevo componente ParticleSystem para sistemas de partículas, 
 implementé un gestor de recursos para evitar cargar recursos duplicados, mejoré los componentes de sonido para añadir paneo 
 horizontal y sonido 2D, entre otros. 
+
+\medskip
 
 Con la parte del editor más avanzada, implementé la lógica necesaria para leer los datos que genera el editor, como
 escenas o prefabs. Además, implementé la ventana de gestión de proyectos del editor, añadí control de errores en todo el motor, 
@@ -52,6 +60,8 @@ ajustar parámetros del motor, como gravedad del mundo físico, frecuencia del mot
 muchos otros. Implementé el flujo de escenas, es decir, guardar la última escena abierta, mostrar el viewport de una forma especial
 en caso de que no haya ninguna escena abierta y mostrar en el viewport el nombre de la escena actual junto con su contenido
 correspondiente. 
+
+\medskip
 
 Por último, cambié el uso que se hacía de SDL para la implementación de mando en el Input, de SDLJoystick a SDLGameController ya
 que está más preparada para mando y SDLJoystick es una interfaz de más bajo nivel preparada para cualquier tipo de dispositivo.
@@ -71,12 +81,16 @@ la unión entre el editor y el motor.
 
 Inicialmente tuve que crear un proyecto vacío de Visual Studio para empezar a prototipar el lenguaje. No quería utilizar ninguna biblioteca externa
 que implementase la lógica para un editor de nodos, pues prefería poder desarrollarlo desde cero. Tampoco he querido mirar en profundidad el  funcionamiento del lenguaje de scripting de otros motores como Unity o Unreal porque no queríamos copiar descaradamente su forma de uso y queríamos desarrollar un lenguaje propio
-que se adaptase a las necesidades concretas de nuestro motor. \\
+que se adaptase a las necesidades concretas de nuestro motor.
+
+\medskip
 
 Fue un proceso iterativo donde poco a poco se iba añadiendo funcionalidad, y cuando finalmente conseguí una implementación que me parecía robusta fue
 cuando decidímos juntar los dos primeros proyectos del TFG, siendo el motor y el scripting. Para poder llevar a cabo la integración tuve que hacer
 la clase Script, que junto con las clases relacionadas con los nodos ya permitían enlazar los nodos con el bucle de juego principal del motor. También fue necesaria la creación de la clase ScriptFunctionality para poder dotar al lenguaje de funcionalidad básica como sumas, restas y operaciones genéricas
-para la entrada. \\
+para la entrada. 
+
+\medskip
 
 Llegados a este punto pospuse un poco el desarrollo del scripting y empezé a centrarme en cómo sería la unión entre el editor y el motor. Tras varios
 intentos fallidos finalmente terminé de desarrollar la clase ECSReader, con la cual se puede leer el contenido del motor gracias a unas marcas que
@@ -87,8 +101,8 @@ ECSReader para generar código en c++ que pueda leer el motor, de esta forma, aut
 ficheros diferentes: ClassReflection, que permite serializar los atributos de una clase y poder dotarles de valor desde fuera conociendo el nombre de la
 variable; ComponentFactory, que con el nombre de un componente en formato string crea un componente de ese tipo, siendo una especie de factoría; y FunctionManager, el cual genera una función para cada método de los componentes y luego los agrupa en un mapa.\\
 
-
 \medskip
+
 Con esto, ya estaba hecha la reflexión con la que queríamos dotar al motor, y siendo la persona que más avanzada iba con su parte decidí ayudar a mis compañeros con algunas tareas. Empezando por el motor y gracias a mi experiencia con serialización de JSON, hice serialización de escenas y entidades, seguido de la implementación del sistema de Overlays y sus componenetes asociados (Image, Button y Text), la Splash Screen y la serialización de información del proyecto, como tamaño de la ventana o el icono usado.
 
 
