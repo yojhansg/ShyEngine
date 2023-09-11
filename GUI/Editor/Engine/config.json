@@ -10,7 +10,7 @@
         18
     ],
     "bgAlpha": 255,
-    "bgColor": "170, 233, 255",
+    "bgColor": "0, 0, 0",
     "channels": 1,
     "chuncksize": 2048,
     "closeWithEscape": true,
@@ -18,15 +18,17 @@
     "debugFrameRate": false,
     "debugPhysics": false,
     "frequency": 44100,
-    "fullScreen": true,
-    "game": "Platform",
+    "fullScreen": false,
+    "game": "SpaceInvaders",
     "gravity": "0.000000, -9.810000",
-    "initialScene": "Scene.scene",
+    "initialScene": "Level.scene",
     "layers": [
         "Default",
-        "Player",
-        "Platform",
-        "PARTICLE"
+        "Alien",
+        "Ship",
+        "Limits",
+        "DeathZone",
+        "Bullet"
     ],
     "matrix": [
         [
@@ -48,9 +50,9 @@
             false
         ],
         [
-            false,
             true,
-            false,
+            true,
+            true,
             false,
             false,
             false,
@@ -66,9 +68,9 @@
             false
         ],
         [
+            false,
+            false,
             true,
-            false,
-            false,
             false,
             false,
             false,
@@ -318,8 +320,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Assets",
-    "projectFilePath": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject",
+    "path": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\Assets",
+    "projectFilePath": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\SpaceInvaders.shyproject",
     "showcursor": true,
     "splashScreen": true,
     "timeToDoubleClick": 0.5,
@@ -327,5 +329,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "Platform"
+    "windowTitle": "SpaceInvaders"
 }
