@@ -14,7 +14,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{6f198e1d-a62a-425f-a068-0b496291419f}</ProjectGuid>
-    <RootNamespace>ImGUI</RootNamespace>
+    <RootNamespace>Editor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Editor</ProjectName>
   </PropertyGroup>
@@ -102,30 +102,30 @@
     <ClInclude Include="..\..\dependencies\imgui\imconfig.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui.h" />
     <ClInclude Include="..\..\dependencies\imgui\imgui_internal.h" />
-    <ClInclude Include="..\..\src\ImGUI\Build.h" />
-    <ClInclude Include="..\..\src\ImGUI\Camera.h" />
-    <ClInclude Include="..\..\src\ImGUI\ColorPalette.h" />
-    <ClInclude Include="..\..\src\ImGUI\Components.h" />
-    <ClInclude Include="..\..\src\ImGUI\Console.h" />
-    <ClInclude Include="..\..\src\ImGUI\FileExplorer.h" />
-    <ClInclude Include="..\..\src\ImGUI\Font.h" />
-    <ClInclude Include="..\..\src\ImGUI\Game.h" />
-    <ClInclude Include="..\..\src\ImGUI\Hierarchy.h" />
-    <ClInclude Include="..\..\src\ImGUI\Entity.h" />
-    <ClInclude Include="..\..\src\ImGUI\Editor.h" />
-    <ClInclude Include="..\..\src\ImGUI\LogManager.h" />
-    <ClInclude Include="..\..\src\ImGUI\MenuBar.h" />
-    <ClInclude Include="..\..\src\ImGUI\PrefabManager.h" />
-    <ClInclude Include="..\..\src\ImGUI\Preferences.h" />
-    <ClInclude Include="..\..\src\ImGUI\ProjectsManager.h" />
-    <ClInclude Include="..\..\src\ImGUI\ResourcesManager.h" />
-    <ClInclude Include="..\..\src\ImGUI\Scene.h" />
-    <ClInclude Include="..\..\src\ImGUI\ScriptCreation.h" />
-    <ClInclude Include="..\..\src\ImGUI\ScriptCreationUtilities.h" />
-    <ClInclude Include="..\..\src\ImGUI\Texture.h" />
-    <ClInclude Include="..\..\src\ImGUI\Vector2.h" />
-    <ClInclude Include="..\..\src\ImGUI\Window.h" />
-    <ClInclude Include="..\..\src\ImGUI\WindowLayout.h" />
+    <ClInclude Include="..\..\src\Editor\Build.h" />
+    <ClInclude Include="..\..\src\Editor\Camera.h" />
+    <ClInclude Include="..\..\src\Editor\ColorPalette.h" />
+    <ClInclude Include="..\..\src\Editor\Components.h" />
+    <ClInclude Include="..\..\src\Editor\Console.h" />
+    <ClInclude Include="..\..\src\Editor\FileExplorer.h" />
+    <ClInclude Include="..\..\src\Editor\Font.h" />
+    <ClInclude Include="..\..\src\Editor\Game.h" />
+    <ClInclude Include="..\..\src\Editor\Hierarchy.h" />
+    <ClInclude Include="..\..\src\Editor\Entity.h" />
+    <ClInclude Include="..\..\src\Editor\Editor.h" />
+    <ClInclude Include="..\..\src\Editor\LogManager.h" />
+    <ClInclude Include="..\..\src\Editor\MenuBar.h" />
+    <ClInclude Include="..\..\src\Editor\PrefabManager.h" />
+    <ClInclude Include="..\..\src\Editor\Preferences.h" />
+    <ClInclude Include="..\..\src\Editor\ProjectsManager.h" />
+    <ClInclude Include="..\..\src\Editor\ResourcesManager.h" />
+    <ClInclude Include="..\..\src\Editor\Scene.h" />
+    <ClInclude Include="..\..\src\Editor\ScriptCreation.h" />
+    <ClInclude Include="..\..\src\Editor\ScriptCreationUtilities.h" />
+    <ClInclude Include="..\..\src\Editor\Texture.h" />
+    <ClInclude Include="..\..\src\Editor\Vector2.h" />
+    <ClInclude Include="..\..\src\Editor\Window.h" />
+    <ClInclude Include="..\..\src\Editor\WindowLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dependencies\imgui\backends\imgui_impl_sdl2.cpp" />
@@ -135,30 +135,30 @@
     <ClCompile Include="..\..\dependencies\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\dependencies\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Build.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Camera.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\ColorPalette.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Components.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Console.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\FileExplorer.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Font.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Game.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Hierarchy.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Entity.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Editor.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\LogManager.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\MenuBar.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\PrefabManager.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Preferences.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\ProjectsManager.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\ResourcesManager.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Scene.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\ScriptCreation.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\ScriptCreationUtilities.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Texture.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Vector2.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\Window.cpp" />
-    <ClCompile Include="..\..\src\ImGUI\WindowLayout.cpp" />
+    <ClCompile Include="..\..\src\Editor\Build.cpp" />
+    <ClCompile Include="..\..\src\Editor\Camera.cpp" />
+    <ClCompile Include="..\..\src\Editor\ColorPalette.cpp" />
+    <ClCompile Include="..\..\src\Editor\Components.cpp" />
+    <ClCompile Include="..\..\src\Editor\Console.cpp" />
+    <ClCompile Include="..\..\src\Editor\FileExplorer.cpp" />
+    <ClCompile Include="..\..\src\Editor\Font.cpp" />
+    <ClCompile Include="..\..\src\Editor\Game.cpp" />
+    <ClCompile Include="..\..\src\Editor\Hierarchy.cpp" />
+    <ClCompile Include="..\..\src\Editor\Entity.cpp" />
+    <ClCompile Include="..\..\src\Editor\Editor.cpp" />
+    <ClCompile Include="..\..\src\Editor\LogManager.cpp" />
+    <ClCompile Include="..\..\src\Editor\MenuBar.cpp" />
+    <ClCompile Include="..\..\src\Editor\PrefabManager.cpp" />
+    <ClCompile Include="..\..\src\Editor\Preferences.cpp" />
+    <ClCompile Include="..\..\src\Editor\ProjectsManager.cpp" />
+    <ClCompile Include="..\..\src\Editor\ResourcesManager.cpp" />
+    <ClCompile Include="..\..\src\Editor\Scene.cpp" />
+    <ClCompile Include="..\..\src\Editor\ScriptCreation.cpp" />
+    <ClCompile Include="..\..\src\Editor\ScriptCreationUtilities.cpp" />
+    <ClCompile Include="..\..\src\Editor\Texture.cpp" />
+    <ClCompile Include="..\..\src\Editor\Vector2.cpp" />
+    <ClCompile Include="..\..\src\Editor\Window.cpp" />
+    <ClCompile Include="..\..\src\Editor\WindowLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Components\Components.vcxproj">

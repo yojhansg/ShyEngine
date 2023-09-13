@@ -22,9 +22,6 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, int nCmdShow) {
 
 	Editor* editor = Editor::GetInstance();
 
-	//editor->Probando();
-	//editor->Example();
-
 	if (!editor->Init()) {
 		return -1;
 	}

@@ -287,9 +287,9 @@ namespace ShyEditor {
                     showPopUpWindowOpenProject = true;
                 else {
 
-
-
                     projectFilePath = openPath;
+
+                    ChangeProjectPath(projectFilePath);
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
                     editor->SetProjectInfo(new ProjectInfo(name, creationDate, folderPath));

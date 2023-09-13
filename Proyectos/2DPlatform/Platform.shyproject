@@ -159,7 +159,7 @@
         "windowIcon": "",
         "windowSize": "1920, 1080",
         "vsync": true,
-        "fullScreen": true,
+        "fullScreen": false,
         "showcursor": true,
         "bgColor": "170, 233, 255",
         "bgAlpha": 255,
@@ -480,5 +480,5 @@
         "chuncksize": 2048
     },
     "Project Name": "Platform",
-    "Project Path": "C:\\Users\\pablo\\Desktop\\ShyEngine\\Platform\\Platform.shyproject"
+    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\2DPlatform\\Platform.shyproject"
 }

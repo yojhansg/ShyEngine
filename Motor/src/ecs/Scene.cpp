@@ -20,6 +20,8 @@ namespace ECS {
             delete e;
         }
         entities.clear();
+
+        delete referencesManager;
     }
 
     void Scene::init() {
@@ -100,8 +102,6 @@ namespace ECS {
         for (auto e : entities) {
             e->onDestroy();
         }
-
-        delete referencesManager;
     }
 
     void Scene::onDestroyOnRemovedEntities() {
