@@ -19,16 +19,11 @@
     "debugPhysics": false,
     "frequency": 44100,
     "fullScreen": false,
-    "game": "SpaceInvaders",
+    "game": "Test",
     "gravity": "0.000000, -9.810000",
-    "initialScene": "Level.scene",
+    "initialScene": "Scene.scene",
     "layers": [
-        "Default",
-        "Alien",
-        "Ship",
-        "Limits",
-        "DeathZone",
-        "Bullet"
+        "Default"
     ],
     "matrix": [
         [
@@ -50,9 +45,9 @@
             false
         ],
         [
-            true,
-            true,
-            true,
+            false,
+            false,
+            false,
             false,
             false,
             false,
@@ -70,7 +65,7 @@
         [
             false,
             false,
-            true,
+            false,
             false,
             false,
             false,
@@ -320,8 +315,8 @@
             false
         ]
     ],
-    "path": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\Assets",
-    "projectFilePath": "C:\\Users\\Ivanof18\\Desktop\\TFG\\Projects\\SpaceInvaders\\SpaceInvaders.shyproject",
+    "path": "C:\\Users\\pablo\\Desktop\\Engine\\Test\\Assets",
+    "projectFilePath": "C:\\Users\\pablo\\Desktop\\Engine\\Test\\Test.shyproject",
     "showcursor": true,
     "splashScreen": true,
     "timeToDoubleClick": 0.5,
@@ -329,5 +324,5 @@
     "vsync": true,
     "windowIcon": "",
     "windowSize": "1920, 1080",
-    "windowTitle": "SpaceInvaders"
+    "windowTitle": "Test"
 }

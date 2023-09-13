@@ -117,14 +117,6 @@
             "localRotation": "0.000000",
             "components": [
                 {
-                    "component": "Image",
-                    "attributes": {
-                        "fileName": "CHARACTER/Character_Idle.png",
-                        "flipmode": "0.000000",
-                        "rotationPoint": "0.000000, 0.000000"
-                    }
-                },
-                {
                     "component": "PlatformController",
                     "attributes": {
                         "velocity": "200.000000",
@@ -136,20 +128,11 @@
                     }
                 },
                 {
-                    "component": "BoxBody",
+                    "component": "Image",
                     "attributes": {
-                        "size": "0.200000, 0.300000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "5.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "true",
-                        "gravityScale": "1.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": "Player"
+                        "fileName": "CHARACTER/Character_Idle.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 },
                 {
@@ -171,7 +154,7 @@
                         "size": "0.000000, 0.000000",
                         "randomSizeBetweenTwoValues": "true",
                         "sizeFirstValue": "10.000000, 10.000000",
-                        "sizeSecondValue": "30.000000, 30.000000",
+                        "sizeSecondValue": "25.000000, 25.000000",
                         "angle": "0.000000",
                         "randomAngleBetweenTwoValues": "false",
                         "angleFirstValue": "0.000000",
@@ -187,11 +170,11 @@
                         "rotationSecondValue": "0.000000",
                         "color": "0.000000, 1.000000, 0.617760",
                         "randomColorBetweenTwoColors": "false",
-                        "colorFirstValue": "1.000000, 0.972973, 0.000000",
-                        "colorSecondValue": "1.000000, 0.000000, 0.000000",
+                        "colorFirstValue": "1.000000, 1.000000, 1.000000",
+                        "colorSecondValue": "0.000000, 0.000000, 0.000000",
                         "layerName": "PARTICLE",
                         "sensor": "false",
-                        "gravityScale": "0.300000",
+                        "gravityScale": "1.000000",
                         "force": "0.000000",
                         "randomForceBetweenTwoValues": "false",
                         "forceFirstValue": "0.000000",
@@ -231,6 +214,23 @@
                     }
                 },
                 {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.150000, 0.300000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "5.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "true",
+                        "gravityScale": "1.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Player"
+                    }
+                },
+                {
                     "component": "Animation",
                     "attributes": {
                         "speed": "7.000000",
@@ -244,8 +244,8 @@
                 }
             ],
             "scripts": {
-                "Scripts/HandleJump": [],
                 "Scripts/CameraMovement": [],
+                "Scripts/HandleJump": [],
                 "Scripts/AnimationFlipLeft": [],
                 "Scripts/AnimationFlipRight": [],
                 "Scripts/BackToIdle": [],
@@ -428,6 +428,28 @@
             "scripts": null
         },
         {
+            "name": "llave",
+            "id": 13,
+            "childs": [],
+            "order": 0,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "449.999786, 0.833423",
+            "localScale": "5.000000, 5.000000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Images\\llave.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
             "name": "Plataformas",
             "id": 18,
             "childs": [
@@ -439,7 +461,7 @@
                     "prefabId": -3,
                     "isTransform": true,
                     "localPosition": "844.347473, 108.695580",
-                    "localScale": "5.000000, 5.000000",
+                    "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
                         {
@@ -478,46 +500,7 @@
                     "prefabId": -3,
                     "isTransform": true,
                     "localPosition": "1306.957275, 320.869202",
-                    "localScale": "5.000000, 5.000000",
-                    "localRotation": "0.000000",
-                    "components": [
-                        {
-                            "component": "Image",
-                            "attributes": {
-                                "fileName": "Images\\plataforma.png",
-                                "flipmode": "0.000000",
-                                "rotationPoint": "0.000000, 0.000000"
-                            }
-                        },
-                        {
-                            "component": "BoxBody",
-                            "attributes": {
-                                "size": "0.000000, 0.000000",
-                                "offSet": "0.000000, 0.000000",
-                                "bodyType": "0.000000",
-                                "mass": "0.000000",
-                                "bounciness": "0.000000",
-                                "trigger": "false",
-                                "freezeRotation": "false",
-                                "gravityScale": "0.000000",
-                                "friction": "0.000000",
-                                "linearDamping": "0.000000",
-                                "angularDamping": "0.000000",
-                                "layerName": "Platform"
-                            }
-                        }
-                    ],
-                    "scripts": null
-                },
-                {
-                    "name": "plataforma",
-                    "id": 7,
-                    "childs": [],
-                    "order": 0,
-                    "prefabId": -3,
-                    "isTransform": true,
-                    "localPosition": "-482.608398, -148.695587",
-                    "localScale": "5.000000, 5.000000",
+                    "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
                         {
@@ -556,7 +539,46 @@
                     "prefabId": -3,
                     "isTransform": true,
                     "localPosition": "447.825745, -79.130508",
-                    "localScale": "5.000000, 5.000000",
+                    "localScale": "5.000000, 3.000000",
+                    "localRotation": "0.000000",
+                    "components": [
+                        {
+                            "component": "Image",
+                            "attributes": {
+                                "fileName": "Images\\plataforma.png",
+                                "flipmode": "0.000000",
+                                "rotationPoint": "0.000000, 0.000000"
+                            }
+                        },
+                        {
+                            "component": "BoxBody",
+                            "attributes": {
+                                "size": "0.000000, 0.000000",
+                                "offSet": "0.000000, 0.000000",
+                                "bodyType": "0.000000",
+                                "mass": "0.000000",
+                                "bounciness": "0.000000",
+                                "trigger": "false",
+                                "freezeRotation": "false",
+                                "gravityScale": "0.000000",
+                                "friction": "0.000000",
+                                "linearDamping": "0.000000",
+                                "angularDamping": "0.000000",
+                                "layerName": "Platform"
+                            }
+                        }
+                    ],
+                    "scripts": null
+                },
+                {
+                    "name": "plataforma",
+                    "id": 7,
+                    "childs": [],
+                    "order": 0,
+                    "prefabId": -3,
+                    "isTransform": true,
+                    "localPosition": "-482.608398, -148.695587",
+                    "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
                         {
@@ -595,7 +617,7 @@
                     "prefabId": -3,
                     "isTransform": true,
                     "localPosition": "-7.826119, 9.565210",
-                    "localScale": "5.000000, 5.000000",
+                    "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
                         {

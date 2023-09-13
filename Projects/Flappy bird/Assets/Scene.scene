@@ -17,7 +17,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "Character.png"
+                        "fileName": "Character.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 }
             ],
@@ -28,13 +30,13 @@
                         "value": 10.0
                     }
                 },
+                "Scripts/PlayerRotation": [],
                 "Scripts/CameraController": {
                     "Speed": {
                         "type": "float",
                         "value": 5.0
                     }
-                },
-                "Scripts/PlayerRotation": []
+                }
             }
         },
         {
@@ -51,7 +53,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "Spider.png"
+                        "fileName": "Spider.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 }
             ],
@@ -82,7 +86,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "Floor.jpg"
+                        "fileName": "Floor.jpg",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 },
                 {

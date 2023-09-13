@@ -295,7 +295,6 @@ namespace ShyEditor {
 
                     windowClosed = true;
                     ImGui::End();
-                    std::cout << std::filesystem::current_path() << std::endl;
 
                     return Result::ENTERED;
                 }
@@ -808,7 +807,7 @@ namespace ShyEditor {
         fileStreamIn.close();
 
         name = json["Project Name"];
-        openPath = json["Project Path"];
+        openPath = filepath;
         creationDate = json["Creation Date"];
         lastOpenedScenePath = json["Last Opened Scene"];
 

@@ -142,11 +142,11 @@
                 8
             ],
             "-3": [
-                7,
-                14,
-                15,
+                17,
                 16,
-                17
+                15,
+                7,
+                14
             ]
         }
     },
@@ -159,7 +159,7 @@
         "windowIcon": "",
         "windowSize": "1920, 1080",
         "vsync": true,
-        "fullScreen": false,
+        "fullScreen": true,
         "showcursor": true,
         "bgColor": "170, 233, 255",
         "bgAlpha": 255,
