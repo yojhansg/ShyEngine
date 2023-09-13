@@ -34,6 +34,7 @@ namespace ECS {
 		static void ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::json& overlay, ECS::Overlay* parent);
 		static void ProcessComponent(ECS::Entity* entity, nlohmann::json& component);
 		static void ProcessScripts(nlohmann::json& jsonData, ECS::Entity* entity);
+
 	};
 
 }

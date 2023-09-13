@@ -130,6 +130,8 @@ namespace ShyEditor {
 		// Returns true if everything went correctly, false otherwise
 		bool SaveProject();
 
+		bool ChangeProjectPath(const std::string& newpath);
+
 		// Creates all assets folders needed (Images, Sound, Fonts, Scenes, etc.)
 		bool CreateAssetsFolders(const std::string& root);
 

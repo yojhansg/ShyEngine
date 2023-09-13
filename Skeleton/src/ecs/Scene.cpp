@@ -11,6 +11,8 @@ namespace ECS {
 
         cameraPosition = { 0 ,0 };
         cameraScale = 1;
+
+        referencesManager = new ReferencesManager();
     }
 
     Scene::~Scene() {
@@ -98,6 +100,8 @@ namespace ECS {
         for (auto e : entities) {
             e->onDestroy();
         }
+
+        delete referencesManager;
     }
 
     void Scene::onDestroyOnRemovedEntities() {
@@ -187,6 +191,10 @@ namespace ECS {
             if (e->isActive() && !e->isRemoved())
                 e->Event(name);
         }
+    }
+
+    ReferencesManager* Scene::GetReferencesManager() {
+        return referencesManager;
     }
 
 }

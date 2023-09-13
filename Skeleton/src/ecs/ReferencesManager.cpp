@@ -14,7 +14,6 @@ void ECS::ReferencesManager::RemoveEntityFromMap(int id) {
 
 	if (map.contains(id)) {
 		map.at(id) = nullptr;
-		//map.erase(id);
 	}
 	else
 		Console::Output::PrintError("Entity with non-existent ID", "The reference could not be deleted. There is no entity with that ID.");

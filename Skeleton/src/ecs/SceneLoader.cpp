@@ -129,7 +129,7 @@ void ECS::SceneLoader::ProcessEntityWithTransform(ECS::Scene* scene, nlohmann::j
 
 	ECS::Entity* entity = scene->createEntity(objectName, renderOrder, id);
 
-	ReferencesManager::instance()->AddEntityToMap(id, entity);
+	scene->GetReferencesManager()->AddEntityToMap(id, entity);
 
 	// Transform component
 	ECS::Transform* transform = entity->addComponent<ECS::Transform>();
@@ -215,7 +215,7 @@ void ECS::SceneLoader::ProcessEntityWithOverlay(ECS::Scene* scene, nlohmann::jso
 
 	ECS::Entity* entity = scene->createEntity(name, 0, id);
 
-	ReferencesManager::instance()->AddEntityToMap(id, entity);
+	scene->GetReferencesManager()->AddEntityToMap(id, entity);
 
 	// Overlay Component
 	ECS::Overlay* overlayElement = entity->addComponent<ECS::Overlay>();

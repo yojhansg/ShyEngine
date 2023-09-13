@@ -7,9 +7,7 @@ namespace ECS {
 
 	class Entity;
 
-	class ReferencesManager : public Utilities::Singleton<ReferencesManager> {
-
-		friend Singleton<ReferencesManager>;
+	class ReferencesManager {
 
 	public:
 
@@ -18,6 +16,7 @@ namespace ECS {
 
 		bool IsEntityValid(int id);
 		Entity* GetEntity(int id);
+
 	private:
 
 		std::unordered_map<int, Entity*> map;

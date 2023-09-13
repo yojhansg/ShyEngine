@@ -2,6 +2,9 @@
 #include "ScriptManager.h"
 #include "Script.h"
 #include "ReferencesManager.h"
+#include "Entity.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 Scripting::ConstNode::ConstNode(int idx, Scripting::Variable val) : Scripting::OutputNode(idx)
 {
@@ -19,16 +22,16 @@ void Scripting::ConstNode::Operate(Node*& next, int& iterationIdx)
 	output = script->GetSerialisedValue(name);
 
 
+	auto currentScene = ECS::SceneManager::instance()->getCurrentScene();
 
 	if (originalValue.type == Variable::Type::Entity)
 	{
 		//TODO: hacer algo con el id
 
 		int id = output.value.entityId;
-		if (ECS::ReferencesManager::instance()->IsEntityValid(id)) {
+		if (currentScene->GetReferencesManager()->IsEntityValid(id)) {
 
-
-			output.value.entity = ECS::ReferencesManager::instance()->GetEntity(id);
+			output.value.entity = currentScene->GetReferencesManager()->GetEntity(id);
 		}
 		else {
 			output.value.entity = nullptr;

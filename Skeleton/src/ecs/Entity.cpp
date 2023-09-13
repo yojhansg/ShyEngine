@@ -54,7 +54,7 @@ namespace ECS {
 		inRenderSet = false;
 
 		if (usesId)
-			ReferencesManager::instance()->RemoveEntityFromMap(id);
+			getScene()->GetReferencesManager()->RemoveEntityFromMap(id);
 	}
 
 	Scene* Entity::getScene() {

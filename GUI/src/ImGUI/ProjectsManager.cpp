@@ -287,6 +287,8 @@ namespace ShyEditor {
                     showPopUpWindowOpenProject = true;
                 else {
 
+
+
                     projectFilePath = openPath;
 
                     std::string folderPath = std::filesystem::path(openPath).parent_path().string();
@@ -725,6 +727,37 @@ namespace ShyEditor {
         std::filesystem::path p(instance->projectFilePath);
 
         return p.filename().string();
+    }
+
+    bool ProjectsManager::ChangeProjectPath(const std::string& newpath) {
+
+        // Add the project path to the recent projects
+        std::ifstream fileStreamIn(newpath);
+
+        if (!fileStreamIn.is_open()) {
+            errorMessage = L"Error while opening the new project file for reading.";
+            return false;
+        }
+
+        // Gets the json from the recent projects file
+        json j = json::parse(fileStreamIn);
+
+        fileStreamIn.close();
+
+
+        j["Project Path"] = newpath;
+
+        // Create the project file in the specified folder
+        std::ofstream outputFile(newpath);
+
+        if (!outputFile.is_open()) {
+            errorMessage = L"Error while opening the new project file for writing.";
+            return false;
+        }
+
+        outputFile << j.dump(4);
+        outputFile.close();
+
     }
 
     bool ProjectsManager::CreateAssetsFolders(const std::string& root) {

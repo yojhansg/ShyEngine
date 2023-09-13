@@ -1,8 +1,9 @@
 #pragma once
 
+#include "ReferencesManager.h"
+#include <Vector2D.h>
 #include <string>
 #include <list>
-#include <Vector2D.h>
 
 namespace ECS {
 
@@ -60,12 +61,14 @@ namespace ECS {
 		// Returns the pointer to an entity that matches with the name, nullptr otherwise (Not an efficient way to find an entity)
 		Entity* findEntityByName(const std::string& ent_name);
 
-
 		void Event(std::string const& name);
+
+		ReferencesManager* GetReferencesManager();
 
 
 	private:
 
+		ReferencesManager* referencesManager;
 
 		float cameraScale;
 		Utilities::Vector2D cameraPosition;
