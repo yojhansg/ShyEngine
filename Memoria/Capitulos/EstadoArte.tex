@@ -276,46 +276,37 @@ Los editores de videojuegos desempeñan un papel crucial en el proceso de desarro
     \item \textit{Simular y depurar}: Los editores a menudo incluyen herramientas de simulación y depuración que ayudan a los desarrolladores a probar y solucionar problemas en tiempo real.
 \end{enumerate}
 
-\subsection{Enfoque histórico y actual de la integración entre editor y motor}
-
-En la actualidad, muchos editores de videojuegos están integrados con motores de juego, una evolución significativa con respecto a la forma en que solían operar por separado. Antes, los motores y los editores solían ser herramientas independientes, lo que requería a los desarrolladores crear contenido en el editor y luego importarlo y vincularlo manualmente al motor. Este proceso a menudo era laborioso y propenso a errores.
-
-\medskip 
-
-Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft, una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas. En la imagen \ref{fig:Worldcraft} observamos el editor WorldCraft.
-
-\medskip
-
-Sin embargo, con la integración de editores y motores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se aplican sin necesidad de complicados procesos de compilación.
-
-\medskip 
-
-Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida. La simplicidad de este enfoque también ha abierto las puertas a diseñadores y creadores de contenido que pueden contribuir al desarrollo de juegos sin necesidad de conocimientos profundos en programación o procesos de compilación.
-
 \begin{figure}[t]
     \centering
-    \includegraphics[width=8cm]{Imagenes/Vectorial/Worldcraft}
+    \includegraphics[width=13cm]{Imagenes/Vectorial/Worldcraft}
     \caption{Editor de WorldCraft}
     \label{fig:Worldcraft}
 \end{figure}
 \medskip 
 
+\subsection{Enfoque histórico y actual de la integración entre editor y motor}
+
+En la actualidad, muchos editores de videojuegos vienen con motores integrados, una evolución significativa con respecto a la forma en que solían operar por separado. Antes, los motores y los editores solían ser herramientas independientes, lo que requería a los desarrolladores crear contenido en el editor y luego importarlo y vincularlo manualmente al motor. 
+
+\medskip 
+
+Un ejemplo histórico de esta separación entre motores y editores es el caso de WorldCraft (figura~\ref{fig:Worldcraft}), una herramienta de diseño de niveles utilizada por Valve para desarrollar juegos como ``Half-Life''. En ese entorno, los diseñadores creaban mapas y niveles en WorldCraft, pero luego necesitaban compilar esos niveles en un formato que el motor del juego pudiera entender. Este proceso de compilación a menudo llevaba tiempo y podía ser complicado, lo que requería una comprensión profunda de ambas herramientas.
+
+\medskip
+
+Sin embargo, con la integración de los motores dentro de los editores en la actualidad, este proceso se ha simplificado significativamente. El motor y el editor trabajan en conjunto de manera más fluida, lo que permite a los desarrolladores diseñar niveles, crear contenido y ajustar parámetros directamente en el editor. La comunicación entre el editor y el motor es más directa, lo que significa que los cambios realizados en el editor se reflejan de manera más inmediata en el juego. Por ejemplo, un diseñador puede usar el editor para colocar entidades en el mapa, definir sus atributos y comportamientos, y estos cambios se pueden apreciar de manera inmediata.
+
+\medskip 
+
+Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida.
+
 
 % --------------------------------------------------------- SCRIPTING -------------------------------
 
 
-\section{¿Qué es el Scripting?}
+\section{Convertir el comportamiento en datos para el motor}
 
-El scripting, en el contexto del desarrollo de videojuegos, se refiere a la capacidad de definir el comportamiento y las reglas del juego utilizando scripts o instrucciones escritas en un lenguaje específico. Estos scripts permiten controlar eventos, acciones y la interacción dentro del juego, proporcionando una forma versátil de diseñar la experiencia del jugador.
-
-\subsection{¿Qué diferencia hay entre script y componente?}
-
-La diferencia entre scripts y componentes es que, ambos definen lógica para el videojuego pero los componentes son comportamiento,
-en la mayoría de casos, fundamental y genérico (por ejemplo un componente ``Imagen''), que proporciona el motor al usuario, y los scripts son piezas de lógica que construye el usuario y que, en general, es comportamiento específico al videojuego que esté desarrollando el usuario.
-
-\subsection{¿Como se convierte el comportamiento en datos para el motor?}
-
-Una pregunta esencial en el desarrollo de videojuegos es cómo traducir el comportamiento deseado del juego en información que el motor del juego pueda procesar. La manera en que esto se logra depende en gran medida de cómo esté estructurado el motor y del diseño del juego en sí.
+Una pregunta esencial en el desarrollo de videojuegos es cómo traducir el comportamiento deseado del juego en información que el motor del juego pueda procesar. La manera en que esto se logra depende en gran medida de cómo esté estructurado el motor y que margen de personalizaciçon se quiere proporcionar a los creadores de gameplay.
 
 \medskip 
 
@@ -326,44 +317,35 @@ Si el motor del juego está diseñado para ser muy específico y limitado en cuanto
 En contraste, si el motor no está diseñado para ser tan específico y se requiere agregar comportamientos particulares, entonces es necesario recurrir a la programación. Es aquí donde se pueden dar distintos enfoques:
 
 \begin{enumerate}
-    \item Un enfoque común en esta situación es el uso de Dynamic Link Libraries (DLL) o bibliotecas de enlace dinámico. Aquí, los programadores escriben código en lenguajes como C++ para definir nuevos comportamientos o características del juego. Estos comportamientos se agrupan en bibliotecas (DLL) que se integran con el motor del juego.
+    \item Un enfoque común en esta situación es el uso de Dynamic Link Libraries o bibliotecas de enlace dinámico. Aquí, los programadores escriben código en lenguajes como C++ para definir nuevos comportamientos o características del juego. Estos comportamientos se agrupan en bibliotecas que se integran con el motor del juego.
 
     \medskip 
 
-    La clave del funcionamiento de las DLL es el enlace dinámico. En lugar de incluir todo el código de la DLL en el ejecutable del juego, el programa principal solo contiene referencias a las funciones y datos en la DLL. Estas referencias se resuelven en tiempo de ejecución cuando el juego se carga. Esto significa que las DLL se cargan en memoria solo cuando se necesitan, lo que ahorra recursos y permite una gestión más eficiente de la memoria. Sin embargo, es necesario implementar un sistema de reflexión y serialización/deserialización en el motor del juego, ya que esto permite agregar nuevas entidades o comportamientos sin necesidad de recompilar o modificar el código del motor. 
+    La clave del funcionamiento de estas bibliotecas es el enlace dinámico. En lugar de incluir todo el código de la biblioteca en el ejecutable del juego, el programa principal solo contiene referencias a las funciones y datos en esta. Estas referencias se resuelven en tiempo de ejecución cuando el juego se carga. Esto significa que el ``.exe'' es independiente de la biblioteca, que se carga como datos y se ejecuta siguiendo el convenio acordado por el motor.  
 
     \medskip 
 
-    Este enfoque de DLLs ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito en la  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
+    Este enfoque de bibliotecas de enlace dinámico ha sido ampliamente utilizado en motores de juego como Unreal Engine, lo que ha contribuido a su éxito en la  industria del desarrollo de videojuegos. Además, también se empleó en juegos icónicos como Quake II y Half-Life.
 
     \medskip
-
-    En la figura \ref{fig:dll} se observa de manera esquemática el funcionamiento de una DLL.
 
     \item Otra alternativa importante es el uso de ``programación no nativa'' mediante el empleo de lenguajes de script. Un ejemplo clásico de esto es el uso de Lua. Lua es un lenguaje de script que se interpreta, lo que significa que para el motor del juego es simplemente un archivo de texto que contiene instrucciones.
 
     \medskip 
 
-    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores \cite{de2008lua}.
+    Este enfoque tiene varias ventajas. Primero, permite iteraciones rápidas en el desarrollo, ya que no es necesario recompilar todo. Además, no se requiere un entorno de desarrollo costoso como Visual Studio para programar el gameplay, lo que reduce los costos y las barreras de entrada para los desarrolladores ya que se ejecuta en máquina virtual aislada y suelen ser lenguajes mas sencillos \cite{de2008lua}.
     
     \medskip 
 
-    Sin embargo, este enfoque también presenta desafíos. Se necesita una conexión efectiva entre el mundo nativo (generalmente escrito en lenguajes como C++) y el lenguaje de script para que puedan comunicarse y llamar funciones entre sí. 
+    Sin embargo, este enfoque también presenta desafíos. Se necesita una conexión efectiva entre el mundo nativo (generalmente escrito en lenguajes como C++) y el lenguaje de script para que puedan comunicarse y llamar funciones entre sí, y la ejecución de un lenguaje interpretado es más lenta.
     
     \medskip 
 
-    A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interaccióncon el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen ser más accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
+    A cambio, como todo se maneja como datos, la parte de reflexión se vuelve más sencilla para la serialización y la interacción con el editor del juego. Esto significa que los comportamientos y características definidos en lenguajes de script suelen ser más accesibles y configurables en el editor del juego sin necesidad de recompilar el motor. 
     
 \end{enumerate}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/DLL.png}
-    \caption{Funcionamiento de una DLL.}
-    \label{fig:dll}
-\end{figure}
-
-Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, pueden resultar complicados para los diseñadores de juegos y, en algunos casos, pueden volverse muy verbosos dependiendo de los objetivos específicos. Una posible solución es la programación visual.
+Por supuesto, también es importante considerar las limitaciones y desafíos que los lenguajes de script pueden presentar. Aunque son poderosos en muchos aspectos, no son lo suficientemente sencillos como para que los diseñadores puedan esbozar comportamientos de manera rápida. Una opción de mayor simplicidad es la programación visual.
 
 \subsubsection*{Programación visual}
 \label{programacionVisual}
@@ -375,7 +357,7 @@ La programación visual es una alternativa que busca hacer que la creación de com
 En este enfoque, lo que se crea visualmente se traduce aún en datos que el motor del juego puede entender. Estos datos pueden interpretarse de diversas formas. Por ejemplo, se pueden transpilar a código C++, lo que finalmente nos llevaría de nuevo al primer enfoque que mencionamos. También podrían reescribirse en un lenguaje de script como Lua, o simplemente serializarse en un formato propio y luego ejecutarse mediante un intérprete diseñado específicamente para ese formato.
 
 
-\subsection{¿Como se comunica el motor con el scripting?}
+\subsection{Comunicación entre motor y scripting}
 \label{comunicacionScripting}
 
 La interacción entre el motor del juego y el sistema de scripting en lo que respecta al gameplay es una consideración central en el proceso de desarrollo de videojuegos en tiempo real. Dado que el motor del juego conoce  los eventos que suceden en el juego, como el fin de una partida o colisiones entre entidades, surge la interrogante de cómo las entidades del juego adquieren conocimiento de estos eventos. En este contexto, se emplean principalmente dos enfoques: el sistema de eventos y el método de encuestas:
@@ -402,33 +384,35 @@ La interacción entre el motor del juego y el sistema de scripting en lo que resp
 \section{Ejemplos de motores}
 
 \subsection{Unity}
+\label{cap:unity}
 
 Unity es ampliamente reconocido como uno de los motores de videojuegos más populares y versátiles en la industria actual, que fue lanzado en 2005 por Unity Technologies. Lo que distingue a Unity es su separación intermedia entre gameplay y motor, que permite desarrollar una amplia variedad de videojuegos, desde simples juegos móviles 2D hasta experiencias de realidad virtual inmersivas para múltiples plataformas, incluyendo PC, consolas y dispositivos móviles \cite{Unity}.
-
-\subsubsection{Arquitectura}
-
-En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en entidades y componentes (EC) [\ref{ecsystem}]. En este enfoque, los elementos fundamentales son los ``GameObjects'', que funcionan como las entidades en el mundo del juego. Cada ``GameObject'' puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
-
-\medskip
-
-La familiaridad con esta arquitectura es evidente desde el propio editor de Unity. El proceso de desarrollo se basa en la creación de entidades (``GameObjects'') y la asignación de scripts (componentes) para otorgar funcionalidad al juego. Estos scripts, escritos en C\#, permiten definir cómo interactúan y responden los ``GameObject'' en el mundo del juego.
-
-\subsubsection{Scripting}
-
-El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase de la que todos los scripts en Unity deben heredar para funcionar
-como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un ``GameObject'' debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda
-y gestione adecuadamente los scripts como parte integral de la lógica del juego \cite{hecker2015unity}.
 
 \medskip
 
 En la figura \ref{fig:unityEditor} podemos ver el editor de Unity.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
-        \includegraphics[scale=0.2]{Imagenes/Vectorial/UnityEditor}
+        \includegraphics[scale=0.23]{Imagenes/Vectorial/UnityEditor}
     \caption{Editor de Unity.%
         \label{fig:unityEditor}}
 \end{figure}
+
+
+\subsubsection{Arquitectura}
+
+En términos de su arquitectura, Unity adopta una estructura que se alinea con la arquitectura basada en entidades y componentes (EC) [\ref{ecsystem}]. En este enfoque, los elementos fundamentales son los \textit{GameObjects}, que funcionan como las entidades en el mundo del juego. Cada \textit{GameObject} puede estar compuesto por una combinación de ``componentes'', que actúan como los módulos responsables de definir su comportamiento y características.
+
+\medskip
+
+La familiaridad con esta arquitectura es evidente desde el propio editor de Unity. El proceso de desarrollo se basa en la creación de entidades (\textit{GameObjects}) y la asignación de scripts (componentes) para otorgar funcionalidad al juego. Estos scripts, escritos en C\#, permiten definir cómo interactúan y responden los \textit{GameObject} en el mundo del juego.
+
+\subsubsection{Scripting}
+
+El sistema de scripting de Unity se basa en C\# y hace uso fundamentalmente del componente \texttt{MonoBehaviour}. \texttt{MonoBehaviour} es una clase de la que todos los scripts en Unity deben heredar para funcionar
+como componentes adjuntos a objetos en el juego. Significa que cualquier script destinado a ser un componente en un \textit{GameObject} debe ser una subclase de \texttt{MonoBehaviour}. Esta herencia permite que Unity comprenda
+y gestione adecuadamente los scripts como parte integral de la lógica del juego \cite{hecker2015unity}.
 
 \subsection{Unreal Engine}
 
@@ -440,12 +424,6 @@ C++ y es multiplataforma. En cuanto a la ``altitud'' de la línea de separación e
 
 En cuanto al editor, se muestra en la figura \ref{fig:unrealeditor}:
 
-\begin{figure}[h]
-    \centering
-        \includegraphics[scale=0.2]{Imagenes/Vectorial/unrealeditor}
-    \caption{Editor de Unreal Engine.%
-        \label{fig:unrealeditor}}
-\end{figure}
 
 \subsubsection{Arquitectura}
 
@@ -453,9 +431,9 @@ La arquitectura de gameplay en Unreal Engine es una mezcla de componentes y here
 
 \medskip
 
-En cuanto a la herencia de clases, Unreal Engine utiliza la herencia de clases para crear una jerarquía de objetos y personajes. Por ejemplo, puedes tener una clase base que representa un personaje jugable y luego crear subclases que hereden de la clase base para crear personajes específicos con características adicionales. Esto permite la reutilización de código y la organización de la funcionalidad común.
+En cuanto a la herencia de clases, Unreal Engine utiliza la herencia de clases para crear una jerarquía de objetos y personajes. Por ejemplo, se puede tener una clase base que representa un personaje jugable y luego crear subclases que hereden de la clase base para crear personajes específicos con características adicionales. Esto permite la reutilización de código y la organización de la funcionalidad común.
 
-En Unreal lo correspondiente a los ``GameObject'' son los ``Actor''.
+En Unreal lo correspondiente a los \textit{GameObject} son los \textit{Actor}.
 
 \medskip
 
@@ -465,12 +443,12 @@ Además de la herencia de clases, Unreal Engine hace un uso extensivo de la compo
 
 Por otra parte, Unreal Engine cuenta con los Blueprints, que permiten definir la lógica y el comportamiento de los actores y componentes de una manera visual y gráfica. Esto significa que se puede definir cómo interactúan los componentes y actores a través de conexiones visuales en lugar de escribir código. Los Blueprints se pueden utilizar tanto para heredar comportamientos como para agregar componentes y personalizarlos.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
-        \includegraphics[scale=0.5]{Imagenes/Vectorial/blueprintsUnreal.png}
-    \caption{Blueprints de Unreal Engine.}%
+        \includegraphics[scale=0.23]{Imagenes/Vectorial/unrealeditor}
+    \caption{Editor de Unreal Engine.%
+        \label{fig:unrealeditor}}
 \end{figure}
-
 
 \subsubsection{Sistema de scripting}
 
@@ -479,10 +457,18 @@ En cuanto al creación de comportamiento, Unreal Engine tiene dos modos distintos
 \begin{itemize}
     \item \textit{Programación en C++}: Permite a los desarrolladores escribir código en C++ para crear la lógica del juego, personalizar el comportamiento de los actores y desarrollar características específicas. Esta opción es ideal para tareas que requieren un alto rendimiento o una manipulación más detallada de los sistemas del motor. También es cierto que la programación en C++ puede ser más compleja que el uso de Blueprints, especialmente para quienes no están familiarizados con el lenguaje \cite{sherif2016unreal}.
 
-    \item \textit{Blueprints}: Son una herramienta visual que permite a los desarrolladores crear la lógica del juego sin necesidad de programar en C++. Este scripting es de tipo basado en nodos y funciona con la unión de nodos y a través de la creación flujo y lógica. Por ello, se pueden crear prototipos rápidamente y no requieren de conocimientos de programación para utilizarlos \cite{valcasara2015unreal}. 
+    \item \textit{Blueprints}: Son una herramienta visual que permite a los desarrolladores crear la lógica del juego sin necesidad de programar en C++. Este scripting es de tipo basado en nodos y funciona con la unión de nodos y a través de la creación flujo y lógica. Por ello, se pueden crear prototipos rápidamente y no requieren de conocimientos de programación para utilizarlos \cite{valcasara2015unreal}. En la figura \ref{fig:blueprints} vemos la herramienta Blueprints de Unreal.
 \end{itemize}
 
 En cuanto a la combinación de ambos enfoques, Unreal Engine permite integrar fácilmente código C++ y Blueprints en un mismo proyecto. Esto significa que se puede utilizar C++ para las partes críticas del rendimiento o para implementar sistemas complejos, mientras que se utiliza Blueprints para prototipos rápidos, lógica de juego simple y personalización de componentes y actores. Los Blueprints también pueden comunicarse con código C++ a través de interfaces definidas, lo que permite una colaboración eficaz entre programadores y diseñadores.
+
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[scale=0.5]{Imagenes/Vectorial/blueprintsUnreal.png}
+    \caption{Blueprints de Unreal Engine.}%
+    \label{fig:blueprints}
+\end{figure}
 
 % \subsubsection{Comunicación motor-editor}
 
