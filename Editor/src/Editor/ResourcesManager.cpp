@@ -5,6 +5,8 @@
 
 #include "CheckML.h"
 
+#include <iostream>
+
 
 namespace ShyEditor {
 
@@ -64,8 +66,10 @@ namespace ShyEditor {
 			return instance->engineFonts.at(newkey);
 
 		Font* font = new Font(instance->engineProjectPath + "\\Assets\\" + key, pointSize);
+		
+		std::cout << "Nueva fuente" << std::endl;
 
-		instance->engineFonts.insert(std::make_pair(key, font));
+		instance->engineFonts.insert(std::make_pair(newkey, font));
 
 		return font;
 

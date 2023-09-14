@@ -10,7 +10,7 @@
             "order": 0,
             "prefabId": 0,
             "isTransform": true,
-            "localPosition": "1.250133, -18.749794",
+            "localPosition": "3.355394, -18.749794",
             "localScale": "2.481952, 1.967324",
             "localRotation": "0.000000",
             "components": [
@@ -40,7 +40,7 @@
             "left": "0",
             "right": "0",
             "bottom": "0",
-            "position": "977.249268, 550.749756",
+            "position": "971.619263, 505.453217",
             "size": "1224.498535, 369.499451",
             "components": [
                 {
@@ -48,7 +48,7 @@
                     "attributes": {
                         "text": "YOU LOSE",
                         "font": "Default.ttf",
-                        "fontSize": "227.000000",
+                        "fontSize": "245.000000",
                         "horizontalAlignment": "0.000000",
                         "verticalAlignment": "1.000000",
                         "fit": "0.000000",

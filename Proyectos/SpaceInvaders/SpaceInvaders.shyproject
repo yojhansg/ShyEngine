@@ -1,6 +1,6 @@
 {
     "Creation Date": "2023-09-09 12:31:56",
-    "Last Opened Scene": "Level.scene",
+    "Last Opened Scene": "Lose.scene",
     "Prefabs": {
         "prefabs": [
             {
@@ -57,7 +57,7 @@
     "Preferences": {
         "game": "SpaceInvaders",
         "creator": "Yojhan, Pablo e Ivan",
-        "initialScene": "Level.scene",
+        "initialScene": "Lose.scene",
         "splashScreen": false,
         "windowTitle": "SpaceInvaders",
         "windowIcon": "",
