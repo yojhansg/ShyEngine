@@ -67,8 +67,6 @@ namespace ShyEditor {
 
 		Font* font = new Font(instance->engineProjectPath + "\\Assets\\" + key, pointSize);
 		
-		std::cout << "Nueva fuente" << std::endl;
-
 		instance->engineFonts.insert(std::make_pair(newkey, font));
 
 		return font;

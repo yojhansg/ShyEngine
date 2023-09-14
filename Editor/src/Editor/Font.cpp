@@ -16,8 +16,6 @@ namespace ShyEditor {
 	{
 		font = TTF_OpenFont(filepath.c_str(), pointSize);
 
-		std::cout << "nueva fuente" << std::endl;
-
 		if (font == NULL) {
 
 			LogManager::LogError("Could not create font with path: " + filepath);
