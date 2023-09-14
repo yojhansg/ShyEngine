@@ -18,57 +18,56 @@ desarrollo.
 \medskip
 
 En el primer caso, el inconveniente reside en desarrollar dichas tecnologías de forma dependiente al videojuego para el que se esté desarrollando, es decir,
-atendiendo a sus características concretas de tal forma que no se pueda reutilizar para el desarrollo de otro tipo de videojuego.
+atendiendo a sus características concretas de tal forma que no se pueda reutilizar para la creación de otro tipo de videojuego.
 
 \medskip
 
-En el segundo caso, el inconveniente reside en la forma de obtener dichas tecnologías, licencias o costes. A la hora de desarrollar esas tecnologías los
-equipos deben trazar la línea que separa lo que son las tecnologías para desarrollar un videojuego y el propio desarrollo del videojuego. Ésta separación
-en necesaria para garantizar la reutilización de las tecnologías.   
+En el segundo caso, el inconveniente reside en la forma de obtener dichas tecnologías, licencias o costes. A la hora de crear esas tecnologías los equipos
+deben trazar la línea que separa lo que son las tecnologías para desarrollar un videojuego y el propio desarrollo del videojuego. Ésta separación es
+necesaria para garantizar la reutilización de las tecnologías.   
 
 \medskip
 
-A estas tecnologías se las conoce como motores de ejecución. En general suelen estar constituidas de varias librerías dedicadas a un fin específico como 
-puede ser los gráficos, el audio, las físicas, el input, etc.
+A estas tecnologías se las conoce como motores de videojuegos. En general suelen estar constituidos de varias librerías dedicadas a un fin específico
+como puede ser los gráficos, el audio, las físicas, el input, etc.
 
 \medskip
 
-En algunos casos, además del motor de ejecución, las empresas desarrolladoras de motores incluyen editores. Los editores son herramientas que simplifican
-el desarrollo comunicando las acciones del desarrollador al motor. Entre alguna de sus funciones claves destacan la definición de comportamientos, la 
-creación de assets y elementos en el juego, depuración y generación de versiones ejecutables para distintas plataformas.
+En algunos casos, además del motor de videojuegos, las empresas desarrolladoras de motores incluyen editores. Los editores son herramientas que simplifican
+el desarrollo comunicando las acciones del usuario al motor. Entre alguna de sus funciones claves destacan la definición de comportamientos, la creación de assets y 
+elementos en el juego, depuración y generación de versiones ejecutables para distintas plataformas.
 
 \medskip
 
-Existen en el mercado diferentes motores con distintas licencias y características. Los más cómodos para el desarrollo son los que tienen editor, pero un
-editor es muy costoso de desarrollar, por lo que los motores que lo proporcionan son aquellos que tienen una masa crítica de uso muy grande, como para que
-merezca la pena el esfuerzo de desarrollo del editor. Esto solo ocurre en motores generalistas que permiten realizar juegos de muchos tipos y con muy buena
-calidad. El precio a pagar por usar esos motores es su complejidad, tanto en el uso del editor como en el motor en tiempo de ejecución. Esto no es un problema
-si el juego desarrollado hace uso de todas las características punteras, pero sí lo es si se quiere hacer un juego modesto donde se ponga a prueba la 
-jugabilidad y no tanto la tecnología.
+Existen en el mercado diferentes motores con distintas licencias y características. Los más cómodos son los que tienen editor, pero un editor es muy costoso
+de desarrollar, por lo que los motores que lo proporcionan son aquellos que tienen una masa crítica de uso muy grande como para que merezca la pena el esfuerzo
+de crearlo. Esto solo ocurre en motores generalistas que permiten realizar juegos de muchos tipos y con muy buena calidad. El precio a pagar por usar esos motores
+es su complejidad, tanto en el uso del editor como en el motor en tiempo de ejecución. Esto no es un problema si el juego desarrollado hace uso de todas las 
+características punteras, pero sí lo es si se quiere hacer un juego modesto donde se ponga a prueba la jugabilidad y no tanto la tecnología.
 
 \medskip
 
 La alternativa para hacer juegos más pequeños es hacer uso de motores más simples, pero normalmente no traen editor y eso alarga el proceso de desarrollo.
 En este punto es donde entra nuestro nuestro trabajo de fin de grado. Vamos a hacer un motor con su editor para hacer juegos pequeños en los que la experiencia
-de desarrollo sea equivalente a la vivida con editores de motores más grandes, pero que esté centrado en el desarrollo de juegos 2D mucho más pequeños para 
-perfiles con poca experiencia en programación o en desarrollo de videojuegos en general. Esto  simplifica el uso del editor y también el tamaño de las versiones
-ejecutables realizadas.
+de desarrollo sea equivalente a la vivida con editores de motores más grandes, pero que esté centrado en la creación de juegos 2D mucho más pequeños para perfiles
+con poca experiencia en programación o en la creación de videojuegos en general. Esto simplifica el uso del editor y también el tamaño de las versiones ejecutables
+realizadas.
 
 \medskip
 
 Las características del motor que queremos hacer son:
 
 \begin{itemize}
-    \item \textit{Ejecución del juego desde el editor}: Esto significa la posibilidad de lanzar el juego desde el editor sin tener que hacer una versión 
-    ejecutable o buscar el archivo ejecutable a mano. Además, se podrá imprimir información por consola visible desde el editor ya sea para depurar o 
-    consultar errores.
-
     \item \textit{Autosuficiencia}: Aporta funcionalidad para manejar recursos, crear escenas y objetos desde el editor y permite la creación de ejecutables
-    finales del juego para su distribución. Con esta característica se busca la mínima dependencia de herramientas externas. 
+    finales del juego para su distribución. Con esta característica se busca la mínima dependencia posible de herramientas externas. 
 
     \item \textit{Programación visual}: Esta es la parte a destacar de nuestro motor. Debido a la complejidad que presentan algunos motores de la actualidad 
     para desarrolladores principiantes o inexpertos, la programación visual es una herramienta muy útil e intuitiva para crear lógica y comportamiento en el 
     videojuego.
+
+    \item \textit{Ejecución del juego desde el editor}: Esto proporciona la posibilidad de lanzar el juego desde el editor sin tener que hacer una versión 
+    ejecutable o buscar el archivo ejecutable a mano. Además, se podrá imprimir información por consola visible desde el editor ya sea para depurar o consultar
+    errores.
 \end{itemize}
 
 %-------------------------------------------------------------------
@@ -97,7 +96,7 @@ Enlace al repositorio: \url{https://github.com/ivasan07/ShyEngine}
 
 \medskip
 
-El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visual Studio 2022 y escrito en C++, y la generación del PDF ha sido llevada a cabo con Latex.
+El código ha sido desarrollado en el entorno de desarrollo integrado (IDE) Visual Studio 2022 y escrito en C++, y la generación del PDF ha sido llevada a cabo con \LaTeX.
 
 \medskip
 

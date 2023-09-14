@@ -13,7 +13,7 @@ más utilizados hoy en día y sus características, qué es un editor y porque se us
 existen para generar comportamiento en los videojuegos.
 \end{resumen}
 
-\section{¿Qué es un videojuego?}
+\section{Qué es un videojuego}
 
 Un videojuego es un juego electrónico en el que uno o más jugadores interactúan mediante un controlador con un dispositivo electrónico que muestra
 imágenes de video. Este dispositivo, comúnmente conocido como ``plataforma'', puede ser una computadora, una máquina de arcade, una consola de 
@@ -33,18 +33,18 @@ múltiples jugadores a través de una red LAN o en línea vía Internet. El género d
 para describir su estilo, mecánicas de juego, temas y elementos característicos. Algunos de los géneros más representativos son los videojuegos de acción,
 rol, estrategia, simulación, deportes o aventura.
 
-\subsection{¿Cómo se hace un juego?}
+\subsection{Cómo se hace un videojuego}
 
 La creación de videojuegos es una actividad llevada a cabo por las empresas desarrolladoras de videojuegos. Estas se encargan de diseñar y programar el videojuego,
 desde el concepto inicial hasta el videojuego en su versión final. Esta es una actividad multidisciplinaria, que involucra profesionales de la informática,
 el diseño, el sonido, la actuación, etc. El proceso es similar a la creación de software en general, aunque difiere en la gran cantidad de aportes creativos
-necesarios. El desarrollo también varía en función de la plataforma objetivo, el género y la forma de visualización (2d, 2.5d y 3d).
+necesarios. El desarrollo también varía en función de la plataforma objetivo, el género y la forma de visualización (2D, 2.5D y 3D).
 
 \medskip
 
-El desarrollo ha pasado por muchas fases hasta el estado en el que se encuentra en la actualidad. En las primeras décadas a partir del nacimiento de los videojuegos,
-los desarrolladores tenían que diseñar hardware específico para ejecutar los juegos. A partir de la década de 2000 en adelante, la mayoría de los juegos se desarrollan
-digitalmente, lo que significa que el código y los recursos se crean en computadoras en lugar de hardware dedicado. 
+El modo de desarrollo ha pasado por muchas fases hasta el estado en el que se encuentra en la actualidad. En las primeras décadas a partir del nacimiento de los videojuegos,
+los desarrolladores tenían que diseñar hardware específico para ejecutar los juegos. A partir de finales de la década de 1970 en adelante, la mayoría de los juegos se desarrollan
+de manera programada, lo que significa que el código y los recursos se crean en computadoras en lugar de hardware dedicado. 
 
 \medskip
 
@@ -54,39 +54,40 @@ quiera cargar en el juego.
 \medskip
 
 Sin entrar mucho en detalle, las etapas que sigue un desarrollo profesional son las siguientes: concepto, diseño, planificación, preproducción, producción, pruebas,
-distribución y mantenimiento. Además se suelen utilizar metodologías ágiles de producción para controlar y mejorar el desarrollo. \cite{MetodosAgiles}
+distribución y mantenimiento. Para ello, se suelen utilizar metodologías ágiles de producción para controlar y mejorar el desarrollo. \cite{MetodosAgiles}
 
 
-\subsection{¿Qué es un juego dirigido por datos?}
+\subsection{Juego dirigido por datos}
 
 El concepto de juego dirigido por datos se refiere a la reutilización de la parte de programación
-de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y el Half-Life, desarrollados por id Software y Valve Corporation, respectivamente.
-
-\begin{figure}[h]
-    \centering
-    %
-    \subfloat[][Quake II (1997)]{
-    \includegraphics[width=3cm]{Imagenes/Vectorial/quake2}
-    \label{fig:etiqueta1}
-    }
-    \qquad
-    \subfloat[][Half-Life (1998)]{
-    \includegraphics[width=3cm]{Imagenes/Vectorial/halflife}
-    \label{fig:etiqueta2}
-    }
-    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos.}
-    \label{fig:dirigidosdatos}
-\end{figure}  
+de un videojuego para hacer otros nuevos a partir de nuevos recursos, también entendidos como datos. Como ejemplos de juegos clásicos dirigidos por datos serían el Quake II y 
+el Half-Life, desarrollados por id Software y Valve Corporation, respectivamente.
 
 \medskip
 
-En todos ellos, se creaban nuevos datos/recursos para desarrollarlos.
+En otras palabras, el motor carga los recursos y cambiando los recursos cambia el juego.
 
-\section{¿Qué es un motor de videojuegos?}
+\begin{figure}[t]   
+    \centering
+    %
+    \subfloat[][Quake II (1997)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/quake2}
+    }
+    \qquad
+    \subfloat[][Half-Life (1998)]{
+    \includegraphics[width=5cm]{Imagenes/Vectorial/halflife}
+    }
+    \caption{Ejemplos de juegos dirigidos por datos con juegos clásicos}
+    \label{fig:dirigidosdatos}
+\end{figure}  
 
-Un motor de videojuegos es un entorno de desarrollo que proporciona herramientas para la creación de videojuegos. Su función principal es dotar al videojuego de un motor para
-renderizar gráficos 2D y 3D, un motor físico que simule las leyes de la física y detección de colisiones, y herramientas para poder crear las animaciones, scripts, sonidos, 
-inteligencia artificial, redes, gestión de memoria, y demás sistemas del videojuego.
+En todos ellos, se creaban nuevos datos/recursos para desarrollarlos. En la figura \ref{fig:dirigidosdatos} se muestran algunos ejemplos.
+
+\section{Qué es un motor de videojuegos}
+
+Un motor de videojuegos es un entorno de desarrollo que proporciona herramientas para la creación de videojuegos. Su función principal es dotar al videojuego de una bibloteca para
+renderizar gráficos 2D y 3D, otra para física que simule las leyes de la física y detección de colisiones, y herramientas para poder crear las animaciones, scripts, sonidos, inteligencia
+artificial, redes, gestión de memoria, y demás sistemas del videojuego.
 
 \medskip
 
@@ -98,14 +99,15 @@ de mundos, armas, personajes, vehículos y reglas de juego con cambios mínimos en
 
 \medskip
 
-Hacia finales de la década de 1990, algunos juegos como Quake III Arena y Unreal fueron diseñados teniendo en cuenta la reutilización y la ``modificación'' de recursos. Los motores se hicieron
+Hacia finales de la década de 1990, algunos juegos como Quake II y Half-Life fueron diseñados teniendo en cuenta la reutilización y la ``modificación'' de recursos. Los motores se hicieron
 altamente personalizables mediante lenguajes de programación de scripts como el Quake C de id Software, y la licencia de motores comenzó a ser una corriente de ingresos secundaria
-viable para los desarrolladores que los crearon. 
+viable para los desarrolladores que los crearon.
 
 \subsection{División entre motor y gameplay}
 
 El gameplay se define como la experiencia general de jugar a un videojuego. Incluye las mecánicas, las reglas que gobiernan las interacciones entre los elementos en el juego, los
 objetivos del jugador, los criterios para ganar o perder, las habilidades del personaje, los NPC (Non-Playable-Characters), y el flujo general de la experiencia de juego en su conjunto.
+\cite{GameEngineArchitecture}
 
 \medskip
 
@@ -113,14 +115,14 @@ La línea entre un juego y su motor a menudo es borrosa. Algunos motores hacen un
 
 \medskip
 
-En la imagen \ref{fig:cap2:motor-gameplay} se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
-personajes, modelos, escenas, lógica y comportamiento. Y por otro lado tenemos el motor, encargado de cargar toda esa información. 
+En la figura \ref{fig:motor-gameplay} se representa lo que es un juego, la caja más grande, y de lo que está compuesto. Por un lado tenemos el gameplay/datos que son los recursos de imágenes, audio,
+personajes, modelos, escenas, lógica y comportamiento. Y por otro lado, separado por la línea roja, tenemos el motor, encargado de cargar toda esa información. 
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
-        \includegraphics[width=0.7\textwidth]{Imagenes/Vectorial/Motor-Gameplay}
+        \includegraphics[width=10cm]{Imagenes/Vectorial/Motor-Gameplay}
     \caption{División de juego en motor y gameplay.%
-        \label{fig:cap2:motor-gameplay}}
+        \label{fig:motor-gameplay}}
 \end{figure}
 
 \medskip
@@ -132,7 +134,7 @@ que hay que crear y proporcionar al motor. Como veremos más adelante, hay varias
 
 Otro aspecto interesante a comentar es la ``altitud'' a la que se encuentra la línea divisoria entre motor y gameplay. Si la línea está muy alta, entonces el motor nos aporta mucha funcionalidad
 y hay que crear poco comportamiento en el gameplay. Eso hace que el motor esté muy focalizado en un tipo de juegos concretos por lo que si el género o tipo del videojuego a desarrollar no es
-compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo. [\ref{fig:cap2:motorSobreGameplay}]
+compatible con el tipo de funcionalidad que aporta el motor se va a terminar excluyendo.
 
 \medskip
 
@@ -148,20 +150,13 @@ de Frostbite desarrollado por Electronic Arts para juegos de acción y disparos (
 
 En el libro Game Engine Architecture \cite{GameEngineArchitecture} se cita lo siguiente: ``Se podría argumentar que una arquitectura orientada a datos es lo que diferencia a un motor de juego
 de un software que es un juego, pero no un motor. Cuando un juego contiene lógica o reglas de juego codificadas a mano, o utiliza código de casos especiales para representar tipos específicos
-de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término `motor de juego' para el software que es
+de objetos de juego, se vuelve difícil o imposible reutilizar ese software para crear un juego diferente. Probablemente deberíamos reservar el término motor de juego para el software que es
 extensible y puede utilizarse como base para muchos juegos diferentes sin modificaciones importantes.''
 
-\begin{figure}[h]
-    \centering
-        \includegraphics[scale=0.3]{Imagenes/Vectorial/MotorSobreGameplay}
-    \caption{Motor aporta funcionalidad al gameplay.%
-        \label{fig:cap2:motorSobreGameplay}}
-\end{figure}
-
-\subsection{¿De que está compuesto un motor de videojuegos?}
+\subsection{Partes de un motor de videojuegos}
 
 Como se ha mencionado anteriormente, un motor proporciona la tecnología necesaria para desarrollar un videojuego. Esta tecnología, en realidad, es un conjunto de varías tecnologías con diferentes
-propósitos, todo necesarios para el videojuego. Para un motor de carácter general, es decir, sin implementación extra para un tipo de videojuegos concreto, estas tecnologías son las siguientes: 
+propósitos, todos necesarios para el videojuego. Para un motor de carácter general, es decir, sin implementación extra para un tipo de videojuegos concreto, estas tecnologías son las siguientes: 
 
 \begin{itemize}
     \item \textit{Motor de renderizado}: Este componente se encarga de generar los gráficos y la representación visual del juego en la pantalla. Utiliza técnicas de renderizado, como rasterización
@@ -193,18 +188,20 @@ propósitos, todo necesarios para el videojuego. Para un motor de carácter genera
 \end{figure}
 
 
-\section{¿Qué es una arquitectura en el contexto del desarrollo de videojuegos?}
+\section{Arquitectura de videojuegos}
 
-Hasta ahora se hemos hablado sobre la idea de motor de videojuegos y lo que los separa del gameplay. Pero a la hora de desarrollar un videojuego existen varios patrones o arquitecturas
-que se pueden seguir para construir sus bases. Estas arquitecturas definen el comportamiento del gameplay y sirven de conexión con el motor. 
-
-\medskip
-
-Un arquitectura define como se representan los diferentes tipos de entidades en el mundo junto con sus atributos y comportamientos.
+Hasta ahora hemos hablado sobre la idea de motor de videojuegos y lo que los separa del gameplay. Pero a la hora de desarrollar un videojuego existen varios patrones o arquitecturas
+que se pueden seguir para construir sus bases. Estas arquitecturas definen el modo de implementar el gameplay y sirven de conexión con el motor. 
 
 \medskip
 
-Existen dos tipos de arquitecturas principales:
+Un concepto importante para entender el propósito de las arquitecturas son las entidades. Las entidades representan objetos individuales en el juego. Esto podrí­a ser cualquier cosa, 
+desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra. A día de hoy los videojuegos son un conjunto de entidades que interactuán entre sí y la 
+arquitectura usada en el videojuego define como se implementan dichas entidades. 
+
+\medskip
+
+Existen dos tipos de arquitecturas principales \cite{GameEngineArchitecture}:
 
 \begin{itemize}
     \item \textit{Centrada en objetos}: Cada objeto tiene un conjunto de atributos y comportamientos que están encapsulados dentro de la clase (o clases) de la cual el objeto es una 
@@ -214,18 +211,27 @@ Existen dos tipos de arquitecturas principales:
     define de forma implícita por la colección de propiedades de las que está compuesto.
 \end{itemize}
 
-Aquí una imagen que muestra la diferencia:
-
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
-        \includegraphics[scale=0.15]{Imagenes/Vectorial/ObjetosvsPropiedades}
+        \includegraphics[scale=0.3]{Imagenes/Vectorial/ObjetosvsPropiedades}
     \caption{Diferencia entre arquitectura centrada en objetos vs propiedades.%
-        \label{fig:cap2:objetosvspropiedades}}
+        \label{fig:objetosvspropiedades}}
 \end{figure}
 
+En la figura \ref{fig:objetosvspropiedades} se muestra la diferencia.
 
+\subsection{Arquitectura basada en herencia}
 
-\subsection{¿En qué consiste la arquitectura basada en Entidades y Componentes (EC)?}
+La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Por ejemplo, si está creando un juego de rol (RPG), se podría tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar atributos y métodos según sea necesario.
+
+\medskip
+
+La arquitectura basada en herencia presenta ciertas ventajas, especialmente en proyectos pequeños o simples. Una de las ventajas clave es su simplicidad conceptual, ya que la herencia permite establecer relaciones claras entre clases a través de una jerarquía.
+
+\medskip
+Sin embargo, esta arquitectura también tiene sus desventajas. Uno de los problemas más significativos es su rigidez. La herencia puede hacer que un sistema sea menos adaptable a cambios o que la creación de nuevas clases sea más complicada, ya que cualquier modificación en la clase base puede afectar a todas las clases derivadas. En proyectos grandes, las jerarquías de clases pueden volverse extremadamente complejas y difíciles de mantener, lo que puede aumentar la complejidad y el tiempo de desarrollo. Además, compartir funcionalidad entre clases no relacionadas en la jerarquía puede ser complicado, lo que dificulta la reutilización de código.
+
+\subsection{Arquitectura basada en entidades y componentes}
 \label{ecsystem}
 
 La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental en el desarrollo de videojuegos debido a su flexibilidad y eficiencia en el manejo de la complejidad. Esta basado en la idea de arquitectura centrada en propiedades.
@@ -235,7 +241,7 @@ La arquitectura basada en entidades y componentes (EC) es un enfoque fundamental
 En el corazón de la arquitectura EC se encuentran dos conceptos clave:
 
 \begin{itemize}
-  \item \textit{Entidades}: Una entidad representa un objeto individual en el juego. Esto podrí­a ser cualquier cosa, desde un personaje, un enemigo, un proyectil, hasta un objeto inanimado como una piedra, pero realmente son contenedores vací­os que no contienen lógica ni información por sí­ mismos y lo que les define son sus componentes.
+  \item \textit{Entidades}: Son contenedores vací­os que no contienen lógica ni información por sí­ mismos y lo que les define son sus componentes.
 
   \item \textit{Componentes}: Los componentes son módulos independientes que contienen datos y lógica. Cada entidad en un juego está compuesta por uno o más componentes que definen sus atributos y comportamiento. Por ejemplo, una entidad de jugador podrí­a tener componentes como ``Posición'' para representar su ubicación en el mundo, ``Imagen'' para la apariencia visual o ``Movimiento'' para el movimiento del personaje, entre otros.
 
@@ -243,22 +249,12 @@ En el corazón de la arquitectura EC se encuentran dos conceptos clave:
 
 La principal ventaja de esta separación entre entidades y componentes es que permite una gran flexibilidad y reutilización de código. Las entidades pueden ser construidas y modificadas dinámicamente combinando diferentes componentes. Esto facilita la creación de nuevos tipos de objetos en el juego sin necesidad de escribir código especí­fico para cada uno.
 
-\subsection{¿Qué es una arquitectura basada en herencia?}
-
-La arquitectura basada en herencia ha sido un enfoque tradicional en el desarrollo de videojuegos y todaví­a se utiliza en algunos motores y sistemas. Este enfoque se centra en la creación de jerarquí­as de clases en las que cada clase representa un tipo de objeto en el juego. Por ejemplo, si está creando un juego de rol (RPG), se podría tener una jerarquí­a de clases que comienza con una clase base ``Personaje'' y se divide en clases derivadas como ``Jugador'' y ``Enemigo''. Cada clase puede agregar o modificar atributos y métodos según sea necesario.
-
-\medskip
-
-La arquitectura basada en herencia presenta ciertas ventajas, especialmente en proyectos más pequeños o simples. Una de las ventajas clave es su simplicidad conceptual, ya que la herencia permite establecer relaciones claras entre clases a través de una jerarquía. Además, en situaciones donde se requiere un alto rendimiento, la herencia puede ser más eficiente, ya que las clases son estáticas y el compilador puede realizar optimizaciones específicas.
-
-\medskip
-Sin embargo, esta arquitectura también tiene sus desventajas. Uno de los problemas más significativos es su rigidez. La herencia puede hacer que un sistema sea menos adaptable a cambios o que la creación de nuevas clases sea más complicada, ya que cualquier modificación en la clase base puede afectar a todas las clases derivadas. En proyectos grandes, las jerarquías de clases pueden volverse extremadamente complejas y difíciles de mantener, lo que puede aumentar la complejidad y el tiempo de desarrollo. Además, compartir funcionalidad entre clases no relacionadas en la jerarquía puede ser complicado, lo que dificulta la reutilización de código.
-
 \section{¿Qué es un editor?}
 \label{cap3:sec:motores}
 
-Un editor de videojuegos es una herramienta de software diseñada para facilitar la creación, diseño y modificación de videojuegos. A lo largo de la historia de los videojuegos, los editores han evolucionado significativamente en términos de funcionalidad y facilidad de uso. \cite{lengyel2010game}
-\subsection{Evolución histórica de los Editores}
+Un editor de videojuegos es una herramienta de software diseñada para facilitar la creación, diseño y modificación de videojuegos. A lo largo de la historia de los videojuegos, los editores han evolucionado significativamente en términos de funcionalidad y usabilidad. \cite{lengyel2010game}
+
+\subsection{Evolución histórica de los editores}
 
 En sus inicios, los editores de videojuegos eran herramientas rudimentarias que requerían un conocimiento técnico profundo y estaban reservados principalmente para desarrolladores de juegos experimentados. Estos primeros editores solían centrarse en la manipulación de código y la creación de niveles o mapas, con una interfaz de usuario limitada.
 
@@ -296,10 +292,10 @@ Sin embargo, con la integración de editores y motores en la actualidad, este pro
 
 Esta integración ha mejorado significativamente la eficiencia y la productividad en el desarrollo de videojuegos, permitiendo a los equipos de desarrollo centrarse más en la creatividad y la iteración rápida. La simplicidad de este enfoque también ha abierto las puertas a diseñadores y creadores de contenido que pueden contribuir al desarrollo de juegos sin necesidad de conocimientos profundos en programación o procesos de compilación.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.8\textwidth]{Imagenes/Vectorial/Worldcraft}
-    \caption{Editor de WorldCraft.}
+    \includegraphics[width=8cm]{Imagenes/Vectorial/Worldcraft}
+    \caption{Editor de WorldCraft}
     \label{fig:Worldcraft}
 \end{figure}
 \medskip 

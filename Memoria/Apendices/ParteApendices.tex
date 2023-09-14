@@ -44,40 +44,36 @@
 \chapter{Abstract}
 \cabeceraEspecial{Abstract}
 
-Video game development is a field that has undergone a significant evolution over the years. Initially, video games were simple programs with basic 
-simple programs with basic behavior and very reduced graphics, but over time, and due in part to the evolution of technology, they have increased considerably in complexity and scope. 
-considerably in complexity and scope. 
+The development of video games is a field that has undergone significant evolution over the years. Initially, video games were simple programs with basic behavior and very limited
+graphics. However, over time, and partly due to the evolution of technology, they have increased considerably in complexity and scope.
 
 \medskip
 
-An execution engine is a software that provides the necessary technology to develop the gameplay of a video game. It is a set of libraries 
-(graphics, audio, physics...) grouped in a coherent way that abstracts the technology to the developer so that he can focus on the development of the video game.
+A game engine is software that provides the necessary technology to develop the gameplay of a video game. It's a coherent set of libraries (graphics, audio, physics, etc.) that 
+abstracts technology for the developer, allowing them to focus on the game's development.
 
 \medskip
 
-Nowadays, video game development is a complex task. On the one hand, it can be carried out from scratch, i.e., programming the technology that will be required by the video game and then 
-the videogame will require and then developing it and, on the other hand, using an execution engine that provides that independent technology to the specific needs of the videogame to be developed.
-specific needs of the video game to be developed.
+Nowadays, game development is a complex task. On one hand, it can be done from scratch, meaning programming the technology the game will require and then developing it. On the other
+hand, you can use a game engine that provides that technology independently of the specific needs of the game to be developed.
 
 \medskip
 
 In some cases, in order to help the development, game editors are incorporated. The editors simplify development by linking the creation of game elements, behavior definition, behavioral
-game elements, behavior definition, debugging and generation of executable versions, among other things, in a single visual tool. This 
-avoids having to communicate directly with the execution engine through programming. 
+game elements, behavior definition, debugging and generation of executable versions, among other things, in a single visual tool. This avoids having to communicate directly with the videogame
+engine through programming. 
 
 \medskip
 
-This is a great advantage to experienced developers, but engines like Unity or Unreal Engine can be too complex for non-programmers, even if your programming experience
-programming experience, even if they are aiming for simple 2D games. In addition, they are huge systems that pretend to be used to make any game and have a lot of varied 
-any game have a lot of varied functionality and create executable versions with a lot of unnecessary data. If you want to make small and simple games 
-and simple games, the toll you pay is very high.
+This presents a significant advantage for experienced developers, but engines like Unity or Unreal Engine can be overly complex for individuals with no programming experience, even if their
+goal is to create simple 2D games. Additionally, these are extensive systems designed to handle a wide range of game types, resulting in a lot of varied functionality and creating executable
+versions with a large amount of unnecessary data. If you want to create small and simple games, the overhead can be quite substantial.
 
 \medskip
 
-This is where our work comes in. The idea is to make an engine with its editor to make small games in which the development experience is
-equivalent to that of the editors of larger engines, but that is focused on developing smaller 2D games and is much less of a burden
-in execution and in generating executable versions. This will open the doors to our engine to developers with little programming experience or even profiles with no development experience at all.
-or even profiles with no experience in videogame development at all.
+This is where our work comes into play. The idea is to create an engine with its editor for developing small games, where the development experience is equivalent to that of larger engine
+editors. However, it will be focused on smaller 2D game development and will have a much lighter load in terms of execution and generating executable versions. This will open the doors to
+our engine for developers with little programming experience or even those with no experience at all in game development.
 
 \bigskip
 
@@ -94,85 +90,75 @@ Keywords: Video game editor, Video game development environment, Video game engi
 \section{Motivation}
 \label{cap2:sec:motivation}
 
-The development of video games has been a technical and organizational challenge since its inception. Especially at the technical level, it requires the expertise of computer
-computer engineers capable of developing the necessary technology that a video game may require. Development companies have a choice
-between developing the technologies needed to develop a video game or obtaining those technologies already developed and starting directly with the development.
-development.
+The development of video games has been a technical and organizational challenge since its inception. Especially at the technical level, it requires the expertise of computer 
+computer engineers capable of developing the necessary technology that a video game may require. Development companies have a choice between developing the technologies needed
+to develop a video game or obtaining those technologies already developed and starting directly with the development.
 
 \medskip
 
-In the first case, the disadvantage lies in developing these technologies in a way that is dependent on the videogame for which it is being developed, i.e., according to the specific characteristics of the videogame,
-in such a way that it cannot be reused for the development of another type of videogame.
+In the first case, the disadvantage lies in developing these technologies in a way that is dependent on the videogame for which it is being developed, i.e., according to the 
+specific characteristics of the videogame, in such a way that it cannot be reused for the development of another type of videogame.
 
 \medskip
 
-In the second case, the disadvantage lies in the way of obtaining such technologies, licenses or costs. When developing these technologies, teams must draw the line
-teams must draw the line between the technologies to develop a videogame and the development of the videogame itself. This separation
-is necessary to ensure the reusability of the technologies.   
+In the second case, the disadvantage lies in the way of obtaining such technologies, licenses or costs. When developing these technologies, teams must draw the line teams must 
+draw the line between the technologies to develop a videogame and the development of the videogame itself. This separation is necessary to ensure the reusability of the technologies.   
 
 \medskip
 
-These technologies are known as execution engines. In general, they usually consist of several libraries dedicated to a specific purpose, such as graphics, audio, audio, video, video, etc. 
-such as graphics, audio, physics, input, etc.
+These technologies are known as videogame engines. In general, they usually consist of several libraries dedicated to a specific purpose such as graphics, audio, physics, input, etc.
 
 \medskip
 
-In some cases, in addition to the runtime engine, engine developers include editors. Editors are tools that simplify
-development by communicating the developer's actions to the engine. Some of their key functions include the definition of behaviors, the creation of assets and in-game elements, the 
-creation of assets and elements in the game, debugging and generation of executable versions for different platforms.
+In some cases, in addition to the videogame engine, engine developers include editors. Editors are tools that simplify development by communicating the developer's actions to the engine.
+Some of their key functions include the definition of behaviors, the creation of assets and in-game elements, the creation of assets and elements in the game, debugging and generation
+of executable versions for different platforms.
 
 \medskip
 
-There are different engines on the market with different licenses and features. The most convenient for development are those with an editor, but an editor is very costly to develop.
-editor is very expensive to develop, so the engines that provide it are those that have a very large critical mass of use, so that it is worth the development effort.
-worth the development effort of the editor. This only happens in generalist engines that allow to realize games of many types and with very good quality.
-quality. The price to pay for using these engines is their complexity, both in the use of the editor and in the runtime engine. This is not a problem
+There are different engines on the market with different licenses and features. The most convenient for development are those with an editor, but an editor is very costly to develop, so 
+the engines that provide it are those that have a very large critical mass of use, so that it is worth the development effort. This only happens in generalist engines that allow to realize 
+games of many types and with very good quality. The price to pay for using these engines is their complexity, both in the use of the editor and in the runtime engine. This is not a problem
 if the developed game makes use of all the state-of-the-art features, but it is a problem if you want to make a modest game where the gameplay is put to the test and not so much the technology. 
-gameplay and not so much the technology.
 
 \medskip
 
-The alternative to make smaller games is to make use of simpler engines, but usually they don't come with an editor and that lengthens the development process.
-This is where our end of degree work comes in. We are going to make an engine with its editor to make small games in which the development experience is equivalent to the experience
-development experience is equivalent to that experienced with larger engine editors, but that is focused on the development of much smaller 2D games for 
-profiles with little experience in programming or game development in general. This simplifies the use of the editor and also the size of the executable versions made.
-executable versions.
+The alternative to make smaller games is to make use of simpler engines, but usually they don't come with an editor and that lengthens the development process. This is where our end of degree
+work comes in. We are going to make an engine with its editor to make small games, aiming to provide a development experience equivalent to that of larger game engine editors. However, our focus
+will be on creating much smaller 2D games, catering to individuals with limited experience in programming or game development in general. This simplifies the use of the editor and also reduces the
+size of the executable versions produced.
 
 \medskip
 
 The features of the engine we want to make are:
 
 \begin{itemize}
-    \item \textit{Execute the game from the editor}: This means the possibility of launching the game from the editor without having to make an executable version or to look for the executable file. 
-    executable version or to look for the executable file by hand. In addition, it will be possible to print information by console visible from the editor either for debugging or to 
-    to check for errors.
+    \item \textit{Self-sufficiency}: It provides functionality to manage resources, create scenes and objects from the editor and allows the creation of final executables of the game for its
+    distribution. With this feature, the minimum dependence on external tools is sought. 
 
-    \textit{Self-sufficiency}: It provides functionality to manage resources, create scenes and objects from the editor and allows the creation of final executables of the game for its distribution.
-    final executables of the game for its distribution. With this feature, the minimum dependence on external tools is sought. 
+    \item \textit{Visual programming}: This is the most important part of our engine. Due to the complexity that some engines today pose for beginner or inexperienced developers, visual programming
+    is a very useful and intuitive tool for creating logic and behavior in the video game.
 
-    \item \textit{Visual programming}: This is the most important part of our engine. Due to the complexity of some of today's engines for beginners or inexperienced developers. 
-    for beginners or inexperienced developers, visual programming is a very useful and intuitive tool to create logic and behavior in the video game. 
-    game.
+    \item \textit{Execute the game from the editor}: This provides the possibility to launch the game from the editor without having to create an executable version or manually search for the 
+    executable file. Additionally, you will be able to print information to the console that is visible from the editor, either for debugging or error checking purposes.
 \end{itemize}
 
 %-------------------------------------------------------------------
 \section{Goals}
 \label{cap2:sec:goals}
 
-The main objective is to develop a self-sufficient 2D videogame engine with integrated editor and node-based visual programming.
-In addition, it will be possible to populate and view the progress of the game being developed directly from the editor and generate executable versions. 
+The main objective is to develop a self-sufficient 2D videogame engine with integrated editor and node-based visual programming. In addition, it will be possible to populate and view the 
+progress of the game being developed directly from the editor and generate executable versions. 
 
 \medskip
 
 With this, users will have a tool to develop any type of 2D videogame with an accessible level of complexity and a pleasant and intuitive user experience. 
-a pleasant and intuitive user experience.
 
 \section{Tools}
 \label{cap2:sec:tools}
 
 %-------------------------------------------------------------------
-To begin with, Git has been used as a version control system through the GitHub Desktop application. All the code
-implemented has been uploaded to a repository.
+To begin with, Git has been used as a version control system through the GitHub Desktop application. All the code implemented has been uploaded to a repository.
 
 \medskip
 
@@ -180,7 +166,7 @@ Link to the repository: \url{https://github.com/ivasan07/ShyEngine}
 
 \medskip
 
-The code has been developed in the Visual Studio 2022 integrated development environment (IDE) and written in C++, and the PDF generation has been carried out with Latex.
+The code has been developed in the Visual Studio 2022 integrated development environment (IDE) and written in C++, and the PDF generation has been carried out with \LaTeX.
 
 \medskip
 
@@ -198,28 +184,25 @@ The work will be divided into five phases: research and planning, initial develo
 
 \begin{itemize}
     \item \textit{Research and planning}: 
-    The first phase of the work will consist of researching different game engines and publishers to understand how they work and their different
-    architectures. We will also look for libraries that fit the demands of our project to achieve a comfortable and efficient development.
-    Finally we will plan the division of work as well as the future continuous integration of each of the parts.
+    The first phase of the work will consist of researching different game engines and publishers to understand how they work and their different architectures. We will also look for
+    libraries that fit the demands of our project to achieve a comfortable and efficient development. Finally we will plan the division of work as well as the future continuous integration
+    of each of the parts.
 
-    \item \textit{Initial development}: For this phase, we will develop the core of each project. As for the engine, the first tests of the libraries that will be used in the project will be carried out.
-    the first tests of the libraries to be used and the basic game architecture will be implemented. Regarding the editor, we will create the project
-    in which the selected graphical interface library will be integrated to test its operation. As for the visual scripting, we will start prototyping the language.
-    the language. In addition, a continuous integration process will be carried out as this phase progresses in order to avoid possible incompatibilities in the next phase.
-    phase. This will involve the definition of an interchange file format that will be the interface between the editor and the engine. The type of information, its basic
-    information, its basic structure and how the assets will be referenced.
+    \item \textit{Initial development}: For this phase, we will be developing the core of each project. Regarding the engine, initial testing of the libraries to be used will be conducted,
+    and the basic game architecture will be implemented. As for the editor, a project will be created in which the selected graphical interface library will be integrated to test its 
+    functionality. Regarding visual scripting, the language will begin to be prototyped. Additionally, a continuous integration process will be carried out as this phase progresses to
+    prevent potential incompatibilities in the next phase. This will involve defining a file exchange format that will serve as the bridge between the editor and the engine. The type of
+    information, its basic structure, and how assets will be referenced.
 
-    \item \textit{Development core}: During this phase, being the longest one, we will add new functionalities in each of the parts, such as new
-    components in case of the editor, system of windows and docking for the editor, etc. We will extend the information exchange between engine and editor so that we will continue to integrate and
-    we will continue to integrate and create the visual scripting system in the editor to generate the first scripts and the logic to store and interpret them in the engine.
-    in the engine.
+    \item \textit{Development core}: During this phase, being the longest one, we will add new functionalities in each of the parts, such as new components in case of the editor, system
+    of windows and docking for the editor, etc. We will extend the information exchange between engine and editor so that we will continue to integrate and we will continue to integrate 
+    and create the visual scripting system in the editor to generate the first scripts and the logic to store and interpret them in the engine.
 
-    \item \textit{Closing of the development}: With the projects finished and fully integrated, we will continue the development of the functionalities related to the improvement of the user experience.
-    related to improving the user experience, especially in the editor, to make it as polished as possible before user testing. This will involve the
-    testing/development of some gameplay to detect possible bugs and correct them.
+    \item \textit{Closing of the development}: With the projects completed and fully integrated, we will continue to develop features related to improving the user experience, especially
+    in the editor, to make it as polished as possible before user testing. This will involve testing/developing a game to identify possible errors and correct them.
 
-    \item \textit{Testing with users}: Tests will be carried out with users from different contexts: users with programming experience and users with no experience.
-    inexperienced users. In this way, we will take advantage of their feedback to fix possible bugs and polish details to improve the user experience.
+    \item \textit{Testing with users}: User testing will be conducted with individuals from different backgrounds: users with programming experience and users without experience. This way,
+    we will leverage their feedback to address potential issues and refine details that enhance the user experience.
 \end{itemize}
 
 
@@ -231,30 +214,42 @@ The work will be divided into five phases: research and planning, initial develo
 \chapter{Conclusions}
 \cabeceraEspecial{Conclusions}
 
-In the development of our video game engine, despite being a simpler project compared to the leading engines in the industry and having a team of only three members, we have managed to create a tool with a fairly successful finish and functionality comparable to that of other renowned engines in the industry. In addition, we have succeeded in our goal of bringing game programming to people with no previous experience in the field, which expands the possibilities of game development to a wider audience.
+In the development of our game engine, despite being a relatively simpler project compared to industry-leading engines and having a team of just three members, we have managed to create 
+a tool with a fairly accurate finish and functionality comparable to that of other renowned engines in the industry. Furthermore, we have successfully achieved our goal of making game
+development more accessible to individuals with no prior experience in the field, thus expanding the possibilities for game development to a wider audience.
 
 \medskip
 
-However, our engine has certain limitations, such as the inability to move ImGUI windows outside of the main SDL window, which can create discomfort in certain situations, such as when implementing scripts. In addition, we had to implement reflection in C++, which, in retrospect, could have been simplified by choosing a higher level language. A higher level language would also have reduced the need to manage memory manually in the editor project and would have made the development of the editor more convenient.
+However, our engine does have certain limitations, such as the inability to move ImGUI windows outside of the main SDL window, which can be inconvenient in certain situations, especially
+when implementing scripts. Additionally, we had to implement reflection in C++, which in hindsight could have been simplified by choosing a language with built-in reflection capabilities.
+A higher-level language would have also reduced the need to manually manage memory in the editor project, making its development more comfortable.
 
 \medskip
 
 Looking ahead, we have several areas of improvement and potential development for our engine:
 
 \begin{itemize}
-    \item \textit{File path abstraction}: We can work on file and directory path abstraction, turning files into engine objects. This would simplify resource management and increase user convenience.
+    \item \textit{File path abstraction}: We can work on abstracting file and directory paths by turning files into engine objects. This would simplify resource management and provide more
+    user convenience.
     
-    \item \textit{Add explanatory texts}: Include boxes with explanatory text in areas that may be confusing for users, thus improving the user experience and facilitating the understanding of the tool.
+    \item \textit{Add explanatory texts}: Including text-explanatory boxes in areas that might be confusing to users is a great idea. This would improve the user experience and make it easier
+    for users to understand the tool.
     
-    \item \textit{Contribution of documentation and tutorials}: as a complement to the addition of explanatory texts, a section with documentation and links to tutorials could also be developed to facilitate the learning curve in its initial part.
+    \item \textit{Contribution of documentation and tutorials}: As a complement to adding explanatory texts, developing a section with documentation and links to tutorials to facilitate the 
+    learning curve is also a valuable enhancement. This would provide users with a comprehensive resource to learn and understand the tool more effectively.
 
-    \item \textit{Improve Scripting}: Expanding the scripting capabilities would allow users to express their ideas more fully. This could include adding more complex functionality, such as managing editable arrays from the editor, creating classes, recursion, timers, coroutines, and debugging running nodes.
+    \item \textit{Improve scripting}: Expanding the scripting capabilities would allow users to express their ideas more fully. This could include adding more complex functionality, such as
+    managing editable arrays from the editor, creating classes, recursion, timers, coroutines, and debugging running nodes.
     
-    \item \textit{Custom data structures}: Provide users with the ability to create custom data structures and group elements within the scripting system, which would increase flexibility and design options.
+    \item \textit{Custom data structures}: Provide users with the ability to create custom data structures and group elements within the scripting system, which would increase flexibility 
+    and design options.
     
-    \item \textit{Execute in the editor}: Allow users to run their games directly in the editor itself rather than in a separate window, which would streamline the development and testing process.
+    \item \textit{Execute in the editor}: Allow users to run their games directly in the editor itself rather than in a separate window, which would streamline the development and testing
+    process.
     
-    \item{Enhanced usability of entities in the scene window}: Work on improving the usability of entities in the scene window so that users can interact and manage their elements more efficiently.
+    \item \textit{Enhanced usability of entities in the scene window}: Work on improving the usability of entities in the scene window so that users can interact and manage their elements more
+    efficiently.
 \end{itemize}
 
-In summary, while we have achieved a functional and accessible game engine, we recognize that there is always room for improvement and expansion. Our goals for the future include making the tool even more user-friendly and adding additional features that allow for more complete and versatile game development.
+In summary, while we have achieved a functional and accessible game engine, we acknowledge that there is always room for improvement and expansion. Our goals for the future include making the 
+tool even more user-friendly and adding additional features that enable more comprehensive and versatile game development.
