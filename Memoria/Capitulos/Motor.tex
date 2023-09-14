@@ -31,6 +31,8 @@ El motor, llamado ShyEngine, esta dividido en diez partes y cada una cumple una 
 A continuación se entrará en detalle sobre la función y detalles de implementación de cada proyecto y de las librerías asociadas al mismo, si las tiene.
 
 
+
+
 % ----------------------------------------------- UTILIDADES -------------------------------------------------
 
 \subsection{Utilidades}
@@ -133,7 +135,7 @@ Estos estados se dividen en:
     \item \textit{Up}: Una tecla esta soltada. 
     \item \textit{Pressed}: Una tecla acaba de ser pulsada. 
     \item \textit{Released}: Una tecla acaba de ser soltada. 
-\end{itemize} 
+\end{itemize}  
 
 Algo a tener en cuenta es que debido a la posibilidad de tener varios mandos conectados, el manager diferencia entre métodos
 con identificador y métodos sin identificador. Los métodos con identificador reciben el identificador del mando del que se quiere consultar el estado y los métodos sin identificador
@@ -156,7 +158,8 @@ y movimiento físico necesarios \cite{PhysicsForGameDevelopers}.
 
 \medskip
 
-La física esta representada en un ``mundo físico'' donde se pueden crear cuerpos afectados por la física. La simulación de este mundo tiene la peculiaridad de que se actualiza por intervalos de tiempo fijos, lo que se conoce como ``paso físico''. En estos ``pasos físicos'' se realizan cálculos de colisiones, se resuelven restricciones y se actualizan las posiciones y velocidades de los cuerpos. 
+La física esta representada en un ``mundo físico'' donde se pueden crear cuerpos afectados por la física. La simulación de este mundo tiene la peculiaridad de que se actualiza por intervalos de tiempo fijos, lo que se conoce como ``paso físico''. En estos ``pasos físicos'' se realizan cálculos de colisiones, se resuelven restricciones y se actualizan las posiciones y velocidades de los cuerpos. Además, para evitar que todos los cuerpos
+colisiones con todos, existen las capas de colisión. Cada cuerpo se encuentra en una capa y se puede configurar que capas colisionan con que otras.
 
 \medskip
 
@@ -209,9 +212,7 @@ Este es el proyecto implementa la arquitectura, componentes fundamentales para e
 La partes fundamentales de esta arquitectura son las siguientes: 
 
 \begin{itemize}
-    \item \textit{Component}: Clase que representa a un componente. Desde un componente se puede 
-    acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados
-    por los componentes que hereden de esta clase.
+    \item \textit{Component}: Clase que representa a un componente. Desde un componente se puede acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados por los componentes que hereden de esta clase.
 
     \item \textit{Entity}: clase que representa una entidad. Contiene una referencia a la escena en la que se encuentra, una lista de componentes y otra de scripts asociados a esta entidad. Tiene información 
     sobre el nombre de la entidad, su estado, un identificador y su orden de renderizado.
@@ -220,8 +221,7 @@ La partes fundamentales de esta arquitectura son las siguientes:
     el juego en estados como menús, gameplay, inventario, pantallas de carga, mapa, etc. Contiene información sobre su nombre y bastantes métodos comunes a las entidades y componentes.
 \end{itemize}
 
-Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Las entidades tienen métodos para añadir componentes, consultar si contienen un componente y 
-eliminarlos.
+Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Las entidades tienen métodos para añadir componentes, consultar si contienen un componente y eliminarlos.
 
 \subsubsection{Managers y componentes}
 \label{managersycomponentes}
@@ -249,7 +249,7 @@ En cuanto a los componentes:
 
     \item \textit{MusicEmitter}: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
 
-    \item \textit{ParticleSystem}: Componente encargado de implementar un sistema de partículas configurable. Tiene soporte para cargar texturas y mover las partículas con el motor de físicas Box2D.
+    \item \textit{ParticleSystem}: Componente encargado de implementar un sistema de partículas configurable. Tiene soporte para usar texturas para las partículas y moverlas con el motor de físicas Box2D.
 
     \item \textit{Animation}: Componente encargado de implementar la lógica de reproducción de animaciones.
 
@@ -339,7 +339,7 @@ Esto se explica mejor con el siguiente diagrama:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/UpdateVsFixed}
 \end{center}
 
-Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo.
+Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Ese intervalo de tiempo fijo es un valor que se puede modificar en el motor en base a las necesidades del videojuego.
 
 
 \section{Cómo se serializa la información del motor}
