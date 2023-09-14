@@ -6,13 +6,27 @@
 
 \chapter{Motor}
 
-\section{Cómo funciona y cómo está dividio}
+\section{Funcionamiento y partes del motor}
 
-El motor esta dividido en diez proyectos de tecnología y cada uno cumple una función específica.
+El motor esta dividido en diez partes fundamentales. A continuación se entrará en detalle sobre la función y detalles de implementación de cada una y de las librerías utilizadas.
 
-\medskip
+Como introducción, en la figura \ref{fig:arquitecturaMotor} se muestra una diagrama resumido sobre la arquitectura del motor.
 
-A continuación se entrará en detalle sobre la función y detalles de implementación de cada proyecto y de las librerías asociadas al mismo, si las tiene.
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=13cm]{Imagenes/Vectorial/ArquitecturaMotor}
+    \caption{Arquitectura del motor.
+        \label{fig:arquitecturaMotor}}
+\end{figure}
+
+
+
+% ----------------------------------------------- CONSOLA -------------------------------------------------
+
+\subsection{Consola}
+
+Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estándar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
+
 
 
 % ----------------------------------------------- UTILIDADES -------------------------------------------------
@@ -42,7 +56,6 @@ Unos ejemplos de estas clases serían:
 
 
 
-
 % ----------------------------------------------- RECURSOS -------------------------------------------------
 
 \subsection{Recursos}
@@ -54,6 +67,9 @@ recursos que se pueden guardar son fuentes de texto, imágenes, efectos de sonido
 
 Uno de los objetivos del manager de recursos es reutilizar los recursos creados para solo tener cargada una copia de cada recurso en
 memoria. Por ello, a la hora de añadir un nuevo recurso al manager, primero comprueba si ya lo contiene y en ese caso, lo devuelve; en caso contrario, lo crea.
+
+
+
 
 % ----------------------------------------------- SONIDO -------------------------------------------------
 
@@ -88,6 +104,7 @@ de efectos de sonidos.
 \end{itemize}
 
 
+
 % ----------------------------------------------- INPUT -------------------------------------------------
 
 \subsection{Input}
@@ -106,25 +123,22 @@ Estos estados se dividen en:
 
 \begin{itemize} 
     \item \textit{Down}: Una tecla esta siendo pulsada. 
-    \item \textit{Up}: Una tecla no esta siendo pulsada. 
+    \item \textit{Up}: Una tecla esta soltada. 
     \item \textit{Pressed}: Una tecla acaba de ser pulsada. 
     \item \textit{Released}: Una tecla acaba de ser soltada. 
 \end{itemize} 
 
 Algo a tener en cuenta es que debido a la posibilidad de tener varios mandos conectados, el manager diferencia entre métodos
 con identificador y métodos sin identificador. Los métodos con identificador reciben el identificador del mando del que se quiere consultar el estado y los métodos sin identificador
-devuelven la información del estado del último mando que registró input. De esa manera, si se quiere desarrollar un singleplayer, el usuario no tendrá que preocuparse por la posibilidad
+devuelven la información del estado del último mando que registró input. De esa manera, si se quiere desarrollar un juego monojugador, el usuario no tendrá que preocuparse por la posibilidad
 de múltiples mandos teniendo que indicar que identificador tiene su mando. 
 
 \medskip
 
 Además, el manager tiene soporte para conexiones y desconexiones durante la ejecución, e implementa métodos con lógica usada frecuentemente como lo es el movimiento horizontal para facilitar su implementación al usuario. 
 
-% ----------------------------------------------- CONSOLA -------------------------------------------------
 
-\subsection{Consola}
 
-Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estándar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
 
 % ----------------------------------------------- FISICAS -------------------------------------------------
 
@@ -147,6 +161,8 @@ Las clases que tiene este proyecto son las siguientes:
 
     \item \textit{DebugDraw}: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede dibujar polígonos, círculos, segmentos y puntos.
 \end{itemize}
+
+
 
 
 % ----------------------------------------------- RENDERER -------------------------------------------------
@@ -279,6 +295,8 @@ En cuanto a los managers:
 
     \item \textit{ReferencesManager\label{referencesManager}}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas al accediendo a la referencia de una entidad, por ejemplo en caso de que la referencia sea errónea o dicha entidad haya sido eliminada.
 \end{itemize}
+
+
 
 
 % ----------------------------------------------- PROYECTO PRINCIPAL -------------------------------------------------
