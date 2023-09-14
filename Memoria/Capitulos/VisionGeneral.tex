@@ -6,7 +6,7 @@
 
 \chapter{Visión general del trabajo}
 
-En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los motores con editor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades del desarrollo de juegos. Sin embargo, esta versatilidad puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
+En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los editores con motor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades del desarrollo de juegos, lo que puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
 
 \medskip
 
@@ -18,7 +18,7 @@ Una decisión crítica en nuestro proyecto fue mantener el motor y el editor separ
 
 \medskip
 
-En nuestro modelo, el elemento fundamental es la escena, que contiene un conjunto de entidades. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades a partir de su identificador o recursos como imágenes a partir de su ruta. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación legible de los objetos del juego.
+Nuestro modelo, es similar al de Unity [\ref{cap:unity}]. El elemento fundamental es la escena, que contiene un conjunto de entidades. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos, al igual que hace Unity. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades a partir de su identificador o recursos como imágenes a partir de su ruta. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación legible de los objetos del juego.
 
 \medskip
 
@@ -63,7 +63,7 @@ En la figura \ref{fig:visionGeneral} vemos un esquema general y simplificado del
 
 \begin{figure}[h]
    \centering
-   \includegraphics[width=0.8\textwidth]{Imagenes/Vectorial/VisionGeneral.png}
+   \includegraphics[width=1.2\textwidth]{Imagenes/Vectorial/VisionGeneral.png}
    \caption{Esquema general y simplificado del proyecto.}
    \label{fig:visionGeneral}
 \end{figure}
@@ -71,7 +71,7 @@ En la figura \ref{fig:visionGeneral} vemos un esquema general y simplificado del
 
 \medskip
 
-En los próximos apartados, analizaremos los diversos apartados de este esquema. En primer lugar, se abordará el motor, se expondrá su arquitectura, su funcionamiento y su capacidad para producir datos destinados al editor. En segundo lugar, se examinará el editor, se describirá su proceso de lectura de los datos provenientes del motor y su capacidad para generar las escenas que posteriormente serán procesadas por el motor, entre otros aspectos.
+En los próximos capítulos analizaremos los diversos elementos de este esquema. En primer lugar, se abordará el motor, se expondrá su arquitectura y su funcionamiento. En segundo lugar, se examinará el editor, se describirá su proceso de lectura de los componentes nativos del motor y su capacidad para generar las escenas que posteriormente serán procesadas por el motor, entre otros aspectos.
 %------------------------------------------------  --------------------------------------------
 
 

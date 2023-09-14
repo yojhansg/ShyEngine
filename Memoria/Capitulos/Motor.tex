@@ -6,12 +6,9 @@
 
 \chapter{Motor}
 
-\section{Cómo funciona y cómo está dividio}
+\section{Funcionamiento y división del motor}
 
-El motor esta dividido en diez proyectos de tecnología y cada uno cumple una función específica.
-
-\medskip
-
+El motor esta dividido en diez partes y cada una cumple una función específica.
 A continuación se entrará en detalle sobre la función y detalles de implementación de cada proyecto y de las librerías asociadas al mismo, si las tiene.
 
 
@@ -40,6 +37,11 @@ Unos ejemplos de estas clases serían:
     
 \end{itemize}
 
+% ----------------------------------------------- CONSOLA -------------------------------------------------
+
+\subsection{Consola}
+
+Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estándar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
 
 
 
@@ -59,11 +61,11 @@ memoria. Por ello, a la hora de añadir un nuevo recurso al manager, primero comp
 
 \subsection{Sonido}
 
-El objetivo de este proyecto es construir un envoltorio sobre la librería de audio \texttt{SDL\_Mixer} para poder implementar posteriormente los componentes de emisión de música y de sonidos.
+El objetivo de este proyecto es construir un envoltorio sobre la librería de audio SDL\_Mixer para poder implementar posteriormente los componentes de emisión de música y de sonidos.
 
 \medskip
 
-Para un mejor entendimiento de la implementación es necesario saber que \texttt{SDL\_Mixer} diferencia entre efectos de sonido o sonidos cortos en general (WAV, MP3)
+Para un mejor entendimiento de la implementación es necesario saber que SDL\_Mixer diferencia entre efectos de sonido o sonidos cortos en general (WAV, MP3)
 y música de fondo (WAV, MP3, OGG).
 
 \medskip
@@ -106,32 +108,25 @@ Estos estados se dividen en:
 
 \begin{itemize} 
     \item \textit{Down}: Una tecla esta siendo pulsada. 
-    \item \textit{Up}: Una tecla no esta siendo pulsada. 
     \item \textit{Pressed}: Una tecla acaba de ser pulsada. 
     \item \textit{Released}: Una tecla acaba de ser soltada. 
 \end{itemize} 
 
 Algo a tener en cuenta es que debido a la posibilidad de tener varios mandos conectados, el manager diferencia entre métodos
 con identificador y métodos sin identificador. Los métodos con identificador reciben el identificador del mando del que se quiere consultar el estado y los métodos sin identificador
-devuelven la información del estado del último mando que registró input. De esa manera, si se quiere desarrollar un singleplayer, el usuario no tendrá que preocuparse por la posibilidad
+devuelven la información del estado del último mando que registró input. De esa manera, si se quiere desarrollar un juego monojugador, el usuario no tendrá que preocuparse por la posibilidad
 de múltiples mandos teniendo que indicar que identificador tiene su mando. 
 
 \medskip
 
 Además, el manager tiene soporte para conexiones y desconexiones durante la ejecución, e implementa métodos con lógica usada frecuentemente como lo es el movimiento horizontal para facilitar su implementación al usuario. 
 
-% ----------------------------------------------- CONSOLA -------------------------------------------------
-
-\subsection{Consola}
-
-Este proyecto contiene una sola clase Output con métodos estáticos que implementan funcionalidad relacionada con el mostrado de la salida estándar por la consola. Tiene métodos para imprimir texto estándar, advertencias o errores. Estos textos se diferencian por su color y sirven principalmente como ayuda para el desarrollo de un videojuego.
-
 % ----------------------------------------------- FISICAS -------------------------------------------------
 
 \subsection{Físicas}
 
 Este proyecto tiene como objetivo implementar un envoltorio sobre la librería de físicas Box2D \cite{Box2DBook} para proporcionar una API sencilla para el usuario y para desarrollar los componentes de colisión
-y movimiento físico necesarios. \cite{PhysicsForGameDevelopers}
+y movimiento físico necesarios \cite{PhysicsForGameDevelopers}.
 
 \medskip
 
@@ -142,10 +137,9 @@ La física esta representada en un ``mundo físico'' donde se pueden crear cuerpos
 Las clases que tiene este proyecto son las siguientes:
 
 \begin{itemize}
-    \item \textit{PhysicsManager}: Clase, \texttt{Singleton}, que contiene la funcionalidad necesariara para manejar el filtrado de colisiones e información sobre gravedad del mundo físico. Cada objeto físico tiene información sobre en que capa se encuentra y con que capas colisiona. Para que se produzca una colisión,
-    los cuerpos deben cumplir una condición, y es que, la capa del cuerpo A debe de estar marcada para que colisione con la del cuerpo B y viceversa.
+    \item \texttt{PhysicsManager}: Clase, \texttt{Singleton}, que contiene la funcionalidad necesariara para manejar el filtrado de colisiones e información sobre gravedad del mundo físico. 
 
-    \item \textit{DebugDraw}: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede dibujar polígonos, círculos, segmentos y puntos.
+    \item \texttt{DebugDraw}: Clase que contiene la funcionalidad para dibujar los cuerpos físicos de Box2D. En concreto, puede dibujar polígonos, círculos, segmentos y puntos.
 \end{itemize}
 
 
@@ -153,7 +147,7 @@ Las clases que tiene este proyecto son las siguientes:
 
 \subsection{Renderer}
 
-Este proyecto es el que se encarga de mostrar las texturas y fuentes en pantalla, así como limpiar la pantalla o guardar información sobre ella. Hace uso de las librería de SDL, SDL\_Image y SDL\_TTF. \cite{SDLGameDevelopment}
+Este proyecto es el que se encarga de mostrar los sprites y fuentes en pantalla, así como limpiar la pantalla o guardar información sobre ella. Hace uso de las librería de SDL, SDL\_Image y SDL\_TTF \cite{SDLGameDevelopment}.
 
 \medskip
 
@@ -176,18 +170,18 @@ Las clases que se encargan de estas funciones son:
 
 \subsection{Arquitectura de gameplay}
 
-Como arquitectura de gameplay se ha implementado de tipo entidades y componentes (EC) que veíamos en \ref{ecsystem}.
+Como arquitectura de gameplay se ha implementado de tipo entidades y componentes (EC) descrito en \ref{ecsystem}.
 
 \medskip
 
-Este es el proyecto más importante del motor. Implementa la arquitectura, componentes fundamentales para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
+Este es el proyecto implementa la arquitectura, componentes fundamentales para el usuario y una serie de managers como el de escenas, prefabs, referencias y overlay.
 
 \medskip
 
 La partes fundamentales de esta arquitectura son las siguientes: 
 
 \begin{itemize}
-    \item \textit{Component}: Clase que representa a un componente. Contiene una referencia a la entidad a la que está asociado e información sobre si esta activo o eliminado. Desde un componente se puede 
+    \item \textit{Component}: Clase que representa a un componente. Desde un componente se puede 
     acceder a la entidad y escena que lo contiene y establecer su estado, es decir, activarlo o desactivarlo y eliminarlo. Además, contiene una serie de métodos virtuales preparados para ser implementados
     por los componentes que hereden de esta clase.
 
@@ -198,8 +192,7 @@ La partes fundamentales de esta arquitectura son las siguientes:
     el juego en estados como menús, gameplay, inventario, pantallas de carga, mapa, etc. Contiene información sobre su nombre y bastantes métodos comunes a las entidades y componentes.
 \end{itemize}
 
-Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Por ello, las entidades únicamente se encarga de mantener 
-actualizados a todos los componentes que tengan asociados. Además de los métodos para actualizar a los componentes, las entidades tiene métodos para añadir componentes, consultar si contienen un componente y 
+Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Las entidades tienen métodos para añadir componentes, consultar si contienen un componente y 
 eliminarlos.
 
 \subsubsection{Managers y componentes}
@@ -217,13 +210,13 @@ En cuanto a los componentes:
 
     \item \textit{Overlay}: Componente encargado de representar los elementos de la interfaz de usuario como textos, imágenes y botones.
 
-    \item \textit{Image}: Componente encargado de cargar una imagen y renderizarla en pantalla en la posición indicada por el transform de la entidad. Para cargar la imagen hace uso del manager de recursos para
+    \item \textit{Image}: Componente encargado de cargar una imagen y renderizarla en pantalla en la posición indicada por el Transform de la entidad. Para cargar la imagen hace uso del manager de recursos para
     reutilizar la imagen en caso de estar ya creada por otra entidad. 
 
-    \item \textit{PhysicBody}: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcionalidad de sincronizar posición, rotación y escala del \texttt{Transform} de la entidad al cuerpo físico.
+    \item \textit{PhysicBody}: Componente encargado de crear un cuerpo físico de Box2D. Implementa la funcionalidad de sincronizar posición, rotación y escala del Transform de la entidad al cuerpo físico.
     Contiene la información sobre bastantes propiedades físicas como el tipo de cuerpo (estático, cinemático, dinámico), el rozamiento o la escala de la gravedad.
 
-    \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó anteriomente, SDLMixer dispone de un conjunto de canales
+    \item \textit{SoundEmitter}: Componente encargado de cargar un sonido e implementar métodos para reproducirlo, detenerlo, pausarlo, etc. Como se comentó anteriomente, SDL\_Mixer dispone de un conjunto de canales
     para reproducir sonidos pero este componente es abstrae la necesidad de canales desde la perspectiva del usuario. 
 
     \item \textit{MusicEmitter}: Componente encargado de cargar música e implementar métodos para reproducirla, detenerla, pausarla, rebobinarla, etc.
@@ -236,12 +229,11 @@ En cuanto a los componentes:
 
     \item \textit{PlatformController}: Componente encargado de implmentar un movimiento de tipo plataformas.
 
-    Estos dos útlimos componentes no son fundamentales pero aportan comodidad porque evitan al usuario tener que implementarlos usando el sistema de scripting, lo que puede ser algo avanzado.
+    Estos dos útlimos componentes no son fundamentales ya que son de gameplay, pero aportan comodidad porque evitan al usuario tener que implementarlos usando el sistema de scripting.
 
     \medskip 
 
-    Mencionar también que es obligatorio que las entidades tengan al menos un componente, Transform u Overlay. Esto es así para poder distinguir entre entidades destinadas a la interfaz de usuario y el resto
-    de entidades de la escena.
+    Mencionar también que es obligatorio que las entidades tengan al menos un componente, Transform u Overlay. Esto es así para poder posicionarlas en pantalla, aunque cambie la manera de dibujarlas.
 
 \end{itemize}
 
@@ -274,10 +266,10 @@ En cuanto a los managers:
     \item \textit{PrefabsManager}: Encargado de cargar la información de los prefabs creados en el editor e implementar métodos para instanciar entidades a partir de la información de esos prefabs. Se 
     diferencia entre prefabs con \texttt{Transform} y prefabs con \texttt{Overlay}. 
 
-    \item \textit{RenderManager}: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar en juego es deseable poder elegir elegir el orden en el que se renderizan las 
+    \item \textit{RenderManager}: Encargado de renderizar por orden las entidades de la escena. A la hora de desarrollar el juego es deseable poder elegir el orden en el que se renderizan las 
     entidades. Esto también se conoce como profundidad o z-order.
 
-    \item \textit{ReferencesManager\label{referencesManager}}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas al accediendo a la referencia de una entidad, por ejemplo en caso de que la referencia sea errónea o dicha entidad haya sido eliminada.
+    \item \textit{ReferencesManager}: Encargado de manejar una relación entre las entidades y sus identificadores. Necesario para evitar problemas al acceder a la referencia de una entidad, por ejemplo en caso de que la referencia sea errónea o dicha entidad haya sido eliminada.
 \end{itemize}
 
 
@@ -295,19 +287,19 @@ En cuanto al bucle principal, tiene la siguiente estructura:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/EstructuraBuclePrincipal}
 \end{center}
 
-Además de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, tiempo transcurrido desde el inicio de la ejecución del programa o el número de frames/actualizaciones
+Además de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, el tiempo transcurrido desde el inicio de la ejecución del programa o el número de frames/actualizaciones
 hasta el momento. El \texttt{DeltaTime} es una medida de tiempo, generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
 
 \medskip
 
-Algo a comentar es la diferencia entre el \texttt{Paso físico} y la \texttt{Actualización}. La lbrería de físicas Box2D, y todas en general, requieren que la actualización del mundo físico se realice en intervalos
-de tiempo fijo, principalmente por motivos de estabilidad. Por ello, es necesario hacer cálculos adicionales para saber en que momentos se debe ejecutar el Paso Físico ya que no se puede llamar en cada frame, a 
-diferencia de la \texttt{Actualización}.
+Algo a comentar es la diferencia entre el ``paso físico'' y la ``actualización''. La librería de físicas Box2D requiere que la actualización del mundo físico se realice en intervalos
+de tiempo fijo, principalmente por motivos de estabilidad. Por ello, es necesario hacer cálculos adicionales para saber en que momentos se debe ejecutar el ``paso físico'' ya que no se puede llamar en cada frame, a 
+diferencia de la ``actualización''.
 
 \medskip
 
 La potencia del hardware de la computadora y la carga de trabajo afectan directamente al número de actualizaciones por segundo que se producen en el bucle principal de un videojuego. Por lo tanto, la llamada al 
-método \texttt{Actualización} se puede dar con mucha irregularidad. Sin embargo, el motor de física necesita intervalos de tiempo fijo.
+método ``actualización'' se puede dar con mucha irregularidad. Sin embargo, el motor de física necesita intervalos de tiempo fijo.
 
 \medskip
 
@@ -317,8 +309,7 @@ Esto se explica mejor con el siguiente diagrama:
     \includegraphics[scale=0.3]{Imagenes/Vectorial/UpdateVsFixed}
 \end{center}
 
-Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Ese intervalo de tiempo fijo es un valor que se puede modificar en base a las necesidades
-del videojuego.
+Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo.
 
 
 \section{Cómo se serializa la información del motor}
@@ -330,7 +321,7 @@ Esta cualidad es especialmente útil pues permitiría la capacidad de conocer las 
 \medskip
 
 Para solventar esta carencia el motor cuenta con un proyecto adicional llamado \texttt{ECSReader}. 
-Este proyecto tiene la función de entender la estructura de componentes para más adelante poder serializar esta información. Este proyecto no tiene utilidad durante la ejecución del motor, y se trata de una herramienta que puede ejecutar el desarrollador en cualquier momento que considere oportuno.
+Este proyecto tiene la función de entender la estructura de componentes para más adelante poder serializar esta información. Este proyecto no tiene utilidad durante la ejecución del motor, y se trata de una herramienta que se debe ejecutar por lo menos una vez para generar la información de los componentes.
 
 \medskip
 
@@ -347,16 +338,16 @@ Durante la ejecución del \texttt{ECSReader}, se almacena información sobre cada 
 \subsection{Recursos generados}
 \label{generacionDeDatos}
 
-Una vez todos los ficheros dados son leídos, comienza el proceso de generación de recursos. La función de estos recursos es de vital importancia, tanto para la comunicación del motor con el editor, como para el propio funcionamiento del motor. A continuación se menciona cada fichero generado junto con su utilidad.
+Una vez todos los ficheros dados son leídos, comienza el proceso de generación de recursos. La función de estos recursos es de vital importancia para la comunicación del motor con el editor. A continuación se menciona cada fichero generado junto con su utilidad.
 
 \begin{enumerate}
-    \item \textit{FunctionManager\label{recursosgenerados}}: Se trata de un par de ficheros en C++, uno siendo el fichero de cabecera y otro de fuente. Entre estos dos ficheros se genera una función para cada método que se haya leído. Además, este fichero cuenta con funcionalidad para agrupar cada una de las funciones en una única estructura, de tal forma que se pueda acceder a cada
+    \item \textit{FunctionManager\label{recursosgenerados}}: Esta clase genera una función para cada método que se haya leído. Además, este fichero cuenta con funcionalidad para agrupar cada una de las funciones en una única estructura, de tal forma que se pueda acceder a cada
     una de las funciones conociéndo únicamente su nombre. Se genera una función para cada método para que de esta forma todas las funciones tengan la misma estructura y además poder hacer manejo de errores antes de redirigir la llamada al método original.
 
-    \item  \textit{ClassReflection}: Se trata de una clase en C++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase se encarga de manipular los atributos de cada componente, simulando la reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización
+    \item  \textit{ClassReflection}:Esta clase se encarga de manipular los atributos de cada componente, simulando la reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización
     de una escena.
     
-    \item  \textit{ComponentFactory}: Se trata de una clase en C++ compuesta por dos ficheros, uno siendo el fichero de cabecera y otro de fuente. Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, siendo de vital importancia para el proceso de deserialización de una escena.
+    \item  \textit{ComponentFactory}: Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, siendo de vital importancia para el proceso de deserialización de una escena.
 
     \item  \textit{Ficheros para el editor}: Se generan dos ficheros, uno para componentes y otro para managers, ambos en formato JSON.\@ Estos contienen toda la información relacionada con cada componente y manager, y se trata de los ficheros utilizados para la lectura de los datos del motor en el editor.
 
@@ -366,10 +357,6 @@ Si bien estos ficheros podrían ser generados a mano, esta automatización supone 
 
 
 \section{Funcionamiento del lenguaje de scripting}
-
-Este lenguaje está pensado para ser utilizado por un editor de programación visual, utilizando flechas y nodos, aunque esto se explicará más en detalle en el apartado del editor \ref{scriptingEditor}.
-
-\medskip 
 
 Este lenguaje de scripting está pensado para funcionar mendiante eventos, como vemos en el apartado \ref{comunicacionScripting}, de forma que se pueda seleccionar qué partes del script queremos ejecutar en respuesta al evento recibido. Estos eventos vienen representados por nodos y funcionan como punto de partida inicial para la ejecución del script.
 Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en el que se ejecutan los nodos, garantizando que el script se comporte siempre de la misma forma. Este flujo vendrá representado por flechas.
@@ -390,13 +377,13 @@ Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en e
 
 La ejecución de un script sigue la siguiente estructura. Primero se ejecuta el nodo inicial marcado por el evento, y antes de procesar dicho nodo se ejecutan cada una de sus entradas. A su vez, estas entradas siguen el mismo proceso ejecutando primero sus nodos de entrada correspondientes hasta dar 
 con un nodo que no tenga entrada. Cuando todas las entradas y sub-entradas han sido procesadas es entonces cuando se ejecuta el propio nodo, el cual pasará el flujo al nodo siguiente. Este proceso se repite hasta dar con un nodo que no tenga ningún nodo siguiente. Durante este proceso un mismo nodo no puede
-ser ejecutado dos veces, y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje, reduciendo el número de nodos procesados, además de mejorar su legibilidad y previsibilidad (por ejemeplo en un caso
+ser ejecutado dos veces, y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje, reduciendo el número de nodos procesados, además de mejorar su legibilidad y previsibilidad (por ejemplo en un caso
 donde un nodo genere un número aleatorio, poder usar el mismo número con cada acceso al nodo), al precio de no permitir hacer programas que funcionen de forma recursiva.
 
 
 \medskip
 
-Dependiendo de su funcionamiento existen varios tipos de nodos: 
+Existen varios tipos de nodos: 
 
 \begin{enumerate}
 
@@ -412,8 +399,7 @@ Todo esto permite al usuario crear comportamientos complejos de una manera visua
 
 \section{Integración scripting en el motor}
 
-Una vez conociendo el lenguaje que ha sido diseñado para el motor, el siguiente punto interesante a tratar es cómo ha sido implementado.
-Para su integración en el motor aparece \texttt{Script}, un nuevo tipo de componente, junto con un nuevo manager, \texttt{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \texttt{ScriptManager} funciona como un manejador de recursos de tipo script de forma
+Para la integración del lenguaje en el motor aparece \texttt{Script}, un nuevo tipo de componente, junto con un nuevo manager, \texttt{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \texttt{ScriptManager} funciona como un manejador de recursos de tipo script de forma
 que no se generen copias innecesarias del recurso cuando el script sea reutilizado por otra entidad, al igual que se encarga de su correcta deserialización del formato JSON. Por otro lado, la clase \texttt{Script} proporciona los eventos necesarios al lenguaje de scripting, redirigiendo los eventos recibidos de la clase componente, además de guardar información adicional 
 para almacenar los distintos valores serializados. La clase \texttt{Script} no maneja los nodos, sino que almacena punteros al nodo inicial de cada evento, en caso de que exista.
 
@@ -432,25 +418,24 @@ Para la implementación de la lógica del scripting, se ha creado una clase por ca
 
 \medskip
 
-Para representar los valores dentro del editor, manejamos la abstracción de una variable la cual puede tomar cualquier valor, y todo se procesa dentro de una unión (siendo una unión un tipo especial de clase en C++ que solo puede almacenar el valor de uno de sus miembros). 
 El lenguaje está preparado para soportar los tipos: float, char, string, bool, un vector bidimensional de float, una estructura para representar un color y un puntero a una entidad.
 Con el fin de simplificar el uso, hemos decidido no distinguir entre tipos númericos (como pueden ser el int o el float) sino manejar una agrupación de ellos, algo parecido al funcionamiento de Javascript\footnotemark.
 
 \medskip
 
-Con el mismo fin de simplificar las cosas, también hemos decidido descartar la capacidad de almacenar un variable de tipo \texttt{Componente}. Por ello, en las llamadas a funciones donde hiciera falta un parámetro de tipo \texttt{Componente}, se pasará de tipo entidad, desde la cual se accederá al componente necesario. 
+Con el mismo fin de simplificar las cosas, también hemos decidido descartar la capacidad de almacenar un variable de tipo \texttt{Component}. Por ello, en las llamadas a funciones donde hiciera falta un parámetro de tipo \texttt{Componente}, se pasará de tipo entidad, desde la cual se accederá al componente necesario. 
 
 \medskip
 
 Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, pero si el valor procede de un nodo de entrada, 
- su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}[\ref{referencesManager}].
+ su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}[\ref{managersycomponentes}].
 
  \medskip
 
-Para la ejecución de un nodo funcion, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}[\ref{recursosgenerados}]. Cabe mencionar, que en caso de que la función esté asociada a un componente en lugar de un manager, el primer parámetro será siempre un puntero a la entidad.
+Para la ejecución de un nodo funcion, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}[\ref{recursosgenerados}]. Cabe mencionar, que en caso de que la función esté asociada a un componente en lugar de un manager, el primer parámetro será siempre la entidad.
 
 \medskip
 
- Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality}, con funcionalidad básica para poder usar desde el script, como puede ser escribir por consola o realizar operaciones aritméticas.
+ Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality}, con funcionalidad básica para poder usar desde el script, como puede ser escribir por consola.
 
  \footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number}}
