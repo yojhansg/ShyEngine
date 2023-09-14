@@ -9,19 +9,18 @@
 \section{Funcionamiento y arquitectura}
 \label{arquitecturaEditor}
 
-El editor está desarrollado en C++ a pesar de no tener el motor integrado debido a la elección de utilizar ImGUI \cite{ImGui}, una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor, como la creación de ventanas, dropdowns o checkboxes, entre otras.
-
-\medskip
-
-En la imagen \ref{fig:capturaEditor} podemos ver una imagen de nuestro editor.
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/capturaEditor.png}
+    \includegraphics[width=1.1\textwidth]{Imagenes/Vectorial/capturaEditor.png}
     \caption{Captura del editor de ShyEngine.}
     \label{fig:capturaEditor}
 \end{figure}
 
+Debido a la elección de utilizar ImGui (ImGui es el nombre correcto de la biblioteca), una biblioteca de interfaz de usuario (UI) diseñada específicamente para C++, nuestro editor, ShyEditor, está desarrollado en C++ a pesar de no tener el motor integrado. Esta elección nos brindó acceso a una amplia gama de funcionalidades esenciales para la creación del editor, como la creación de ventanas, dropdowns o checkboxes, entre otras.
+
+\medskip
+
+En la imagen \ref{fig:capturaEditor} podemos ver una imagen de nuestro editor.
 
 \medskip
 
@@ -30,17 +29,25 @@ En cuanto a su funcionamiento, el editor se compone de tres secciones principale
 \begin{enumerate}
     \item \textit{Gestor de proyectos}: Esta sección es la primera en iniciarse y se encarga de crear un archivo de configuración ``.shyproject'' y un directorio dedicado para cada videojuego que se desee crear, o para cargar un proyecto mediante la lectura de su archivo de configuración.
     
+    \item \textit{Editor principal}: El núcleo del editor es esta sección, donde se lleva a cabo la mayoría de la creación y edición de contenido. Aquí se manejan las entidades, la jerarquía, los componentes y los assets del juego.
+
     \item \textit{Ventana de edición de scripts}: Desde esta ventana se maneja la creación y edición de scripts. Permite a los desarrolladores definir el comportamiento y la lógica del juego.
     
-    \item \textit{Editor principal}: El núcleo del editor es esta sección, donde se lleva a cabo la mayoría de la creación y edición de contenido. Aquí se manejan las entidades, la jerarquía, los componentes y los assets del juego.
 \end{enumerate}
 
-El flujo de trabajo del editor comienza con la ventana del gestor de proyectos. Después se traslada a una pila de estados, que determina qué ventana se debe mostrar y manejar en un momento dado, ya sea la ventana de edición de scripts o el editor principal.
+El flujo de trabajo del editor comienza con la ventana del gestor de proyectos. Después se traslada a una pila de estados, que determina qué ventana se debe mostrar y manejar en un momento dado, ya sea la ventana de el editor principal o edición de scripts.
 Todas las operaciones en el editor se gestionan a través de un bucle principal que se encarga de manejar la entrada del usuario, actualizar el estado de las ventanas y renderizarlas.
 
 \medskip
 
-En el dibujo \ref{fig:funcionamientoEditor} podemos ver dicho flujo.
+En la figura \ref{fig:funcionamientoEditor} podemos ver dicho flujo.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Vectorial/FuncionamientoEditor.png}
+    \caption{Flujo de funcionamiento del editor.}
+    \label{fig:funcionamientoEditor}
+\end{figure}
 
 \medskip
 
@@ -48,7 +55,7 @@ En cuanto al funcionamiento de las ventanas, cada ventana del editor hereda de u
 
 \medskip 
 
-El editor cuenta con varias ventanas principales:
+La ventana del editor principal cuenta con varias subventanas:
 
 \begin{itemize}
     \item \textit{Scene}: Esta ventana es en la que se previsualizan todas las entidades de la escena.
@@ -60,15 +67,22 @@ El editor cuenta con varias ventanas principales:
     \item \textit{File Explorer}: Esta ventana permite navegar por los directorios de nuestro proyecto para ver y manejar nuestros assets, y realizar acciones como cargar una escena guardada.
 \end{itemize}
 
-Aunque también dispone de otras ventanas secundarias como la de preferencias, la de gestión de prefabs, la de edición de la paleta de colores, o la consola.
+Aunque también dispone de otras subventanas más secundarias como la de preferencias, la de gestión de prefabs, la de edición de la paleta de colores, o la consola.
 
 \medskip
 
-En el dibujo \ref{fig:arquitecturaVentanas} observamos esta arquitectura de ventanas.
+En la figura \ref{fig:arquitecturaVentanas} observamos esta arquitectura de ventanas.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Vectorial/ArquitecturaVentanas.png}
+    \caption{Arquitectura de las ventanas.}
+    \label{fig:arquitecturaVentanas}
+\end{figure}
 
 \medskip
 
-Cabe destacar que el editor también soporta la modificación del layout de ventanas y personalización de la paleta de colores, como se ve en la imagen \ref{fig:personalizacionEditor}.
+Cabe destacar que el editor también soporta la modificación del layout de ventanas y personalización de la paleta de colores, como se ve en la figura~\ref{fig:personalizacionEditor}.
 
 \medskip
 
@@ -79,40 +93,24 @@ Un aspecto importante del sistema de IDs es que también se utiliza para diferenc
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/FuncionamientoEditor.png}
-    \caption{Flujo de funcionamiento del editor.}
-    \label{fig:funcionamientoEditor}
-\end{figure}
-
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/ArquitecturaVentanas.png}
-    \caption{Arquitectura de las ventanas.}
-    \label{fig:arquitecturaVentanas}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagenes/Vectorial/personalizacionEditor.png}
+    \includegraphics[width=1.1\textwidth]{Imagenes/Vectorial/personalizacionEditor.png}
     \caption{Personalización del editor.}
     \label{fig:personalizacionEditor}
 \end{figure}
 
 \section{Como se leen los componentes a partir de los datos del motor}
-Como se mencionó anteriormente en \ref{generacionDeDatos}, el motor del juego genera archivos en formato JSON que contienen los datos serializados de los componentes, sus atributos y su tipo correspondiente.
+Como se mencionó anteriormente en la sección~\ref{generacionDeDatos}, el motor del cuenta con una herramienta que serializa en formato JSON los nombres de los atributos correspondientes a sus componentes nativos.
+\medskip
+
+Los datos en formato JSON se interpretan y se utilizan para ser editados desde la ventana de Componentes de ShyEditor.
 
 \medskip
 
-Los datos en formato JSON se interpretan y se utilizan para construir objetos de C++ en el editor. Estos objetos son los que se añaden a las entidades para definir su comportamiento.
-
-\medskip
-
-En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lectura de componentes.
+En la imagen \ref{fig:datosEditor} se puede observar el funcionamiento de la lectura de los atributos de los componentes del motor.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.65\textwidth]{Imagenes/Vectorial/LecturaComponentesEditor.png}
+    \includegraphics[width=1\textwidth]{Imagenes/Vectorial/LecturaComponentesEditor.png}
     \caption{Lectura de componentes del motor en el editor.}
     \label{fig:datosEditor}
 \end{figure}
@@ -141,11 +139,11 @@ La figura \ref{fig:serializacionEditor} representa como se serializa la informac
 \section{Scripting en el editor}
 \label{scriptingEditor}
 
-Como hemos mencionado anteriormente, el editor contiene un estado completamente dedicado a la creación y modificación de scripts. 
+Como hemos mencionado anteriormente, el editor contiene una ventana completamente dedicada a la creación y modificación de scripts. 
 
 \medskip
 
-En el editor, los scripts se crean utilizando un sistema de programación visual [\ref{programacionVisual}] mediante nodos y conexiones. Los nodos representan acciones o eventos [\ref{comunicacionScripting}] específicos que ocurren en el juego, como el inicio de una escena, la colisión entre objetos o la activación de una trampa. Estos nodos se organizan en el espacio de trabajo del editor y se conectan entre sí para definir la secuencia y lógica del comportamiento.
+En el editor, los scripts se crean utilizando un sistema de programación visual (sección~\ref{programacionVisual}) mediante nodos y conexiones. Los nodos representan acciones o eventos (sección~\ref{comunicacionScripting}) específicos que ocurren en el juego, como el inicio de una escena, la colisión entre objetos o la activación de una trampa. Estos nodos se organizan en el espacio de trabajo del editor y se conectan entre sí para definir la secuencia y lógica del comportamiento.
 
 \medskip
 
