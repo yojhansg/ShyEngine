@@ -17,7 +17,9 @@
                 {
                     "component": "Image",
                     "attributes": {
-                        "fileName": "background.png"
+                        "fileName": "background.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
                     }
                 }
             ],

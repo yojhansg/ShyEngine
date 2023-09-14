@@ -1,5 +1,6 @@
 #include "RenderManager.h"
 #include "Entity.h"
+#include "SceneManager.h"
 
 ECS::RenderManager::RenderManager() {}
 
@@ -8,7 +9,7 @@ ECS::RenderManager::~RenderManager() {}
 void ECS::RenderManager::Render() {
 	for (Entity* elem : set) {
 
-		if (elem->active)
+		if (elem->active && elem->getScene() == SceneManager::instance()->getCurrentScene())
 			elem->render();
 	}
 }

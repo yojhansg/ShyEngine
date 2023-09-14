@@ -25,8 +25,6 @@ namespace ECS {
 
 		void init() override;
 
-		void start() override;
-
 		void render() override;
 
 	publish:

@@ -122,7 +122,11 @@ namespace ECS {
 
 	void SceneManager::removeAllScenes() {
 		auto size = scenes.size();
-		for (int i = 0; i < size; i++) popScene();
+		for (int i = 0; i < size; i++) {
+			scenes.top()->onDestroy();
+			delete scenes.top();
+			scenes.pop();
+		}
 	}
 
 
