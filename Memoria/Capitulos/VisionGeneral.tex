@@ -1,25 +1,24 @@
 %---------------------------------------------------------------------
 %
-%                          Editor
+%                          Visión general
 %
 %---------------------------------------------------------------------
 
-\chapter{Vision general}
+\chapter{Visión general del trabajo}
 
-En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los editores con motor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades del desarrollo de juegos. Sin embargo, esta versatilidad puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
-
-\medskip
-
-Por lo tanto, hemos optado por desarrollar un motor dirigido por datos específicamente diseñado para juegos 2D simples y eficientes, complementado por un editor que permita la creación de estos juegos. En nuestro enfoque, los datos desempeñan un papel central al servir como el medio de comunicación entre el editor y el motor. El motor genera datos sobre los componentes disponibles para el editor y el editor genera datos sobre el juego que el motor puede leer e interpretar.
+En el capítulo anterior, exploramos la naturaleza de un motor de juego y un editor, así como su interacción mutua. Mientras que un motor con un editor puede acelerar significativamente el proceso de desarrollo de juegos, los editores en sí mismos representan una inversión considerable en términos de recursos y tiempo. Los motores con editor integrado suelen ser extensos y ofrecen una amplia gama de funcionalidades para atender diversas necesidades del desarrollo de juegos. Sin embargo, esta versatilidad puede ser un inconveniente si se busca crear un juego pequeño y simple, ya que obliga a los desarrolladores a aprender a utilizar características innecesarias y puede resultar en un producto final con un exceso de funcionalidades no utilizadas.
 
 \medskip
 
-Una decisión crítica en nuestro proyecto fue mantener el motor y el editor como entidades separadas e independientes, en lugar de estar integradas en un único proyecto. 
-Tener el editor y el motor como unidades separadas es una tarea más complicada, requiriendo de una mayor preparación inicial para la comunicación de datos, pero a cambio nos aporta una mayor flexibilidad, pudiendo hacer modificaciones sobre el ejecutable del motor de una forma cómoda. Esta flexibilidad además nos permitiría poder utilizar el editor con un motor diferente, lo cual nos puede ser de bastante utilidad para desarrollos futuros. Por último, esta separación entre editor y motor fue importante para poder acelerar el desarrollo del proyecto, pudiendo paralelizar el trabajo.
+Por lo tanto, hemos optado por desarrollar un motor dirigido por datos específicamente diseñado para juegos 2D simples y eficientes, complementado por un editor que permita la creación de estos juegos. En nuestro enfoque, los datos desempeñan un papel central al servir como el medio de comunicación entre el editor y el motor. El editor genera los datos sobre niveles, entidades, componentes, etc y el motor los puede leer e interpretar.
 
 \medskip
 
-En nuestro modelo, la entidad fundamental es la escena, que contiene entidades individuales. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades a partir de su ID o recursos como imagenes a partir de su ruta. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación eficiente y legible de los objetos del juego.
+Una decisión crítica en nuestro proyecto fue mantener el motor y el editor separados en lugar de estar integrados. Esto supone tener que diseñar una forma de comunicarlos, pero a su vez nos aporta flexibilidad ya que nos permitiría poder utilizar el motor con un editor diferente y viceversa. Por último, esta separación fue importante para poder acelerar el desarrollo del proyecto, pudiendo paralelizar el trabajo.
+
+\medskip
+
+En nuestro modelo, el elemento fundamental es la escena, que contiene un conjunto de entidades. Estas entidades están equipadas con componentes que, a su vez, almacenan atributos que representan datos específicos. Estos atributos pueden variar desde tipos de datos simples hasta referencias a otras entidades a partir de su identificador o recursos como imágenes a partir de su ruta. La serialización de estos datos se lleva a cabo en formato JSON, lo que permite una representación legible de los objetos del juego.
 
 \medskip
 
@@ -28,25 +27,28 @@ puede reutilizarse en diferentes partes del juego para acelerar y simplificar el
 (pudiendo además modificar el prefab original para modificar simultáneamente todas sus instancias), como desde el motor en tiempo de ejecución.
 \medskip
 
-Como se mencionó en el apartado de motivación [\ref{cap1:sec:motivacion}], el objetivo es desarrollar un motor con editor que pudiera ser utilizado por gente que no sea programadora. Por ello, se ha decidido implementar un sistema de programación visual. 
-De esta forma, el usuario no tendrá que estar previamente familiarizado con ningún lenguaje de programación, pudiendo centrarse en el desarrollo de videojuegos.
+Como se mencionó en el apartado de motivación [\ref{cap1:sec:motivacion}], el objetivo es desarrollar un motor con editor que pueda ser utilizado por gente que no sea programadora. Por ello, se ha decidido implementar un sistema de programación visual. De esta forma, el usuario no tendrá que estar previamente familiarizado con ningún lenguaje de programación, pudiendo centrarse en el desarrollo de videojuegos.
 \medskip
 
-Hemos decidido que los scripts funcionen como datos en vez de como código compilado, ahorrando tiempos de compilación y evitando depender de una programa externo para compilar el código.
+Hemos decidido que los scripts funcionen como datos en vez de como código compilado, ahorrando tiempos de compilación y evitando depender de una programa externo para compilar el código. Esto conlleva tener que almacenar 
+la información de estos scripts en ficheros e interpretarlos por el motor en ejecución.
 
 \medskip
 
-El lenguaje permite controlar el orden de ejecución de cada nodo, otorgando legibilidad y previsibilidad a su ejecución, y el lenguaje cuenta con distintos tipos de nodos, cada tipo con una función concreta, como ejecutar una función del motor, almacenar el valor de un dato especificado por el usuario, o modificar el orden de ejecución de los nodos en tiempo real.
+El lenguaje permite controlar el orden de ejecución de cada nodo, otorgando legibilidad y previsibilidad a su ejecución. El lenguaje cuenta con distintos tipos de nodos, cada tipo con una función concreta, como ejecutar una función del motor, almacenar el valor de un dato especificado por el usuario, o modificar el orden de ejecución de los nodos en tiempo real.
+
 \medskip
 
-Para desarrollar el scripting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos etre ellos mediante el uso de flechas para crear el comportamiento deseado. 
-Para saber de qué nodos dispone el usuario, el editor contendrá información sobre el funcionamiento del motor para conocer sus componetes, y la información esencial de cada función disponible, siendo el nombre, el valor devuelto y la entrada requerida.
-Cuando el usuario haya terminado con el proceso de creación, la información relacionada con el script será serializada en un fichero usando un formato JSON.
-Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecución del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de datos que representa el script y que puede ser accedida más adelante.
-Esta estructura está preparada para ejecutar el script, funcionando como un intérprete capaz de ejecutar funciones dentro del motor con la información proporcionada. Esto es gracias a que el motor cuenta con funcionalidad que, conociendo únicamente el nombre de la función que se quiera ejecutar, pueda identificar de qué función
-se trata y proceder a ejecutarla. 
-El motor da control al script mediante el uso de una serie de eventos. Estos eventos van desde los más básicos como \texttt{Update}, que se lanza en cada fotograma, a algunos eventos más específicos de uso como ejecutarse al detectar una colisión de la entidad, o al posicionar el ratón sobre un elemento de la interfaz.
-En el editor de nodos, estos eventos son representados como un nodo adicional, haciendo que se mantenga cohesionado con resto del editor de nodos, pudiendo utilizar en el mismo script todos los eventos que se consideren oportunos.
+Para desarrollar el scripting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos entre ellos mediante el uso de flechas para crear el comportamiento deseado. 
+Para saber de qué nodos dispone el usuario, el editor contendrá información sobre el funcionamiento del motor para conocer sus componentes, y la información esencial de cada función disponible, siendo el nombre, el valor devuelto y la entrada requerida. Cuando el usuario haya terminado con el proceso de creación, la información relacionada con el script será serializada en un fichero usando un formato JSON.
+
+\medskip
+
+Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecución del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de datos que representa el script y que puede ser accedida más adelante. Esta estructura está preparada para ejecutar el script, funcionando como un intérprete capaz de ejecutar funciones dentro del motor con la información proporcionada. Esto es gracias a que el motor cuenta con funcionalidad que, conociendo únicamente el nombre de la función que se quiera ejecutar, pueda identificar de qué función se trata y proceder a ejecutarla. 
+
+\medskip
+
+El motor da control al script mediante el uso de una serie de eventos. Estos eventos van desde los más básicos como \texttt{Update}, que se lanza en cada fotograma, a algunos eventos más específicos de uso como ejecutarse al detectar una colisión de la entidad, o al posicionar el ratón sobre un elemento de la interfaz.En el editor de nodos, estos eventos son representados como un nodo adicional, haciendo que se mantenga cohesionado con resto del editor de nodos, pudiendo utilizar en el mismo script todos los eventos que se consideren oportunos.
 
 \medskip
 
