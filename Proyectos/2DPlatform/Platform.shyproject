@@ -145,8 +145,8 @@
             "-3": [
                 17,
                 16,
-                15,
                 7,
+                15,
                 14
             ]
         }
@@ -157,7 +157,7 @@
         "initialScene": "Scene.scene",
         "splashScreen": false,
         "windowTitle": "Platform",
-        "windowIcon": "",
+        "windowIcon": "Character.png",
         "windowSize": "1920, 1080",
         "vsync": true,
         "fullScreen": false,

@@ -250,7 +250,7 @@ namespace ShyEditor {
     void MenuBar::Debug() {
         Preferences::GenerateDebug();
         editor->GetScene()->SaveScene();
-        Game::Play(true);
+        Game::Play(false);
     }
 
     void MenuBar::Release() {

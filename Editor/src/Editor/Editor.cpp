@@ -118,7 +118,7 @@ void Editor::Loop() {
 
 	// Configure the SDL window to start the editor
 	SDL_SetWindowResizable(instance->window, SDL_TRUE);
-	SDL_SetWindowSize(instance->window, _WindowMainSize);
+	SDL_SetWindowSize(instance->window, instance->userResolution.getX(), instance->userResolution.getY());
 	SDL_SetWindowPosition(instance->window, _Centered);
 
 	// Init the ImGUI windows in the editor
@@ -219,7 +219,6 @@ bool Editor::InitSDL() {
 		return false;
 	}
 
-
 	if (TTF_Init() < 0) {
 
 		IMG_Quit();
@@ -228,10 +227,20 @@ bool Editor::InitSDL() {
 		return false;
 	}
 
+	// Get user window resolution
+	SDL_DisplayMode dm;
+	if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
+		ShyEditor::LogManager::LogError("Could not get user window resolution!");
+		return false;
+	}
+
+	userResolution.setX(dm.w);
+	userResolution.setY(dm.h);
+
 	// WINDOW
 		// Create our window
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-	window = SDL_CreateWindow("Shy Engine", _Centered, _ProjectSelectionDialogueSize, window_flags);
+	window = SDL_CreateWindow("ShyEngine", _Centered, _ProjectSelectionDialogueSize, window_flags);
 
 	// Make sure creating the window succeeded
 	if (window == NULL) {

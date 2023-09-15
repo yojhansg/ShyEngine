@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 
+#include "Vector2.h"
+
 #define _ProjectSelectionDialogueSize 1080, 720
 #define _WindowMainSize 1920, 1080
 
@@ -117,6 +119,8 @@ private:
 	// Pointers to our window and surface
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+
+	ShyEditor::Vector2 userResolution;
 
 	// Project info structure 
 	ShyEditor::ProjectInfo* projecInfo;
