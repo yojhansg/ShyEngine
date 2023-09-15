@@ -1,0 +1,95 @@
+{
+    "comments": [],
+    "consts": [
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 5,
+            "serialized": false,
+            "type": "string",
+            "value": "Llave",
+            "x": 700.0,
+            "y": 160.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 7,
+            "serialized": false,
+            "type": "string",
+            "value": "Win.scene",
+            "x": 1478.0,
+            "y": -87.0
+        },
+        {
+            "enum": false,
+            "enumStr": "",
+            "index": 8,
+            "serialized": false,
+            "type": "float",
+            "value": 0.0,
+            "x": 1455.0,
+            "y": 568.0
+        }
+    ],
+    "events": [
+        {
+            "index": 0,
+            "type": "onCollisionEnter",
+            "x": 243.0,
+            "y": 485.0
+        }
+    ],
+    "forks": [
+        {
+            "A": 6,
+            "B": -1,
+            "condition": 4,
+            "index": 3,
+            "type": 0,
+            "x": 1317.0,
+            "y": 369.0
+        }
+    ],
+    "functions": [
+        {
+            "function": "Entity_Collided",
+            "index": 1,
+            "input": [],
+            "x": 375.0,
+            "y": 36.0
+        },
+        {
+            "function": "PhysicBody_getCollisionLayer",
+            "index": 2,
+            "input": [
+                1
+            ],
+            "x": 684.0,
+            "y": -191.0
+        },
+        {
+            "function": "Text_Equals",
+            "index": 4,
+            "input": [
+                2,
+                5
+            ],
+            "x": 995.0,
+            "y": 37.0
+        },
+        {
+            "function": "SceneManager_ChangeScene",
+            "index": 6,
+            "input": [
+                7,
+                8
+            ],
+            "x": 1796.0,
+            "y": 291.0
+        }
+    ],
+    "nodeCount": 9,
+    "onCollisionEnter": 3,
+    "serializedValues": []
+}
