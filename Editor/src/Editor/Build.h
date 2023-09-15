@@ -23,8 +23,6 @@ namespace ShyEditor {
 
 		void Copy(std::string file, std::string path);
 
-		void ChangeExeIcon(const std::string& exe);
-
 		void BuildThread();
 		bool SelectFolder();
 
