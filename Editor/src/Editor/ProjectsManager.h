@@ -101,6 +101,11 @@ namespace ShyEditor {
 		bool showPopUpWindowNewProject;
 		bool showPopUpWindowOpenProject;
 
+		// Delete project information
+		bool showDeleteProjectPopUp;
+		int deletedProjectIdx;
+		std::string deletedProjectFolder;
+
 		// Textures
 		Texture* folder;
 		Texture* trash;
@@ -141,6 +146,8 @@ namespace ShyEditor {
 
 		// Shows a pop-up window with an error message
 		void ShowErrorPopup(const std::wstring& errorMessage);
+
+		void DeleteProjectPopup();
 
 		// Check if a file has a certain extension
 		bool HasExtension(const std::wstring& filePath, const std::wstring& extension);

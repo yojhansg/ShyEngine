@@ -54,6 +54,7 @@ namespace ShyEditor {
         windowClosed = invalidProjectName = false;
         invalidNewProjectPath = invalidOpenProjectPath = false;
         showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
+        showDeleteProjectPopUp = false;
 
         creationDate = name = projectFilePath = openPath = lastSavedProjectPath = "";
         lastOpenedScenePath = "Scene.scene";
@@ -324,13 +325,10 @@ namespace ShyEditor {
                 ImVec2 buttonSize = ImVec2(w * 0.095f, h / 10);
                 if (ImGui::Button(label.c_str(), buttonSize)) {
 
-                    recentProjectsInfo[i].deleted = true;
+                    deletedProjectIdx = i;
+                    showDeleteProjectPopUp = true;
+                    deletedProjectFolder = fs::path(recentProjectsInfo[i].path).parent_path().string();
 
-                    std::string projectFolder = fs::path(recentProjectsInfo[i].path).parent_path().string();
-
-                    if (fs::exists(projectFolder) && fs::is_directory(projectFolder)) {
-                        fs::remove_all(projectFolder);
-                    }
                 }
 
                 ImVec2 buttonPos = ImGui::GetItemRectMin();
@@ -370,6 +368,9 @@ namespace ShyEditor {
 
         if (showPopUpWindowOpenProject)
             ShowErrorPopup(errorMessage);
+
+        if (showDeleteProjectPopUp)
+            DeleteProjectPopup();
 
 
         ImGui::End();
@@ -877,6 +878,33 @@ namespace ShyEditor {
                 ImGui::CloseCurrentPopup();
                 showPopUpWindowNewProject = showPopUpWindowOpenProject = false;
             }
+            ImGui::EndPopup();
+        }
+
+    }
+
+    void ProjectsManager::DeleteProjectPopup() {
+
+        ImGui::OpenPopup("DeleteProject");
+
+        ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x / 1.2f, ImGui::GetIO().DisplaySize.y / 6.0f));
+
+        if (ImGui::BeginPopupModal("DeleteProject")) {
+            ImGui::Text("%s", "Do you really want to delete this project?");
+
+            ImGui::SetCursorPosX(ImGui::GetContentRegionAvail().x / 2.0f - ImGui::GetContentRegionAvail().x / 16.0f);
+            ImGui::SetCursorPosY(ImGui::GetContentRegionAvail().y / 0.8f);
+            if (ImGui::Button("OK", ImVec2(ImGui::GetContentRegionAvail().x / 4.0f, ImGui::GetContentRegionAvail().y / 1.5f))) {
+
+                recentProjectsInfo[deletedProjectIdx].deleted = true;
+
+                if (fs::exists(deletedProjectFolder) && fs::is_directory(deletedProjectFolder))
+                    fs::remove_all(deletedProjectFolder);
+
+                ImGui::CloseCurrentPopup();
+                showDeleteProjectPopUp = false;
+            }
+
             ImGui::EndPopup();
         }
 
