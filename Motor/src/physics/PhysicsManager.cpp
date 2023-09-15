@@ -33,7 +33,7 @@ namespace Physics {
 		// Collision Matrix
 		layersCount = 0;
 
-		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, false));
+		collision_matrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, true));
 
 		freeLayers = std::stack<int>();
 

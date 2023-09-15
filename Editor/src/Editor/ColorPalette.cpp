@@ -699,12 +699,11 @@ namespace ShyEditor {
 			paletteName[0] = '\0';
 		}
 
-		if (ImGui::Button("Remove palette")) {
+		/*if (ImGui::Button("Remove palette")) {
 
 			showErasePopup = true;
 			paletteName[0] = '\0';
-		}
-
+		}*/
 
 
 		if (showSavePopup)
@@ -712,8 +711,6 @@ namespace ShyEditor {
 			//TODO: center
 
 			ImGui::OpenPopup("Save color palette");
-
-
 
 		}
 
@@ -744,37 +741,36 @@ namespace ShyEditor {
 
 
 
-		if (showErasePopup)
-		{
-			//TODO: center
+		//if (showErasePopup)
+		//{
+		//	//TODO: center
 
-			ImGui::OpenPopup("Erase color palette");
-		}
+		//	ImGui::OpenPopup("Erase color palette");
+		//}
 
-		if (ImGui::BeginPopupModal("Erase color palette", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-		{
+		//if (ImGui::BeginPopupModal("Erase color palette", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+		//{
 
 
-			ImGui::InputText("Palette to erase", paletteName, 16);
+		//	ImGui::InputText("Palette to erase", paletteName, 16);
 
-			if (ImGui::Button("Erase")) {
+		//	if (ImGui::Button("Erase")) {
 
-				showErasePopup = false;
-				ImGui::CloseCurrentPopup();
+		//		showErasePopup = false;
+		//		ImGui::CloseCurrentPopup();
 
-				//TODO: llamar a erase
+		//		//TODO: llamar a erase
 
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel")) {
+		//	}
+		//	ImGui::SameLine();
+		//	if (ImGui::Button("Cancel")) {
 
-				showErasePopup = false;
-				ImGui::CloseCurrentPopup();
-			}
+		//		showErasePopup = false;
+		//		ImGui::CloseCurrentPopup();
+		//	}
 
-			ImGui::EndPopup();
-		}
-
+		//	ImGui::EndPopup();
+		//}
 
 	}
 
