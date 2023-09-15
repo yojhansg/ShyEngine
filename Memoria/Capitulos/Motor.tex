@@ -200,6 +200,7 @@ Las clases que se encargan de estas funciones son:
 % ----------------------------------------------- ENTITY COMPONENT ARCHITECTURE -------------------------------------------------
 
 \subsection{Arquitectura de gameplay}
+\label{managersycomponentes}
 
 Como arquitectura de gameplay se ha implementado de tipo entidades y componentes (EC) descrito en \ref{ecsystem}.
 
@@ -224,7 +225,6 @@ La partes fundamentales de esta arquitectura son las siguientes:
 Como hemos dicho anteriormente, las entidades funcionan como contenedores y los que realmente implementan la funcionalidad son los componentes. Las entidades tienen métodos para añadir componentes, consultar si contienen un componente y eliminarlos.
 
 \subsubsection{Managers y componentes}
-\label{managersycomponentes}
 
 Por otro lado, en este proyecto se implementan también los managers necesarios para el funcionamiento del motor y los componentes fundamentales que el motor va a proporcionar al usuario.
 
@@ -467,7 +467,7 @@ Con el mismo fin de simplificar las cosas, también hemos decidido descartar la c
 \medskip
 
 Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, pero si el valor procede de un nodo de entrada, 
- su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}[\ref{managersycomponentes}].
+ su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}(sección~\ref{managersycomponentes}:~Managers~y~componentes).
 
  \medskip
 

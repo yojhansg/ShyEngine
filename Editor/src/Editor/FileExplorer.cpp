@@ -49,7 +49,6 @@ namespace ShyEditor {
 		audio = ResourcesManager::GetInstance()->AddTexture(AudioImage, true);
 
 		docked = true;
-		viewMode = 0;
 
 		shouldOpenDeleteFilePopup = false;
 		shouldOpenFileMenu = false;
@@ -161,11 +160,6 @@ namespace ShyEditor {
 		}
 
 		ImGui::SameLine();
-		ImGui::RadioButton("Show list", &viewMode, 0);
-		ImGui::SameLine();
-		ImGui::RadioButton("Show icons", &viewMode, 1);
-
-		ImGui::SameLine();
 		if (ImGui::Button("Refresh"))
 			shouldUpdate = true;
 
@@ -176,10 +170,9 @@ namespace ShyEditor {
 
 		ImGui::Separator();
 
-		if (viewMode == 0)
-			DrawList();
-		else
-			DrawIcons();
+	
+		DrawList();
+
 
 		ShowDeleteFilePopup();
 		ShowFileMenuPopup();
@@ -249,10 +242,6 @@ namespace ShyEditor {
 		}
 
 		ImGui::Unindent();
-	}
-
-	void FileExplorer::DrawIcons() {
-		//TODO
 	}
 
 	void FileExplorer::OnItemSelected(Entry& entry) {

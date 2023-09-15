@@ -58,10 +58,7 @@ namespace ShyEditor {
 
 		void ProcessPath();
 
-		int viewMode;
-
 		void DrawList();
-		void DrawIcons();
 
 		void OnItemSelected(Entry& entry);
 		void ItemDrag(Entry& entry);
