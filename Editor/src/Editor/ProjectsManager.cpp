@@ -892,9 +892,19 @@ namespace ShyEditor {
         if (ImGui::BeginPopupModal("DeleteProject")) {
             ImGui::Text("%s", "Do you really want to delete this project?");
 
-            ImGui::SetCursorPosX(ImGui::GetContentRegionAvail().x / 2.0f - ImGui::GetContentRegionAvail().x / 16.0f);
-            ImGui::SetCursorPosY(ImGui::GetContentRegionAvail().y / 0.8f);
-            if (ImGui::Button("OK", ImVec2(ImGui::GetContentRegionAvail().x / 4.0f, ImGui::GetContentRegionAvail().y / 1.5f))) {
+            ImVec2 contentRegionAvail = ImGui::GetContentRegionAvail();
+
+            ImGui::SetCursorPosX(contentRegionAvail.x / 2.0f + contentRegionAvail.x / 16.0f);
+            ImGui::SetCursorPosY(contentRegionAvail.y / 0.8f);
+            if (ImGui::Button("No", ImVec2(contentRegionAvail.x / 4.0f, contentRegionAvail.y / 1.5f))) {
+
+                ImGui::CloseCurrentPopup();
+                showDeleteProjectPopUp = false;
+            }
+
+            ImGui::SetCursorPosX(contentRegionAvail.x / 2.0f - contentRegionAvail.x / 4.0f);
+            ImGui::SetCursorPosY(contentRegionAvail.y / 0.8f);
+            if (ImGui::Button("Yes", ImVec2(contentRegionAvail.x / 4.0f, contentRegionAvail.y / 1.5f))) {
 
                 recentProjectsInfo[deletedProjectIdx].deleted = true;
 
