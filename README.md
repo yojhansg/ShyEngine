@@ -27,10 +27,6 @@ llamado "src" con el código fuente del proyecto, otro directorio
 otro directorio "dependencies" con la librerías utilizada sin compilar 
 y por último un fichero con extensión ".sln" con la solución.
 
-## Instalación
-
-
-
 ## Muestras
 
 ### Algunas capuras del editor
