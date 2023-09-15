@@ -383,7 +383,7 @@ El programa comienza leyendo el código fuente del motor, leyendo cada fichero y 
 
     \item Almacena en una lista el nombre de todas las clases que hereden de componente, o que por el contrario hereden de uno como ocurren en el caso los componentes físicos.
     \item Para qué atributos de un componente deben guardarse se utiliza una etiqueta especial, \texttt{reflect}. Esta marca debe aparecer delante de cada atributo que se quiera poder serializar. De cada atributo se guarda tanto el nombre como el tipo del mismo.
-    \item Para el proceso de almacenar los métodos de un componente se utiliza otra etiqueta nueva, publish. Esta marca funciona como un nuevo modificador de acceso, de forma que todos los métodos que se encuentren entre dicha marca y la siguiente pasarán a ser almacenados. De los métodos se almacena tanto el nombre, como un vector con la entrada (almacenando tanto tipo como nombre) y el valor de salida.
+    \item Para el proceso de almacenar los métodos de un componente se utiliza otra etiqueta nueva, \texttt{publish}. Esta marca funciona como un nuevo modificador de acceso, de forma que todos los métodos que se encuentren entre dicha marca y la siguiente pasarán a ser almacenados. De los métodos se almacena tanto el nombre, como un vector con la entrada (almacenando tanto tipo como nombre) y el valor de salida.
 
 \end{itemize}
 
@@ -395,15 +395,16 @@ Este uso de las etiquetas nos proporciona una gran comodidad y control en el des
 Una vez todos los ficheros dados son leídos, comienza el proceso de generación de recursos. La función de estos recursos es de vital importancia para la comunicación del motor con el editor. A continuación se menciona cada fichero generado junto con su utilidad.
 
 \begin{enumerate}
-    \item \textit{FunctionManager\label{recursosgenerados}}: Este fichero genera una función asociada a cada método que se haya leído, con la diferencia de que en el caso de que se trate de un método de un componente (en lugar de una método de un manager), se añade un parámetro adicional para acceder al puntero del componente. Esta nueva función tiene como salida una estructura abstracta, la cual puede tomar cualquier valor que queramos que sea soportado por el scripting. La función toma como entrada un vector con esta misma estructura abstracta. En la ejecución de la función se comprueba que la entrada dada sea correcta, y en ese caso hace una llamada al método asociado. Además, este fichero genera un mapa que contiene todas las funciones generadas, con su nombre como clave.\\
+    \item \textit{FunctionManager\label{recursosgenerados}}: Este fichero genera una función asociada a cada método que se haya leído, con la diferencia de que en el caso de que se trate de un método de un componente (en lugar de una método de un manager), se añade un parámetro adicional para acceder al puntero del componente. 
+    Esta nueva función tiene como salida una estructura abstracta, la cual puede tomar cualquier valor que queramos que sea soportado por el scripting. La función toma como entrada un vector con esta misma estructura abstracta. 
+    En la ejecución de la función se comprueba que la entrada dada sea correcta, y en ese caso hace una llamada al método asociado. Además, este fichero genera un mapa que contiene todas las funciones generadas, con su nombre como clave.\\
     
     Con este fichero podemos invocar a la funcionalidad del motor conociendo únicamente el nombre de cada método, lo cual es útil para el intérprete del lenguaje de scripting. Por otro lado, el hecho de haber convertido cada método en funciones, y todas con la misma estructura nos permite poder agrupar todas las funciones en un único mapa.
     
 
-    \item  \textit{ClassReflection}:Esta clase se encarga de manipular los atributos de cada componente, simulando la reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización
-    de una escena.
+    \item  \textit{ClassReflection}:Esta clase se encarga de manipular los atributos de cada componente, simulando el uso de  reflexión. Con esta clase se puede modificar cada atributo conociendo únicamente su nombre, lo cual es importante durante el proceso de deserialización de una escena.
     
-    \item  \textit{ComponentFactory}: Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, siendo de vital importancia para el proceso de deserialización de una escena.
+    \item  \textit{ComponentFactory}: Esta clase tiene la función de generar un componente de un tipo determinado dado el nombre del tipo, funcionando a modo de factoría, siendo de vital importancia para el proceso de deserialización de una escena.
 
     \item  \textit{Ficheros para el editor}: Se generan dos ficheros, uno para componentes y otro para managers, ambos en formato JSON.\@ Estos contienen toda la información relacionada con cada componente y manager, y se trata de los ficheros utilizados para la lectura de los datos del motor en el editor.
 
@@ -414,8 +415,13 @@ Si bien estos ficheros podrían ser generados a mano, esta automatización supone 
 
 \section{Funcionamiento del lenguaje de scripting}
 
-Este lenguaje de scripting está pensado para funcionar mendiante eventos, como vemos en el apartado \ref{comunicacionScripting}, de forma que se pueda seleccionar qué partes del script queremos ejecutar en respuesta al evento recibido. Estos eventos vienen representados por nodos y funcionan como punto de partida inicial para la ejecución del script.
-Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en el que se ejecutan los nodos, garantizando que el script se comporte siempre de la misma forma. Este flujo vendrá representado por flechas.
+Este lenguaje se trata de un sistema basado en nodos pensando principalmente para ser usado de forma visual, inspirado en el 
+sistema de Blueprints de Unreal. Para entender el lenguaje conviene primero entender el concepto de nodo. Un nodo es una agrupación lógica con una función determinada, pudiendo utilizarse para represetar un dato, ejecutar operaciones aritméticas o llamar a funcionalidad dentro del motor. Estos nodos pueden conectarse entre sí, de forma que un nodo que represente una función se le pueda pasar como parámetros de entrada otros nodos. En los casos de nodos que representen funciones, dependiendo de su funcionalidad puede tener también un valor de salida, pudiendo enlazar la salida de una función con la entrada de otra, de esta forma creando comportamientos más complejos.
+
+\medskip 
+
+La ejecución del lenguaje funciona siguiendo un flujo, es decir, poder establecer el orden en el que se ejecutan los nodos, garantizando que el script se comporte siempre de la misma forma, lo cual es importante para casos donde tenemos varias funciones que queremos que se ejecuten de forma secuencial, sin una dependencia directa entre sus valores de entrada y salida.
+Este lenguaje de scripting está pensado para funcionar mendiante eventos, como vemos en el apartado \ref{comunicacionScripting}, los cuales son señales enviadas por el motor tras cumplirse una condición, como puede ser en la colisión de dos entidades o la inicialización de la entidad. El lenguaje da soporte para marcar qué nodo queremos ejecutar en respuesta al evento recibido. Estos eventos vienen representados por nodos y funcionan como punto de partida inicial para la ejecución del script.
 
 \medskip 
 
@@ -433,20 +439,24 @@ Esta ejecución funciona siguiendo un flujo, es decir, se establece el orden en e
 
 La ejecución de un script sigue la siguiente estructura. Primero se ejecuta el nodo inicial marcado por el evento, y antes de procesar dicho nodo se ejecutan cada una de sus entradas. A su vez, estas entradas siguen el mismo proceso ejecutando primero sus nodos de entrada correspondientes hasta dar 
 con un nodo que no tenga entrada. Cuando todas las entradas y sub-entradas han sido procesadas es entonces cuando se ejecuta el propio nodo, el cual pasará el flujo al nodo siguiente. Este proceso se repite hasta dar con un nodo que no tenga ningún nodo siguiente. Durante este proceso un mismo nodo no puede
-ser ejecutado dos veces, y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje, reduciendo el número de nodos procesados, además de mejorar su legibilidad y previsibilidad (por ejemplo en un caso
+ser ejecutado dos veces (con la excepción de bucles), y el valor de salida de cada nodo debe ser guardado hasta que termine todo el proceso de ejecución. De esta forma se consigue optimizar la velocidad del lenguaje pues se reduce el número de nodos que son ejecutados, además de mejorar su legibilidad y previsibilidad (por ejemplo en un caso
 donde un nodo genere un número aleatorio, poder usar el mismo número con cada acceso al nodo), al precio de no permitir hacer programas que funcionen de forma recursiva.
+
+\medskip
+
+Puede parecer poco intuitivo que el nodo que queremos ejecutar al principio sea el último en ejecutarse, por lo que para facilitar su entendimiento haremos uso de un ejemplo. Supongamos que queremos hacer un programa que escriba por consola el resultado de una suma en cada iteración. Para ello usaremos una estructura similar a la figura \ref{fig:cap4:OrdenNodos} descartando el cuarto nodo. Nuestro nodo inicial sería el nodo encargado de escribir por consola, y aunque sea el nodo directamente enlazado al evento, no se puede ejecutar inmediatamente pues para ello aún hay que procesar el resultado de la suma, la cual a su vez, primero tiene que procesar los dos valores que se quieran sumar. No se puede procesar un nodo sin haber procesado su entrada anteriormente, por ello, 
 
 
 \medskip
 
-Existen varios tipos de nodos: 
+Existen tres tipos de nodos principales: 
 
 \begin{enumerate}
 
 
     \item  \textit{Nodo de función}: Este nodo representa una función en el lenguaje, y puede tener entrada y un valor de salida, al igual que puede recibir y pasar el flujo del script. Este nodo puede ser serializado para ser llamado desde otro script, creando así algo semejante a un método en un lenguaje convencional.
-    \item  \textit{Nodo de entrada}: Proporciona un valor constante que puede ser usado como entrada para una función. Este valor puede ser serializado para modificarse desde fuera permitiendo reutilizar scripts con datos diferentes. Este tipo de nodo no puede recibir el flujo.
-    \item  \textit{Nodo de bifurcación}: Permite la implementación de lógica condicional y dos tipos de bucles, dependiendo del tipo interno asociado, haciendo posible modificar el flujo del script durante su ejecución. Recibe además un valor de entrada a modo de condición y no tiene un valor de salida.
+    \item  \textit{Nodo de entrada}: Proporciona un valor constante que puede ser usado como entrada para una función. Este valor puede ser serializado para modificarse desde fuera permitiendo reutilizar scripts con datos diferentes. Por ejemplo, un script que represente la vida de un enemigo, y queramos serializar la vida, de forma que con el uso del mismo script, podamos representar enemigos con número de vidas diferentes. Este tipo de nodo no puede recibir el flujo.
+    \item  \textit{Nodo de bifurcación}: Este tipo de nodo permite la modificación del flujo del script, pudiendo hacerlo mediante lógica condicional y bucles, su comportamiento dependiendo de su tipo interno. Recibe un valor de entrada a modo de condición y no tiene un valor de salida. En el caso de los bucles, los nodos que se ejecuten dentro del bucle sí que pueden ser ejecutados varias veces en la misma iteración del evento.
 
 \end{enumerate}
 
@@ -455,15 +465,15 @@ Todo esto permite al usuario crear comportamientos complejos de una manera visua
 
 \section{Integración scripting en el motor}
 
-Para la integración del lenguaje en el motor aparece \texttt{Script}, un nuevo tipo de componente, junto con un nuevo manager, \texttt{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \texttt{ScriptManager} funciona como un manejador de recursos de tipo script de forma
-que no se generen copias innecesarias del recurso cuando el script sea reutilizado por otra entidad, al igual que se encarga de su correcta deserialización del formato JSON. Por otro lado, la clase \texttt{Script} proporciona los eventos necesarios al lenguaje de scripting, redirigiendo los eventos recibidos de la clase componente, además de guardar información adicional 
+Para la integración del lenguaje en el motor aparece \texttt{Script}, un nuevo tipo de componente, junto con un nuevo manager, \texttt{ScriptManager}. Entre estas dos clases se establece el puente entre el motor y el funcionamiento del scripting. \texttt{ScriptManager} funciona tanto como un manejador de recursos de tipo script, de forma
+que no se generen copias innecesarias del recurso cuando el script sea reutilizado por otra entidad, al igual que se encarga de su correcta deserialización del formato JSON. Además, también aporta funcionalidad básica para el correcto funcionamiento del scripting. Por otro lado, la clase \texttt{Script} proporciona los eventos necesarios al lenguaje de scripting, redirigiendo los eventos recibidos de la clase componente, además de guardar información adicional 
 para almacenar los distintos valores serializados. La clase \texttt{Script} no maneja los nodos, sino que almacena punteros al nodo inicial de cada evento, en caso de que exista.
 
 
 \medskip
 
 
-Para la implementación de la lógica del scripting, se ha creado una clase por cada tipo de nodo, siendo responsable cada uno de manejar su propia información, y entre todos creando una jerarquía de clases para poder manejar el script mediante herencia y polimorfismo.
+Para la implementación de la lógica del scripting, se ha creado una clase por cada tipo de nodo, siendo responsable cada uno de manejar su propia información, y entre todos creando una jerarquía de clases para poder manejar el script mediante herencia y polimorfismo. Estas clases sirven para representar internamente un script.
 
 \begin{figure}[h]
     \centering
@@ -474,6 +484,10 @@ Para la implementación de la lógica del scripting, se ha creado una clase por ca
 
 \medskip
 
+Para representar los valores dentro del motor, manejamos la abstracción
+de una variable la cual puede tomar cualquier valor, y todo se procesa dentro
+de una unión (siendo una unión un tipo especial de clase en C++ que solo
+puede almacenar el valor de uno de sus miembros). 
 El lenguaje está preparado para soportar los tipos: float, char, string, bool, un vector bidimensional de float, una estructura para representar un color y un puntero a una entidad.
 Con el fin de simplificar el uso, hemos decidido no distinguir entre tipos númericos (como pueden ser el int o el float) sino manejar una agrupación de ellos, algo parecido al funcionamiento de Javascript\footnotemark.
 
@@ -483,15 +497,14 @@ Con el mismo fin de simplificar las cosas, también hemos decidido descartar la c
 
 \medskip
 
-Para el tipo entidad hay dos casos de uso, dependiendo del origen del nodo que haya producido el valor. Si procede de una función, la variable se usa como puntero a la entidad dada, pero si el valor procede de un nodo de entrada, 
- su valor deserializado es el identificador de la entidad. Por lo cual, antes de poder acceder al puntero tenemos que conseguir la referencia a la entidad haciendo uso del \textit{ReferencesManager}(sección~\ref{managersycomponentes}:~Managers~y~componentes).
+Para el tipo entidad hay dos casos de uso. El primer caso ocurre cuando el puntero se consigue en tiempo de ejecución (por ejemplo al acceder al padre de la entidad actual o acceder a la entidad con la que se ha colisionado), en cuyo caso no se requeriría de ningún paso adicional para su uso, pero en el otro caso, la referencia a esta entidad se consigue desde el proceso de deserialización de la escena, donde al no poder guardar directamente un puntero se guarda el identificador de la entidad. Haciendo uso de este identificador y de \textit{ReferencesManager}(sección~\ref{managersycomponentes}:~Managers~y~componentes) se puede acceder al puntero correspondiente.
 
  \medskip
 
-Para la ejecución de un nodo funcion, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}[\ref{recursosgenerados}]. Cabe mencionar, que en caso de que la función esté asociada a un componente en lugar de un manager, el primer parámetro será siempre la entidad.
+Para la ejecución de un nodo función, éste almacena el nombre de la función a ejecutar, con lo que se puede ejecutar la función asociada haciendo uso del \textit{FunctionManager}[\ref{recursosgenerados}]. 
 
 \medskip
 
- Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality}, con funcionalidad básica para poder usar desde el script, como puede ser escribir por consola.
+Por último, para completar el lenguaje se ha creado la clase \textit{ScriptFunctionality}. Esta clase forma parte del motor y se encarga de proporcionar funcionalidad básica que no es aportada por ningún componente, como operaciones aritméticas o escribir por consola.
 
- \footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number}}
+\footnotetext{\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number}}
