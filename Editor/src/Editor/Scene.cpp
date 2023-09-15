@@ -917,10 +917,14 @@ namespace ShyEditor {
 			ImGui::SameLine();
 
 			ImGui::SetCursorPos(ImVec2(100, ImGui::GetFrameHeight() + 10));
-			ImGui::SliderFloat("Zoom (-/+)", &sceneCamera->GetScale(), sceneCamera->GetMinScale(), sceneCamera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
+			ImGui::Text("Zoom (-/+):");
+			ImGui::SameLine();
+			ImGui::SliderFloat("##ZoomSlider", &sceneCamera->GetScale(), sceneCamera->GetMinScale(), sceneCamera->GetMaxScale(), "%.3f", ImGuiSliderFlags_Logarithmic);
 
 			ImGui::SameLine();
 
+			ImGui::Text("View:");
+			ImGui::SameLine();
 			ImGui::RadioButton("##Scene view - Both", &viewMode, 0);
 			ImGui::SameLine();
 			ImGui::RadioButton("##Scene view - World", &viewMode, 1);
