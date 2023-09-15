@@ -383,7 +383,22 @@ El programa comienza leyendo el código fuente del motor, leyendo cada fichero y 
 
     \item Almacena en una lista el nombre de todas las clases que hereden de componente, o que por el contrario hereden de uno como ocurren en el caso los componentes físicos.
     \item Para qué atributos de un componente deben guardarse se utiliza una etiqueta especial, \texttt{reflect}. Esta marca debe aparecer delante de cada atributo que se quiera poder serializar. De cada atributo se guarda tanto el nombre como el tipo del mismo.
+
+    \begin{figure}[h]
+        \centering
+            \includegraphics[width=0.5\textwidth]{Imagenes/Vectorial/ejemploPublish}
+        \caption{Ejemplo de uso de la etiqueta publish.
+            \label{fig:cap4:ejemploPublish}}
+    \end{figure}
+
     \item Para el proceso de almacenar los métodos de un componente se utiliza otra etiqueta nueva, \texttt{publish}. Esta marca funciona como un nuevo modificador de acceso, de forma que todos los métodos que se encuentren entre dicha marca y la siguiente pasarán a ser almacenados. De los métodos se almacena tanto el nombre, como un vector con la entrada (almacenando tanto tipo como nombre) y el valor de salida.
+
+    \begin{figure}[h]
+        \centering
+            \includegraphics[width=0.5\textwidth]{Imagenes/Vectorial/ejemploReflect}
+        \caption{Ejemplo de uso de la etiqueta reflect.
+            \label{fig:cap4:ejemploReflect}}
+    \end{figure}
 
 \end{itemize}
 
