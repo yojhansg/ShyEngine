@@ -98,7 +98,8 @@ namespace ShyEditor {
 		// Physics
 		data.gravity_x = 0;
 		data.gravity_y = -9.81f;
-		data.collisionMatrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, true));
+		data.collisionMatrix = std::vector<std::vector<bool>>(MAX_COLLISION_LAYERS, std::vector<bool>(MAX_COLLISION_LAYERS, false));
+		data.collisionMatrix[0][0] = true;
 		data.layers.push_back("Default");
 
 		// Input

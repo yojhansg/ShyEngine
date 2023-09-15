@@ -402,7 +402,6 @@ bool Editor::RunProjectsWindow() {
 	instance->AddWindow(new ShyEditor::ColorPalette());
 
 	SDL_SetWindowPosition(instance->window, _Centered);
-	SDL_SetWindowResizable(instance->window, SDL_FALSE);
 
 	ShyEditor::ProjectsManager* dialog = ShyEditor::ProjectsManager::GetInstance();
 
