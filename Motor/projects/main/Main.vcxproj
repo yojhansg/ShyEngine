@@ -47,6 +47,7 @@
     <ResourceCompile Include="Main.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Build\Assets\Images\shyIconSmall.ico" />
     <Image Include="icon.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
