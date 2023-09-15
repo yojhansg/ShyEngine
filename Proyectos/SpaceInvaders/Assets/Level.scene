@@ -128,16 +128,16 @@
                 }
             ],
             "scripts": {
-                "Scripts/Shoot": {
-                    "PrefabName": {
-                        "type": "string",
-                        "value": "bullet"
-                    }
-                },
                 "Scripts/Ship movement": {
                     "Speed": {
                         "type": "float",
                         "value": 5.0
+                    }
+                },
+                "Scripts/Shoot": {
+                    "PrefabName": {
+                        "type": "string",
+                        "value": "bullet"
                     }
                 },
                 "Scripts/Bullet Cooldown": {
@@ -231,12 +231,12 @@
                     "childs": [
                         {
                             "name": "alien",
-                            "id": 11,
+                            "id": 3,
                             "childs": [],
                             "order": 0,
                             "prefabId": 0,
                             "isTransform": true,
-                            "localPosition": "440.000000, 440.000000",
+                            "localPosition": "-540.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
                             "localRotation": "0.000000",
                             "components": [
@@ -277,12 +277,12 @@
                         },
                         {
                             "name": "alien",
-                            "id": 3,
+                            "id": 11,
                             "childs": [],
                             "order": 0,
                             "prefabId": 0,
                             "isTransform": true,
-                            "localPosition": "-540.000000, 440.000000",
+                            "localPosition": "440.000000, 440.000000",
                             "localScale": "1.000000, 1.000000",
                             "localRotation": "0.000000",
                             "components": [
@@ -1380,6 +1380,12 @@
             "localRotation": "0.000000",
             "components": [],
             "scripts": {
+                "Scripts/Alien Vertical Movement": {
+                    "Jump distance": {
+                        "type": "Vector2D",
+                        "value": "0.000000, -70.000000"
+                    }
+                },
                 "Scripts/AlienManager": {
                     "Alien count": {
                         "type": "float",
@@ -1388,12 +1394,6 @@
                     "Win Scene": {
                         "type": "string",
                         "value": "Win.scene"
-                    }
-                },
-                "Scripts/Alien Vertical Movement": {
-                    "Jump distance": {
-                        "type": "Vector2D",
-                        "value": "0.000000, -70.000000"
                     }
                 }
             }

@@ -19,7 +19,7 @@
                     "attributes": {
                         "fileName": "Character.png",
                         "flipmode": "0.000000",
-                        "rotationPoint": "0.000000, 0.000000"
+                        "rotationPoint": "0.500000, 0.500000"
                     }
                 }
             ],
@@ -30,13 +30,13 @@
                         "value": 10.0
                     }
                 },
-                "Scripts/PlayerRotation": [],
                 "Scripts/CameraController": {
                     "Speed": {
                         "type": "float",
                         "value": 5.0
                     }
-                }
+                },
+                "Scripts/PlayerRotation": []
             }
         },
         {
@@ -55,7 +55,7 @@
                     "attributes": {
                         "fileName": "Spider.png",
                         "flipmode": "0.000000",
-                        "rotationPoint": "0.000000, 0.000000"
+                        "rotationPoint": "0.500000, 0.500000"
                     }
                 }
             ],
@@ -110,6 +110,123 @@
                 }
             ],
             "scripts": null
+        },
+        {
+            "name": "Floor",
+            "id": 5,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "2712.501953, 61.000000",
+            "localScale": "4.180000, 2.500000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Floor.jpg",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "0.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": ""
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "Floor",
+            "id": 6,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "45.839626, 1661.315552",
+            "localScale": "4.180000, 2.500000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Floor.jpg",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "0.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": ""
+                    }
+                }
+            ],
+            "scripts": null
+        },
+        {
+            "name": "Floor",
+            "id": 7,
+            "childs": [],
+            "order": -1,
+            "prefabId": 0,
+            "isTransform": true,
+            "localPosition": "2723.339600, 1658.815552",
+            "localScale": "4.180000, 2.500000",
+            "localRotation": "0.000000",
+            "components": [
+                {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "Floor.jpg",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
+                    }
+                },
+                {
+                    "component": "BoxBody",
+                    "attributes": {
+                        "size": "0.000000, 0.000000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "0.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "false",
+                        "gravityScale": "0.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": ""
+                    }
+                }
+            ],
+            "scripts": null
         }
     ],
     "overlays": [
@@ -122,10 +239,10 @@
             "isTransform": false,
             "placement": "1",
             "anchor": "0.500000,0.500000",
-            "top": "1",
-            "left": "1",
-            "right": "-1",
-            "bottom": "-1",
+            "top": "0",
+            "left": "-12",
+            "right": "-232",
+            "bottom": "-123",
             "position": "0.000000, 0.000000",
             "size": "100.000000, 100.000000",
             "components": [

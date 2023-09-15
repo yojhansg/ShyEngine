@@ -24,16 +24,16 @@
                     }
                 ],
                 "scripts": {
-                    "Scripts/Movement": {
-                        "Speed": {
-                            "type": "float",
-                            "value": 10.0
-                        }
-                    },
                     "Scripts/CameraController": {
                         "Speed": {
                             "type": "float",
                             "value": 5.0
+                        }
+                    },
+                    "Scripts/Movement": {
+                        "Speed": {
+                            "type": "float",
+                            "value": 10.0
                         }
                     }
                 }
@@ -368,5 +368,5 @@
         "chuncksize": 2048
     },
     "Project Name": "Flappy bird",
-    "Project Path": "C:\\Users\\sryoj\\Documents\\TFG\\Projects\\Flappy bird\\Flappy bird.shyproject"
+    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\Flappy bird\\Flappy bird.shyproject"
 }

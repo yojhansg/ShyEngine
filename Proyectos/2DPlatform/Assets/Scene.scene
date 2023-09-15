@@ -117,6 +117,14 @@
             "localRotation": "0.000000",
             "components": [
                 {
+                    "component": "Image",
+                    "attributes": {
+                        "fileName": "CHARACTER/Character_Idle.png",
+                        "flipmode": "0.000000",
+                        "rotationPoint": "0.000000, 0.000000"
+                    }
+                },
+                {
                     "component": "PlatformController",
                     "attributes": {
                         "velocity": "200.000000",
@@ -128,11 +136,20 @@
                     }
                 },
                 {
-                    "component": "Image",
+                    "component": "BoxBody",
                     "attributes": {
-                        "fileName": "CHARACTER/Character_Idle.png",
-                        "flipmode": "0.000000",
-                        "rotationPoint": "0.000000, 0.000000"
+                        "size": "0.150000, 0.300000",
+                        "offSet": "0.000000, 0.000000",
+                        "bodyType": "2.000000",
+                        "mass": "5.000000",
+                        "bounciness": "0.000000",
+                        "trigger": "false",
+                        "freezeRotation": "true",
+                        "gravityScale": "1.000000",
+                        "friction": "0.000000",
+                        "linearDamping": "0.000000",
+                        "angularDamping": "0.000000",
+                        "layerName": "Player"
                     }
                 },
                 {
@@ -214,23 +231,6 @@
                     }
                 },
                 {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "0.150000, 0.300000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "5.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "true",
-                        "gravityScale": "1.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": "Player"
-                    }
-                },
-                {
                     "component": "Animation",
                     "attributes": {
                         "speed": "7.000000",
@@ -244,8 +244,8 @@
                 }
             ],
             "scripts": {
-                "Scripts/CameraMovement": [],
                 "Scripts/HandleJump": [],
+                "Scripts/CameraMovement": [],
                 "Scripts/AnimationFlipLeft": [],
                 "Scripts/AnimationFlipRight": [],
                 "Scripts/BackToIdle": [],
@@ -598,12 +598,12 @@
                 },
                 {
                     "name": "plataforma",
-                    "id": 15,
+                    "id": 7,
                     "childs": [],
                     "order": 0,
                     "prefabId": -3,
                     "isTransform": true,
-                    "localPosition": "447.825745, -79.130508",
+                    "localPosition": "-413.042969, -133.043365",
                     "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
@@ -637,12 +637,12 @@
                 },
                 {
                     "name": "plataforma",
-                    "id": 7,
+                    "id": 15,
                     "childs": [],
                     "order": 0,
                     "prefabId": -3,
                     "isTransform": true,
-                    "localPosition": "-413.042969, -133.043365",
+                    "localPosition": "447.825745, -79.130508",
                     "localScale": "5.000000, 3.000000",
                     "localRotation": "0.000000",
                     "components": [
