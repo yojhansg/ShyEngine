@@ -700,13 +700,12 @@ namespace ShyEditor {
 		ImGui::EndChild();
 	}
 
-	//Returns true if there has been a change in a component
+	// Returns true if there has been a change in a component
 	bool Entity::DrawComponentsInEditor() {
 
 		bool changes = false;
 		for (auto it = components.begin(); it != components.end();) {
 			std::string componentName = (*it).second.GetName();
-
 
 			if (ImGui::CollapsingHeader(Editor::Beautify(componentName).c_str())) {
 
@@ -722,7 +721,7 @@ namespace ShyEditor {
 					std::string attributeName = attribute->GetName();
 					Components::Attribute* attr = attribute;
 
-					ImGui::Text(attributeName.c_str());
+					ImGui::Text(Editor::Beautify(attributeName).c_str());
 
 					std::string attributeDescription;
 					if (Components::ComponentManager::GetComponentElementInfo(&attributeDescription, componentName, attributeName, "info")) {

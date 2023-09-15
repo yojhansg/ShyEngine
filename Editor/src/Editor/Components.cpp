@@ -54,10 +54,11 @@ namespace ShyEditor {
 
 					const std::string overlayStr = "Overlay";
 					const std::string transformStr = "Transform";
+					const std::string physicBody = "PhysicBody";
 
 					const std::string compName = comp.first;
 
-					if (compName == transformStr || compName == overlayStr)
+					if (compName == transformStr || compName == overlayStr || compName == physicBody)
 						continue;
 
 					bool constainsOverlay = compName.compare(0, overlayStr.length(), overlayStr) == 0;

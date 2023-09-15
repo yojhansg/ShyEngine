@@ -1,8 +1,10 @@
 {
     "Creation Date": "2023-09-15 19:37:13",
     "Last Opened Scene": "Scene.scene",
-    "Project Name": "Test",
-    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\Test\\Test.shyproject",
+    "Prefabs": {
+        "prefabs": [],
+        "prefabInstances": null
+    },
     "Preferences": {
         "game": "Test",
         "creator": "Yojhan, Pablo e Ivan",
@@ -329,8 +331,6 @@
         "channels": 1,
         "chuncksize": 2048
     },
-    "Prefabs": {
-        "prefabs": [],
-        "prefabInstances": null
-    }
+    "Project Name": "Test",
+    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\Test\\Test.shyproject"
 }
