@@ -90,23 +90,6 @@
                         "flipmode": "0.000000",
                         "rotationPoint": "0.000000, 0.000000"
                     }
-                },
-                {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "0.000000, 0.000000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "0.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "false",
-                        "gravityScale": "0.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": ""
-                    }
                 }
             ],
             "scripts": null
@@ -128,23 +111,6 @@
                         "fileName": "Floor.jpg",
                         "flipmode": "0.000000",
                         "rotationPoint": "0.000000, 0.000000"
-                    }
-                },
-                {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "0.000000, 0.000000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "0.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "false",
-                        "gravityScale": "0.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": ""
                     }
                 }
             ],
@@ -168,23 +134,6 @@
                         "flipmode": "0.000000",
                         "rotationPoint": "0.000000, 0.000000"
                     }
-                },
-                {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "0.000000, 0.000000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "0.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "false",
-                        "gravityScale": "0.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": ""
-                    }
                 }
             ],
             "scripts": null
@@ -207,23 +156,6 @@
                         "flipmode": "0.000000",
                         "rotationPoint": "0.000000, 0.000000"
                     }
-                },
-                {
-                    "component": "BoxBody",
-                    "attributes": {
-                        "size": "0.000000, 0.000000",
-                        "offSet": "0.000000, 0.000000",
-                        "bodyType": "2.000000",
-                        "mass": "0.000000",
-                        "bounciness": "0.000000",
-                        "trigger": "false",
-                        "freezeRotation": "false",
-                        "gravityScale": "0.000000",
-                        "friction": "0.000000",
-                        "linearDamping": "0.000000",
-                        "angularDamping": "0.000000",
-                        "layerName": ""
-                    }
                 }
             ],
             "scripts": null
@@ -239,10 +171,10 @@
             "isTransform": false,
             "placement": "1",
             "anchor": "0.500000,0.500000",
-            "top": "0",
-            "left": "-12",
-            "right": "-232",
-            "bottom": "-123",
+            "top": "-18",
+            "left": "-14",
+            "right": "-233",
+            "bottom": "-402",
             "position": "0.000000, 0.000000",
             "size": "100.000000, 100.000000",
             "components": [

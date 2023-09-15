@@ -46,7 +46,7 @@
         "creator": "Yojhan, Pablo e Ivan",
         "initialScene": "Scene.scene",
         "splashScreen": false,
-        "windowTitle": "Flappy bird",
+        "windowTitle": "TopDown",
         "windowIcon": "",
         "windowSize": "1920, 1080",
         "vsync": true,
@@ -367,6 +367,6 @@
         "channels": 1,
         "chuncksize": 2048
     },
-    "Project Name": "Flappy bird",
-    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\Flappy bird\\Flappy bird.shyproject"
+    "Project Name": "TopDown",
+    "Project Path": "C:\\Users\\pablo\\Desktop\\TFG\\Proyectos\\TopDown\\TopDown.shyproject"
 }

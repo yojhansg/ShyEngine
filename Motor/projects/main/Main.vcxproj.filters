@@ -45,5 +45,8 @@
     <Image Include="icon.ico">
       <Filter>Archivos de recursos</Filter>
     </Image>
+    <Image Include="..\..\..\Build\Assets\Images\shyIconSmall.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
   </ItemGroup>
 </Project>

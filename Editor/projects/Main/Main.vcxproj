@@ -15,6 +15,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Main\CheckML.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Main.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Build\Assets\Images\shyIconSmall.ico" />
+    <Image Include="..\..\..\Build\Assets\Images\shyIconSmall.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
