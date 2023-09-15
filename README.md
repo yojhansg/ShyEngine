@@ -31,8 +31,33 @@ y por último un fichero con extensión ".sln" con la solución.
 
 
 
-## Algunas capuras del editor y de juegos
+## Muestras
 
+### Algunas capuras del editor
 
+En esta imagen se muestra la ventana de selección de proyectos:
 
+![ProjectSelection](/ReadmeAssets/ProjectSelection.PNG)
+
+En esta imagen se muestra la vista principal del editor:
+
+![Editor](/ReadmeAssets/Editor.PNG)
+
+En esta imagen se muestra la vista de scripting del editor:
+
+![Scripting](/ReadmeAssets/Scripting.PNG)
+
+### Juegos desarrollados
+
+Videojuego 2D de tipo plataformas:
+
+![Plataformas](/ReadmeAssets/Plataformas.png)
+
+Recreación del Space Invaders:
+
+![SpaceInvaders](/ReadmeAssets/SpaceInvaders.png)
+
+Videojuego 2D de tipo TopDown:
+
+![TopDown](/ReadmeAssets/TopDown.png)
 
