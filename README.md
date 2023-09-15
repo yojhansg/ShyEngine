@@ -31,8 +31,8 @@ y por último un fichero con extensión ".sln" con la solución.
 
 
 
-## Algunas capuras del editor y de juegos
+## Algunas capuras del editor y juego desarrollados
 
-
+![This is an alt text.](/ReadmeAssets/ProjectSelection.PNG "This is a sample image.")
 
 
