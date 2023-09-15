@@ -88,8 +88,8 @@ namespace ShyEditor {
 		// Window
 		data.windowTitle = Editor::GetInstance()->GetProjectInfo().name;
 		data.icon = "";
-		data.width = 1920;
-		data.height = 1080;
+		data.width = 1080;
+		data.height = 720;
 		data.vsync = true;
 		data.showCursor = true;
 		data.fullscreen = false;
