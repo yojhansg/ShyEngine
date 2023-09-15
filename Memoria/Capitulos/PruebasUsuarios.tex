@@ -55,7 +55,7 @@ Nuestro objetivo de la prueba con usuarios es ver si el entorno de desarrollo se
 
 \subsection{Selección de usuarios}
 
-Nuestro entorno de desarrollo está pensado para que pueda ser usado alguien sin previa experiencia en el desarrollo de videojuegos, aunque sí que esperamos que se tenga un mínimo de conocimientos previos de informática y manejo de ordenadores, y conocimientos básicos sobre videojuegos. Este será nuestro principal público objetivo, aunque también es interesante hacer pruebas con usuarios más experimentados, ya sea programando o desarrollando videojuegos, y ver cómo se desenvuelven con las herramientas dadas, y viendo si su conocimiento previo supone una gran diferencia a la hora de hacer juegos.
+Nuestro entorno de desarrollo está pensado para que pueda ser usado alguien sin previa experiencia en el desarrollo de videojuegos, aunque sí que esperamos que se tenga un mínimo de conocimientos previos de informática y manejo de ordenadores, y conocimientos básicos sobre videojuegos. Este será nuestro principal público objetivo, aunque también es interesante hacer pruebas con usuarios más experimentados, tanto con experiencia programando como desarrollando videojuegos, y ver cómo se desenvuelven con las herramientas dadas, y viendo si su conocimiento previo supone una gran diferencia a la hora de hacer juegos.
 
 \medskip
 
@@ -78,22 +78,30 @@ Una vez finalizada la prueba, se realizará al usuario una breve encuesta donde p
 
 Las pruebas se realizaron a lo largo de varios días, todas hechas por el mismo investigador.
 En cuanto a los juegos desarrollados, la mayor parte de los usuarios decidió hacer un videojuego de plataformas, usando los assets proporcionados.
-El grupo de los usuarios sin experiencia fue el que más problemas tuvo, sobre todo al principio, teniendo el investigador que acabar ayudándoles en varias ocasiones. El problema más frecuente fue el poco entendimiento del funcionamiento de los componentes. Una vez pasado este primer obstáculo, el resto de la prueba fue más fluida, utilizando principalmente los componentes predefinidos por el motor en vez de aventurarse a crear su propio script. Cabe destacar un usuario que se las ingenió para crear un script capaz de eliminar una entidad al entrar en contacto con el jugador.
+El grupo de los usuarios sin experiencia fue el que más problemas tuvo, sobre todo al principio, teniendo el investigador que acabar ayudándoles en varias ocasiones. El problema más frecuente fue el poco entendimiento del funcionamiento de los componentes. Una vez pasado este primer obstáculo, el resto de la prueba fue más fluida, utilizando principalmente los componentes predefinidos por el motor en vez de aventurarse a crear su propio script, aunque cabe destacar un usuario que se atrevió a desarrollar script más complejos con relativo éxito.
 
 \medskip
 
-El segundo grupo, con experiencia programando pero no desarrollando videojuegos, fue bastante mejor, con menos bloqueos que el primero, con más gente atreviéndose a diseñar scripts más complejos, aunque hubo varios que tras varios fracasos se frustraron y terminaron dejándolo con el fin de no perder más tiempo de la prueba. En este grupo hubo bloqueos más variados, aunque ninguno tan fuerte como los bloqueos del primer grupo.
+El segundo grupo, formado por usuarios con experiencia programando pero no desarrollando videojuegos, fue bastante mejor, con menos bloqueos que el primero, con más gente atreviéndose a diseñar scripts más complejos, aunque hubo varios que tras varios fracasos se frustraron y terminaron dejándolo con el fin de no perder más tiempo de la prueba. En este grupo hubo bloqueos más variados, aunque ninguno tan fuerte como los bloqueos del primer grupo.
+
+\medskip
+
 El grupo con experiencia en el desarrollo de videojuegos fue el que más avances hizo con diferencia, asociando rápidamente conceptos vistos en otros motores al nuestro. El único bloqueo que hubo fue por parte de usuario que no terminaba de entender el funcionamiento de los prefabs en nuestro entorno de desarrollo, aunque después de ayudarle con eso no terminó usándolos.
  
 \medskip
 
 En cuanto al feedback recibido, hemos recibido bastantes quejas y sugerencias principalmente sobre el editor. La mayor parte de los usuarios confiesa haberse perdido por la interfaz en algún momento, y otro considerable porcentaje considera los scripts una herramienta bastante confusa la primera vez que interactúan con ella y la mayoría considera que para realizar la prueba sería necesario aportar más información y tiempo.
 
+\medskip
+
+Por último, hay que mencionar que gracias a realizar las pruebas hemos
+encontrado bugs críticos tanto en el motor como en el editor, algunos gracias a realizar las pruebas en el propio ordenador del usuario, permitiendo ver el comportamiento del editor con diferentes resoluciones y programas instalados, y a usos del usuario del editor que no habíamos contemplado en un principio.
+
 \subsection{Conclusiones}
 
 Lo primero a mencionar es que nuestra cantidad de usuarios no es lo suficientemente grande como para sacar resultados concluyentes, pero viendo la tendencia general de todos los usuarios podemos estimar algunas conclusiones.\\
 
-Consideramos que las pruebas con usuarios han sido realmente útiles, permitiéndonos ver que conceptos que dábamos por hecho que serían intuitivos realmente no lo son, y nos han servido para tomar nota de muchos posibles cambios y mejoras que habría que implementar para mejorar la calidad de la experiencia de usuario, como anotaciones en partes complejas del editor que pueden no llegar a entenderse. 
+Consideramos que las pruebas con usuarios han sido realmente útiles, permitiéndonos ver que conceptos que dábamos por hecho que serían intuitivos realmente no lo son, como el concepto de transformación y nos han servido para tomar nota de muchos posibles cambios y mejoras que habría que implementar para mejorar la calidad de la experiencia de usuario, como anotaciones en partes complejas del editor que pueden no llegar a entenderse. 
 \medskip
 
 Creemos que el principal problema con nuestro entorno de desarrollo es la falta de información que se proporciona al usuario, lo cual es especialmente negativo para los usuarios nuevos. Por ello hemos pensado en implementar varias posibles correcciones, añadiendo más información en forma de marcadores de ayuda por cada elemento del editor que consideremos oportuno en base a nuestras observaciones. Además, creemos importante el implementar una documentación donde recordar los elementos principales del editor, así como poder profundizar sobre el funcionamiento del scripting. Por último, creemos de vital importancia hacer un tutorial (ya bien en formato web o vídeo) donde crear un videojuego sencillo desde cero, que pueda ir siguiendo el usuario para que así pueda ver en acción el funcionamiento de todas las partes del editor. Con estos cambios es probable que no se solucione por completo el problema, pero sería una gran ayuda para sobrepasar la brecha de conocimiento inicial necesaria para usar el entorno de desarrollo.

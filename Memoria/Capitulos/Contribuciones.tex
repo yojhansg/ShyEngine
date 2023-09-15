@@ -106,11 +106,11 @@ para continuar el desarrollo del scripting, que es poder tener un mapa con todas
 
 La mejor forma de comprobar que el scripting funcionaba era utilizándolo de forma exhaustiva, por lo que comencé el desarrollo de varios juegos pequeños para ver si encontraba alguna limitación. Estos juegos eran un pequeño flappy bird y otro un reloj que daba la hora en tiempo real (realmente no se podría decirse que es un juego sino más bien una prueba). El problema
 del desarrollo de scripts es que estaba enlazado con el motor, pero aún no con el editor, lo cual significaba que cada script lo tenía que hacer a mano, modificando el propio fichero desde un editor de texto, lo cual era bastante tedioso de hacer y se complicaba mucho cuando el script crecía de tamaño. Por ello, mi idea era implementar ya la ventana de edición de scripts
-en el editor, pero debido a que el editor aún no estaba lo suficientemente avanzado decidí ayudar a Pablo en el desarrollo del motor. 
+en el editor, pero debido a que el editor aún no estaba lo suficientemente avanzado decidí ayudar a mi compañero en el desarrollo del motor. 
 
 \medskip
 
-Del motor terminé unas cosas que Pablo había dejado a medias y luego me puse a añadir funcionalidad adicional. Lo primero que añadí, debido a mi previa experiencia usando la biblioteca de JSON de nlohmann, fue la serialización de escenas y entidades. Con eso hecho me puse a implementar un sistema de Overlays, siendo los overlays los distintos elementos con los que cuenta
+Del motor ayudé a mi compañero implementando funcionalidad con la que se encontraba a mitad de desarrollo. Lo primero que añadí, debido a mi previa experiencia usando la biblioteca de JSON de nlohmann, fue la serialización de escenas y entidades. Con eso hecho me puse a implementar un sistema de Overlays, siendo los overlays los distintos elementos con los que cuenta
 el motor para representar la interfaz de usuario, junto con sus componentes correspondientes (OverlayImage, OverlayText y OverlayButton). Además, también hice la estructura para la deserialización de valores que carga el motor, con información como el nombre del juego o el tamaño de la ventana, dejando margen para poder ser expandido con más valores en un futuro. Implementé 
 funcionalidad para otorgar al motor de una jerarquía de entidades. También implementé lógica para dotar al motor de una splashScreen con el logo del motor.
 
@@ -122,7 +122,7 @@ para poder mostrar elementos por consola con un formato unificado, mostrando que
 
 \medskip
 
-Cuando el editor ya se encontraba en un estado más avanzado fue cuando empecé la implementación del editor visual de nodos en el editor. En el momento en el que todo se encontraba más o menos listo, pudiendo crear scripts y poder serializarlos y aprovechando que Iván se encontraba de viaje, procedí a hacer una refactorización general del sistema de ventanas, para permitir al usuario poder moverlas y agruparlas como mejor
+Cuando el editor ya se encontraba en un estado más avanzado fue cuando empecé la implementación del editor visual de nodos en el editor. En el momento en el que todo se encontraba más o menos listo, pudiendo crear scripts y poder serializarlos y aproveché para hacer hacer una refactorización general del sistema de ventanas, para permitir al usuario poder moverlas y agruparlas como mejor
 le pareciese utilizando la rama experimental de docking de ImGui. Implementé la lectura de los datos que genera el motor, con la clase ComponentReader y ComponentManager. Procedí a cambiar la ventana de la escena y la forma en la que se renderizaban las entidades además de añadiendo la opción de renderizar elementos de la interfaz. Con todo esto listo, me dediqué a añadir 
 funcionalidad adicional en el editor, pudiendo ejecutar el juego en una ventana nueva, con la funcionalidad adicional de poder detener su ejecución desde el editor en cualquier momento. También añadí funcionalidad para poder crear una build, reuniendo los assets necesarios junto con el ejecutable del motor en una única carpeta, modificando el nombre e icono del fichero ejecutable. 
 Otras ventanas que añadí fue el esqueleto básico de la ventana de preferencias, el manejador de docking para cambiar la distribución de la ventana y la ventana de modificación de paletas de colores.
