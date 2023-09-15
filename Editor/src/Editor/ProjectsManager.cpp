@@ -25,6 +25,7 @@
 
 #define FolderImage "folder.png"
 #define TrashImage "basura.png"
+#define TrashImageOpen "basuraOpen.png"
 
 using namespace nlohmann;
 namespace fs = std::filesystem;
@@ -61,6 +62,7 @@ namespace ShyEditor {
 
         folder = ResourcesManager::GetInstance()->AddTexture(FolderImage, true);
         trash = ResourcesManager::GetInstance()->AddTexture(TrashImage, true);
+        trashOpen = ResourcesManager::GetInstance()->AddTexture(TrashImageOpen, true);
 
         w = h = 0.0f;
     }
@@ -115,13 +117,6 @@ namespace ShyEditor {
             // Open Project Window
             if (!windowClosed)
                 result = OpenProject();
-
-            /*ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 5.0f));
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 5.0f));*/
-
-            //// Close Editor
-            //if (!windowClosed)
-            //    result = CloseEditor();
 
             ImGuiRender(renderer);
 
@@ -326,7 +321,8 @@ namespace ShyEditor {
 
                 std::string label = "##" + std::to_string(i);
 
-                if (ImGui::Button(label.c_str(), ImVec2(w * 0.095f, h / 10))) {
+                ImVec2 buttonSize = ImVec2(w * 0.095f, h / 10);
+                if (ImGui::Button(label.c_str(), buttonSize)) {
 
                     recentProjectsInfo[i].deleted = true;
 
@@ -337,10 +333,16 @@ namespace ShyEditor {
                     }
                 }
 
+                ImVec2 buttonPos = ImGui::GetItemRectMin();
+
                 ImGui::SameLine();
                 ImGui::SetCursorPosX(ImGui::GetWindowSize().x - ImGui::GetWindowSize().x / 9);
-                ImGui::Image(trash->getSDLTexture(), ImVec2(w * 0.09f, h / 10));
 
+
+                if (ImGui::IsMouseHoveringRect(buttonPos, ImVec2(buttonPos.x + buttonSize.x, buttonPos.y + buttonSize.y)))
+                    ImGui::Image(trashOpen->getSDLTexture(), buttonSize);
+                else 
+                    ImGui::Image(trash->getSDLTexture(), buttonSize);
             }
 
             ImGui::EndListBox();

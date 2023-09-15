@@ -104,6 +104,7 @@ namespace ShyEditor {
 		// Textures
 		Texture* folder;
 		Texture* trash;
+		Texture* trashOpen;
 
 		void StartImGuiFrame();
 		void ImGuiRender(SDL_Renderer* renderer);
