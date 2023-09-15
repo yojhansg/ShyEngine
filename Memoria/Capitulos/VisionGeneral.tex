@@ -30,8 +30,7 @@ puede reutilizarse en diferentes partes del juego para acelerar y simplificar el
 Como se mencionó en el apartado de motivación [\ref{cap1:sec:motivacion}], el objetivo es desarrollar un motor con editor que pueda ser utilizado por gente que no sea programadora. Por ello, se ha decidido implementar un sistema de programación visual. De esta forma, el usuario no tendrá que estar previamente familiarizado con ningún lenguaje de programación, pudiendo centrarse en el desarrollo de videojuegos.
 \medskip
 
-Hemos decidido que los scripts funcionen como datos en vez de como código compilado, ahorrando tiempos de compilación y evitando depender de una programa externo para compilar el código. Esto conlleva tener que almacenar 
-la información de estos scripts en ficheros e interpretarlos por el motor en ejecución.
+Hemos decidido que los scripts funcionen como datos en vez de como código compilado, ahorrando tiempos de compilación y evitando depender de una programa externo para compilar el código, aunque esta forma de implementación implica que la ejecución del juego no estará tan optimizada, pues en vez de poder ejecutar código directamente, éste tiene que ser interpretado por el motor. Además esta solución también conlleva tener que almacenar la información para los scripts en ficheros externos.
 
 \medskip
 
@@ -39,12 +38,9 @@ El lenguaje permite controlar el orden de ejecución de cada nodo, otorgando legi
 
 \medskip
 
-Para desarrollar el scripting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos entre ellos mediante el uso de flechas para crear el comportamiento deseado. 
-Para saber de qué nodos dispone el usuario, el editor contendrá información sobre el funcionamiento del motor para conocer sus componentes, y la información esencial de cada función disponible, siendo el nombre, el valor devuelto y la entrada requerida. Cuando el usuario haya terminado con el proceso de creación, la información relacionada con el script será serializada en un fichero usando un formato JSON.
-
-\medskip
-
-Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecución del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de datos que representa el script y que puede ser accedida más adelante. Esta estructura está preparada para ejecutar el script, funcionando como un intérprete capaz de ejecutar funciones dentro del motor con la información proporcionada. Esto es gracias a que el motor cuenta con funcionalidad que, conociendo únicamente el nombre de la función que se quiera ejecutar, pueda identificar de qué función se trata y proceder a ejecutarla. 
+Para desarrollar el scripting, el editor de nodos (ubicado en el editor), permitirá al usuario crear distintos tipos de nodos y enlazarlos entre ellos mediante el uso de flechas para crear el comportamiento deseado. Con este comportamiento se puede diseñar funcionalidad que interactúe con el funcionamiento del motor, pudiendo leer y modificar sus valores para de esta forma poder, por ejemplo, mover objetos, cambiar el texto de la interfaz o añadir fuerzas a los objetos físicos de la escena. Esta funcionalidad se obetendrá mediante un flujo de datos conseguidos a partir del motor. Cuando el usuario haya terminado con el proceso de creación, la información relacionada con el script será serializada en un fichero usando un formato JSON.
+Este fichero formará parte de los recursos del juego, y será leído por el motor durante la ejecución del juego. En el proceso de lectura, el motor leerá y procesará esta información, almacenándolo en una estructura de datos que internamente representa el script y que puede ser accedida más adelante. Esta estructura está preparada para ejecutar el script, funcionando como un intérprete capaz de ejecutar funciones dentro del motor con la información proporcionada. Esto es gracias a que el motor cuenta con funcionalidad que, conociendo únicamente el nombre de la función que se quiera ejecutar, pueda identificar de qué función se trata y proceder a ejecutarla. Haciendo que el intérprete no dependa del motor y funcione conociendo únicamente el nombre nos permite añadir funcionalidad nueva 
+en el motor sin tener que cambiar el funcionamiento del intérprete, aunque esto podría hacer que cambiando la funcionalidad del motor algún script creado previamente pase a ser obsolete haciendo referencia a funcionalidad que haya sido descartada.
 
 \medskip
 
