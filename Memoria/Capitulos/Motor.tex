@@ -307,15 +307,21 @@ En cuanto a los managers:
 
 \subsection{Bucle principal}
 
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=5cm]{Imagenes/Vectorial/EstructuraBuclePrincipal}
+    \caption{Estructura del bucle principal del motor.
+        \label{fig:bucleprincipal}}
+\end{figure}
+
 Este proyecto implementa la clase \texttt{Engine}, encargada de inicializar el motor, ejecutar su bucle principal y cerrarlo una vez terminado.
 
 \medskip
 
-En cuanto al bucle principal, tiene la siguiente estructura:
+La figura \ref{fig:bucleprincipal} muestra un diagrama con estructura del bucle principal de ejecución del motor.
 
-\begin{center}
-    \includegraphics[scale=0.3]{Imagenes/Vectorial/EstructuraBuclePrincipal}
-\end{center}
+\medskip
+
 
 Además de esos métodos, se realizan cálculos de tiempo para proporcionar al usuario el \texttt{DeltaTime}, el tiempo transcurrido desde el inicio de la ejecución del programa o el número de frames/actualizaciones
 hasta el momento. El \texttt{DeltaTime} es una medida de tiempo, generalmente en milisegundos, que informa sobre el tiempo transcurrido entre la iteración anterior y la actual. 
@@ -331,13 +337,16 @@ diferencia de la ``actualización''.
 La potencia del hardware de la computadora y la carga de trabajo afectan directamente al número de actualizaciones por segundo que se producen en el bucle principal de un videojuego. Por lo tanto, la llamada al 
 método ``actualización'' se puede dar con mucha irregularidad. Sin embargo, el motor de física necesita intervalos de tiempo fijo.
 
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=12cm]{Imagenes/Vectorial/UpdateVsFixed}
+    \caption{Diferencia entre la Actualización y el Paso físico.
+        \label{fig:updatevsfixed}}
+\end{figure}
+
 \medskip
 
-Esto se explica mejor con el siguiente diagrama:
-
-\begin{center}
-    \includegraphics[scale=0.3]{Imagenes/Vectorial/UpdateVsFixed}
-\end{center}
+Esto se explica mejor con el diagrama que se muestra en la figura \ref{fig:updatevsfixed}:
 
 Como se puede apreciar, el \texttt{Paso físico}, marcado en verde, siempre se ejecuta en el mismo intervalo de tiempo. Ese intervalo de tiempo fijo es un valor que se puede modificar en el motor en base a las necesidades del videojuego.
 
