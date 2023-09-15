@@ -117,9 +117,9 @@ void Editor::Loop() {
 	if (closed) return;
 
 	// Configure the SDL window to start the editor
-	SDL_SetWindowResizable(instance->window, SDL_TRUE);
-	SDL_SetWindowSize(instance->window, instance->userResolution.getX(), instance->userResolution.getY());
 	SDL_SetWindowPosition(instance->window, _Centered);
+	SDL_SetWindowResizable(instance->window, SDL_TRUE);
+	SDL_MaximizeWindow(instance->window);
 
 	// Init the ImGUI windows in the editor
 	instance->LoadImGuiINIFile();
