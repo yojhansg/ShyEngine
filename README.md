@@ -40,7 +40,7 @@ The engine features a reflection system through tags (similar to Unreal) so that
 
 The libraries used by the engine are SDL for rendering (images, text) and input, and Box2D for physics.
 
-![Box2DSDL](/ReadmeAssets/Box2DSDL.PNG)
+![Box2DSDL](/ReadmeAssets/Box2DSDL.png)
 
 ## Editor
 
@@ -60,15 +60,15 @@ This scripting language is a node-based system primarily designed to be used in 
 
 Editor main view (viewport, hierarchy, components, file explorer, console):
 
-![Editor](/ReadmeAssets/Editor.PNG)
+![Editor](/ReadmeAssets/edit.PNG)
 
 Project selection view (create project or open recent projects)
 
-![ProjectSelection](/ReadmeAssets/projects.PNG)
+![ProjectSelection](/ReadmeAssets/projects.png)
 
 Scripting view (node-base visual scripting)
 
-![Scripting](/ReadmeAssets/script.PNG)
+![Scripting](/ReadmeAssets/script.png)
 
 ### Game developed to showcase engine's features
 
