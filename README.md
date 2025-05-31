@@ -64,11 +64,11 @@ Editor main view (viewport, hierarchy, components, file explorer, console):
 
 Project selection view (create project or open recent projects)
 
-![ProjectSelection](/ReadmeAssets/Projects.png)
+![ProjectSelection](/ReadmeAssets/Projects.PNG)
 
 Scripting view (node-base visual scripting)
 
-![Scripting](/ReadmeAssets/Script.png)
+![Scripting](/ReadmeAssets/Script.PNG)
 
 ### Game developed to showcase engine's features
 
