@@ -60,7 +60,7 @@ This scripting language is a node-based system primarily designed to be used in 
 
 Editor main view (viewport, hierarchy, components, file explorer, console):
 
-![Editor](/ReadmeAssets/edit.PNG)
+![Editor](/ReadmeAssets/Editor.PNG)
 
 Project selection view (create project or open recent projects)
 
