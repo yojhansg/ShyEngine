@@ -1,4 +1,4 @@
-# Trabajo de fin de grado | Desarrollo de videojuegos UCM
+# Final degree project | Desarrollo de videojuegos UCM
 
 Final degree project repository
 
@@ -64,11 +64,11 @@ Editor main view (viewport, hierarchy, components, file explorer, console):
 
 Project selection view (create project or open recent projects)
 
-![ProjectSelection](/ReadmeAssets/projects.png)
+![ProjectSelection](/ReadmeAssets/Projects.png)
 
 Scripting view (node-base visual scripting)
 
-![Scripting](/ReadmeAssets/script.png)
+![Scripting](/ReadmeAssets/Script.png)
 
 ### Game developed to showcase engine's features
 
